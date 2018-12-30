@@ -1,0 +1,13 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^3.4.3"
+  },
+  "scripts": {
+    "preinstall": "yarn config set workspaces-experimental true"
+  }
+}
