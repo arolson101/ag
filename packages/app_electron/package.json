@@ -5,9 +5,9 @@
   "scripts": {
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
-    "serve": "nodemon -q --watch ./webpack.config.ts --exec \"webpack-dev-server --port 3030 --hot --mode=development\"",
+    "start": "nodemon -q --watch ./webpack.config.ts --exec \"webpack-dev-server --port 3030 --hot --mode=development\"",
     "electron": "wait-on ./dist/main.js && nodemon -q --watch ./dist/main.js --exec \"electron dist --url http://localhost:3030\"",
-    "start:dev": "rimraf dist && concurrently --kill-others \"npm:serve\" \"npm:electron\""
+    "start:dev": "rimraf dist && concurrently --kill-others \"npm:start\" \"npm:electron\""
   },
   "dependencies": {
     "@ag/testlib": "^0.0.0"
