@@ -5,5 +5,5 @@ export interface TestLib {
 
 export const test: TestLib = {
   foo: 123,
-  bar: "bar",
+  bar: 'bar',
 }

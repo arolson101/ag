@@ -1,6 +1,6 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { buildWebpackConfig } from '../../scripts/buildWebpackConfig';
-import pkg from "./package.json";
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { buildWebpackConfig } from '../../scripts/buildWebpackConfig'
+import pkg from './package.json'
 const CreateFileWebpack = require('create-file-webpack')
 
 const appName = 'Ag'
@@ -14,18 +14,22 @@ module.exports = [
       new CreateFileWebpack({
         path: 'dist',
         fileName: 'package.json',
-        content: JSON.stringify({
-          name: appName,
-          version: pkg.version,
-          main: 'main.js'
-        }, null, '  ')
-      })
+        content: JSON.stringify(
+          {
+            name: appName,
+            version: pkg.version,
+            main: 'main.js',
+          },
+          null,
+          '  '
+        ),
+      }),
     ],
     devServer: {
       // prevent HMR stuff getting added
       inline: false,
       stats: 'minimal',
-    }
+    },
   }),
 
   buildWebpackConfig({
@@ -40,9 +44,9 @@ module.exports = [
     devServer: {
       publicPath: '/',
       historyApiFallback: {
-        disableDotRule: true
+        disableDotRule: true,
       },
       stats: 'minimal',
-    }
+    },
   }),
 ]

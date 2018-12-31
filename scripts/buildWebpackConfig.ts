@@ -1,5 +1,5 @@
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
+import webpack from 'webpack'
+import WebpackDevServer from 'webpack-dev-server'
 // import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 const WriteFilePlugin = require('write-file-webpack-plugin')
 
@@ -10,16 +10,21 @@ interface ConfigOptions {
   devServer?: webpack.Configuration['devServer']
 }
 
-export const buildWebpackConfig = ({name, target, plugins, devServer}: ConfigOptions): webpack.Configuration & WebpackDevServer.Configuration => ({
+export const buildWebpackConfig = ({
+  name,
+  target,
+  plugins,
+  devServer,
+}: ConfigOptions): webpack.Configuration & WebpackDevServer.Configuration => ({
   target,
   devtool: 'inline-source-map',
   entry: `./src/${name}.ts`,
   output: {
     publicPath: '/',
-    filename: `${name}.js`
+    filename: `${name}.js`,
   },
   resolve: {
-    extensions: [".ts", ".tsx", ".js", ".jsx"]
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   module: {
     rules: [
@@ -27,16 +32,16 @@ export const buildWebpackConfig = ({name, target, plugins, devServer}: ConfigOpt
         test: /\.tsx?$/,
         exclude: '/node_modules/',
         use: [
-          { loader: 'babel-loader' },
-          { loader: 'ts-loader' }
+          { loader: 'babel-loader' }, //
+          { loader: 'ts-loader' },
         ],
-      }
-    ]
+      },
+    ],
   },
   plugins: [
     ...(plugins || []),
     new WriteFilePlugin({
-      test: /^((?!(hot-update)).)*$/
+      test: /^((?!(hot-update)).)*$/,
     }),
     // new BundleAnalyzerPlugin({
     //   analyzerMode: 'static',
@@ -45,7 +50,7 @@ export const buildWebpackConfig = ({name, target, plugins, devServer}: ConfigOpt
     // }),
   ],
   externals: {
-    'devtron': 'commonjs devtron',
+    devtron: 'commonjs devtron',
     'electron-react-devtools': 'commonjs electron-react-devtools',
   },
   stats: 'minimal',
