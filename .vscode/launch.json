@@ -14,9 +14,27 @@
         "runtimeExecutable": "${workspaceFolder}/packages/app_electron/node_modules/.bin/electron.cmd"
       },
       "args": [
-        ".", //
+        "--remote-debugging-port=9223", //
+        ".",
         "--url",
         "http://localhost:3030"
+      ]
+    },
+    {
+      "name": "Electron: renderer",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9223,
+      "webRoot": "${workspaceFolder}/packages/app_electron/dist",
+      "timeout": 30000
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Electron",
+      "configurations": [
+        "Electron: main", //
+        "Electron: renderer"
       ]
     }
   ]
