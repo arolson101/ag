@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
     "lib": [
       "esnext"
     ],
-    "module": "esnext",
     "strict": true,
     "jsx": "preserve",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "sourceMap": true
