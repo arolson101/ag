@@ -5,8 +5,11 @@ const CreateFileWebpack = require('create-file-webpack')
 
 const appName = 'Ag'
 
+const context = __dirname
+
 module.exports = [
   buildWebpackConfig({
+    context,
     name: 'main',
     target: 'electron-main',
     plugins: [
@@ -33,12 +36,13 @@ module.exports = [
   }),
 
   buildWebpackConfig({
+    context,
     name: 'index',
     target: 'electron-renderer',
     plugins: [
       // create index.html
       new HtmlWebpackPlugin({
-        title: `${appName}`,
+        title: `${appName} ${pkg.version}`,
       }),
     ],
     devServer: {

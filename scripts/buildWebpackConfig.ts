@@ -2,9 +2,11 @@ import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 // import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
 const WriteFilePlugin = require('write-file-webpack-plugin')
+import path from 'path'
 
 interface ConfigOptions {
-  name: string
+  name: webpack.Configuration['name']
+  context: string
   target: webpack.Configuration['target']
   plugins?: webpack.Configuration['plugins']
   devServer?: webpack.Configuration['devServer']
@@ -12,16 +14,22 @@ interface ConfigOptions {
 
 export const buildWebpackConfig = ({
   name,
+  context,
   target,
   plugins,
   devServer,
 }: ConfigOptions): webpack.Configuration & WebpackDevServer.Configuration => ({
   target,
-  devtool: 'inline-source-map',
+  context,
+  devtool: 'source-map',
   entry: `./src/${name}.ts`,
   output: {
     publicPath: '/',
     filename: `${name}.js`,
+    devtoolModuleFilenameTemplate: info => {
+      const rel = /*path.relative(context,*/ info.absoluteResourcePath /*)*/
+      return `webpack:///${rel}`
+    },
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],

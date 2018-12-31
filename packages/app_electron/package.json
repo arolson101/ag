@@ -6,7 +6,7 @@
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "serve": "nodemon -q --watch ./webpack.config.ts --exec \"webpack-dev-server --port 3030 --hot --mode=development\"",
-    "electron": "wait-on ./dist/main.js && nodemon -q --watch ./dist/main.js --exec \"electron dist\"",
+    "electron": "wait-on ./dist/main.js && nodemon -q --watch ./dist/main.js --exec \"electron dist --url http://localhost:3030\"",
     "start:dev": "rimraf dist && concurrently --kill-others \"npm:serve\" \"npm:electron\""
   },
   "dependencies": {
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@types/electron-is-dev": "^0.3.0",
     "@types/electron-window-state": "^2.0.33",
+    "commander": "^2.19.0",
     "devtron": "^1.4.0",
     "electron": "^4.0.0",
     "electron-is-dev": "^1.0.1",
