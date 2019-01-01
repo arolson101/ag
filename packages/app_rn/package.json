@@ -5,7 +5,8 @@
   "scripts": {
     "metro": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "start": "haul"
+    "start": "haul",
+    "debug": "react-native-debugger"
   },
   "dependencies": {
     "react": "16.6.3",
