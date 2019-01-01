@@ -7,7 +7,10 @@
     "build:dev": "webpack --mode=development",
     "start": "nodemon -q --watch ./webpack.config.ts --exec \"webpack-dev-server --port 3030 --hot --mode=development\"",
     "electron": "wait-on ./dist/main.js && nodemon -q --watch ./dist/main.js --exec \"electron dist --url http://localhost:3030\"",
-    "start:dev": "rimraf dist && concurrently --kill-others \"npm:start\" \"npm:electron\""
+    "start:dev": "rimraf dist && concurrently --kill-others \"npm:start\" \"npm:electron\"",
+    "storybook": "concurrently --raw --kill-others \"npm:storybook:server\" \"npm:storybook:electron\"",
+    "storybook:server": "start-storybook --ci --quiet -p 6006",
+    "storybook:electron": "wait-on http://localhost:6006 && electron dist --url http://localhost:6006/"
   },
   "dependencies": {
     "@ag/testlib": "^0.0.0"
@@ -20,6 +23,10 @@
     "electron": "^4.0.0",
     "electron-is-dev": "^1.0.1",
     "electron-react-devtools": "^0.5.3",
-    "electron-window-state": "^5.0.3"
+    "electron-window-state": "^5.0.3",
+    "@storybook/react": "^4.1.4",
+    "@storybook/addon-actions": "^4.1.4",
+    "@storybook/addon-links": "^4.1.4",
+    "@storybook/addons": "^4.1.4"
   }
 }
