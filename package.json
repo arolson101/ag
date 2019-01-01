@@ -55,7 +55,6 @@
     "write-file-webpack-plugin": "^4.5.0"
   },
   "scripts": {
-    "preinstall": "yarn config set workspaces-experimental true",
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
     "lint": "tslint --fix \"**/*{.ts,.tsx}\"",
     "electron-serve": "cd packages/app_electron && yarn run serve"
