@@ -57,10 +57,6 @@ export const buildWebpackConfig = ({
     //   openAnalyzer: false,
     // }),
   ],
-  externals: {
-    devtron: 'commonjs devtron',
-    'electron-react-devtools': 'commonjs electron-react-devtools',
-  },
   stats: 'minimal',
   devServer: {
     ...(devServer || {}),

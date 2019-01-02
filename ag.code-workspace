@@ -1,14 +1,17 @@
 {
   "folders": [
-	{
-		"path": "."
-	},
-	{
-		"path": "packages/app_electron"
-	},
-	{
-		"path": "packages/app_rn"
-	}
-],
+    {
+      "path": "."
+    },
+    {
+      "path": "packages/app_electron"
+    },
+    {
+      "path": "packages/app_rn"
+    },
+    {
+      "path": "packages/state"
+    }
+  ],
   "settings": {}
 }

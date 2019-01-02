@@ -1,0 +1,19 @@
+{
+  "name": "@ag/state",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/react-redux": "^6.0.11",
+    "@types/redux": "^3.6.0",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.7",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.3.3",
+    "typesafe-actions": "^3.0.0"
+  }
+}

@@ -7,7 +7,11 @@
     "object-literal-sort-keys": false,
     "interface-name": false,
     "no-implicit-dependencies": false,
+    "no-object-literal-type-assertion": false,
     "no-var-requires": false,
-    "ordered-imports": false
+    "ordered-imports": false,
+    "no-submodule-imports": false,
+    "no-empty-interface": false,
+    "no-empty": true
   }
 }
