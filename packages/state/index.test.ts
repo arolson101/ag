@@ -1,22 +1,33 @@
-import { actions, configureStore, Services, selectors } from './index'
+import { StateObservable } from 'redux-observable'
+import { Subject } from 'rxjs'
+import { marbles } from 'rxjs-marbles'
+import { rootEpic } from './epics'
+import { actions, Services } from './index'
+import { RootState } from './reducers'
 
 const services: Services = {
   logger: () => {},
 }
 
 describe('navigation state', () => {
-  test('starts loading', async () => {
-    const store = configureStore(services)
-    let wasLoading = false
-    store.subscribe(() => {
-      if (selectors.isLoading(store.getState())) {
-        wasLoading = true
-      }
+  test(
+    'rootEpic marbles',
+    marbles(m => {
+      const action$ = m.hot('a', {
+        a: actions.nav.home(),
+      })
+      const expect$ = m.cold('x 1s y', {
+        x: actions.nav.loading.request(),
+        y: actions.nav.loading.success(),
+      })
+      const state$ = {} as RootState
+      const output$ = rootEpic(
+        action$ as any,
+        new StateObservable(new Subject(), state$),
+        services
+      )
+
+      m.expect(output$).toBeObservable(expect$)
     })
-    expect(selectors.isLoading(store.getState())).toBe(false)
-    store.dispatch(actions.nav.home())
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    expect(selectors.isLoading(store.getState())).toBe(false)
-    expect(wasLoading).toBe(true)
-  })
+  )
 })

@@ -3,6 +3,9 @@
   "extends": ["tslint:latest", "tslint-config-prettier"],
   "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
+    "max-line-length": {
+      "options": [100]
+    },
     "prettier": true,
     "object-literal-sort-keys": false,
     "interface-name": false,
@@ -12,6 +15,9 @@
     "ordered-imports": false,
     "no-submodule-imports": false,
     "no-empty-interface": false,
-    "no-empty": true
+    "no-empty": false
+  },
+  "linterOptions": {
+    "exclude": ["node_modules/**"]
   }
 }

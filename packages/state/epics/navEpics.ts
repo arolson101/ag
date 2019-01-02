@@ -6,6 +6,7 @@ import { EpicType } from './index'
 
 const navAction: EpicType = (action$, state$, { logger }) =>
   action$.pipe(
+    // tap(action => console.log('navAction got action', action)),
     filter(isActionOf(actions.nav.login)),
     tap(action => {
       logger(`action type must be equal: === ${action.type}`)
@@ -15,12 +16,12 @@ const navAction: EpicType = (action$, state$, { logger }) =>
 
 const navLogin: EpicType = (action$, state$) =>
   action$.pipe(
-    filter(isActionOf(actions.nav.login)),
+    // tap(action => console.log('navLogin got action', action)),
+    filter(isActionOf(actions.nav.home)),
     mergeMap(action =>
       concat(
         of(actions.nav.loading.request()),
-        delay(1000),
-        of(actions.nav.loading.success())
+        of(actions.nav.loading.success()).pipe(delay(1001))
       )
     )
   )
