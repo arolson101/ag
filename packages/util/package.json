@@ -1,0 +1,11 @@
+{
+  "name": "@ag/util",
+  "version": "0.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "immutability-helper": "^2.9.0"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}

@@ -7,8 +7,11 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@types/graphql": "^14.0.4",
     "@types/react-redux": "^6.0.11",
     "@types/redux": "^3.6.0",
+    "graphql-anywhere": "^4.1.24",
+    "graphql-tag": "^2.10.0",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.7",
