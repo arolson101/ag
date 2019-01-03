@@ -1,27 +1,48 @@
+import assert from 'assert'
 import { RootAction, actions } from '../actions'
 import { getType, StateType } from 'typesafe-actions'
 
 const initialState = {
   loading: false,
-  loadError: undefined as Error | undefined,
+  error: undefined as Error | undefined,
+  url: undefined as string | undefined,
+  data: {} as object,
 }
+
+type NavState = typeof initialState
 
 export const navSelectors = {
   isLoading: (state: NavState) => state.loading,
-  loadError: (state: NavState) => state.loadError,
+  getLoadError: (state: NavState) => state.error,
+  getUrl: (state: NavState) => state.url,
+  getLoadData: (state: NavState) => state.data,
 }
 
-export const nav = (state = initialState, action: RootAction) => {
+export const nav = (state: NavState = initialState, action: RootAction): NavState => {
   switch (action.type) {
-    case getType(actions.nav.loading.request):
-      return { ...state, loading: true, loadError: undefined }
-    case getType(actions.nav.loading.success):
-      return { ...state, loading: false }
-    case getType(actions.nav.loading.failure):
-      return { ...state, loading: false, loadError: action.payload }
+    case getType(actions.nav.navigate.request):
+      return {
+        ...state,
+        error: undefined,
+        data: {},
+        url: action.payload.url,
+        loading: true,
+      }
+    case getType(actions.nav.navigate.success):
+      assert(state.url === action.payload.url)
+      return {
+        ...state, //
+        loading: false,
+        data: action.payload.data,
+      }
+    case getType(actions.nav.navigate.failure):
+      assert(state.url === action.payload.url)
+      return {
+        ...state, //
+        loading: false,
+        error: action.payload.error,
+      }
     default:
       return state
   }
 }
-
-type NavState = StateType<typeof nav>
