@@ -8,7 +8,7 @@ interface Props {
 }
 
 export class LoginPageComponent extends PureComponent<Props> {
-  public static readonly fragments = {
+  static readonly fragments = {
     entry: gql`
       fragment FeedEntry on Entry {
         commentCount
@@ -26,7 +26,7 @@ export class LoginPageComponent extends PureComponent<Props> {
     `,
   }
 
-  public static readonly query = gql`
+  static readonly query = gql`
     query Comment($repoName: String!) {
       entry(repoFullName: $repoName) {
         comments {
@@ -37,9 +37,9 @@ export class LoginPageComponent extends PureComponent<Props> {
     ${LoginForm.fragments.entry}
   `
 
-  public static readonly propTypes = {}
+  static readonly propTypes = {}
 
-  public render() {
+  render() {
     return (
       <>
         <LoginForm entry={filter(LoginForm.fragments.entry, entry)} />
