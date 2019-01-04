@@ -7,7 +7,8 @@ interface Props {
   create: boolean
 }
 
-export class LoginPageComponent extends PureComponent<Props> {
+export class LoginPage extends PureComponent<Props> {
+  static readonly url = '/login'
   static readonly fragments = {
     entry: gql`
       fragment FeedEntry on Entry {

@@ -2,7 +2,9 @@ import { combineEpics, Epic } from 'redux-observable'
 import { ObservableInput } from 'rxjs'
 import { RootAction } from '../actions'
 import { RootState } from '../reducers'
-import { navEpics } from './navEpics'
+import { createRoute } from './navEpics'
+
+export { createRoute }
 
 export interface Services {
   logger: (str: string) => any
@@ -11,6 +13,5 @@ export interface Services {
 
 export interface EpicType extends Epic<RootAction, RootAction, RootState, Services> {}
 
-export const rootEpic = combineEpics<RootAction, RootAction, RootState, Services>(
-  ...navEpics //
-)
+export const makeEpic = (...args: EpicType[]) =>
+  combineEpics<RootAction, RootAction, RootState, Services>(...args)
