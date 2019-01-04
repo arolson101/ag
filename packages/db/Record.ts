@@ -13,8 +13,6 @@ interface Update<T> {
 export type BaseType<T> = CompressedJson<T>
 export type HistoryType<T> = CompressedJson<Array<Update<T>>>
 
-type RecordSubclass<Props> = Props & Record<Props>
-
 @Entity()
 @Index(['_deleted', 'id'])
 export abstract class Record<Props extends {}> {
@@ -23,16 +21,18 @@ export abstract class Record<Props extends {}> {
   @Column('text', { nullable: true }) _base?: BaseType<Props>
   @Column('text', { nullable: true }) _history?: HistoryType<Props>
 
-  constructor(props?: Props, genId?: () => string) {
-    if (genId) {
-      this.id = genId()
-    }
+  constructor(genId?: () => string, props?: Props) {
     this._deleted = 0
     this._base = undefined
     this._history = undefined
 
     if (props) {
+      assert(!['id', '_deleted', '_base', '_history'].some(key => key in props))
       Object.assign(this, props)
+    }
+
+    if (genId) {
+      this.id = genId()
     }
   }
 

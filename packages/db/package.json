@@ -6,13 +6,14 @@
   "scripts": {
     "test": "jest"
   },
-  "devDependencies": {
+  "dependencies": {
+    "@ag/util": "^0.0.0",
     "@types/randomcolor": "^0.5.0",
+    "randomcolor": "^0.5.3",
+    "react-intl": "^2.7.2",
     "type-graphql": "^0.16.0",
     "typedi": "^0.8.0",
     "typeorm": "^0.2.11"
   },
-  "dependencies": {
-    "randomcolor": "^0.5.3"
-  }
+  "devDependencies": {}
 }

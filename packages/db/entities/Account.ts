@@ -4,7 +4,7 @@ import { defineMessages } from 'react-intl'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { Record } from '../Record'
-import { AccountType, AccountInput } from './AccountInput'
+import { AccountInput, AccountType } from './AccountInput'
 
 @ObjectType()
 @Entity({ name: 'accounts' })
@@ -20,8 +20,8 @@ export class Account extends Record<Account.Props> {
   @Column() @Field() routing!: string
   @Column() @Field() key!: string
 
-  constructor(bankId?: string, props?: AccountInput, genId?: () => string) {
-    super({ ...Account.defaultValues(), ...props }, genId)
+  constructor(genId?: () => string, bankId?: string, props?: AccountInput) {
+    super(genId, { ...Account.defaultValues(), ...props })
     if (bankId) {
       this.bankId = bankId
     }

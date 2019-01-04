@@ -10,7 +10,7 @@ class TestRecord extends Record<TestRecordProps> implements TestRecordProps {
   bar!: number
 
   constructor(props?: TestRecordProps) {
-    super(props)
+    super(undefined, props)
   }
 }
 

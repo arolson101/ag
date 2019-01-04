@@ -1,11 +1,12 @@
+/* tslint:disable:no-implicit-dependencies */
 import { StateObservable } from 'redux-observable'
-import { Subject, from, of } from 'rxjs'
+import { of, Subject } from 'rxjs'
 import { marbles } from 'rxjs-marbles'
+import { delay } from 'rxjs/operators'
 import { rootEpic } from './epics'
+import { navHome } from './epics/navEpics'
 import { actions, Services } from './index'
 import { RootState } from './reducers'
-import { navHome } from './epics/navEpics'
-import { delay } from 'rxjs/operators'
 
 const services: Services = {
   logger: () => {},

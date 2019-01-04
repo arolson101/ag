@@ -12,7 +12,7 @@ interface Props {
 }
 
 export class LoginForm extends PureComponent<Props> {
-  public static readonly fragments = {
+  static readonly fragments = {
     entry: gql`
       fragment LoginForm on Entry {
         score
@@ -23,11 +23,11 @@ export class LoginForm extends PureComponent<Props> {
     `,
   }
 
-  public static readonly propTypes = {
+  static readonly propTypes = {
     entry: propType(LoginForm.fragments.entry),
   }
 
-  public render() {
+  render() {
     return <>foo</>
   }
 }

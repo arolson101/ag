@@ -1,6 +1,6 @@
 import assert from 'assert'
-import { RootAction, actions } from '../actions'
-import { getType, StateType } from 'typesafe-actions'
+import { getType } from 'typesafe-actions'
+import { actions, RootAction } from '../actions'
 
 const initialState = {
   loading: false,
@@ -28,20 +28,23 @@ export const nav = (state: NavState = initialState, action: RootAction): NavStat
         url: action.payload.url,
         loading: true,
       }
+
     case getType(actions.nav.navigate.success):
       assert(state.url === action.payload.url)
       return {
-        ...state, //
+        ...state,
         loading: false,
         data: action.payload.data,
       }
+
     case getType(actions.nav.navigate.failure):
       assert(state.url === action.payload.url)
       return {
-        ...state, //
+        ...state,
         loading: false,
         error: action.payload.error,
       }
+
     default:
       return state
   }
