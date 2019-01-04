@@ -1,5 +1,6 @@
 import { CompressedJson, dehydrate, hydrate } from '@ag/util/dehydrate'
 import { iupdate, Spec } from '@ag/util/iupdate'
+import assert from 'assert'
 import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
 
 type Change<T> = Partial<Spec<T>>
@@ -35,13 +36,8 @@ export abstract class Record<Props extends {}> {
     }
   }
 
-  static update<Props extends {}, R extends RecordSubclass<Props>>(
-    entity: new (props?: Props) => R,
-    obj: R,
-    t: number,
-    q: Change<Props>
-  ): R {
-    const { id, _deleted, _base, _history, ...p } = obj
+  update(t: number, q: Change<Props>) {
+    const { id, _deleted, _base, _history, ...p } = this
     const props = (p as unknown) as Props
     const prevHistory = _history ? hydrate(_history) : []
     const change = { t, q }
@@ -51,7 +47,7 @@ export abstract class Record<Props extends {}> {
       ? iupdate(props, change.q as Spec<Props>)
       : rebuildObject(props, _base, changes)
 
-    return new entity({
+    Object.assign(this, {
       ...nextProps,
       id,
       _deleted,
@@ -60,17 +56,13 @@ export abstract class Record<Props extends {}> {
     })
   }
 
-  static delete<Props extends {}, R extends RecordSubclass<Props>>(
-    entity: new (props?: Props) => R,
-    obj: R,
-    t: number
-  ): R {
-    const { id, _deleted, _base, _history, ...p } = obj
-    const props = (p as unknown) as Props
-    return new entity({
-      ...props,
-      _deleted: Math.max(obj._deleted, t),
-    })
+  delete(t: number) {
+    assert(t > 0)
+    this._deleted = Math.max(this._deleted, t)
+  }
+
+  isDeleted(): boolean {
+    return this._deleted > 0
   }
 }
 

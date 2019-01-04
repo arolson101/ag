@@ -11,4 +11,17 @@ ctx.extend(
   }
 )
 
+ctx.extend(
+  '$plus',
+  (param: number, old: number): any => {
+    if (typeof param !== 'number') {
+      throw new Error('parameter to $plus must be a number')
+    }
+    if (typeof old !== 'number') {
+      throw new Error('target of $plus must be a number')
+    }
+    return param + old
+  }
+)
+
 export const iupdate = ctx.update

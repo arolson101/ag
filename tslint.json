@@ -19,7 +19,8 @@
     "member-access": [true, "no-public"],
     "variable-name": [true, "ban-keywords", "allow-leading-underscore"],
     "member-ordering": false,
-    "no-namespace": false
+    "no-namespace": false,
+    "no-this-assignment": false
   },
   "linterOptions": {
     "exclude": ["node_modules/**"]
