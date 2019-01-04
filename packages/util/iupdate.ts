@@ -1,6 +1,6 @@
 import { Context, Spec } from 'immutability-helper'
 
-export { Spec }
+export { Spec as ISpec }
 
 const ctx = new Context()
 

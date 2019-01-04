@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "main": "index.ts",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
   "scripts": {
     "test": "jest"
   },

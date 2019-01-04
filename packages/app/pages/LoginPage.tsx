@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import gql from 'graphql-tag'
-import { LoginForm } from './LoginForm'
+import { LoginForm } from '../components/LoginForm'
 import { filter } from 'graphql-anywhere'
 
 interface Props {

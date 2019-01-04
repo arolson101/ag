@@ -1,16 +1,31 @@
 {
   "folders": [
     {
+      "path": "packages/app",
+      "name": "@ag/app"
+    },
+    {
+      "path": "packages/db",
+      "name": "@ag/db"
+    },
+    {
+      "path": "packages/state",
+      "name": "@ag/state"
+    },
+    {
+      "path": "packages/util",
+      "name": "@ag/util"
+    },
+    {
+      "path": "packages/app_electron",
+      "name": "target: electron"
+    },
+    {
+      "path": "packages/app_rn",
+      "name": "target: react-native"
+    },
+    {
       "path": "."
-    },
-    {
-      "path": "packages/app_electron"
-    },
-    {
-      "path": "packages/app_rn"
-    },
-    {
-      "path": "packages/state"
     }
   ],
   "settings": {}

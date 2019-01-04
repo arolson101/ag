@@ -1,0 +1,24 @@
+{
+  "name": "@ag/app",
+  "version": "0.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "@ag/db": "^0.0.0",
+    "@ag/state": "^0.0.0",
+    "@ag/util": "^0.0.0",
+    "graphql-anywhere": "^4.1.24",
+    "graphql-tag": "^2.10.0",
+    "react": "^16.7.0"
+  },
+  "devDependencies": {
+    "@types/react": "^16.7.18"
+  }
+}

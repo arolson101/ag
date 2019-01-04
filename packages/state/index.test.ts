@@ -5,7 +5,7 @@ import { marbles } from 'rxjs-marbles'
 import { delay } from 'rxjs/operators'
 import { rootEpic } from './epics'
 import { navHome } from './epics/navEpics'
-import { actions, Services } from './index'
+import { rootActions as actions, Services } from './index'
 import { RootState } from './reducers'
 
 const services: Services = {

@@ -1,4 +1,4 @@
-import { Spec } from '@ag/util/iupdate'
+import { ISpec } from '@ag/util/iupdate'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Field, ObjectType } from 'type-graphql'
@@ -30,9 +30,9 @@ export class Account extends Record<Account.Props> {
 
 export namespace Account {
   export interface Props extends Pick<AccountInput, keyof AccountInput> {}
-  export interface Interface extends Pick<Account, Exclude<keyof Account, 'saveAccount'>> {}
   export const Type = AccountType
   export type Type = AccountType
+  export type Spec = ISpec<AccountInput>
 
   export const messages = defineMessages({
     CHECKING: {
@@ -74,8 +74,6 @@ export namespace Account {
         return randomColor({ luminosity: 'bright' })
     }
   }
-
-  export type Query = Spec<AccountInput>
 
   // export namespace change {
   //   export const add = (t: number, ...accounts: Interface[]): DbChange => ({
