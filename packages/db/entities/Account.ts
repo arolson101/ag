@@ -1,53 +1,29 @@
-import { iupdate } from '@ag/util/iupdate'
+import { Spec } from '@ag/util/iupdate'
+import randomColor from 'randomcolor'
+import { defineMessages } from 'react-intl'
+import { Field, ObjectType } from 'type-graphql'
+import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { Record } from '../Record'
-import { Column, Entity, PrimaryColumn } from '../typeorm'
-import { DbChange, Field, InputType, ObjectType, registerEnumType } from './helpers'
-import { defineMessages } from 'src/intl'
-const randomColor = require<(options?: RandomColorOptions) => string>('randomcolor')
-
-// see ofx4js.domain.data.banking.AccountType
-export enum AccountType {
-  CHECKING = 'CHECKING',
-  SAVINGS = 'SAVINGS',
-  MONEYMRKT = 'MONEYMRKT',
-  CREDITLINE = 'CREDITLINE',
-  CREDITCARD = 'CREDITCARD',
-}
-registerEnumType(AccountType, { name: 'AccountType' })
-
-@InputType()
-export class AccountInput {
-  @Field({ nullable: true }) name?: string
-  @Field({ nullable: true }) color?: string
-  @Field(type => AccountType, { nullable: true }) type?: AccountType
-  @Field({ nullable: true }) number?: string
-  @Field({ nullable: true }) visible?: boolean
-  @Field({ nullable: true }) routing?: string
-  @Field({ nullable: true }) key?: string
-}
+import { AccountType, AccountInput } from './AccountInput'
 
 @ObjectType()
 @Entity({ name: 'accounts' })
 export class Account extends Record<Account.Props> {
-  @PrimaryColumn() @Field() id: string
-  @Column() @Field() bankId: string
+  @PrimaryColumn() @Field() id!: string
+  @Column() @Field() bankId!: string
 
-  @Column() @Field() name: string
-  @Column() @Field() color: string
-  @Column() @Field(type => AccountType) @Column() type: AccountType
-  @Column() @Field() number: string
-  @Column() @Field() visible: boolean
-  @Column() @Field() routing: string
-  @Column() @Field() key: string
+  @Column() @Field() name!: string
+  @Column() @Field() color!: string
+  @Column() @Field(type => AccountType) @Column() type!: AccountType
+  @Column() @Field() number!: string
+  @Column() @Field() visible!: boolean
+  @Column() @Field() routing!: string
+  @Column() @Field() key!: string
 
   constructor(bankId?: string, props?: AccountInput, genId?: () => string) {
-    super()
-    if (bankId && props && genId) {
-      this.createRecord(genId, {
-        ...Account.defaultValues(),
-        ...props,
-        bankId,
-      })
+    super({ ...Account.defaultValues(), ...props }, genId)
+    if (bankId) {
+      this.bankId = bankId
     }
   }
 }
@@ -99,27 +75,27 @@ export namespace Account {
     }
   }
 
-  export type Query = iupdate.Query<AccountInput>
+  export type Query = Spec<AccountInput>
 
-  export namespace change {
-    export const add = (t: number, ...accounts: Interface[]): DbChange => ({
-      table: Account,
-      t,
-      adds: accounts,
-    })
+  // export namespace change {
+  //   export const add = (t: number, ...accounts: Interface[]): DbChange => ({
+  //     table: Account,
+  //     t,
+  //     adds: accounts,
+  //   })
 
-    export const edit = (t: number, id: string, q: Query): DbChange => ({
-      table: Account,
-      t,
-      edits: [{ id, q }],
-    })
+  //   export const edit = (t: number, id: string, q: Query): DbChange => ({
+  //     table: Account,
+  //     t,
+  //     edits: [{ id, q }],
+  //   })
 
-    export const remove = (t: number, id: string): DbChange => ({
-      table: Account,
-      t,
-      deletes: [id],
-    })
-  }
+  //   export const remove = (t: number, id: string): DbChange => ({
+  //     table: Account,
+  //     t,
+  //     deletes: [id],
+  //   })
+  // }
 
   export const defaultValues = (): Props => ({
     name: '',
@@ -133,20 +109,20 @@ export namespace Account {
 
   type Nullable<T> = { [K in keyof T]?: T[K] | undefined | null }
 
-  export const diff = (account: Account, values: Nullable<Props>): Query => {
-    return Object.keys(values).reduce(
-      (q, prop): Query => {
-        const val = values[prop]
-        if (val !== account[prop]) {
-          return {
-            ...q,
-            [prop]: { $set: val },
-          }
-        } else {
-          return q
-        }
-      },
-      {} as Query
-    )
-  }
+  // export const diff = (account: Account, values: Nullable<Props>): Query => {
+  //   return Object.keys(values).reduce(
+  //     (q, prop): Query => {
+  //       const val = values[prop]
+  //       if (val !== account[prop]) {
+  //         return {
+  //           ...q,
+  //           [prop]: { $set: val },
+  //         }
+  //       } else {
+  //         return q
+  //       }
+  //     },
+  //     {} as Query
+  //   )
+  // }
 }

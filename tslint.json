@@ -18,7 +18,8 @@
     "no-empty": false,
     "member-access": [true, "no-public"],
     "variable-name": [true, "ban-keywords", "allow-leading-underscore"],
-    "member-ordering": false
+    "member-ordering": false,
+    "no-namespace": false
   },
   "linterOptions": {
     "exclude": ["node_modules/**"]

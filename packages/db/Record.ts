@@ -1,8 +1,6 @@
-import { pipe } from 'rxjs'
-import { deflateRawSync, inflateRawSync } from 'zlib'
+import { CompressedJson, dehydrate, hydrate } from '@ag/util/dehydrate'
 import { iupdate, Spec } from '@ag/util/iupdate'
-import { hydrate, dehydrate, CompressedJson } from '@ag/util/dehydrate'
-import { Column, Entity, Index, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
 
 type Change<T> = Partial<Spec<T>>
 
@@ -14,16 +12,20 @@ interface Update<T> {
 export type BaseType<T> = CompressedJson<T>
 export type HistoryType<T> = CompressedJson<Array<Update<T>>>
 
+type RecordSubclass<Props> = Props & Record<Props>
+
 @Entity()
 @Index(['_deleted', 'id'])
 export abstract class Record<Props extends {}> {
-  @PrimaryGeneratedColumn('uuid') id!: string
+  @PrimaryColumn() id!: string
   @Column() _deleted: number
   @Column('text', { nullable: true }) _base?: BaseType<Props>
   @Column('text', { nullable: true }) _history?: HistoryType<Props>
 
-  constructor(props?: Props) {
-    // id is assigned by database
+  constructor(props?: Props, genId?: () => string) {
+    if (genId) {
+      this.id = genId()
+    }
     this._deleted = 0
     this._base = undefined
     this._history = undefined
@@ -36,11 +38,13 @@ export abstract class Record<Props extends {}> {
   static update<Props extends {}, R extends RecordSubclass<Props>>(
     entity: new (props?: Props) => R,
     obj: R,
-    change: Update<Props>
+    t: number,
+    q: Change<Props>
   ): R {
     const { id, _deleted, _base, _history, ...p } = obj
     const props = (p as unknown) as Props
     const prevHistory = _history ? hydrate(_history) : []
+    const change = { t, q }
     const changes = [...prevHistory, change].sort((a, b) => a.t - b.t)
     const isLatest = changes[changes.length - 1] === change
     const nextProps = isLatest
@@ -56,12 +60,19 @@ export abstract class Record<Props extends {}> {
     })
   }
 
-  static delete<Props extends {}, R extends RecordSubclass<Props>>(obj: R): R {
-    return obj
+  static delete<Props extends {}, R extends RecordSubclass<Props>>(
+    entity: new (props?: Props) => R,
+    obj: R,
+    t: number
+  ): R {
+    const { id, _deleted, _base, _history, ...p } = obj
+    const props = (p as unknown) as Props
+    return new entity({
+      ...props,
+      _deleted: Math.max(obj._deleted, t),
+    })
   }
 }
-
-type RecordSubclass<Props> = Props & Record<Props>
 
 const rebuildObject = <Props>(
   props: Props,
@@ -70,23 +81,4 @@ const rebuildObject = <Props>(
 ): Props => {
   const base: Props = _base ? hydrate(_base) : props
   return changes.reduce((current, change) => iupdate(current, change.q as Spec<Props>), base)
-}
-
-export const updateRecord = <R extends T & IRecord<T>, T>(record: R, change: Update<T>): R => {
-  const { id, _base, _deleted, _history, ...props } = record as IRecord<T>
-  const prevHistory = _history ? hydrate(_history) : []
-  const changes = [...prevHistory, change].sort((a, b) => a.t - b.t)
-  const isLatest = changes[changes.length - 1] === change
-  const next = isLatest ? iupdate(props, change.q) : rebuildObject(props, _base, changes)
-  return {
-    ...next,
-    id,
-    _deleted,
-    _base: _base || dehydrate(props as T),
-    _history: dehydrate(changes),
-  } as R
-}
-
-export const deleteRecord = <R extends IRecord<T>, T>(record: R, t: number): R => {
-  return { ...(record as {}), _deleted: t } as R
 }

@@ -2230,6 +2230,11 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.1.tgz#48fd98c1561fe718b61733daed46ff115b496e18"
   integrity sha512-eqz8c/0kwNi/OEHQfvIuJVLTst3in0e7uTKeuY+WL/zfKn0xVujOTp42bS/vUUokhK5P2BppLd9JXMOMHcgbjA==
 
+"@types/randomcolor@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@types/randomcolor/-/randomcolor-0.5.0.tgz#8fd8e56014cf182c966cdb78f1995f47ec5b91db"
+  integrity sha512-odex88/brECZgiSzp6i9rYiNaWAacn862VY358HFiDbxfIUhbbB+6y3Ah7WlXx9g9qNdJGTLZde9blfCSFch4Q==
+
 "@types/range-parser@*":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
@@ -10701,6 +10706,11 @@ randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.0.6.tgz#d302c522948588848a8d300c932b44c24231da80"
   dependencies:
     safe-buffer "^5.1.0"
+
+randomcolor@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/randomcolor/-/randomcolor-0.5.3.tgz#7f90f2f2a7f6d5a52232161eeaeeaea9ac3b5815"
+  integrity sha1-f5Dy8qf21aUiMhYe6u6uqaw7WBU=
 
 randomfill@^1.0.3:
   version "1.0.4"
