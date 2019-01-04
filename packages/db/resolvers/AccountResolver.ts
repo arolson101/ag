@@ -1,4 +1,5 @@
 import Axios, { CancelTokenSource } from 'axios'
+import { log } from '@ag/util/log'
 import cuid from 'cuid'
 import * as ofx4js from 'ofx4js'
 import { Arg, Mutation, Query, Resolver, Root, FieldResolver } from 'type-graphql'
@@ -78,9 +79,9 @@ export class AccountResolver {
       const { username, password } = checkLogin(bank)
       const accountProfiles = await service.readAccountProfiles(username, password)
       if (accountProfiles.length === 0) {
-        console.log('server reports no accounts')
+        log.info('server reports no accounts')
       } else {
-        console.log('accountProfiles', accountProfiles)
+        log.info('accountProfiles', accountProfiles)
         const t = Date.now()
         const accounts = accountProfiles
           .map(accountProfile => toAccountInput(bank, accountProfiles, accountProfile))
@@ -109,10 +110,10 @@ export class AccountResolver {
             adds,
             edits,
           }
-          console.log('account changes', change)
+          log.info('account changes', change)
           await this.app.write([change])
         } else {
-          console.log('no account changes')
+          log.info('no account changes')
         }
       }
     } catch (ex) {
@@ -133,7 +134,8 @@ export class AccountResolver {
     @Arg('end', { nullable: true }) end?: Date
   ): Promise<Transaction[]> {
     const res = await this.app.transactions.getForAccount(account.id, start, end)
-    console.log(
+    log.info(
+      '%s\n%s\n%o',
       `transactions for account ${account.id} (bank ${account.bankId})`,
       `time: BETWEEN '${start}' AND '${end}'`,
       res
