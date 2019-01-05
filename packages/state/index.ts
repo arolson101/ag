@@ -1,4 +1,4 @@
 export { actions } from './actions'
-export { configureStore, Services } from './configureStore'
-export { createRoute, makeEpic } from './epics'
+export { configureStore, Dependencies, EpicType } from './configureStore'
+export { createRoute } from './epics'
 export { selectors } from './reducers'
