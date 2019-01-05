@@ -1,4 +1,5 @@
-import { createRoute } from '@ag/state'
+import { createRoute, EpicType } from '@ag/state'
+import { DocumentNode } from 'graphql'
 import { LoginPage } from './pages/LoginPage'
 
 // export const login = createStandardAction('nav/login')()
@@ -35,15 +36,25 @@ import { LoginPage } from './pages/LoginPage'
 //   'nav/loading/failure'
 // )<void, any, Error>()
 
-const { ac: navLogin, eh: handleNavLogin } = createRoute<LoginPage.Params>(
-  LoginPage.url,
-  LoginPage.query
-)
-
-export const routes = {
-  navLogin,
+export interface PageQuery<Params = void> extends DocumentNode {
+  __tag?: Params
 }
 
-export const handlers = [
-  handleNavLogin, //
-]
+interface RouteComponent<Params> {
+  url: string
+  query: PageQuery<Params>
+}
+
+export const routeHandlers: EpicType[] = []
+
+const addRouteComponent = <T>(page: RouteComponent<T>) => {
+  const { ac, eh } = createRoute<T>(page.url, page.query)
+  routeHandlers.push(eh)
+  return ac
+}
+
+export const routes = {
+  login: addRouteComponent(LoginPage),
+}
+
+// routes.login()

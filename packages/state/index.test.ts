@@ -12,7 +12,8 @@ test(
     const { ac: navHome, eh: handleNavHome } = createRoute<{ foo: string }>('/home', 'asdf')
 
     const dependencies: Dependencies = {
-      runQuery: (query: string) => of({ response: 123 }).pipe(delay(100)),
+      runQuery: (document: any, variableValues: any) =>
+        of({ response: 123 }).pipe(delay(100)) as any,
     }
 
     const action$ = m.hot('a', {

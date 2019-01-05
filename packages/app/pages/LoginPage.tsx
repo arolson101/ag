@@ -1,7 +1,9 @@
+import { DocumentNode } from 'graphql'
 import { filter } from 'graphql-anywhere'
 import gql from 'graphql-tag'
 import React, { PureComponent } from 'react'
 import { LoginForm } from '../components/LoginForm'
+import { PageQuery } from '../routes'
 
 export namespace LoginPage {
   export type Params = void
@@ -12,7 +14,7 @@ export namespace LoginPage {
 
 export class LoginPage extends PureComponent<LoginPage.Props> {
   static url: string
-  static query: string
+  static query: PageQuery<LoginPage.Params>
 
   static readonly propTypes = {}
 
