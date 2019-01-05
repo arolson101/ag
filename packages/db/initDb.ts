@@ -6,7 +6,7 @@ import { DbImports, DbImportsService } from './services'
 
 ormUseContainer(Container)
 
-export { DbImports as Imports }
+export { DbImports }
 
 export const initDb = (imports: DbImports) => {
   Container.set(DbImportsService, new DbImportsService(imports))
