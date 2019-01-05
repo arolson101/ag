@@ -35,4 +35,15 @@ import { LoginPage } from './pages/LoginPage'
 //   'nav/loading/failure'
 // )<void, any, Error>()
 
-export const { ac: navLogin, eh: handleNavLogin } = createRoute(LoginPage.url, LoginPage.query)
+const { ac: navLogin, eh: handleNavLogin } = createRoute<LoginPage.Params>(
+  LoginPage.url,
+  LoginPage.query
+)
+
+export const routes = {
+  navLogin,
+}
+
+export const handlers = [
+  handleNavLogin, //
+]
