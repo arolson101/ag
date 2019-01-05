@@ -1,10 +1,17 @@
 {
   "defaultSeverity": "warning",
-  "extends": ["tslint:latest", "tslint-config-prettier"],
-  "rulesDirectory": ["tslint-plugin-prettier"],
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier"
+  ],
+  "rulesDirectory": [
+    "tslint-plugin-prettier"
+  ],
   "rules": {
     "max-line-length": {
-      "options": [100]
+      "options": [
+        100
+      ]
     },
     "prettier": true,
     "object-literal-sort-keys": false,
@@ -15,13 +22,22 @@
     "no-submodule-imports": false,
     "no-empty-interface": false,
     "no-empty": false,
-    "member-access": [true, "no-public"],
-    "variable-name": [true, "ban-keywords", "allow-leading-underscore"],
+    "member-access": [
+      true,
+      "no-public"
+    ],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "allow-leading-underscore"
+    ],
     "member-ordering": false,
     "no-namespace": false,
     "no-this-assignment": false
   },
   "linterOptions": {
-    "exclude": ["node_modules/**"]
+    "exclude": [
+      "**/node_modules/**"
+    ]
   }
 }

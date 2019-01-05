@@ -1,3 +1,4 @@
+/* tslint:disable:no-implicit-dependencies */
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { buildWebpackConfig } from '../../scripts/buildWebpackConfig'
 import pkg from './package.json'

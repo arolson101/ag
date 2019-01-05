@@ -1,3 +1,4 @@
+/* tslint:disable:no-implicit-dependencies */
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 // import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
