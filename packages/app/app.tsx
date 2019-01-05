@@ -1,4 +1,5 @@
 import { DbImports, initDb } from '@ag/db'
+import { configureStore, Dependencies } from '@ag/state'
 import React from 'react'
 
 const dbImports: DbImports = {
@@ -7,6 +8,11 @@ const dbImports: DbImports = {
 }
 
 const runQuery = initDb(dbImports)
+
+const dependencies: Dependencies = {
+  runQuery,
+}
+const store = configureStore([], dependencies)
 
 export class App extends React.PureComponent {
   render() {

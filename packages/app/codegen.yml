@@ -1,0 +1,10 @@
+schema: ../db/dist/schema.json
+documents: ./**/*.ts
+overwrite: true
+require:
+  - ts-node/register
+generates:
+  ./graphql-types.d.ts:
+    plugins:
+      - typescript-common
+      - typescript-client
