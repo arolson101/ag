@@ -1,8 +1,8 @@
 import cuid from 'cuid'
+import { Arg, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
+import { Container } from 'typedi'
 import { Account, Bank, BankInput } from '../entities'
 import { AppDbService } from '../services/AppDbService'
-import { Container } from 'typedi'
-import { Resolver, Query, Arg, FieldResolver, Root, Mutation } from 'type-graphql'
 
 @Resolver(Bank)
 export class BankResolver {

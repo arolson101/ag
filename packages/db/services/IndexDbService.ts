@@ -2,9 +2,9 @@ import crypto from 'crypto'
 import sanitize from 'sanitize-filename'
 import { Service } from 'typedi'
 import { Connection, Repository, Transaction } from 'typeorm'
+import { Account, Bank, Bill, Budget, DbInfo } from '../entities'
 import { AppDbService } from './AppDbService'
 import { DbImportsService } from './DbImportsService'
-import { Account, Bank, Bill, Budget, DbInfo } from '../entities'
 
 const appEntities = [
   Account, //

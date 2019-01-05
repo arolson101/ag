@@ -1,4 +1,4 @@
-import { createStandardAction, createAsyncAction } from 'typesafe-actions'
+import { createAsyncAction, createStandardAction } from 'typesafe-actions'
 
 export interface NavigateRequest<P = {}> {
   url: string

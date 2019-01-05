@@ -1,5 +1,5 @@
 import { CompressedJson, dehydrate, hydrate } from '@ag/util/dehydrate'
-import { iupdate, ISpec } from '@ag/util/iupdate'
+import { ISpec, iupdate } from '@ag/util/iupdate'
 import assert from 'assert'
 import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
 

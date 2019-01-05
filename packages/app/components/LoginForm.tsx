@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react'
 import { propType } from 'graphql-anywhere'
 import gql from 'graphql-tag'
+import React, { PureComponent } from 'react'
 
 interface Props {
   entry: {

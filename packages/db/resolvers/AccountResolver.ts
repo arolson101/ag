@@ -1,8 +1,8 @@
-import Axios, { CancelTokenSource } from 'axios'
 import { log } from '@ag/util/log'
+import Axios, { CancelTokenSource } from 'axios'
 import cuid from 'cuid'
 import * as ofx4js from 'ofx4js'
-import { Arg, Mutation, Query, Resolver, Root, FieldResolver } from 'type-graphql'
+import { Arg, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
 // import { checkLogin, createService, getFinancialAccount, toAccountType } from '../../online'
 import { DbChange } from '../dbWrite'
 import {

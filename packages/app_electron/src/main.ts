@@ -1,9 +1,9 @@
+import program from 'commander'
 import { app, BrowserWindow } from 'electron'
 import isDev from 'electron-is-dev'
 import windowStateKeeper from 'electron-window-state'
 import path from 'path'
 import url from 'url'
-import program from 'commander'
 
 const defaultUrl = url.format({
   pathname: path.join(__dirname, 'index.html'),
