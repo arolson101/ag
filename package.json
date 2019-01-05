@@ -12,9 +12,14 @@
       "**/react-native-scripts/**"
     ]
   },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  },
   "scripts": {
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
-    "lint": "tslint --fix \"**/*{.ts,.tsx}\""
+    "lint": "tslint --fix \"**/*{.ts,.tsx}\"",
+    "test": "jest"
   },
   "dependencies": {},
   "devDependencies": {
