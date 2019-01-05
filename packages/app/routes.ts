@@ -36,7 +36,7 @@ import { LoginPage } from './pages/LoginPage'
 //   'nav/loading/failure'
 // )<void, any, Error>()
 
-export interface PageQuery<Params = void> extends DocumentNode {
+export interface PageQuery<Params> extends DocumentNode {
   __tag?: Params
 }
 
@@ -57,4 +57,4 @@ export const routes = {
   login: addRouteComponent(LoginPage),
 }
 
-// routes.login()
+routes.login({})

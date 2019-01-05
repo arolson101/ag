@@ -1,0 +1,16 @@
+{
+  "overwrite": true,
+  "schema": "../db/dist/schema.json",
+  "documents": "**/*.tsx",
+  "generates": {
+    "graphql-types.d.ts": {
+      "config": {
+        "noNamespaces": true
+      },
+      "plugins": [
+        "typescript-common",
+        "typescript-client"
+      ]
+    }
+  }
+}

@@ -11,23 +11,23 @@ interface Props {
   }
 }
 
-export class LoginForm extends PureComponent<Props> {
-  static readonly fragments = {
-    entry: gql`
-      fragment LoginForm on Entry {
-        score
-        vote {
-          vote_value
-        }
-      }
-    `,
-  }
+// export class LoginForm extends PureComponent<Props> {
+//   static readonly fragments = {
+//     entry: gql`
+//       fragment LoginForm on Entry {
+//         score
+//         vote {
+//           vote_value
+//         }
+//       }
+//     `,
+//   }
 
-  static readonly propTypes = {
-    entry: propType(LoginForm.fragments.entry),
-  }
+//   static readonly propTypes = {
+//     entry: propType(LoginForm.fragments.entry),
+//   }
 
-  render() {
-    return <>foo</>
-  }
-}
+//   render() {
+//     return <>foo</>
+//   }
+// }

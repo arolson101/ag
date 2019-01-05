@@ -1,20 +1,12 @@
-import { DocumentNode } from 'graphql'
-import { filter } from 'graphql-anywhere'
 import gql from 'graphql-tag'
 import React, { PureComponent } from 'react'
-import { LoginForm } from '../components/LoginForm'
+import { LoginPageQuery, LoginPageVariables } from '../graphql-types'
+// import { LoginForm } from '../components/LoginForm'
 import { PageQuery } from '../routes'
 
-export namespace LoginPage {
-  export type Params = void
-  export interface Props {
-    create: boolean
-  }
-}
-
-export class LoginPage extends PureComponent<LoginPage.Props> {
+export class LoginPage extends PureComponent<LoginPageQuery> {
   static url: string
-  static query: PageQuery<LoginPage.Params>
+  static query: PageQuery<LoginPageVariables>
 
   static readonly propTypes = {}
 
