@@ -44,6 +44,7 @@ module.exports = [
       // create index.html
       new HtmlWebpackPlugin({
         title: `${appName} ${pkg.version}`,
+        template: './src/template.html',
       }),
     ],
     devServer: {

@@ -9,11 +9,10 @@ import { RootState } from './reducers'
 test(
   'navigation handler',
   marbles(m => {
-    const { ac: navHome, eh: handleNavHome } = createRoute<{ foo: string }>('/home', 'asdf')
+    const { ac: navHome, eh: handleNavHome } = createRoute<{ foo: string }>('/home', 'asdf' as any)
 
     const dependencies: Dependencies = {
-      runQuery: (document: any, variableValues: any) =>
-        of({ response: 123 }).pipe(delay(100)) as any,
+      runQuery: (document, variableValues) => of({ response: 123 }).pipe(delay(100)) as any,
     }
 
     const action$ = m.hot('a', {
