@@ -17,6 +17,7 @@
     "testEnvironment": "node"
   },
   "scripts": {
+    "postinstall": "patch-package",
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
     "lint": "tslint -c tslint.json --fix \"**/*{.ts,.tsx}\"",
     "test": "jest"
@@ -45,6 +46,8 @@
     "jest": "^23.6.0",
     "lerna": "^3.4.3",
     "nodemon": "^1.18.9",
+    "patch-package": "^5.1.1",
+    "postinstall-postinstall": "^2.0.0",
     "prettier": "^1.15.3",
     "prettier-tslint": "^0.4.1",
     "rimraf": "^2.6.2",

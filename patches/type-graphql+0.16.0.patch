@@ -1,0 +1,19 @@
+patch-package
+--- a/node_modules/type-graphql/helpers/loadResolversFromGlob.js
++++ b/node_modules/type-graphql/helpers/loadResolversFromGlob.js
+@@ -1,12 +1,12 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+-const glob = require("glob");
++// const glob = require("glob");
+ function findFileNamesFromGlob(globString) {
+-    return glob.sync(globString);
++    return [] // glob.sync(globString);
+ }
+ exports.findFileNamesFromGlob = findFileNamesFromGlob;
+ function loadResolversFromGlob(globString) {
+     const filePaths = findFileNamesFromGlob(globString);
+-    const modules = filePaths.map(fileName => require(fileName));
++    const modules = [] // filePaths.map(fileName => require(fileName));
+ }
+ exports.loadResolversFromGlob = loadResolversFromGlob;
