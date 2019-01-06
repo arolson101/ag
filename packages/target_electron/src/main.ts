@@ -27,15 +27,13 @@ function createWindow() {
   if (isDev) {
     // this breaks VS Code debugging
     //
-    // const devtools = require('electron-devtools-installer');
-    // const installExtension = devtools.default;
-    //
-    // Promise.all(
-    //   [devtools.REACT_PERF]
-    //   .map(installExtension)
-    // )
-    // .then((name) => console.log(`Added Extension:  ${name}`))
-    // .catch((err) => console.log('An error occurred: ', err));
+    import('electron-devtools-installer').then(devtools => {
+      const installExtension = devtools.default
+
+      Promise.all([devtools.REACT_DEVELOPER_TOOLS].map(ext => installExtension(ext)))
+        .then(name => console.log(`Added Extension:  ${name}`))
+        .catch(err => console.log('An error occurred: ', err))
+    })
     //
     // if(!BrowserWindow.getDevToolsExtensions().hasOwnProperty('devtron')) {
     //   BrowserWindow.addDevToolsExtension(require('devtron').path);

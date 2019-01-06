@@ -1,21 +1,66 @@
 import { DbImports, initDb } from '@ag/db'
-import { configureStore, Dependencies } from '@ag/state'
+import { configureStore, Dependencies, RootStore } from '@ag/state'
 import React from 'react'
+import { InjectedIntl, InjectedIntlProps, injectIntl, IntlProvider } from 'react-intl'
+import { Provider } from 'react-redux'
+import { AppContext } from './context'
 
-const dbImports: DbImports = {
-  openDb: () => undefined as any,
-  deleteDb: () => undefined as any,
+interface State {
+  store?: RootStore
 }
 
-const runQuery = initDb(dbImports)
+interface Props extends DbImports {}
 
-const dependencies: Dependencies = {
-  runQuery,
+interface GetIntlProviderProps {
+  children: (intl: InjectedIntl) => React.ReactNode
 }
-const store = configureStore([], dependencies)
+const GetIntlProvider = injectIntl<GetIntlProviderProps>(({ intl, children }) => (
+  <>{children(intl)}</>
+))
+GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
 
-export class App extends React.PureComponent {
+export class App extends React.PureComponent<Props, State> {
+  state: State = {}
+
+  componentDidMount() {
+    this.init()
+  }
+
+  init() {
+    const { openDb, deleteDb } = this.props
+
+    const dbImports: DbImports = {
+      openDb,
+      deleteDb,
+    }
+
+    const runQuery = initDb(dbImports)
+
+    const dependencies: Dependencies = {
+      runQuery,
+    }
+    const store = configureStore([], dependencies)
+
+    this.setState({ store })
+  }
+
   render() {
-    return <>app</>
+    const { store } = this.state
+    if (!store) {
+      return <>loading...</>
+    }
+    return (
+      <Provider store={store}>
+        <IntlProvider locale='en'>
+          <GetIntlProvider>
+            {intl => (
+              <AppContext.Provider value={{ intl, ui: null as any }}>
+                app with store
+              </AppContext.Provider>
+            )}
+          </GetIntlProvider>
+        </IntlProvider>
+      </Provider>
+    )
   }
 }

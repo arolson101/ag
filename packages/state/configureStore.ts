@@ -9,7 +9,7 @@ export { EpicType, Dependencies }
 
 export interface RootStore extends Store<RootState, RootAction> {}
 
-export function configureStore(epics: EpicType[], dependencies: Dependencies) {
+export function configureStore(epics: EpicType[], dependencies: Dependencies): RootStore {
   const epicMiddleware = createEpicMiddleware<RootAction, RootAction, RootState, Dependencies>({
     dependencies,
   })

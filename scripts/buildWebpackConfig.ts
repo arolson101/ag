@@ -33,7 +33,7 @@ export const buildWebpackConfig = ({
     },
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
   },
   module: {
     rules: [

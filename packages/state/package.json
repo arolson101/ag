@@ -15,6 +15,8 @@
     "graphql": "^14.0.2",
     "graphql-anywhere": "^4.1.24",
     "graphql-tag": "^2.10.0",
+    "react": "^16.7.0",
+    "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.7",
     "redux-observable": "^1.0.0",
@@ -23,7 +25,8 @@
   },
   "devDependencies": {
     "@types/graphql": "^14.0.4",
-    "@types/react-redux": "^6.0.11",
+    "@types/react": "^16.7.18",
+    "@types/react-redux": "^6.0.12",
     "@types/redux": "^3.6.0",
     "rxjs-marbles": "^5.0.0"
   }
