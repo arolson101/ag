@@ -12,8 +12,8 @@
     "ios": "react-native run-ios"
   },
   "dependencies": {
-    "react": "16.6.3",
-    "react-native": "0.57.8"
+    "react": "^16.7.0",
+    "react-native": "^0.57.8"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^4.1.4",
@@ -25,9 +25,9 @@
     "babel-jest": "23.6.0",
     "babel-runtime": "^7.0.0-beta.3",
     "haul": "^1.0.0-rc.10",
-    "jest": "23.6.0",
+    "jest": "^23.6.0",
     "metro-react-native-babel-preset": "^0.45.0",
     "react-dom": "^16.7.0",
-    "react-test-renderer": "16.6.3"
+    "react-test-renderer": "^16.6.3"
   }
 }
