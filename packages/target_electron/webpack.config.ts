@@ -23,6 +23,9 @@ module.exports = [
             name: appName,
             version: pkg.version,
             main: 'main.js',
+            dependencies: {
+              sqlite3: pkg.dependencies.sqlite3,
+            },
           },
           null,
           '  '

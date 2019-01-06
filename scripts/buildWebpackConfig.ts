@@ -72,5 +72,6 @@ export const buildWebpackConfig = ({
   },
   externals: {
     'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
+    sqlite3: 'commonjs sqlite3',
   },
 })

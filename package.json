@@ -9,7 +9,8 @@
       "**/react-native",
       "**/react-native/**",
       "**/react-native-scripts",
-      "**/react-native-scripts/**"
+      "**/react-native-scripts/**",
+      "**/sqlite3"
     ]
   },
   "jest": {
