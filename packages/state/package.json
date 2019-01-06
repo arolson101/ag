@@ -15,7 +15,6 @@
     "graphql": "^14.0.2",
     "graphql-anywhere": "^4.1.24",
     "graphql-tag": "^2.10.0",
-    "react-redux": "^6.0.0",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.7",
     "redux-observable": "^1.0.0",

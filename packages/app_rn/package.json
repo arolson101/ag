@@ -23,9 +23,11 @@
     "@types/react": "^16.7.18",
     "@types/react-native": "^0.57.25",
     "babel-jest": "23.6.0",
+    "babel-runtime": "^7.0.0-beta.3",
     "haul": "^1.0.0-rc.10",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "^0.45.0",
+    "react-dom": "^16.7.0",
     "react-test-renderer": "16.6.3"
   }
 }
