@@ -4,7 +4,7 @@
     "module": "commonjs",
     "lib": ["esnext", "dom"],
     "strict": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
