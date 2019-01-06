@@ -17,11 +17,11 @@
       "name": "@ag/util"
     },
     {
-      "path": "packages/app_electron",
+      "path": "packages/target_electron",
       "name": "target: electron"
     },
     {
-      "path": "packages/app_rn",
+      "path": "packages/target_rn",
       "name": "target: react-native"
     },
     {
