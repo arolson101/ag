@@ -20,7 +20,7 @@ export interface DateFieldProps<Values = any> {
 }
 
 export interface FormProps<Values = any> {
-  onSubmit: (values: Values) => void
+  onSubmit: () => void
 }
 
 export interface SelectFieldItem {
@@ -59,8 +59,16 @@ export interface UrlFieldProps<Values = any> {
 }
 
 export interface UiContext {
+  // special ui
+  confirm: (
+    props: { title: string; action: string; onConfirm: () => any; event: React.SyntheticEvent }
+  ) => any
+
+  // layout
   Page: ComponentType<{}>
   Text: ComponentType<{ children: string }>
+  SubmitButton: ComponentType<{ onPress: (event: React.SyntheticEvent) => any }>
+  DeleteButton: ComponentType<{ onPress: (event: React.SyntheticEvent) => any }>
 
   // form
   Form: React.ComponentType<FormProps>

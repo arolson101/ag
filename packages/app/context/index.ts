@@ -1,2 +1,2 @@
 export * from './AppContext'
-export * from './ui'
+export * from './uiContext'

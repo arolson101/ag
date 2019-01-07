@@ -1,6 +1,6 @@
 import React from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
-import { UiContext } from './ui'
+import { UiContext } from './uiContext'
 
 export interface AppContext {
   intl: IntlContext
