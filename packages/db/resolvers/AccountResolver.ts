@@ -134,7 +134,7 @@ export class AccountResolver {
     @Arg('end', { nullable: true }) end?: Date
   ): Promise<Transaction[]> {
     const res = await this.app.transactions.getForAccount(account.id, start, end)
-    log.info(
+    log.db(
       '%s\n%s\n%o',
       `transactions for account ${account.id} (bank ${account.bankId})`,
       `time: BETWEEN '${start}' AND '${end}'`,

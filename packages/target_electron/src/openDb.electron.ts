@@ -12,7 +12,7 @@ export const openDb = async (
   entities: ConnectionOptions['entities']
 ): Promise<Connection> => {
   const type = 'sqlite'
-  log.info('openDb %s', name)
+  log.db('openDb %s', name)
   const db = await createConnection({
     type,
     name,
@@ -28,7 +28,7 @@ export const openDb = async (
 }
 
 export const deleteDb = async (name: string) => {
-  log.info('deleteDb %s', name)
+  log.db('deleteDb %s', name)
   const database = path.join(userData, name + '.db')
   fs.unlinkSync(database)
 }
