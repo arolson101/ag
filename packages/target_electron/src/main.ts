@@ -23,11 +23,11 @@ let mainWindow: BrowserWindow | null = null
 // https://github.com/electron/electron/blob/master/docs/tutorial/security.md
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
-function createWindow() {
+async function createWindow() {
   if (isDev) {
     // this breaks VS Code debugging
     //
-    import('electron-devtools-installer').then(
+    await import('electron-devtools-installer').then(
       ({ default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS }) => {
         Promise.all([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].map(ext => installExtension(ext)))
           .then(name => console.log(`Added Extension:  ${name}`))
@@ -64,6 +64,10 @@ function createWindow() {
 
   // and load the index.html of the app.
   mainWindow.loadURL(program.url)
+
+  if (isDev) {
+    mainWindow.webContents.openDevTools()
+  }
 
   // Let us register listeners on the window, so we can update the state
   // automatically (the listeners will be removed when the window is closed)

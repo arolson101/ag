@@ -21,7 +21,7 @@ export const createRoute = <Params = void>(url: string, query: DocumentNode) => 
               log.nav(`${url} failure: %o`, errors)
               return actions.nav.navigate.failure({ url: action.payload.url, errors })
             } else {
-              log.nav(`${url} success with data '%o'`, data)
+              log.nav(`${url} success with data %o`, data)
               return actions.nav.navigate.success({ url: action.payload.url, data: data! })
             }
           }),

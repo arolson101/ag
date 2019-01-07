@@ -3,14 +3,16 @@ import { configureStore, Dependencies, RootStore } from '@ag/state'
 import React from 'react'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
-import { AppContext } from './context'
+import { AppContext, UiContext } from './context'
 import { routeHandlers, routes } from './routes'
 
 interface State {
   store?: RootStore
 }
 
-interface Props extends DbImports {}
+interface Props extends DbImports {
+  ui: UiContext
+}
 
 interface GetIntlProviderProps {
   children: (intl: InjectedIntl) => React.ReactNode
@@ -49,18 +51,17 @@ export class App extends React.PureComponent<Props, State> {
 
   render() {
     const { store } = this.state
+    const { ui } = this.props
+
     if (!store) {
       return <>loading...</>
     }
+
     return (
       <Provider store={store}>
         <IntlProvider locale='en'>
           <GetIntlProvider>
-            {intl => (
-              <AppContext.Provider value={{ intl, ui: null as any }}>
-                app with store
-              </AppContext.Provider>
-            )}
+            {intl => <AppContext.Provider value={{ intl, ui }}>app with store</AppContext.Provider>}
           </GetIntlProvider>
         </IntlProvider>
       </Provider>

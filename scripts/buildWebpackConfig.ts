@@ -49,6 +49,14 @@ export const buildWebpackConfig = ({
         //   { loader: 'ts-loader' },
         // ],
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader?name=font/[name].[ext]',
+      },
     ],
   },
   plugins: [
