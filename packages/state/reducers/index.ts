@@ -10,7 +10,7 @@ export interface RootState extends StateType<typeof rootReducer> {}
 
 export const selectors = {
   isLoading: (state: RootState) => navSelectors.isLoading(state.nav),
-  getLoadError: (state: RootState) => navSelectors.getLoadError(state.nav),
+  getLoadErrors: (state: RootState) => navSelectors.getLoadErrors(state.nav),
   getUrl: (state: RootState) => navSelectors.getUrl(state.nav),
   getLoadData: (state: RootState) => navSelectors.getLoadData(state.nav),
 }

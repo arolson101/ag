@@ -12,7 +12,7 @@ export interface NavigateSuccess<D extends object = {}> {
 
 export interface NavigateError {
   url: string
-  error: Error
+  errors: ReadonlyArray<Error>
 }
 
 export const navigate = createAsyncAction(

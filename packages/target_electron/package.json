@@ -12,7 +12,7 @@
     "build:dev": "webpack --mode=development",
     "start": "nodemon -q --watch ./webpack.config.ts --exec \"webpack-dev-server --port 3030 --hot --mode=development\"",
     "electron": "wait-on ./dist/main.js && nodemon -q --watch ./dist/main.js --exec \"electron dist --url http://localhost:3030\"",
-    "//postinstall": "electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "start:dev": "rimraf dist && concurrently --kill-others \"npm:start\" \"npm:electron\"",
     "storybook": "concurrently --raw --kill-others \"npm:storybook:server\" \"npm:storybook:electron\"",
     "storybook:server": "start-storybook --ci --quiet -p 6006",

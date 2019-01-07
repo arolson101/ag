@@ -53,9 +53,6 @@ export const buildWebpackConfig = ({
   },
   plugins: [
     ...(plugins || []),
-    new webpack.NormalModuleReplacementPlugin(/typeorm$/, (result: any) => {
-      result.request = result.request.replace(/typeorm/, 'typeorm/browser')
-    }),
     new WriteFilePlugin({
       test: /^((?!(hot-update)).)*$/,
     }),

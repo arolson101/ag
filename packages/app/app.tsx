@@ -1,9 +1,10 @@
 import { DbImports, initDb } from '@ag/db'
 import { configureStore, Dependencies, RootStore } from '@ag/state'
 import React from 'react'
-import { InjectedIntl, InjectedIntlProps, injectIntl, IntlProvider } from 'react-intl'
+import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { AppContext } from './context'
+import { routeHandlers, routes } from './routes'
 
 interface State {
   store?: RootStore
@@ -39,7 +40,9 @@ export class App extends React.PureComponent<Props, State> {
     const dependencies: Dependencies = {
       runQuery,
     }
-    const store = configureStore([], dependencies)
+    const store = configureStore(routeHandlers, dependencies)
+
+    store.dispatch(routes.login({}))
 
     this.setState({ store })
   }
