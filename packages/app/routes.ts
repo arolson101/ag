@@ -1,6 +1,6 @@
 import { createRoute, EpicType } from '@ag/state'
 import { DocumentNode } from 'graphql'
-import { LoginPage } from './pages/LoginPage'
+import { LoginPageComponent } from './pages/LoginPage'
 
 // export const login = createStandardAction('nav/login')()
 // export const logout = createStandardAction('nav/logout')()
@@ -54,7 +54,7 @@ const addRouteComponent = <T>(page: RouteComponent<T>) => {
 }
 
 export const routes = {
-  login: addRouteComponent(LoginPage),
+  // login: addRouteComponent(LoginPageComponent),
 }
 
-routes.login({})
+// routes.login({})

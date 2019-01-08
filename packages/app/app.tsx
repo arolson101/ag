@@ -4,7 +4,7 @@ import React from 'react'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { AppContext, UiContext } from './context'
-import { LoginPage } from './pages/LoginPage'
+import { LoginPageComponent } from './pages/LoginPage'
 import { routeHandlers, routes } from './routes'
 
 interface State {
@@ -64,7 +64,7 @@ export class App extends React.PureComponent<Props, State> {
           <GetIntlProvider>
             {intl => (
               <AppContext.Provider value={{ intl, ui }}>
-                <LoginPage
+                <LoginPageComponent
                   createDb={() => alert('createDb')}
                   deleteDb={() => alert('deleteDb')}
                   openDb={() => alert('openDb')}

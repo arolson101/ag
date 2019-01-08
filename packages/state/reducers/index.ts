@@ -12,5 +12,5 @@ export const selectors = {
   isLoading: (state: RootState) => navSelectors.isLoading(state.nav),
   getLoadErrors: (state: RootState) => navSelectors.getLoadErrors(state.nav),
   getUrl: (state: RootState) => navSelectors.getUrl(state.nav),
-  getLoadData: (state: RootState) => navSelectors.getLoadData(state.nav),
+  getLoadData: <T extends {}>(state: RootState) => navSelectors.getLoadData<T>(state.nav),
 }

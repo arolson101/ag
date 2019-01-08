@@ -12,11 +12,12 @@ export const openDb = async (
   entities: ConnectionOptions['entities']
 ): Promise<Connection> => {
   const type = 'sqlite'
-  log.db('openDb %s', name)
+  const database = path.join(userData, name + '.db')
+  log.db('opening %s', database)
   const db = await createConnection({
     type,
     name,
-    database: path.join(userData, name + '.db'),
+    database,
     synchronize: true,
     entities,
     extra: {
@@ -24,6 +25,7 @@ export const openDb = async (
     },
     // logging: true,
   })
+  log.db('opened')
   return db
 }
 

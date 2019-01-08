@@ -30,3 +30,35 @@ export type LoginPageAllDbs = {
 
   name: string
 }
+
+export type CreateDbVariables = {
+  name: string
+  password: string
+}
+
+export type CreateDbMutation = {
+  __typename?: 'Mutation'
+
+  createDb: boolean
+}
+
+export type OpenDbVariables = {
+  dbId: string
+  password: string
+}
+
+export type OpenDbMutation = {
+  __typename?: 'Mutation'
+
+  openDb: boolean
+}
+
+export type DeleteDbVariables = {
+  dbId: string
+}
+
+export type DeleteDbMutation = {
+  __typename?: 'Mutation'
+
+  deleteDb: string
+}

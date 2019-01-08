@@ -14,7 +14,7 @@ export const navSelectors = {
   isLoading: (state: NavState) => state.loading,
   getLoadErrors: (state: NavState) => state.errors,
   getUrl: (state: NavState) => state.url,
-  getLoadData: (state: NavState) => state.data,
+  getLoadData: <T extends {}>(state: NavState) => state.data as T,
 }
 
 export const nav = (state: NavState = initialState, action: RootAction): NavState => {

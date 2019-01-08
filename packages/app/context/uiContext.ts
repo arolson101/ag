@@ -66,7 +66,7 @@ export interface UiContext {
 
   // layout
   Page: ComponentType<{}>
-  Text: ComponentType<{ children: string }>
+  Text: ComponentType<{ children: string | string[] }>
   SubmitButton: ComponentType<{ onPress: (event: React.SyntheticEvent) => any }>
   DeleteButton: ComponentType<{ onPress: (event: React.SyntheticEvent) => any }>
 
