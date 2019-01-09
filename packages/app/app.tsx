@@ -1,11 +1,11 @@
 import { DbImports, initDb } from '@ag/db'
-import { configureStore, Dependencies, RootStore } from '@ag/state'
 import React from 'react'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { AppContext, UiContext } from './context'
 import { LoginPageComponent } from './pages/LoginPage'
 import { routeHandlers, routes } from './routes'
+import { configureStore, Dependencies, RootStore } from './state'
 
 interface State {
   store?: RootStore

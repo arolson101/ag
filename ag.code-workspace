@@ -9,10 +9,6 @@
       "name": "@ag/db"
     },
     {
-      "path": "packages/state",
-      "name": "@ag/state"
-    },
-    {
       "path": "packages/util",
       "name": "@ag/util"
     },

@@ -1,18 +1,22 @@
 /* tslint:disable:no-implicit-dependencies */
+import { ExecutionResult } from 'graphql'
 import { StateObservable } from 'redux-observable'
 import { of, Subject } from 'rxjs'
 import { marbles } from 'rxjs-marbles'
 import { delay } from 'rxjs/operators'
-import { actions, createRoute, Dependencies } from './index'
-import { RootState } from './reducers'
+import { actions } from '../actions'
+import { createRoute } from '../epics'
+import { RootState } from '../reducers'
+import { Dependencies } from '../state'
 
 test(
-  'navigation handler',
+  'navigation success',
   marbles(m => {
     const { ac: navHome, eh: handleNavHome } = createRoute<{ foo: string }>('/home', 'asdf' as any)
 
     const dependencies: Dependencies = {
-      runQuery: (document, variableValues) => of({ response: 123 }).pipe(delay(100)) as any,
+      runQuery: (document, variableValues) =>
+        of<ExecutionResult>({ data: { response: 123 } }).pipe(delay(100)) as any,
     }
 
     const action$ = m.hot('a', {

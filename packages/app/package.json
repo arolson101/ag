@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@ag/db": "^0.0.0",
-    "@ag/state": "^0.0.0",
     "@ag/util": "^0.0.0",
     "apollo-client": "^2.4.8",
     "formik": "^1.4.2",
@@ -25,15 +24,21 @@
     "react-apollo": "^2.3.3",
     "react-intl": "^2.7.2",
     "react-redux": "^6.0.0",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.7",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.3.3",
+    "typesafe-actions": "^3.0.0"
   },
   "devDependencies": {
     "@types/graphql": "^14.0.4",
     "@types/react": "^16.7.18",
     "@types/react-intl": "^2.3.14",
     "@types/react-redux": "^6.0.12",
+    "@types/redux": "^3.6.0",
     "graphql-code-generator": "^0.15.2",
     "graphql-codegen-typescript-client": "^0.15.2",
-    "graphql-codegen-typescript-common": "^0.15.2"
+    "graphql-codegen-typescript-common": "^0.15.2",
+    "rxjs-marbles": "^5.0.0"
   }
 }

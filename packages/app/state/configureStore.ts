@@ -1,9 +1,9 @@
 import { applyMiddleware, createStore, Store } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
-import { RootAction } from './actions'
-import { Dependencies, EpicType } from './epics'
-import { rootReducer, RootState } from './reducers'
+import { RootAction } from '../actions'
+import { Dependencies, EpicType } from '../epics'
+import { rootReducer, RootState } from '../reducers'
 
 export { EpicType, Dependencies }
 

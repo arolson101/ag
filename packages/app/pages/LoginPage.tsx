@@ -24,33 +24,26 @@ interface FormValues {
   passwordConfirm: string
 }
 
-interface Props {
+interface Props extends LoginPageQuery {
   createDb: (opts: { name: string; password: string }) => any
   openDb: (opts: { dbId: string; password: string }) => any
   deleteDb: (opts: { dbId: string }) => any
 }
 
-const makeQuery = <QueryType, Variables>(query: DocumentNode) =>
-  // tslint:disable:max-classes-per-file
-  class extends ApolloQuery<QueryType, Variables> {
-    static displayName = query.loc!.source.name
-    static defaultProps = {
-      query,
-    }
-  }
-
-export class LoginPageComponent extends React.PureComponent<LoginPageQuery & Props> {
+export class LoginPageComponent extends React.PureComponent<Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  static readonly Query = makeQuery<LoginPageQuery, LoginPageVariables>(gql`
+  static url = '/login'
+
+  static readonly query = gql`
     query LoginPage {
       allDbs {
         dbId
         name
       }
     }
-  `)
+  `
 
   static readonly mutations = {
     createDb: gql`
@@ -186,60 +179,6 @@ export class LoginPageComponent extends React.PureComponent<LoginPageQuery & Pro
   //     this.confirmInput.focus()
   //   }
   // }
-}
-
-// tslint:disable-next-line:max-classes-per-file
-export class ErrorPage extends React.PureComponent<{ error: ApolloError }> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
-
-  render() {
-    const { ui } = this.context
-    const { Text } = ui
-    return <Text>Error: {this.props.error.message}</Text>
-  }
-}
-
-// tslint:disable-next-line:max-classes-per-file
-export class WrappedLoginPage extends React.PureComponent {
-  render() {
-    return (
-      <LoginPageComponent.Query>
-        {({ data, error, client }) => {
-          if (error) {
-            return <ErrorPage error={error} />
-          }
-
-          const createDb: Props['createDb'] = variables =>
-            client.mutate<CreateDbMutation, CreateDbVariables>({
-              mutation: LoginPageComponent.mutations.createDb,
-              variables,
-            })
-
-          const openDb: Props['openDb'] = variables =>
-            client.mutate<OpenDbMutation, OpenDbVariables>({
-              mutation: LoginPageComponent.mutations.openDb,
-              variables,
-            })
-
-          const deleteDb: Props['deleteDb'] = variables =>
-            client.mutate<DeleteDbMutation, DeleteDbVariables>({
-              mutation: LoginPageComponent.mutations.deleteDb,
-              variables,
-            })
-
-          return (
-            <LoginPageComponent
-              allDbs={data!.allDbs}
-              createDb={createDb}
-              openDb={openDb}
-              deleteDb={deleteDb}
-            />
-          )
-        }}
-      </LoginPageComponent.Query>
-    )
-  }
 }
 
 const messages = defineMessages({
