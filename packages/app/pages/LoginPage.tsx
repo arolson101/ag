@@ -1,34 +1,27 @@
-import { ApolloError } from 'apollo-client'
 import { Formik, FormikErrors } from 'formik'
-import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import React from 'react'
-import { Query as ApolloQuery } from 'react-apollo'
 import { defineMessages } from 'react-intl'
+import { connect } from 'react-redux'
+import { actions } from '../actions'
 import { AppContext, typedFields } from '../context'
-import {
-  CreateDbMutation,
-  CreateDbVariables,
-  DeleteDbMutation,
-  DeleteDbVariables,
-  LoginPageQuery,
-  LoginPageVariables,
-  OpenDbMutation,
-  OpenDbVariables,
-} from '../graphql-types'
-// import { LoginForm } from '../components/LoginForm'
-import { PageQuery } from '../routes'
+import { LoginPageForm } from '../forms'
+import { LoginPageQuery } from '../graphql-types'
+import { AppState, selectors } from '../reducers'
 
-interface FormValues {
-  password: string
-  passwordConfirm: string
+type FormValues = LoginPageForm.Values
+
+interface StateProps {
+  data: LoginPageQuery
+  dbId: string
 }
 
-interface Props extends LoginPageQuery {
-  createDb: (opts: { name: string; password: string }) => any
-  openDb: (opts: { dbId: string; password: string }) => any
+interface DispatchProps {
+  submitForm: (variables: FormValues) => any
   deleteDb: (opts: { dbId: string }) => any
 }
+
+interface Props extends StateProps, DispatchProps {}
 
 export class LoginPageComponent extends React.PureComponent<Props> {
   static contextType = AppContext
@@ -45,40 +38,21 @@ export class LoginPageComponent extends React.PureComponent<Props> {
     }
   `
 
-  static readonly mutations = {
-    createDb: gql`
-      mutation CreateDb($name: String!, $password: String!) {
-        createDb(name: $name, password: $password)
-      }
-    `,
-
-    openDb: gql`
-      mutation OpenDb($dbId: String!, $password: String!) {
-        openDb(dbId: $dbId, password: $password)
-      }
-    `,
-
-    deleteDb: gql`
-      mutation DeleteDb($dbId: String!) {
-        deleteDb(dbId: $dbId)
-      }
-    `,
-  }
-
   render() {
+    const { submitForm, dbId } = this.props
     const { ui, intl } = this.context
     const { Page, Text, SubmitButton, DeleteButton } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
-    const create = this.props.allDbs.length === 0
+    const create = !dbId
 
     const initialValues = {
-      password: '',
-      passwordConfirm: '',
+      ...LoginPageForm.initalValues,
+      dbId,
     }
 
     return (
       <Page>
-        <Formik initialValues={initialValues} validate={this.validate} onSubmit={this.onSubmit}>
+        <Formik initialValues={initialValues} validate={this.validate} onSubmit={submitForm}>
           {formApi => (
             <Form onSubmit={formApi.submitForm}>
               <Text>
@@ -122,7 +96,7 @@ export class LoginPageComponent extends React.PureComponent<Props> {
   }
 
   validate = (values: FormValues): FormikErrors<FormValues> => {
-    const create = this.props.allDbs.length === 0
+    const create = !values.dbId
     const errors: FormikErrors<FormValues> = {}
     const { intl } = this.context
 
@@ -142,18 +116,6 @@ export class LoginPageComponent extends React.PureComponent<Props> {
     return errors
   }
 
-  onSubmit = ({ password }: FormValues) => {
-    const create = this.props.allDbs.length === 0
-    if (create) {
-      const { createDb } = this.props
-      createDb({ name: 'appdb', password })
-    } else {
-      const { openDb } = this.props
-      const dbId = this.props.allDbs[0].dbId
-      openDb({ password, dbId })
-    }
-  }
-
   confirmDelete = (event: React.SyntheticEvent) => {
     const { ui, intl } = this.context
     ui.confirm({
@@ -165,8 +127,7 @@ export class LoginPageComponent extends React.PureComponent<Props> {
   }
 
   deleteDb = () => {
-    const { deleteDb } = this.props
-    const dbId = this.props.allDbs[0].dbId
+    const { deleteDb, dbId } = this.props
     deleteDb({ dbId })
   }
 
@@ -180,6 +141,15 @@ export class LoginPageComponent extends React.PureComponent<Props> {
   //   }
   // }
 }
+
+export const LoginPage = connect<StateProps, DispatchProps, {}, AppState>(
+  state => ({
+    data: selectors.getLoadData<LoginPageQuery>(state),
+    dbId: LoginPageForm.getDbId(state),
+  }),
+  actions.loginPage
+)(LoginPageComponent)
+LoginPage.displayName = 'LoginPage'
 
 const messages = defineMessages({
   welcomeMessageCreate: {

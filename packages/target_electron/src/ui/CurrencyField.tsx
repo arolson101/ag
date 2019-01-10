@@ -6,7 +6,7 @@ import React from 'react'
 export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
   render() {
     const { field: name, label, placeholder } = this.props
-    const id = `${name}-input`
+    const id = name
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {

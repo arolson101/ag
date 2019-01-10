@@ -1,4 +1,4 @@
-import { DocumentNode, execute, ExecutionArgs } from 'graphql'
+import { DocumentNode, execute, ExecutionArgs, ExecutionResult } from 'graphql'
 import { Container } from 'typedi'
 import { useContainer as ormUseContainer } from 'typeorm'
 import { schema } from './schema'
@@ -13,10 +13,10 @@ export const initDb = (imports: DbImports) => {
   return runQuery
 }
 
-const runQuery = async (
+const runQuery = async <Variables = ExecutionArgs['variableValues'], Result = object>(
   document: DocumentNode,
-  variableValues: ExecutionArgs['variableValues']
-) => {
+  variableValues: Variables
+): Promise<ExecutionResult<Result>> => {
   return execute({
     schema,
     document,

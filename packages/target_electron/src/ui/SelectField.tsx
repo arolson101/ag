@@ -31,17 +31,15 @@ const renderItem: ItemRenderer<SelectFieldItem> = (item, { handleClick, modifier
 export class SelectField extends React.PureComponent<SelectFieldProps> {
   render() {
     const { field: name, label, items, onValueChange } = this.props
-    const id = `${name}-input`
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
           const error = !!(form.touched[name] && form.errors[name])
           return (
             <FormGroup
-              intent={error ? Intent.DANGER : undefined}
+              intent={error ? Intent.DANGER : undefined} //
               helperText={error}
               label={label}
-              labelFor={id}
             >
               <ItemSuggest
                 popoverProps={{ minimal: true }}

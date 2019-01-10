@@ -1,45 +1,45 @@
 import { UrlFieldProps } from '@ag/app/context'
-import { FormGroup, Intent } from '@blueprintjs/core'
+import { FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
 
 export class UrlField extends React.PureComponent<UrlFieldProps> {
-  private textInput = React.createRef<HTMLInputElement>()
+  private textInput: HTMLInputElement | null = null
 
   focusTextInput = () => {
-    if (this.textInput.current) {
-      this.textInput.current.focus()
+    if (this.textInput) {
+      this.textInput.focus()
     }
   }
 
   render() {
     const { field: name, autoFocus, label, placeholder } = this.props
-    const id = `${name}-input`
+    const id = name
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
           const error = !!(form.touched[name] && form.errors[name])
+          const intent = error ? Intent.DANGER : undefined
           return (
-            <FormGroup
-              intent={error ? Intent.DANGER : undefined}
-              helperText={error}
-              label={label}
-              labelFor={id}
-            >
-              <input
+            <FormGroup intent={intent} helperText={error} label={label} labelFor={id}>
+              <InputGroup
                 id={id}
-                className={'pt-input pt-fill' + (error ? ' pt-intent-danger' : '')}
                 type='text'
+                intent={intent}
                 autoFocus={autoFocus}
                 onChange={field.onChange}
                 value={field.value}
                 placeholder={placeholder && placeholder}
-                ref={this.textInput}
+                inputRef={this.inputRef}
               />
             </FormGroup>
           )
         }}
       </Field>
     )
+  }
+
+  inputRef = (ref: HTMLInputElement | null) => {
+    this.textInput = ref
   }
 }

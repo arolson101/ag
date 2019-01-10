@@ -6,7 +6,7 @@ import { marbles } from 'rxjs-marbles'
 import { delay } from 'rxjs/operators'
 import { actions } from '../actions'
 import { createRoute } from '../epics'
-import { RootState } from '../reducers'
+import { AppState } from '../reducers'
 import { Dependencies } from '../state'
 
 test(
@@ -25,7 +25,7 @@ test(
     const expect$ = m.cold('100ms x', {
       x: actions.nav.navigate.success({ url: '/home', data: { response: 123 } }),
     })
-    const state$ = {} as RootState
+    const state$ = {} as AppState
     const output$ = handleNavHome(
       action$ as any,
       new StateObservable(new Subject(), state$),
@@ -53,7 +53,7 @@ test(
     const expect$ = m.cold('100ms x', {
       x: actions.nav.navigate.failure({ url: '/home', errors: [err] }),
     })
-    const state$ = {} as RootState
+    const state$ = {} as AppState
     const output$ = handleNavHome(
       action$ as any,
       new StateObservable(new Subject(), state$),

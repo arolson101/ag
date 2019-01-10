@@ -6,7 +6,7 @@ import React from 'react'
 export class DateField extends React.PureComponent<DateFieldProps> {
   render() {
     const { field: name, label } = this.props
-    const id = `${name}-input`
+    const id = name
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {

@@ -1,5 +1,5 @@
 import { getType } from 'typesafe-actions'
-import { actions, RootAction } from '../actions'
+import { actions, AppAction } from '../actions'
 
 const initialState = {
   loading: false,
@@ -17,7 +17,7 @@ export const navSelectors = {
   getLoadData: <T extends {}>(state: NavState) => state.data as T,
 }
 
-export const nav = (state: NavState = initialState, action: RootAction): NavState => {
+export const nav = (state: NavState = initialState, action: AppAction): NavState => {
   switch (action.type) {
     case getType(actions.nav.navigate.request):
       return {

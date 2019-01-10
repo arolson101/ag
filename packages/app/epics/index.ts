@@ -1,15 +1,15 @@
 import { DocumentNode, ExecutionArgs, ExecutionResult } from 'graphql'
 import { Epic } from 'redux-observable'
 import { ObservableInput } from 'rxjs'
-import { RootAction } from '../actions'
-import { RootState } from '../reducers'
+import { AppAction } from '../actions'
+import { AppState } from '../reducers'
 export { createRoute } from './navEpics'
 
 export interface Dependencies {
-  runQuery: (
+  runQuery: <Variables = ExecutionArgs['variableValues'], Result = object>(
     document: DocumentNode,
-    variableValues: ExecutionArgs['variableValues']
-  ) => ObservableInput<ExecutionResult<object>>
+    variableValues: Variables
+  ) => ObservableInput<ExecutionResult<Result>>
 }
 
-export interface EpicType extends Epic<RootAction, RootAction, RootState, Dependencies> {}
+export interface EpicType extends Epic<AppAction, AppAction, AppState, Dependencies> {}

@@ -19,6 +19,7 @@ export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
               labelFor={id}
             >
               <Switch
+                id={id}
                 className='pt-align-right'
                 label={label}
                 checked={field.value}

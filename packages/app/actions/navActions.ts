@@ -15,8 +15,10 @@ export interface NavigateError {
   errors: ReadonlyArray<Error>
 }
 
-export const navigate = createAsyncAction(
-  'navigate/request',
-  'navigate/success',
-  'navigate/failure'
-)<NavigateRequest, NavigateSuccess, NavigateError>()
+export const nav = {
+  navigate: createAsyncAction('navigate/request', 'navigate/success', 'navigate/failure')<
+    NavigateRequest,
+    NavigateSuccess,
+    NavigateError
+  >(),
+}

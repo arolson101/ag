@@ -2,8 +2,8 @@ import { DbImports, initDb } from '@ag/db'
 import React from 'react'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
+import { Router } from './components'
 import { AppContext, UiContext } from './context'
-import { LoginPageComponent } from './pages/LoginPage'
 import { routeHandlers, routes } from './routes'
 import { configureStore, Dependencies, RootStore } from './state'
 
@@ -53,6 +53,7 @@ export class App extends React.PureComponent<Props, State> {
   render() {
     const { store } = this.state
     const { ui } = this.props
+    const { RouteSelector } = ui
 
     if (!store) {
       return <>loading...</>
@@ -64,12 +65,13 @@ export class App extends React.PureComponent<Props, State> {
           <GetIntlProvider>
             {intl => (
               <AppContext.Provider value={{ intl, ui }}>
-                <LoginPageComponent
-                  createDb={() => alert('createDb')}
-                  deleteDb={() => alert('deleteDb')}
-                  openDb={() => alert('openDb')}
-                  allDbs={[]}
-                />
+                <Router />
+                {/* <LoginPageComponent
+                  submitForm={values => console.log('submit ' + JSON.stringify(values))}
+                  deleteDb={() => console.log('deleteDb')}
+                  dbId={'123'}
+                  data={{ allDbs: [] }}
+                /> */}
               </AppContext.Provider>
             )}
           </GetIntlProvider>

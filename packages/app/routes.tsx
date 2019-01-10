@@ -1,6 +1,9 @@
 import { DocumentNode } from 'graphql'
+import React from 'react'
+import { connect } from 'react-redux'
+import { AppContext, RouteConfig } from './context'
 import { createRoute } from './epics'
-import { LoginPageComponent } from './pages/LoginPage'
+import { LoginPage, LoginPageComponent } from './pages/LoginPage'
 import { EpicType } from './state'
 
 // export const login = createStandardAction('nav/login')()
@@ -48,7 +51,7 @@ interface RouteComponent<Params> {
 
 export const routeHandlers: EpicType[] = []
 
-const addRouteComponent = <T>(page: RouteComponent<T>) => {
+const addRouteComponent = <T extends {}>(page: RouteComponent<T>) => {
   const { ac, eh } = createRoute<T>(page.url, page.query)
   routeHandlers.push(eh)
   return ac
