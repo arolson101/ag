@@ -6,7 +6,7 @@ import { CurrencyField } from './CurrencyField'
 import { DateField } from './DateField'
 import { Divider } from './Divider'
 import { Form } from './Form'
-import { RouteSelector } from './RouteSelector'
+import { Router } from './Router'
 import { SelectField } from './SelectField'
 import { TextField } from './TextField'
 import { UrlField } from './UrlField'
@@ -16,7 +16,7 @@ export const ui: UiContext = {
   confirm,
 
   // routes
-  RouteSelector,
+  Router,
 
   // layout
   Page: ({ children }) => <div>{children}</div>,

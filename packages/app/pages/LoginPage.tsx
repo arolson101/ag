@@ -4,15 +4,14 @@ import React from 'react'
 import { defineMessages } from 'react-intl'
 import { connect } from 'react-redux'
 import { actions } from '../actions'
-import { AppContext, typedFields } from '../context'
+import { AppContext, RouteProps, typedFields } from '../context'
 import { LoginPageForm } from '../forms'
 import { LoginPageQuery } from '../graphql-types'
-import { AppState, selectors } from '../reducers'
+import { AppState } from '../reducers'
 
 type FormValues = LoginPageForm.Values
 
 interface StateProps {
-  data: LoginPageQuery
   dbId: string
 }
 
@@ -21,14 +20,13 @@ interface DispatchProps {
   deleteDb: (opts: { dbId: string }) => any
 }
 
-interface Props extends StateProps, DispatchProps {}
+interface Props extends StateProps, DispatchProps, RouteProps<LoginPageQuery> {}
 
 export class LoginPageComponent extends React.PureComponent<Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  static url = '/login'
-
+  static readonly url = '/login'
   static readonly query = gql`
     query LoginPage {
       allDbs {
@@ -142,14 +140,24 @@ export class LoginPageComponent extends React.PureComponent<Props> {
   // }
 }
 
-export const LoginPage = connect<StateProps, DispatchProps, {}, AppState>(
-  state => ({
-    data: selectors.getLoadData<LoginPageQuery>(state),
-    dbId: LoginPageForm.getDbId(state),
-  }),
+const Base = connect<StateProps, DispatchProps, RouteProps<LoginPageQuery>, AppState>(
+  (state, props) => {
+    console.log('here')
+    return {
+      dbId: props.location.state.allDbs.length ? props.location.state.allDbs[0].dbId : '',
+    }
+  },
   actions.loginPage
 )(LoginPageComponent)
-LoginPage.displayName = 'LoginPage'
+
+// tslint:disable-next-line:max-classes-per-file
+export class LoginPage extends Base {
+  static displayName = 'LoginPage'
+
+  // hoisted statics
+  static readonly url: typeof LoginPageComponent['url']
+  static readonly query: typeof LoginPageComponent['query']
+}
 
 const messages = defineMessages({
   welcomeMessageCreate: {

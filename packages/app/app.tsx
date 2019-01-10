@@ -2,9 +2,8 @@ import { DbImports, initDb } from '@ag/db'
 import React from 'react'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
-import { Router } from './components'
 import { AppContext, UiContext } from './context'
-import { routeHandlers, routes } from './routes'
+import { routes, routes2 } from './router'
 import { configureStore, Dependencies, RootStore } from './state'
 
 interface State {
@@ -43,7 +42,7 @@ export class App extends React.PureComponent<Props, State> {
     const dependencies: Dependencies = {
       runQuery,
     }
-    const store = configureStore(routeHandlers, dependencies)
+    const store = configureStore([], dependencies)
 
     store.dispatch(routes.login({}))
 
@@ -53,7 +52,7 @@ export class App extends React.PureComponent<Props, State> {
   render() {
     const { store } = this.state
     const { ui } = this.props
-    const { RouteSelector } = ui
+    const { Router } = ui
 
     if (!store) {
       return <>loading...</>
@@ -64,8 +63,8 @@ export class App extends React.PureComponent<Props, State> {
         <IntlProvider locale='en'>
           <GetIntlProvider>
             {intl => (
-              <AppContext.Provider value={{ intl, ui }}>
-                <Router />
+              <AppContext.Provider value={{ history, intl, ui }}>
+                <Router routes={routes2} />
                 {/* <LoginPageComponent
                   submitForm={values => console.log('submit ' + JSON.stringify(values))}
                   deleteDb={() => console.log('deleteDb')}

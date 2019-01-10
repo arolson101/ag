@@ -1,4 +1,5 @@
 import { ComponentType } from 'react'
+import { Router } from './routeContext'
 import {
   CheckboxFieldProps,
   CurrencyFieldProps,
@@ -9,15 +10,6 @@ import {
   UrlFieldProps,
 } from './uiContextForms'
 
-export interface RouteSelectorProps {
-  url: string
-  routes: RouteConfig
-}
-
-export interface RouteConfig {
-  [path: string]: React.ComponentType<{}>
-}
-
 export interface UiContext {
   // special ui
   confirm: (
@@ -25,7 +17,7 @@ export interface UiContext {
   ) => any
 
   // routes
-  RouteSelector: ComponentType<RouteSelectorProps>
+  Router: Router
 
   // layout
   Page: ComponentType<{}>
