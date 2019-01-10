@@ -1,17 +1,14 @@
-import { DbImports, initDb } from '@ag/db'
 import React from 'react'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
+import { actions } from './actions'
 import { AppContext, UiContext } from './context'
-import { routes, routes2 } from './router'
-import { configureStore, Dependencies, RootStore } from './state'
+import { routes } from './pages'
+import { AppStore } from './state'
 
-interface State {
-  store?: RootStore
-}
-
-interface Props extends DbImports {
+interface Props {
   ui: UiContext
+  store: AppStore
 }
 
 interface GetIntlProviderProps {
@@ -22,36 +19,14 @@ const GetIntlProvider = injectIntl<GetIntlProviderProps>(({ intl, children }) =>
 ))
 GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
 
-export class App extends React.PureComponent<Props, State> {
-  state: State = {}
-
+export class App extends React.PureComponent<Props> {
   componentDidMount() {
-    this.init()
-  }
-
-  init() {
-    const { openDb, deleteDb } = this.props
-
-    const dbImports: DbImports = {
-      openDb,
-      deleteDb,
-    }
-
-    const runQuery = initDb(dbImports)
-
-    const dependencies: Dependencies = {
-      runQuery,
-    }
-    const store = configureStore([], dependencies)
-
-    store.dispatch(routes.login({}))
-
-    this.setState({ store })
+    const { store } = this.props
+    store.dispatch(actions.nav.login({}))
   }
 
   render() {
-    const { store } = this.state
-    const { ui } = this.props
+    const { store, ui } = this.props
     const { Router } = ui
 
     if (!store) {
@@ -63,14 +38,8 @@ export class App extends React.PureComponent<Props, State> {
         <IntlProvider locale='en'>
           <GetIntlProvider>
             {intl => (
-              <AppContext.Provider value={{ history, intl, ui }}>
-                <Router routes={routes2} />
-                {/* <LoginPageComponent
-                  submitForm={values => console.log('submit ' + JSON.stringify(values))}
-                  deleteDb={() => console.log('deleteDb')}
-                  dbId={'123'}
-                  data={{ allDbs: [] }}
-                /> */}
+              <AppContext.Provider value={{ intl, ui }}>
+                <Router routes={routes} />
               </AppContext.Provider>
             )}
           </GetIntlProvider>

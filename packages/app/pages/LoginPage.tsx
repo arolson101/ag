@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { actions } from '../actions'
 import { AppContext, RouteProps, typedFields } from '../context'
 import { LoginPageForm } from '../forms'
-import { LoginPageQuery } from '../graphql-types'
+import { LoginPageQuery, LoginPageVariables } from '../graphql-types'
 import { AppState } from '../reducers'
 
 type FormValues = LoginPageForm.Values
@@ -141,12 +141,9 @@ export class LoginPageComponent extends React.PureComponent<Props> {
 }
 
 const Base = connect<StateProps, DispatchProps, RouteProps<LoginPageQuery>, AppState>(
-  (state, props) => {
-    console.log('here')
-    return {
-      dbId: props.location.state.allDbs.length ? props.location.state.allDbs[0].dbId : '',
-    }
-  },
+  (state, props) => ({
+    dbId: props.location.state.allDbs.length ? props.location.state.allDbs[0].dbId : '',
+  }),
   actions.loginPage
 )(LoginPageComponent)
 
@@ -157,6 +154,10 @@ export class LoginPage extends Base {
   // hoisted statics
   static readonly url: typeof LoginPageComponent['url']
   static readonly query: typeof LoginPageComponent['query']
+}
+
+export namespace LoginPage {
+  export type Params = LoginPageVariables
 }
 
 const messages = defineMessages({

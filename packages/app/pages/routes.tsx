@@ -1,9 +1,5 @@
-import { DocumentNode } from 'graphql'
-import { createAsyncAction } from 'typesafe-actions'
-import { Location, RouteConfig } from '../context'
-import { createRoute } from '../epics'
-import { LoginPage } from '../pages/LoginPage'
-import { EpicType } from '../state'
+import { RouteConfig } from '../context'
+import { LoginPage } from './LoginPage'
 
 // export const login = createStandardAction('nav/login')()
 // export const logout = createStandardAction('nav/logout')()
@@ -33,35 +29,6 @@ import { EpicType } from '../state'
 //   delete: createStandardAction('nav/tx/delete')<{ txId: string }>(),
 // }
 
-export interface PageQuery<Params> extends DocumentNode {
-  __tag?: Params
-}
-
-interface RouteComponent<Params> {
-  url: string
-  query: PageQuery<Params>
-}
-
-export const routeHandlers: EpicType[] = []
-
-const addRouteComponent = <T extends {}>(page: RouteComponent<T>) => {
-  const { ac, eh } = createRoute<T>(page.url, page.query)
-  routeHandlers.push(eh)
-  return ac
-}
-
-export const routes = {
-  login: addRouteComponent(LoginPage),
-}
-
-export const loading = createAsyncAction(
-  'nav/loading/request',
-  'nav/loading/success',
-  'nav/loading/failure'
-)<string, Location, Error>()
-
-// routes.login({})
-
-export const routes2: RouteConfig = {
+export const routes: RouteConfig = {
   [LoginPage.url]: LoginPage,
 }

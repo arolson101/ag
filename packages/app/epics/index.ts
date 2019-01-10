@@ -3,7 +3,7 @@ import { Epic } from 'redux-observable'
 import { ObservableInput } from 'rxjs'
 import { AppAction } from '../actions'
 import { AppState } from '../reducers'
-export { createRoute } from './navEpics'
+import { loginPageEpics } from './LoginPageEpics'
 
 export interface Dependencies {
   runQuery: <Variables = ExecutionArgs['variableValues'], Result = object>(
@@ -12,4 +12,8 @@ export interface Dependencies {
   ) => ObservableInput<ExecutionResult<Result>>
 }
 
-export interface EpicType extends Epic<AppAction, AppAction, AppState, Dependencies> {}
+export interface AppEpic extends Epic<AppAction, AppAction, AppState, Dependencies> {}
+
+export const appEpics = [
+  ...loginPageEpics, //
+]

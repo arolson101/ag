@@ -1,7 +1,7 @@
 import debug from 'debug'
 import gql from 'graphql-tag'
 import { from } from 'rxjs'
-import { filter, ignoreElements, map, mergeMap } from 'rxjs/operators'
+import { filter, ignoreElements, map, mergeMap, tap } from 'rxjs/operators'
 import { isActionOf } from 'typesafe-actions'
 import { actions } from '../actions'
 import {
@@ -12,12 +12,15 @@ import {
   OpenDbMutation,
   OpenDbVariables,
 } from '../graphql-types'
-import { EpicType } from './index'
+import { LoginPage } from '../pages'
+import { AppEpic } from './index'
+import { createRouteEpic } from './navEpics'
 
 const log = debug('app:LoginPage')
 
-const loginPageSubmit: EpicType = (action$, state$, { runQuery }) =>
+const loginPageSubmit: AppEpic = (action$, state$, { runQuery }) =>
   action$.pipe(
+    tap(() => console.log('loginPageSubmit epic')),
     filter(isActionOf(actions.loginPage.submitForm)),
     mergeMap(({ payload: values }) => {
       const create = !!values.dbId
@@ -58,8 +61,9 @@ const loginPageSubmit: EpicType = (action$, state$, { runQuery }) =>
     ignoreElements()
   )
 
-const deleteDbEpic: EpicType = (action$, state$, { runQuery }) =>
+const deleteDbEpic: AppEpic = (action$, state$, { runQuery }) =>
   action$.pipe(
+    tap(() => console.log('loginPageSubmit epic')),
     filter(isActionOf(actions.loginPage.deleteDb)),
     mergeMap(({ payload: variables }) => {
       const query = gql`
@@ -82,6 +86,9 @@ const deleteDbEpic: EpicType = (action$, state$, { runQuery }) =>
   )
 
 export const loginPageEpics = [
-  loginPageSubmit, //
+  createRouteEpic(LoginPage.url, LoginPage.query),
+  loginPageSubmit,
   deleteDbEpic,
 ]
+
+// login !!! TODO

@@ -1,4 +1,7 @@
 import { UiContext } from '@ag/app'
+import '@blueprintjs/core/lib/css/blueprint.css'
+import '@blueprintjs/icons/lib/css/blueprint-icons.css'
+import 'normalize.css/normalize.css'
 import React from 'react'
 import { CheckboxField } from './CheckboxField'
 import { confirm } from './confirm'

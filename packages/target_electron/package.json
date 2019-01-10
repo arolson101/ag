@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@ag/app": "^0.0.0",
+    "@ag/db": "^0.0.0",
     "@ag/util": "^0.0.0",
     "@blueprintjs/core": "^3.10.0",
     "@blueprintjs/icons": "^3.4.0",
@@ -34,9 +35,16 @@
     "normalize.css": "^8.0.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-redux": "^6.0.0",
+    "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "redux": "^4.0.1",
+    "redux-devtools-extension": "^2.13.7",
+    "redux-observable": "^1.0.0",
+    "rxjs": "^6.3.3",
     "sqlite3": "4.0.0",
-    "typeorm": "^0.2.11"
+    "typeorm": "^0.2.11",
+    "typesafe-actions": "^3.0.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^4.1.4",

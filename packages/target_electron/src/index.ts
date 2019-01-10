@@ -1,16 +1,12 @@
-import { App } from '@ag/app'
+import { actions, App } from '@ag/app'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { deleteDb, openDb } from './openDb.electron'
+import { store } from './store'
 import { ui } from './ui'
-
-import '@blueprintjs/core/lib/css/blueprint.css'
-import '@blueprintjs/icons/lib/css/blueprint-icons.css'
-import 'normalize.css/normalize.css'
 
 const runApp = () => {
   ReactDOM.render(
-    React.createElement(App, { deleteDb, openDb, ui }),
+    React.createElement(App, { store, ui }), //
     document.getElementById('root')
   )
 }

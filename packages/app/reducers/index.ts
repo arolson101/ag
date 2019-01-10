@@ -2,6 +2,10 @@ import { combineReducers } from 'redux'
 import { StateType } from 'typesafe-actions'
 import { nav, navSelectors } from './navReducer'
 
+export const appReducers = {
+  nav,
+}
+
 export const rootReducer = combineReducers({
   nav,
 })

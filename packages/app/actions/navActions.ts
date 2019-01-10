@@ -1,4 +1,5 @@
 import { createAsyncAction, createStandardAction } from 'typesafe-actions'
+import { LoginPage } from '../pages'
 
 export interface NavigateRequest<P = {}> {
   url: string
@@ -21,4 +22,6 @@ export const nav = {
     NavigateSuccess,
     NavigateError
   >(),
+
+  login: createStandardAction('nav/login')<LoginPage.Params>(),
 }

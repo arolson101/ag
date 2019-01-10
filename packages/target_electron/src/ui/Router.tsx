@@ -1,6 +1,8 @@
 import { AppContext, RouterProps } from '@ag/app/context'
+import { ConnectedRouter } from 'connected-react-router'
 import React from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
+import { history } from '../store'
 
 export class Router extends React.PureComponent<RouterProps> {
   static contextType = AppContext
@@ -12,7 +14,7 @@ export class Router extends React.PureComponent<RouterProps> {
     const { Text, SubmitButton } = ui
 
     return (
-      <BrowserRouter>
+      <ConnectedRouter history={history}>
         <Switch>
           {Object.keys(routes).map(path => (
             <Route key={path} path={path} exact component={routes[path]} />
@@ -30,7 +32,7 @@ export class Router extends React.PureComponent<RouterProps> {
             )}
           />
         </Switch>
-      </BrowserRouter>
+      </ConnectedRouter>
     )
   }
 }

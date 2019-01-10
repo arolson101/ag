@@ -4,15 +4,17 @@ import { StateObservable } from 'redux-observable'
 import { of, Subject } from 'rxjs'
 import { marbles } from 'rxjs-marbles'
 import { delay } from 'rxjs/operators'
+import { createStandardAction } from 'typesafe-actions'
 import { actions } from '../actions'
-import { createRoute } from '../epics'
+import { createRouteEpic } from '../epics/navEpics'
 import { AppState } from '../reducers'
 import { Dependencies } from '../state'
 
 test(
   'navigation success',
   marbles(m => {
-    const { ac: navHome, eh: handleNavHome } = createRoute<{ foo: string }>('/home', 'asdf' as any)
+    const navHome = createStandardAction('nav/login')<{ foo: string }>()
+    const handleNavHome = createRouteEpic('/home', 'asdf' as any)
 
     const dependencies: Dependencies = {
       runQuery: (document, variableValues) =>
@@ -39,7 +41,8 @@ test(
 test(
   'navigation failure',
   marbles(m => {
-    const { ac: navHome, eh: handleNavHome } = createRoute<{ foo: string }>('/home', 'asdf' as any)
+    const navHome = createStandardAction('nav/login')<{ foo: string }>()
+    const handleNavHome = createRouteEpic('/home', 'asdf' as any)
     const err = new GraphQLError('error navigating')
 
     const dependencies: Dependencies = {
