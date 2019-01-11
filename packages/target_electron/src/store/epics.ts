@@ -5,8 +5,7 @@ import { isActionOf } from 'typesafe-actions'
 
 const routerEpic: AppEpic = (action$, state$) =>
   action$.pipe(
-    tap(() => console.log('routerEpic')),
-    filter(isActionOf(actions.nav.navigate.success)),
+    filter(isActionOf(actions.navigate.success)),
     map(action => push(action.payload.url, action.payload.data) as any)
   )
 

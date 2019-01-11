@@ -19,11 +19,28 @@ export interface UiContext {
   // routes
   Router: Router
 
+  // dialog
+  Alert: ComponentType<{
+    title: string
+
+    body?: string[]
+
+    onConfirm: () => any
+    confirmText: string
+
+    onCancel?: () => any
+    cancelText?: string
+
+    onClosed: () => any
+
+    show: boolean
+  }>
+
   // layout
   Page: ComponentType<{}>
   Text: ComponentType<{ children: string | string[] }>
-  SubmitButton: ComponentType<{ onPress: (event: React.SyntheticEvent) => any }>
-  DeleteButton: ComponentType<{ onPress: (event: React.SyntheticEvent) => any }>
+  SubmitButton: ComponentType<{ disabled?: boolean; onPress: (event: React.SyntheticEvent) => any }>
+  DeleteButton: ComponentType<{ disabled?: boolean; onPress: (event: React.SyntheticEvent) => any }>
 
   // form
   Form: React.ComponentType<FormProps>

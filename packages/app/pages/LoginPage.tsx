@@ -1,4 +1,4 @@
-import { Formik, FormikErrors } from 'formik'
+import { Formik, FormikActions, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
@@ -16,7 +16,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  submitForm: (variables: FormValues) => any
+  submitForm: (values: FormValues, actions: FormikActions<FormValues>) => any
   deleteDb: (opts: { dbId: string }) => any
 }
 
@@ -78,11 +78,11 @@ export class LoginPageComponent extends React.PureComponent<Props> {
                   // inputRef={this.inputRef}
                 />
               )}
-              <SubmitButton onPress={formApi.submitForm}>
+              <SubmitButton onPress={formApi.submitForm} disabled={formApi.isSubmitting}>
                 <Text>{intl.formatMessage(create ? messages.create : messages.open)}</Text>
               </SubmitButton>
               {!create && (
-                <DeleteButton onPress={this.confirmDelete}>
+                <DeleteButton onPress={this.confirmDelete} disabled={formApi.isSubmitting}>
                   <Text>{intl.formatMessage(messages.delete)}</Text>
                 </DeleteButton>
               )}

@@ -1,4 +1,4 @@
-import { actions, App } from '@ag/app'
+import { App } from '@ag/app'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { store } from './store'

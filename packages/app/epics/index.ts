@@ -4,6 +4,7 @@ import { ObservableInput } from 'rxjs'
 import { AppAction } from '../actions'
 import { AppState } from '../reducers'
 import { loginPageEpics } from './LoginPageEpics'
+import { navEpics } from './navEpics'
 
 export interface Dependencies {
   runQuery: <Variables = ExecutionArgs['variableValues'], Result = object>(
@@ -16,4 +17,5 @@ export interface AppEpic extends Epic<AppAction, AppAction, AppState, Dependenci
 
 export const appEpics = [
   ...loginPageEpics, //
+  ...navEpics,
 ]

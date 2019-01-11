@@ -1,7 +1,8 @@
-import { AppAction, AppState, Dependencies } from '@ag/app'
+import { AppAction, Dependencies } from '@ag/app'
+import { AppState } from '@ag/app/reducers'
 import { DbImports, initDb } from '@ag/db'
 import { routerMiddleware } from 'connected-react-router'
-import { createBrowserHistory } from 'history'
+import { createMemoryHistory } from 'history'
 import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
@@ -9,7 +10,7 @@ import { epics } from './epics'
 import { deleteDb, openDb } from './openDb.electron'
 import { createRootReducer, ElectronState } from './reducers'
 
-export const history = createBrowserHistory()
+export const history = createMemoryHistory()
 
 const dbImports: DbImports = {
   openDb,

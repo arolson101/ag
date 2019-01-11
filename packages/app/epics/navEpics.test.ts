@@ -5,10 +5,10 @@ import { of, Subject } from 'rxjs'
 import { marbles } from 'rxjs-marbles'
 import { delay } from 'rxjs/operators'
 import { createStandardAction } from 'typesafe-actions'
+import { Dependencies } from '.'
 import { actions } from '../actions'
-import { createRouteEpic } from '../epics/navEpics'
 import { AppState } from '../reducers'
-import { Dependencies } from '../state'
+import { createRouteEpic } from './navEpics'
 
 test(
   'navigation success',
@@ -25,7 +25,7 @@ test(
       a: navHome({ foo: 'foo' }),
     })
     const expect$ = m.cold('100ms x', {
-      x: actions.nav.navigate.success({ url: '/home', data: { response: 123 } }),
+      x: actions.navigate.success({ url: '/home', data: { response: 123 } }),
     })
     const state$ = {} as AppState
     const output$ = handleNavHome(
@@ -54,7 +54,7 @@ test(
       a: navHome({ foo: 'foo' }),
     })
     const expect$ = m.cold('100ms x', {
-      x: actions.nav.navigate.failure({ url: '/home', errors: [err] }),
+      x: actions.navigate.failure({ url: '/home', errors: [err] }),
     })
     const state$ = {} as AppState
     const output$ = handleNavHome(

@@ -1,3 +1,4 @@
+import { actions } from '../actions'
 import { RouteConfig } from '../context'
 import { LoginPage } from './LoginPage'
 
@@ -28,6 +29,13 @@ import { LoginPage } from './LoginPage'
 //   update: createStandardAction('nav/tx/update')<{ txId: string }>(),
 //   delete: createStandardAction('nav/tx/delete')<{ txId: string }>(),
 // }
+
+const createRouteFunction = <T extends {}>(url: string) => (params: T) =>
+  actions.navigate.request({ url, params })
+
+export const nav = {
+  login: createRouteFunction<LoginPage.Params>(LoginPage.url),
+}
 
 export const routes: RouteConfig = {
   [LoginPage.url]: LoginPage,

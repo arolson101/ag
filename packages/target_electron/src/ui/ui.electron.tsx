@@ -1,4 +1,5 @@
 import { UiContext } from '@ag/app'
+import { Alert } from '@blueprintjs/core'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import 'normalize.css/normalize.css'
@@ -21,11 +22,34 @@ export const ui: UiContext = {
   // routes
   Router,
 
+  // dialog
+  Alert: props => (
+    <Alert
+      isOpen={props.show}
+      onClosed={props.onClosed}
+      confirmButtonText={props.confirmText}
+      onConfirm={props.onConfirm}
+      cancelButtonText={props.cancelText}
+      onCancel={props.onCancel}
+    >
+      <h1>{props.title}</h1>
+      {props.body && props.body.map((b, i) => <p key={i}>{b}</p>)}
+    </Alert>
+  ),
+
   // layout
   Page: ({ children }) => <div>{children}</div>,
   Text: ({ children }) => <span>{children}</span>,
-  SubmitButton: ({ onPress, children }) => <button onClick={onPress}>{children}</button>,
-  DeleteButton: ({ onPress, children }) => <button onClick={onPress}>{children}</button>,
+  SubmitButton: ({ onPress, disabled, children }) => (
+    <button onClick={onPress} disabled={disabled}>
+      {children}
+    </button>
+  ),
+  DeleteButton: ({ onPress, disabled, children }) => (
+    <button onClick={onPress} disabled={disabled}>
+      {children}
+    </button>
+  ),
 
   // form
   Form,

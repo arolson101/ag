@@ -1,10 +1,16 @@
 import { ActionType } from 'typesafe-actions'
+import { dialogActions } from './dialogActions'
 import { loginPage } from './LoginPageActions'
-import { nav } from './navActions'
+import { navActions } from './navActions'
+
+export * from './dialogActions'
+export * from './LoginPageActions'
+export * from './navActions'
 
 export const actions = {
   loginPage,
-  nav,
+  ...navActions,
+  ...dialogActions,
 }
 
 export type AppAction = ActionType<typeof actions>

@@ -15459,6 +15459,11 @@ typescript@^3.2.2:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.2.2.tgz#fe8101c46aa123f8353523ebdcf5730c2ae493e5"
   integrity sha512-VCj5UiSyHBjwfYacmDuc/NOk4QQixbE+Wn7MFJuS0nRuPQbof132Pw4u53dm264O8LPc2MVsc7RJNml5szurkg==
 
+typescript@^3.3.0-dev.20190110:
+  version "3.3.0-dev.20190110"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.0-dev.20190110.tgz#3904786315ffd8aa10144b6e10562895206b8ffd"
+  integrity sha512-KX6KnWq717uH4cXe9RZruhwnhPufqBLDrxAHy6k3A5JHPnIRuaK2cdij+TQNG8nur3PO6dTLWo4rgwdBsFz/qw==
+
 ua-parser-js@^0.7.18:
   version "0.7.19"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.19.tgz#94151be4c0a7fb1d001af7022fdaca4642659e4b"

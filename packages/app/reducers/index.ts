@@ -1,20 +1,13 @@
-import { combineReducers } from 'redux'
+import { Store } from 'redux'
 import { StateType } from 'typesafe-actions'
-import { nav, navSelectors } from './navReducer'
+import { AppAction } from '../actions'
+import { dialog } from './dialog'
 
 export const appReducers = {
-  nav,
+  dialog,
 }
 
-export const rootReducer = combineReducers({
-  nav,
-})
+export interface AppState extends StateType<typeof appReducers> {}
+export interface AppStore extends Store<AppState, AppAction> {}
 
-export interface AppState extends StateType<typeof rootReducer> {}
-
-export const selectors = {
-  isLoading: (state: AppState) => navSelectors.isLoading(state.nav),
-  getLoadErrors: (state: AppState) => navSelectors.getLoadErrors(state.nav),
-  getUrl: (state: AppState) => navSelectors.getUrl(state.nav),
-  getLoadData: <T extends {}>(state: AppState) => navSelectors.getLoadData<T>(state.nav),
-}
+export const selectors = {}

@@ -20,7 +20,8 @@ export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
             >
               <Switch
                 id={id}
-                className='pt-align-right'
+                alignIndicator='right'
+                // className='pt-align-right'
                 label={label}
                 checked={field.value}
                 onChange={e => form.setFieldValue(name, e.currentTarget.checked)}

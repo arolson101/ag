@@ -16,7 +16,7 @@
     "start:dev": "rimraf dist && concurrently --kill-others \"yarn:start\" \"yarn:electron\"",
     "storybook": "concurrently --raw --kill-others \"yarn:storybook:server\" \"yarn:storybook:electron\"",
     "storybook:server": "start-storybook --ci --quiet -p 6006",
-    "storybook:electron": "wait-on http://localhost:6006 && electron dist --url http://localhost:6006/"
+    "storybook:electron": "wait-on http://localhost:6006/webpack-dev-server/ && electron dist --url http://localhost:6006/webpack-dev-server/"
   },
   "dependencies": {
     "@ag/app": "^0.0.0",
