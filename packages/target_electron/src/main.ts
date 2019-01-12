@@ -1,9 +1,12 @@
 import program from 'commander'
+import debug from 'debug'
 import { app, BrowserWindow } from 'electron'
 import isDev from 'electron-is-dev'
 import windowStateKeeper from 'electron-window-state'
 import path from 'path'
 import url from 'url'
+
+const log = debug('app:main')
 
 const defaultUrl = url.format({
   pathname: path.join(__dirname, 'index.html'),
@@ -27,13 +30,19 @@ async function createWindow() {
   if (isDev) {
     // this breaks VS Code debugging
     //
-    await import('electron-devtools-installer').then(
-      ({ default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS }) => {
-        Promise.all([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].map(ext => installExtension(ext)))
-          .then(name => console.log(`Added Extension:  ${name}`))
-          .catch(err => console.log('An error occurred: ', err))
+    const { default: installExtension, ...exts } = await import('electron-devtools-installer')
+    for (const ext of [
+      exts.REACT_DEVELOPER_TOOLS,
+      exts.REDUX_DEVTOOLS,
+      exts.APOLLO_DEVELOPER_TOOLS,
+    ]) {
+      try {
+        const name = installExtension(ext)
+        log(`Added Extension:  ${name}`)
+      } catch (err) {
+        log('An error occurred: ', err)
       }
-    )
+    }
     //
     // if(!BrowserWindow.getDevToolsExtensions().hasOwnProperty('devtron')) {
     //   BrowserWindow.addDevToolsExtension(require('devtron').path);
