@@ -15,50 +15,58 @@ export type DateTime = any
 // Documents
 // ====================================================
 
-export type LoginPageVariables = {}
+export namespace LoginPage {
+  export type Variables = {}
 
-export type LoginPageQuery = {
-  __typename?: 'Query'
+  export type Query = {
+    __typename?: 'Query'
 
-  allDbs: LoginPageAllDbs[]
+    allDbs: AllDbs[]
+  }
+
+  export type AllDbs = {
+    __typename?: 'DbInfo'
+
+    dbId: string
+
+    name: string
+  }
 }
 
-export type LoginPageAllDbs = {
-  __typename?: 'DbInfo'
+export namespace CreateDb {
+  export type Variables = {
+    name: string
+    password: string
+  }
 
-  dbId: string
+  export type Mutation = {
+    __typename?: 'Mutation'
 
-  name: string
+    createDb: boolean
+  }
 }
 
-export type CreateDbVariables = {
-  name: string
-  password: string
+export namespace OpenDb {
+  export type Variables = {
+    dbId: string
+    password: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    openDb: boolean
+  }
 }
 
-export type CreateDbMutation = {
-  __typename?: 'Mutation'
+export namespace DeleteDb {
+  export type Variables = {
+    dbId: string
+  }
 
-  createDb: boolean
-}
+  export type Mutation = {
+    __typename?: 'Mutation'
 
-export type OpenDbVariables = {
-  dbId: string
-  password: string
-}
-
-export type OpenDbMutation = {
-  __typename?: 'Mutation'
-
-  openDb: boolean
-}
-
-export type DeleteDbVariables = {
-  dbId: string
-}
-
-export type DeleteDbMutation = {
-  __typename?: 'Mutation'
-
-  deleteDb: string
+    deleteDb: string
+  }
 }

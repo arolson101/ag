@@ -1,95 +1,132 @@
+import debug from 'debug'
 import { Formik, FormikActions, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
 import React from 'react'
+import { Mutation, Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
-import { connect } from 'react-redux'
-import { actions } from '../actions'
-import { AppContext, RouteProps, typedFields } from '../context'
+import { ErrorDisplay } from '../components'
+import { ConfirmButton } from '../components/ConfirmButton'
+import { AppContext, typedFields } from '../context'
 import { LoginPageForm } from '../forms'
-import { LoginPageQuery, LoginPageVariables } from '../graphql-types'
-import { AppState } from '../reducers'
+import * as Gql from '../graphql-types'
+
+const log = debug('app:LoginPage')
 
 type FormValues = LoginPageForm.Values
 
-interface StateProps {
-  dbId: string
+class LoginPageQuery extends Query<Gql.LoginPage.Query, Gql.LoginPage.Variables> {
+  static defaultProps = {
+    query: gql`
+      query LoginPage {
+        allDbs {
+          dbId
+          name
+        }
+      }
+    `,
+  }
 }
 
-interface DispatchProps {
-  submitForm: (values: FormValues, actions: FormikActions<FormValues>) => any
-  deleteDb: (opts: { dbId: string }) => any
+class DeleteDbMutation extends Mutation<Gql.DeleteDb.Mutation, Gql.DeleteDb.Variables> {
+  static defaultProps = {
+    mutation: gql`
+      mutation DeleteDb($dbId: String!) {
+        deleteDb(dbId: $dbId)
+      }
+    `,
+    refetchQueries: [{ query: LoginPageQuery.defaultProps.query }],
+  }
 }
 
-interface Props extends StateProps, DispatchProps, RouteProps<LoginPageQuery> {}
+interface Props {}
 
-export class LoginPageComponent extends React.PureComponent<Props> {
+export class LoginPage extends React.PureComponent<Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  static readonly url = '/login'
-  static readonly query = gql`
-    query LoginPage {
-      allDbs {
-        dbId
-        name
-      }
-    }
-  `
-
   render() {
-    const { submitForm, dbId } = this.props
     const { ui, intl } = this.context
     const { Page, Text, SubmitButton, DeleteButton } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
-    const create = !dbId
-
-    const initialValues = {
-      ...LoginPageForm.initalValues,
-      dbId,
-    }
 
     return (
-      <Page>
-        <Formik initialValues={initialValues} validate={this.validate} onSubmit={submitForm}>
-          {formApi => (
-            <Form onSubmit={formApi.submitForm}>
-              <Text>
-                {intl.formatMessage(
-                  create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
+      <LoginPageQuery>
+        {result => {
+          const { data, loading, error } = result
+          if (loading) {
+            return <Text>loading...</Text>
+          } else if (error) {
+            return <ErrorDisplay error={error} />
+          }
+
+          const dbId = data && data.allDbs.length ? data.allDbs[0].dbId : ''
+          const create = !dbId
+
+          const initialValues = {
+            ...LoginPageForm.initalValues,
+            dbId,
+          }
+
+          return (
+            <Page>
+              <Formik
+                initialValues={initialValues}
+                validate={this.validate}
+                onSubmit={this.onSubmit}
+              >
+                {formApi => (
+                  <Form onSubmit={formApi.submitForm}>
+                    <Text>
+                      {intl.formatMessage(
+                        create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
+                      )}
+                    </Text>
+                    <TextField
+                      autoFocus
+                      secure
+                      field='password'
+                      label={intl.formatMessage(messages.passwordLabel)}
+                      placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+                      // returnKeyType={create ? 'next' : 'go'}
+                      // onSubmitEditing={create ? this.focusConfirmInput : formApi.submitForm}
+                    />
+                    {create && (
+                      <TextField
+                        secure
+                        field='passwordConfirm'
+                        label={intl.formatMessage(messages.passwordConfirmLabel)}
+                        placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
+                        // returnKeyType={'go'}
+                        onSubmitEditing={formApi.submitForm}
+                        // inputRef={this.inputRef}
+                      />
+                    )}
+                    <SubmitButton onPress={formApi.submitForm} disabled={formApi.isSubmitting}>
+                      <Text>{intl.formatMessage(create ? messages.create : messages.open)}</Text>
+                    </SubmitButton>
+                    {!create && (
+                      <DeleteDbMutation variables={{ dbId }}>
+                        {(deleteDb, { error: deleteDbError }) => (
+                          <>
+                            <ErrorDisplay error={deleteDbError} />
+                            <ConfirmButton
+                              message={intl.formatMessage(messages.deleteMessage)}
+                              component={DeleteButton as any}
+                              onConfirmed={deleteDb}
+                            >
+                              <Text>{intl.formatMessage(messages.delete)}</Text>
+                            </ConfirmButton>
+                          </>
+                        )}
+                      </DeleteDbMutation>
+                    )}
+                  </Form>
                 )}
-              </Text>
-              <TextField
-                autoFocus
-                secure
-                field='password'
-                label={intl.formatMessage(messages.passwordLabel)}
-                placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-                // returnKeyType={create ? 'next' : 'go'}
-                // onSubmitEditing={create ? this.focusConfirmInput : formApi.submitForm}
-              />
-              {create && (
-                <TextField
-                  secure
-                  field='passwordConfirm'
-                  label={intl.formatMessage(messages.passwordConfirmLabel)}
-                  placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
-                  // returnKeyType={'go'}
-                  onSubmitEditing={formApi.submitForm}
-                  // inputRef={this.inputRef}
-                />
-              )}
-              <SubmitButton onPress={formApi.submitForm} disabled={formApi.isSubmitting}>
-                <Text>{intl.formatMessage(create ? messages.create : messages.open)}</Text>
-              </SubmitButton>
-              {!create && (
-                <DeleteButton onPress={this.confirmDelete} disabled={formApi.isSubmitting}>
-                  <Text>{intl.formatMessage(messages.delete)}</Text>
-                </DeleteButton>
-              )}
-            </Form>
-          )}
-        </Formik>
-      </Page>
+              </Formik>
+            </Page>
+          )
+        }}
+      </LoginPageQuery>
     )
   }
 
@@ -114,20 +151,70 @@ export class LoginPageComponent extends React.PureComponent<Props> {
     return errors
   }
 
-  confirmDelete = (event: React.SyntheticEvent) => {
-    const { ui, intl } = this.context
-    ui.confirm({
-      event,
-      title: intl.formatMessage(messages.deleteTitle),
-      action: intl.formatMessage(messages.delete),
-      onConfirm: this.deleteDb,
-    })
+  onSubmit = async (values: FormValues, factions: FormikActions<FormValues>) => {
+    try {
+      const { client, ui, intl } = this.context
+      const create = !values.dbId
+      const refetchQueries = [{ query: LoginPageQuery.defaultProps.query }]
+      if (create) {
+        log('running CreateDb mutation')
+        const { name, password } = values
+        const mutation = gql`
+          mutation CreateDb($name: String!, $password: String!) {
+            createDb(name: $name, password: $password)
+          }
+        `
+        const res = await client.mutate<Gql.CreateDb.Mutation, Gql.CreateDb.Variables>({
+          mutation,
+          variables: { name, password },
+          refetchQueries,
+        })
+        log('CreateDb finished %O', res)
+      } else {
+        log('running OpenDb mutation')
+        const { dbId, password } = values
+        const mutation = gql`
+          mutation OpenDb($dbId: String!, $password: String!) {
+            openDb(dbId: $dbId, password: $password)
+          }
+        `
+        const res = await client.mutate<Gql.OpenDb.Mutation, Gql.OpenDb.Variables>({
+          mutation,
+          variables: { dbId, password },
+          refetchQueries,
+        })
+        log('CreateDb finished %O', res)
+      }
+
+      // redirect to /home
+    } finally {
+      factions.setSubmitting(false)
+    }
   }
 
-  deleteDb = () => {
-    const { deleteDb, dbId } = this.props
-    deleteDb({ dbId })
-  }
+  // confirmDelete = (event: React.SyntheticEvent, dbId: string) => {
+  //   const { ui, intl } = this.context
+  //   ui.confirm({
+  //     event,
+  //     title: intl.formatMessage(messages.deleteMessage),
+  //     action: intl.formatMessage(messages.delete),
+  //     onConfirm: () => this.deleteDb(dbId),
+  //   })
+  // }
+
+  // deleteDb = async (dbId: string) => {
+  //   const mutation = gql`
+  //     mutation DeleteDb($dbId: String!) {
+  //       deleteDb(dbId: $dbId)
+  //     }
+  //   `
+  //   const variables = { dbId }
+  //   const { client, ui } = this.context
+  //   const result = await client.mutate<Gql.DeleteDb.Mutation, Gql.DeleteDb.Variables>({
+  //     mutation,
+  //     variables,
+  //   })
+  // }
 
   // inputRef = (ref: any) => {
   //   this.confirmInput = ref
@@ -138,26 +225,6 @@ export class LoginPageComponent extends React.PureComponent<Props> {
   //     this.confirmInput.focus()
   //   }
   // }
-}
-
-const Base = connect<StateProps, DispatchProps, RouteProps<LoginPageQuery>, AppState>(
-  (state, props) => ({
-    dbId: props.location.state.allDbs.length ? props.location.state.allDbs[0].dbId : '',
-  }),
-  actions.loginPage
-)(LoginPageComponent)
-
-// tslint:disable-next-line:max-classes-per-file
-export class LoginPage extends Base {
-  static displayName = 'LoginPage'
-
-  // hoisted statics
-  static readonly url: typeof LoginPageComponent['url']
-  static readonly query: typeof LoginPageComponent['query']
-}
-
-export namespace LoginPage {
-  export type Params = LoginPageVariables
 }
 
 const messages = defineMessages({
@@ -181,9 +248,9 @@ const messages = defineMessages({
     id: 'LoginForm.delete',
     defaultMessage: 'Delete',
   },
-  deleteTitle: {
-    id: 'LoginForm.deleteTitle',
-    defaultMessage: 'Are you sure?',
+  deleteMessage: {
+    id: 'LoginForm.deleteMessage',
+    defaultMessage: 'This will delete all the data.  Are you sure?',
   },
   valueEmpty: {
     id: 'LoginForm.valueEmpty',

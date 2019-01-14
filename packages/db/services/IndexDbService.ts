@@ -1,8 +1,8 @@
 import crypto from 'crypto'
 import sanitize from 'sanitize-filename'
 import { Service } from 'typedi'
-import { Connection, Repository, Transaction } from 'typeorm'
-import { Account, Bank, Bill, Budget, DbInfo } from '../entities'
+import { Connection, getConnection, getConnectionManager, Repository } from 'typeorm'
+import { Account, Bank, Bill, Budget, Category, DbInfo, Transaction } from '../entities'
 import { AppDbService } from './AppDbService'
 import { DbImportsService } from './DbImportsService'
 
@@ -11,6 +11,7 @@ const appEntities = [
   Bank,
   Bill,
   Budget,
+  Category,
   Transaction,
 ]
 
@@ -42,6 +43,13 @@ export class IndexDbService {
     return dbs
   }
 
+  async ensureClosed(name: string): Promise<void> {
+    const mgr = getConnectionManager()
+    if (mgr.has(name)) {
+      await mgr.get(name).close()
+    }
+  }
+
   async createDb(name: string, password: string): Promise<boolean> {
     await this.initPromise
     const dbInfo = new DbInfo()
@@ -50,7 +58,7 @@ export class IndexDbService {
     dbInfo.path = sanitize(name)
     const key = DbInfo.generateKey()
     dbInfo.setPassword(key, password)
-
+    await this.ensureClosed(dbInfo.path)
     const db = await this.imports.openDb(dbInfo.path, key, appEntities)
     await this.dbInfos.save(dbInfo)
     this.appService.open(db)
@@ -60,6 +68,7 @@ export class IndexDbService {
   async openDb(dbId: string, password: string): Promise<boolean> {
     await this.initPromise
     const dbInfo = await this.dbInfos.findOneOrFail(dbId)
+    await this.ensureClosed(dbInfo.path)
     const key = dbInfo.getKey(password)
     const db = await this.imports.openDb(dbInfo.path, key, appEntities)
     this.appService.open(db)
@@ -71,7 +80,7 @@ export class IndexDbService {
     return true
   }
 
-  async deleteDb(dbId: string): Promise<void> {
+  async deleteDb(dbId: string): Promise<string> {
     const dbInfo = await this.dbInfos.findOneOrFail(dbId)
     await this.imports.deleteDb(dbInfo.path)
     await this.dbInfos
@@ -80,5 +89,6 @@ export class IndexDbService {
       .from(DbInfo)
       .where('dbId = :dbId', { dbId })
       .execute()
+    return dbId
   }
 }

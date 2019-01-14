@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { Connection, ConnectionOptions, createConnection } from 'typeorm'
 
-const userData = electron.remote.app.getPath('userData')
+const userData = (electron.remote || electron).app.getPath('userData')
 
 export const openDb = async (
   name: string,

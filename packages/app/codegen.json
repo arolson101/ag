@@ -5,7 +5,7 @@
   "generates": {
     "graphql-types.d.ts": {
       "config": {
-        "noNamespaces": true
+        "noNamespaces": false
       },
       "plugins": [
         "typescript-common",

@@ -37,7 +37,7 @@ export class DbResolver {
   }
 
   @Mutation(returns => String)
-  async deleteDb(@Arg('dbId') dbId: string): Promise<void> {
+  async deleteDb(@Arg('dbId') dbId: string): Promise<string> {
     return this.index.deleteDb(dbId)
   }
 }

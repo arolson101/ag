@@ -8,7 +8,6 @@ export class Form extends React.PureComponent<FormProps> {
   }
 
   onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    console.log('form onsubmit')
     event.preventDefault()
     const { onSubmit } = this.props
     onSubmit()

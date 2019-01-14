@@ -12,7 +12,7 @@ import { createRootReducer, ElectronState } from './reducers'
 
 export const history = createMemoryHistory()
 
-const dbImports: DbImports = {
+export const dbImports: DbImports = {
   openDb,
   deleteDb,
 }

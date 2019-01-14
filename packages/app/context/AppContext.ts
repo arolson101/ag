@@ -1,3 +1,4 @@
+import { ApolloClient } from 'apollo-client'
 import React from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { UiContext } from './uiContext'
@@ -5,6 +6,7 @@ import { UiContext } from './uiContext'
 export interface AppContext {
   intl: IntlContext
   ui: UiContext
+  client: ApolloClient<any>
 }
 
 const defaultContext: AppContext = null as any

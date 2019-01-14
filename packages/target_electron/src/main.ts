@@ -3,8 +3,11 @@ import debug from 'debug'
 import { app, BrowserWindow } from 'electron'
 import isDev from 'electron-is-dev'
 import windowStateKeeper from 'electron-window-state'
+import { Server } from 'http'
 import path from 'path'
 import url from 'url'
+import { startServer } from '../../db/server'
+import { dbImports } from './store'
 
 const log = debug('app:main')
 
@@ -22,6 +25,13 @@ program
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null = null
+
+startServer(dbImports).then(opts => {
+  app.on('will-quit', () => {
+    opts.server.close()
+  })
+  ;(global as any).graphQlServer = opts.url
+})
 
 // https://github.com/electron/electron/blob/master/docs/tutorial/security.md
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'

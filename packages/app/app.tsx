@@ -1,12 +1,15 @@
+import ApolloClient from 'apollo-client'
 import React from 'react'
+import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { Dialogs } from './components'
 import { AppContext, UiContext } from './context'
-import { nav, routes } from './pages'
+import { routes } from './pages'
 import { AppStore } from './reducers'
 
 interface Props {
+  client: ApolloClient<any>
   ui: UiContext
   store: AppStore
 }
@@ -22,11 +25,11 @@ GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
 export class App extends React.PureComponent<Props> {
   componentDidMount() {
     const { store } = this.props
-    store.dispatch(nav.login({}))
+    // store.dispatch(nav.login({}))
   }
 
   render() {
-    const { store, ui } = this.props
+    const { client, store, ui } = this.props
     const { Router } = ui
 
     if (!store) {
@@ -34,18 +37,20 @@ export class App extends React.PureComponent<Props> {
     }
 
     return (
-      <Provider store={store}>
-        <IntlProvider locale='en'>
-          <GetIntlProvider>
-            {intl => (
-              <AppContext.Provider value={{ intl, ui }}>
-                <Router routes={routes} />
-                <Dialogs />
-              </AppContext.Provider>
-            )}
-          </GetIntlProvider>
-        </IntlProvider>
-      </Provider>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <IntlProvider locale='en'>
+            <GetIntlProvider>
+              {intl => (
+                <AppContext.Provider value={{ client, intl, ui }}>
+                  <Router routes={routes} />
+                  <Dialogs />
+                </AppContext.Provider>
+              )}
+            </GetIntlProvider>
+          </IntlProvider>
+        </Provider>
+      </ApolloProvider>
     )
   }
 }

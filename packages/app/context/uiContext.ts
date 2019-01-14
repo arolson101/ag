@@ -10,6 +10,22 @@ import {
   UrlFieldProps,
 } from './uiContextForms'
 
+export interface AlertProps {
+  title: string
+
+  body?: string[]
+
+  onConfirm: () => any
+  confirmText: string
+
+  onCancel?: () => any
+  cancelText?: string
+
+  onClosed: () => any
+
+  show: boolean
+}
+
 export interface UiContext {
   // special ui
   confirm: (
@@ -20,21 +36,7 @@ export interface UiContext {
   Router: Router
 
   // dialog
-  Alert: ComponentType<{
-    title: string
-
-    body?: string[]
-
-    onConfirm: () => any
-    confirmText: string
-
-    onCancel?: () => any
-    cancelText?: string
-
-    onClosed: () => any
-
-    show: boolean
-  }>
+  Alert: ComponentType<AlertProps>
 
   // layout
   Page: ComponentType<{}>

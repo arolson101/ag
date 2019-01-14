@@ -5,7 +5,7 @@ import { DbChange } from '../dbWrite'
 import { Transaction, TransactionInput } from '../entities/index'
 import { AppDbService } from '../services/AppDbService'
 
-@Resolver(Transaction)
+@Resolver(objectType => Transaction)
 export class TransactionResolver {
   constructor(private app: AppDbService) {}
 

@@ -14,8 +14,11 @@
   },
   "dependencies": {
     "@ag/util": "^0.0.0",
+    "apollo-server": "^2.3.1",
     "axios": "^0.18.0",
     "cuid": "^2.1.4",
+    "debug": "^4.1.1",
+    "get-port": "^4.1.0",
     "graphql": "^14.0.2",
     "ofx4js": "^2.0.1",
     "randomcolor": "^0.5.3",
@@ -29,10 +32,13 @@
     "@2fd/graphdoc": "^2.4.0",
     "@types/axios": "^0.14.0",
     "@types/cuid": "^1.3.0",
+    "@types/get-port": "^4.0.1",
     "@types/graphql": "^14.0.4",
     "@types/randomcolor": "^0.5.0",
     "@types/react-intl": "^2.3.14",
     "@types/sanitize-filename": "^1.1.28",
-    "commander": "^2.19.0"
+    "bufferutil": "^4.0.1",
+    "commander": "^2.19.0",
+    "utf-8-validate": "^5.0.2"
   }
 }

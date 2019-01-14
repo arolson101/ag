@@ -10,7 +10,7 @@ export interface RouteProps<T extends {} = object> {
 }
 
 export interface RouteConfig {
-  [path: string]: React.ComponentType<RouteProps<any>>
+  [path: string]: React.ComponentType
 }
 
 export interface RouterProps {
