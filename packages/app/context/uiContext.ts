@@ -37,6 +37,7 @@ export interface UiContext {
 
   // dialog
   Alert: ComponentType<AlertProps>
+  LoadingOverlay: ComponentType<{ show: boolean }>
 
   // layout
   Page: ComponentType<{}>

@@ -1,5 +1,5 @@
 import { UiContext } from '@ag/app'
-import { Alert } from '@blueprintjs/core'
+import { Alert, ProgressBar, Spinner } from '@blueprintjs/core'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import 'normalize.css/normalize.css'
@@ -36,6 +36,8 @@ export const ui: UiContext = {
       {props.body && props.body.map((b, i) => <p key={i}>{b}</p>)}
     </Alert>
   ),
+
+  LoadingOverlay: props => (props.show ? <Spinner /> : null),
 
   // layout
   Page: ({ children }) => <div>{children}</div>,

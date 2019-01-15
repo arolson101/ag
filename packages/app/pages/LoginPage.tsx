@@ -46,7 +46,7 @@ export class LoginPage extends React.PureComponent<Props> {
 
   render() {
     const { ui, intl } = this.context
-    const { Page, Text, SubmitButton, DeleteButton } = ui
+    const { Page, Text, SubmitButton, DeleteButton, LoadingOverlay } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
 
     return (
@@ -54,7 +54,7 @@ export class LoginPage extends React.PureComponent<Props> {
         {result => {
           const { data, loading, error } = result
           if (loading) {
-            return <Text>loading...</Text>
+            return <LoadingOverlay show={loading} />
           } else if (error) {
             return <ErrorDisplay error={error} />
           }
@@ -106,12 +106,13 @@ export class LoginPage extends React.PureComponent<Props> {
                     </SubmitButton>
                     {!create && (
                       <DeleteDbMutation variables={{ dbId }}>
-                        {(deleteDb, { error: deleteDbError }) => (
+                        {(deleteDb, { error: deleteDbError, loading: running }) => (
                           <>
+                            <LoadingOverlay show={running} />
                             <ErrorDisplay error={deleteDbError} />
                             <ConfirmButton
                               message={intl.formatMessage(messages.deleteMessage)}
-                              component={DeleteButton as any}
+                              component={DeleteButton}
                               onConfirmed={deleteDb}
                             >
                               <Text>{intl.formatMessage(messages.delete)}</Text>
