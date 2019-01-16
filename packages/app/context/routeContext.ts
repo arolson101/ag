@@ -1,14 +1,5 @@
 import React from 'react'
 
-export interface Location<T extends {} = object> {
-  path: string
-  state: T
-}
-
-export interface RouteProps<T extends {} = object> {
-  location: Location<T>
-}
-
 export interface RouteConfig {
   [path: string]: React.ComponentType
 }
@@ -18,3 +9,9 @@ export interface RouterProps {
 }
 
 export type Router = React.ComponentType<RouterProps>
+
+export interface RouteContext {
+  push: (path: string) => any
+  pop: () => any
+  replace: (path: string) => any
+}

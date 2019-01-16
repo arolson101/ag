@@ -44,6 +44,9 @@ export class LoginPage extends React.PureComponent<Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
+  static readonly route = `/login`
+  static readonly link = () => `/login`
+
   render() {
     const { ui, intl } = this.context
     const { Page, Text, SubmitButton, DeleteButton, LoadingOverlay } = ui
@@ -154,7 +157,7 @@ export class LoginPage extends React.PureComponent<Props> {
 
   onSubmit = async (values: FormValues, factions: FormikActions<FormValues>) => {
     try {
-      const { client, ui, intl } = this.context
+      const { client, ui, intl, router } = this.context
       const create = !values.dbId
       const refetchQueries = [{ query: LoginPageQuery.defaultProps.query }]
       if (create) {
@@ -187,7 +190,7 @@ export class LoginPage extends React.PureComponent<Props> {
         log('CreateDb finished %O', res)
       }
 
-      // redirect to /home
+      router.push('/home')
     } finally {
       factions.setSubmitting(false)
     }

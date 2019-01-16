@@ -1,5 +1,7 @@
 import { actions } from '../actions'
 import { RouteConfig } from '../context'
+import { BankEditPage } from './BankEditPage'
+import { HomePage } from './HomePage'
 import { LoginPage } from './LoginPage'
 
 // export const login = createStandardAction('nav/login')()
@@ -32,4 +34,7 @@ import { LoginPage } from './LoginPage'
 
 export const routes: RouteConfig = {
   ['/']: LoginPage,
+  ['/login']: LoginPage,
+  ['/home']: HomePage,
+  // ['/bank/edit/:bankId']: BankEditPage,
 }

@@ -6,8 +6,9 @@ import windowStateKeeper from 'electron-window-state'
 import { Server } from 'http'
 import path from 'path'
 import url from 'url'
+import { DbImports } from '../../db'
 import { startServer } from '../../db/server'
-import { dbImports } from './store'
+import { deleteDb, openDb } from './store/openDb.electron'
 
 const log = debug('app:main')
 
@@ -25,6 +26,11 @@ program
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null = null
+
+const dbImports: DbImports = {
+  openDb,
+  deleteDb,
+}
 
 startServer(dbImports).then(opts => {
   app.on('will-quit', () => {
