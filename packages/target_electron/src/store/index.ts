@@ -1,17 +1,13 @@
 import { AppAction, Dependencies } from '@ag/app'
 import { AppState } from '@ag/app/reducers'
 import { DbImports, initDb } from '@ag/db'
-// import { routerMiddleware } from 'connected-react-router'
-// import { createMemoryHistory } from 'history'
 import { createBrowserHistory } from 'history'
 import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
-import { epics } from './epics'
+import { epics } from '../epics/epics'
+import { ElectronState, rootReducer } from '../reducers'
 import { deleteDb, openDb } from './openDb.electron'
-import { createRootReducer, ElectronState } from './reducers'
-
-export const history = createBrowserHistory()
 
 export const dbImports: DbImports = {
   openDb,
@@ -24,19 +20,19 @@ export const dbImports: DbImports = {
 //   runQuery,
 // }
 
-// const epicMiddleware = createEpicMiddleware<AppAction, AppAction, AppState, Dependencies>({
-//   dependencies,
-// })
+const epicMiddleware = createEpicMiddleware<AppAction, AppAction, AppState, Dependencies>({
+  // dependencies,
+})
 
-// const middleware = [
-//   epicMiddleware, //
-//   routerMiddleware(history),
-// ]
+const middleware = [
+  epicMiddleware, //
+  // routerMiddleware(history),
+]
 
-// export const store = createStore<ElectronState, AppAction, {}, {}>(
-//   createRootReducer(history),
-//   composeWithDevTools(applyMiddleware(...middleware))
-// )
+export const store = createStore<ElectronState, AppAction, {}, {}>(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(...middleware))
+)
 
-// const rootEpic = combineEpics<AppAction, AppAction, AppState, Dependencies>(...epics)
-// epicMiddleware.run(rootEpic)
+const rootEpic = combineEpics<AppAction, AppAction, AppState, Dependencies>(...epics)
+epicMiddleware.run(rootEpic)

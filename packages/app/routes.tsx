@@ -1,13 +1,26 @@
-import { RouteConfig } from '../context'
-import { BankEditPage } from './BankEditPage'
-import { HomePage } from './HomePage'
-import { LoginPage } from './LoginPage'
+import { BankEditPage, HomePage, LoginPage } from './pages'
+
+export interface RouteConfig {
+  [path: string]: React.ComponentType<any> | React.ComponentType<void>
+}
+
+export const routes: RouteConfig = {
+  ['/']: LoginPage,
+  [LoginPage.id]: LoginPage,
+  [HomePage.id]: HomePage,
+  [BankEditPage.id]: BankEditPage,
+}
 
 export interface AppRouteFunction {
   (id: typeof LoginPage.id, props: LoginPage.Props): any
   (id: typeof HomePage.id, props: HomePage.Props): any
   (id: typeof BankEditPage.id, props: BankEditPage.Props): any
 }
+
+export type AppNavDispatch =
+  | { id: typeof LoginPage.id; props: LoginPage.Props }
+  | { id: typeof HomePage.id; props: HomePage.Props }
+  | { id: typeof BankEditPage.id; props: BankEditPage.Props }
 
 // export const logout = createStandardAction('nav/logout')()
 
@@ -35,10 +48,3 @@ export interface AppRouteFunction {
 //   update: createStandardAction('nav/tx/update')<{ txId: string }>(),
 //   delete: createStandardAction('nav/tx/delete')<{ txId: string }>(),
 // }
-
-export const routes: RouteConfig = {
-  ['/']: LoginPage,
-  [LoginPage.id]: LoginPage,
-  [HomePage.id]: HomePage,
-  [BankEditPage.id]: BankEditPage,
-}

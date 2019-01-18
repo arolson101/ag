@@ -1,15 +1,17 @@
-import { ActionType } from 'typesafe-actions'
+import { ActionType, createStandardAction } from 'typesafe-actions'
+import { AppNavDispatch } from '../routes'
 import { dialogActions } from './dialogActions'
-import { loginPage } from './LoginPageActions'
-import { navActions } from './navActions'
 
 export * from './dialogActions'
-export * from './LoginPageActions'
-export * from './navActions'
+
+const nav = {
+  push: createStandardAction('nav/push')<AppNavDispatch>(),
+  replace: createStandardAction('nav/replace')<AppNavDispatch>(),
+  pop: createStandardAction('nav/pop')(),
+}
 
 export const actions = {
-  loginPage,
-  ...navActions,
+  nav,
   ...dialogActions,
 }
 

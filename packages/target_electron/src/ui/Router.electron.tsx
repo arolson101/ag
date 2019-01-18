@@ -1,34 +1,8 @@
-import { AppContext, RouteContext, RouterProps } from '@ag/app/context'
-import { parse, stringify } from 'query-string'
-// import { ConnectedRouter } from 'connected-react-router'
+import { AppContext, RouterProps } from '@ag/app/context'
+import { parse } from 'query-string'
 import React from 'react'
 import { Route, Router as ReactRouter, Switch } from 'react-router-dom'
-import { history } from '../store'
-
-export const router: RouteContext = {
-  push: (path: string, props: object | void) =>
-    history.push(
-      history.createHref({
-        pathname: '/' + path,
-        hash: '',
-        search: props ? stringify(props) : '',
-        state: {},
-      })
-    ),
-  pop: () => history.goBack(),
-  replace: (path: string, props: object | void) =>
-    history.push(
-      history.createHref({
-        pathname: '/' + path,
-        hash: '',
-        search: props ? stringify(props) : '',
-        state: {},
-      })
-    ),
-  dialog: (path: string, props: object | void) => {
-    throw new Error('not implemented')
-  },
-}
+import { history } from '../reducers'
 
 export class Router extends React.PureComponent<RouterProps> {
   static contextType = AppContext

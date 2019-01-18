@@ -29,7 +29,6 @@
     "apollo-client": "^2.4.8",
     "apollo-link-http": "^1.5.9",
     "commander": "^2.19.0",
-    "connected-react-router": "^6.1.0",
     "debug": "^4.1.1",
     "electron": "^4.0.1",
     "electron-devtools-installer": "^2.2.4",

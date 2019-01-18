@@ -1,14 +1,14 @@
 import { ApolloClient } from 'apollo-client'
-import React from 'react'
+import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
-import { RouteContext } from './routeContext'
+import { AppAction } from '../actions'
 import { UiContext } from './uiContext'
 
 export interface AppContext {
   intl: IntlContext
   ui: UiContext
   client: ApolloClient<any>
-  router: RouteContext
+  dispatch: Dispatch<AppAction>
 }
 
 const defaultContext: AppContext = null as any

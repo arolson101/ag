@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import React from 'react'
 import { Mutation, Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
+import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
 import { ConfirmButton } from '../components/ConfirmButton'
 import { AppContext, typedFields } from '../context'
@@ -164,7 +165,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
 
   onSubmit = async (values: FormValues, factions: FormikActions<FormValues>) => {
     try {
-      const { client, ui, intl, router } = this.context
+      const { client, ui, intl, dispatch } = this.context
       const create = !values.dbId
       const refetchQueries = [{ query: LoginPageQuery.defaultProps.query }]
       if (create) {
@@ -197,7 +198,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
         log('CreateDb finished %O', res)
       }
 
-      router.push(HomePage.id)
+      dispatch(actions.nav.push({ id: HomePage.id, props: undefined }))
     } finally {
       factions.setSubmitting(false)
     }

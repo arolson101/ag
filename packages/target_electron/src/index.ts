@@ -6,7 +6,8 @@ import debug from 'debug'
 import { remote } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { router, ui } from './ui'
+import { store } from './store'
+import { ui } from './ui'
 
 const log = debug('app:renderer')
 
@@ -24,7 +25,7 @@ const client = new ApolloClient({
 
 const runApp = () => {
   ReactDOM.render(
-    React.createElement(App, { router, client, ui }), //
+    React.createElement(App, { store, client, ui }), //
     document.getElementById('root')
   )
 }
