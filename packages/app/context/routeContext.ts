@@ -1,7 +1,7 @@
 import React from 'react'
 
 export interface RouteConfig {
-  [path: string]: React.ComponentType
+  [path: string]: React.ComponentType<any>
 }
 
 export interface RouterProps {

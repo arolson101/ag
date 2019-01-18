@@ -1,10 +1,7 @@
-import { actions } from '../actions'
 import { RouteConfig } from '../context'
 import { BankEditPage } from './BankEditPage'
 import { HomePage } from './HomePage'
 import { LoginPage } from './LoginPage'
-
-// export const login = createStandardAction('nav/login')()
 // export const logout = createStandardAction('nav/logout')()
 
 // export const home = createStandardAction('nav/home')()
@@ -34,7 +31,7 @@ import { LoginPage } from './LoginPage'
 
 export const routes: RouteConfig = {
   ['/']: LoginPage,
-  ['/login']: LoginPage,
-  ['/home']: HomePage,
-  // ['/bank/edit/:bankId']: BankEditPage,
+  [LoginPage.route]: LoginPage,
+  [HomePage.route]: HomePage,
+  [BankEditPage.route]: BankEditPage,
 }

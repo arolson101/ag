@@ -1,16 +1,18 @@
 import React from 'react'
 import { AppContext } from '../context'
 
-interface Props {
-  bankId: string
+export namespace BankEditPage {
+  export interface Props {
+    bankId: string
+  }
 }
 
-export class BankEditPage extends React.PureComponent<Props> {
+export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
   static readonly route = `/bank/:bankId`
-  static readonly link = ({ bankId }: Props) => `/bank/${bankId}`
+  static readonly link = ({ bankId }: BankEditPage.Props) => `/bank/${bankId}`
 
   render() {
     const { ui } = this.context

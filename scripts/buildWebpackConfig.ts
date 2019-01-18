@@ -74,6 +74,7 @@ export const buildWebpackConfig = ({
   devServer: {
     ...(devServer || {}),
     stats: 'minimal',
+    historyApiFallback: true,
   },
   externals: {
     'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',

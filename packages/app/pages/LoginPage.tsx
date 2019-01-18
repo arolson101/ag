@@ -38,9 +38,11 @@ class DeleteDbMutation extends Mutation<Gql.DeleteDb.Mutation, Gql.DeleteDb.Vari
   }
 }
 
-interface Props {}
+export namespace LoginPage {
+  export interface Props {}
+}
 
-export class LoginPage extends React.PureComponent<Props> {
+export class LoginPage extends React.PureComponent<LoginPage.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 

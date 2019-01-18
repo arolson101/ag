@@ -16,9 +16,17 @@ export class Router extends React.PureComponent<RouterProps> {
     return (
       <ReactRouter history={history}>
         <Switch>
-          {Object.keys(routes).map(path => (
-            <Route key={path} path={path} exact component={routes[path]} />
-          ))}
+          {Object.keys(routes).map(path => {
+            const Component = routes[path]
+            return (
+              <Route
+                key={path}
+                path={path}
+                exact
+                render={props => <Component {...props.match.params} />}
+              />
+            )
+          })}
           <Route
             render={({ location }) => (
               <>
