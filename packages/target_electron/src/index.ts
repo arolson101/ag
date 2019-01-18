@@ -1,4 +1,4 @@
-import { App, RouteContext } from '@ag/app'
+import { App } from '@ag/app'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
@@ -6,8 +6,7 @@ import debug from 'debug'
 import { remote } from 'electron'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { history } from './store'
-import { ui } from './ui'
+import { router, ui } from './ui'
 
 const log = debug('app:renderer')
 
@@ -22,12 +21,6 @@ const client = new ApolloClient({
   link: new HttpLink({ uri: graphQlServer }),
   cache: new InMemoryCache(),
 })
-
-const router: RouteContext = {
-  push: (path: string) => history.push(path),
-  pop: () => history.goBack(),
-  replace: (path: string) => history.replace(path),
-}
 
 const runApp = () => {
   ReactDOM.render(

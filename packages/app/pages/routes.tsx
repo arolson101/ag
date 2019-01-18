@@ -2,6 +2,13 @@ import { RouteConfig } from '../context'
 import { BankEditPage } from './BankEditPage'
 import { HomePage } from './HomePage'
 import { LoginPage } from './LoginPage'
+
+export interface AppRouteFunction {
+  (id: typeof LoginPage.id, props: LoginPage.Props): any
+  (id: typeof HomePage.id, props: HomePage.Props): any
+  (id: typeof BankEditPage.id, props: BankEditPage.Props): any
+}
+
 // export const logout = createStandardAction('nav/logout')()
 
 // export const home = createStandardAction('nav/home')()
@@ -31,7 +38,7 @@ import { LoginPage } from './LoginPage'
 
 export const routes: RouteConfig = {
   ['/']: LoginPage,
-  [LoginPage.route]: LoginPage,
-  [HomePage.route]: HomePage,
-  [BankEditPage.route]: BankEditPage,
+  [LoginPage.id]: LoginPage,
+  [HomePage.id]: HomePage,
+  [BankEditPage.id]: BankEditPage,
 }

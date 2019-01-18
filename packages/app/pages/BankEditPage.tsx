@@ -11,8 +11,7 @@ export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  static readonly route = `/bank/:bankId`
-  static readonly link = ({ bankId }: BankEditPage.Props) => `/bank/${bankId}`
+  static readonly id = 'BankEditPage'
 
   render() {
     const { ui } = this.context

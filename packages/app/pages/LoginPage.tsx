@@ -9,6 +9,7 @@ import { ConfirmButton } from '../components/ConfirmButton'
 import { AppContext, typedFields } from '../context'
 import { LoginPageForm } from '../forms'
 import * as Gql from '../graphql-types'
+import { HomePage } from './HomePage'
 
 const log = debug('app:LoginPage')
 
@@ -39,15 +40,19 @@ class DeleteDbMutation extends Mutation<Gql.DeleteDb.Mutation, Gql.DeleteDb.Vari
 }
 
 export namespace LoginPage {
-  export interface Props {}
+  export type Props = void
+  export interface Destination {
+    id: 'LoginPage'
+    props: Props
+  }
 }
 
 export class LoginPage extends React.PureComponent<LoginPage.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  static readonly route = `/login`
-  static readonly link = () => `/login`
+  static readonly id = `LoginPage`
+  static readonly link = (props: LoginPage.Props) => `/login`
 
   render() {
     const { ui, intl } = this.context
@@ -192,7 +197,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
         log('CreateDb finished %O', res)
       }
 
-      router.push('/home')
+      router.push(HomePage.id)
     } finally {
       factions.setSubmitting(false)
     }

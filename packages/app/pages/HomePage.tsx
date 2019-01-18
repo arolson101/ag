@@ -1,12 +1,15 @@
 import React from 'react'
 import { AppContext } from '../context'
 
-export class HomePage extends React.PureComponent {
+export namespace HomePage {
+  export type Props = void
+}
+
+export class HomePage extends React.PureComponent<HomePage.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  static readonly route = `/home`
-  static readonly link = () => `/home`
+  static readonly id = 'HomePage'
 
   render() {
     const { ui } = this.context
