@@ -20,7 +20,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
-          const error = !!(form.touched[name] && form.errors[name])
+          const error = form.errors[name]
           const intent = error ? Intent.DANGER : undefined
           return (
             <FormGroup intent={intent} helperText={error} label={label} labelFor={id}>

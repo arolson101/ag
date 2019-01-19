@@ -19,6 +19,12 @@ export class ErrorDisplay extends React.PureComponent<Props, State> {
     show: true,
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.error !== prevProps.error) {
+      this.setState({ show: true })
+    }
+  }
+
   render() {
     let { error: errors } = this.props
 

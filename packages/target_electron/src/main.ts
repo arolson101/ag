@@ -5,9 +5,6 @@ import isDev from 'electron-is-dev'
 import windowStateKeeper from 'electron-window-state'
 import path from 'path'
 import url from 'url'
-import { DbImports } from '../../db'
-import { startServer } from '../../db/server'
-import { deleteDb, openDb } from './store/openDb.electron'
 
 const log = debug('app:main')
 
@@ -26,25 +23,11 @@ program
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null = null
 
-const dbImports: DbImports = {
-  openDb,
-  deleteDb,
-}
-
-startServer(dbImports).then(opts => {
-  app.on('will-quit', () => {
-    opts.server.close()
-  })
-  ;(global as any).graphQlServer = opts.url
-})
-
 // https://github.com/electron/electron/blob/master/docs/tutorial/security.md
 process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
 async function createWindow() {
   if (isDev) {
-    // this breaks VS Code debugging
-    //
     const { default: installExtension, ...exts } = await import('electron-devtools-installer')
     for (const ext of [
       exts.REACT_DEVELOPER_TOOLS,
@@ -58,13 +41,6 @@ async function createWindow() {
         log('An error occurred: ', err)
       }
     }
-    //
-    // if(!BrowserWindow.getDevToolsExtensions().hasOwnProperty('devtron')) {
-    //   BrowserWindow.addDevToolsExtension(require('devtron').path);
-    // }
-    // if(!BrowserWindow.getDevToolsExtensions().hasOwnProperty('electron-react-devtools')) {
-    //   BrowserWindow.addDevToolsExtension(require('electron-react-devtools').path);
-    // }
   }
 
   // Load the previous state with fallback to defaults

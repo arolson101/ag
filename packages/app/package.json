@@ -14,7 +14,7 @@
   "dependencies": {
     "@ag/db": "^0.0.0",
     "@ag/util": "^0.0.0",
-    "apollo-client": "^2.4.8",
+    "apollo-client": "^2.4.12",
     "debug": "^4.1.1",
     "formik": "^1.4.2",
     "graphql": "^14.0.2",

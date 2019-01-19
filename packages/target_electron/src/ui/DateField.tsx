@@ -10,7 +10,7 @@ export class DateField extends React.PureComponent<DateFieldProps> {
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
-          const error = !!(form.touched[name] && form.errors[name])
+          const error = form.errors[name]
           return (
             <FormGroup
               intent={error ? Intent.DANGER : undefined}

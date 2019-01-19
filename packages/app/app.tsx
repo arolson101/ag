@@ -3,16 +3,14 @@ import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
-import { actions } from './actions'
-import { Dialogs } from './components'
 import { AppContext, UiContext } from './context'
 import { AppStore } from './reducers'
 import { routes } from './routes'
 
 interface Props {
   client: ApolloClient<any>
-  ui: UiContext
   store: AppStore
+  ui: UiContext
 }
 
 interface GetIntlProviderProps {
@@ -23,11 +21,20 @@ const GetIntlProvider = injectIntl<GetIntlProviderProps>(({ intl, children }) =>
 ))
 GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
 
+interface State {
+  client?: ApolloClient<any>
+}
+
 export class App extends React.PureComponent<Props> {
   render() {
-    const { client, ui, store } = this.props
+    const { client, store, ui } = this.props
     const { Router } = ui
     const dispatch = store.dispatch
+
+    if (!client) {
+      return null
+      // throw new Error('no client')
+    }
 
     return (
       <ApolloProvider client={client}>
