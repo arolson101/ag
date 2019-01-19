@@ -4,10 +4,10 @@ import { ApolloLink, FetchResult, NextLink, Observable, Operation } from 'apollo
 import debug from 'debug'
 import { execute } from 'graphql'
 import Container from 'typedi'
+import { DbImports, DbImportsService } from '../services'
 import { schema } from './schema'
-import { DbImports, DbImportsService } from './services'
 
-debug.enable('app:*')
+export { DbImports }
 
 const log = debug('app:client')
 

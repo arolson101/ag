@@ -1,12 +1,15 @@
 import ApolloClient from 'apollo-client'
+import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
-import { DbImports, initClient } from '../db'
 import { AppContext, UiContext } from './context'
+import { DbImports, initClient } from './db'
 import { AppStore } from './reducers'
 import { routes } from './routes'
+
+debug.enable('app:*')
 
 interface Props extends DbImports {
   store: AppStore

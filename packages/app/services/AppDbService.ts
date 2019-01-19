@@ -1,6 +1,6 @@
 import { Service } from 'typedi'
 import { Connection } from 'typeorm'
-import { DbChange, dbWrite } from '../dbWrite'
+import { DbChange, dbWrite } from './dbWrite'
 import { AccountRepository, BankRepository, TransactionRepository } from './repositories'
 
 @Service()

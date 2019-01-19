@@ -1,9 +1,9 @@
 import cuid from 'cuid'
 import { Arg, Mutation, Query, Resolver } from 'type-graphql'
 import { Container } from 'typedi'
-import { DbChange } from '../dbWrite'
-import { Transaction, TransactionInput } from '../entities/index'
+import { Transaction, TransactionInput } from '../entities'
 import { AppDbService } from '../services/AppDbService'
+import { DbChange } from '../services/dbWrite'
 
 @Resolver(objectType => Transaction)
 export class TransactionResolver {

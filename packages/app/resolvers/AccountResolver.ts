@@ -3,8 +3,6 @@ import Axios, { CancelTokenSource } from 'axios'
 import cuid from 'cuid'
 import * as ofx4js from 'ofx4js'
 import { Arg, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
-// import { checkLogin, createService, getFinancialAccount, toAccountType } from '../../online'
-import { DbChange } from '../dbWrite'
 import {
   Account,
   AccountInput,
@@ -14,6 +12,8 @@ import {
   TransactionInput,
 } from '../entities'
 import { AppDbService } from '../services/AppDbService'
+// import { checkLogin, createService, getFinancialAccount, toAccountType } from '../../online'
+import { DbChange } from '../services/dbWrite'
 
 @Resolver(Account)
 export class AccountResolver {

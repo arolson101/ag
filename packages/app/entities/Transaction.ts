@@ -2,7 +2,7 @@ import { standardizeDate } from '@ag/util/date'
 import { ISpec } from '@ag/util/iupdate'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { Record } from '../Record'
+import { Record } from './Record'
 import { TransactionInput } from './TransactionInput'
 
 @ObjectType()

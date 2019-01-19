@@ -18,11 +18,12 @@
     "testEnvironment": "node"
   },
   "scripts": {
+    "postinstall": "patch-package",
     "lerna-semver-sync": "lerna-semver-sync",
     "lint": "tslint -c tslint.json --fix \"**/*{.ts,.tsx}\"",
-    "postinstall": "patch-package",
+    "test": "jest",
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
-    "test": "jest"
+    "prettier-package-json": "prettier-package-json --write --key-order ./package.json packages/app/package.json packages/target_electron/package.json packages/target_rn/package.json --key-order name,private,version,description,license,author,maintainers,contributors,homepage,repository,bugs,workspaces,main,build,module,browser,man,preferGlobal,bin,files,directories,scripts,config,jest,optionalDependencies,dependencies,bundleDependencies,bundledDependencies,peerDependencies,devDependencies,keywords,engines,engine-strict,engineStrict,os,cpu,publishConfig"
   },
   "dependencies": {},
   "devDependencies": {
@@ -55,6 +56,7 @@
     "patch-package": "^5.1.1",
     "postinstall-postinstall": "^2.0.0",
     "prettier": "^1.15.3",
+    "prettier-package-json": "^2.0.1",
     "prettier-tslint": "^0.4.1",
     "rimraf": "^2.6.2",
     "style-loader": "^0.23.1",

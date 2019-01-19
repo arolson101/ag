@@ -1,15 +1,15 @@
 {
   "name": "target_rn",
-  "version": "0.0.1",
   "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "debug": "react-native-debugger",
+    "ios": "react-native run-ios",
+    "start": "haul",
+    "test": "jest"
+  },
   "jest": {
     "preset": "react-native"
-  },
-  "scripts": {
-    "test": "jest",
-    "start": "haul",
-    "debug": "react-native-debugger",
-    "ios": "react-native run-ios"
   },
   "dependencies": {
     "react": "^16.7.0",

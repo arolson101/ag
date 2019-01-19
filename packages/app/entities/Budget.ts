@@ -1,8 +1,8 @@
 import { ISpec } from '@ag/util/iupdate'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { Record } from '../Record'
 import { BudgetInput } from './BudgetInput'
+import { Record } from './Record'
 
 @ObjectType()
 @Entity({ name: 'budgets' })

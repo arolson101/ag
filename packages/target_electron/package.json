@@ -1,7 +1,7 @@
 {
   "name": "target_electron",
-  "description": "description",
   "version": "0.0.0",
+  "description": "description",
   "license": "MIT",
   "author": "Andrew Olson <andrew@olsononline.org>",
   "build": {
@@ -10,17 +10,16 @@
   "scripts": {
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
-    "start": "nodemon -q --watch ./webpack.config.ts --exec \"webpack-dev-server --port 3030 --hot --mode=development\"",
-    "electron": "wait-on ./dist/main.js && nodemon -q --watch ./dist/main.js --exec \"electron dist --url http://localhost:3030/\"",
     "preelectron": "electron-builder install-app-deps",
+    "electron": "wait-on ./dist/main.js && nodemon -q --watch ./dist/main.js --exec \"electron dist --url http://localhost:3030/\"",
+    "start": "nodemon -q --watch ./webpack.config.ts --exec \"webpack-dev-server --port 3030 --hot --mode=development\"",
     "start:dev": "rimraf dist && concurrently --kill-others \"yarn:start\" \"yarn:electron\"",
     "storybook": "concurrently --raw --kill-others \"yarn:storybook:server\" \"yarn:storybook:electron\"",
-    "storybook:server": "start-storybook --ci --quiet -p 6006",
-    "storybook:electron": "wait-on http://localhost:6006/webpack-dev-server/ && electron dist --url http://localhost:6006/webpack-dev-server/"
+    "storybook:electron": "wait-on http://localhost:6006/webpack-dev-server/ && electron dist --url http://localhost:6006/webpack-dev-server/",
+    "storybook:server": "start-storybook --ci --quiet -p 6006"
   },
   "dependencies": {
     "@ag/app": "^0.0.0",
-    "@ag/db": "^0.0.0",
     "@ag/util": "^0.0.0",
     "@blueprintjs/core": "^3.11.0",
     "@blueprintjs/icons": "^3.4.0",

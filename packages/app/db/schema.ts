@@ -8,7 +8,7 @@ import {
   CategoryResolver,
   DbResolver,
   TransactionResolver,
-} from './resolvers'
+} from '../resolvers'
 
 gqlUseContainer(Container)
 

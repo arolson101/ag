@@ -5,10 +5,6 @@
       "name": "@ag/app"
     },
     {
-      "path": "packages/db",
-      "name": "@ag/db"
-    },
-    {
       "path": "packages/util",
       "name": "@ag/util"
     },
