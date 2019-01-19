@@ -3,7 +3,7 @@ import program from 'commander'
 import fs from 'fs'
 import { getIntrospectionQuery, graphqlSync } from 'graphql'
 import path from 'path'
-import { schema } from '../schema'
+import { schema } from '../db'
 
 let outFile: string | undefined
 

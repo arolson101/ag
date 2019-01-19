@@ -1,8 +1,10 @@
-import { log } from '@ag/util/log'
+import debug from 'debug'
 import electron from 'electron'
 import fs from 'fs'
 import path from 'path'
 import { Connection, ConnectionOptions, createConnection } from 'typeorm'
+
+const log = debug('app:db')
 
 const userData = (electron.remote || electron).app.getPath('userData')
 
@@ -13,7 +15,7 @@ export const openDb = async (
 ): Promise<Connection> => {
   const type = 'sqlite'
   const database = path.join(userData, name + '.db')
-  log.db('opening %s', database)
+  log('opening %s', database)
   const db = await createConnection({
     type,
     name,
@@ -25,12 +27,12 @@ export const openDb = async (
     },
     // logging: true,
   })
-  log.db('opened')
+  log('opened')
   return db
 }
 
 export const deleteDb = async (name: string) => {
-  log.db('deleteDb %s', name)
+  log('deleteDb %s', name)
   const database = path.join(userData, name + '.db')
   fs.unlinkSync(database)
 }

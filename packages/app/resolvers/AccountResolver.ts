@@ -1,6 +1,6 @@
-import { log } from '@ag/util/log'
 import Axios, { CancelTokenSource } from 'axios'
 import cuid from 'cuid'
+import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { Arg, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
 import {
@@ -14,6 +14,8 @@ import {
 import { AppDbService } from '../services/AppDbService'
 // import { checkLogin, createService, getFinancialAccount, toAccountType } from '../../online'
 import { DbChange } from '../services/dbWrite'
+
+const log = debug('app:AccountResolver')
 
 @Resolver(Account)
 export class AccountResolver {
@@ -134,7 +136,7 @@ export class AccountResolver {
     @Arg('end', { nullable: true }) end?: Date
   ): Promise<Transaction[]> {
     const res = await this.app.transactions.getForAccount(account.id, start, end)
-    log.db(
+    log(
       '%s\n%s\n%o',
       `transactions for account ${account.id} (bank ${account.bankId})`,
       `time: BETWEEN '${start}' AND '${end}'`,

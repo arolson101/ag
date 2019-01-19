@@ -2,18 +2,14 @@
   "folders": [
     {
       "path": "packages/app",
-      "name": "@ag/app"
+      "name": "app"
     },
     {
-      "path": "packages/util",
-      "name": "@ag/util"
-    },
-    {
-      "path": "packages/target_electron",
+      "path": "packages/electron",
       "name": "target: electron"
     },
     {
-      "path": "packages/target_rn",
+      "path": "packages/rn",
       "name": "target: react-native"
     },
     {

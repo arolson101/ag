@@ -1,7 +1,7 @@
-import { ISpec } from '@ag/util/iupdate'
 import { fail } from 'assert'
 import { Connection } from 'typeorm'
 import { Record } from '../entities/Record'
+import { ISpec } from '../util/iupdate'
 
 export interface Change {
   readonly seq?: number

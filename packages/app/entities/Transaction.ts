@@ -1,7 +1,7 @@
-import { standardizeDate } from '@ag/util/date'
-import { ISpec } from '@ag/util/iupdate'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { standardizeDate } from '../util/date'
+import { ISpec } from '../util/iupdate'
 import { Record } from './Record'
 import { TransactionInput } from './TransactionInput'
 

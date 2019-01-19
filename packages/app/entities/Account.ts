@@ -1,8 +1,8 @@
-import { ISpec } from '@ag/util/iupdate'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { ISpec } from '../util/iupdate'
 import { AccountInput, AccountType } from './AccountInput'
 import { Record } from './Record'
 

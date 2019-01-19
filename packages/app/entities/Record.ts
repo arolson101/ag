@@ -1,7 +1,7 @@
-import { CompressedJson, dehydrate, hydrate } from '@ag/util/dehydrate'
-import { ISpec, iupdate } from '@ag/util/iupdate'
 import assert from 'assert'
 import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
+import { CompressedJson, dehydrate, hydrate } from '../util/dehydrate'
+import { ISpec, iupdate } from '../util/iupdate'
 
 type Change<T> = Partial<ISpec<T>>
 

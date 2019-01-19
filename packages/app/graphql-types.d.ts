@@ -33,6 +33,18 @@ export namespace LoginPage {
   }
 }
 
+export namespace DeleteDb {
+  export type Variables = {
+    dbId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    deleteDb: string
+  }
+}
+
 export namespace CreateDb {
   export type Variables = {
     name: string
@@ -56,17 +68,5 @@ export namespace OpenDb {
     __typename?: 'Mutation'
 
     openDb: boolean
-  }
-}
-
-export namespace DeleteDb {
-  export type Variables = {
-    dbId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteDb: string
   }
 }

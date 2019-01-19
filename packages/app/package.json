@@ -6,6 +6,7 @@
   "scripts": {
     "precodegen": "yarn run schema",
     "codegen": "gql-gen",
+    "pregraphdoc": "yarn run schema",
     "graphdoc": "graphdoc --force -s ./dist/schema.json -o ./dist/graphdoc",
     "schema": "node -r ts-node/register/transpile-only ./scripts/buildSchema.ts ./dist/schema.json",
     "test": "jest"
@@ -15,7 +16,6 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@ag/util": "^0.0.0",
     "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
     "apollo-link": "^1.2.6",
@@ -29,6 +29,8 @@
     "graphql": "^14.0.2",
     "graphql-anywhere": "^4.1.24",
     "graphql-tag": "^2.10.0",
+    "immutability-helper": "^2.9.0",
+    "luxon": "^1.9.0",
     "ofx4js": "^2.0.1",
     "prop-types": "^15.6.2",
     "randomcolor": "^0.5.3",
@@ -53,6 +55,7 @@
     "@types/debug": "^0.0.31",
     "@types/get-port": "^4.0.1",
     "@types/graphql": "^14.0.4",
+    "@types/luxon": "^1.4.1",
     "@types/randomcolor": "^0.5.0",
     "@types/react": "^16.7.18",
     "@types/react-intl": "^2.3.14",
