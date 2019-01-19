@@ -4,7 +4,7 @@ import React from 'react'
 import { Route, Router as ReactRouter, Switch } from 'react-router-dom'
 import { history } from '../reducers'
 
-export class Router extends React.PureComponent<RouterProps> {
+export class ElectronRouter extends React.PureComponent<RouterProps> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 

@@ -1,2 +1,2 @@
 export * from './rootReducer'
-export * from './router'
+export * from './routeReducer'

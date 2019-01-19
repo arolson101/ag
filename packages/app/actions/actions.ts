@@ -1,8 +1,10 @@
 import { ActionType, createStandardAction } from 'typesafe-actions'
-import { AppNavDispatch } from '../routes'
 import { dialogActions } from './dialogActions'
 
-export * from './dialogActions'
+export interface AppNavDispatch {
+  id: string
+  props: object | void
+}
 
 const nav = {
   push: createStandardAction('nav/push')<AppNavDispatch>(),

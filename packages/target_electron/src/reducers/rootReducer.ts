@@ -1,6 +1,6 @@
 import { appReducers, AppState } from '@ag/app'
 import { combineReducers } from 'redux'
-import { router, RouterState } from './router'
+import { router, RouterState } from './routeReducer'
 
 const electronReducers = {
   router,

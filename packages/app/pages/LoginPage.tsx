@@ -4,17 +4,26 @@ import gql from 'graphql-tag'
 import React from 'react'
 import { Mutation, Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
-import { actions } from '../actions'
-import { ErrorDisplay } from '../components'
-import { ConfirmButton } from '../components/ConfirmButton'
+import { ConfirmButton, ErrorDisplay } from '../components'
 import { AppContext, typedFields } from '../context'
-import { LoginPageForm } from '../forms'
 import * as Gql from '../graphql-types'
-import { HomePage } from './HomePage'
+import { go } from '../routes'
 
 const log = debug('app:LoginPage')
 
-type FormValues = LoginPageForm.Values
+interface Values {
+  name: string
+  dbId?: string
+  password: string
+  passwordConfirm?: string
+}
+
+const initalValues: Values = {
+  name: 'appdb',
+  dbId: undefined,
+  password: '',
+  passwordConfirm: '',
+}
 
 class LoginPageQuery extends Query<Gql.LoginPage.Query, Gql.LoginPage.Variables> {
   static defaultProps = {
@@ -42,10 +51,6 @@ class DeleteDbMutation extends Mutation<Gql.DeleteDb.Mutation, Gql.DeleteDb.Vari
 
 export namespace LoginPage {
   export type Props = void
-  export interface Destination {
-    id: 'LoginPage'
-    props: Props
-  }
 }
 
 export class LoginPage extends React.PureComponent<LoginPage.Props> {
@@ -53,12 +58,11 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
   context!: React.ContextType<typeof AppContext>
 
   static readonly id = `LoginPage`
-  static readonly link = (props: LoginPage.Props) => `/login`
 
   render() {
     const { ui, intl } = this.context
     const { Page, Text, SubmitButton, DeleteButton, LoadingOverlay } = ui
-    const { Form, TextField } = typedFields<FormValues>(ui)
+    const { Form, TextField } = typedFields<Values>(ui)
 
     return (
       <LoginPageQuery>
@@ -70,11 +74,11 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
             return <ErrorDisplay error={error} />
           }
 
-          const dbId = data && data.allDbs.length ? data.allDbs[0].dbId : ''
+          const dbId = data && data.allDbs.length ? data.allDbs[0].dbId : undefined
           const create = !dbId
 
           const initialValues = {
-            ...LoginPageForm.initalValues,
+            ...initalValues,
             dbId,
           }
 
@@ -115,7 +119,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                     <SubmitButton onPress={formApi.submitForm} disabled={formApi.isSubmitting}>
                       <Text>{intl.formatMessage(create ? messages.create : messages.open)}</Text>
                     </SubmitButton>
-                    {!create && (
+                    {dbId && (
                       <DeleteDbMutation variables={{ dbId }}>
                         {(deleteDb, { error: deleteDbError, loading: running }) => (
                           <>
@@ -142,33 +146,45 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
     )
   }
 
-  validate = (values: FormValues): FormikErrors<FormValues> => {
-    const create = !values.dbId
-    const errors: FormikErrors<FormValues> = {}
+  validate = (values: Values): FormikErrors<Values> => {
+    const errors: FormikErrors<Values> = {}
     const { intl } = this.context
 
-    if (create) {
+    if (values.dbId) {
+      if (!values.password.trim()) {
+        errors.password = intl.formatMessage(messages.valueEmpty)
+      }
+    } else {
       if (!values.password.trim()) {
         errors.password = intl.formatMessage(messages.valueEmpty)
       }
       if (values.password !== values.passwordConfirm) {
         errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
       }
-    } else {
-      if (!values.password.trim()) {
-        errors.password = intl.formatMessage(messages.valueEmpty)
-      }
     }
 
     return errors
   }
 
-  onSubmit = async (values: FormValues, factions: FormikActions<FormValues>) => {
+  onSubmit = async (values: Values, factions: FormikActions<Values>) => {
     try {
-      const { client, ui, intl, dispatch } = this.context
-      const create = !values.dbId
+      const { client, dispatch } = this.context
       const refetchQueries = [{ query: LoginPageQuery.defaultProps.query }]
-      if (create) {
+      if (values.dbId) {
+        log('running OpenDb mutation')
+        const { dbId, password } = values
+        const mutation = gql`
+          mutation OpenDb($dbId: String!, $password: String!) {
+            openDb(dbId: $dbId, password: $password)
+          }
+        `
+        const res = await client.mutate<Gql.OpenDb.Mutation, Gql.OpenDb.Variables>({
+          mutation,
+          variables: { dbId, password },
+          refetchQueries,
+        })
+        log('OpenDb finished %O', res)
+      } else {
         log('running CreateDb mutation')
         const { name, password } = values
         const mutation = gql`
@@ -182,51 +198,13 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
           refetchQueries,
         })
         log('CreateDb finished %O', res)
-      } else {
-        log('running OpenDb mutation')
-        const { dbId, password } = values
-        const mutation = gql`
-          mutation OpenDb($dbId: String!, $password: String!) {
-            openDb(dbId: $dbId, password: $password)
-          }
-        `
-        const res = await client.mutate<Gql.OpenDb.Mutation, Gql.OpenDb.Variables>({
-          mutation,
-          variables: { dbId, password },
-          refetchQueries,
-        })
-        log('CreateDb finished %O', res)
       }
 
-      dispatch(actions.nav.push({ id: HomePage.id, props: undefined }))
+      dispatch(go.home())
     } finally {
       factions.setSubmitting(false)
     }
   }
-
-  // confirmDelete = (event: React.SyntheticEvent, dbId: string) => {
-  //   const { ui, intl } = this.context
-  //   ui.confirm({
-  //     event,
-  //     title: intl.formatMessage(messages.deleteMessage),
-  //     action: intl.formatMessage(messages.delete),
-  //     onConfirm: () => this.deleteDb(dbId),
-  //   })
-  // }
-
-  // deleteDb = async (dbId: string) => {
-  //   const mutation = gql`
-  //     mutation DeleteDb($dbId: String!) {
-  //       deleteDb(dbId: $dbId)
-  //     }
-  //   `
-  //   const variables = { dbId }
-  //   const { client, ui } = this.context
-  //   const result = await client.mutate<Gql.DeleteDb.Mutation, Gql.DeleteDb.Variables>({
-  //     mutation,
-  //     variables,
-  //   })
-  // }
 
   // inputRef = (ref: any) => {
   //   this.confirmInput = ref

@@ -10,7 +10,7 @@ import { CurrencyField } from './CurrencyField'
 import { DateField } from './DateField'
 import { Divider } from './Divider'
 import { Form } from './Form'
-import { Router } from './Router.electron'
+import { ElectronRouter } from './Router.electron'
 import { SelectField } from './SelectField'
 import { TextField } from './TextField'
 import { UrlField } from './UrlField'
@@ -20,7 +20,7 @@ export const ui: UiContext = {
   confirm,
 
   // routes
-  Router,
+  Router: ElectronRouter,
 
   // dialog
   Alert: props => (

@@ -1,7 +1,15 @@
+import { actions } from './actions'
 import { BankEditPage, HomePage, LoginPage } from './pages'
 
 export interface RouteConfig {
   [path: string]: React.ComponentType<any> | React.ComponentType<void>
+}
+
+export const go = {
+  login: (props: LoginPage.Props) => actions.nav.push({ id: LoginPage.id, props }),
+  home: (props: HomePage.Props) => actions.nav.push({ id: HomePage.id, props }),
+  bankCreate: (props: BankEditPage.Props) => actions.nav.push({ id: BankEditPage.id, props }),
+  bankEdit: (props: BankEditPage.Props) => actions.nav.push({ id: BankEditPage.id, props }),
 }
 
 export const routes: RouteConfig = {
@@ -10,17 +18,6 @@ export const routes: RouteConfig = {
   [HomePage.id]: HomePage,
   [BankEditPage.id]: BankEditPage,
 }
-
-export interface AppRouteFunction {
-  (id: typeof LoginPage.id, props: LoginPage.Props): any
-  (id: typeof HomePage.id, props: HomePage.Props): any
-  (id: typeof BankEditPage.id, props: BankEditPage.Props): any
-}
-
-export type AppNavDispatch =
-  | { id: typeof LoginPage.id; props: LoginPage.Props }
-  | { id: typeof HomePage.id; props: HomePage.Props }
-  | { id: typeof BankEditPage.id; props: BankEditPage.Props }
 
 // export const logout = createStandardAction('nav/logout')()
 
