@@ -1,23 +1,9 @@
-import { AppAction, Dependencies } from '@ag/app'
-import { AppState } from '@ag/app/reducers'
-import { DbImports } from '@ag/db'
+import { AppAction, AppState, Dependencies } from '@ag/app'
 import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { epics } from '../epics/epics'
 import { ElectronState, rootReducer } from '../reducers'
-import { deleteDb, openDb } from './openDb.electron'
-
-export const dbImports: DbImports = {
-  openDb,
-  deleteDb,
-}
-
-// const runQuery = initDb(dbImports)
-
-// const dependencies: Dependencies = {
-//   runQuery,
-// }
 
 const epicMiddleware = createEpicMiddleware<AppAction, AppAction, AppState, Dependencies>({
   // dependencies,

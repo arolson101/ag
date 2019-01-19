@@ -3,12 +3,12 @@ import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
+import { DbImports, initClient } from '../db'
 import { AppContext, UiContext } from './context'
 import { AppStore } from './reducers'
 import { routes } from './routes'
 
-interface Props {
-  client: ApolloClient<any>
+interface Props extends DbImports {
   store: AppStore
   ui: UiContext
 }
@@ -22,19 +22,24 @@ const GetIntlProvider = injectIntl<GetIntlProviderProps>(({ intl, children }) =>
 GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
 
 interface State {
-  client?: ApolloClient<any>
+  client: ApolloClient<any>
 }
 
-export class App extends React.PureComponent<Props> {
+export class App extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    const { openDb, deleteDb } = this.props
+    const client = initClient({ openDb, deleteDb })
+    this.state = {
+      client,
+    }
+  }
+
   render() {
-    const { client, store, ui } = this.props
+    const { store, ui } = this.props
+    const { client } = this.state
     const { Router } = ui
     const dispatch = store.dispatch
-
-    if (!client) {
-      return null
-      // throw new Error('no client')
-    }
 
     return (
       <ApolloProvider client={client}>

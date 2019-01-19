@@ -1,7 +1,7 @@
 import { ActionType, createStandardAction } from 'typesafe-actions'
 import { dialogActions } from './dialogActions'
 
-export interface AppNavDispatch {
+interface AppNavDispatch {
   id: string
   props: object | void
 }
