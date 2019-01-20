@@ -9,7 +9,7 @@ const algorithm = 'aes-256-gcm'
 
 @ObjectType()
 @Entity({ name: 'dbs' })
-export class DbInfo {
+export class Db {
   @PrimaryColumn() @Field() dbId!: string
   @Column() @Field() name!: string
   @Column() path!: string

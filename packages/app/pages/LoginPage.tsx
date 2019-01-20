@@ -1,12 +1,14 @@
 import debug from 'debug'
 import { Formik, FormikErrors } from 'formik'
+import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import React from 'react'
-import { Mutation, Query } from 'react-apollo'
+import { Mutation, Query, QueryProps } from 'react-apollo'
 import { defineMessages } from 'react-intl'
-import { ConfirmButton, ErrorDisplay } from '../components'
+import { Omit } from 'utility-types'
+import { AppMutation, AppQuery, ConfirmButton, ErrorDisplay, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
-import * as Gql from '../graphql-types'
+import * as T from '../graphql-types'
 import { go } from '../routes'
 
 const log = debug('app:LoginPage')
@@ -25,28 +27,15 @@ const initalValues: Values = {
   passwordConfirm: '',
 }
 
-class LoginPageQuery extends Query<Gql.LoginPage.Query, Gql.LoginPage.Variables> {
-  static defaultProps = {
-    query: gql`
-      query LoginPage {
-        allDbs {
-          dbId
-          name
-        }
+const queries = {
+  dbs: gql`
+    query Dbs {
+      dbs {
+        dbId
+        name
       }
-    `,
-  }
-}
-
-class DeleteDbMutation extends Mutation<Gql.DeleteDb.Mutation, Gql.DeleteDb.Variables> {
-  static defaultProps = {
-    mutation: gql`
-      mutation DeleteDb($dbId: String!) {
-        deleteDb(dbId: $dbId)
-      }
-    `,
-    refetchQueries: [{ query: LoginPageQuery.defaultProps.query }],
-  }
+    }
+  ` as Gql<T.Dbs.Query, T.Dbs.Variables>,
 }
 
 const mutations = {
@@ -54,13 +43,19 @@ const mutations = {
     mutation CreateDb($name: String!, $password: String!) {
       createDb(name: $name, password: $password)
     }
-  `,
+  ` as Gql<T.CreateDb.Mutation, T.CreateDb.Variables>,
 
   openDb: gql`
     mutation OpenDb($dbId: String!, $password: String!) {
       openDb(dbId: $dbId, password: $password)
     }
-  `,
+  ` as Gql<T.OpenDb.Mutation, T.OpenDb.Variables>,
+
+  deleteDb: gql`
+    mutation DeleteDb($dbId: String!) {
+      deleteDb(dbId: $dbId)
+    }
+  ` as Gql<T.DeleteDb.Mutation, T.DeleteDb.Variables>,
 }
 
 export namespace LoginPage {
@@ -79,16 +74,9 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
     const { Form, TextField } = typedFields<Values>(ui)
 
     return (
-      <LoginPageQuery>
-        {result => {
-          const { data, loading, error } = result
-          if (loading) {
-            return <LoadingOverlay show={loading} />
-          } else if (error) {
-            return <ErrorDisplay error={error} />
-          }
-
-          const dbId = data && data.allDbs.length ? data.allDbs[0].dbId : undefined
+      <AppQuery query={queries.dbs}>
+        {({ dbs }) => {
+          const dbId = dbs.length ? dbs[0].dbId : undefined
           const create = !dbId
 
           const initialValues = {
@@ -98,11 +86,11 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
 
           return (
             <Page>
-              <Mutation
+              <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
                 mutation={create ? mutations.createDb : mutations.openDb}
-                refetchQueries={[{ query: LoginPageQuery.defaultProps.query }]}
+                refetchQueries={[{ query: queries.dbs }]}
               >
-                {(runMutation, mresult) => {
+                {runMutation => {
                   return (
                     <Formik
                       initialValues={initialValues}
@@ -160,7 +148,6 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                               // inputRef={this.inputRef}
                             />
                           )}
-                          <ErrorDisplay error={mresult.error} />
 
                           <SubmitButton
                             onPress={formApi.submitForm}
@@ -171,7 +158,12 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                             </Text>
                           </SubmitButton>
                           {dbId && (
-                            <DeleteDbMutation variables={{ dbId }}>
+                            <AppMutation
+                              mutation={mutations.deleteDb}
+                              variables={{ dbId }}
+                              refetchQueries={[{ query: queries.dbs }]}
+                              onCompleted={formApi.handleReset}
+                            >
                               {(deleteDb, { error: deleteDbError, loading: running }) => (
                                 <>
                                   <LoadingOverlay show={running} />
@@ -185,18 +177,18 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                                   </ConfirmButton>
                                 </>
                               )}
-                            </DeleteDbMutation>
+                            </AppMutation>
                           )}
                         </Form>
                       )}
                     </Formik>
                   )
                 }}
-              </Mutation>
+              </AppMutation>
             </Page>
           )
         }}
-      </LoginPageQuery>
+      </AppQuery>
     )
   }
 
