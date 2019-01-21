@@ -1,20 +1,12 @@
-import { ActionType, createStandardAction } from 'typesafe-actions'
+import { ActionType } from 'typesafe-actions'
+import { dbActions } from './dbActions'
 import { dialogActions } from './dialogActions'
-
-interface AppNavDispatch {
-  id: string
-  props: object | void
-}
-
-const nav = {
-  push: createStandardAction('nav/push')<AppNavDispatch>(),
-  replace: createStandardAction('nav/replace')<AppNavDispatch>(),
-  pop: createStandardAction('nav/pop')(),
-}
+import { navActions } from './navActions'
 
 export const actions = {
-  nav,
+  ...dbActions,
   ...dialogActions,
+  ...navActions,
 }
 
 export type AppAction = ActionType<typeof actions>

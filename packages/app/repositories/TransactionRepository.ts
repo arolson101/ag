@@ -1,5 +1,5 @@
 import { EntityRepository } from 'typeorm'
-import { Transaction } from '../../entities'
+import { Transaction } from '../entities'
 import { RecordRepository } from './RecordRepository'
 
 @EntityRepository(Transaction)

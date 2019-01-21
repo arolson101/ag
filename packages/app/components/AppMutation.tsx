@@ -20,7 +20,7 @@ export class AppMutation<TData, TVariables> extends React.PureComponent<Props<TD
     } = this.context
 
     return (
-      <Mutation<TData, TVariables> {...props} context={this.context}>
+      <Mutation<TData, TVariables> {...props}>
         {(fcn, result) => {
           const { loading, error } = result
           if (loading) {

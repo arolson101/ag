@@ -4,11 +4,12 @@ import sanitize from 'sanitize-filename'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { Connection, getConnectionManager, Repository } from 'typeorm'
+import { actions } from '../actions'
 import { AppContext } from '../context'
 import { Account, Bank, Bill, Budget, Category, Db, Transaction } from '../entities'
-import { AppDbService } from '../services'
-import { DbChange, dbWrite } from '../services/dbWrite'
-import { AccountRepository, BankRepository, TransactionRepository } from '../services/repositories'
+import { selectors } from '../reducers'
+import { AccountRepository, BankRepository, TransactionRepository } from '../repositories'
+import { DbChange, dbWrite } from './dbWrite'
 
 const log = debug('app:DbResolver')
 
@@ -28,38 +29,26 @@ const appEntities = [
 @Service()
 @Resolver(objectType => Db)
 export class DbResolver {
-  private initPromise?: Promise<void>
-  private indexDbConnection!: Connection
-  private dbRepository!: Repository<Db>
-
-  constructor(private app: AppDbService) {}
-
-  private init(ctx: AppContext) {
-    if (this.initPromise) {
-      return this.initPromise
+  async getDbs(ctx: AppContext) {
+    const { getState, openDb, dispatch } = ctx
+    let dbs = selectors.getDbs(getState())
+    if (!dbs) {
+      const db = await openDb('index', '', indexEntities)
+      dispatch(actions.setIndex(db))
+      dbs = selectors.getDbs(getState())
+      if (!dbs) {
+        throw new Error('error initializing index db')
+      }
     }
-    this.initPromise = this.openIndexDb(ctx)
-    return this.initPromise
-  }
-
-  private async openIndexDb({ openDb }: AppContext) {
-    this.indexDbConnection = await openDb('index', '', indexEntities)
-    this.dbRepository = this.indexDbConnection.getRepository(Db)
-  }
-
-  private async ensureClosed(name: string): Promise<void> {
-    const mgr = getConnectionManager()
-    if (mgr.has(name)) {
-      await mgr.get(name).close()
-    }
+    return dbs
   }
 
   @Query(returns => [Db])
   async dbs(@Ctx() ctx: AppContext): Promise<Db[]> {
     log('dbs query')
-    await this.init(ctx)
-    const dbs = await this.dbRepository.find()
-    return dbs
+    const dbs = await this.getDbs(ctx)
+    const all = await dbs.find()
+    return all
   }
 
   @Mutation(returns => Boolean)
@@ -69,17 +58,20 @@ export class DbResolver {
     @Ctx() ctx: AppContext
   ): Promise<boolean> {
     log('createDb')
-    await this.init(ctx)
+    const { openDb, dispatch } = ctx
     const dbInfo = new Db()
     dbInfo.dbId = crypto.randomBytes(8).toString('base64')
     dbInfo.name = name
     dbInfo.path = sanitize(name)
     const key = Db.generateKey()
     dbInfo.setPassword(key, password)
-    await this.ensureClosed(dbInfo.path)
-    const db = await ctx.openDb(dbInfo.path, key, appEntities)
-    await this.dbRepository.save(dbInfo)
-    this.app.open(db)
+
+    const db = await openDb(dbInfo.path, key, appEntities)
+
+    const dbs = await this.getDbs(ctx)
+    await dbs.save(dbInfo)
+
+    dispatch(actions.openApp(db))
     return true
   }
 
@@ -90,32 +82,37 @@ export class DbResolver {
     @Ctx() ctx: AppContext
   ): Promise<boolean> {
     log('openDb')
-    await this.init(ctx)
-    const dbInfo = await this.dbRepository.findOneOrFail(dbId)
-    await this.ensureClosed(dbInfo.path)
+    const { openDb, dispatch } = ctx
+    const dbs = await this.getDbs(ctx)
+    const dbInfo = await dbs.findOneOrFail(dbId)
     const key = dbInfo.getKey(password)
-    const db = await ctx.openDb(dbInfo.path, key, appEntities)
-    this.app.open(db)
+
+    const db = await openDb(dbInfo.path, key, appEntities)
+
+    dispatch(actions.openApp(db))
     return true
   }
 
   @Mutation(returns => Boolean)
-  async closeDb(): Promise<boolean> {
+  async closeDb(
+    @Ctx() { dispatch }: AppContext //
+  ): Promise<boolean> {
     log('closeDb')
-    await this.close()
+    dispatch(actions.closeApp())
     return true
   }
 
-  async close() {
-    await this.app.close()
-  }
-
   @Mutation(returns => String)
-  async deleteDb(@Arg('dbId') dbId: string, @Ctx() ctx: AppContext): Promise<string> {
+  async deleteDb(
+    @Arg('dbId') dbId: string, //
+    @Ctx() ctx: AppContext
+  ): Promise<string> {
     log('deleteDb')
-    const dbInfo = await this.dbRepository.findOneOrFail(dbId)
-    await ctx.deleteDb(dbInfo.path)
-    await this.dbRepository
+    const { deleteDb, dispatch } = ctx
+    const dbs = await this.getDbs(ctx)
+    const dbInfo = await dbs.findOneOrFail(dbId)
+    await deleteDb(dbInfo.path)
+    await dbs
       .createQueryBuilder()
       .delete()
       .from(Db)

@@ -1,26 +1,35 @@
 import cuid from 'cuid'
-import { Arg, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
-import { Container } from 'typedi'
+import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
+import { AppContext } from '../context'
 import { Account, Bank, BankInput } from '../entities'
-import { AppDbService } from '../services/AppDbService'
+import { selectors } from '../reducers'
 
 @Resolver(Bank)
 export class BankResolver {
-  constructor(private app: AppDbService) {}
-
   @Query(returns => Bank)
-  async bank(@Arg('bankId') bankId: string): Promise<Bank> {
-    return this.app.banks.get(bankId)
+  async bank(
+    @Arg('bankId') bankId: string, //
+    @Ctx() { getState }: AppContext
+  ): Promise<Bank> {
+    const banks = selectors.getBanks(getState())
+    return banks.get(bankId)
   }
 
   @Query(returns => [Bank])
-  async banks(): Promise<Bank[]> {
-    return this.app.banks.all()
+  async banks(
+    @Ctx() { getState }: AppContext //
+  ): Promise<Bank[]> {
+    const banks = selectors.getBanks(getState())
+    return banks.all()
   }
 
   @FieldResolver(type => [Account])
-  async accounts(@Root() bank: Bank): Promise<Account[]> {
-    const res = await this.app.accounts.getForBank(bank.id)
+  async accounts(
+    @Root() bank: Bank, //
+    @Ctx() { getState }: AppContext
+  ): Promise<Account[]> {
+    const accounts = selectors.getAccounts(getState())
+    const res = await accounts.getForBank(bank.id)
     return res.sort((a, b) => a.name.localeCompare(b.name))
   }
   /*

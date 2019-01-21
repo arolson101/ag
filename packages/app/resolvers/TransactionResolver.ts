@@ -1,17 +1,20 @@
 import cuid from 'cuid'
-import { Arg, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Container } from 'typedi'
+import { AppContext } from '../context'
 import { Transaction, TransactionInput } from '../entities'
-import { AppDbService } from '../services/AppDbService'
-import { DbChange } from '../services/dbWrite'
+import { selectors } from '../reducers'
+import { DbChange } from './dbWrite'
 
 @Resolver(objectType => Transaction)
 export class TransactionResolver {
-  constructor(private app: AppDbService) {}
-
   @Query(returns => Transaction)
-  async transaction(@Arg('transactionId') transactionId: string): Promise<Transaction> {
-    return this.app.transactions.get(transactionId)
+  async transaction(
+    @Arg('transactionId') transactionId: string, //
+    @Ctx() { getState }: AppContext
+  ): Promise<Transaction> {
+    const transactions = selectors.getTransactions(getState())
+    return transactions.get(transactionId)
   }
   /*
   @Mutation(returns => Transaction)

@@ -2,7 +2,8 @@ import Axios, { CancelTokenSource } from 'axios'
 import cuid from 'cuid'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
-import { Arg, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
+import { AppContext } from '../context'
 import {
   Account,
   AccountInput,
@@ -11,9 +12,9 @@ import {
   Transaction,
   TransactionInput,
 } from '../entities'
-import { AppDbService } from '../services/AppDbService'
+import { selectors } from '../reducers'
 // import { checkLogin, createService, getFinancialAccount, toAccountType } from '../../online'
-import { DbChange } from '../services/dbWrite'
+import { DbChange } from './dbWrite'
 
 const log = debug('app:AccountResolver')
 
@@ -21,11 +22,13 @@ const log = debug('app:AccountResolver')
 export class AccountResolver {
   private tokens = new Map<string, CancelTokenSource>()
 
-  constructor(private app: AppDbService) {}
-
   @Query(returns => Account)
-  async account(@Arg('accountId') accountId: string): Promise<Account> {
-    return this.app.accounts.get(accountId)
+  async account(
+    @Arg('accountId') accountId: string, //
+    @Ctx() { getState }: AppContext //
+  ): Promise<Account> {
+    const accounts = selectors.getAccounts(getState())
+    return accounts.get(accountId)
   }
   /*
   @Mutation(returns => Account)
@@ -131,11 +134,13 @@ export class AccountResolver {
 */
   @FieldResolver(type => [Transaction])
   async transactions(
+    @Ctx() { getState }: AppContext,
     @Root() account: Account,
     @Arg('start', { nullable: true }) start?: Date,
     @Arg('end', { nullable: true }) end?: Date
   ): Promise<Transaction[]> {
-    const res = await this.app.transactions.getForAccount(account.id, start, end)
+    const transactions = selectors.getTransactions(getState())
+    const res = await transactions.getForAccount(account.id, start, end)
     log(
       '%s\n%s\n%o',
       `transactions for account ${account.id} (bank ${account.bankId})`,

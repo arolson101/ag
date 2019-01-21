@@ -21,7 +21,7 @@ export class AppQuery<TData, TVariables> extends React.PureComponent<Props<TData
     } = this.context
 
     return (
-      <Query<TData, TVariables> {...props} context={this.context}>
+      <Query<TData, TVariables> {...props}>
         {({ loading, error, data }) => {
           if (loading) {
             return <LoadingOverlay show={loading} />

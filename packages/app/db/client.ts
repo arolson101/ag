@@ -3,7 +3,7 @@ import ApolloClient from 'apollo-client'
 import { ApolloLink, FetchResult, NextLink, Observable, Operation } from 'apollo-link'
 import debug from 'debug'
 import { execute } from 'graphql'
-import Container from 'typedi'
+import { ApolloClientContextProvider } from './ContextProvider'
 import { schema } from './schema'
 
 const log = debug('app:client')
@@ -18,7 +18,7 @@ class ExecuteLink extends ApolloLink {
           document: operation.query,
           variableValues: operation.variables,
           operationName: operation.operationName,
-          contextValue: operation.getContext(),
+          contextValue: ApolloClientContextProvider.cachedContext,
         })
       )
         .then(data => {

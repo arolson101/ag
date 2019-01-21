@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { AppContext, UiContext } from './context'
 import { client } from './db'
+import { ApolloClientContextProvider } from './db/ContextProvider'
 import { AppStore } from './reducers'
 import { routes } from './routes'
 
@@ -47,8 +48,10 @@ export class App extends React.PureComponent<Props> {
                 <AppContext.Provider
                   value={{ client, intl, ui, dispatch, getState, openDb, deleteDb }}
                 >
-                  <Router routes={routes} />
-                  {/* <Dialogs /> */}
+                  <ApolloClientContextProvider>
+                    <Router routes={routes} />
+                    {/* <Dialogs /> */}
+                  </ApolloClientContextProvider>
                 </AppContext.Provider>
               </Provider>
             )}
