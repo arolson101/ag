@@ -1,4 +1,3 @@
-import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'

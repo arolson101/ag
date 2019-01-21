@@ -1,5 +1,29 @@
 export type Maybe<T> = T | null
 
+export interface BankInput {
+  name?: Maybe<string>
+
+  web?: Maybe<string>
+
+  address?: Maybe<string>
+
+  notes?: Maybe<string>
+
+  favicon?: Maybe<string>
+
+  online?: Maybe<boolean>
+
+  fid?: Maybe<string>
+
+  org?: Maybe<string>
+
+  ofx?: Maybe<string>
+
+  username?: Maybe<string>
+
+  password?: Maybe<string>
+}
+
 export enum AccountType {
   Checking = 'CHECKING',
   Savings = 'SAVINGS',
@@ -28,6 +52,71 @@ export namespace IsLoggedIn {
     __typename?: 'AppDb'
 
     loggedIn: boolean
+  }
+}
+
+export namespace BankEditPage {
+  export type Variables = {
+    bankId?: Maybe<string>
+  }
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    bank: Maybe<Bank>
+  }
+
+  export type Bank = {
+    __typename?: 'Bank'
+
+    name: string
+
+    web: string
+
+    address: string
+
+    notes: string
+
+    favicon: string
+
+    online: boolean
+
+    fid: string
+
+    org: string
+
+    ofx: string
+
+    username: string
+
+    password: string
+  }
+}
+
+export namespace SaveBank {
+  export type Variables = {
+    input: BankInput
+    bankId?: Maybe<string>
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    saveBank: SaveBank
+  }
+
+  export type SaveBank = {
+    __typename?: 'Bank'
+
+    id: string
+
+    name: string
   }
 }
 
@@ -65,7 +154,7 @@ export namespace HomePage {
   }
 }
 
-export namespace Dbs {
+export namespace LoginPage {
   export type Variables = {}
 
   export type Query = {

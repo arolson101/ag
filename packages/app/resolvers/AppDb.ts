@@ -8,13 +8,13 @@ export class AppDb {
   @Field()
   loggedIn: boolean = true
 
-  @Field(returns => Bank)
+  @Field(returns => Bank, { nullable: true })
   async bank(
     @Ctx() { getState }: AppContext, //
-    @Arg('bankId') bankId: string
-  ): Promise<Bank> {
+    @Arg('bankId', { nullable: true }) bankId?: string
+  ): Promise<Bank | undefined> {
     const banks = selectors.getBanks(getState())
-    return banks.get(bankId)
+    return bankId ? banks.get(bankId) : undefined
   }
 
   @Field(returns => [Bank])

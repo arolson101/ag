@@ -1,5 +1,5 @@
 import { CheckboxFieldProps } from '@ag/app/context'
-import { FormGroup, Intent, Switch } from '@blueprintjs/core'
+import { Switch } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
 
@@ -10,23 +10,14 @@ export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
-          const error = form.errors[name]
           return (
-            <FormGroup
-              intent={error ? Intent.DANGER : undefined}
-              helperText={error}
+            <Switch
+              id={id}
+              alignIndicator='right'
               label={label}
-              labelFor={id}
-            >
-              <Switch
-                id={id}
-                alignIndicator='right'
-                // className='pt-align-right'
-                label={label}
-                checked={field.value}
-                onChange={e => form.setFieldValue(name, e.currentTarget.checked)}
-              />
-            </FormGroup>
+              checked={field.value}
+              onChange={e => form.setFieldValue(name, e.currentTarget.checked)}
+            />
           )
         }}
       </Field>

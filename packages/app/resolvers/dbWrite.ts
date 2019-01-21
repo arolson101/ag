@@ -42,10 +42,10 @@ export const dbWrite = async (db: Connection, changes: DbChange[]) => {
 
         if (change.edits) {
           const edits = change.edits
-          const items: Array<Record<any>> = (await manager.findByIds(
+          const items = await manager.findByIds<Record<any>>(
             change.table,
             change.edits.map(edit => edit.id)
-          )) as any[]
+          )
           items.forEach((record, i) => {
             record.update(change.t, edits[i].q)
           })

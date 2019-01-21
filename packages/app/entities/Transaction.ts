@@ -21,8 +21,8 @@ export class Transaction extends Record<Transaction.Props> {
   @Column({ default: 0 }) @Field() balance!: number
   // split: Split
 
-  constructor(genId?: () => string, accountId?: string, props?: TransactionInput) {
-    super(genId, { ...Transaction.defaultValues(), ...props })
+  constructor(id?: string, accountId?: string, props?: TransactionInput) {
+    super(id, { ...Transaction.defaultValues(), ...props })
     if (accountId) {
       this.accountId = accountId
     }

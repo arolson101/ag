@@ -22,6 +22,13 @@ export const dbSelectors = {
 
   getAppDb: (state: DbState) => state.app,
 
+  getAppDbOrFail: (state: DbState) => {
+    if (!state.app) {
+      throw new Error('app is not open')
+    }
+    return state.app
+  },
+
   getBanks: (state: DbState) => {
     if (!state.app) {
       throw new Error('app is not open')

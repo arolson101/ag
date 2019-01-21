@@ -1,5 +1,5 @@
 import { UiContext } from '@ag/app'
-import { Alert, ProgressBar, Spinner } from '@blueprintjs/core'
+import { Alert, Collapse, Divider, Spinner } from '@blueprintjs/core'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import 'normalize.css/normalize.css'
@@ -8,7 +8,6 @@ import { CheckboxField } from './CheckboxField'
 import { confirm } from './confirm'
 import { CurrencyField } from './CurrencyField'
 import { DateField } from './DateField'
-import { Divider } from './Divider'
 import { Form } from './Form'
 import { ElectronRouter } from './Router.electron'
 import { SelectField } from './SelectField'
@@ -42,6 +41,11 @@ export const ui: UiContext = {
   // layout
   Page: ({ children }) => <div>{children}</div>,
   Container: ({ children }) => <div>{children}</div>,
+  Collapsible: ({ show, children }) => (
+    <Collapse isOpen={show} keepChildrenMounted>
+      {children}
+    </Collapse>
+  ),
   Text: ({ children, onClick }) => <span onClick={onClick}>{children}</span>,
   SubmitButton: ({ onPress, disabled, children }) => (
     <button onClick={onPress} disabled={disabled}>

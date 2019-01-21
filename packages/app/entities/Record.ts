@@ -21,7 +21,7 @@ export abstract class Record<Props extends {}> {
   @Column('text', { nullable: true }) _base?: BaseType<Props>
   @Column('text', { nullable: true }) _history?: HistoryType<Props>
 
-  constructor(genId?: () => string, props?: Props) {
+  constructor(id?: string, props?: Props) {
     this._deleted = 0
     this._base = undefined
     this._history = undefined
@@ -31,8 +31,8 @@ export abstract class Record<Props extends {}> {
       Object.assign(this, props)
     }
 
-    if (genId) {
-      this.id = genId()
+    if (id) {
+      this.id = id
     }
   }
 

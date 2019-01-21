@@ -42,6 +42,7 @@ export interface UiContext {
   // layout
   Page: ComponentType<{}>
   Container: ComponentType<{}>
+  Collapsible: ComponentType<{ show: boolean }>
   Text: ComponentType<{ onClick?: () => any }>
   SubmitButton: ComponentType<{ disabled?: boolean; onPress: (event: React.SyntheticEvent) => any }>
   DeleteButton: ComponentType<{ disabled?: boolean; onPress: (event: React.SyntheticEvent) => any }>

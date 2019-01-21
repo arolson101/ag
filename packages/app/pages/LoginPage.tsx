@@ -3,7 +3,7 @@ import { Formik, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery, ConfirmButton, ErrorDisplay, Gql, IsLoggedIn } from '../components'
+import { AppMutation, AppQuery, ConfirmButton, Gql, IsLoggedIn } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
@@ -26,13 +26,13 @@ const initalValues: Values = {
 
 const queries = {
   dbs: gql`
-    query Dbs {
+    query LoginPage {
       dbs {
         dbId
         name
       }
     }
-  ` as Gql<T.Dbs.Query, T.Dbs.Variables>,
+  ` as Gql<T.LoginPage.Query, T.LoginPage.Variables>,
 }
 
 const mutations = {
@@ -120,7 +120,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                       }}
                     >
                       {formApi => (
-                        <Form onSubmit={formApi.submitForm}>
+                        <Form onSubmit={formApi.handleSubmit}>
                           <Text>
                             {intl.formatMessage(
                               create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
