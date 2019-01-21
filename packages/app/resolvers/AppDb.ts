@@ -5,6 +5,9 @@ import { selectors } from '../reducers'
 
 @ObjectType()
 export class AppDb {
+  @Field()
+  loggedIn: boolean = true
+
   @Field(returns => Bank)
   async bank(
     @Ctx() { getState }: AppContext, //

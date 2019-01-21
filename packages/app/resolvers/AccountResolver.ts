@@ -17,6 +17,7 @@ import { selectors } from '../reducers'
 import { DbChange } from './dbWrite'
 
 const log = debug('app:AccountResolver')
+log.enabled = false // process.env.NODE_ENV !== 'production'
 
 @Resolver(Account)
 export class AccountResolver {

@@ -3,12 +3,12 @@ import { Formik, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery, ConfirmButton, ErrorDisplay, Gql } from '../components'
+import { AppMutation, AppQuery, ConfirmButton, ErrorDisplay, Gql, IsLoggedIn } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
-import { go } from '../routes'
 
 const log = debug('app:LoginPage')
+log.enabled = process.env.NODE_ENV !== 'production'
 
 interface Values {
   name: string
@@ -85,7 +85,10 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
             <Page>
               <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
                 mutation={create ? mutations.createDb : mutations.openDb}
-                refetchQueries={[{ query: queries.dbs }]}
+                refetchQueries={[
+                  { query: queries.dbs }, //
+                  { query: IsLoggedIn.query },
+                ]}
               >
                 {runMutation => {
                   return (
@@ -110,8 +113,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                       onSubmit={async (values, factions) => {
                         try {
                           await runMutation({ variables: values })
-                          const { dispatch } = this.context
-                          dispatch(go.home())
+                          log('logged in')
                         } finally {
                           factions.setSubmitting(false)
                         }

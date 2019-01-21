@@ -8,7 +8,6 @@ import { DbChange } from './dbWrite'
 
 @Resolver(objectType => Transaction)
 export class TransactionResolver {
-
   /*
   @Mutation(returns => Transaction)
   async saveTransaction(

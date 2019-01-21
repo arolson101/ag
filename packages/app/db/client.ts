@@ -7,11 +7,12 @@ import { ApolloClientContextProvider } from './ApolloClientContextProvider'
 import { schema } from './schema'
 
 const log = debug('app:client')
+log.enabled = false // process.env.NODE_ENV !== 'production'
 
 class ExecuteLink extends ApolloLink {
   request(operation: Operation, forward?: NextLink): Observable<FetchResult> | null {
     return new Observable(observer => {
-      // log('ExecuteLink %o', operation)
+      log('ExecuteLink %o', operation)
       Promise.resolve(
         execute({
           schema,

@@ -1,5 +1,6 @@
 export * from './actions'
 export * from './app'
+export * from './components'
 export * from './context'
 export * from './epics'
 export * from './reducers'

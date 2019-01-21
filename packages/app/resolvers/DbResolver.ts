@@ -10,6 +10,7 @@ import { selectors } from '../reducers'
 import { AppDb } from './AppDb'
 
 const log = debug('app:DbResolver')
+log.enabled = false // process.env.NODE_ENV !== 'production'
 
 const indexEntities = [
   Db, //

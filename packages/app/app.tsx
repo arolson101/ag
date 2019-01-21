@@ -4,13 +4,12 @@ import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { Connection, ConnectionOptions } from 'typeorm'
+import { IsLoggedIn } from './components'
 import { AppContext, UiContext } from './context'
 import { client } from './db'
 import { ApolloClientContextProvider } from './db/ApolloClientContextProvider'
 import { AppStore } from './reducers'
-import { routes } from './routes'
-
-debug.enable('app:*')
+import { loggedInRoutes, loggedOutRoutes } from './routes'
 
 interface Props {
   store: AppStore
@@ -48,7 +47,11 @@ export class App extends React.PureComponent<Props> {
                   value={{ client, intl, ui, dispatch, getState, openDb, deleteDb }}
                 >
                   <ApolloClientContextProvider>
-                    <Router routes={routes} />
+                    <IsLoggedIn>
+                      {isLoggedIn => (
+                        <Router routes={isLoggedIn ? loggedInRoutes : loggedOutRoutes} />
+                      )}
+                    </IsLoggedIn>
                     {/* <Dialogs /> */}
                   </ApolloClientContextProvider>
                 </AppContext.Provider>

@@ -1,8 +1,11 @@
-import { AppContext, RouterProps } from '@ag/app/context'
+import { AppContext, RouterProps } from '@ag/app'
+import debug from 'debug'
 import { parse } from 'query-string'
 import React from 'react'
-import { Route, Router as ReactRouter, Switch } from 'react-router-dom'
+import { Redirect, Route, Router as ReactRouter, Switch } from 'react-router-dom'
 import { history } from '../reducers'
+
+const log = debug('electron:router')
 
 export class ElectronRouter extends React.PureComponent<RouterProps> {
   static contextType = AppContext
@@ -10,8 +13,6 @@ export class ElectronRouter extends React.PureComponent<RouterProps> {
 
   render() {
     const { routes } = this.props
-    const { ui } = this.context
-    const { Text, SubmitButton } = ui
 
     return (
       <ReactRouter history={history}>
@@ -28,16 +29,10 @@ export class ElectronRouter extends React.PureComponent<RouterProps> {
             )
           })}
           <Route
-            render={({ location }) => (
-              <>
-                <Text>no matching route: {location.pathname}</Text>
-                <SubmitButton
-                  onPress={() => console.log('login')} //
-                >
-                  login
-                </SubmitButton>
-              </>
-            )}
+            render={({ location }) => {
+              log('"%s" (%o) not found- redirecting to "/"', location.pathname, location)
+              return <Redirect to='/' />
+            }}
           />
         </Switch>
       </ReactRouter>

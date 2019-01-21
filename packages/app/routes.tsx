@@ -12,9 +12,13 @@ export const go = {
   bankEdit: (props: BankEditPage.Props) => actions.nav.push({ id: BankEditPage.id, props }),
 }
 
-export const routes: RouteConfig = {
+export const loggedOutRoutes: RouteConfig = {
   ['/']: LoginPage,
   [LoginPage.id]: LoginPage,
+}
+
+export const loggedInRoutes: RouteConfig = {
+  ['/']: HomePage,
   [HomePage.id]: HomePage,
   [BankEditPage.id]: BankEditPage,
 }

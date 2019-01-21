@@ -15,6 +15,22 @@ export type DateTime = any
 // Documents
 // ====================================================
 
+export namespace IsLoggedIn {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    loggedIn: boolean
+  }
+}
+
 export namespace Dbs {
   export type Variables = {}
 
@@ -30,18 +46,6 @@ export namespace Dbs {
     dbId: string
 
     name: string
-  }
-}
-
-export namespace DeleteDb {
-  export type Variables = {
-    dbId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteDb: string
   }
 }
 
@@ -68,5 +72,17 @@ export namespace OpenDb {
     __typename?: 'Mutation'
 
     openDb: boolean
+  }
+}
+
+export namespace DeleteDb {
+  export type Variables = {
+    dbId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    deleteDb: string
   }
 }

@@ -7,6 +7,7 @@ import path from 'path'
 import url from 'url'
 
 const log = debug('app:main')
+log.enabled = process.env.NODE_ENV !== 'production'
 
 const defaultUrl = url.format({
   pathname: path.join(__dirname, 'index.html'),
