@@ -2,8 +2,7 @@ import assert from 'assert'
 import { Connection, Repository } from 'typeorm'
 import { getType } from 'typesafe-actions'
 import { actions, AppAction } from '../actions'
-import { Db } from '../entities'
-import { AccountRepository, BankRepository, TransactionRepository } from '../repositories'
+import { AccountRepository, BankRepository, Db, TransactionRepository } from '../entities'
 
 export interface DbState {
   indexDb?: {

@@ -1,4 +1,3 @@
-import ApolloClient from 'apollo-client'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
@@ -7,7 +6,7 @@ import { Provider } from 'react-redux'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { AppContext, UiContext } from './context'
 import { client } from './db'
-import { ApolloClientContextProvider } from './db/ContextProvider'
+import { ApolloClientContextProvider } from './db/ApolloClientContextProvider'
 import { AppStore } from './reducers'
 import { routes } from './routes'
 

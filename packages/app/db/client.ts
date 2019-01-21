@@ -3,7 +3,7 @@ import ApolloClient from 'apollo-client'
 import { ApolloLink, FetchResult, NextLink, Observable, Operation } from 'apollo-link'
 import debug from 'debug'
 import { execute } from 'graphql'
-import { ApolloClientContextProvider } from './ContextProvider'
+import { ApolloClientContextProvider } from './ApolloClientContextProvider'
 import { schema } from './schema'
 
 const log = debug('app:client')
