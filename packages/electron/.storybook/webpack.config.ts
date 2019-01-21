@@ -2,13 +2,11 @@
 import { getTransformer } from 'ts-transform-graphql-tag'
 import webpack from 'webpack'
 
-module.exports = {
-  plugins: [
-    // your custom plugins
-  ],
+const config: webpack.Configuration = {
   resolve: {
     extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
   },
+  target: 'web',
   module: {
     rules: [
       {
@@ -29,4 +27,13 @@ module.exports = {
       },
     ],
   },
+  node: {
+    fs: 'empty',
+  },
+  externals: {
+    'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
+    sqlite3: 'commonjs sqlite3',
+  },
 }
+
+module.exports = config

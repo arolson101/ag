@@ -24,37 +24,6 @@ const initalValues: Values = {
   passwordConfirm: '',
 }
 
-const queries = {
-  dbs: gql`
-    query LoginPage {
-      dbs {
-        dbId
-        name
-      }
-    }
-  ` as Gql<T.LoginPage.Query, T.LoginPage.Variables>,
-}
-
-const mutations = {
-  createDb: gql`
-    mutation CreateDb($name: String!, $password: String!) {
-      createDb(name: $name, password: $password)
-    }
-  ` as Gql<T.CreateDb.Mutation, T.CreateDb.Variables>,
-
-  openDb: gql`
-    mutation OpenDb($dbId: String!, $password: String!) {
-      openDb(dbId: $dbId, password: $password)
-    }
-  ` as Gql<T.OpenDb.Mutation, T.OpenDb.Variables>,
-
-  deleteDb: gql`
-    mutation DeleteDb($dbId: String!) {
-      deleteDb(dbId: $dbId)
-    }
-  ` as Gql<T.DeleteDb.Mutation, T.DeleteDb.Variables>,
-}
-
 export namespace LoginPage {
   export interface Props {}
 }
@@ -65,13 +34,44 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
 
   static readonly id = `LoginPage`
 
+  static readonly queries = {
+    dbs: gql`
+      query LoginPage {
+        dbs {
+          dbId
+          name
+        }
+      }
+    ` as Gql<T.LoginPage.Query, T.LoginPage.Variables>,
+  }
+
+  static readonly mutations = {
+    createDb: gql`
+      mutation CreateDb($name: String!, $password: String!) {
+        createDb(name: $name, password: $password)
+      }
+    ` as Gql<T.CreateDb.Mutation, T.CreateDb.Variables>,
+
+    openDb: gql`
+      mutation OpenDb($dbId: String!, $password: String!) {
+        openDb(dbId: $dbId, password: $password)
+      }
+    ` as Gql<T.OpenDb.Mutation, T.OpenDb.Variables>,
+
+    deleteDb: gql`
+      mutation DeleteDb($dbId: String!) {
+        deleteDb(dbId: $dbId)
+      }
+    ` as Gql<T.DeleteDb.Mutation, T.DeleteDb.Variables>,
+  }
+
   render() {
     const { ui, intl } = this.context
     const { Page, Text, SubmitButton, DeleteButton, LoadingOverlay } = ui
     const { Form, TextField } = typedFields<Values>(ui)
 
     return (
-      <AppQuery query={queries.dbs}>
+      <AppQuery query={LoginPage.queries.dbs}>
         {({ dbs }) => {
           const dbId = dbs.length ? dbs[0].dbId : undefined
           const create = !dbId
@@ -84,9 +84,9 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
           return (
             <Page>
               <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
-                mutation={create ? mutations.createDb : mutations.openDb}
+                mutation={create ? LoginPage.mutations.createDb : LoginPage.mutations.openDb}
                 refetchQueries={[
-                  { query: queries.dbs }, //
+                  { query: LoginPage.queries.dbs }, //
                   { query: IsLoggedIn.query },
                 ]}
               >
@@ -158,9 +158,9 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                           </SubmitButton>
                           {dbId && (
                             <AppMutation
-                              mutation={mutations.deleteDb}
+                              mutation={LoginPage.mutations.deleteDb}
                               variables={{ dbId }}
-                              refetchQueries={[{ query: queries.dbs }]}
+                              refetchQueries={[{ query: LoginPage.queries.dbs }]}
                               onCompleted={formApi.handleReset}
                             >
                               {deleteDb => (

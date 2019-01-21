@@ -48,12 +48,12 @@ export const ui: UiContext = {
   ),
   Text: ({ children, onClick }) => <span onClick={onClick}>{children}</span>,
   SubmitButton: ({ onPress, disabled, children }) => (
-    <button onClick={onPress} disabled={disabled}>
+    <button type='submit' onClick={onPress} disabled={disabled}>
       {children}
     </button>
   ),
   DeleteButton: ({ onPress, disabled, children }) => (
-    <button onClick={onPress} disabled={disabled}>
+    <button type='button' onClick={onPress} disabled={disabled}>
       {children}
     </button>
   ),

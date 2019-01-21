@@ -23,7 +23,7 @@ interface Props {
 interface GetIntlProviderProps {
   children: (intl: InjectedIntl) => React.ReactNode
 }
-const GetIntlProvider = injectIntl<GetIntlProviderProps>(({ intl, children }) => (
+export const GetIntlProvider = injectIntl<GetIntlProviderProps>(({ intl, children }) => (
   <>{children(intl)}</>
 ))
 GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
