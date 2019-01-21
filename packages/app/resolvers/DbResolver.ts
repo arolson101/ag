@@ -35,7 +35,7 @@ export class DbResolver {
     let dbs = selectors.getDbs(getState())
     if (!dbs) {
       const db = await openDb('index', '', indexEntities)
-      dispatch(actions.setIndex(db))
+      dispatch(actions.openIndex(db))
       dbs = selectors.getDbs(getState())
       if (!dbs) {
         throw new Error('error initializing index db')

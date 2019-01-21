@@ -31,6 +31,40 @@ export namespace IsLoggedIn {
   }
 }
 
+export namespace HomePage {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    banks: Banks[]
+  }
+
+  export type Banks = {
+    __typename?: 'Bank'
+
+    id: string
+
+    name: string
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
+  }
+}
+
 export namespace Dbs {
   export type Variables = {}
 

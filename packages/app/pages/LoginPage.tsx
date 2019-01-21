@@ -8,7 +8,7 @@ import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('app:LoginPage')
-log.enabled = process.env.NODE_ENV !== 'production'
+log.enabled = false // process.env.NODE_ENV !== 'production'
 
 interface Values {
   name: string

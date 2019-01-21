@@ -6,6 +6,7 @@ import { Redirect, Route, Router as ReactRouter, Switch } from 'react-router-dom
 import { history } from '../reducers'
 
 const log = debug('electron:router')
+log.enabled = process.env.NODE_ENV !== 'production'
 
 export class ElectronRouter extends React.PureComponent<RouterProps> {
   static contextType = AppContext
@@ -30,7 +31,7 @@ export class ElectronRouter extends React.PureComponent<RouterProps> {
           })}
           <Route
             render={({ location }) => {
-              log('"%s" (%o) not found- redirecting to "/"', location.pathname, location)
+              log('"%s" (%O) not found- redirecting to "/"', location.pathname, location)
               return <Redirect to='/' />
             }}
           />

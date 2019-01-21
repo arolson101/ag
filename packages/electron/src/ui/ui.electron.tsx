@@ -41,6 +41,7 @@ export const ui: UiContext = {
 
   // layout
   Page: ({ children }) => <div>{children}</div>,
+  Container: ({ children }) => <div>{children}</div>,
   Text: ({ children, onClick }) => <span onClick={onClick}>{children}</span>,
   SubmitButton: ({ onPress, disabled, children }) => (
     <button onClick={onPress} disabled={disabled}>

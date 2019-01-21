@@ -8,6 +8,7 @@ export interface RouteConfig {
 export const go = {
   login: (props: LoginPage.Props) => actions.nav.push({ id: LoginPage.id, props }),
   home: (props: HomePage.Props) => actions.nav.push({ id: HomePage.id, props }),
+  bank: (props: { bankId: string }) => actions.nav.push({ id: BankEditPage.id, props }),
   bankCreate: (props: void) => actions.nav.push({ id: BankEditPage.id, props }),
   bankEdit: (props: BankEditPage.Props) => actions.nav.push({ id: BankEditPage.id, props }),
 }

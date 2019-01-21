@@ -48,7 +48,7 @@ const initialState = {}
 
 export const db = (state: DbState = initialState, action: AppAction): DbState => {
   switch (action.type) {
-    case getType(actions.setIndex):
+    case getType(actions.openIndex):
       assert(!state.indexDb)
       return {
         ...state,
@@ -57,7 +57,6 @@ export const db = (state: DbState = initialState, action: AppAction): DbState =>
           dbRepository: action.payload.getRepository(Db),
         },
       }
-      break
 
     case getType(actions.openApp):
       assert(!state.app)
