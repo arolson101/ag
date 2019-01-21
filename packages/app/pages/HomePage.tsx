@@ -1,5 +1,7 @@
 import React from 'react'
+import { Link } from '../components'
 import { AppContext } from '../context'
+import { go } from '../routes'
 
 export namespace HomePage {
   export type Props = void
@@ -17,7 +19,7 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
 
     return (
       <Page>
-        <Text>home page</Text>
+        <Text>home page</Text> <Link to={go.bankCreate()}>bank create</Link>
       </Page>
     )
   }

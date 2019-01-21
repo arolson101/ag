@@ -3,7 +3,7 @@ import { AppContext } from '../context'
 
 export namespace BankEditPage {
   export interface Props {
-    bankId: string
+    bankId?: string
   }
 }
 
@@ -16,10 +16,11 @@ export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
   render() {
     const { ui } = this.context
     const { Page, Text } = ui
+    const { bankId } = this.props
 
     return (
       <Page>
-        <Text>home page</Text>
+        <Text>bank {bankId ? 'edit' : 'create'}</Text>
       </Page>
     )
   }
