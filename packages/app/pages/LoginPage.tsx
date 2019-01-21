@@ -1,11 +1,8 @@
 import debug from 'debug'
 import { Formik, FormikErrors } from 'formik'
-import { DocumentNode } from 'graphql'
 import gql from 'graphql-tag'
 import React from 'react'
-import { Mutation, Query, QueryProps } from 'react-apollo'
 import { defineMessages } from 'react-intl'
-import { Omit } from 'utility-types'
 import { AppMutation, AppQuery, ConfirmButton, ErrorDisplay, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
@@ -164,10 +161,8 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                               refetchQueries={[{ query: queries.dbs }]}
                               onCompleted={formApi.handleReset}
                             >
-                              {(deleteDb, { error: deleteDbError, loading: running }) => (
+                              {deleteDb => (
                                 <>
-                                  <LoadingOverlay show={running} />
-                                  <ErrorDisplay error={deleteDbError} />
                                   <ConfirmButton
                                     message={intl.formatMessage(messages.deleteMessage)}
                                     component={DeleteButton}
