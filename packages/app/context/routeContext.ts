@@ -1,8 +1,7 @@
 import React from 'react'
-import { RouteConfig } from '../routes'
 
 export interface RouterProps {
-  routes: RouteConfig
+  isLoggedIn: boolean
 }
 
 export type Router = React.ComponentType<RouterProps>

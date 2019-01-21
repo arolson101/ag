@@ -56,7 +56,7 @@ const mutations = {
 }
 
 export namespace LoginPage {
-  export type Props = void
+  export interface Props {}
 }
 
 export class LoginPage extends React.PureComponent<LoginPage.Props> {

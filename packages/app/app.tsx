@@ -8,7 +8,6 @@ import { AppContext, UiContext } from './context'
 import { client } from './db'
 import { ApolloClientContextProvider } from './db/ApolloClientContextProvider'
 import { AppStore } from './reducers'
-import { loggedInRoutes, loggedOutRoutes } from './routes'
 
 interface Props {
   store: AppStore
@@ -46,11 +45,7 @@ export class App extends React.PureComponent<Props> {
                   value={{ client, intl, ui, dispatch, getState, openDb, deleteDb }}
                 >
                   <ApolloClientContextProvider>
-                    <IsLoggedIn>
-                      {isLoggedIn => (
-                        <Router routes={isLoggedIn ? loggedInRoutes : loggedOutRoutes} />
-                      )}
-                    </IsLoggedIn>
+                    <IsLoggedIn>{isLoggedIn => <Router isLoggedIn={isLoggedIn} />}</IsLoggedIn>
                     {/* <Dialogs /> */}
                   </ApolloClientContextProvider>
                 </AppContext.Provider>

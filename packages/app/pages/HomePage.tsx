@@ -1,11 +1,11 @@
 import React from 'react'
+import { actions } from '../actions'
 import { AppQuery, gql, Gql, Link } from '../components'
 import { AppContext } from '../context'
 import * as T from '../graphql-types'
-import { go } from '../routes'
 
 export namespace HomePage {
-  export type Props = void
+  export interface Props {}
 }
 
 const queries = {
@@ -45,7 +45,7 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
                   <Text>home page</Text>
                 </Container>
                 <Container>
-                  <Link to={go.bankCreate()}>add bank</Link>
+                  <Link to={actions.nav.bankCreate()}>add bank</Link>
                 </Container>
                 <Container>
                   {!appDb.banks.length ? (
@@ -53,8 +53,8 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
                   ) : (
                     appDb.banks.map(bank => (
                       <Container key={bank.id}>
-                        <Link to={go.bank({ bankId: bank.id })}>{bank.name}</Link> [
-                        <Link to={go.bankEdit({ bankId: bank.id })}>edit</Link>]
+                        <Link to={actions.nav.bank({ bankId: bank.id })}>{bank.name}</Link> [
+                        <Link to={actions.nav.bankEdit({ bankId: bank.id })}>edit</Link>]
                         {!bank.accounts.length ? (
                           <Text>No accounts</Text>
                         ) : (
