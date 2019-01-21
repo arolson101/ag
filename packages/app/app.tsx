@@ -4,16 +4,23 @@ import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
+import { Connection, ConnectionOptions } from 'typeorm'
 import { AppContext, UiContext } from './context'
-import { DbImports, initClient } from './db'
+import { client } from './db'
 import { AppStore } from './reducers'
 import { routes } from './routes'
 
 debug.enable('app:*')
 
-interface Props extends DbImports {
+interface Props {
   store: AppStore
   ui: UiContext
+  openDb: (
+    name: string,
+    key: string,
+    entities: ConnectionOptions['entities']
+  ) => Promise<Connection>
+  deleteDb: (name: string) => Promise<void>
 }
 
 interface GetIntlProviderProps {
@@ -24,25 +31,12 @@ const GetIntlProvider = injectIntl<GetIntlProviderProps>(({ intl, children }) =>
 ))
 GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
 
-interface State {
-  client: ApolloClient<any>
-}
-
-export class App extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    const { openDb, deleteDb } = this.props
-    const client = initClient({ openDb, deleteDb })
-    this.state = {
-      client,
-    }
-  }
-
+export class App extends React.PureComponent<Props> {
   render() {
-    const { store, ui } = this.props
-    const { client } = this.state
+    const { store, ui, openDb, deleteDb } = this.props
     const { Router } = ui
     const dispatch = store.dispatch
+    const getState = store.getState
 
     return (
       <ApolloProvider client={client}>
@@ -50,7 +44,9 @@ export class App extends React.PureComponent<Props, State> {
           <GetIntlProvider>
             {intl => (
               <Provider store={store}>
-                <AppContext.Provider value={{ client, intl, ui, dispatch }}>
+                <AppContext.Provider
+                  value={{ client, intl, ui, dispatch, getState, openDb, deleteDb }}
+                >
                   <Router routes={routes} />
                   {/* <Dialogs /> */}
                 </AppContext.Provider>

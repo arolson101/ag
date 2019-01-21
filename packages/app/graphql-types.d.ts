@@ -15,17 +15,17 @@ export type DateTime = any
 // Documents
 // ====================================================
 
-export namespace LoginPage {
+export namespace Dbs {
   export type Variables = {}
 
   export type Query = {
     __typename?: 'Query'
 
-    allDbs: AllDbs[]
+    dbs: Dbs[]
   }
 
-  export type AllDbs = {
-    __typename?: 'DbInfo'
+  export type Dbs = {
+    __typename?: 'Db'
 
     dbId: string
 
