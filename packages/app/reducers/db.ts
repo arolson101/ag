@@ -21,6 +21,8 @@ export interface DbState {
 export const dbSelectors = {
   getDbs: (state: DbState) => state.indexDb && state.indexDb.dbRepository,
 
+  getAppDb: (state: DbState) => state.app,
+
   getBanks: (state: DbState) => {
     if (!state.app) {
       throw new Error('app is not open')

@@ -8,14 +8,7 @@ import { DbChange } from './dbWrite'
 
 @Resolver(objectType => Transaction)
 export class TransactionResolver {
-  @Query(returns => Transaction)
-  async transaction(
-    @Arg('transactionId') transactionId: string, //
-    @Ctx() { getState }: AppContext
-  ): Promise<Transaction> {
-    const transactions = selectors.getTransactions(getState())
-    return transactions.get(transactionId)
-  }
+
   /*
   @Mutation(returns => Transaction)
   async saveTransaction(

@@ -3,13 +3,11 @@ import debug from 'debug'
 import sanitize from 'sanitize-filename'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
-import { Connection, getConnectionManager, Repository } from 'typeorm'
 import { actions } from '../actions'
 import { AppContext } from '../context'
 import { Account, Bank, Bill, Budget, Category, Db, Transaction } from '../entities'
 import { selectors } from '../reducers'
-import { AccountRepository, BankRepository, TransactionRepository } from '../repositories'
-import { DbChange, dbWrite } from './dbWrite'
+import { AppDb } from './AppDb'
 
 const log = debug('app:DbResolver')
 
@@ -29,6 +27,8 @@ const appEntities = [
 @Service()
 @Resolver(objectType => Db)
 export class DbResolver {
+  private appDbInstance = new AppDb()
+
   async getDbs(ctx: AppContext) {
     const { getState, openDb, dispatch } = ctx
     let dbs = selectors.getDbs(getState())
@@ -49,6 +49,17 @@ export class DbResolver {
     const dbs = await this.getDbs(ctx)
     const all = await dbs.find()
     return all
+  }
+
+  @Query(returns => AppDb, { nullable: true })
+  async appDb(@Ctx() { getState }: AppContext): Promise<AppDb | undefined> {
+    log('appDb')
+    const appDb = selectors.getAppDb(getState())
+    if (appDb) {
+      return this.appDbInstance
+    } else {
+      return undefined
+    }
   }
 
   @Mutation(returns => Boolean)

@@ -6,23 +6,6 @@ import { selectors } from '../reducers'
 
 @Resolver(Bank)
 export class BankResolver {
-  @Query(returns => Bank)
-  async bank(
-    @Arg('bankId') bankId: string, //
-    @Ctx() { getState }: AppContext
-  ): Promise<Bank> {
-    const banks = selectors.getBanks(getState())
-    return banks.get(bankId)
-  }
-
-  @Query(returns => [Bank])
-  async banks(
-    @Ctx() { getState }: AppContext //
-  ): Promise<Bank[]> {
-    const banks = selectors.getBanks(getState())
-    return banks.all()
-  }
-
   @FieldResolver(type => [Account])
   async accounts(
     @Root() bank: Bank, //

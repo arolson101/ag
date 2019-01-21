@@ -22,14 +22,6 @@ const log = debug('app:AccountResolver')
 export class AccountResolver {
   private tokens = new Map<string, CancelTokenSource>()
 
-  @Query(returns => Account)
-  async account(
-    @Arg('accountId') accountId: string, //
-    @Ctx() { getState }: AppContext //
-  ): Promise<Account> {
-    const accounts = selectors.getAccounts(getState())
-    return accounts.get(accountId)
-  }
   /*
   @Mutation(returns => Account)
   async saveAccount(
