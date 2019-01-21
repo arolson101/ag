@@ -6,6 +6,7 @@ import { Service } from 'typedi'
 import { Connection, getConnectionManager, Repository } from 'typeorm'
 import { AppContext } from '../context'
 import { Account, Bank, Bill, Budget, Category, Db, Transaction } from '../entities'
+import { AppDbService } from '../services'
 import { DbChange, dbWrite } from '../services/dbWrite'
 import { AccountRepository, BankRepository, TransactionRepository } from '../services/repositories'
 
@@ -30,10 +31,8 @@ export class DbResolver {
   private initPromise?: Promise<void>
   private indexDbConnection!: Connection
   private dbRepository!: Repository<Db>
-  private appDbConnection!: Connection
-  banks!: BankRepository
-  accounts!: AccountRepository
-  transactions!: TransactionRepository
+
+  constructor(private app: AppDbService) {}
 
   private init(ctx: AppContext) {
     if (this.initPromise) {
@@ -80,7 +79,7 @@ export class DbResolver {
     await this.ensureClosed(dbInfo.path)
     const db = await ctx.openDb(dbInfo.path, key, appEntities)
     await this.dbRepository.save(dbInfo)
-    this.open(db)
+    this.app.open(db)
     return true
   }
 
@@ -96,19 +95,8 @@ export class DbResolver {
     await this.ensureClosed(dbInfo.path)
     const key = dbInfo.getKey(password)
     const db = await ctx.openDb(dbInfo.path, key, appEntities)
-    this.open(db)
+    this.app.open(db)
     return true
-  }
-
-  open(appDbConnection: Connection) {
-    this.appDbConnection = appDbConnection
-    this.banks = appDbConnection.getCustomRepository(BankRepository)
-    this.accounts = appDbConnection.getCustomRepository(AccountRepository)
-    this.transactions = appDbConnection.getCustomRepository(TransactionRepository)
-  }
-
-  async write(changes: DbChange[]) {
-    await dbWrite(this.appDbConnection, changes)
   }
 
   @Mutation(returns => Boolean)
@@ -119,11 +107,7 @@ export class DbResolver {
   }
 
   async close() {
-    await this.appDbConnection.close()
-    delete this.appDbConnection
-    delete this.banks
-    delete this.accounts
-    delete this.transactions
+    await this.app.close()
   }
 
   @Mutation(returns => String)
