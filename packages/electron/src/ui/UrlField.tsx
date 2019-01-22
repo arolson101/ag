@@ -1,4 +1,4 @@
-import { UrlFieldProps } from '@ag/app/context'
+import { UrlFieldProps } from '@ag/app'
 import { FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'

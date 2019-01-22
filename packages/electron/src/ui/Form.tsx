@@ -1,4 +1,4 @@
-import { FormProps } from '@ag/app/context'
+import { FormProps } from '@ag/app'
 import React from 'react'
 
 export class Form extends React.PureComponent<FormProps> {

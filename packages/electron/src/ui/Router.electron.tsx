@@ -1,5 +1,4 @@
-import { AppContext, RouterProps } from '@ag/app'
-import { BankCreatePage, BankEditPage, HomePage, LoginPage } from '@ag/app/pages'
+import { AppContext, BankCreatePage, BankEditPage, HomePage, LoginPage, RouterProps } from '@ag/app'
 import debug from 'debug'
 import { parse } from 'query-string'
 import React from 'react'

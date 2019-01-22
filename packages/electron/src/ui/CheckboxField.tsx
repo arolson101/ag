@@ -1,4 +1,4 @@
-import { CheckboxFieldProps } from '@ag/app/context'
+import { CheckboxFieldProps } from '@ag/app'
 import { Switch } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
