@@ -8,28 +8,28 @@ export namespace HomePage {
   export interface Props {}
 }
 
-const queries = {
-  HomePage: gql`
-    query HomePage {
-      appDb {
-        banks {
-          id
-          name
-          accounts {
-            id
-            name
-          }
-        }
-      }
-    }
-  ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
-}
-
 export class HomePage extends React.PureComponent<HomePage.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
   static readonly id = 'HomePage'
+
+  static readonly queries = {
+    HomePage: gql`
+      query HomePage {
+        appDb {
+          banks {
+            id
+            name
+            accounts {
+              id
+              name
+            }
+          }
+        }
+      }
+    ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
+  }
 
   render() {
     const { ui } = this.context
@@ -37,7 +37,7 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
 
     return (
       <Page>
-        <AppQuery query={queries.HomePage}>
+        <AppQuery query={HomePage.queries.HomePage}>
           {({ appDb }) =>
             appDb && (
               <>

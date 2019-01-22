@@ -3,7 +3,7 @@ import React from 'react'
 import { defineMessages } from 'react-intl'
 import { AppMutation, AppQuery, gql, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
-import { filist } from '../data'
+import { filist, formatAddress } from '../data'
 import { Bank } from '../entities'
 import * as T from '../graphql-types'
 import { pick } from '../util/pick'
@@ -20,47 +20,47 @@ interface FormValues extends BankInput {
   fi: number
 }
 
-const queries = {
-  BankEditPage: gql`
-    query BankEditPage($bankId: String) {
-      appDb {
-        bank(bankId: $bankId) {
-          name
-          web
-          address
-          notes
-          favicon
-
-          online
-
-          fid
-          org
-          ofx
-
-          username
-          password
-        }
-      }
-    }
-  ` as Gql<T.BankEditPage.Query, T.BankEditPage.Variables>,
-}
-
-const mutations = {
-  SaveBank: gql`
-    mutation SaveBank($input: BankInput!, $bankId: String) {
-      saveBank(input: $input, bankId: $bankId) {
-        id
-        name
-      }
-    }
-  ` as Gql<T.SaveBank.Mutation, T.SaveBank.Variables>,
-}
-
 export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
   static readonly id = 'BankEditPage'
+
+  static readonly queries = {
+    BankEditPage: gql`
+      query BankEditPage($bankId: String) {
+        appDb {
+          bank(bankId: $bankId) {
+            name
+            web
+            address
+            notes
+            favicon
+
+            online
+
+            fid
+            org
+            ofx
+
+            username
+            password
+          }
+        }
+      }
+    ` as Gql<T.BankEditPage.Query, T.BankEditPage.Variables>,
+  }
+
+  static readonly mutations = {
+    SaveBank: gql`
+      mutation SaveBank($input: BankInput!, $bankId: String) {
+        saveBank(input: $input, bankId: $bankId) {
+          id
+          name
+        }
+      }
+    ` as Gql<T.SaveBank.Mutation, T.SaveBank.Variables>,
+  }
 
   render() {
     const { ui, intl } = this.context
@@ -71,7 +71,7 @@ export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
     const { bankId } = this.props
 
     return (
-      <AppQuery query={queries.BankEditPage} variables={{ bankId }}>
+      <AppQuery query={BankEditPage.queries.BankEditPage} variables={{ bankId }}>
         {({ appDb }) => {
           if (!appDb) {
             throw new Error('db not open')
@@ -85,7 +85,7 @@ export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
               : Bank.defaultValues),
           }
           return (
-            <AppMutation mutation={mutations.SaveBank}>
+            <AppMutation mutation={BankEditPage.mutations.SaveBank}>
               {saveBank => (
                 <Formik
                   initialValues={initialValues} //
@@ -113,7 +113,18 @@ export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
                         field='fi'
                         items={filist.map(fi => ({ label: fi.name, value: fi.id }))}
                         label={intl.formatMessage(messages.fi)}
-                        // onValueChange={this.fiOnValueChange}
+                        onValueChange={value => {
+                          if (formApi) {
+                            const fi = filist[+value]
+                            formApi.setFieldValue('name', value ? fi.name || '' : '')
+                            formApi.setFieldValue('web', fi.profile.siteURL || '')
+                            formApi.setFieldValue('favicon', '')
+                            formApi.setFieldValue('address', formatAddress(fi) || '')
+                            formApi.setFieldValue('fid', fi.fid || '')
+                            formApi.setFieldValue('org', fi.org || '')
+                            formApi.setFieldValue('ofx', fi.ofx || '')
+                          }
+                        }}
                         searchable
                       />
                       <Divider />
@@ -152,6 +163,7 @@ export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
                           label={intl.formatMessage(messages.password)}
                           placeholder={intl.formatMessage(messages.passwordPlaceholder)}
                         />
+                        <Divider />
                         <TextField
                           noCorrect
                           field='fid'

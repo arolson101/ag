@@ -20,12 +20,12 @@ const emptyResponse = {
 
 storiesOf('LoginPage', module)
   .add('create', () => (
-    <MockApp query={LoginPage.queries.dbs} response={emptyResponse}>
+    <MockApp query={LoginPage.queries.LoginPage} response={emptyResponse}>
       <LoginPage />
     </MockApp>
   ))
   .add('login', () => (
-    <MockApp query={LoginPage.queries.dbs} response={existsResponse}>
+    <MockApp query={LoginPage.queries.LoginPage} response={existsResponse}>
       <LoginPage />
     </MockApp>
   ))

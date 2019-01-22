@@ -35,7 +35,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
   static readonly id = `LoginPage`
 
   static readonly queries = {
-    dbs: gql`
+    LoginPage: gql`
       query LoginPage {
         dbs {
           dbId
@@ -71,7 +71,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
     const { Form, TextField } = typedFields<Values>(ui)
 
     return (
-      <AppQuery query={LoginPage.queries.dbs}>
+      <AppQuery query={LoginPage.queries.LoginPage}>
         {({ dbs }) => {
           const dbId = dbs.length ? dbs[0].dbId : undefined
           const create = !dbId
@@ -86,7 +86,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
               <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
                 mutation={create ? LoginPage.mutations.createDb : LoginPage.mutations.openDb}
                 refetchQueries={[
-                  { query: LoginPage.queries.dbs }, //
+                  { query: LoginPage.queries.LoginPage }, //
                   { query: IsLoggedIn.query },
                 ]}
               >
@@ -160,7 +160,7 @@ export class LoginPage extends React.PureComponent<LoginPage.Props> {
                             <AppMutation
                               mutation={LoginPage.mutations.deleteDb}
                               variables={{ dbId }}
-                              refetchQueries={[{ query: LoginPage.queries.dbs }]}
+                              refetchQueries={[{ query: LoginPage.queries.LoginPage }]}
                               onCompleted={formApi.handleReset}
                             >
                               {deleteDb => (

@@ -27,12 +27,13 @@ export class TextField extends React.PureComponent<TextFieldProps> {
               {rows && rows > 1 ? (
                 <TextArea
                   id={id}
-                  className={'pt-input pt-fill' + (error ? ' pt-intent-danger' : '')}
+                  intent={intent}
                   placeholder={placeholder}
                   onChange={field.onChange}
                   value={field.value}
                   rows={rows}
                   inputRef={this.inputRef}
+                  fill
                 />
               ) : (
                 <InputGroup

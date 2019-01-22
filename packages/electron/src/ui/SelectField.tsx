@@ -1,32 +1,7 @@
-import { SelectFieldItem, SelectFieldProps } from '@ag/app/context'
-import { FormGroup, Intent, MenuItem } from '@blueprintjs/core'
-import { ItemPredicate, ItemRenderer, Suggest } from '@blueprintjs/select'
+import { SelectFieldProps } from '@ag/app/context'
+import { FormGroup, HTMLSelect, Intent } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
-
-import '@blueprintjs/select/lib/css/blueprint-select.css'
-import './SelectField.css'
-
-const ItemSuggest = Suggest.ofType<SelectFieldItem>()
-
-const filterItem: ItemPredicate<SelectFieldItem> = (query, item) => {
-  return item.label.toLowerCase().indexOf(query.toLowerCase()) >= 0
-}
-
-const renderItem: ItemRenderer<SelectFieldItem> = (item, { handleClick, modifiers }) => {
-  if (!modifiers.matchesPredicate) {
-    return null
-  }
-  return (
-    <MenuItem
-      active={modifiers.active}
-      key={item.value}
-      // label={item.label}
-      onClick={handleClick}
-      text={item.label}
-    />
-  )
-}
 
 export class SelectField extends React.PureComponent<SelectFieldProps> {
   render() {
@@ -41,22 +16,22 @@ export class SelectField extends React.PureComponent<SelectFieldProps> {
               helperText={error}
               label={label}
             >
-              <ItemSuggest
-                popoverProps={{ minimal: true }}
-                className='pt-fill'
-                itemPredicate={filterItem}
-                itemRenderer={renderItem}
-                inputValueRenderer={item => item.label}
-                items={items}
-                // inputProps={{ value: items[fieldApi.value].label }}
-                onItemSelect={item => {
-                  form.setFieldValue(name, item.value)
+              <HTMLSelect
+                {...field}
+                fill
+                onChange={e => {
+                  field.onChange(e)
                   if (onValueChange) {
-                    onValueChange(item.value)
+                    onValueChange(e.currentTarget.value)
                   }
                 }}
-                // selectedValue={fieldApi.value}
-              />
+              >
+                {items.map(item => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </HTMLSelect>
             </FormGroup>
           )
         }}
