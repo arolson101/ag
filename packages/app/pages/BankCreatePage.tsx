@@ -2,17 +2,15 @@ import React from 'react'
 import { AppContext } from '../context'
 import { BankForm } from '../forms'
 
-export namespace BankEditPage {
-  export interface Props {
-    bankId: string
-  }
+export namespace BankCreatePage {
+  export interface Props {}
 }
 
-export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
+export class BankCreatePage extends React.PureComponent<BankCreatePage.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  static readonly id = 'BankEditPage'
+  static readonly id = 'BankCreatePage'
 
   render() {
     const {
@@ -21,7 +19,7 @@ export class BankEditPage extends React.PureComponent<BankEditPage.Props> {
 
     return (
       <Page>
-        <BankForm bankId={this.props.bankId} />
+        <BankForm />
       </Page>
     )
   }

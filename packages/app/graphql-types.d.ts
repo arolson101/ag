@@ -55,7 +55,7 @@ export namespace IsLoggedIn {
   }
 }
 
-export namespace BankEditPage {
+export namespace BankForm {
   export type Variables = {
     bankId?: Maybe<string>
   }
@@ -120,41 +120,7 @@ export namespace SaveBank {
   }
 }
 
-export namespace HomePage {
-  export type Variables = {}
-
-  export type Query = {
-    __typename?: 'Query'
-
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
-
-    banks: Banks[]
-  }
-
-  export type Banks = {
-    __typename?: 'Bank'
-
-    id: string
-
-    name: string
-
-    accounts: Accounts[]
-  }
-
-  export type Accounts = {
-    __typename?: 'Account'
-
-    id: string
-
-    name: string
-  }
-}
-
-export namespace LoginPage {
+export namespace LoginForm {
   export type Variables = {}
 
   export type Query = {
@@ -207,5 +173,39 @@ export namespace DeleteDb {
     __typename?: 'Mutation'
 
     deleteDb: string
+  }
+}
+
+export namespace HomePage {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    banks: Banks[]
+  }
+
+  export type Banks = {
+    __typename?: 'Bank'
+
+    id: string
+
+    name: string
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
   }
 }

@@ -29,11 +29,10 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   id={id}
                   intent={intent}
                   placeholder={placeholder}
-                  onChange={field.onChange}
-                  value={field.value}
                   rows={rows}
                   inputRef={this.inputRef}
                   fill
+                  {...field}
                 />
               ) : (
                 <InputGroup
@@ -41,10 +40,9 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   type={secure ? 'password' : 'text'}
                   intent={intent}
                   autoFocus={autoFocus}
-                  onChange={field.onChange}
-                  value={field.value}
                   placeholder={placeholder}
                   inputRef={this.inputRef}
+                  {...field}
                 />
               )}
             </FormGroup>

@@ -1,5 +1,5 @@
 import { AppContext, RouterProps } from '@ag/app'
-import { BankEditPage, HomePage, LoginPage } from '@ag/app/pages'
+import { BankCreatePage, BankEditPage, HomePage, LoginPage } from '@ag/app/pages'
 import debug from 'debug'
 import { parse } from 'query-string'
 import React from 'react'
@@ -9,7 +9,7 @@ import { history } from '../reducers'
 const log = debug('electron:router')
 log.enabled = process.env.NODE_ENV !== 'production'
 
-type ComponentWithId = React.ComponentType & { id: string }
+type ComponentWithId = React.ComponentType<any> & { id: string }
 
 const loggedOutRoutes: ComponentWithId[] = [
   LoginPage, //
@@ -17,6 +17,7 @@ const loggedOutRoutes: ComponentWithId[] = [
 
 const loggedInRoutes: ComponentWithId[] = [
   HomePage, //
+  BankCreatePage,
   BankEditPage,
 ]
 

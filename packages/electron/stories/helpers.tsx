@@ -1,6 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import { AppContext, GetIntlProvider, Gql } from '@ag/app'
-import { LoginPage } from '@ag/app/pages'
+import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { ApolloConsumer } from 'react-apollo'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
@@ -36,9 +36,7 @@ export const MockApp: React.FC<{ query: Gql<any, any>; variables?: any; response
                     getState: () => {
                       throw new Error('no getState')
                     },
-                    dispatch: () => {
-                      throw new Error('no dispatch')
-                    },
+                    dispatch: action('dispatch'),
                     openDb: () => {
                       throw new Error('no openDb')
                     },
