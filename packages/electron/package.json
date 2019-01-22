@@ -11,7 +11,7 @@
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "dev": "rimraf dist && concurrently --kill-others \"yarn:dev:server\" \"yarn:dev:electron\"",
-    "predev:electron": "electron-builder install-app-deps",
+    "electron-builder": "electron-builder install-app-deps",
     "dev:electron": "wait-on ./dist/main.js && nodemon -q --watch ./dist/main.js --exec \"electron dist --url http://localhost:3030/\"",
     "dev:server": "nodemon -q --watch ./webpack.config.ts --exec \"webpack-dev-server --port 3030 --hot --mode=development\"",
     "storybook": "concurrently --raw --kill-others \"yarn:storybook:server\" \"yarn:storybook:electron\"",
