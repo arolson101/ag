@@ -37,7 +37,8 @@
   },
   "linterOptions": {
     "exclude": [
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "**/graphql-types.d.ts"
     ]
   }
 }

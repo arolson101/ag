@@ -1,4 +1,4 @@
-import { SelectFieldProps } from '@ag/app/context'
+import { SelectFieldProps } from '@ag/app'
 import { FormGroup, HTMLSelect, Intent } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'

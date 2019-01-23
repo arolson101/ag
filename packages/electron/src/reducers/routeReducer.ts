@@ -1,5 +1,4 @@
-import { actions, AppAction } from '@ag/app'
-import { BankEditPage, HomePage, LoginPage } from '@ag/app/pages'
+import { actions, AppAction, BankEditPage, HomePage, LoginPage } from '@ag/app'
 import { createBrowserHistory, History } from 'history'
 import { stringify } from 'query-string'
 import { getType } from 'typesafe-actions'

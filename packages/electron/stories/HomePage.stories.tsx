@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { HomePage } from '@ag/app/pages'
+import { HomePage } from '@ag/app'
 import { storiesOf } from '@storybook/react'
 import React from 'react'
 import { MockApp } from './helpers'
@@ -11,7 +11,7 @@ const emptyResponse = {
   },
 }
 
-storiesOf('HomePage', module) //
+storiesOf('Pages/HomePage', module) //
   .add('empty', () => (
     <MockApp query={HomePage.queries.HomePage} response={emptyResponse}>
       <HomePage />

@@ -1,6 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { LoginForm } from '@ag/app/forms'
-import { LoginPage } from '@ag/app/pages'
+import { LoginForm } from '@ag/app'
 import { storiesOf } from '@storybook/react'
 import React from 'react'
 import { MockApp } from './helpers'
@@ -19,14 +18,14 @@ const emptyResponse = {
   dbs: [],
 }
 
-storiesOf('LoginPage', module)
+storiesOf('Forms/LoginForm', module)
   .add('create', () => (
     <MockApp query={LoginForm.queries.LoginForm} response={emptyResponse}>
-      <LoginPage />
+      <LoginForm />
     </MockApp>
   ))
   .add('login', () => (
     <MockApp query={LoginForm.queries.LoginForm} response={existsResponse}>
-      <LoginPage />
+      <LoginForm />
     </MockApp>
   ))

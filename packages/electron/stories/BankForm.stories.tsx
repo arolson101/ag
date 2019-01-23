@@ -1,6 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { BankForm } from '@ag/app/forms'
-import { BankCreatePage } from '@ag/app/pages'
+import { BankForm } from '@ag/app'
 import { storiesOf } from '@storybook/react'
 import React from 'react'
 import { MockApp } from './helpers'
@@ -12,13 +11,13 @@ const emptyResponse = {
   },
 }
 
-storiesOf('BankCreatePage', module) //
-  .add('empty', () => (
+storiesOf('Forms/BankForm', module) //
+  .add('create', () => (
     <MockApp
       query={BankForm.queries.BankForm}
       variables={{ bankId: undefined }}
       response={emptyResponse}
     >
-      <BankCreatePage />
+      <BankForm />
     </MockApp>
   ))
