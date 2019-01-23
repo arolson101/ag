@@ -26,6 +26,18 @@ export interface AlertProps {
   show: boolean
 }
 
+export interface DialogProps {
+  title: string
+  isOpen: boolean
+  onClose: () => any
+}
+
+export interface ButtonConfig {
+  title: string
+  onClick: () => any
+  isDanger?: boolean
+}
+
 export interface UiContext {
   // special ui
   confirm: (
@@ -37,6 +49,9 @@ export interface UiContext {
 
   // dialog
   Alert: ComponentType<AlertProps>
+  Dialog: ComponentType<DialogProps>
+  DialogBody: ComponentType
+  DialogFooter: ComponentType<{ primary: ButtonConfig; secondary?: ButtonConfig }>
   LoadingOverlay: ComponentType<{ show: boolean }>
 
   // layout

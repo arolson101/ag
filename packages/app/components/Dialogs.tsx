@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { getType } from 'typesafe-actions'
 import { actions, AppAction } from '../actions'
 import { AppContext } from '../context'
 import { BankCreateDlg } from '../dialogs'
 import { AppState } from '../reducers'
+import { DialogState } from '../reducers/dialog'
 
 interface StateProps {
-  action: AppAction | undefined
+  state: DialogState
 }
 
 interface DispatchProps {
@@ -21,30 +21,22 @@ export class DialogsComponent extends React.PureComponent<Props> {
   context!: React.ContextType<typeof AppContext>
 
   render() {
-    const { action } = this.props
+    const { state } = this.props
+    const {
+      ui: { Dialog },
+    } = this.context
 
-    if (!action) {
-      return null
-    }
-
-    switch (action.type) {
-      case getType(actions.dlg.bankCreate):
-        return <BankCreateDlg />
-      case getType(actions.dlg.bankEdit):
-        return <BankCreateDlg {...action.payload} />
-      default:
-        return null
-    }
-  }
-
-  onClosed = () => {
-    const { dispatch } = this.props
-    dispatch(actions.dlg.close())
+    return (
+      <>
+        {state.bankCreate && <BankCreateDlg {...state.bankCreate} />}
+        {state.bankEdit && <BankCreateDlg {...state.bankEdit} />}
+      </>
+    )
   }
 }
 
 export const Dialogs = connect<StateProps, DispatchProps, {}, AppState>(
   state => ({
-    action: state.dialog.action,
+    state: state.dialog,
   }) //
 )(DialogsComponent)

@@ -1,5 +1,14 @@
 import { UiContext } from '@ag/app'
-import { Alert, Collapse, Divider, Spinner } from '@blueprintjs/core'
+import {
+  Alert,
+  Button,
+  Classes,
+  Collapse,
+  Dialog,
+  Divider,
+  Intent,
+  Spinner,
+} from '@blueprintjs/core'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import 'normalize.css/normalize.css'
@@ -37,6 +46,31 @@ export const ui: UiContext = {
   ),
 
   LoadingOverlay: props => (props.show ? <Spinner /> : null),
+
+  Dialog: ({ isOpen, title, onClose, children }) => (
+    <Dialog title={title} isOpen={isOpen} onClose={onClose}>
+      {children}
+    </Dialog>
+  ),
+
+  DialogBody: ({ children }) => <div className={Classes.DIALOG_BODY}>{children}</div>,
+  DialogFooter: ({ primary, secondary }) => (
+    <div className={Classes.DIALOG_FOOTER}>
+      <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+        {secondary && (
+          <Button
+            onClick={secondary.onClick}
+            intent={secondary.isDanger ? Intent.DANGER : Intent.NONE}
+          >
+            {secondary.title}
+          </Button>
+        )}
+        <Button onClick={primary.onClick} intent={Intent.PRIMARY}>
+          {primary.title}
+        </Button>
+      </div>
+    </div>
+  ),
 
   // layout
   Page: ({ children }) => <div>{children}</div>,

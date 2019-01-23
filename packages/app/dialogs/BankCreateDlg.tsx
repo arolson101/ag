@@ -6,6 +6,7 @@ import { BankForm } from '../forms'
 export namespace BankCreateDlg {
   export interface Props {
     bankId?: string
+    isOpen: boolean
   }
 }
 
@@ -16,16 +17,16 @@ export class BankCreateDlg extends React.PureComponent<BankCreateDlg.Props> {
   static readonly id = 'BankCreateDlg'
 
   render() {
-    const { bankId } = this.props
+    const { bankId, isOpen } = this.props
     const {
       dispatch,
-      ui: { Page },
+      ui: { Dialog },
     } = this.context
 
     return (
-      <Page>
+      <Dialog isOpen={isOpen} onClose={this.close} title={bankId ? 'edit bank' : 'add bank'}>
         <BankForm onSaved={this.close} />
-      </Page>
+      </Dialog>
     )
   }
 
