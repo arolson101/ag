@@ -3,7 +3,7 @@ import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { Connection, ConnectionOptions } from 'typeorm'
-import { IsLoggedIn } from './components'
+import { Dialogs, IsLoggedIn } from './components'
 import { AppContext, UiContext } from './context'
 import { client } from './db'
 import { ApolloClientContextProvider } from './db/ApolloClientContextProvider'
@@ -46,7 +46,7 @@ export class App extends React.PureComponent<Props> {
                 >
                   <ApolloClientContextProvider>
                     <IsLoggedIn>{isLoggedIn => <Router isLoggedIn={isLoggedIn} />}</IsLoggedIn>
-                    {/* <Dialogs /> */}
+                    <Dialogs />
                   </ApolloClientContextProvider>
                 </AppContext.Provider>
               </Provider>

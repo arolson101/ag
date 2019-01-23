@@ -1,4 +1,4 @@
-import { AppContext, BankCreatePage, BankEditPage, HomePage, LoginPage, RouterProps } from '@ag/app'
+import { AppContext, HomePage, LoginPage, RouterProps } from '@ag/app'
 import debug from 'debug'
 import { parse } from 'query-string'
 import React from 'react'
@@ -16,8 +16,6 @@ const loggedOutRoutes: ComponentWithId[] = [
 
 const loggedInRoutes: ComponentWithId[] = [
   HomePage, //
-  BankCreatePage,
-  BankEditPage,
 ]
 
 export class ElectronRouter extends React.PureComponent<RouterProps> {

@@ -40,8 +40,8 @@ export class BankResolver {
       changes = [Bank.change.add(t, bank)]
     }
     await dbWrite(app.connection, changes)
-    assert(bankId === bank.id)
-    assert(bank === (await app.banks.get(bankId)))
+    assert.equal(bankId, bank.id)
+    assert.deepEqual(bank, await app.banks.get(bankId))
     return bank
   }
 

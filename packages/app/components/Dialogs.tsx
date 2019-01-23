@@ -1,11 +1,13 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { actions, AlertConfig, AppAction } from '../actions'
+import { getType } from 'typesafe-actions'
+import { actions, AppAction } from '../actions'
 import { AppContext } from '../context'
+import { BankCreateDlg } from '../dialogs'
 import { AppState } from '../reducers'
 
 interface StateProps {
-  alerts: AlertConfig[]
+  action: AppAction | undefined
 }
 
 interface DispatchProps {
@@ -19,45 +21,30 @@ export class DialogsComponent extends React.PureComponent<Props> {
   context!: React.ContextType<typeof AppContext>
 
   render() {
-    const { alerts, dispatch } = this.props
-    const { ui, intl } = this.context
-    const { Alert } = ui
-    return (
-      <>
-        {alerts.map((alert, idx) => (
-          <Alert
-            key={idx}
-            show={alert.show}
-            title={intl.formatMessage(alert.title.id, alert.title.values as any)}
-            body={alert.body && alert.body.map(b => intl.formatMessage(b.id, b.values as any))}
-            onConfirm={this.onConfirm}
-            confirmText={intl.formatMessage(alert.confirmText)}
-            onCancel={alert.cancelAction && (() => dispatch(alert.cancelAction!))}
-            cancelText={alert.cancelText && intl.formatMessage(alert.cancelText)}
-            onClosed={this.onClosed}
-          />
-        ))}
-      </>
-    )
-  }
+    const { action } = this.props
 
-  onConfirm = () => {
-    const { dispatch } = this.props
-    dispatch(actions.dismissAlert())
+    if (!action) {
+      return null
+    }
+
+    switch (action.type) {
+      case getType(actions.dlg.bankCreate):
+        return <BankCreateDlg />
+      case getType(actions.dlg.bankEdit):
+        return <BankCreateDlg {...action.payload} />
+      default:
+        return null
+    }
   }
 
   onClosed = () => {
-    const { dispatch, alerts } = this.props
-    const alert = alerts[alerts.length - 1]
-    dispatch(actions.popAlert())
-    if (alert.confirmAction) {
-      dispatch(alert.confirmAction)
-    }
+    const { dispatch } = this.props
+    dispatch(actions.dlg.close())
   }
 }
 
 export const Dialogs = connect<StateProps, DispatchProps, {}, AppState>(
   state => ({
-    alerts: state.dialog,
+    action: state.dialog.action,
   }) //
 )(DialogsComponent)

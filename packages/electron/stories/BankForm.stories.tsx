@@ -1,5 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import { BankForm } from '@ag/app'
+import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
 import React from 'react'
 import { MockApp } from './helpers'
@@ -18,6 +19,6 @@ storiesOf('Forms/BankForm', module) //
       variables={{ bankId: undefined }}
       response={emptyResponse}
     >
-      <BankForm />
+      <BankForm onSaved={action('saved')} onDeleted={action('deleted')} />
     </MockApp>
   ))

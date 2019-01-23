@@ -9,9 +9,15 @@ import * as T from '../graphql-types'
 import { pick } from '../util/pick'
 
 export namespace BankForm {
-  export interface Props {
-    bankId?: string
+  export interface EditProps {
+    bankId: string
+    onSaved: () => any
+    onDeleted: () => any
   }
+  export interface CreateProps {
+    onSaved: () => any
+  }
+  export type Props = EditProps | CreateProps
 }
 
 type BankInput = { [P in keyof Bank.Props]-?: Bank.Props[P] }
@@ -57,6 +63,19 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
         saveBank(input: $input, bankId: $bankId) {
           id
           name
+          web
+          address
+          notes
+          favicon
+
+          online
+
+          fid
+          org
+          ofx
+
+          username
+          password
         }
       }
     ` as Gql<T.SaveBank.Mutation, T.SaveBank.Variables>,
@@ -74,7 +93,8 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
     const { Form, CheckboxField, Divider, SelectField, TextField, UrlField } = typedFields<
       FormValues
     >(ui)
-    const { bankId } = this.props
+    const { onSaved } = this.props
+    const { bankId, onDeleted } = this.props as BankForm.EditProps
 
     return (
       <AppQuery query={BankForm.queries.BankForm} variables={{ bankId }}>
@@ -91,7 +111,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
               : Bank.defaultValues),
           }
           return (
-            <AppMutation mutation={BankForm.mutations.SaveBank}>
+            <AppMutation mutation={BankForm.mutations.SaveBank} onCompleted={onSaved}>
               {saveBank => (
                 <>
                   <Formik
@@ -104,9 +124,9 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                       }
                       return errors
                     }}
-                    onSubmit={async (values, factions) => {
+                    onSubmit={async ({ fi, ...input }, factions) => {
                       try {
-                        await saveBank({ variables: { input: values, bankId } })
+                        await saveBank({ variables: { input, bankId } })
                       } finally {
                         factions.setSubmitting(false)
                       }
@@ -205,7 +225,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                       mutation={BankForm.mutations.DeleteBank}
                       variables={{ bankId }}
                       // refetchQueries={[{ query: LoginForm.queries.LoginForm }]}
-                      // onCompleted={formApi.handleReset}
+                      onCompleted={onDeleted}
                     >
                       {deleteBank => (
                         <>

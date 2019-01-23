@@ -45,7 +45,7 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
                   <Text>home page</Text>
                 </Container>
                 <Container>
-                  <Link to={actions.nav.bankCreate()}>add bank</Link>
+                  <Link to={actions.dlg.bankCreate()}>add bank</Link>
                 </Container>
                 <Container>
                   {!appDb.banks.length ? (
@@ -54,7 +54,7 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
                     appDb.banks.map(bank => (
                       <Container key={bank.id}>
                         <Link to={actions.nav.bank({ bankId: bank.id })}>{bank.name}</Link> [
-                        <Link to={actions.nav.bankEdit({ bankId: bank.id })}>edit</Link>]
+                        <Link to={actions.dlg.bankEdit({ bankId: bank.id })}>edit</Link>]
                         {!bank.accounts.length ? (
                           <Text>No accounts</Text>
                         ) : (

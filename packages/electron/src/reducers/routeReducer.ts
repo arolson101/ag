@@ -1,4 +1,4 @@
-import { actions, AppAction, BankEditPage, HomePage, LoginPage } from '@ag/app'
+import { actions, AppAction, HomePage, LoginPage } from '@ag/app'
 import { createBrowserHistory, History } from 'history'
 import { stringify } from 'query-string'
 import { getType } from 'typesafe-actions'
@@ -34,14 +34,6 @@ export const router = (state: RouterState = initialState, action: AppAction): Ro
     // case getType(actions.nav.bank):
     // state.history.push(href(BankPage.id))
     // break
-
-    case getType(actions.nav.bankCreate):
-      state.history.push(href(BankEditPage.id))
-      break
-
-    case getType(actions.nav.bankEdit):
-      state.history.push(href(BankEditPage.id, action.payload))
-      break
   }
   return state
 }

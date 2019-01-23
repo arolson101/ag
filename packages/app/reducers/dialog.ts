@@ -1,23 +1,20 @@
 import { getType } from 'typesafe-actions'
-import { actions, AlertConfig, AppAction } from '../actions'
+import { actions, AppAction } from '../actions'
 
-const initialState: AlertConfig[] = []
+interface DialogState {
+  action: AppAction | undefined
+}
 
-type DialogState = typeof initialState
+const initialState: DialogState = { action: undefined }
 
 export const dialog = (state: DialogState = initialState, action: AppAction): DialogState => {
   switch (action.type) {
-    case getType(actions.pushAlert):
-      return [...state, action.payload]
+    case getType(actions.dlg.bankCreate):
+    case getType(actions.dlg.bankEdit):
+      return { ...state, action }
 
-    case getType(actions.dismissAlert):
-      return [
-        ...state.slice(0, -1), //
-        { ...state[state.length - 1], show: false },
-      ]
-
-    case getType(actions.popAlert):
-      return state.slice(0, -1)
+    case getType(actions.dlg.close):
+      return { ...state, action: undefined }
 
     default:
       return state
