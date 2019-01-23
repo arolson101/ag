@@ -91,91 +91,96 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
             >
               {runMutation => {
                 return (
-                  <Formik
-                    validateOnBlur={false}
-                    initialValues={initialValues}
-                    validate={values => {
-                      const errors: FormikErrors<Values> = {}
-                      if (values.dbId) {
-                        if (!values.password.trim()) {
-                          errors.password = intl.formatMessage(messages.valueEmpty)
+                  <>
+                    <Formik
+                      validateOnBlur={false}
+                      initialValues={initialValues}
+                      validate={values => {
+                        const errors: FormikErrors<Values> = {}
+                        if (values.dbId) {
+                          if (!values.password.trim()) {
+                            errors.password = intl.formatMessage(messages.valueEmpty)
+                          }
+                        } else {
+                          if (!values.password.trim()) {
+                            errors.password = intl.formatMessage(messages.valueEmpty)
+                          }
+                          if (values.password !== values.passwordConfirm) {
+                            errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
+                          }
                         }
-                      } else {
-                        if (!values.password.trim()) {
-                          errors.password = intl.formatMessage(messages.valueEmpty)
+                        return errors
+                      }}
+                      onSubmit={async (values, factions) => {
+                        try {
+                          await runMutation({ variables: values })
+                          log('logged in')
+                        } finally {
+                          factions.setSubmitting(false)
                         }
-                        if (values.password !== values.passwordConfirm) {
-                          errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
-                        }
-                      }
-                      return errors
-                    }}
-                    onSubmit={async (values, factions) => {
-                      try {
-                        await runMutation({ variables: values })
-                        log('logged in')
-                      } finally {
-                        factions.setSubmitting(false)
-                      }
-                    }}
-                  >
-                    {formApi => (
-                      <Form onSubmit={formApi.handleSubmit}>
-                        <Text>
-                          {intl.formatMessage(
-                            create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
-                          )}
-                        </Text>
-                        <TextField
-                          autoFocus
-                          secure
-                          field='password'
-                          label={intl.formatMessage(messages.passwordLabel)}
-                          placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-                          // returnKeyType={create ? 'next' : 'go'}
-                          // onSubmitEditing={create ? this.focusConfirmInput :
-                          // formApi.submitForm}
-                        />
-                        {create && (
-                          <TextField
-                            secure
-                            field='passwordConfirm'
-                            label={intl.formatMessage(messages.passwordConfirmLabel)}
-                            placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
-                            // returnKeyType={'go'}
-                            onSubmitEditing={formApi.submitForm}
-                            // inputRef={this.inputRef}
-                          />
-                        )}
-
-                        <SubmitButton onPress={formApi.submitForm} disabled={formApi.isSubmitting}>
+                      }}
+                    >
+                      {formApi => (
+                        <Form onSubmit={formApi.handleSubmit}>
                           <Text>
-                            {intl.formatMessage(create ? messages.create : messages.open)}
-                          </Text>
-                        </SubmitButton>
-                        {dbId && (
-                          <AppMutation
-                            mutation={LoginForm.mutations.deleteDb}
-                            variables={{ dbId }}
-                            refetchQueries={[{ query: LoginForm.queries.LoginForm }]}
-                            onCompleted={formApi.handleReset}
-                          >
-                            {deleteDb => (
-                              <>
-                                <ConfirmButton
-                                  message={intl.formatMessage(messages.deleteMessage)}
-                                  component={DeleteButton}
-                                  onConfirmed={deleteDb}
-                                >
-                                  <Text>{intl.formatMessage(messages.delete)}</Text>
-                                </ConfirmButton>
-                              </>
+                            {intl.formatMessage(
+                              create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
                             )}
-                          </AppMutation>
+                          </Text>
+                          <TextField
+                            autoFocus
+                            secure
+                            field='password'
+                            label={intl.formatMessage(messages.passwordLabel)}
+                            placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+                            // returnKeyType={create ? 'next' : 'go'}
+                            // onSubmitEditing={create ? this.focusConfirmInput :
+                            // formApi.submitForm}
+                          />
+                          {create && (
+                            <TextField
+                              secure
+                              field='passwordConfirm'
+                              label={intl.formatMessage(messages.passwordConfirmLabel)}
+                              placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
+                              // returnKeyType={'go'}
+                              onSubmitEditing={formApi.submitForm}
+                              // inputRef={this.inputRef}
+                            />
+                          )}
+
+                          <SubmitButton
+                            onPress={formApi.submitForm}
+                            disabled={formApi.isSubmitting}
+                          >
+                            <Text>
+                              {intl.formatMessage(create ? messages.create : messages.open)}
+                            </Text>
+                          </SubmitButton>
+                        </Form>
+                      )}
+                    </Formik>
+
+                    {dbId && (
+                      <AppMutation
+                        mutation={LoginForm.mutations.deleteDb}
+                        variables={{ dbId }}
+                        refetchQueries={[{ query: LoginForm.queries.LoginForm }]}
+                      >
+                        {deleteDb => (
+                          <>
+                            <ConfirmButton
+                              message={intl.formatMessage(messages.deleteMessage)}
+                              component={DeleteButton}
+                              onConfirmed={deleteDb}
+                            >
+                              <Text>{intl.formatMessage(messages.delete)}</Text>
+                            </ConfirmButton>
+                          </>
                         )}
-                      </Form>
+                      </AppMutation>
                     )}
-                  </Formik>
+                  </>
                 )
               }}
             </AppMutation>

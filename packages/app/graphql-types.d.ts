@@ -120,6 +120,18 @@ export namespace SaveBank {
   }
 }
 
+export namespace DeleteBank {
+  export type Variables = {
+    bankId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    deleteBank: boolean
+  }
+}
+
 export namespace LoginForm {
   export type Variables = {}
 
