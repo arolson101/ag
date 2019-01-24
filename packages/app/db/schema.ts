@@ -22,4 +22,5 @@ export const schema = buildSchemaSync({
     BudgetResolver,
     CategoryResolver,
   ],
+  validate: false, // https://github.com/19majkel94/type-graphql/issues/150
 })
