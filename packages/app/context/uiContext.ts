@@ -14,6 +14,7 @@ export interface AlertProps {
   title: string
 
   body?: string[]
+  danger?: boolean
 
   onConfirm: () => any
   confirmText: string

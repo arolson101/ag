@@ -6,6 +6,7 @@ interface Props {
   message: string
   onConfirmed: () => any
   component: React.ComponentType<{ onPress: (e: React.SyntheticEvent<Element, Event>) => any }>
+  danger?: boolean
 }
 
 interface State {
@@ -23,7 +24,7 @@ export class ConfirmButton extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { message, component: Component, children, ...props } = this.props
+    const { message, danger, component: Component, children, ...props } = this.props
 
     const { intl, ui } = this.context
     const { Alert, DeleteButton } = ui
@@ -37,6 +38,7 @@ export class ConfirmButton extends React.PureComponent<Props, State> {
           title={intl.formatMessage(messages.title)}
           body={[message]}
           confirmText={intl.formatMessage(messages.ok)}
+          danger={danger}
           onConfirm={this.onConfirm}
           cancelText={intl.formatMessage(messages.cancel)}
           onCancel={this.onCancel}

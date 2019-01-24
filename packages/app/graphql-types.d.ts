@@ -72,31 +72,7 @@ export namespace BankForm {
     bank: Maybe<Bank>
   }
 
-  export type Bank = {
-    __typename?: 'Bank'
-
-    name: string
-
-    web: string
-
-    address: string
-
-    notes: string
-
-    favicon: string
-
-    online: boolean
-
-    fid: string
-
-    org: string
-
-    ofx: string
-
-    username: string
-
-    password: string
-  }
+  export type Bank = BankFields.Fragment
 }
 
 export namespace SaveBank {
@@ -115,9 +91,7 @@ export namespace SaveBank {
     __typename?: 'Bank'
 
     id: string
-
-    name: string
-  }
+  } & BankFields.Fragment
 }
 
 export namespace DeleteBank {
@@ -219,5 +193,33 @@ export namespace HomePage {
     id: string
 
     name: string
+  }
+}
+
+export namespace BankFields {
+  export type Fragment = {
+    __typename?: 'Bank'
+
+    name: string
+
+    web: string
+
+    address: string
+
+    notes: string
+
+    favicon: string
+
+    online: boolean
+
+    fid: string
+
+    org: string
+
+    ofx: string
+
+    username: string
+
+    password: string
   }
 }

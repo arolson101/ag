@@ -28,28 +28,37 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
 
   static readonly id = 'BankForm'
 
+  static readonly fragments = {
+    bankFields: gql`
+      fragment bankFields on Bank {
+        name
+        web
+        address
+        notes
+        favicon
+
+        online
+
+        fid
+        org
+        ofx
+
+        username
+        password
+      }
+    `,
+  }
+
   static readonly queries = {
     BankForm: gql`
       query BankForm($bankId: String) {
         appDb {
           bank(bankId: $bankId) {
-            name
-            web
-            address
-            notes
-            favicon
-
-            online
-
-            fid
-            org
-            ofx
-
-            username
-            password
+            ...bankFields
           }
         }
       }
+      ${BankForm.fragments.bankFields}
     ` as Gql<T.BankForm.Query, T.BankForm.Variables>,
   }
 
@@ -58,22 +67,10 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
       mutation SaveBank($input: BankInput!, $bankId: String) {
         saveBank(input: $input, bankId: $bankId) {
           id
-          name
-          web
-          address
-          notes
-          favicon
-
-          online
-
-          fid
-          org
-          ofx
-
-          username
-          password
+          ...bankFields
         }
       }
+      ${BankForm.fragments.bankFields}
     ` as Gql<T.SaveBank.Mutation, T.SaveBank.Variables>,
 
     DeleteBank: gql`
@@ -87,7 +84,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
 
   render() {
     const { ui, intl } = this.context
-    const { SubmitButton, Text, Collapsible, DeleteButton } = ui
+    const { Text, Collapsible, DeleteButton } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField, UrlField } = typedFields<
       FormValues
     >(ui)
@@ -108,7 +105,10 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
               : Bank.defaultValues),
           }
           return (
-            <AppMutation mutation={BankForm.mutations.SaveBank} onCompleted={onClosed}>
+            <AppMutation
+              mutation={BankForm.mutations.SaveBank}
+              refetchQueries={[{ query: HomePage.queries.HomePage }]}
+            >
               {saveBank => (
                 <>
                   <Formik
@@ -126,6 +126,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                         await saveBank({ variables: { input, bankId } })
                       } finally {
                         factions.setSubmitting(false)
+                        onClosed()
                       }
                     }}
                   >
@@ -133,28 +134,32 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                       this.formApi = formApi
                       return (
                         <Form onSubmit={formApi.handleSubmit}>
-                          <Text>{intl.formatMessage(messages.fiHelp)}</Text>
-                          <Divider />
-                          <SelectField
-                            field='fi'
-                            items={filist.map(fi => ({ label: fi.name, value: fi.id }))}
-                            label={intl.formatMessage(messages.fi)}
-                            onValueChange={value => {
-                              if (formApi) {
-                                value = +value // coax to number
-                                const fi = filist[value]
-                                formApi.setFieldValue('name', value ? fi.name || '' : '')
-                                formApi.setFieldValue('web', fi.profile.siteURL || '')
-                                formApi.setFieldValue('favicon', '')
-                                formApi.setFieldValue('address', formatAddress(fi) || '')
-                                formApi.setFieldValue('fid', fi.fid || '')
-                                formApi.setFieldValue('org', fi.org || '')
-                                formApi.setFieldValue('ofx', fi.ofx || '')
-                              }
-                            }}
-                            searchable
-                          />
-                          <Divider />
+                          {!bankId && (
+                            <>
+                              <Text>{intl.formatMessage(messages.fiHelp)}</Text>
+                              <Divider />
+                              <SelectField
+                                field='fi'
+                                items={filist.map(fi => ({ label: fi.name, value: fi.id }))}
+                                label={intl.formatMessage(messages.fi)}
+                                onValueChange={value => {
+                                  if (formApi) {
+                                    value = +value // coax to number
+                                    const fi = filist[value]
+                                    formApi.setFieldValue('name', value ? fi.name || '' : '')
+                                    formApi.setFieldValue('web', fi.profile.siteURL || '')
+                                    formApi.setFieldValue('favicon', '')
+                                    formApi.setFieldValue('address', formatAddress(fi) || '')
+                                    formApi.setFieldValue('fid', fi.fid || '')
+                                    formApi.setFieldValue('org', fi.org || '')
+                                    formApi.setFieldValue('ofx', fi.ofx || '')
+                                  }
+                                }}
+                                searchable
+                              />
+                              <Divider />
+                            </>
+                          )}
                           <TextField
                             field='name'
                             label={intl.formatMessage(messages.name)}
@@ -231,6 +236,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                             message={intl.formatMessage(messages.confirmDeleteMessage)}
                             component={DeleteButton}
                             onConfirmed={deleteBank}
+                            danger
                           >
                             <Text>{intl.formatMessage(messages.deleteBank)}</Text>
                           </ConfirmButton>
@@ -349,6 +355,6 @@ const messages = defineMessages({
   },
   confirmDeleteMessage: {
     id: 'BankForm.confirmDeleteMessage',
-    defaultMessage: 'Are you sure?',
+    defaultMessage: 'This will delete the bank, its accounts and transactions.',
   },
 })
