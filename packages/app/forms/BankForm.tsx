@@ -6,18 +6,14 @@ import { AppContext, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
 import { Bank } from '../entities'
 import * as T from '../graphql-types'
+import { HomePage } from '../pages'
 import { pick } from '../util/pick'
 
 export namespace BankForm {
-  export interface EditProps {
-    bankId: string
-    onSaved: () => any
-    onDeleted: () => any
+  export interface Props {
+    bankId?: string
+    onClosed: () => any
   }
-  export interface CreateProps {
-    onSaved: () => any
-  }
-  export type Props = EditProps | CreateProps
 }
 
 type BankInput = { [P in keyof Bank.Props]-?: Bank.Props[P] }
@@ -95,8 +91,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
     const { Form, CheckboxField, Divider, SelectField, TextField, UrlField } = typedFields<
       FormValues
     >(ui)
-    const { onSaved } = this.props
-    const { bankId, onDeleted } = this.props as BankForm.EditProps
+    const { bankId, onClosed } = this.props
 
     return (
       <AppQuery query={BankForm.queries.BankForm} variables={{ bankId }}>
@@ -113,7 +108,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
               : Bank.defaultValues),
           }
           return (
-            <AppMutation mutation={BankForm.mutations.SaveBank} onCompleted={onSaved}>
+            <AppMutation mutation={BankForm.mutations.SaveBank} onCompleted={onClosed}>
               {saveBank => (
                 <>
                   <Formik
@@ -227,8 +222,8 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                     <AppMutation
                       mutation={BankForm.mutations.DeleteBank}
                       variables={{ bankId }}
-                      // refetchQueries={[{ query: LoginForm.queries.LoginForm }]}
-                      onCompleted={onDeleted}
+                      refetchQueries={[{ query: HomePage.queries.HomePage }]}
+                      onCompleted={onClosed}
                     >
                       {deleteBank => (
                         <>

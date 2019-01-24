@@ -82,14 +82,14 @@ export const ui: UiContext = {
   ),
   Text: ({ children, onClick }) => <span onClick={onClick}>{children}</span>,
   SubmitButton: ({ onPress, disabled, children }) => (
-    <button type='submit' onClick={onPress} disabled={disabled}>
+    <Button type='submit' onClick={onPress} disabled={disabled}>
       {children}
-    </button>
+    </Button>
   ),
   DeleteButton: ({ onPress, disabled, children }) => (
-    <button type='button' onClick={onPress} disabled={disabled}>
+    <Button type='button' intent={Intent.DANGER} fill minimal onClick={onPress} disabled={disabled}>
       {children}
-    </button>
+    </Button>
   ),
 
   // form

@@ -19,6 +19,6 @@ storiesOf('Forms/BankForm', module) //
       variables={{ bankId: undefined }}
       response={emptyResponse}
     >
-      <BankForm onSaved={action('saved')} onDeleted={action('deleted')} />
+      <BankForm onClosed={action('onClosed')} />
     </MockApp>
   ))

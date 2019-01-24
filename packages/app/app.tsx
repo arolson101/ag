@@ -3,10 +3,11 @@ import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { Connection, ConnectionOptions } from 'typeorm'
-import { Dialogs, IsLoggedIn } from './components'
+import { IsLoggedIn } from './components'
 import { AppContext, UiContext } from './context'
 import { client } from './db'
 import { ApolloClientContextProvider } from './db/ApolloClientContextProvider'
+import { Dialogs } from './dialogs'
 import { AppStore } from './reducers'
 
 interface Props {

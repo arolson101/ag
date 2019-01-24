@@ -4,18 +4,18 @@ import { actions } from '../actions'
 import { AppContext } from '../context'
 import { BankForm } from '../forms'
 
-export namespace BankCreateDlg {
+export namespace BankDialog {
   export interface Props {
     bankId?: string
     isOpen: boolean
   }
 }
 
-export class BankCreateDlg extends React.PureComponent<BankCreateDlg.Props> {
+export class BankDialog extends React.PureComponent<BankDialog.Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  static readonly id = 'BankCreateDlg'
+  static readonly id = 'BankDialog'
 
   bankForm = React.createRef<BankForm>()
 
@@ -33,7 +33,7 @@ export class BankCreateDlg extends React.PureComponent<BankCreateDlg.Props> {
         title={intl.formatMessage(bankId ? messages.titleEdit : messages.titleCreate)}
       >
         <DialogBody>
-          <BankForm onSaved={this.close} ref={this.bankForm} />
+          <BankForm onClosed={this.close} ref={this.bankForm} bankId={bankId} />
         </DialogBody>
         <DialogFooter
           primary={{
@@ -63,23 +63,23 @@ export class BankCreateDlg extends React.PureComponent<BankCreateDlg.Props> {
 
 const messages = defineMessages({
   titleEdit: {
-    id: 'BankCreateDlg.titleEdit',
+    id: 'BankDialog.titleEdit',
     defaultMessage: 'Edit Bank',
   },
   titleCreate: {
-    id: 'BankCreateDlg.titleCreate',
+    id: 'BankDialog.titleCreate',
     defaultMessage: 'Add Bank',
   },
   save: {
-    id: 'BankCreateDlg.save',
+    id: 'BankDialog.save',
     defaultMessage: 'Save',
   },
   create: {
-    id: 'BankCreateDlg.create',
+    id: 'BankDialog.create',
     defaultMessage: 'Add',
   },
   cancel: {
-    id: 'BankCreateDlg.cancel',
+    id: 'BankDialog.cancel',
     defaultMessage: 'Cancel',
   },
 })

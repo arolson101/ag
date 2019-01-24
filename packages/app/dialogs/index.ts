@@ -1,1 +1,2 @@
-export * from './BankCreateDlg'
+export * from './BankDialog'
+export * from './Dialogs'

@@ -1,10 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { actions, AppAction } from '../actions'
+import { AppAction } from '../actions'
 import { AppContext } from '../context'
-import { BankCreateDlg } from '../dialogs'
 import { AppState } from '../reducers'
 import { DialogState } from '../reducers/dialog'
+import { BankDialog } from './BankDialog'
 
 interface StateProps {
   state: DialogState
@@ -22,14 +22,11 @@ export class DialogsComponent extends React.PureComponent<Props> {
 
   render() {
     const { state } = this.props
-    const {
-      ui: { Dialog },
-    } = this.context
 
     return (
       <>
-        {state.bankCreate && <BankCreateDlg {...state.bankCreate} />}
-        {state.bankEdit && <BankCreateDlg {...state.bankEdit} />}
+        {state.bankCreate && <BankDialog {...state.bankCreate} />}
+        {state.bankEdit && <BankDialog {...state.bankEdit} />}
       </>
     )
   }
