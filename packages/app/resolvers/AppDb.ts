@@ -25,13 +25,13 @@ export class AppDb {
     return banks.all()
   }
 
-  @Field(returns => Account)
+  @Field(returns => Account, { nullable: true })
   async account(
     @Ctx() { getState }: AppContext,
-    @Arg('accountId') accountId: string
-  ): Promise<Account> {
+    @Arg('accountId', { nullable: true }) accountId?: string
+  ): Promise<Account | undefined> {
     const accounts = selectors.getAccounts(getState())
-    return accounts.get(accountId)
+    return accountId ? accounts.get(accountId) : undefined
   }
 
   @Field(returns => [Account])
@@ -42,12 +42,12 @@ export class AppDb {
     return accounts.all()
   }
 
-  @Field(returns => Transaction)
+  @Field(returns => Transaction, { nullable: true })
   async transaction(
     @Ctx() { getState }: AppContext,
-    @Arg('transactionId') transactionId: string
-  ): Promise<Transaction> {
+    @Arg('transactionId', { nullable: true }) transactionId?: string
+  ): Promise<Transaction | undefined> {
     const transactions = selectors.getTransactions(getState())
-    return transactions.get(transactionId)
+    return transactionId ? transactions.get(transactionId) : undefined
   }
 }

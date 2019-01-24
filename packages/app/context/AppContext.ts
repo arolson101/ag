@@ -1,5 +1,5 @@
 import { ApolloClient } from 'apollo-client'
-import { CancelToken } from 'axios'
+import { CancelToken, CancelTokenSource } from 'axios'
 import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
@@ -7,7 +7,7 @@ import { AppAction } from '../actions'
 import { AppState } from '../reducers'
 import { UiContext } from './uiContext'
 
-export { CancelToken }
+export { CancelToken, CancelTokenSource }
 
 export interface AppContext {
   intl: IntlContext

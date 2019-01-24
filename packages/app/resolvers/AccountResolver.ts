@@ -1,9 +1,9 @@
-import Axios, { CancelTokenSource } from 'axios'
+import assert from 'assert'
 import cuid from 'cuid'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
-import { AppContext } from '../context'
+import { AppContext, CancelTokenSource } from '../context'
 import {
   Account,
   AccountInput,
@@ -13,8 +13,9 @@ import {
   TransactionInput,
 } from '../entities'
 import { selectors } from '../reducers'
+import { diff } from '../util/diff'
 // import { checkLogin, createService, getFinancialAccount, toAccountType } from '../../online'
-import { DbChange } from './dbWrite'
+import { DbChange, dbWrite } from './dbWrite'
 
 const log = debug('app:AccountResolver')
 log.enabled = false // process.env.NODE_ENV !== 'production'
@@ -23,39 +24,48 @@ log.enabled = false // process.env.NODE_ENV !== 'production'
 export class AccountResolver {
   private tokens = new Map<string, CancelTokenSource>()
 
-  /*
   @Mutation(returns => Account)
   async saveAccount(
+    @Ctx() { getState }: AppContext,
     @Arg('input') input: AccountInput,
     @Arg('accountId', { nullable: true }) accountId?: string,
     @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Account> {
+    const app = selectors.getAppDbOrFail(getState())
     let account: Account
     let changes: any[]
     const t = Date.now()
     if (accountId) {
-      account = await this.app.accounts.get(accountId)
-      const q = Account.diff(account, input)
+      account = await app.accounts.get(accountId)
+      const q = diff<AccountInput>(account, input)
       changes = [Account.change.edit(t, accountId, q)]
       account.update(t, q)
     } else {
       if (!bankId) {
         throw new Error('when creating an account, bankId must be specified')
       }
-      account = new Account(cuid, bankId, input)
+      account = new Account(cuid(), bankId, input)
+      accountId = account.id
       changes = [Account.change.add(t, account)]
     }
-    await this.app.write(changes)
+    await dbWrite(app.connection, changes)
+    assert.equal(accountId, account.id)
+    assert.deepEqual(account, await app.banks.get(accountId))
     return account
   }
 
   @Mutation(returns => Boolean)
-  async deleteAccount(@Arg('accountId') accountId: string): Promise<boolean> {
+  async deleteAccount(
+    @Ctx() { getState }: AppContext,
+    @Arg('accountId') accountId: string
+  ): Promise<boolean> {
+    const app = selectors.getAppDbOrFail(getState())
     const t = Date.now()
     const changes = [Account.change.remove(t, accountId)]
-    await this.app.write(changes)
+    await dbWrite(app.connection, changes)
     return true
-  }*/
+  }
+
   /*
   @Mutation(returns => Bank)
   async downloadAccountList(

@@ -16,9 +16,7 @@ export namespace BankForm {
   }
 }
 
-type BankInput = { [P in keyof Bank.Props]-?: Bank.Props[P] }
-
-interface FormValues extends BankInput {
+interface FormValues extends Required<Bank.Props> {
   fi: number
 }
 
@@ -111,7 +109,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
             >
               {saveBank => (
                 <>
-                  <Formik
+                  <Formik<FormValues>
                     validateOnBlur={false}
                     initialValues={initialValues} //
                     validate={values => {

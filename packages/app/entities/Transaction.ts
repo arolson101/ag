@@ -1,6 +1,6 @@
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { standardizeDate } from '../util/date'
+import { formatDate, standardizeDate } from '../util/date'
 import { ISpec } from '../util/iupdate'
 import { Record } from './Record'
 import { TransactionInput } from './TransactionInput'
@@ -11,7 +11,7 @@ export class Transaction extends Record<Transaction.Props> {
   @PrimaryColumn() @Field() id!: string
   @Column() @Field() accountId!: string
 
-  @Column() @Field() time!: Date
+  @Column() @Field() time!: string
   @Column() @Field() account!: string
   @Column() @Field() serverid!: string
   @Column() @Field() type!: string
@@ -36,7 +36,7 @@ export namespace Transaction {
   export const defaultValues = () => ({
     account: '',
     serverid: '',
-    time: standardizeDate(new Date()),
+    time: formatDate(standardizeDate(new Date())),
     type: '',
     name: '',
     memo: '',

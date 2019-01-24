@@ -2,6 +2,7 @@ import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { DbChange } from '../resolvers/dbWrite'
 import { ISpec } from '../util/iupdate'
 import { AccountInput, AccountType } from './AccountInput'
 import { Record } from './Record'
@@ -75,25 +76,25 @@ export namespace Account {
     }
   }
 
-  // export namespace change {
-  //   export const add = (t: number, ...accounts: Interface[]): DbChange => ({
-  //     table: Account,
-  //     t,
-  //     adds: accounts,
-  //   })
+  export namespace change {
+    export const add = (t: number, ...accounts: Account[]): DbChange => ({
+      table: Account,
+      t,
+      adds: accounts,
+    })
 
-  //   export const edit = (t: number, id: string, q: Query): DbChange => ({
-  //     table: Account,
-  //     t,
-  //     edits: [{ id, q }],
-  //   })
+    export const edit = (t: number, id: string, q: Spec): DbChange => ({
+      table: Account,
+      t,
+      edits: [{ id, q }],
+    })
 
-  //   export const remove = (t: number, id: string): DbChange => ({
-  //     table: Account,
-  //     t,
-  //     deletes: [id],
-  //   })
-  // }
+    export const remove = (t: number, id: string): DbChange => ({
+      table: Account,
+      t,
+      deletes: [id],
+    })
+  }
 
   export const defaultValues = (): Props => ({
     name: '',
@@ -104,23 +105,4 @@ export namespace Account {
     routing: '',
     key: '',
   })
-
-  type Nullable<T> = { [K in keyof T]?: T[K] | undefined | null }
-
-  // export const diff = (account: Account, values: Nullable<Props>): Query => {
-  //   return Object.keys(values).reduce(
-  //     (q, prop): Query => {
-  //       const val = values[prop]
-  //       if (val !== account[prop]) {
-  //         return {
-  //           ...q,
-  //           [prop]: { $set: val },
-  //         }
-  //       } else {
-  //         return q
-  //       }
-  //     },
-  //     {} as Query
-  //   )
-  // }
 }

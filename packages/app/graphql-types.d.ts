@@ -1,5 +1,21 @@
 export type Maybe<T> = T | null
 
+export interface AccountInput {
+  name?: Maybe<string>
+
+  color?: Maybe<string>
+
+  type?: Maybe<AccountType>
+
+  number?: Maybe<string>
+
+  visible?: Maybe<boolean>
+
+  routing?: Maybe<string>
+
+  key?: Maybe<string>
+}
+
 export interface BankInput {
   name?: Maybe<string>
 
@@ -22,6 +38,22 @@ export interface BankInput {
   username?: Maybe<string>
 
   password?: Maybe<string>
+}
+
+export interface TransactionInput {
+  account?: Maybe<string>
+
+  serverid?: Maybe<string>
+
+  time?: Maybe<string>
+
+  type?: Maybe<string>
+
+  name?: Maybe<string>
+
+  memo?: Maybe<string>
+
+  amount?: Maybe<number>
 }
 
 export enum AccountType {
@@ -52,6 +84,62 @@ export namespace IsLoggedIn {
     __typename?: 'AppDb'
 
     loggedIn: boolean
+  }
+}
+
+export namespace AccountForm {
+  export type Variables = {
+    accountId?: Maybe<string>
+  }
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    account: Maybe<Account>
+  }
+
+  export type Account = {
+    __typename?: 'Account'
+
+    id: string
+  } & AccountFields.Fragment
+}
+
+export namespace SaveAccount {
+  export type Variables = {
+    input: AccountInput
+    accountId?: Maybe<string>
+    bankId?: Maybe<string>
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    saveAccount: SaveAccount
+  }
+
+  export type SaveAccount = {
+    __typename?: 'Account'
+
+    id: string
+  } & AccountFields.Fragment
+}
+
+export namespace DeleteAccount {
+  export type Variables = {
+    accountId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    deleteAccount: boolean
   }
 }
 
@@ -162,6 +250,60 @@ export namespace DeleteDb {
   }
 }
 
+export namespace Transaction {
+  export type Variables = {
+    transactionId?: Maybe<string>
+  }
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    transaction: Maybe<Transaction>
+  }
+
+  export type Transaction = TransactionFields.Fragment
+}
+
+export namespace SaveTransaction {
+  export type Variables = {
+    input: TransactionInput
+    transactionId?: Maybe<string>
+    accountId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    saveTransaction: SaveTransaction
+  }
+
+  export type SaveTransaction = TransactionFields.Fragment
+}
+
+export namespace DeleteTransaction {
+  export type Variables = {
+    transactionId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    deleteTransaction: DeleteTransaction
+  }
+
+  export type DeleteTransaction = {
+    __typename?: 'Transaction'
+
+    accountId: string
+  }
+}
+
 export namespace HomePage {
   export type Variables = {}
 
@@ -196,6 +338,28 @@ export namespace HomePage {
   }
 }
 
+export namespace AccountFields {
+  export type Fragment = {
+    __typename?: 'Account'
+
+    bankId: string
+
+    name: string
+
+    type: AccountType
+
+    color: string
+
+    number: string
+
+    visible: boolean
+
+    routing: string
+
+    key: string
+  }
+}
+
 export namespace BankFields {
   export type Fragment = {
     __typename?: 'Bank'
@@ -221,5 +385,25 @@ export namespace BankFields {
     username: string
 
     password: string
+  }
+}
+
+export namespace TransactionFields {
+  export type Fragment = {
+    __typename?: 'Transaction'
+
+    account: string
+
+    serverid: string
+
+    time: string
+
+    type: string
+
+    name: string
+
+    memo: string
+
+    amount: number
   }
 }
