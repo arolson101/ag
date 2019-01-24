@@ -3,6 +3,7 @@ import { UiContext } from './uiContext'
 export interface CheckboxFieldProps<Values = any> {
   field: keyof Values & string
   label: string
+  disabled?: boolean
 }
 
 export interface CurrencyFieldProps<Values = any> {
@@ -11,12 +12,14 @@ export interface CurrencyFieldProps<Values = any> {
   placeholder?: string
   autoFocus?: boolean
   onSubmitEditing?: () => any
+  disabled?: boolean
 }
 
 export interface DateFieldProps<Values = any> {
   field: keyof Values & string
   label: string
   collapsed?: boolean
+  disabled?: boolean
 }
 
 export interface FormProps<Values = any> {
@@ -34,6 +37,7 @@ export interface SelectFieldProps<Values = any> {
   items: SelectFieldItem[]
   onValueChange?: (value: string | number) => any
   searchable?: boolean
+  disabled?: boolean
 }
 
 export interface TextFieldProps<Values = any> {
@@ -47,6 +51,7 @@ export interface TextFieldProps<Values = any> {
   onSubmitEditing?: () => any
   noCorrect?: boolean
   inputRef?: any
+  disabled?: boolean
 }
 
 export interface UrlFieldProps<Values = any> {
@@ -56,6 +61,7 @@ export interface UrlFieldProps<Values = any> {
   placeholder?: string
   autoFocus?: boolean
   onSubmitEditing?: () => any
+  disabled?: boolean
 }
 
 export const typedFields = <V extends {}>(uiContext: UiContext) => {

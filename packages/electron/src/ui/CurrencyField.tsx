@@ -5,7 +5,7 @@ import React from 'react'
 
 export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
   render() {
-    const { field: name, label, placeholder } = this.props
+    const { field: name, label, placeholder, disabled } = this.props
     const id = name
     return (
       <Field name={name}>
@@ -17,6 +17,7 @@ export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
               helperText={error}
               label={label}
               labelFor={id}
+              disabled={disabled}
             >
               <input
                 id={id}
@@ -25,6 +26,7 @@ export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
                 placeholder={placeholder}
                 onChange={field.onChange}
                 value={field.value.toString()}
+                disabled={disabled}
               />
             </FormGroup>
           )

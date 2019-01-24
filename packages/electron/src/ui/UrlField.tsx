@@ -13,7 +13,7 @@ export class UrlField extends React.PureComponent<UrlFieldProps> {
   }
 
   render() {
-    const { field: name, autoFocus, label, placeholder } = this.props
+    const { field: name, autoFocus, disabled, label, placeholder } = this.props
     const id = name
     return (
       <Field name={name}>
@@ -21,7 +21,13 @@ export class UrlField extends React.PureComponent<UrlFieldProps> {
           const error = form.errors[name]
           const intent = error ? Intent.DANGER : undefined
           return (
-            <FormGroup intent={intent} helperText={error} label={label} labelFor={id}>
+            <FormGroup
+              intent={intent}
+              helperText={error}
+              label={label}
+              labelFor={id}
+              disabled={disabled}
+            >
               <InputGroup
                 id={id}
                 type='text'
@@ -31,6 +37,7 @@ export class UrlField extends React.PureComponent<UrlFieldProps> {
                 value={field.value}
                 placeholder={placeholder && placeholder}
                 inputRef={this.inputRef}
+                disabled={disabled}
               />
             </FormGroup>
           )

@@ -22,6 +22,7 @@ import { DateField } from './DateField'
 import { Form } from './Form'
 import { ElectronRouter } from './Router.electron'
 import { SelectField } from './SelectField'
+import { ElectronTab, ElectronTabs } from './Tabs'
 import { TextField } from './TextField'
 import { UrlField } from './UrlField'
 
@@ -114,4 +115,7 @@ export const ui: UiContext = {
   SelectField,
   TextField,
   UrlField,
+
+  Tabs: ElectronTabs,
+  Tab: ElectronTab,
 }

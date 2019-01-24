@@ -5,7 +5,7 @@ import React from 'react'
 
 export class SelectField extends React.PureComponent<SelectFieldProps> {
   render() {
-    const { field: name, label, items, onValueChange } = this.props
+    const { field: name, label, disabled, items, onValueChange } = this.props
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
@@ -15,10 +15,12 @@ export class SelectField extends React.PureComponent<SelectFieldProps> {
               intent={error ? Intent.DANGER : undefined} //
               helperText={error}
               label={label}
+              disabled={disabled}
             >
               <HTMLSelect
                 {...field}
                 fill
+                disabled={disabled}
                 onChange={e => {
                   field.onChange(e)
                   if (onValueChange) {

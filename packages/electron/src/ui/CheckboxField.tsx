@@ -5,10 +5,10 @@ import React from 'react'
 
 export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
   render() {
-    const { field: name, label } = this.props
+    const { field: name, label, disabled } = this.props
     const id = `${name}-input`
     return (
-      <Field name={name}>
+      <Field name={name} disabled={disabled}>
         {({ field, form }: FieldProps) => {
           return (
             <Switch
@@ -17,6 +17,7 @@ export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
               label={label}
               checked={field.value}
               onChange={e => form.setFieldValue(name, e.currentTarget.checked)}
+              disabled={disabled}
             />
           )
         }}

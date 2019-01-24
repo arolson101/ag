@@ -39,6 +39,17 @@ export interface ButtonConfig {
   isDanger?: boolean
 }
 
+export interface TabsProps {
+  id: string
+  initialId: string
+}
+
+export interface TabProps {
+  id: string
+  title: string
+  panel: JSX.Element
+}
+
 export interface UiContext {
   // special ui
   showToast: (message: string, danger?: boolean) => any
@@ -70,4 +81,8 @@ export interface UiContext {
   SelectField: React.ComponentType<SelectFieldProps>
   TextField: React.ComponentType<TextFieldProps>
   UrlField: React.ComponentType<UrlFieldProps>
+
+  // tabs
+  Tabs: React.ComponentType<TabsProps>
+  Tab: React.ComponentType<TabProps>
 }

@@ -5,7 +5,7 @@ import React from 'react'
 
 export class DateField extends React.PureComponent<DateFieldProps> {
   render() {
-    const { field: name, label } = this.props
+    const { field: name, label, disabled } = this.props
     const id = name
     return (
       <Field name={name}>
@@ -17,12 +17,14 @@ export class DateField extends React.PureComponent<DateFieldProps> {
               helperText={error}
               label={label}
               labelFor={id}
+              disabled={disabled}
             >
               <input
                 id={id}
                 className={'pt-input pt-fill' + (error ? ' pt-intent-danger' : '')}
                 onChange={field.onChange}
                 value={field.value.toString()}
+                disabled={disabled}
               />
             </FormGroup>
           )

@@ -15,7 +15,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
   }
 
   render() {
-    const { field: name, label, autoFocus, placeholder, secure, rows } = this.props
+    const { field: name, label, disabled, autoFocus, placeholder, secure, rows } = this.props
     const id = name
     return (
       <Field name={name}>
@@ -23,7 +23,13 @@ export class TextField extends React.PureComponent<TextFieldProps> {
           const error = form.errors[name]
           const intent = error ? Intent.DANGER : undefined
           return (
-            <FormGroup intent={intent} helperText={error} label={label} labelFor={id}>
+            <FormGroup
+              intent={intent}
+              helperText={error}
+              label={label}
+              labelFor={id}
+              disabled={disabled}
+            >
               {rows && rows > 1 ? (
                 <TextArea
                   id={id}
@@ -32,6 +38,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   rows={rows}
                   inputRef={this.inputRef}
                   fill
+                  disabled={disabled}
                   {...field}
                 />
               ) : (
@@ -42,6 +49,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   autoFocus={autoFocus}
                   placeholder={placeholder}
                   inputRef={this.inputRef}
+                  disabled={disabled}
                   {...field}
                 />
               )}

@@ -84,7 +84,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
 
   render() {
     const { ui, intl } = this.context
-    const { Text, Collapsible, DeleteButton, showToast } = ui
+    const { Tabs, Tab, Text, DeleteButton, showToast } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField, UrlField } = typedFields<
       FormValues
     >(ui)
@@ -139,119 +139,151 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                       this.formApi = formApi
                       return (
                         <Form onSubmit={formApi.handleSubmit}>
-                          {!bankId && (
-                            <>
-                              <Text>{intl.formatMessage(messages.fiHelp)}</Text>
-                              <Divider />
-                              <SelectField
-                                field='fi'
-                                items={filist.map(fi => ({ label: fi.name, value: fi.id }))}
-                                label={intl.formatMessage(messages.fi)}
-                                onValueChange={value => {
-                                  if (formApi) {
-                                    value = +value // coax to number
-                                    const fi = filist[value]
-                                    formApi.setFieldValue('name', value ? fi.name || '' : '')
-                                    formApi.setFieldValue('web', fi.profile.siteURL || '')
-                                    formApi.setFieldValue('favicon', '')
-                                    formApi.setFieldValue('address', formatAddress(fi) || '')
-                                    formApi.setFieldValue('fid', fi.fid || '')
-                                    formApi.setFieldValue('org', fi.org || '')
-                                    formApi.setFieldValue('ofx', fi.ofx || '')
-                                  }
-                                }}
-                                searchable
-                              />
-                              <Divider />
-                            </>
-                          )}
-                          <TextField
-                            field='name'
-                            label={intl.formatMessage(messages.name)}
-                            placeholder={intl.formatMessage(messages.namePlaceholder)}
-                          />
-                          <TextField
-                            field='address'
-                            label={intl.formatMessage(messages.address)}
-                            rows={4}
-                          />
-                          <UrlField
-                            field='web'
-                            favicoField='favicon'
-                            label={intl.formatMessage(messages.web)}
-                          />
-                          <TextField
-                            field='notes'
-                            label={intl.formatMessage(messages.notes)}
-                            rows={4}
-                          />
-                          <Divider />
-                          <CheckboxField
-                            field='online'
-                            label={intl.formatMessage(messages.online)}
-                          />
-                          <Collapsible show={formApi.values.online}>
-                            <TextField
-                              field='username'
-                              noCorrect
-                              label={intl.formatMessage(messages.username)}
-                              placeholder={intl.formatMessage(messages.usernamePlaceholder)}
+                          <Tabs id='BankForm' initialId='location'>
+                            <Tab
+                              id='location'
+                              title={intl.formatMessage(messages.tabInfo)}
+                              panel={
+                                <>
+                                  {!bankId && (
+                                    <>
+                                      <Text>{intl.formatMessage(messages.fiHelp)}</Text>
+                                      <Divider />
+                                      <SelectField
+                                        field='fi'
+                                        items={filist.map(fi => ({ label: fi.name, value: fi.id }))}
+                                        label={intl.formatMessage(messages.fi)}
+                                        onValueChange={value => {
+                                          if (formApi) {
+                                            value = +value // coax to number
+                                            const fi = filist[value]
+                                            formApi.setFieldValue(
+                                              'name',
+                                              value ? fi.name || '' : ''
+                                            )
+                                            formApi.setFieldValue('web', fi.profile.siteURL || '')
+                                            formApi.setFieldValue('favicon', '')
+                                            formApi.setFieldValue(
+                                              'address',
+                                              formatAddress(fi) || ''
+                                            )
+                                            formApi.setFieldValue('fid', fi.fid || '')
+                                            formApi.setFieldValue('org', fi.org || '')
+                                            formApi.setFieldValue('ofx', fi.ofx || '')
+                                          }
+                                        }}
+                                        searchable
+                                      />
+                                      <Divider />
+                                    </>
+                                  )}
+                                  <TextField
+                                    field='name'
+                                    label={intl.formatMessage(messages.name)}
+                                    placeholder={intl.formatMessage(messages.namePlaceholder)}
+                                  />
+                                  <TextField
+                                    field='address'
+                                    label={intl.formatMessage(messages.address)}
+                                    rows={4}
+                                  />
+                                  <UrlField
+                                    field='web'
+                                    favicoField='favicon'
+                                    label={intl.formatMessage(messages.web)}
+                                  />
+                                  <TextField
+                                    field='notes'
+                                    label={intl.formatMessage(messages.notes)}
+                                    rows={4}
+                                  />
+                                  {bankId && (
+                                    <AppMutation
+                                      mutation={BankForm.mutations.DeleteBank}
+                                      variables={{ bankId }}
+                                      refetchQueries={[{ query: HomePage.queries.HomePage }]}
+                                      onCompleted={() => {
+                                        showToast(
+                                          intl.formatMessage(messages.deleted, {
+                                            name: edit!.name,
+                                          }),
+                                          true
+                                        )
+                                        onClosed()
+                                      }}
+                                    >
+                                      {deleteBank => (
+                                        <>
+                                          <ConfirmButton
+                                            message={intl.formatMessage(
+                                              messages.confirmDeleteMessage
+                                            )}
+                                            component={DeleteButton}
+                                            onConfirmed={deleteBank}
+                                            danger
+                                          >
+                                            <Text>{intl.formatMessage(messages.deleteBank)}</Text>
+                                          </ConfirmButton>
+                                        </>
+                                      )}
+                                    </AppMutation>
+                                  )}
+                                </>
+                              }
                             />
-                            <TextField
-                              secure
-                              field='password'
-                              label={intl.formatMessage(messages.password)}
-                              placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+                            <Tab
+                              id='online'
+                              title='Online'
+                              panel={
+                                <>
+                                  <CheckboxField
+                                    field='online'
+                                    label={intl.formatMessage(messages.online)}
+                                  />
+                                  <TextField
+                                    field='username'
+                                    noCorrect
+                                    label={intl.formatMessage(messages.username)}
+                                    placeholder={intl.formatMessage(messages.usernamePlaceholder)}
+                                    disabled={!formApi.values.online}
+                                  />
+                                  <TextField
+                                    secure
+                                    field='password'
+                                    label={intl.formatMessage(messages.password)}
+                                    placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+                                    disabled={!formApi.values.online}
+                                  />
+                                  <Divider />
+                                  <TextField
+                                    noCorrect
+                                    field='fid'
+                                    label={intl.formatMessage(messages.fid)}
+                                    placeholder={intl.formatMessage(messages.fidPlaceholder)}
+                                    disabled={!formApi.values.online}
+                                  />
+                                  <TextField
+                                    noCorrect
+                                    field='org'
+                                    label={intl.formatMessage(messages.org)}
+                                    placeholder={intl.formatMessage(messages.orgPlaceholder)}
+                                    disabled={!formApi.values.online}
+                                  />
+                                  <TextField
+                                    noCorrect
+                                    field='ofx'
+                                    label={intl.formatMessage(messages.ofx)}
+                                    placeholder={intl.formatMessage(messages.ofxPlaceholder)}
+                                    disabled={!formApi.values.online}
+                                  />
+                                </>
+                              }
                             />
-                            <Divider />
-                            <TextField
-                              noCorrect
-                              field='fid'
-                              label={intl.formatMessage(messages.fid)}
-                              placeholder={intl.formatMessage(messages.fidPlaceholder)}
-                            />
-                            <TextField
-                              noCorrect
-                              field='org'
-                              label={intl.formatMessage(messages.org)}
-                              placeholder={intl.formatMessage(messages.orgPlaceholder)}
-                            />
-                            <TextField
-                              noCorrect
-                              field='ofx'
-                              label={intl.formatMessage(messages.ofx)}
-                              placeholder={intl.formatMessage(messages.ofxPlaceholder)}
-                            />
-                          </Collapsible>
+                          </Tabs>
                         </Form>
                       )
                     }}
                   </Formik>
-
-                  {bankId && (
-                    <AppMutation
-                      mutation={BankForm.mutations.DeleteBank}
-                      variables={{ bankId }}
-                      refetchQueries={[{ query: HomePage.queries.HomePage }]}
-                      onCompleted={() => {
-                        showToast(intl.formatMessage(messages.deleted, { name: edit!.name }), true)
-                        onClosed()
-                      }}
-                    >
-                      {deleteBank => (
-                        <>
-                          <ConfirmButton
-                            message={intl.formatMessage(messages.confirmDeleteMessage)}
-                            component={DeleteButton}
-                            onConfirmed={deleteBank}
-                            danger
-                          >
-                            <Text>{intl.formatMessage(messages.deleteBank)}</Text>
-                          </ConfirmButton>
-                        </>
-                      )}
-                    </AppMutation>
-                  )}
                 </>
               )}
             </AppMutation>
@@ -276,6 +308,22 @@ const messages = defineMessages({
   create: {
     id: 'BankForm.create',
     defaultMessage: 'Add',
+  },
+  tabInfo: {
+    id: 'BankForm.tabInfo',
+    defaultMessage: 'Information',
+  },
+  tabOnline: {
+    id: 'BankForm.tabOnline',
+    defaultMessage: 'Online',
+  },
+  tabResources: {
+    id: 'BankForm.tabResources',
+    defaultMessage: 'Resources',
+  },
+  tabAccounts: {
+    id: 'BankForm.tabAccounts',
+    defaultMessage: 'Accounts',
   },
   valueEmpty: {
     id: 'BankForm.valueEmpty',
@@ -315,7 +363,7 @@ const messages = defineMessages({
   },
   online: {
     id: 'BankForm.online',
-    defaultMessage: 'Online',
+    defaultMessage: 'Enabled',
   },
   fid: {
     id: 'BankForm.fid',
