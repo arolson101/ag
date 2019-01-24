@@ -84,7 +84,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
 
   render() {
     const { ui, intl } = this.context
-    const { Text, Collapsible, DeleteButton } = ui
+    const { Text, Collapsible, DeleteButton, showToast } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField, UrlField } = typedFields<
       FormValues
     >(ui)
@@ -124,9 +124,14 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                     onSubmit={async ({ fi, ...input }, factions) => {
                       try {
                         await saveBank({ variables: { input, bankId } })
+                        showToast(
+                          intl.formatMessage(bankId ? messages.saved : messages.created, {
+                            name: input.name,
+                          })
+                        )
+                        onClosed()
                       } finally {
                         factions.setSubmitting(false)
-                        onClosed()
                       }
                     }}
                   >
@@ -228,7 +233,10 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                       mutation={BankForm.mutations.DeleteBank}
                       variables={{ bankId }}
                       refetchQueries={[{ query: HomePage.queries.HomePage }]}
-                      onCompleted={onClosed}
+                      onCompleted={() => {
+                        showToast(intl.formatMessage(messages.deleted, { name: edit!.name }), true)
+                        onClosed()
+                      }}
                     >
                       {deleteBank => (
                         <>
@@ -356,5 +364,17 @@ const messages = defineMessages({
   confirmDeleteMessage: {
     id: 'BankForm.confirmDeleteMessage',
     defaultMessage: 'This will delete the bank, its accounts and transactions.',
+  },
+  saved: {
+    id: 'BankForm.saved',
+    defaultMessage: '{name} saved',
+  },
+  created: {
+    id: 'BankForm.created',
+    defaultMessage: '{name} added',
+  },
+  deleted: {
+    id: 'BankForm.deleted',
+    defaultMessage: '{name} deleted',
   },
 })

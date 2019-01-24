@@ -41,9 +41,7 @@ export interface ButtonConfig {
 
 export interface UiContext {
   // special ui
-  confirm: (
-    props: { title: string; action: string; onConfirm: () => any; event: React.SyntheticEvent }
-  ) => any
+  showToast: (message: string, danger?: boolean) => any
 
   // routes
   Router: Router

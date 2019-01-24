@@ -8,14 +8,15 @@ import {
   Divider,
   Intent,
   Overlay,
+  Position,
   Spinner,
+  Toaster,
 } from '@blueprintjs/core'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import 'normalize.css/normalize.css'
 import React from 'react'
 import { CheckboxField } from './CheckboxField'
-import { confirm } from './confirm'
 import { CurrencyField } from './CurrencyField'
 import { DateField } from './DateField'
 import { Form } from './Form'
@@ -24,9 +25,15 @@ import { SelectField } from './SelectField'
 import { TextField } from './TextField'
 import { UrlField } from './UrlField'
 
+export const AppToaster = Toaster.create({
+  className: 'recipe-toaster',
+  position: Position.BOTTOM,
+})
+
 export const ui: UiContext = {
   // special ui
-  confirm,
+  showToast: (message, danger) =>
+    AppToaster.show({ message, intent: danger ? Intent.DANGER : Intent.NONE }),
 
   // routes
   Router: ElectronRouter,
