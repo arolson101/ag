@@ -1,10 +1,13 @@
 import { ApolloClient } from 'apollo-client'
+import { CancelToken } from 'axios'
 import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { AppAction } from '../actions'
 import { AppState } from '../reducers'
 import { UiContext } from './uiContext'
+
+export { CancelToken }
 
 export interface AppContext {
   intl: IntlContext
@@ -19,6 +22,16 @@ export interface AppContext {
     entities: ConnectionOptions['entities']
   ) => Promise<Connection>
   deleteDb: (name: string) => Promise<void>
+
+  httpRequest: (
+    params: {
+      url: string
+      method: string
+      headers: Record<string, string>
+      data: string
+      cancelToken: CancelToken
+    }
+  ) => Promise<any>
 }
 
 const defaultContext: AppContext = null as any
