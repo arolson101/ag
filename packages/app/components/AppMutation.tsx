@@ -27,13 +27,13 @@ export class AppMutation<TData, TVariables> extends React.PureComponent<Props<TD
       <Mutation<TData, TVariables> {...props}>
         {(fcn, result) => {
           const { loading, error } = result
-          if (loading) {
-            return <LoadingOverlay show={loading} />
-          } else if (error) {
-            return <ErrorDisplay error={error} />
-          } else {
-            return children(fcn, result)
-          }
+          return (
+            <>
+              <LoadingOverlay show={loading} />
+              {error && <ErrorDisplay error={error} />}
+              {children(fcn, result)}
+            </>
+          )
         }}
       </Mutation>
     )

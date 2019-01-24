@@ -7,6 +7,7 @@ import {
   Dialog,
   Divider,
   Intent,
+  Overlay,
   Spinner,
 } from '@blueprintjs/core'
 import '@blueprintjs/core/lib/css/blueprint.css'
@@ -39,16 +40,21 @@ export const ui: UiContext = {
       onConfirm={props.onConfirm}
       cancelButtonText={props.cancelText}
       onCancel={props.onCancel}
+      intent={props.confirmDanger ? Intent.DANGER : Intent.PRIMARY}
     >
       <h1>{props.title}</h1>
       {props.body && props.body.map((b, i) => <p key={i}>{b}</p>)}
     </Alert>
   ),
 
-  LoadingOverlay: props => (props.show ? <Spinner /> : null),
+  LoadingOverlay: ({ show }) => (
+    <Overlay isOpen={show} canEscapeKeyClose={false} canOutsideClickClose={false}>
+      <Spinner className={Classes.OVERLAY} />
+    </Overlay>
+  ),
 
   Dialog: ({ isOpen, title, onClose, children }) => (
-    <Dialog title={title} isOpen={isOpen} onClose={onClose}>
+    <Dialog title={title} isOpen={isOpen} onClose={onClose} canOutsideClickClose={false}>
       {children}
     </Dialog>
   ),
