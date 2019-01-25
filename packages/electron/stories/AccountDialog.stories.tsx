@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { AccountForm } from '@ag/app'
+import { AccountDialog, AccountForm } from '@ag/app'
 import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
 import React from 'react'
@@ -30,7 +30,31 @@ const editResponse = {
   },
 }
 
-storiesOf('Forms/AccountForm', module) //
+storiesOf('Dialogs/AccountDialog', module)
+  .add('create', () => (
+    <MockApp
+      query={AccountForm.queries.AccountForm}
+      variables={{ accountId: undefined }}
+      response={emptyResponse}
+    >
+      <AccountDialog isOpen={true} bankId='cjrbfiy580000415s2ibuxm2c' />
+    </MockApp>
+  ))
+  .add('edit', () => (
+    <MockApp
+      query={AccountForm.queries.AccountForm}
+      variables={{ accountId: 'cjrbhh3dw0000415s5awimr3f' }}
+      response={editResponse}
+    >
+      <AccountDialog
+        isOpen={true}
+        bankId={'cjrbfiy580000415s2ibuxm2c'}
+        accountId={'cjrbhh3dw0000415s5awimr3f'}
+      />
+    </MockApp>
+  ))
+
+storiesOf('Forms/AccountForm', module)
   .add('create', () => (
     <MockApp
       query={AccountForm.queries.AccountForm}

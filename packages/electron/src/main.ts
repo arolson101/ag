@@ -36,7 +36,7 @@ async function createWindow() {
       exts.APOLLO_DEVELOPER_TOOLS,
     ]) {
       try {
-        const name = installExtension(ext)
+        const name = await installExtension(ext)
         log(`Added Extension:  ${name}`)
       } catch (err) {
         log('An error occurred: ', err)

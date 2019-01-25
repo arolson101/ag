@@ -1,4 +1,4 @@
-import { UiContext } from '@ag/app'
+import { TabProps, TabsProps, UiContext } from '@ag/app'
 import {
   Alert,
   Button,
@@ -10,6 +10,8 @@ import {
   Overlay,
   Position,
   Spinner,
+  Tab,
+  Tabs,
   Toaster,
 } from '@blueprintjs/core'
 import '@blueprintjs/core/lib/css/blueprint.css'
@@ -22,7 +24,6 @@ import { DateField } from './DateField'
 import { Form } from './Form'
 import { ElectronRouter } from './Router.electron'
 import { SelectField } from './SelectField'
-import { ElectronTab, ElectronTabs } from './Tabs'
 import { TextField } from './TextField'
 import { UrlField } from './UrlField'
 
@@ -116,6 +117,6 @@ export const ui: UiContext = {
   TextField,
   UrlField,
 
-  Tabs: ElectronTabs,
-  Tab: ElectronTab,
+  Tabs: Tabs as React.ComponentType<TabsProps>,
+  Tab: Tab as React.ComponentType<TabProps>,
 }

@@ -41,7 +41,6 @@ export interface ButtonConfig {
 
 export interface TabsProps {
   id: string
-  initialId: string
 }
 
 export interface TabProps {

@@ -1,5 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import { BankDialog, BankForm } from '@ag/app'
+import { action } from '@storybook/addon-actions'
 import { storiesOf } from '@storybook/react'
 import React from 'react'
 import { MockApp } from './helpers'
@@ -31,8 +32,8 @@ const editResponse = {
   },
 }
 
-storiesOf('Dialogs', module) //
-  .add('BankCreateDlg', () => (
+storiesOf('Dialogs/BankDialog', module)
+  .add('create', () => (
     <MockApp
       query={BankForm.queries.BankForm}
       variables={{ bankId: undefined }}
@@ -41,12 +42,32 @@ storiesOf('Dialogs', module) //
       <BankDialog isOpen={true} />
     </MockApp>
   ))
-  .add('BankEditDlg', () => (
+  .add('edit', () => (
     <MockApp
       query={BankForm.queries.BankForm}
       variables={{ bankId: 'cjr9drbdp0001415uh38a4g9j' }}
       response={editResponse}
     >
       <BankDialog isOpen={true} bankId={'cjr9drbdp0001415uh38a4g9j'} />
+    </MockApp>
+  ))
+
+storiesOf('Forms/BankForm', module)
+  .add('create', () => (
+    <MockApp
+      query={BankForm.queries.BankForm}
+      variables={{ bankId: undefined }}
+      response={emptyResponse}
+    >
+      <BankForm onClosed={action('onClosed')} />
+    </MockApp>
+  ))
+  .add('edit', () => (
+    <MockApp
+      query={BankForm.queries.BankForm}
+      variables={{ bankId: 'cjr9drbdp0001415uh38a4g9j' }}
+      response={editResponse}
+    >
+      <BankForm onClosed={action('onClosed')} bankId={'cjr9drbdp0001415uh38a4g9j'} />
     </MockApp>
   ))

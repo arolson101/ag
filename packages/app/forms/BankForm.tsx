@@ -137,7 +137,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                       this.formApi = formApi
                       return (
                         <Form onSubmit={formApi.handleSubmit}>
-                          <Tabs id='BankForm' initialId='location'>
+                          <Tabs id='BankForm'>
                             <Tab
                               id='location'
                               title={intl.formatMessage(messages.tabInfo)}
