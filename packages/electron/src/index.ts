@@ -1,13 +1,10 @@
-import { App } from '@ag/app'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { store } from './store'
-import { deleteDb, openDb } from './store/openDb.electron'
-import { ui } from './ui'
+import ElectronApp from './app'
 
 const runApp = () => {
   ReactDOM.render(
-    React.createElement(App, { openDb, deleteDb, store, ui }),
+    React.createElement(ElectronApp, {}), //
     document.getElementById('root')
   )
 }
