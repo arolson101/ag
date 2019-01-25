@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
@@ -43,7 +44,16 @@ export class App extends React.PureComponent<Props> {
             {intl => (
               <Provider store={store}>
                 <AppContext.Provider
-                  value={{ client, intl, ui, dispatch, getState, openDb, deleteDb }}
+                  value={{
+                    client,
+                    intl,
+                    ui,
+                    dispatch,
+                    getState,
+                    openDb,
+                    deleteDb,
+                    httpRequest: axios,
+                  }}
                 >
                   <ApolloClientContextProvider>
                     <IsLoggedIn>{isLoggedIn => <Router isLoggedIn={isLoggedIn} />}</IsLoggedIn>

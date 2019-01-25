@@ -85,7 +85,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
           }
 
           const { account: edit } = appDb
-          const initialValues = {
+          const initialValues: FormValues = {
             ...(edit
               ? pick(edit, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
               : Account.defaultValues()),
@@ -98,7 +98,8 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
             >
               {saveAccount => (
                 <Formik<FormValues>
-                  initialValues={initialValues as any}
+                  validateOnBlur={false}
+                  initialValues={initialValues}
                   validate={values => {
                     const errors: FormikErrors<FormValues> = {}
                     if (!values.name || !values.name.trim()) {
@@ -113,8 +114,12 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
                         accountId,
                         input,
                       }
-
                       await saveAccount({ variables } as any)
+                      showToast(
+                        intl.formatMessage(bankId ? messages.saved : messages.created, {
+                          name: input.name,
+                        })
+                      )
                       onClosed()
                     } finally {
                       factions.setSubmitting(false)
@@ -173,39 +178,39 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
                             placeholder={intl.formatMessage(messages.keyPlaceholder)}
                           />
                         )}
+
+                        {accountId && (
+                          <AppMutation
+                            mutation={AccountForm.mutations.DeleteAccount}
+                            variables={{ accountId }}
+                            refetchQueries={[{ query: HomePage.queries.HomePage }]}
+                            onCompleted={() => {
+                              showToast(
+                                intl.formatMessage(messages.deleted, {
+                                  name: edit!.name,
+                                }),
+                                true
+                              )
+                              onClosed()
+                            }}
+                          >
+                            {deleteAccount => (
+                              <>
+                                <ConfirmButton
+                                  message={intl.formatMessage(messages.confirmDeleteMessage)}
+                                  component={DeleteButton}
+                                  onConfirmed={deleteAccount}
+                                  danger
+                                >
+                                  <Text>{intl.formatMessage(messages.deleteAccount)}</Text>
+                                </ConfirmButton>
+                              </>
+                            )}
+                          </AppMutation>
+                        )}
                       </Form>
                     )
                   }}
-
-                  {accountId && (
-                    <AppMutation
-                      mutation={AccountForm.mutations.DeleteAccount}
-                      variables={{ accountId }}
-                      refetchQueries={[{ query: HomePage.queries.HomePage }]}
-                      onCompleted={() => {
-                        showToast(
-                          intl.formatMessage(messages.deleted, {
-                            name: edit!.name,
-                          }),
-                          true
-                        )
-                        onClosed()
-                      }}
-                    >
-                      {deleteAccount => (
-                        <>
-                          <ConfirmButton
-                            message={intl.formatMessage(messages.confirmDeleteMessage)}
-                            component={DeleteButton}
-                            onConfirmed={deleteAccount}
-                            danger
-                          >
-                            <Text>{intl.formatMessage(messages.deleteAccount)}</Text>
-                          </ConfirmButton>
-                        </>
-                      )}
-                    </AppMutation>
-                  )}
                 </Formik>
               )}
             </AppMutation>
@@ -316,8 +321,16 @@ const messages = defineMessages({
     id: 'AccountDialog.deleteAccount',
     defaultMessage: 'Delete Account',
   },
+  saved: {
+    id: 'AccountForm.saved',
+    defaultMessage: '{name} saved',
+  },
+  created: {
+    id: 'AccountForm.created',
+    defaultMessage: '{name} added',
+  },
   deleted: {
     id: 'AccountForm.deleted',
-    defaultMessage: 'Account {name} deleted',
+    defaultMessage: '{name} deleted',
   },
 })

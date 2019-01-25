@@ -50,7 +50,7 @@ export class AccountResolver {
     }
     await dbWrite(app.connection, changes)
     assert.equal(accountId, account.id)
-    assert.deepEqual(account, await app.banks.get(accountId))
+    assert.deepEqual(account, await app.accounts.get(accountId))
     return account
   }
 

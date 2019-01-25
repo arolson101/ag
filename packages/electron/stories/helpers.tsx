@@ -43,6 +43,7 @@ export const MockApp: React.FC<{ query: Gql<any, any>; variables?: any; response
                     deleteDb: () => {
                       throw new Error('no deleteDb')
                     },
+                    httpRequest: action('httpRequest') as any,
                   }}
                 >
                   {children}

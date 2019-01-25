@@ -60,10 +60,22 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
                         ) : (
                           bank.accounts.map(account => (
                             <Container key={account.id}>
-                              <Text>{account.name}</Text>
+                              <Text>{account.name}</Text>[
+                              <Link
+                                to={actions.dlg.accountEdit({
+                                  bankId: bank.id,
+                                  accountId: account.id,
+                                })}
+                              >
+                                edit
+                              </Link>
+                              ]
                             </Container>
                           ))
                         )}
+                        [
+                        <Link to={actions.dlg.accountCreate({ bankId: bank.id })}>add account</Link>
+                        ]
                       </Container>
                     ))
                   )}

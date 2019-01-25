@@ -4,7 +4,8 @@ import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { DbChange } from '../resolvers/dbWrite'
 import { ISpec } from '../util/iupdate'
-import { AccountInput, AccountType } from './AccountInput'
+import { AccountInput } from './AccountInput'
+import { AccountType } from './AccountType'
 import { Record } from './Record'
 
 @ObjectType()
@@ -30,7 +31,7 @@ export class Account extends Record<Account.Props> {
 }
 
 export namespace Account {
-  export interface Props extends Pick<AccountInput, keyof AccountInput> {}
+  export interface Props extends Pick<Required<AccountInput>, keyof AccountInput> {}
   export const Type = AccountType
   export type Type = AccountType
   export type Spec = ISpec<AccountInput>

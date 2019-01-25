@@ -111,7 +111,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                 <>
                   <Formik<FormValues>
                     validateOnBlur={false}
-                    initialValues={initialValues} //
+                    initialValues={initialValues}
                     validate={values => {
                       const errors: FormikErrors<FormValues> = {}
                       if (!values.name.trim()) {

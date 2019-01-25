@@ -4,6 +4,7 @@ import { AppAction } from '../actions'
 import { AppContext } from '../context'
 import { AppState } from '../reducers'
 import { DialogState } from '../reducers/dialog'
+import { AccountDialog } from './AccountDialog'
 import { BankDialog } from './BankDialog'
 
 interface StateProps {
@@ -25,8 +26,8 @@ export class DialogsComponent extends React.PureComponent<Props> {
 
     return (
       <>
-        {state.bankCreate && <BankDialog {...state.bankCreate} />}
-        {state.bankEdit && <BankDialog {...state.bankEdit} />}
+        {state.bankDialog && <BankDialog {...state.bankDialog} />}
+        {state.accountDialog && <AccountDialog {...state.accountDialog} />}
       </>
     )
   }
