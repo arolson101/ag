@@ -37,7 +37,7 @@ storiesOf('Forms/AccountForm', module) //
       variables={{ accountId: undefined }}
       response={emptyResponse}
     >
-      <AccountForm bankId='cjr9drbdp0001415uh38a4g9j' onClosed={action('onClosed')} />
+      <AccountForm bankId='cjrbfiy580000415s2ibuxm2c' onClosed={action('onClosed')} />
     </MockApp>
   ))
   .add('edit', () => (
@@ -48,7 +48,7 @@ storiesOf('Forms/AccountForm', module) //
     >
       <AccountForm
         onClosed={action('onClosed')}
-        bankId={'cjr9drbdp0001415uh38a4g9j'}
+        bankId={'cjrbfiy580000415s2ibuxm2c'}
         accountId={'cjrbhh3dw0000415s5awimr3f'}
       />
     </MockApp>
