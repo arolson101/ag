@@ -56,12 +56,14 @@ export interface TransactionInput {
   amount?: Maybe<number>
 }
 
-export enum AccountType {
-  Checking = 'CHECKING',
-  Savings = 'SAVINGS',
-  Moneymrkt = 'MONEYMRKT',
-  Creditline = 'CREDITLINE',
-  Creditcard = 'CREDITCARD',
+import { AccountType } from './entities/AccountType'
+
+export type AccountTypeValueMap = {
+  CHECKING: AccountType
+  SAVINGS: AccountType
+  MONEYMRKT: AccountType
+  CREDITLINE: AccountType
+  CREDITCARD: AccountType
 }
 
 /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */

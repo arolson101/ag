@@ -1,14 +1,5 @@
-import { Field, InputType, registerEnumType } from 'type-graphql'
-
-// see ofx4js.domain.data.banking.AccountType
-export enum AccountType {
-  CHECKING = 'CHECKING',
-  SAVINGS = 'SAVINGS',
-  MONEYMRKT = 'MONEYMRKT',
-  CREDITLINE = 'CREDITLINE',
-  CREDITCARD = 'CREDITCARD',
-}
-registerEnumType(AccountType, { name: 'AccountType' })
+import { Field, InputType } from 'type-graphql'
+import { AccountType } from './AccountType'
 
 @InputType()
 export class AccountInput {

@@ -70,9 +70,9 @@
     "@types/sanitize-filename": "^1.1.28",
     "bufferutil": "^4.0.1",
     "commander": "^2.19.0",
-    "graphql-code-generator": "^0.15.2",
-    "graphql-codegen-typescript-client": "^0.15.2",
-    "graphql-codegen-typescript-common": "^0.15.2",
+    "graphql-code-generator": "^0.16.0",
+    "graphql-codegen-typescript-client": "^0.16.0",
+    "graphql-codegen-typescript-common": "^0.16.0",
     "rxjs-marbles": "^5.0.0",
     "utf-8-validate": "^5.0.2"
   }

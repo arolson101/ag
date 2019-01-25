@@ -5,12 +5,12 @@
   "generates": {
     "graphql-types.d.ts": {
       "config": {
-        "noNamespaces": false
+        "noNamespaces": false,
+        "enums": {
+          "AccountType": "./entities/AccountType#AccountType"
+        }
       },
-      "plugins": [
-        "typescript-common",
-        "typescript-client"
-      ]
+      "plugins": ["typescript-common", "typescript-client"]
     }
   }
 }
