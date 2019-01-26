@@ -16,7 +16,7 @@ export class Account extends Record<Account.Props> {
 
   @Column() @Field() name!: string
   @Column() @Field() color!: string
-  @Column() @Field(type => AccountType) @Column() type!: AccountType
+  @Column('text') @Field(type => AccountType) type!: AccountType
   @Column() @Field() number!: string
   @Column() @Field() visible!: boolean
   @Column() @Field() routing!: string
