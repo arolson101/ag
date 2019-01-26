@@ -6,6 +6,9 @@
       "packages/*"
     ],
     "nohoist": [
+      "**/electron",
+      "**/electron-webpack",
+      "**/electron-webpack/**",
       "**/react-native",
       "**/react-native/**",
       "**/react-native-scripts",
@@ -45,6 +48,7 @@
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
     "express": "^4.16.4",
+    "electron-webpack": "^2.6.2",
     "file-loader": "^3.0.1",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.10.0",
