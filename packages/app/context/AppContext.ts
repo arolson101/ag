@@ -9,12 +9,19 @@ import { UiContext } from './uiContext'
 
 export { CancelToken, CancelTokenSource }
 
-export interface AppContext {
-  intl: IntlContext
+export interface ImageUri {
+  width: number
+  height: number
+  uri: string
+}
+
+export interface LibraryImage {
+  image: ImageUri
+  path: string
+}
+
+export interface ClientDependencies {
   ui: UiContext
-  client: ApolloClient<any>
-  dispatch: Dispatch<AppAction>
-  getState: () => AppState
 
   openDb: (
     name: string,
@@ -27,11 +34,21 @@ export interface AppContext {
     params: {
       url: string
       method: string
-      headers: Record<string, string>
-      data: string
-      cancelToken: CancelToken
+      headers?: Record<string, string>
+      data?: string
+      cancelToken?: CancelToken
     }
   ) => Promise<any>
+
+  getImageFromLibrary: (width: number, height: number) => Promise<LibraryImage>
+  resizeImage: (image: ImageUri, width: number, height: number, format: string) => Promise<ImageUri>
+}
+
+export interface AppContext extends ClientDependencies {
+  intl: IntlContext
+  client: ApolloClient<any>
+  dispatch: Dispatch<AppAction>
+  getState: () => AppState
 }
 
 const defaultContext: AppContext = null as any

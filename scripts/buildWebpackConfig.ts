@@ -40,14 +40,16 @@ export const buildWebpackConfig = ({
       {
         test: /\.tsx?$/,
         exclude: '/node_modules/',
-        loader: 'ts-loader',
-        options: {
-          getCustomTransformers: () => ({ before: [getTransformer()] }),
-        },
-        // use: [
-        //   { loader: 'babel-loader' }, //
-        //   { loader: 'ts-loader' },
-        // ],
+        // loader: 'ts-loader',
+        use: [
+          { loader: 'babel-loader' }, //
+          {
+            loader: 'ts-loader',
+            options: {
+              getCustomTransformers: () => ({ before: [getTransformer()] }),
+            },
+          },
+        ],
       },
       {
         test: /\.css$/,
