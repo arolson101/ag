@@ -1,5 +1,6 @@
 /* tslint:disable:no-implicit-dependencies */
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import webpack from 'webpack'
 import { buildWebpackConfig } from '../../scripts/buildWebpackConfig'
 import pkg from './package.json'
 
@@ -16,6 +17,11 @@ module.exports = buildWebpackConfig({
     new HtmlWebpackPlugin({
       title: `${appName} ${pkg.version}`,
       template: './src/template.html',
+    }),
+
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      manifest: require('./dist/vendor-manifest.json'),
     }),
   ],
   devServer: {

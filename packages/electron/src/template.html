@@ -9,8 +9,9 @@
 
     <script>
       // ensure bundle.js can find node modules
-      const path = require("path");
-      module.paths.push(path.resolve(process.cwd(), 'node_modules'));
+      const app = require('electron').remote.app
+      module.paths.push(app.getAppPath());
     </script>
+    <script type="text/javascript" src="/vendor.js"></script>
   </body>
 </html>
