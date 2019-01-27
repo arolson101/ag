@@ -14,8 +14,6 @@ runApp()
 // const registerServiceWorker = require('./registerServiceWorker').default
 // registerServiceWorker()
 
-// if (module.hot) {
-//   module.hot.accept('./App/App', () => {
-//     runApp()
-//   })
-// }
+if (module.hot) {
+  module.hot.accept()
+}
