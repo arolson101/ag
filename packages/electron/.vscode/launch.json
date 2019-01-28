@@ -7,6 +7,16 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Electron: dev",
+      "args": [
+        "-r",
+        "ts-node/register/transpile-only",
+        "${workspaceFolder}/dev.ts",
+      ],
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Electron: webpack",
       "program": "${workspaceFolder}/node_modules/.bin/webpack",
       "internalConsoleOptions": "openOnSessionStart"

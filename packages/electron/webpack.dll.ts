@@ -11,7 +11,8 @@ const packages = Object.keys({
   dep => !['@ag/app', 'commander', 'electron-is-dev', 'electron-window-state'].includes(dep)
 )
 
-module.exports = {
+const config: webpack.Configuration = {
+  name: 'vendor',
   // mode: "development || "production",
   resolve: {
     extensions: ['.mjs', '.js', '.jsx'],
@@ -39,7 +40,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js',
-    library: '[name]',
+    library: 'vendor',
   },
   externals: {
     'electron-devtools-installer': 'commonjs electron-devtools-installer',
@@ -49,7 +50,9 @@ module.exports = {
   plugins: [
     new webpack.DllPlugin({
       path: path.join(__dirname, 'dist', '[name]-manifest.json'),
-      name: '[name]',
+      name: 'vendor',
     }),
   ],
 }
+
+module.exports = config

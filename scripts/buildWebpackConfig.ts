@@ -1,4 +1,5 @@
 /* tslint:disable:no-implicit-dependencies */
+import path from 'path'
 import { getTransformer } from 'ts-transform-graphql-tag'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
@@ -27,10 +28,12 @@ export const buildWebpackConfig = ({
   output: {
     publicPath: '/',
     filename: `${name}.js`,
-    devtoolModuleFilenameTemplate: info => {
-      const rel = /*path.relative(context,*/ info.absoluteResourcePath /*)*/
-      return `webpack:///${rel}`
-    },
+    // devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]?[loaders]',
+
+    // devtoolModuleFilenameTemplate: info => {
+    //   const rel = path.relative(path.join(context, '../..'), info.absoluteResourcePath)
+    //   return `webpack:///${rel}`
+    // },
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
