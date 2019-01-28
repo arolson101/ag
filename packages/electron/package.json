@@ -19,7 +19,8 @@
     "dev:server:main": "nodemon --watch ./webpack.main.ts --exec \"webpack --watch --progress --mode=development --config webpack.main.ts\"",
     "storybook": "concurrently --raw --kill-others \"yarn:storybook:server\" \"yarn:storybook:electron\"",
     "storybook:electron": "wait-on http://localhost:6006/ && electron dist --url http://localhost:6006/",
-    "storybook:server": "start-storybook --ci --quiet -p 6006"
+    "storybook:server": "start-storybook --ci --quiet -p 6006",
+    "test-dev": "ts-node ./dev.ts"
   },
   "dependencies": {
     "@ag/app": "^0.0.0",
@@ -70,6 +71,7 @@
     "@types/storybook__addon-actions": "^3.4.1",
     "@types/storybook__addon-links": "^3.3.3",
     "@types/storybook__react": "^4.0.0",
+    "chalk": "^2.4.2",
     "electron-builder": "^20.38.4",
     "electron-devtools-installer": "^2.2.4",
     "electron-react-devtools": "^0.5.3"
