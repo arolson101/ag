@@ -1,6 +1,7 @@
 /* tslint:disable:no-implicit-dependencies */
 import path from 'path'
 import webpack from 'webpack'
+
 import apppkg from '../app/package.json'
 import electronpkg from './package.json'
 

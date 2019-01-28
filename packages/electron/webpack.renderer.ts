@@ -1,17 +1,59 @@
 /* tslint:disable:no-implicit-dependencies */
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { getTransformer } from 'ts-transform-graphql-tag'
 import webpack from 'webpack'
-import { buildWebpackConfig } from '../../scripts/buildWebpackConfig'
 import pkg from './package.json'
+const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const appName = 'Ag'
 
-const context = __dirname
-
-module.exports = buildWebpackConfig({
-  context,
+const config: webpack.Configuration = {
+  context: __dirname,
   name: 'index',
   target: 'electron-renderer',
+  entry: `./src/index.ts`,
+  output: {
+    filename: 'index.js',
+    // devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]?[loaders]',
+
+    // devtoolModuleFilenameTemplate: info => {
+    //   const rel = path.relative(path.join(context, '../..'), info.absoluteResourcePath)
+    //   return `webpack:///${rel}`
+    // },
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        exclude: '/node_modules/',
+        loader: 'ts-loader',
+        options: {
+          getCustomTransformers: () => ({ before: [getTransformer()] }),
+        },
+
+        // use: [
+        //   { loader: 'babel-loader' }, //
+        //   {
+        //     loader: 'ts-loader',
+        //     options: {
+        //       getCustomTransformers: () => ({ before: [getTransformer()] }),
+        //     },
+        //   },
+        // ],
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader?name=font/[name].[ext]',
+      },
+    ],
+  },
   plugins: [
     // create index.html
     new HtmlWebpackPlugin({
@@ -23,12 +65,22 @@ module.exports = buildWebpackConfig({
       context: __dirname,
       manifest: require('./dist/vendor-manifest.json'),
     }),
+
+    // write the output files back to disk
+    new WriteFilePlugin({
+      test: /^((?!(hot-update)).)*$/,
+    }),
+
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'static',
+    //   reportFilename: `stats-${name}.html`,
+    //   openAnalyzer: false,
+    // }),
   ],
-  devServer: {
-    publicPath: '/',
-    historyApiFallback: {
-      disableDotRule: true,
-    },
-    stats: 'minimal',
-  },
-})
+  externals: [
+    'react-native-sqlite-storage', //
+    'sqlite3',
+  ],
+}
+
+module.exports = config

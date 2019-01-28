@@ -7,7 +7,10 @@ import path from 'path'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 
-const mode = 'development'
+const devConfig: Partial<webpack.Configuration> = {
+  mode: 'development',
+  devtool: 'source-map',
+}
 const port = 3456
 
 let electronProcess: ChildProcess | undefined
@@ -64,7 +67,7 @@ const checkVendorDll = () => {
     if (packageTime > vendorTime) {
       print(channels.dll, `${vendorDllFile} is out of date; rebuilding`)
       const config = require(configPath)
-      const compiler = webpack({ ...config, mode })
+      const compiler = webpack({ ...config, ...devConfig })
       compiler.run((err, stats) => {
         print(channels.dll, stats.toString(minimalStats))
         if (err) {
@@ -149,7 +152,7 @@ const runWebpackForMain = async (promises: Array<Promise<any>>) => {
   return new Promise((resolve, reject) => {
     print(channels.webpack, 'starting webpack')
     const mainConfig = require('./webpack.main')
-    const compiler = webpack({ ...mainConfig, mode })
+    const compiler = webpack({ ...mainConfig, ...devConfig })
     webpackWatching = compiler.watch({}, (err, stats) => {
       if (err) {
         console.log('Error in main config: %o', err)
@@ -177,7 +180,7 @@ const runWebpackDevServer = async (promises: Array<Promise<any>>) => {
   await Promise.all(promises)
   return new Promise(resolve => {
     const host = 'localhost'
-    const config: webpack.Configuration = { ...require('./webpack.renderer'), mode }
+    const config: webpack.Configuration = { ...require('./webpack.renderer'), ...devConfig }
     const options: WebpackDevServer.Configuration = {
       hot: true,
       historyApiFallback: true,
