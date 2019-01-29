@@ -1,4 +1,4 @@
-import React, { Children } from 'react'
+import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
