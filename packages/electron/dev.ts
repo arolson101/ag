@@ -18,8 +18,9 @@ let webpackWatching: webpack.Compiler.Watching | undefined
 let server: WebpackDevServer | undefined
 
 const channels = {
+  patch: chalk.dim.green(`[patch]`),
   dll: chalk.dim.green(`[dll]`),
-  lib: chalk.dim.magenta(`[lib]`),
+  lib: chalk.dim.green(`[lib]`),
   webpack: chalk.rgb(83, 154, 199)(`[main]`),
   electron: chalk.rgb(160, 234, 249)(`[electron]`),
   wds: chalk.rgb(115, 175, 203)(`[wds]`),
@@ -52,7 +53,32 @@ const print = (channel: string, messages: string) => {
   }
 }
 
-const checkVendorDll = () => {
+const patchPackage = () => {
+  return new Promise(resolve => {
+    const child = spawn('patch-package', { cwd: path.resolve(__dirname, '..', '..') })
+
+    child.stdout.on('data', data => {
+      print(channels.patch, data.toString())
+    })
+    child.stderr.on('data', data => {
+      print(channels.patch, data.toString())
+    })
+
+    child.on('exit', code => {
+      if (code === 0) {
+        print(channels.patch, chalk.green('✓') + ` patched packages`)
+        resolve()
+      } else {
+        closeEverything(channels.patch)
+        throw new Error(`patch-packages failed`)
+      }
+    })
+  })
+}
+
+const checkVendorDll = async (promises: Array<Promise<any>>) => {
+  await Promise.all(promises)
+
   return new Promise(resolve => {
     const configPath = './webpack.dll.ts'
     const vendorDllFile = './dist/vendor.js' //
@@ -218,7 +244,8 @@ const closeEverything = (channel: string) => {
   }
 }
 
-const vendorPromise = checkVendorDll()
+const patchPromise = patchPackage()
+const vendorPromise = checkVendorDll([patchPromise])
 const libPromise = checkSqlite()
 const wdsPromise = runWebpackDevServer([vendorPromise])
 const mainPromise = runWebpackForMain([libPromise])

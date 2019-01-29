@@ -44,7 +44,7 @@ const config: webpack.Configuration = {
     library: 'vendor',
   },
   externals: {
-    'electron-devtools-installer': 'commonjs electron-devtools-installer',
+    'electron-devtools-installer': 'commonjs electron-devtools-installer', //
     'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
     sqlite3: 'commonjs sqlite3',
   },

@@ -54,7 +54,9 @@ const config: webpack.Configuration = {
       ),
     }),
   ],
-  externals: ['electron-devtools-installer'],
+  externals: {
+    'electron-devtools-installer': 'commonjs electron-devtools-installer', //
+  },
 }
 
 module.exports = config
