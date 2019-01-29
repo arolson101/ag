@@ -1,3 +1,4 @@
+import { AppContext } from '@ag/app'
 import debug from 'debug'
 import React from 'react'
 import { SafeAreaView, Text, TouchableOpacity, View } from 'react-native'
@@ -11,6 +12,7 @@ import {
 } from 'react-native-navigation'
 import { ThemeManager } from 'react-native-ui-lib'
 import { icons } from './icons'
+import * as Tabs from './tabs'
 
 const log = debug('rn:navigation')
 log.enabled = true
@@ -33,6 +35,7 @@ class ComponentTest extends React.PureComponent {
     },
     bottomTab: {
       text: 'Tab 2',
+      // icon: icons.bank,
     },
   })
 
@@ -50,12 +53,20 @@ class ComponentTest extends React.PureComponent {
   }
 }
 
-Navigation.registerComponent(`ComponentTest`, () => ComponentTest)
+const store = { foo: 'bar' }
+const Provider: React.FC = props => <>{props.children}</>
+
+Navigation.registerComponentWithRedux(`ComponentTest`, () => ComponentTest, Provider, store)
 
 Navigation.setDefaultOptions({
   bottomTab: {
     selectedTextColor: ThemeManager.primaryColor,
     selectedIconColor: ThemeManager.primaryColor,
+  },
+  topBar: {
+    largeTitle: {
+      visible: true,
+    },
   },
 })
 
@@ -95,34 +106,60 @@ const tab1 = (): LayoutBottomTabsChildren => {
       options: {
         bottomTab: {
           text: 'tab 1a',
-          icon: icons.bank,
+          icon: icons.home,
         },
       },
     },
   }
 }
 
-const bottomTabs = (): LayoutBottomTabs => ({
-  children: [
-    tab1(),
-    {
-      component: {
-        name: 'ComponentTest',
-        options: {
-          topBar: {
-            visible: true,
-            title: {
-              text: 'tab 2',
-            },
-          },
+interface TabComponent {
+  name: string
+  stackId: string
+}
+
+const makeTab = (tab: TabComponent, passProps: AppContext): LayoutBottomTabsChildren => ({
+  stack: {
+    id: tab.stackId,
+    children: [
+      {
+        component: {
+          name: tab.name,
+          passProps,
         },
       },
-    },
+    ],
+  },
+})
+
+for (const tab of [
+  Tabs.AccountsTab,
+  Tabs.BillsTab,
+  Tabs.BudgetsTab,
+  Tabs.CalendarTab,
+  Tabs.HomeTab,
+]) {
+  Navigation.registerComponentWithRedux(tab.name, () => tab, Provider, store)
+}
+
+const bottomTabs = (passProps: AppContext): LayoutBottomTabs => ({
+  children: [
+    makeTab(Tabs.HomeTab, passProps),
+    makeTab(Tabs.AccountsTab, passProps),
+    makeTab(Tabs.BillsTab, passProps),
+    makeTab(Tabs.BudgetsTab, passProps),
+    makeTab(Tabs.CalendarTab, passProps),
   ],
 })
 
-export const root = (): LayoutRoot => ({
+const testProps: AppContext = {
+  intl: {
+    formatMessage: (message: any) => message.defaultMessage,
+  },
+} as any
+
+export const root = (passProps: AppContext = testProps): LayoutRoot => ({
   root: {
-    bottomTabs: bottomTabs(),
+    bottomTabs: bottomTabs(passProps),
   },
 })

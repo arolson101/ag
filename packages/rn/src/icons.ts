@@ -1,24 +1,27 @@
 import debug from 'debug'
-import * as rnn from 'react-native-navigation'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 const log = debug('rn:navigation')
 log.enabled = true
 
-type iconNames = 'bank'
+const tabSize = 24
 
-const iconSource: Record<iconNames, string> = {
-  bank: 'university',
+type iconNames = keyof typeof iconSource
+
+// https://fontawesome.com/icons?d=gallery&m=free
+const iconSource = {
+  accounts: 'university',
+  home: 'home',
+  bills: 'money-check-alt',
+  budgets: 'piggy-bank',
+  calendar: 'calendar-alt',
 }
 
 export const icons: Record<iconNames, any> = {} as any
 
 const getIcons = async () => {
-  const constants = await rnn.Navigation.constants()
-  log('constants: %o', constants)
-  // const bottomTabsHeight = constants.bottomTabsHeight;
   const promises = (Object.keys(iconSource) as iconNames[]).map(async name => {
-    const val = await FontAwesome5.getImageSource(iconSource[name], 24)
+    const val = await FontAwesome5.getImageSource(iconSource[name], tabSize)
     icons[name] = val
   })
   await Promise.all(promises)
