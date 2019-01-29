@@ -2,20 +2,24 @@ import { TabProps, TabsProps, UiContext } from '@ag/app'
 import {
   Alert,
   Button,
+  Card,
   Classes,
   Collapse,
   Dialog,
   Divider,
+  H3,
   Intent,
   Overlay,
   Position,
   Spinner,
   Tab,
   Tabs,
+  Text,
   Toaster,
 } from '@blueprintjs/core'
 import '@blueprintjs/core/lib/css/blueprint.css'
 import '@blueprintjs/icons/lib/css/blueprint-icons.css'
+import classNames from 'classnames'
 import 'normalize.css/normalize.css'
 import React from 'react'
 import { CheckboxField } from './CheckboxField'
@@ -88,6 +92,16 @@ export const ui: UiContext = {
   ),
 
   // layout
+  Card: ({ children }) => <Card>{children}</Card>,
+  Row: ({ left, right, center, flex, children }) => (
+    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', flex }}>
+      {children}
+    </div>
+  ),
+  Column: ({ top, bottom, center, flex, children }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</div>
+  ),
+
   Page: ({ children }) => <div>{children}</div>,
   Container: ({ children }) => <div>{children}</div>,
   Collapsible: ({ show, children }) => (
@@ -95,7 +109,22 @@ export const ui: UiContext = {
       {children}
     </Collapse>
   ),
-  Text: ({ children, onClick }) => <span onClick={onClick}>{children}</span>,
+  Link: ({ onClick, children }) => <a onClick={onClick}>{children}</a>,
+  Text: ({ header, muted, children, onClick }) => {
+    const Component: React.ComponentType<any> = header ? H3 : Text
+    return (
+      <Component
+        className={classNames(
+          Classes.UI_TEXT,
+          muted && Classes.TEXT_MUTED,
+          header && Classes.HEADING
+        )}
+        onClick={onClick}
+      >
+        {children}
+      </Component>
+    )
+  },
   SubmitButton: ({ onPress, disabled, children }) => (
     <Button type='submit' onClick={onPress} disabled={disabled}>
       {children}

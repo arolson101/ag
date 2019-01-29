@@ -3,7 +3,7 @@ import { AppAction } from '../actions'
 import { AppContext } from '../context'
 
 interface Props {
-  to: AppAction
+  dispatch: AppAction
 }
 
 export class Link extends React.PureComponent<Props> {
@@ -12,13 +12,13 @@ export class Link extends React.PureComponent<Props> {
 
   render() {
     const { ui } = this.context
-    const { Text } = ui
-    return <Text onClick={this.onClick}>{this.props.children}</Text>
+    const { Link: LinkUI } = ui
+    return <LinkUI onClick={this.onClick}>{this.props.children}</LinkUI>
   }
 
   onClick = () => {
     const { dispatch } = this.context
-    const { to } = this.props
+    const { dispatch: to } = this.props
     dispatch(to)
   }
 }

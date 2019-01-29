@@ -64,10 +64,14 @@ export interface UiContext {
   LoadingOverlay: ComponentType<{ show: boolean }>
 
   // layout
+  Card: ComponentType<{}>
+  Row: ComponentType<{ left?: boolean; right?: boolean; center?: boolean; flex?: number }>
+  Column: ComponentType<{ top?: boolean; bottom?: boolean; center?: boolean; flex?: number }>
   Page: ComponentType<{}>
   Container: ComponentType<{}>
   Collapsible: ComponentType<{ show: boolean }>
-  Text: ComponentType<{ onClick?: () => any }>
+  Link: ComponentType<{ onClick?: () => any }>
+  Text: ComponentType<{ header?: boolean; muted?: boolean; onClick?: () => any }>
   SubmitButton: ComponentType<{ disabled?: boolean; onPress: (event: React.SyntheticEvent) => any }>
   DeleteButton: ComponentType<{ disabled?: boolean; onPress: (event: React.SyntheticEvent) => any }>
 

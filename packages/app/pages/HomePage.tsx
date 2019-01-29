@@ -1,6 +1,7 @@
 import React from 'react'
 import { actions } from '../actions'
 import { AppQuery, gql, Gql, Link } from '../components'
+import { BankDisplay } from '../components/BankDisplay'
 import { AppContext } from '../context'
 import * as T from '../graphql-types'
 
@@ -19,15 +20,11 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
       query HomePage {
         appDb {
           banks {
-            id
-            name
-            accounts {
-              id
-              name
-            }
+            ...BankDisplay
           }
         }
       }
+      ${BankDisplay.fragments.BankDisplay}
     ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
   }
 
@@ -41,44 +38,12 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
           {({ appDb }) =>
             appDb && (
               <>
+                <Text header>Accounts</Text>
+                {appDb.banks.map(bank => (
+                  <BankDisplay bank={bank} key={bank.id} />
+                ))}
                 <Container>
-                  <Text>home page</Text>
-                </Container>
-                <Container>
-                  <Link to={actions.dlg.bankCreate()}>add bank</Link>
-                </Container>
-                <Container>
-                  {!appDb.banks.length ? (
-                    <Text>No banks</Text>
-                  ) : (
-                    appDb.banks.map(bank => (
-                      <Container key={bank.id}>
-                        <Link to={actions.nav.bank({ bankId: bank.id })}>{bank.name}</Link> [
-                        <Link to={actions.dlg.bankEdit({ bankId: bank.id })}>edit</Link>]
-                        {!bank.accounts.length ? (
-                          <Text>No accounts</Text>
-                        ) : (
-                          bank.accounts.map(account => (
-                            <Container key={account.id}>
-                              <Text>{account.name}</Text>[
-                              <Link
-                                to={actions.dlg.accountEdit({
-                                  bankId: bank.id,
-                                  accountId: account.id,
-                                })}
-                              >
-                                edit
-                              </Link>
-                              ]
-                            </Container>
-                          ))
-                        )}
-                        [
-                        <Link to={actions.dlg.accountCreate({ bankId: bank.id })}>add account</Link>
-                        ]
-                      </Container>
-                    ))
-                  )}
+                  <Link dispatch={actions.dlg.bankCreate()}>add bank</Link>
                 </Container>
               </>
             )

@@ -321,7 +321,11 @@ export namespace HomePage {
     banks: Banks[]
   }
 
-  export type Banks = {
+  export type Banks = BankDisplay.Fragment
+}
+
+export namespace BankDisplay {
+  export type Fragment = {
     __typename?: 'Bank'
 
     id: string
