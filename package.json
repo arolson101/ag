@@ -11,8 +11,8 @@
       "**/electron-webpack/**",
       "**/react-native",
       "**/react-native/**",
-      "**/react-native-scripts",
-      "**/react-native-scripts/**",
+      "**/react-native*",
+      "**/react-native*/**",
       "**/sqlite3"
     ]
   },
