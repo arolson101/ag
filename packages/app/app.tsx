@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Children } from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
@@ -13,6 +13,7 @@ import { omit } from './util/omit'
 export namespace App {
   export interface Props extends ClientDependencies {
     store: AppStore
+    children: (isLoggedIn: boolean) => JSX.Element
   }
 }
 
@@ -26,8 +27,7 @@ GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
 
 export class App extends React.PureComponent<App.Props> {
   render() {
-    const { store, ui } = this.props
-    const { Router } = ui
+    const { store, ui, children } = this.props
     const dispatch = store.dispatch
     const getState = store.getState
 
@@ -47,7 +47,7 @@ export class App extends React.PureComponent<App.Props> {
                   }}
                 >
                   <ApolloClientContextProvider>
-                    <IsLoggedIn>{isLoggedIn => <Router isLoggedIn={isLoggedIn} />}</IsLoggedIn>
+                    <IsLoggedIn>{isLoggedIn => children(isLoggedIn)}</IsLoggedIn>
                     <Dialogs />
                   </ApolloClientContextProvider>
                 </AppContext.Provider>

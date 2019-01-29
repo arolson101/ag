@@ -26,7 +26,6 @@ import { CheckboxField } from './CheckboxField'
 import { CurrencyField } from './CurrencyField'
 import { DateField } from './DateField'
 import { Form } from './Form'
-import { ElectronRouter } from './Router.electron'
 import { SelectField } from './SelectField'
 import { TextField } from './TextField'
 import { UrlField } from './UrlField'
@@ -40,9 +39,6 @@ export const ui: UiContext = {
   // special ui
   showToast: (message, danger) =>
     AppToaster.show({ message, intent: danger ? Intent.DANGER : Intent.NONE }),
-
-  // routes
-  Router: ElectronRouter,
 
   // dialog
   Alert: props => (

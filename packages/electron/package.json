@@ -44,7 +44,8 @@
     "redux-observable": "^1.0.0",
     "sqlite3": "4.0.0",
     "typeorm": "^0.2.11",
-    "typesafe-actions": "^3.0.0"
+    "typesafe-actions": "^3.0.0",
+    "utility-types": "^3.4.1"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^4.1.4",

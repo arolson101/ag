@@ -1,4 +1,4 @@
-import { AppContext, HomePage, LoginPage, RouterProps } from '@ag/app'
+import { AppContext, HomePage, LoginPage } from '@ag/app'
 import debug from 'debug'
 import { parse } from 'query-string'
 import React from 'react'
@@ -18,7 +18,11 @@ const loggedInRoutes: ComponentWithId[] = [
   HomePage, //
 ]
 
-export class ElectronRouter extends React.PureComponent<RouterProps> {
+interface Props {
+  isLoggedIn: boolean
+}
+
+export class ElectronRouter extends React.PureComponent<Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 

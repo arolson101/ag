@@ -1,5 +1,4 @@
 import { ComponentType } from 'react'
-import { Router } from './routeContext'
 import {
   CheckboxFieldProps,
   CurrencyFieldProps,
@@ -52,9 +51,6 @@ export interface TabProps {
 export interface UiContext {
   // special ui
   showToast: (message: string, danger?: boolean) => any
-
-  // routes
-  Router: Router
 
   // dialog
   Alert: ComponentType<AlertProps>
