@@ -23,13 +23,7 @@ export const appProps: Omit<App.Props, 'children'> = {
 
 class ElectronApp extends React.PureComponent {
   render() {
-    return (
-      <App {...appProps}>
-        {(
-          isLoggedIn //
-        ) => <ElectronRouter isLoggedIn={isLoggedIn} />}
-      </App>
-    )
+    return <App {...appProps}>{isLoggedIn => <ElectronRouter isLoggedIn={isLoggedIn} />}</App>
   }
 }
 

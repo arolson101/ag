@@ -14,13 +14,17 @@
   "dependencies": {
     "@ag/app": "^0.0.0",
     "@babel/polyfill": "^7.2.5",
+    "debug": "^4.1.1",
     "haul": "^1.0.0-rc.10",
     "react": "^16.7.0",
     "react-native": "^0.57.8",
     "react-native-fs": "^2.13.3",
     "react-native-image-crop-picker": "^0.22.0",
     "react-native-image-resizer": "^1.0.0",
-    "react-native-navigation": "^2.8.0"
+    "react-native-navigation": "^2.8.0",
+    "react-native-typography": "^1.4.0",
+    "react-native-ui-lib": "^3.16.0",
+    "react-native-vector-icons": "^6.2.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^4.1.4",
@@ -30,6 +34,7 @@
     "@types/react": "^16.7.18",
     "@types/react-native": "^0.57.25",
     "@types/react-native-fs": "^2.8.2",
+    "@types/react-native-vector-icons": "^4.6.4",
     "babel-jest": "23.6.0",
     "babel-runtime": "^7.0.0-beta.3",
     "jest": "^23.6.0",
