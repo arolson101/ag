@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import ElectronApp from './app'
+import ElectronApp from './app/ElectronApp'
 
 const runApp = () => {
   ReactDOM.render(

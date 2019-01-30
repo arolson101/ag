@@ -5,7 +5,7 @@ import { AppContext } from '../context/AppContext'
 interface Props {
   message: string
   onConfirmed: () => any
-  component: React.ComponentType<{ onPress: (e: React.SyntheticEvent<Element, Event>) => any }>
+  component: React.ComponentType<{ onPress: () => any }>
   danger?: boolean
 }
 
@@ -42,7 +42,6 @@ export class ConfirmButton extends React.PureComponent<Props, State> {
           onConfirm={this.onConfirm}
           cancelText={intl.formatMessage(messages.cancel)}
           onCancel={this.onCancel}
-          onClosed={this.onClosed}
           show={this.state.show}
         />
       </>
@@ -55,16 +54,11 @@ export class ConfirmButton extends React.PureComponent<Props, State> {
 
   onConfirm = () => {
     this.setState({ show: false, confirmed: true })
+    this.props.onConfirmed()
   }
 
   onCancel = () => {
     this.setState({ show: false, confirmed: false })
-  }
-
-  onClosed = () => {
-    if (this.state.confirmed) {
-      this.props.onConfirmed()
-    }
   }
 }
 

@@ -1,3 +1,4 @@
+// import { intlReducer } from 'react-intl-redux'
 import { Store } from 'redux'
 import { StateType } from 'typesafe-actions'
 import { AppAction } from '../actions'
@@ -7,6 +8,13 @@ import { dialog } from './dialog'
 export const appReducers = {
   dialog,
   db,
+  // intl: intlReducer,
+}
+
+export const initialAppState = {
+  // intl: {
+  //   locale: 'en',
+  // },
 }
 
 export interface AppState extends StateType<typeof appReducers> {}
@@ -19,4 +27,5 @@ export const selectors = {
   getBanks: (state: AppState) => dbSelectors.getBanks(state.db),
   getAccounts: (state: AppState) => dbSelectors.getAccounts(state.db),
   getTransactions: (state: AppState) => dbSelectors.getTransactions(state.db),
+  // getIntl: (state: AppState) => state.intl,
 }

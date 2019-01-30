@@ -44,7 +44,6 @@ export const ui: UiContext = {
   Alert: props => (
     <Alert
       isOpen={props.show}
-      onClosed={props.onClosed}
       confirmButtonText={props.confirmText}
       onConfirm={props.onConfirm}
       cancelButtonText={props.cancelText}

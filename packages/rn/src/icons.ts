@@ -27,4 +27,4 @@ const getIcons = async () => {
   await Promise.all(promises)
 }
 
-export const fontInit = getIcons()
+export const iconInit = getIcons()

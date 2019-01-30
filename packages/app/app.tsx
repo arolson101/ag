@@ -1,14 +1,17 @@
+import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
-import { InjectedIntl, injectIntl, IntlProvider } from 'react-intl'
+import { IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
-import { IsLoggedIn } from './components'
+import { GetIntlProvider, IsLoggedIn } from './components'
 import { AppContext, ClientDependencies } from './context'
 import { client } from './db'
 import { ApolloClientContextProvider } from './db/ApolloClientContextProvider'
 import { Dialogs } from './dialogs'
 import { AppStore } from './reducers'
-import { omit } from './util/omit'
+
+const log = debug('app:app')
+log.enabled = true
 
 export namespace App {
   export interface Props extends ClientDependencies {
@@ -17,19 +20,11 @@ export namespace App {
   }
 }
 
-interface GetIntlProviderProps {
-  children: (intl: InjectedIntl) => React.ReactNode
-}
-export const GetIntlProvider = injectIntl<GetIntlProviderProps>(({ intl, children }) => (
-  <>{children(intl)}</>
-))
-GetIntlProvider.WrappedComponent.displayName = 'GetIntlProvider'
-
 export class App extends React.PureComponent<App.Props> {
   render() {
-    const { store, ui, children } = this.props
-    const dispatch = store.dispatch
-    const getState = store.getState
+    log('App: %o', this.props)
+    const { store, children, ...props } = this.props
+    const { dispatch, getState } = store
 
     return (
       <ApolloProvider client={client}>
@@ -43,7 +38,7 @@ export class App extends React.PureComponent<App.Props> {
                     intl,
                     dispatch,
                     getState,
-                    ...omit(this.props, ['store']),
+                    ...props,
                   }}
                 >
                   <ApolloClientContextProvider>

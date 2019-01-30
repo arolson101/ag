@@ -6,14 +6,10 @@
       "packages/*"
     ],
     "nohoist": [
-      "**/electron",
-      "**/electron-webpack",
-      "**/electron-webpack/**",
-      "**/react-native",
-      "**/react-native/**",
-      "**/react-native*",
-      "**/react-native*/**",
-      "**/sqlite3"
+      "electron/sqlite3",
+      "electron/electron*",
+      "**/*react-native*",
+      "rn/native-base"
     ]
   },
   "jest": {
@@ -36,6 +32,7 @@
     "@types/copy-webpack-plugin": "^4.4.2",
     "@types/html-webpack-plugin": "^3.2.0",
     "@types/jest": "^23.3.11",
+    "@types/react-intl-redux": "^0.1.11",
     "@types/webpack": "^4.4.22",
     "@types/webpack-bundle-analyzer": "^2.13.0",
     "@types/webpack-dev-server": "^3.1.1",
@@ -70,7 +67,7 @@
     "tslint": "^5.12.0",
     "tslint-config-prettier": "^1.17.0",
     "tslint-plugin-prettier": "^2.0.1",
-    "typeorm": "^0.2.11",
+    "typeorm": "0.2.11",
     "typescript": "^3.3.0-dev.20190110",
     "wait-on": "^3.2.0",
     "webpack": "^4.28.3",

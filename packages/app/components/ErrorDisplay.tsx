@@ -47,7 +47,6 @@ export class ErrorDisplay extends React.PureComponent<Props, State> {
         body={(errors as Error[]).map(e => e.message)}
         confirmText={intl.formatMessage(messages.ok)}
         onConfirm={this.onConfirm}
-        onClosed={this.onClosed}
         show={this.state.show}
       />
     )
@@ -56,8 +55,6 @@ export class ErrorDisplay extends React.PureComponent<Props, State> {
   onConfirm = () => {
     this.setState({ show: false })
   }
-
-  onClosed = () => {}
 }
 
 const messages = defineMessages({

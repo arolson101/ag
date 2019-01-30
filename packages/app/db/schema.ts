@@ -1,5 +1,6 @@
 import { buildSchemaSync, useContainer as gqlUseContainer } from 'type-graphql'
 import { Container } from 'typedi'
+import { useContainer as ormUseContainer } from 'typeorm'
 import {
   AccountResolver,
   BankResolver,
@@ -11,6 +12,7 @@ import {
 } from '../resolvers'
 
 gqlUseContainer(Container)
+ormUseContainer(Container)
 
 export const schema = buildSchemaSync({
   resolvers: [

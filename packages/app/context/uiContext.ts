@@ -21,8 +21,6 @@ export interface AlertProps {
   onCancel?: () => any
   cancelText?: string
 
-  onClosed: () => any
-
   show: boolean
 }
 
@@ -68,8 +66,8 @@ export interface UiContext {
   Collapsible: ComponentType<{ show: boolean }>
   Link: ComponentType<{ onClick?: () => any }>
   Text: ComponentType<{ header?: boolean; muted?: boolean; onClick?: () => any }>
-  SubmitButton: ComponentType<{ disabled?: boolean; onPress: (event: React.SyntheticEvent) => any }>
-  DeleteButton: ComponentType<{ disabled?: boolean; onPress: (event: React.SyntheticEvent) => any }>
+  SubmitButton: ComponentType<{ disabled?: boolean; onPress: () => any }>
+  DeleteButton: ComponentType<{ disabled?: boolean; onPress: () => any }>
 
   // form
   Form: React.ComponentType<FormProps>

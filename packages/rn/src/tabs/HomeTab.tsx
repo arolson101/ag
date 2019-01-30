@@ -1,11 +1,19 @@
 import { AppContext } from '@ag/app'
+import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { Text, View } from 'react-native'
-import { Options } from 'react-native-navigation'
+import { Navigation, Options } from 'react-native-navigation'
 import { icons } from '../icons'
 
-export class HomeTab extends React.PureComponent {
+const log = debug('rn:HomeTab')
+log.enabled = true
+
+interface Props {
+  componentId: string
+}
+
+export class HomeTab extends React.PureComponent<Props> {
   static readonly id = 'HomeTab'
   static readonly stackId = 'HomeTabStack'
 
@@ -20,6 +28,17 @@ export class HomeTab extends React.PureComponent {
       },
     },
   })
+
+  componentDidMount() {
+    log('component mounted: %o', this.props)
+    Navigation.mergeOptions(this.props.componentId, {
+      topBar: {
+        title: {
+          text: 'Title',
+        },
+      },
+    })
+  }
 
   render() {
     return (
