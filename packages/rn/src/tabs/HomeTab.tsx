@@ -1,4 +1,4 @@
-import { AppContext } from '@ag/app'
+import { AppContext, HomePage } from '@ag/app'
 import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'
@@ -35,7 +35,7 @@ export class HomeTab extends React.PureComponent<Props> {
   render() {
     return (
       <View>
-        <Text>Home: {JSON.stringify(this.props)}</Text>
+        <HomePage />
       </View>
     )
   }

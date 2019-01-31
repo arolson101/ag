@@ -30,15 +30,21 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
   }
 
   render() {
-    const { ui } = this.context
+    const { ui, dispatch } = this.context
     const { Page, Container, Text } = ui
 
     return (
       <Page>
-        <AppQuery query={HomePage.queries.HomePage}>
+        <AppQuery
+          query={HomePage.queries.HomePage}
+          onCompleted={({ appDb }) => {
+            if (!appDb) {
+              dispatch(actions.dlg.login())
+            }
+          }}
+        >
           {({ appDb }) => (
             <>
-              <LoginDialog isOpen={!appDb} />
               <Text header>Accounts</Text>
               {appDb && appDb.banks.map(bank => <BankDisplay bank={bank} key={bank.id} />)}
               <Container>

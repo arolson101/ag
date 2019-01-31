@@ -2,6 +2,7 @@ import { getType } from 'typesafe-actions'
 import { actions, AppAction } from '../actions'
 
 export interface DialogState {
+  login?: boolean
   bankDialog?: {
     isOpen: boolean
     bankId?: string
@@ -17,6 +18,13 @@ const initialState: DialogState = {}
 
 export const dialog = (state: DialogState = initialState, action: AppAction): DialogState => {
   switch (action.type) {
+    case getType(actions.dlg.login):
+    case getType(actions.closeApp):
+      return { ...state, login: true }
+
+    case getType(actions.openApp):
+      return { ...state, login: false }
+
     case getType(actions.dlg.bankCreate):
       return { ...state, bankDialog: { isOpen: true } }
 
@@ -32,6 +40,7 @@ export const dialog = (state: DialogState = initialState, action: AppAction): Di
     case getType(actions.dlg.close):
       return {
         ...state,
+        login: undefined,
         bankDialog: state.bankDialog && { ...state.bankDialog, isOpen: false },
         accountDialog: state.accountDialog && { ...state.accountDialog, isOpen: false },
       }
