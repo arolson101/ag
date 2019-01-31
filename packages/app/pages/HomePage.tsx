@@ -3,6 +3,7 @@ import { actions } from '../actions'
 import { AppQuery, gql, Gql, Link } from '../components'
 import { BankDisplay } from '../components/BankDisplay'
 import { AppContext } from '../context'
+import { LoginDialog } from '../dialogs/LoginDialog'
 import * as T from '../graphql-types'
 
 export namespace HomePage {
@@ -35,19 +36,16 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
     return (
       <Page>
         <AppQuery query={HomePage.queries.HomePage}>
-          {({ appDb }) =>
-            appDb && (
-              <>
-                <Text header>Accounts</Text>
-                {appDb.banks.map(bank => (
-                  <BankDisplay bank={bank} key={bank.id} />
-                ))}
-                <Container>
-                  <Link dispatch={actions.dlg.bankCreate()}>add bank</Link>
-                </Container>
-              </>
-            )
-          }
+          {({ appDb }) => (
+            <>
+              <LoginDialog isOpen={!appDb} />
+              <Text header>Accounts</Text>
+              {appDb && appDb.banks.map(bank => <BankDisplay bank={bank} key={bank.id} />)}
+              <Container>
+                <Link dispatch={actions.dlg.bankCreate()}>add bank</Link>
+              </Container>
+            </>
+          )}
         </AppQuery>
       </Page>
     )

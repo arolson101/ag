@@ -16,9 +16,10 @@ log.enabled = true
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
     bottomTab: {
-      selectedTextColor: platform.tabBarActiveTextColor,
+      selectedTextColor: platform.tabBarTextColor,
       selectedIconColor: platform.tabBarActiveTextColor,
       textColor: platform.tabBarTextColor,
+      iconColor: platform.tabBarTextColor,
     },
     topBar: {
       largeTitle: {
@@ -69,13 +70,8 @@ const bottomTabs = (passProps: AppContext): LayoutBottomTabs => ({
   ],
 })
 
-import { InjectedIntl, IntlProvider } from 'react-intl'
-const intl = new IntlProvider({ locale: 'en' }).context.intl as InjectedIntl
-
-const fakeProps = { intl: { formatMessage: (m: any) => m.defaultMessage } } as any
-
-export const root = (passProps: AppContext = fakeProps): LayoutRoot => ({
+export const root = (passProps: AppContext): LayoutRoot => ({
   root: {
-    bottomTabs: bottomTabs(fakeProps),
+    bottomTabs: bottomTabs(passProps),
   },
 })

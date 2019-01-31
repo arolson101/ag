@@ -3,23 +3,26 @@ import ApolloClient from 'apollo-client'
 import { ApolloLink, FetchResult, NextLink, Observable, Operation } from 'apollo-link'
 import debug from 'debug'
 import { execute } from 'graphql'
+import { AppContext } from '../context'
 import { ApolloClientContextProvider } from './ApolloClientContextProvider'
 import { schema } from './schema'
 
 const log = debug('app:client')
-log.enabled = false // process.env.NODE_ENV !== 'production'
+log.enabled = true // process.env.NODE_ENV !== 'production'
 
-class ExecuteLink extends ApolloLink {
+export class ExecuteLink extends ApolloLink {
+  static context: AppContext
+
   request(operation: Operation, forward?: NextLink): Observable<FetchResult> | null {
     return new Observable(observer => {
-      log('ExecuteLink %o', operation)
+      log('ExecuteLink %o', { operation, context: ExecuteLink.context })
       Promise.resolve(
         execute({
           schema,
           document: operation.query,
           variableValues: operation.variables,
           operationName: operation.operationName,
-          contextValue: ApolloClientContextProvider.cachedContext,
+          contextValue: ExecuteLink.context,
         })
       )
         .then(data => {

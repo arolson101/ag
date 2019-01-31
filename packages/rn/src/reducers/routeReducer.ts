@@ -1,4 +1,4 @@
-import { actions, AppAction, HomePage, LoginPage } from '@ag/app'
+import { actions, AppAction, HomePage } from '@ag/app'
 import { getType } from 'typesafe-actions'
 
 export interface RouterState {}

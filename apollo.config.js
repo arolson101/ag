@@ -1,5 +1,9 @@
 module.exports = {
-  service: {
-    localSchemaFile: './packages/db/dist/schema.json',
-  },
+  client: {
+    service: {
+      name: 'ag',
+      localSchemaFile: './packages/app/dist/schema.json'
+    },
+    includes: ['./projects/**/*.*'],
+  }
 };

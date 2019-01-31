@@ -1,4 +1,4 @@
-import { AppContext, HomePage, LoginPage } from '@ag/app'
+import { AppContext, HomePage } from '@ag/app'
 import debug from 'debug'
 import { parse } from 'query-string'
 import React from 'react'
@@ -10,25 +10,17 @@ log.enabled = process.env.NODE_ENV !== 'production'
 
 type ComponentWithId = React.ComponentType<any> & { id: string }
 
-const loggedOutRoutes: ComponentWithId[] = [
-  LoginPage, //
-]
-
-const loggedInRoutes: ComponentWithId[] = [
+const routes: ComponentWithId[] = [
   HomePage, //
 ]
 
-interface Props {
-  isLoggedIn: boolean
-}
+interface Props {}
 
 export class ElectronRouter extends React.PureComponent<Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
   render() {
-    const { isLoggedIn } = this.props
-    const routes = isLoggedIn ? loggedInRoutes : loggedOutRoutes
     const fallback = `/${routes[0].id}`
 
     return (

@@ -1,9 +1,13 @@
+import debug from 'debug'
 import React from 'react'
 import { Query, QueryProps } from 'react-apollo'
 import { Omit } from 'utility-types'
 import { AppContext } from '../context'
 import { ErrorDisplay } from './ErrorDisplay'
 import { Gql } from './Gql'
+
+const log = debug('app:AppQuery')
+log.enabled = true
 
 interface Props<D, V> extends Omit<QueryProps<D, V>, 'query' | 'children'> {
   query: Gql<D, V>
@@ -26,6 +30,7 @@ export class AppQuery<TData, TVariables> extends React.PureComponent<Props<TData
           if (loading) {
             return <LoadingOverlay show={loading} />
           } else if (error) {
+            log('error: %s (%O)', error.message, error)
             return <ErrorDisplay error={error} />
           } else {
             return children(data!)

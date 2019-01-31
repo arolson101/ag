@@ -4,7 +4,7 @@ import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { AppAction } from '../actions'
-import { AppState } from '../reducers'
+import { AppState, AppStore } from '../reducers'
 import { UiContext } from './uiContext'
 
 export { CancelToken, CancelTokenSource }
@@ -47,6 +47,7 @@ export interface ClientDependencies {
 export interface AppContext extends ClientDependencies {
   intl: IntlContext
   client: ApolloClient<any>
+  store: AppStore
   dispatch: Dispatch<AppAction>
   getState: () => AppState
 }

@@ -62,7 +62,13 @@ export const ui: UiContext = {
   ),
 
   Dialog: ({ isOpen, title, onClose, children }) => (
-    <Dialog title={title} isOpen={isOpen} onClose={onClose} canOutsideClickClose={false}>
+    <Dialog
+      title={title}
+      isOpen={isOpen}
+      onClose={onClose}
+      isCloseButtonShown={!!onClose}
+      canOutsideClickClose={false}
+    >
       {children}
     </Dialog>
   ),

@@ -14,6 +14,9 @@ interface Props {
 }
 
 export class HomeTab extends React.PureComponent<Props> {
+  static contextType = AppContext
+  context!: React.ContextType<typeof AppContext>
+
   static readonly id = 'HomeTab'
   static readonly stackId = 'HomeTabStack'
 
@@ -29,21 +32,10 @@ export class HomeTab extends React.PureComponent<Props> {
     },
   })
 
-  componentDidMount() {
-    log('component mounted: %o', this.props)
-    Navigation.mergeOptions(this.props.componentId, {
-      topBar: {
-        title: {
-          text: 'Title',
-        },
-      },
-    })
-  }
-
   render() {
     return (
       <View>
-        <Text>Home</Text>
+        <Text>Home: {JSON.stringify(this.props)}</Text>
       </View>
     )
   }

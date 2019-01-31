@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { AppContext, ClientDependencies, GetIntlProvider, Gql } from '@ag/app'
+import { App, AppContext, AppStore, ClientDependencies, Gql } from '@ag/app'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { ApolloConsumer } from 'react-apollo'
@@ -20,6 +20,14 @@ const clientDependencies: ClientDependencies = {
   getImageFromLibrary: action('getImageFromLibrary') as any,
 }
 
+const store = {
+  getState: () => {
+    throw new Error('no getState')
+  },
+  dispatch: action('dispatch'),
+} as any
+const appContext = App.createContext(store, clientDependencies)
+
 export const MockApp: React.FC<{ query: Gql<any, any>; variables?: any; response: object }> = ({
   query,
   variables,
@@ -38,25 +46,7 @@ export const MockApp: React.FC<{ query: Gql<any, any>; variables?: any; response
     <MockedProvider mocks={mocks}>
       <IntlProvider locale='en'>
         <ApolloConsumer>
-          {client => (
-            <GetIntlProvider>
-              {intl => (
-                <AppContext.Provider
-                  value={{
-                    client,
-                    intl,
-                    getState: () => {
-                      throw new Error('no getState')
-                    },
-                    dispatch: action('dispatch'),
-                    ...clientDependencies,
-                  }}
-                >
-                  {children}
-                </AppContext.Provider>
-              )}
-            </GetIntlProvider>
-          )}
+          {client => <AppContext.Provider value={appContext}>{children}</AppContext.Provider>}
         </ApolloConsumer>
       </IntlProvider>
     </MockedProvider>

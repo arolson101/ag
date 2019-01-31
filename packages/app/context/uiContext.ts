@@ -27,7 +27,7 @@ export interface AlertProps {
 export interface DialogProps {
   title: string
   isOpen: boolean
-  onClose: () => any
+  onClose?: () => any
 }
 
 export interface ButtonConfig {

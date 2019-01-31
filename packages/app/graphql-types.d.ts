@@ -73,22 +73,6 @@ export type DateTime = any
 // Documents
 // ====================================================
 
-export namespace IsLoggedIn {
-  export type Variables = {}
-
-  export type Query = {
-    __typename?: 'Query'
-
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
-
-    loggedIn: boolean
-  }
-}
-
 export namespace AccountForm {
   export type Variables = {
     accountId?: Maybe<string>

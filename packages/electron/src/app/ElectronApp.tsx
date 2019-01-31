@@ -1,4 +1,4 @@
-import { App } from '@ag/app'
+import { App, ClientDependencies } from '@ag/app'
 import axios from 'axios'
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
@@ -8,7 +8,7 @@ import { ui } from '../ui'
 import { ElectronRouter } from './ElectronRouter'
 import { deleteDb, openDb } from './openDb.electron'
 
-export const appProps: Omit<App.Props, 'children'> = {
+export const dependencies: ClientDependencies = {
   ui,
 
   openDb,
@@ -17,13 +17,17 @@ export const appProps: Omit<App.Props, 'children'> = {
 
   getImageFromLibrary: null as any,
   resizeImage: null as any,
-
-  store,
 }
+
+const context = App.createContext(store, dependencies)
 
 class ElectronApp extends React.PureComponent {
   render() {
-    return <App {...appProps}>{isLoggedIn => <ElectronRouter isLoggedIn={isLoggedIn} />}</App>
+    return (
+      <App context={context}>
+        <ElectronRouter />
+      </App>
+    )
   }
 }
 

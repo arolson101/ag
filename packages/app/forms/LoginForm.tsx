@@ -3,9 +3,10 @@ import { Formik, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery, ConfirmButton, Gql, IsLoggedIn } from '../components'
+import { AppMutation, AppQuery, ConfirmButton, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
+import { HomePage } from '../pages'
 
 const log = debug('app:LoginForm')
 log.enabled = false // process.env.NODE_ENV !== 'production'
@@ -25,7 +26,9 @@ const initalValues: Values = {
 }
 
 export namespace LoginForm {
-  export interface Props {}
+  export interface Props {
+    dbId?: string
+  }
 }
 
 export class LoginForm extends React.PureComponent<LoginForm.Props> {
@@ -65,6 +68,9 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
     ` as Gql<T.DeleteDb.Mutation, T.DeleteDb.Variables>,
   }
 
+  formApi = React.createRef<Formik>()
+  deleteDb = React.createRef<ConfirmButton>()
+
   render() {
     const { ui, intl } = this.context
     const { Page, Text, SubmitButton, DeleteButton, LoadingOverlay } = ui
@@ -86,13 +92,14 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
               mutation={create ? LoginForm.mutations.createDb : LoginForm.mutations.openDb}
               refetchQueries={[
                 { query: LoginForm.queries.LoginForm }, //
-                { query: IsLoggedIn.query },
+                { query: HomePage.queries.HomePage },
               ]}
             >
               {runMutation => {
                 return (
                   <>
                     <Formik
+                      ref={this.formApi}
                       validateOnBlur={false}
                       initialValues={initialValues}
                       validate={values => {
@@ -148,15 +155,6 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                               // inputRef={this.inputRef}
                             />
                           )}
-
-                          <SubmitButton
-                            onPress={formApi.submitForm}
-                            disabled={formApi.isSubmitting}
-                          >
-                            <Text>
-                              {intl.formatMessage(create ? messages.create : messages.open)}
-                            </Text>
-                          </SubmitButton>
                         </Form>
                       )}
                     </Formik>
@@ -173,6 +171,7 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                               message={intl.formatMessage(messages.deleteMessage)}
                               component={DeleteButton}
                               onConfirmed={deleteDb}
+                              ref={this.deleteDb}
                             >
                               <Text>{intl.formatMessage(messages.delete)}</Text>
                             </ConfirmButton>
@@ -188,6 +187,18 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
         }}
       </AppQuery>
     )
+  }
+
+  delete = () => {
+    if (this.deleteDb.current) {
+      this.deleteDb.current.onPress()
+    }
+  }
+
+  submit = () => {
+    if (this.formApi.current) {
+      this.formApi.current.submitForm()
+    }
   }
 
   // inputRef = (ref: any) => {
