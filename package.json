@@ -6,10 +6,13 @@
       "packages/*"
     ],
     "nohoist": [
+      "**/@ag/app",
       "electron/sqlite3",
       "electron/electron*",
       "**/*react-native*",
-      "rn/native-base"
+      "rn/native-base",
+      "rn/node-libs-react-native/**",
+      "rn/@babel/polyfill"
     ]
   },
   "jest": {

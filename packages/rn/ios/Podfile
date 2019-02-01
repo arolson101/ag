@@ -29,4 +29,6 @@ target 'app_rn' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
+
 end

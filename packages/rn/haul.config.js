@@ -5,7 +5,7 @@ export default {
   webpack: env => {
     const config = createWebpackConfig(({ platform }) => {
       return {
-        entry: `./index.ts`,
+        entry: `./index.js`,
       }
     })(env)
 
