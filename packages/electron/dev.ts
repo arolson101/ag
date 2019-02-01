@@ -1,6 +1,6 @@
 /* tslint:disable:no-console no-implicit-dependencies */
 import chalk from 'chalk'
-import { ChildProcess, spawn, spawnSync } from 'child_process'
+import { ChildProcess, spawn } from 'child_process'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -53,9 +53,18 @@ const print = (channel: string, messages: string) => {
   }
 }
 
+const wrapCmd = (name: string): string => {
+  switch (os.platform()) {
+    case 'win32':
+      return `${name}.cmd`
+    default:
+      return name
+  }
+}
+
 const patchPackage = () => {
   return new Promise(resolve => {
-    const child = spawn('patch-package', { cwd: path.resolve(__dirname, '..', '..') })
+    const child = spawn(wrapCmd('patch-package'), { cwd: path.resolve(__dirname, '..', '..') })
 
     child.stdout.on('data', data => {
       print(channels.patch, data.toString())
@@ -123,7 +132,7 @@ const checkSqlite = () => {
     )
     if (!fs.existsSync(libPath)) {
       print(channels.lib, `${libPath} not found; building`)
-      const child = spawn('electron-builder', ['install-app-deps'])
+      const child = spawn(wrapCmd('electron-builder'), ['install-app-deps'])
 
       child.stdout.on('data', data => {
         print(channels.lib, data.toString())
@@ -162,7 +171,7 @@ const runElectron = () => {
 
   const args = ['--remote-debugging-port=9223', 'dist', '--url', `http://localhost:${port}`]
   print(channels.electron, 'electron ' + args.join(' '))
-  electronProcess = spawn('electron', args)
+  electronProcess = spawn(wrapCmd('electron'), args)
   electronProcess.stdout.on('data', data => {
     print(channels.electron, data.toString())
   })
