@@ -158,7 +158,7 @@ module.exports = (async () => {
       babelTransformerPath: require.resolve('react-native-typescript-transformer'),
     },
     resolver: {
-      blacklistRE: blacklist([...moduleBlacklist, /sqlite3/, /typeorm\/[^b]/]),
+      blacklistRE: blacklist([...moduleBlacklist, /typeorm\/(?!browser).*/]),
       extraNodeModules: {
         ...require('node-libs-react-native'),
         fs: require.resolve('react-native-fs'),
