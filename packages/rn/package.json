@@ -1,11 +1,12 @@
 {
-  "name": "rn",
+  "name": "@ag/rn",
   "private": true,
   "version": "0.0.1",
   "scripts": {
     "debug": "react-native-debugger",
-    "preios": "cd ios && pod install",
+    "preios": "cd ./ios && pod install",
     "ios": "react-native run-ios",
+    "android": "react-native run-android",
     "start": "react-native start",
     "test": "jest"
   },

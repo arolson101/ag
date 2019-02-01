@@ -62,14 +62,14 @@ export const ui: UiContext = {
     <View style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</View>
   ),
 
-  Page: ({ children }) => <div>{children}</div>,
-  Container: ({ children }) => <div>{children}</div>,
+  Page: ({ children }) => <View>{children}</View>,
+  Container: ({ children }) => <View>{children}</View>,
   Collapsible: ({ show, children }) => (
     <View style={{ display: show ? 'flex' : 'none' }}>{children}</View>
   ),
   Link: ({ onClick, children }) => (
     <Button transparent onPress={onClick}>
-      {children}
+      <Text>{children}</Text>
     </Button>
   ),
   Text: ({ header, muted, children, onClick }) => {
@@ -82,12 +82,12 @@ export const ui: UiContext = {
   },
   SubmitButton: ({ onPress, disabled, children }) => (
     <Button onPress={onPress} disabled={disabled}>
-      {children}
+      <Text>{children}</Text>
     </Button>
   ),
   DeleteButton: ({ onPress, disabled, children }) => (
     <Button danger block onPress={onPress} disabled={disabled}>
-      {children}
+      <Text>{children}</Text>
     </Button>
   ),
 

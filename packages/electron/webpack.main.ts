@@ -4,7 +4,7 @@ import pkg from './package.json'
 
 const CreateFileWebpack = require('create-file-webpack')
 
-const appName = 'Ag'
+const appName = 'Ag-electron'
 
 const outputFilename = 'main.js'
 

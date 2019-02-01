@@ -1,9 +1,13 @@
 import { AppContext } from '@ag/app'
+import debug from 'debug'
 import { Button, Spinner as NBSpinner, Text, View } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
 import { defineMessages } from 'react-intl'
 import { Dimensions, Modal, StyleSheet } from 'react-native'
+
+const log = debug('rn:LoadingOverlay')
+log.enabled = true
 
 interface Props {
   show: boolean
@@ -25,7 +29,7 @@ export class LoadingOverlay extends React.PureComponent<Props> {
         transparent={true} //
         animationType={'fade'}
         visible={visible}
-        // onRequestClose={onCancel}
+        onRequestClose={this.onRequestClose}
       >
         <View style={[styles.modalBackground, { height, width }]}>
           <View style={styles.activityIndicatorWrapper}>
@@ -39,6 +43,10 @@ export class LoadingOverlay extends React.PureComponent<Props> {
         </View>
       </Modal>
     )
+  }
+
+  onRequestClose = () => {
+    log('modal onRequestClose')
   }
 }
 
