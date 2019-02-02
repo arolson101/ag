@@ -79,7 +79,7 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
     return (
       <AppQuery query={LoginForm.queries.LoginForm}>
         {({ dbs }) => {
-          const dbId = dbs.length ? dbs[0].dbId : undefined
+          const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
           const create = !dbId
 
           const initialValues = {

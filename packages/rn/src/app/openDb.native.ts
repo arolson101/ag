@@ -1,5 +1,5 @@
 import debug from 'debug'
-import SqlitePlugin from 'react-native-sqlcipher-storage'
+import SqlitePlugin from 'react-native-sqlite-storage'
 import { Connection, ConnectionOptions, createConnection } from 'typeorm'
 
 const log = debug('rn:db')

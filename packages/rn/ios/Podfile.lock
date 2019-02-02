@@ -3,6 +3,8 @@ PODS:
     - React/Core (= 0.57.8)
   - react-native-randombytes (3.5.2):
     - React
+  - react-native-sqlite-storage (3.3.9):
+    - React
   - React/Core (0.57.8):
     - yoga (= 0.57.8.React)
   - React/DevSupport (0.57.8):
@@ -44,6 +46,7 @@ PODS:
 
 DEPENDENCIES:
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
+  - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - React/Core (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
   - React/RCTActionSheet (from `../node_modules/react-native`)
@@ -66,6 +69,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
+  react-native-sqlite-storage:
+    :path: "../node_modules/react-native-sqlite-storage"
   ReactNativeNavigation:
     :path: "../node_modules/react-native-navigation"
   RNFS:
@@ -78,11 +83,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-randombytes: d3184d351604f78e019535178766590188bbc133
+  react-native-sqlite-storage: 848fb96c0b6d17b3f70e169ac41f84434cdad94c
   ReactNativeNavigation: 20522060de61b1c293ec50681a6aa11488596286
   RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
   RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: cd0423ac9b4a7f48986658dfcb6b62d9b0a943f7
+PODFILE CHECKSUM: cc7c4f3909a04201a6c2188b6b63401dd8994abe
 
 COCOAPODS: 1.5.3

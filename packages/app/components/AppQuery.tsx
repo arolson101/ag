@@ -27,16 +27,13 @@ export class AppQuery<TData, TVariables> extends React.PureComponent<Props<TData
 
     return (
       <Query<TData, TVariables> {...props} onCompleted={onCompleted as any}>
-        {({ loading, error, data }) => {
-          if (loading) {
-            return <LoadingOverlay show={loading} />
-          } else if (error) {
-            log('error: %s (%O)', error.message, error)
-            return <ErrorDisplay error={error} />
-          } else {
-            return children(data!)
-          }
-        }}
+        {({ loading, error, data }) => (
+          <>
+            <LoadingOverlay show={loading} />
+            {error && <ErrorDisplay error={error} />}
+            {children(data!)}
+          </>
+        )}
       </Query>
     )
   }

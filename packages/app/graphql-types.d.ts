@@ -186,7 +186,7 @@ export namespace LoginForm {
   export type Query = {
     __typename?: 'Query'
 
-    dbs: Dbs[]
+    dbs: Maybe<Dbs[]>
   }
 
   export type Dbs = {

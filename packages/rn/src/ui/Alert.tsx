@@ -10,6 +10,7 @@ log.enabled = true
 export class Alert extends React.PureComponent<AlertProps> {
   render() {
     const { show, title, body, danger, onConfirm, confirmText, onCancel, cancelText } = this.props
+    log('showing Alert %s %o', title, this.props)
     return (
       <Modal visible={show} transparent onRequestClose={this.onRequestClose}>
         <View>

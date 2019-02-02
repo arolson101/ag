@@ -28,7 +28,7 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
     return (
       <AppQuery query={LoginForm.queries.LoginForm}>
         {({ dbs }) => {
-          const dbId = dbs.length ? dbs[0].dbId : undefined
+          const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
 
           return (
             <Dialog

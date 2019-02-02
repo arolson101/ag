@@ -165,7 +165,7 @@ module.exports = (async () => {
         vm: require.resolve('vm-browserify/index.js'),
         stream: require.resolve('react-native-stream'),
 
-        'react-native-sqlite-storage': require.resolve('react-native-sqlcipher-storage/sqlite.js'),
+        // 'react-native-sqlite-storage': require.resolve('react-native-sqlcipher-storage/sqlite.js'),
         typeorm: require.resolve('typeorm/browser'),
 
         ...extraNodeModules,
