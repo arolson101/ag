@@ -73,7 +73,7 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
 
   render() {
     const { ui, intl } = this.context
-    const { Page, Text, SubmitButton, DeleteButton, LoadingOverlay } = ui
+    const { Text, DeleteButton } = ui
     const { Form, TextField } = typedFields<Values>(ui)
 
     return (
