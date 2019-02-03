@@ -1,4 +1,4 @@
-import { TabsProps, UiContext } from '@ag/app'
+import { UiContext } from '@ag/app'
 import { Button, Card, H3, ListItem, Tab, Tabs, Text, Toast, View } from 'native-base'
 import React from 'react'
 import { Alert } from './Alert'
@@ -79,6 +79,6 @@ export const ui: UiContext = {
   TextField,
   UrlField,
 
-  Tabs: Tabs as React.ComponentType<TabsProps>,
-  Tab: ({ title, panel }) => <Tab heading={title}>{panel}</Tab>,
+  Tabs: ({ children }) => <Tabs>{children}</Tabs>,
+  Tab: ({ heading, panel }) => <Tab heading={heading}>{panel}</Tab>,
 }

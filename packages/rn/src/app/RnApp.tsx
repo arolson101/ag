@@ -29,11 +29,7 @@ export const dependencies: ClientDependencies = {
 
 const context = App.createContext(store, dependencies)
 
-const RnApp: React.FC = ({ children }) => (
-  <App context={context}>
-    <Root>{children}</Root>
-  </App>
-)
+const RnApp: React.FC = ({ children }) => <App context={context}>{children}</App>
 
 registerComponents(RnApp)
 

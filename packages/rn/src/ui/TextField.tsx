@@ -29,6 +29,7 @@ export class TextField<Values> extends React.PureComponent<TextField.Props<Value
       secure,
       rows,
       onSubmitEditing,
+      disabled,
       // returnKeyType,
       noCorrect,
     } = this.props
@@ -40,11 +41,18 @@ export class TextField<Values> extends React.PureComponent<TextField.Props<Value
           const inputProps = { autoFocus }
           const inputStyle = color ? { color } : {}
           return (
-            <Item {...itemProps} error={error} secureTextEntry={secure} placeholder={placeholder}>
+            <Item
+              {...itemProps}
+              error={error}
+              secureTextEntry={secure}
+              placeholder={placeholder}
+              disabled={disabled}
+            >
               <Label label={label} error={error} />
               {rows && rows > 0 ? (
                 <Textarea
-                  bordered={true}
+                  editable={!disabled}
+                  bordered={false}
                   style={{ flex: 1 }}
                   rowSpan={rows}
                   onChangeText={form.handleChange(name)}
@@ -53,6 +61,7 @@ export class TextField<Values> extends React.PureComponent<TextField.Props<Value
                 />
               ) : (
                 <Input
+                  disabled={disabled}
                   style={{ flex: 1, ...inputStyle }}
                   onChangeText={form.handleChange(name)}
                   value={field.value.toString()}

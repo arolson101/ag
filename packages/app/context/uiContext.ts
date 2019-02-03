@@ -47,7 +47,7 @@ export interface TabsProps {
 
 export interface TabProps {
   id: string
-  title: string
+  heading: string
   panel: JSX.Element
 }
 
