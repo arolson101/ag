@@ -49,7 +49,7 @@ export class Dialog extends React.PureComponent<DialogProps> {
   }
 
   render() {
-    return <Root>{this.props.children}</Root>
+    return <>{this.props.children}</>
   }
 }
 

@@ -9,7 +9,7 @@ export class SelectField<Values> extends React.PureComponent<SelectFieldProps<Va
   private form?: FormikProps<Values>
 
   render() {
-    const { field: name, label, items, searchable } = this.props
+    const { field: name, label, items } = this.props
 
     return (
       <Field name={name}>
@@ -21,30 +21,22 @@ export class SelectField<Values> extends React.PureComponent<SelectFieldProps<Va
             throw new Error(`selected item ${field.value} not found in item list`)
           }
           return (
-            <ListItem
-              button
-              onPress={this.onPress}
-              style={searchable ? {} : { paddingTop: 0, paddingBottom: 0 }}
-            >
+            <ListItem button onPress={this.onPress} style={{ paddingTop: 0, paddingBottom: 0 }}>
               <Label label={label} error={error} />
               <Body>
-                {searchable ? (
-                  <Text style={{ color: platform.textColor }}>{selectedItem.label}</Text>
-                ) : (
-                  <Picker
-                    mode='dialog'
-                    iosHeader={label}
-                    textStyle={{ flex: 1 }}
-                    placeholder='placeholder'
-                    placeholderStyle={{ flex: 1 }}
-                    selectedValue={field.value}
-                    onValueChange={form.handleChange(name)}
-                  >
-                    {items.map(item => (
-                      <Picker.Item key={item.value} label={item.label} value={item.value} />
-                    ))}
-                  </Picker>
-                )}
+                <Picker
+                  mode='dialog'
+                  iosHeader={label}
+                  textStyle={{ flex: 1 }}
+                  // placeholder='placeholder'
+                  // placeholderStyle={{ flex: 1 }}
+                  selectedValue={field.value}
+                  onValueChange={this.onValueChange}
+                >
+                  {items.map(item => (
+                    <Picker.Item key={item.value} label={item.label} value={item.value} />
+                  ))}
+                </Picker>
               </Body>
               {error && <Icon name='close-circle' />}
             </ListItem>
