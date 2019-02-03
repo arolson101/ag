@@ -7,6 +7,8 @@ import path from 'path'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 
+process.env.DEBUG = 'app:*,electron:*'
+
 const devConfig: Partial<webpack.Configuration> = {
   mode: 'development',
   devtool: 'source-map',

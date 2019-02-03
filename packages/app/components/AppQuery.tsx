@@ -31,7 +31,7 @@ export class AppQuery<TData, TVariables> extends React.PureComponent<Props<TData
           <>
             <LoadingOverlay show={loading} />
             {error && <ErrorDisplay error={error} />}
-            {children(data!)}
+            {!loading && children(data!)}
           </>
         )}
       </Query>
