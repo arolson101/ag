@@ -30,6 +30,11 @@ export interface DialogProps {
   onClose?: () => any
 }
 
+export interface DialogFooterProps {
+  primary: ButtonConfig
+  secondary?: ButtonConfig
+}
+
 export interface ButtonConfig {
   title: string
   onClick: () => any
@@ -54,7 +59,7 @@ export interface UiContext {
   Alert: ComponentType<AlertProps>
   Dialog: ComponentType<DialogProps>
   DialogBody: ComponentType
-  DialogFooter: ComponentType<{ primary: ButtonConfig; secondary?: ButtonConfig }>
+  DialogFooter: ComponentType<DialogFooterProps>
   LoadingOverlay: ComponentType<{ show: boolean }>
 
   // layout

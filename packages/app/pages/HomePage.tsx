@@ -3,7 +3,6 @@ import { actions } from '../actions'
 import { AppQuery, gql, Gql, Link } from '../components'
 import { BankDisplay } from '../components/BankDisplay'
 import { AppContext } from '../context'
-import { LoginDialog } from '../dialogs/LoginDialog'
 import * as T from '../graphql-types'
 
 export namespace HomePage {

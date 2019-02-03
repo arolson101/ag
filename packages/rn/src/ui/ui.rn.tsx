@@ -5,6 +5,7 @@ import { Alert } from './Alert'
 import { CheckboxField } from './CheckboxField'
 import { CurrencyField } from './CurrencyField'
 import { DateField } from './DateField'
+import { Dialog, DialogBody, DialogFooter } from './Dialog'
 import { Form } from './Form'
 import { LoadingOverlay } from './LoadingOverlay'
 import { SelectField } from './SelectField'
@@ -26,32 +27,9 @@ export const ui: UiContext = {
 
   LoadingOverlay,
 
-  Dialog: ({ isOpen, title, onClose, children }) => null,
-  // (
-  //   <Dialog title={title} isOpen={isOpen} onClose={onClose} canOutsideClickClose={false}>
-  //     {children}
-  //   </Dialog>
-  // ),
-
-  DialogBody: ({ children }) => null, // <div className={Classes.DIALOG_BODY}>{children}</div>,
-  DialogFooter: ({ primary, secondary }) => null,
-  // (
-  //   <div className={Classes.DIALOG_FOOTER}>
-  //     <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-  //       {secondary && (
-  //         <Button
-  //           onClick={secondary.onClick}
-  //           intent={secondary.isDanger ? Intent.DANGER : Intent.NONE}
-  //         >
-  //           {secondary.title}
-  //         </Button>
-  //       )}
-  //       <Button onClick={primary.onClick} intent={Intent.PRIMARY}>
-  //         {primary.title}
-  //       </Button>
-  //     </div>
-  //   </div>
-  // ),
+  Dialog,
+  DialogBody,
+  DialogFooter,
 
   // layout
   Card: ({ children }) => <Card>{children}</Card>,

@@ -9,9 +9,7 @@ import { icons } from '../icons'
 const log = debug('rn:HomeTab')
 log.enabled = true
 
-interface Props {
-  componentId: string
-}
+interface Props {}
 
 export class HomeTab extends React.PureComponent<Props> {
   static contextType = AppContext

@@ -13,14 +13,12 @@ log.enabled = false // process.env.NODE_ENV !== 'production'
 
 interface Values {
   name: string
-  dbId?: string
   password: string
   passwordConfirm?: string
 }
 
-const initalValues: Values = {
+const initialValues: Values = {
   name: 'appdb',
-  dbId: undefined,
   password: '',
   passwordConfirm: '',
 }
@@ -82,11 +80,6 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
           const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
           const create = !dbId
 
-          const initialValues = {
-            ...initalValues,
-            dbId,
-          }
-
           return (
             <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
               mutation={create ? LoginForm.mutations.createDb : LoginForm.mutations.openDb}
@@ -104,23 +97,23 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                       initialValues={initialValues}
                       validate={values => {
                         const errors: FormikErrors<Values> = {}
-                        if (values.dbId) {
-                          if (!values.password.trim()) {
-                            errors.password = intl.formatMessage(messages.valueEmpty)
-                          }
-                        } else {
+                        if (create) {
                           if (!values.password.trim()) {
                             errors.password = intl.formatMessage(messages.valueEmpty)
                           }
                           if (values.password !== values.passwordConfirm) {
                             errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
                           }
+                        } else {
+                          if (!values.password.trim()) {
+                            errors.password = intl.formatMessage(messages.valueEmpty)
+                          }
                         }
                         return errors
                       }}
                       onSubmit={async (values, factions) => {
                         try {
-                          await runMutation({ variables: values })
+                          await runMutation({ variables: { ...values, dbId } })
                           log('logged in')
                         } finally {
                           factions.setSubmitting(false)
@@ -172,6 +165,7 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                               component={DeleteButton}
                               onConfirmed={deleteDb}
                               ref={this.deleteDb}
+                              danger
                             >
                               <Text>{intl.formatMessage(messages.delete)}</Text>
                             </ConfirmButton>
@@ -219,7 +213,7 @@ const messages = defineMessages({
   },
   welcomeMessageOpen: {
     id: 'LoginForm.welcomeMessageOpen',
-    defaultMessage: 'Welcome!  Enter your password to access your data.',
+    defaultMessage: 'Enter your password to access your data.',
   },
   create: {
     id: 'LoginForm.create',
@@ -235,7 +229,7 @@ const messages = defineMessages({
   },
   deleteMessage: {
     id: 'LoginForm.deleteMessage',
-    defaultMessage: 'This will delete all the data.  Are you sure?',
+    defaultMessage: 'This will delete all the data.',
   },
   valueEmpty: {
     id: 'LoginForm.valueEmpty',

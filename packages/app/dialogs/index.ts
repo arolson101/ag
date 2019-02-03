@@ -1,3 +1,3 @@
 export * from './AccountDialog'
 export * from './BankDialog'
-export * from './Dialogs'
+export * from './LoginDialog'

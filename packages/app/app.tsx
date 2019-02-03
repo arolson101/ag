@@ -5,8 +5,6 @@ import { IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { AppContext, ClientDependencies } from './context'
 import { client, ExecuteLink } from './db'
-import { ApolloClientContextProvider } from './db/ApolloClientContextProvider'
-import { Dialogs } from './dialogs'
 import { AppStore } from './reducers'
 
 const log = debug('app:app')
@@ -20,17 +18,14 @@ export namespace App {
 
 export class App extends React.PureComponent<App.Props> {
   render() {
-    log('App: %o', this.props)
     const { context, children } = this.props
 
     return (
       <ApolloProvider client={context.client}>
         <Provider store={context.store}>
           <AppContext.Provider value={context}>
-            <ApolloClientContextProvider>
-              {children}
-              <Dialogs />
-            </ApolloClientContextProvider>
+            {/* tslint:disable-next-line:prettier */}
+            {children}
           </AppContext.Provider>
         </Provider>
       </ApolloProvider>

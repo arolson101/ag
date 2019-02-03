@@ -1,7 +1,7 @@
 import { FormProps } from '@ag/app'
 import * as NB from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
-import * as React from 'react'
+import React from 'react'
 
 export class Form<Values> extends React.PureComponent<FormProps<Values>> {
   render() {

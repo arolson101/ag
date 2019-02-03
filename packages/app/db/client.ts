@@ -4,11 +4,10 @@ import { ApolloLink, FetchResult, NextLink, Observable, Operation } from 'apollo
 import debug from 'debug'
 import { execute } from 'graphql'
 import { AppContext } from '../context'
-import { ApolloClientContextProvider } from './ApolloClientContextProvider'
 import { schema } from './schema'
 
 const log = debug('app:client')
-log.enabled = true // process.env.NODE_ENV !== 'production'
+log.enabled = false // process.env.NODE_ENV !== 'production'
 
 export class ExecuteLink extends ApolloLink {
   static context: AppContext

@@ -31,10 +31,7 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
           const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
 
           return (
-            <Dialog
-              isOpen={isOpen}
-              title={intl.formatMessage(dbId ? messages.titleOpen : messages.titleCreate)}
-            >
+            <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
               <DialogBody>
                 <LoginForm ref={this.loginForm} />
               </DialogBody>
@@ -59,13 +56,9 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
 }
 
 const messages = defineMessages({
-  titleCreate: {
-    id: 'LoginDialog.titleCreate',
-    defaultMessage: 'Create',
-  },
-  titleOpen: {
-    id: 'LoginDialog.titleOpen',
-    defaultMessage: 'Open',
+  title: {
+    id: 'LoginDialog.title',
+    defaultMessage: 'Ag',
   },
   create: {
     id: 'LoginDialog.create',

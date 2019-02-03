@@ -5,6 +5,7 @@ if (__DEV__) {
   const IGNORED_WARNINGS = [
     'Remote debugger is in a background tab which may cause apps to perform slowly',
     'Require cycle:',
+    'Unbalanced calls start/end for tag',
   ]
   const oldConsoleWarn = console.warn
 
@@ -21,6 +22,8 @@ if (__DEV__) {
     return oldConsoleWarn.apply(console, args)
   }
 }
+
+process.env.DEBUG = 'app*,rn:*'
 
 require('./src/app')
 

@@ -1,4 +1,5 @@
 import { App, AppContext } from '@ag/app'
+import * as Dialogs from '@ag/app/dialogs'
 import debug from 'debug'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
@@ -9,9 +10,9 @@ import {
   Navigation,
 } from 'react-native-navigation'
 import * as Tabs from '../tabs'
+import { DialogContext } from '../ui/Dialog'
 
 const log = debug('rn:navigation')
-log.enabled = true
 
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
@@ -30,14 +31,32 @@ export const setDefaultOptions = () => {
 }
 
 export const registerComponents = (RnApp: React.ComponentType) => {
-  for (const Tab of [
+  for (const tab of [
     Tabs.AccountsTab,
     Tabs.BillsTab,
     Tabs.BudgetsTab,
     Tabs.CalendarTab,
     Tabs.HomeTab,
   ]) {
-    Navigation.registerComponentWithRedux(Tab.name, () => Tab, RnApp, undefined)
+    Navigation.registerComponentWithRedux(tab.name, () => tab, RnApp, undefined)
+  }
+
+  for (const Dialog of [
+    Dialogs.LoginDialog, //
+    Dialogs.BankDialog,
+    Dialogs.AccountDialog,
+  ]) {
+    const component: React.FC<DialogContext> = ({ componentId, children }) => (
+      <AppContext.Consumer>
+        {appContext => (
+          <DialogContext.Provider value={{ ...appContext, componentId }}>
+            <Dialog {...{} as any}>{children}</Dialog>
+          </DialogContext.Provider>
+        )}
+      </AppContext.Consumer>
+    )
+    component.displayName = `rnnDlg(${component.name})`
+    Navigation.registerComponentWithRedux(Dialog.name, () => component, RnApp, undefined)
   }
 }
 

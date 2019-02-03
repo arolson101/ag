@@ -2,9 +2,9 @@ import { App, ClientDependencies } from '@ag/app'
 import axios from 'axios'
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
-import { Omit } from 'utility-types'
 import { store } from '../store'
 import { ui } from '../ui'
+import { Dialogs } from './Dialogs'
 import { ElectronRouter } from './ElectronRouter'
 import { deleteDb, openDb } from './openDb.electron'
 
@@ -26,6 +26,7 @@ class ElectronApp extends React.PureComponent {
     return (
       <App context={context}>
         <ElectronRouter />
+        <Dialogs />
       </App>
     )
   }

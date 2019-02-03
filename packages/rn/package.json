@@ -21,7 +21,6 @@
     "axios": "^0.18.0",
     "debug": "^4.1.1",
     "formik": "^1.4.2",
-    "haul": "^1.0.0-rc.10",
     "native-base": "^2.10.0",
     "node-libs-react-native": "^1.0.3",
     "react": "^16.7.0",
