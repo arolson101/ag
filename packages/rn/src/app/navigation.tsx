@@ -46,11 +46,11 @@ export const registerComponents = (RnApp: React.ComponentType) => {
     Dialogs.BankDialog,
     Dialogs.AccountDialog,
   ]) {
-    const component: React.FC<DialogContext> = ({ componentId, children }) => (
+    const component: React.FC<DialogContext> = ({ componentId, ...props }) => (
       <AppContext.Consumer>
         {appContext => (
           <DialogContext.Provider value={{ ...appContext, componentId }}>
-            <Dialog {...{} as any}>{children}</Dialog>
+            <Dialog {...props as any} />
           </DialogContext.Provider>
         )}
       </AppContext.Consumer>
