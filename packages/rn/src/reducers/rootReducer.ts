@@ -1,20 +1,13 @@
-import { appReducers, AppState, initialAppState } from '@ag/app'
-import { combineReducers } from 'redux'
-import { router, RouterState } from './routeReducer'
+import { AppAction, appReducers, AppState } from '@ag/app'
+import { combineReducers, Store } from 'redux'
 
-const rnReducers = {
-  router,
-}
-
-export const initialState = {
-  ...initialAppState,
-}
+const rnReducers = {}
 
 export const rootReducer = combineReducers({
   ...appReducers,
   ...rnReducers,
 })
 
-export interface RnState extends AppState {
-  router: RouterState
-}
+export interface RnState extends AppState {}
+
+export type RnStore = Store<RnState, AppAction>

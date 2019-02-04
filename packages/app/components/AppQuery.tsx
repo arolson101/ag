@@ -23,7 +23,7 @@ export class AppQuery<TData, TVariables> extends React.Component<Props<TData, TV
     const {
       ui: { LoadingOverlay },
     } = this.context
-    log('query %o', props.query)
+    // log('query %o', props.query)
 
     return (
       <Query<TData, TVariables> {...props} onCompleted={onCompleted as any}>

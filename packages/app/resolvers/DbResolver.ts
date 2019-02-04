@@ -29,6 +29,14 @@ const appEntities = [
 @Resolver(objectType => Db)
 export class DbResolver {
   private appDbInstance = new AppDb()
+  private initPromise!: Promise<any>
+
+  async init(ctx: AppContext) {
+    if (this.initPromise === undefined) {
+      this.initPromise = this.getDbs(ctx)
+    }
+    return this.initPromise
+  }
 
   async getDbs(ctx: AppContext) {
     const { getState, openDb, dispatch } = ctx
@@ -47,14 +55,17 @@ export class DbResolver {
   @Query(returns => [Db])
   async dbs(@Ctx() ctx: AppContext): Promise<Db[]> {
     log('dbs query')
+    await this.init(ctx)
     const dbs = await this.getDbs(ctx)
     const all = await dbs.find()
     return all
   }
 
   @Query(returns => AppDb, { nullable: true })
-  async appDb(@Ctx() { getState }: AppContext): Promise<AppDb | undefined> {
+  async appDb(@Ctx() ctx: AppContext): Promise<AppDb | undefined> {
     log('appDb')
+    await this.init(ctx)
+    const { getState } = ctx
     const appDb = selectors.getAppDb(getState())
     if (appDb) {
       return this.appDbInstance

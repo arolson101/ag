@@ -1,5 +1,5 @@
-import { actions, AppAction } from '@ag/app'
 import { getType } from 'typesafe-actions'
+import { actions, AppAction } from '../actions'
 
 export interface DialogState {
   login?: boolean

@@ -1,38 +1,54 @@
-import { AccountDialog, AppAction, AppContext, BankDialog, LoginDialog } from '@ag/app'
+import { AccountDialog, AppContext, AppState, BankDialog, LoginDialog } from '@ag/app'
+import debug from 'debug'
 import React from 'react'
-import { connect } from 'react-redux'
-import { ElectronState } from '../reducers'
-import { DialogState } from '../reducers/dialogReducer'
+import shallowequal from 'shallowequal'
 
-interface StateProps {
-  state: DialogState
+const log = debug('electron:Dialogs')
+
+interface Props {}
+
+interface State {
+  dialog: AppState['dialog']
 }
 
-interface DispatchProps {
-  dispatch: (action: AppAction) => any
-}
+const subState = (state: AppState): State => ({
+  dialog: state.dialog,
+})
 
-interface Props extends StateProps, DispatchProps {}
-
-export class DialogsComponent extends React.PureComponent<Props> {
+export class Dialogs extends React.PureComponent<Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
+  state: State
+  unsubscribe!: () => void
+
+  constructor(props: Props, context: React.ContextType<typeof AppContext>) {
+    super(props)
+    log('constructor')
+    this.state = subState(context.store.getState() as any)
+    this.unsubscribe = context.store.subscribe(() => {
+      const state = subState(context.store.getState() as any)
+      if (!shallowequal(state, this.state)) {
+        this.setState(state)
+      }
+    })
+  }
+
+  componentWillUnmount() {
+    log('componentWillUnmount')
+    this.unsubscribe()
+  }
+
   render() {
-    const { state } = this.props
+    log('render')
+    const { dialog } = this.state
 
     return (
       <>
-        <LoginDialog isOpen={!!state.login} />
-        {state.bankDialog && <BankDialog {...state.bankDialog} />}
-        {state.accountDialog && <AccountDialog {...state.accountDialog} />}
+        <LoginDialog isOpen={!!dialog.login} />
+        {dialog.bankDialog && <BankDialog {...dialog.bankDialog} />}
+        {dialog.accountDialog && <AccountDialog {...dialog.accountDialog} />}
       </>
     )
   }
 }
-
-export const Dialogs = connect<StateProps, DispatchProps, {}, ElectronState>(
-  state => ({
-    state: state.dialog,
-  }) //
-)(DialogsComponent)

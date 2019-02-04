@@ -1,9 +1,12 @@
+import debug from 'debug'
 import React from 'react'
 import { actions } from '../actions'
 import { AppQuery, gql, Gql, Link } from '../components'
 import { BankDisplay } from '../components/BankDisplay'
 import { AppContext } from '../context'
 import * as T from '../graphql-types'
+
+const log = debug('app:HomePage')
 
 export namespace HomePage {
   export interface Props {}

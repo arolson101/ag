@@ -38,6 +38,7 @@ export const registerComponents = (RnApp: React.ComponentType) => {
     Tabs.CalendarTab,
     Tabs.HomeTab,
   ]) {
+    log('registered tab %s', tab.name)
     Navigation.registerComponentWithRedux(tab.name, () => tab, RnApp, undefined)
   }
 
@@ -56,6 +57,8 @@ export const registerComponents = (RnApp: React.ComponentType) => {
       </AppContext.Consumer>
     )
     component.displayName = `rnnDlg(${component.name})`
+
+    log('registered dialog %s', Dialog.name)
     Navigation.registerComponentWithRedux(Dialog.name, () => component, RnApp, undefined)
   }
 }

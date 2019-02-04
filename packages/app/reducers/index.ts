@@ -2,12 +2,12 @@ import { Store } from 'redux'
 import { StateType } from 'typesafe-actions'
 import { AppAction } from '../actions'
 import { db, dbSelectors } from './db'
+import { dialog } from './dialogReducer'
 
 export const appReducers = {
   db,
+  dialog,
 }
-
-export const initialAppState = {}
 
 export interface AppState extends StateType<typeof appReducers> {}
 export interface AppStore extends Store<AppState, AppAction> {}

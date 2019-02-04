@@ -1,13 +1,5 @@
-import {
-  actions,
-  AppContext,
-  ButtonConfig,
-  DialogFooterProps,
-  DialogProps,
-  UiContext,
-} from '@ag/app'
+import { AppContext, ButtonConfig, DialogFooterProps, DialogProps, UiContext } from '@ag/app'
 import debug from 'debug'
-import { Root, Text } from 'native-base'
 import React from 'react'
 import {
   Navigation,
@@ -29,8 +21,7 @@ export class Dialog extends React.PureComponent<DialogProps> {
 
   componentDidMount() {
     const { title } = this.props
-    const { dispatch, componentId } = this.context
-    dispatch(actions.dlg.mounted({ componentId }))
+    const { componentId } = this.context
     Navigation.mergeOptions(componentId, {
       topBar: {
         title: {
@@ -41,11 +32,6 @@ export class Dialog extends React.PureComponent<DialogProps> {
         },
       },
     })
-  }
-
-  componentWillUnmount() {
-    const { dispatch, componentId } = this.context
-    dispatch(actions.dlg.unmounted({ componentId }))
   }
 
   render() {
