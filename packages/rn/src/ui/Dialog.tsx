@@ -1,6 +1,8 @@
 import { AppContext, ButtonConfig, DialogFooterProps, DialogProps, UiContext } from '@ag/app'
 import debug from 'debug'
+import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
+import { Platform } from 'react-native'
 import {
   Navigation,
   NavigationButtonPressedEvent,
@@ -64,10 +66,18 @@ export class DialogFooter extends React.PureComponent<DialogFooterProps> {
 
     log('setting buttons')
     Navigation.mergeOptions(componentId, {
-      topBar: {
-        rightButtons: [makeButton('primary', primary)],
-        leftButtons: secondary && [makeButton('secondary', secondary)],
-      },
+      topBar:
+        Platform.OS === 'ios'
+          ? {
+              rightButtons: [makeButton('primary', primary)],
+              leftButtons: secondary && [makeButton('secondary', secondary)],
+            }
+          : {
+              rightButtons: [
+                makeButton('primary', primary),
+                ...(secondary ? [makeButton('secondary', secondary)] : []),
+              ],
+            },
     })
 
     Navigation.events().bindComponent(this, componentId)
@@ -86,5 +96,5 @@ export class DialogFooter extends React.PureComponent<DialogFooterProps> {
 const makeButton = (id: TopButtonId, opts: ButtonConfig): OptionsTopBarButton => ({
   id,
   text: opts.title,
-  color: opts.isDanger ? 'red' : undefined,
+  color: opts.isDanger ? 'red' : platform.toolbarBtnTextColor,
 })

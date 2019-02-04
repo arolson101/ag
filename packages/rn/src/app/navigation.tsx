@@ -16,6 +16,10 @@ const log = debug('rn:navigation')
 
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
+    bottomTabs: {
+      backgroundColor: platform.tabActiveBgColor,
+      titleDisplayMode: 'alwaysShow',
+    },
     bottomTab: {
       selectedTextColor: platform.tabBarTextColor,
       selectedIconColor: platform.tabBarActiveTextColor,
@@ -23,6 +27,13 @@ export const setDefaultOptions = () => {
       iconColor: platform.tabBarTextColor,
     },
     topBar: {
+      borderColor: platform.toolbarDefaultBorder,
+      background: {
+        color: platform.toolbarDefaultBg,
+      },
+      title: {
+        color: platform.toolbarBtnTextColor,
+      },
       largeTitle: {
         visible: true,
       },
