@@ -2,7 +2,7 @@ module.exports = {
   client: {
     service: {
       name: 'ag',
-      localSchemaFile: './packages/app/dist/schema.json'
+      localSchemaFile: './dist/schema.json'
     },
     includes: ['./projects/**/*.*'],
   }
