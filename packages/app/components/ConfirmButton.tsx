@@ -1,6 +1,6 @@
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppContext } from '../context/AppContext'
+import { AppContext } from '../context'
 
 interface Props {
   message: string

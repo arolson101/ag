@@ -1,8 +1,11 @@
+import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext } from '../context'
 import { BankForm } from '../forms'
+
+const log = debug('app:BankDialog')
 
 export namespace BankDialog {
   export interface Props {
@@ -50,12 +53,16 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
   }
 
   save = () => {
+    const { dispatch } = this.context
     if (this.bankForm.current) {
+      log('save')
       this.bankForm.current.save()
+      dispatch(actions.dlg.close())
     }
   }
 
   close = () => {
+    log('close')
     const { dispatch } = this.context
     dispatch(actions.dlg.close())
   }

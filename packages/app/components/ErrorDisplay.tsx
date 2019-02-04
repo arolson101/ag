@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppContext } from '../context/AppContext'
+import { AppContext } from '../context'
 
 interface Props {
   error: undefined | Error | Error[] | ReadonlyArray<Error>

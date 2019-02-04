@@ -1,7 +1,7 @@
 import { AccountDialog, BankDialog, LoginDialog } from '@ag/app'
 import assert from 'assert'
 import debug from 'debug'
-import { EventSubscription, Layout, Navigation } from 'react-native-navigation'
+import { Navigation } from 'react-native-navigation'
 import { RnStore } from '../reducers'
 
 const log = debug('rn:storeNavigation')
@@ -9,7 +9,9 @@ const log = debug('rn:storeNavigation')
 const dialogComponentIds: Record<string, string | undefined> = {}
 
 const showModal = async <T>(component: React.ComponentType<T>, passProps: T) => {
-  assert(dialogComponentIds[component.name] === undefined)
+  if (dialogComponentIds[component.name] !== undefined) {
+    return
+  }
 
   const componentId = `id-${component.name}`
   Navigation.showModal({
@@ -37,8 +39,6 @@ const hideModal = (component: React.ComponentType<any>) => {
     log('hideModal %s => %s', component.name, componentId)
     Navigation.dismissModal(componentId)
     dialogComponentIds[component.name] = undefined
-  } else {
-    log('hideModal %s - componentId not found', component.name)
   }
 }
 
@@ -54,11 +54,16 @@ Navigation.events().registerModalDismissedListener(({ componentId }) => {
   log('registerModalDismissedListener %s - componentId not found', componentId)
 })
 
-const updateModal = <T>(component: React.ComponentType<T>, show: T | boolean | undefined) => {
+interface DlgProp {
+  isOpen: boolean
+}
+
+const updateModal = <T extends DlgProp>(component: React.ComponentType<T>, props?: T) => {
+  const show = props && props.isOpen
   const isOpen = dialogComponentIds[component.name] !== undefined
-  if (!!show !== isOpen) {
+  if (show !== isOpen) {
     if (show) {
-      showModal(component, show as T)
+      showModal(component, props!)
     } else {
       hideModal(component)
     }
