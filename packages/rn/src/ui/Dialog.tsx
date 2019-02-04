@@ -54,6 +54,7 @@ export class Dialog extends React.PureComponent<DialogProps> {
 }
 
 export const DialogBody: UiContext['DialogBody'] = ({ children }) => <>{children}</>
+DialogBody.displayName = 'DialogBody'
 
 type TopButtonId = 'primary' | 'secondary'
 
@@ -88,15 +89,7 @@ export class DialogFooter extends React.PureComponent<DialogFooterProps> {
 
   navigationButtonPressed(e: NavigationButtonPressedEvent) {
     log('navigationButtonPressed: %o', e)
-    switch (e.buttonId as TopButtonId) {
-      case 'primary':
-        this.props.primary.onClick()
-        break
-
-      case 'secondary':
-        this.props.secondary!.onClick()
-        break
-    }
+    this.props[e.buttonId as TopButtonId]!.onClick()
   }
 
   render() {

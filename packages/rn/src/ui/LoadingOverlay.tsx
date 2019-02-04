@@ -1,27 +1,19 @@
-import { AppContext } from '@ag/app'
+import { AppContext, LoadingOverlayProps } from '@ag/app'
 import debug from 'debug'
-import { Button, Spinner as NBSpinner, Text, View } from 'native-base'
+import { Spinner as NBSpinner, Text, View } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
-import { defineMessages } from 'react-intl'
 import { Dimensions, Modal, StyleSheet } from 'react-native'
 
 const log = debug('rn:LoadingOverlay')
 log.enabled = true
 
-interface Props {
-  show: boolean
-  // cancelable?: boolean
-  // onCancel: () => any
-}
-
-export class LoadingOverlay extends React.PureComponent<Props> {
+export class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
   render() {
-    const { intl } = this.context
-    const { show: visible /*cancelable, onCancel*/ } = this.props
+    const { title, show: visible /*cancelable, onCancel*/ } = this.props
     const { height, width } = Dimensions.get('window')
 
     return (
@@ -33,12 +25,8 @@ export class LoadingOverlay extends React.PureComponent<Props> {
       >
         <View style={[styles.modalBackground, { height, width }]}>
           <View style={styles.activityIndicatorWrapper}>
+            <Text>{title}</Text>
             <NBSpinner color={platform.brandInfo} />
-            {/* {cancelable && (
-              <Button block transparent info onPress={onCancel}>
-                <Text>{intl.formatMessage(messages.cancel)}</Text>
-              </Button>
-            )} */}
           </View>
         </View>
       </Modal>
@@ -60,19 +48,12 @@ const styles = StyleSheet.create({
   },
   activityIndicatorWrapper: {
     backgroundColor: '#FFFFFF',
-    height: 100,
-    width: 100,
+    minHeight: 100,
+    minWidth: 100,
     borderRadius: 10,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
     flexDirection: 'column',
-  },
-})
-
-const messages = defineMessages({
-  cancel: {
-    id: 'Spinner.cancel',
-    defaultMessage: 'Cancel',
   },
 })

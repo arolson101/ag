@@ -7,7 +7,6 @@ import { ErrorDisplay } from './ErrorDisplay'
 import { Gql } from './Gql'
 
 const log = debug('app:AppQuery')
-log.enabled = true
 
 interface Props<D, V> extends Omit<QueryProps<D, V>, 'query' | 'children' | 'onCompleted'> {
   query: Gql<D, V>
@@ -15,7 +14,7 @@ interface Props<D, V> extends Omit<QueryProps<D, V>, 'query' | 'children' | 'onC
   onCompleted?: (data: D) => void
 }
 
-export class AppQuery<TData, TVariables> extends React.PureComponent<Props<TData, TVariables>> {
+export class AppQuery<TData, TVariables> extends React.Component<Props<TData, TVariables>> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
@@ -24,12 +23,16 @@ export class AppQuery<TData, TVariables> extends React.PureComponent<Props<TData
     const {
       ui: { LoadingOverlay },
     } = this.context
+    log('query %o', props.query)
 
     return (
       <Query<TData, TVariables> {...props} onCompleted={onCompleted as any}>
         {({ loading, error, data }) => (
           <>
-            <LoadingOverlay show={loading} />
+            <LoadingOverlay
+              show={loading}
+              title={`query(${(props.query.definitions[0] as any).name.value})`}
+            />
             {error && <ErrorDisplay error={error} />}
             {!loading && children(data!)}
           </>

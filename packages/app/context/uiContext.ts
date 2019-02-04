@@ -35,6 +35,11 @@ export interface DialogFooterProps {
   secondary?: ButtonConfig
 }
 
+export interface LoadingOverlayProps {
+  show: boolean
+  title: string
+}
+
 export interface ButtonConfig {
   title: string
   onClick: () => any
@@ -60,7 +65,7 @@ export interface UiContext {
   Dialog: ComponentType<DialogProps>
   DialogBody: ComponentType
   DialogFooter: ComponentType<DialogFooterProps>
-  LoadingOverlay: ComponentType<{ show: boolean }>
+  LoadingOverlay: ComponentType<LoadingOverlayProps>
 
   // layout
   Card: ComponentType<{}>
