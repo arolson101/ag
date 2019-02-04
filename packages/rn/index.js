@@ -12,9 +12,7 @@ if (__DEV__) {
   console.warn = (...args) => {
     if (
       typeof args[0] === 'string' &&
-      IGNORED_WARNINGS.some(ignoredWarning =>
-        args[0].startsWith(ignoredWarning),
-      )
+      IGNORED_WARNINGS.some(ignoredWarning => args[0].startsWith(ignoredWarning))
     ) {
       return
     }
@@ -23,7 +21,17 @@ if (__DEV__) {
   }
 }
 
+// set localstorage options to bypass exceptions in 'debug' module
+if (!window.localStorage) window.localStorage = {
+  getItem: (name: string) => undefined,
+  setItem: (name: string, value: any) => undefined,
+  removeItem: (name: string) => undefined
+}
+
 process.env.DEBUG = 'app*,rn:*'
+
+// bypass lodash exceptions 'process.binding is not supported'
+process.binding = () => undefined
 
 require('./src/app')
 
