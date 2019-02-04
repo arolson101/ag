@@ -44,7 +44,7 @@ export class DbResolver {
     return dbs
   }
 
-  @Query(returns => [Db], { nullable: true })
+  @Query(returns => [Db])
   async dbs(@Ctx() ctx: AppContext): Promise<Db[]> {
     log('dbs query')
     const dbs = await this.getDbs(ctx)
