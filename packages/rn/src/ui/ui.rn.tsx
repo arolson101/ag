@@ -1,6 +1,7 @@
 import { UiContext } from '@ag/app'
 import { Button, Card, H3, ListItem, Tab, Tabs, Text, Toast, View } from 'native-base'
 import React from 'react'
+import { Image } from 'react-native'
 import { Alert } from './Alert'
 import { CheckboxField } from './CheckboxField'
 import { CurrencyField } from './CurrencyField'
@@ -82,5 +83,5 @@ export const ui: UiContext = {
   Tabs: ({ children }) => <Tabs>{children}</Tabs>,
   Tab: ({ heading, panel }) => <Tab heading={heading}>{panel}</Tab>,
 
-  Image: null as any,
+  Image: ({ size, source }) => <Image width={size} height={size} source={source} />,
 }
