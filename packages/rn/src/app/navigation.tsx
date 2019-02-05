@@ -3,6 +3,7 @@ import * as Dialogs from '@ag/app/dialogs'
 import debug from 'debug'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
+import { Platform } from 'react-native'
 import {
   LayoutBottomTabs,
   LayoutBottomTabsChildren,
@@ -17,7 +18,7 @@ const log = debug('rn:navigation')
 export const setDefaultOptions = () => {
   Navigation.setDefaultOptions({
     bottomTabs: {
-      backgroundColor: platform.tabActiveBgColor,
+      backgroundColor: Platform.select({ android: platform.tabActiveBgColor, default: undefined }),
       titleDisplayMode: 'alwaysShow',
     },
     bottomTab: {

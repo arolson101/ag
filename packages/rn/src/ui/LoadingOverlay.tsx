@@ -3,38 +3,89 @@ import debug from 'debug'
 import { Spinner as NBSpinner, Text, View } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
-import { Dimensions, Modal, StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
+import { Navigation } from 'react-native-navigation'
 
 const log = debug('rn:LoadingOverlay')
 log.enabled = true
+
+interface OverlayProps {
+  title: string
+}
+class Overlay extends React.PureComponent<OverlayProps> {
+  render() {
+    const { title } = this.props
+    const { height, width } = Dimensions.get('window')
+    return (
+      <View style={[styles.modalBackground, { height, width }]}>
+        <View style={styles.activityIndicatorWrapper}>
+          {/* <Text>{title}</Text> */}
+          <NBSpinner color={platform.brandInfo} />
+        </View>
+      </View>
+    )
+  }
+}
+
+const overlayName = `loadingIndicator`
+
+Navigation.registerComponent(overlayName, () => Overlay)
 
 export class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
-  render() {
-    const { title, show: visible /*cancelable, onCancel*/ } = this.props
-    const { height, width } = Dimensions.get('window')
+  shown: boolean
+  id: string
 
-    return (
-      <Modal
-        transparent={true} //
-        animationType={'fade'}
-        visible={visible}
-        onRequestClose={this.onRequestClose}
-      >
-        <View style={[styles.modalBackground, { height, width }]}>
-          <View style={styles.activityIndicatorWrapper}>
-            <Text>{title}</Text>
-            <NBSpinner color={platform.brandInfo} />
-          </View>
-        </View>
-      </Modal>
-    )
+  constructor(props: LoadingOverlayProps) {
+    super(props)
+    const { show, title } = this.props
+    this.shown = false
+    this.id = `loading-id-${title}`
+    if (show) {
+      this.showOverlay()
+    }
   }
 
-  onRequestClose = () => {
-    log('modal onRequestClose')
+  componentDidUpdate() {
+    const { show } = this.props
+    if (show !== this.shown) {
+      if (show) {
+        this.showOverlay()
+      } else {
+        this.hideOverlay()
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.shown) {
+      this.hideOverlay()
+    }
+  }
+
+  render() {
+    return null
+  }
+
+  showOverlay() {
+    log('showOverlay %s', this.id)
+    const { title } = this.props
+    Navigation.showOverlay({
+      component: {
+        id: this.id,
+        name: overlayName,
+        passProps: { title },
+      },
+    })
+    this.shown = true
+  }
+
+  hideOverlay() {
+    log('hideOverlay %s', this.id)
+    Navigation.dismissOverlay(this.id)
+    this.shown = false
   }
 }
 

@@ -4,7 +4,7 @@ import debug from 'debug'
 import { Navigation } from 'react-native-navigation'
 import { RnStore } from '../reducers'
 
-const log = debug('rn:storeNavigation')
+const log = debug('rn:syncNavState')
 
 const dialogComponentIds: Record<string, string | undefined> = {}
 
