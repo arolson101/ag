@@ -1,11 +1,16 @@
 import { AppContext } from '@ag/app'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 import { Options } from 'react-native-navigation'
 import { icons } from '../icons'
+import { VisibleRoot } from './VisibleRoot'
 
-export class AccountsTab extends React.PureComponent {
+interface Props {
+  componentId: string
+}
+
+export class AccountsTab extends React.PureComponent<Props> {
   static readonly id = 'AccountsTab'
   static readonly stackId = 'AccountsTabStack'
 
@@ -25,9 +30,9 @@ export class AccountsTab extends React.PureComponent {
 
   render() {
     return (
-      <View>
+      <VisibleRoot componentId={this.props.componentId}>
         <Text>Accounts</Text>
-      </View>
+      </VisibleRoot>
     )
   }
 }

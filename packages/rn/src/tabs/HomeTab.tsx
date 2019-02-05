@@ -2,14 +2,16 @@ import { AppContext, HomePage } from '@ag/app'
 import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { Text, View } from 'react-native'
-import { Navigation, Options } from 'react-native-navigation'
+import { Options } from 'react-native-navigation'
 import { icons } from '../icons'
+import { VisibleRoot } from './VisibleRoot'
 
 const log = debug('rn:HomeTab')
 log.enabled = true
 
-interface Props {}
+interface Props {
+  componentId: string
+}
 
 export class HomeTab extends React.PureComponent<Props> {
   static contextType = AppContext
@@ -32,9 +34,9 @@ export class HomeTab extends React.PureComponent<Props> {
 
   render() {
     return (
-      <View>
+      <VisibleRoot componentId={this.props.componentId}>
         <HomePage />
-      </View>
+      </VisibleRoot>
     )
   }
 }

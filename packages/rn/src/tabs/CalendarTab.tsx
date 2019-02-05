@@ -1,11 +1,16 @@
 import { AppContext } from '@ag/app'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { Text, View } from 'react-native'
+import { Text } from 'react-native'
 import { Options } from 'react-native-navigation'
 import { icons } from '../icons'
+import { VisibleRoot } from './VisibleRoot'
 
-export class CalendarTab extends React.PureComponent {
+interface Props {
+  componentId: string
+}
+
+export class CalendarTab extends React.PureComponent<Props> {
   static readonly id = 'CalendarTab'
   static readonly stackId = 'CalendarTabStack'
 
@@ -23,9 +28,9 @@ export class CalendarTab extends React.PureComponent {
 
   render() {
     return (
-      <View>
+      <VisibleRoot componentId={this.props.componentId}>
         <Text>Calendar</Text>
-      </View>
+      </VisibleRoot>
     )
   }
 }

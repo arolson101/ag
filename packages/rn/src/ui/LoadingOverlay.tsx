@@ -28,6 +28,7 @@ class Overlay extends React.PureComponent<OverlayProps> {
 }
 
 const overlayName = `loadingIndicator`
+let idServer = 1
 
 Navigation.registerComponent(overlayName, () => Overlay)
 
@@ -40,9 +41,9 @@ export class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
 
   constructor(props: LoadingOverlayProps) {
     super(props)
-    const { show, title } = this.props
+    const { show } = this.props
     this.shown = false
-    this.id = `loading-id-${title}`
+    this.id = `overlay${idServer++}`
     if (show) {
       this.showOverlay()
     }
