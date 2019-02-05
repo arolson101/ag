@@ -10,6 +10,11 @@ const config: webpack.Configuration = {
   module: {
     rules: [
       {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: 'javascript/auto',
+      },
+      {
         test: /\.tsx?$/,
         exclude: '/node_modules/',
         loader: 'ts-loader',
