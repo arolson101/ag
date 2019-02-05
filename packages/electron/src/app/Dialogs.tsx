@@ -24,7 +24,6 @@ export class Dialogs extends React.PureComponent<Props> {
 
   constructor(props: Props, context: React.ContextType<typeof AppContext>) {
     super(props)
-    log('constructor')
     this.state = subState(context.store.getState() as any)
     this.unsubscribe = context.store.subscribe(() => {
       const state = subState(context.store.getState() as any)
@@ -35,17 +34,15 @@ export class Dialogs extends React.PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    log('componentWillUnmount')
     this.unsubscribe()
   }
 
   render() {
-    log('render')
     const { dialog } = this.state
 
     return (
       <>
-        <LoginDialog isOpen={!!dialog.login} />
+        {dialog.loginDialog && <LoginDialog isOpen={dialog.loginDialog.isOpen} />}
         {dialog.bankDialog && <BankDialog {...dialog.bankDialog} />}
         {dialog.accountDialog && <AccountDialog {...dialog.accountDialog} />}
       </>

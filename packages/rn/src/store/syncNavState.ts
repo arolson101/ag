@@ -73,7 +73,7 @@ const updateModal = <T extends DlgProp>(component: React.ComponentType<T>, props
 export const syncNavState = (store: RnStore) => {
   store.subscribe(() => {
     const dialog = store.getState().dialog
-    updateModal(LoginDialog, dialog.login)
+    updateModal(LoginDialog, dialog.loginDialog)
     updateModal(BankDialog, dialog.bankDialog)
     updateModal(AccountDialog, dialog.accountDialog)
   })

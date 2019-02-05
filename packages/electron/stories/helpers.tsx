@@ -28,27 +28,37 @@ const store = {
 } as any
 const appContext = App.createContext(store, clientDependencies)
 
-export const MockApp: React.FC<{ query: Gql<any, any>; variables?: any; response: object }> = ({
+export const MockApp: React.FC<{ query?: Gql<any, any>; variables?: any; response?: object }> = ({
   query,
   variables,
   response,
   children,
 }) => {
-  const mocks: MockedResponse[] = [
-    {
-      request: { query, variables },
-      result: {
-        data: response,
+  if (query && response) {
+    const mocks: MockedResponse[] = [
+      {
+        request: { query, variables },
+        result: {
+          data: response,
+        },
       },
-    },
-  ]
-  return (
-    <MockedProvider mocks={mocks}>
+    ]
+    return (
+      <MockedProvider mocks={mocks}>
+        <IntlProvider locale='en'>
+          <ApolloConsumer>
+            {client => <AppContext.Provider value={appContext}>{children}</AppContext.Provider>}
+          </ApolloConsumer>
+        </IntlProvider>
+      </MockedProvider>
+    )
+  } else {
+    return (
       <IntlProvider locale='en'>
         <ApolloConsumer>
           {client => <AppContext.Provider value={appContext}>{children}</AppContext.Provider>}
         </ApolloConsumer>
       </IntlProvider>
-    </MockedProvider>
-  )
+    )
+  }
 }

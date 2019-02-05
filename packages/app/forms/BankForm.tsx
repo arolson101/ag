@@ -140,6 +140,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                           <Tabs id='BankForm'>
                             <Tab
                               id='location'
+                              title={intl.formatMessage(messages.tabInfo)}
                               heading={intl.formatMessage(messages.tabInfo)}
                               panel={
                                 <>
@@ -231,7 +232,8 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                             />
                             <Tab
                               id='online'
-                              heading='Online'
+                              title={intl.formatMessage(messages.tabOnline)}
+                              heading={intl.formatMessage(messages.tabOnline)}
                               panel={
                                 <>
                                   <CheckboxField
