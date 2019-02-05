@@ -1,7 +1,5 @@
 import { App, ClientDependencies } from '@ag/app'
-import axios from 'axios'
 import debug from 'debug'
-import { Root } from 'native-base'
 import React from 'react'
 import { YellowBox } from 'react-native'
 import { Navigation } from 'react-native-navigation'
@@ -21,7 +19,7 @@ export const dependencies: ClientDependencies = {
 
   openDb,
   deleteDb,
-  httpRequest: axios,
+  fetch,
 
   getImageFromLibrary: null as any,
   resizeImage: null as any,

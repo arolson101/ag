@@ -5,10 +5,11 @@ import isUrl from 'is-url'
 import minidom from 'minidom'
 import { extname } from 'path'
 import url from 'url'
-import { AppContext, CancelToken, ImageUri } from '../context'
+import urlRegex from 'url-regex'
+import { AbortController, AppContext, ImageUri } from '../context'
 import { imageSize } from '../util/imageSize'
 
-const log = debug('getFavico')
+const log = debug('app:getFavico')
 
 export interface FavicoProps {
   from: string // some sort of identifier to identify where this came from (e.g. url, path)
@@ -23,27 +24,47 @@ const thumbnailSizes = {
 
 const sizes = [32, 64]
 
+export const fixUrl = (from: string): string => {
+  const urlMatches = from.match(urlRegex())
+  if (urlMatches) {
+    from = urlMatches[0]
+  }
+
+  const urlobj = url.parse(from)
+  urlobj.protocol = urlobj.protocol || 'http'
+  from = url.format(urlobj)
+
+  return from
+}
+
 export const getFavico = async (
   from: string,
-  cancelToken: CancelToken,
+  signal: AbortSignal,
   context: AppContext
 ): Promise<FavicoProps> => {
+  from = fixUrl(from)
+
   if (!isUrl(from)) {
+    log(`${from} is not an URL`)
     throw new Error(`${from} is not an URL`)
   }
 
-  const { httpRequest } = context
-  const urlobj = url.parse(from)
-  urlobj.protocol = urlobj.protocol || 'http'
+  log('getFavico %s', from)
 
-  const result = await httpRequest({ url: url.format(urlobj), method: 'get', cancelToken })
-  // log('%o', { result })
+  const { fetch } = context
+
+  const result = await fetch(from, { method: 'get', signal })
+  log('fetch %s %o', from, result)
   if (!result.ok) {
+    log(result.statusText)
     throw new Error(result.statusText)
   }
 
   const body = await result.text()
+  log('body %O', body)
+
   const doc = minidom(body)
+  log('doc %o', doc)
 
   const links = ([] as string[])
     .concat(
@@ -83,19 +104,21 @@ export const getFavico = async (
         return index === array.indexOf(value)
       }
     )
-  // log('%o', { links })
+  log('links: %o', links)
 
   const images: ImageUri[] = []
 
   await Promise.all(
     links.map(async link => {
-      const response = await httpRequest({ url: link, method: 'get', cancelToken })
+      const response = await fetch(link, { method: 'get', signal })
       if (!response.ok) {
+        log('failed getting: %s', link)
         return
       }
       const blob = await response.blob()
       const buf = await toBuffer(blob)
       if (ICO.isICO(buf.buffer as ArrayBuffer)) {
+        log('%s isICO', link)
         const mime = 'image/png'
         const parsedImages = await ICO.parse(buf.buffer as ArrayBuffer, mime)
         for (const parsedImage of parsedImages) {
@@ -106,6 +129,7 @@ export const getFavico = async (
       } else {
         const ext = extname(link).substr(1)
         const { width, height } = imageSize(buf, link)
+        log('%s is %s %dx%d', link, ext, width, height)
         const mime = response.headers.get('content-type') || `image/${ext}`
         const uri = toDataUri(buf, mime)
         images.push({ width, height, uri })
@@ -121,6 +145,8 @@ const makeFavicoFromImages = async (
   images: ImageUri[],
   context: AppContext
 ): Promise<FavicoProps> => {
+  log('making favico from %s (%d images %O)', from, images.length, images)
+
   const { resizeImage } = context
   // add resized images (iOS would rather upscale the 16x16 favico than use the better, larger one)
   await Promise.all(
@@ -143,7 +169,7 @@ const makeFavicoFromImages = async (
         }
       })
   )
-  log('%o', { images })
+  log('images: %o', images)
 
   const source = images
     .filter(
@@ -151,7 +177,7 @@ const makeFavicoFromImages = async (
         index === array.findIndex(a => a.width === value.width && a.height === value.height)
     )
     .sort((a, b) => a.width! - b.width!)
-  log('%o', { source })
+  log('source: %o', source)
 
   if (source.length === 0) {
     throw new Error('no images found')

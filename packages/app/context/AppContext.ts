@@ -1,5 +1,5 @@
+import AbortController from 'abort-controller'
 import { ApolloClient } from 'apollo-client'
-import { CancelToken, CancelTokenSource } from 'axios'
 import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
@@ -7,7 +7,7 @@ import { AppAction } from '../actions'
 import { AppState, AppStore } from '../reducers'
 import { UiContext } from './uiContext'
 
-export { CancelToken, CancelTokenSource }
+export { AbortController }
 
 export interface ImageUri {
   width: number
@@ -30,15 +30,7 @@ export interface ClientDependencies {
   ) => Promise<Connection>
   deleteDb: (name: string) => Promise<void>
 
-  httpRequest: (
-    params: {
-      url: string
-      method: string
-      headers?: Record<string, string>
-      data?: string
-      cancelToken?: CancelToken
-    }
-  ) => Promise<any>
+  fetch(input: RequestInfo, init?: RequestInit): Promise<Response>
 
   getImageFromLibrary: (width: number, height: number) => Promise<LibraryImage>
   resizeImage: (image: ImageUri, width: number, height: number, format: string) => Promise<ImageUri>

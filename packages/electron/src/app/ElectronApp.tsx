@@ -1,5 +1,5 @@
 import { App, ClientDependencies } from '@ag/app'
-import axios from 'axios'
+// import electronFetch from 'electron-fetch'
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { store } from '../store'
@@ -13,7 +13,7 @@ export const dependencies: ClientDependencies = {
 
   openDb,
   deleteDb,
-  httpRequest: axios,
+  fetch,
 
   getImageFromLibrary: null as any,
   resizeImage: null as any,

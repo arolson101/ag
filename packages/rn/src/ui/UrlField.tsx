@@ -1,10 +1,9 @@
-import { AppContext, CancelTokenSource, UrlFieldProps } from '@ag/app'
+import { AbortController, AppContext, UrlFieldProps } from '@ag/app'
 import { FavicoProps, getFavico, getFavicoFromLibrary } from '@ag/app/online/getFavico'
-import Axios from 'axios'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import isUrl from 'is-url'
-import { ActionSheet, Button, Input, Item, NativeBase, Spinner, Text, Thumbnail } from 'native-base'
+import { ActionSheet, Button, Input, Item, NativeBase, Spinner, Thumbnail } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
 import { defineMessages } from 'react-intl'
@@ -29,14 +28,14 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
   private textInput = React.createRef<Input>()
   private form!: FormikProps<Values>
   private originalValue: string | undefined = undefined
-  private cancelTokenSource: CancelTokenSource = Axios.CancelToken.source()
+  private controller = new AbortController()
 
   state: State = {
     gettingIcon: false,
   }
 
   componentWillUnmount() {
-    this.cancelTokenSource.cancel()
+    this.controller.abort()
   }
 
   focusTextInput = () => {
@@ -130,7 +129,7 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
 
     try {
       this.setState({ gettingIcon: true })
-      const icon = await getFavico(value, this.cancelTokenSource.token, this.context)
+      const icon = await getFavico(value, this.controller.signal, this.context)
       this.form.setFieldValue(favicoField, JSON.stringify(icon))
       this.originalValue = icon.from
     } catch (ex) {

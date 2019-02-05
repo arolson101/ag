@@ -2,33 +2,37 @@ import assert from 'assert'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { defineMessages } from 'react-intl'
-import { AppContext, CancelToken } from '../context'
+import { AppContext } from '../context'
 import { Account, Bank } from '../entities'
 
 const log = debug('app:ofx')
 
-const ajaxHandler = (
-  { httpRequest }: AppContext,
-  cancelToken: CancelToken
-): ofx4js.AjaxHandler => async (url, verb, headers, data, async): Promise<string> => {
-  const res = await httpRequest({ url, method: verb.toLowerCase(), headers, data, cancelToken })
+const ajaxHandler = ({ fetch }: AppContext, signal: AbortSignal): ofx4js.AjaxHandler => async (
+  url,
+  verb,
+  headers,
+  body,
+  async
+): Promise<string> => {
+  const res = await fetch(url, { method: verb.toLowerCase(), headers, body, signal })
   if (res.status !== 200) {
     throw new Error(res.statusText)
   }
-  assert(typeof res.data === 'string')
-  log({ url, verb, data, result: res.data })
-  return res.data
+  const text = await res.text()
+  assert(typeof body === 'string')
+  log('ajaxHandler %s %s %o %o', url, verb, body, text)
+  return text
 }
 
 interface OfxServiceParams {
   bank: Bank
-  cancelToken: CancelToken
+  signal: AbortSignal
   context: AppContext
 }
 
 export const ofxService = ({
   bank,
-  cancelToken,
+  signal,
   context,
 }: OfxServiceParams): ofx4js.FinancialInstitutionImpl => {
   const DefaultApplicationContext = ofx4js.DefaultApplicationContext
@@ -57,7 +61,7 @@ export const ofxService = ({
   fiData.setName(name)
 
   const connection = new ofx4js.OFXV1Connection()
-  connection.setAjax(ajaxHandler(context, cancelToken))
+  connection.setAjax(ajaxHandler(context, signal))
 
   // NOTE: making an OFX connection will fail security checks in browsers.  On Chrome you
   // can make it run with the "--disable-web-security" command-line option

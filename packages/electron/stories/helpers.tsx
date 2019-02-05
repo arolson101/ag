@@ -15,7 +15,7 @@ const clientDependencies: ClientDependencies = {
   deleteDb: () => {
     throw new Error('no deleteDb')
   },
-  httpRequest: action('httpRequest') as any,
+  fetch: action('fetch') as any,
   resizeImage: action('resizeImage') as any,
   getImageFromLibrary: action('getImageFromLibrary') as any,
 }

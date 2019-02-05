@@ -3,7 +3,7 @@ import cuid from 'cuid'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
-import { AppContext, CancelTokenSource } from '../context'
+import { AppContext } from '../context'
 import {
   Account,
   AccountInput,
@@ -22,7 +22,7 @@ log.enabled = false // process.env.NODE_ENV !== 'production'
 
 @Resolver(Account)
 export class AccountResolver {
-  private tokens = new Map<string, CancelTokenSource>()
+  // private tokens = new Map<string, CancelTokenSource>()
 
   @Mutation(returns => Account)
   async saveAccount(
@@ -239,12 +239,12 @@ export class AccountResolver {
 */
   @Mutation(returns => Boolean)
   async cancel(@Arg('cancelToken') cancelToken: string): Promise<boolean> {
-    const source = this.tokens.get(cancelToken)
-    if (!source) {
-      return false
-    }
+    // const source = this.tokens.get(cancelToken)
+    // if (!source) {
+    //   return false
+    // }
 
-    source.cancel('cancelled')
+    // source.cancel('cancelled')
     return true
   }
 }
