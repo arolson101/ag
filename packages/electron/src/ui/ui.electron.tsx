@@ -1,4 +1,4 @@
-import { TabProps, TabsProps, UiContext } from '@ag/app'
+import { pickBestImageUri, TabProps, TabsProps, UiContext } from '@ag/app'
 import {
   Alert,
   Button,
@@ -95,7 +95,7 @@ export const ui: UiContext = {
   // layout
   Card: ({ children }) => <Card>{children}</Card>,
   Row: ({ left, right, center, flex, children }) => (
-    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline', flex }}>
+    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex }}>
       {children}
     </div>
   ),
@@ -111,10 +111,11 @@ export const ui: UiContext = {
     </Collapse>
   ),
   Link: ({ onClick, children }) => <a onClick={onClick}>{children}</a>,
-  Text: ({ header, muted, children, onClick }) => {
+  Text: ({ flex, header, muted, children, onClick }) => {
     const Component: React.ComponentType<any> = header ? H3 : Text
     return (
       <Component
+        style={{ flex }}
         className={classNames(
           Classes.UI_TEXT,
           muted && Classes.TEXT_MUTED,
@@ -149,4 +150,9 @@ export const ui: UiContext = {
 
   Tabs: Tabs as React.ComponentType<TabsProps>,
   Tab: Tab as React.ComponentType<TabProps>,
+
+  // image
+  Image: ({ source, size, margin }) => (
+    <img width={size} height={size} src={pickBestImageUri(source, size)} style={{ margin }} />
+  ),
 }

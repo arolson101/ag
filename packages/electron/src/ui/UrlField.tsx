@@ -4,6 +4,7 @@ import {
   fixUrl,
   getFavico,
   getFavicoFromLibrary,
+  pickBestImageUri,
   UrlFieldProps,
 } from '@ag/app'
 import {
@@ -221,7 +222,11 @@ class FavicoButton extends React.PureComponent<FavicoButtonProps> {
     return loading ? (
       <Button {...props} minimal loading />
     ) : favico ? (
-      <Button {...props} minimal icon={<img src={favico.source[0].uri} />} />
+      <Button
+        {...props}
+        minimal
+        icon={<img width={16} height={16} src={pickBestImageUri(favico.source, 16)} />}
+      />
     ) : (
       <Button {...props} minimal>
         {'...'}

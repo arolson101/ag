@@ -57,6 +57,18 @@ export interface TabProps {
   panel: JSX.Element
 }
 
+export interface ImageUri {
+  width: number
+  height: number
+  uri: string
+}
+
+export interface ImageProps {
+  source: ImageUri[]
+  size: number
+  margin?: number
+}
+
 export interface UiContext {
   // special ui
   showToast: (message: string, danger?: boolean) => any
@@ -76,7 +88,7 @@ export interface UiContext {
   Container: ComponentType<{}>
   Collapsible: ComponentType<{ show: boolean }>
   Link: ComponentType<{ onClick?: () => any }>
-  Text: ComponentType<{ header?: boolean; muted?: boolean; onClick?: () => any }>
+  Text: ComponentType<{ flex?: number; header?: boolean; muted?: boolean; onClick?: () => any }>
   SubmitButton: ComponentType<{ disabled?: boolean; onPress: () => any }>
   DeleteButton: ComponentType<{ disabled?: boolean; onPress: () => any }>
 
@@ -93,4 +105,15 @@ export interface UiContext {
   // tabs
   Tabs: React.ComponentType<TabsProps>
   Tab: React.ComponentType<TabProps>
+
+  // image
+  Image: React.ComponentType<ImageProps>
+}
+
+export const pickBestImageUri = (source: ImageUri[], size: number) => {
+  if (!source.length) {
+    return undefined
+  }
+  const best = source.find(img => img.width >= size) || source[source.length - 1]
+  return best.uri
 }

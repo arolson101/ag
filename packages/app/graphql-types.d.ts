@@ -186,7 +186,7 @@ export namespace LoginForm {
   export type Query = {
     __typename?: 'Query'
 
-    dbs: Maybe<Dbs[]>
+    dbs: Dbs[]
   }
 
   export type Dbs = {
@@ -315,6 +315,8 @@ export namespace BankDisplay {
     id: string
 
     name: string
+
+    favicon: string
 
     accounts: Accounts[]
   }

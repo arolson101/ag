@@ -5,15 +5,9 @@ import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { AppAction } from '../actions'
 import { AppState, AppStore } from '../reducers'
-import { UiContext } from './uiContext'
+import { ImageUri, UiContext } from './uiContext'
 
 export { AbortController }
-
-export interface ImageUri {
-  width: number
-  height: number
-  uri: string
-}
 
 export interface LibraryImage {
   image: ImageUri

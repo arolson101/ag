@@ -81,4 +81,6 @@ export const ui: UiContext = {
 
   Tabs: ({ children }) => <Tabs>{children}</Tabs>,
   Tab: ({ heading, panel }) => <Tab heading={heading}>{panel}</Tab>,
+
+  Image: null as any,
 }

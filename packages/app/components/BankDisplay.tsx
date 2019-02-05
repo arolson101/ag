@@ -1,8 +1,9 @@
 import gql from 'graphql-tag'
 import React from 'react'
 import { actions } from '../actions'
-import { AppContext } from '../context'
+import { AppContext, pickBestImageUri } from '../context'
 import * as T from '../graphql-types'
+import { FavicoProps } from '../online'
 import { Link } from './Link'
 
 export namespace BankDisplay {
@@ -20,6 +21,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
       fragment BankDisplay on Bank {
         id
         name
+        favicon
         accounts {
           id
           name
@@ -31,15 +33,20 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
   render() {
     const { bank } = this.props
     const { ui } = this.context
-    const { Card, Row, Text } = ui
+    const { Card, Row, Column, Text, Image } = ui
+
+    const favicon = bank.favicon ? (JSON.parse(bank.favicon) as FavicoProps) : undefined
+    const size = 48
+    const source = favicon ? favicon.source : []
 
     return (
       <Card key={bank.id}>
         <Row>
           <Row flex={1}>
-            <Text header>{bank.name}</Text>
-          </Row>
-          <Row>
+            <Image size={size} source={source} margin={4} />
+            <Text header flex={1}>
+              {bank.name}
+            </Text>
             <Link dispatch={actions.dlg.accountCreate({ bankId: bank.id })}>[add account]</Link>
             <Link dispatch={actions.dlg.bankEdit({ bankId: bank.id })}>[edit]</Link>
           </Row>

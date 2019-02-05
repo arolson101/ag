@@ -1,5 +1,4 @@
 import assert from 'assert'
-import crypto from 'crypto'
 import debug from 'debug'
 import ICO from 'icojs'
 import isUrl from 'is-url'
