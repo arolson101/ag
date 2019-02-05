@@ -11,13 +11,10 @@ import {
   FormGroup,
   HTMLInputProps,
   IButtonProps,
-  Icon,
   IInputGroupProps,
   InputGroup,
   Intent,
-  Spinner,
 } from '@blueprintjs/core'
-import { IconNames } from '@blueprintjs/icons'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import isUrl = require('is-url')
@@ -40,15 +37,16 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
 
   private textInput: HTMLInputElement | null = null
   private form!: FormikProps<Values>
-  private originalValue: string | undefined = undefined
-  private controller = new AbortController()
+  private controller?: AbortController
 
   state: State = {
     gettingIcon: false,
   }
 
   componentWillUnmount() {
-    this.controller.abort()
+    if (this.controller) {
+      this.controller.abort()
+    }
   }
 
   focusTextInput = () => {
@@ -62,15 +60,7 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
   }
 
   render() {
-    const {
-      field: name,
-      favicoField,
-      autoFocus,
-      label,
-      disabled,
-      placeholder,
-      // returnKeyType
-    } = this.props
+    const { field: name, favicoField, autoFocus, label, disabled, placeholder } = this.props
     const id = name
 
     return (
@@ -79,10 +69,6 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
           this.form = form
           const error = !!(form.touched[name] && form.errors[name])
           const intent = error ? Intent.DANGER : undefined
-          const inputProps = { autoFocus, onPress: this.focusTextInput }
-          if (this.originalValue === undefined) {
-            this.originalValue = field.value
-          }
           return (
             <FormGroup
               intent={intent}
@@ -92,26 +78,21 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
               disabled={disabled}
             >
               <NotifyingInput
-                // style={{ flex: 1 }}
+                {...field}
                 placeholder={placeholder}
                 autoFocus={autoFocus}
-                {...field}
-                value={field.value}
                 inputRef={this.inputRef}
                 onValueChanged={this.onValueChanged}
-                leftIcon={
+                leftIcon='globe-network'
+                rightElement={
                   <Field name={favicoField} pure={false}>
-                    {({ field: iconField }: FieldProps<Values>) => {
-                      return (
-                        <FavicoButton
-                          loading={this.state.gettingIcon}
-                          value={iconField.value}
-                          // bordered
-                          onClick={this.onIconButtonPressed}
-                          // style={{ alignSelf: 'center', padding: platform.buttonPadding }}
-                        />
-                      )
-                    }}
+                    {({ field: iconField }: FieldProps<Values>) => (
+                      <FavicoButton
+                        loading={this.state.gettingIcon}
+                        value={iconField.value}
+                        onClick={this.onIconButtonPressed}
+                      />
+                    )}
                   </Field>
                 }
               />
@@ -131,10 +112,11 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
     const { favicoField } = this.props
 
     value = fixUrl(value)
-    log('fixed: %s', value)
+    // log('fixed: %s', value)
 
     if (!isUrl(value)) {
       log(`not looking up icon '${value}' is not an URL`)
+      this.form.setFieldValue(favicoField, undefined)
       return
     }
 
@@ -145,22 +127,21 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
         log(`not looking up icon because we already got it from ${value}`)
         return
       }
-
-      if (iconProps.from !== this.originalValue) {
-        log(`not changing icon because it was from ${iconProps.from}, not ${this.originalValue}`)
-        return
-      }
     }
 
     try {
+      if (this.controller) {
+        this.controller.abort()
+      }
+      this.controller = new AbortController()
       this.setState({ gettingIcon: true })
       const icon = await getFavico(value, this.controller.signal, this.context)
       this.form.setFieldValue(favicoField, JSON.stringify(icon))
-      this.originalValue = icon.from
     } catch (ex) {
       log(ex.message)
     } finally {
       this.setState({ gettingIcon: false })
+      this.controller = undefined
     }
   }
 
@@ -174,7 +155,6 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
     const { favicoField } = this.props
     const icon = await getFavicoFromLibrary(this.context)
     this.form.setFieldValue(favicoField, JSON.stringify(icon))
-    this.originalValue = icon.from
   }
 
   onIconButtonPressed = () => {
@@ -215,7 +195,7 @@ interface NotifyingInputProps extends IInputGroupProps {
   onValueChanged: (newValue: string, oldValue: string) => any
 }
 
-class NotifyingInput extends React.Component<NotifyingInputProps & HTMLInputProps> {
+class NotifyingInput extends React.PureComponent<NotifyingInputProps & HTMLInputProps> {
   componentDidUpdate(prevProps: NotifyingInputProps) {
     const { value, onValueChanged } = this.props
     if (prevProps.value !== value) {
@@ -234,20 +214,17 @@ interface FavicoButtonProps extends IButtonProps {
   loading: boolean
 }
 
-class FavicoButton extends React.Component<FavicoButtonProps> {
+class FavicoButton extends React.PureComponent<FavicoButtonProps> {
   render() {
     const { value, loading, ...props } = this.props
     const favico = value ? (JSON.parse(value) as FavicoProps) : undefined
-    return (
-      <Button {...props}>
-        {loading ? (
-          <Spinner />
-        ) : favico ? (
-          // <Thumbnail style={{ backgroundColor: 'transparent' }} square small {...favico} />
-          <img src={favico.source[0].uri} />
-        ) : (
-          <Icon icon={IconNames.BANK_ACCOUNT} />
-        )}
+    return loading ? (
+      <Button {...props} minimal loading />
+    ) : favico ? (
+      <Button {...props} minimal icon={<img src={favico.source[0].uri} />} />
+    ) : (
+      <Button {...props} minimal>
+        {'...'}
       </Button>
     )
   }

@@ -1,11 +1,11 @@
 import { App, ClientDependencies } from '@ag/app'
-// import electronFetch from 'electron-fetch'
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { store } from '../store'
 import { ui } from '../ui'
 import { Dialogs } from './Dialogs'
 import { ElectronRouter } from './ElectronRouter'
+import { resizeImage } from './image.electron'
 import { deleteDb, openDb } from './openDb.electron'
 
 export const dependencies: ClientDependencies = {
@@ -16,7 +16,7 @@ export const dependencies: ClientDependencies = {
   fetch,
 
   getImageFromLibrary: null as any,
-  resizeImage: null as any,
+  resizeImage,
 }
 
 const context = App.createContext(store, dependencies)
