@@ -18,56 +18,60 @@ export namespace AccountForm {
 
 type FormValues = Required<Account.Props>
 
-export class AccountForm extends React.PureComponent<AccountForm.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+const fragments = {
+  accountFields: gql`
+    fragment accountFields on Account {
+      bankId
+      name
+      type
+      color
+      number
+      visible
+      routing
+      key
+    }
+  `,
+}
 
-  static readonly fragments = {
-    accountFields: gql`
-      fragment accountFields on Account {
-        bankId
-        name
-        type
-        color
-        number
-        visible
-        routing
-        key
-      }
-    `,
-  }
-
-  static readonly queries = {
-    AccountForm: gql`
-      query AccountForm($accountId: String) {
-        appDb {
-          account(accountId: $accountId) {
-            id
-            ...accountFields
-          }
-        }
-      }
-      ${AccountForm.fragments.accountFields}
-    ` as Gql<T.AccountForm.Query, T.AccountForm.Variables>,
-  }
-
-  static readonly mutations = {
-    SaveAccount: gql`
-      mutation SaveAccount($input: AccountInput!, $accountId: String, $bankId: String) {
-        saveAccount(input: $input, accountId: $accountId, bankId: $bankId) {
+const queries = {
+  AccountForm: gql`
+    query AccountForm($accountId: String) {
+      appDb {
+        account(accountId: $accountId) {
           id
           ...accountFields
         }
       }
-      ${AccountForm.fragments.accountFields}
-    ` as Gql<T.SaveAccount.Mutation, T.SaveAccount.Variables>,
+    }
+    ${fragments.accountFields}
+  ` as Gql<T.AccountForm.Query, T.AccountForm.Variables>,
+}
 
-    DeleteAccount: gql`
-      mutation DeleteAccount($accountId: String!) {
-        deleteAccount(accountId: $accountId)
+const mutations = {
+  SaveAccount: gql`
+    mutation SaveAccount($input: AccountInput!, $accountId: String, $bankId: String) {
+      saveAccount(input: $input, accountId: $accountId, bankId: $bankId) {
+        id
+        ...accountFields
       }
-    ` as Gql<T.DeleteAccount.Mutation, T.DeleteAccount.Variables>,
-  }
+    }
+    ${fragments.accountFields}
+  ` as Gql<T.SaveAccount.Mutation, T.SaveAccount.Variables>,
+
+  DeleteAccount: gql`
+    mutation DeleteAccount($accountId: String!) {
+      deleteAccount(accountId: $accountId)
+    }
+  ` as Gql<T.DeleteAccount.Mutation, T.DeleteAccount.Variables>,
+}
+
+export class AccountForm extends React.PureComponent<AccountForm.Props> {
+  static contextType = AppContext
+  context!: React.ContextType<typeof AppContext>
+
+  static readonly fragments = fragments
+  static readonly queries = queries
+  static readonly mutations = mutations
 
   private formApi: FormikProps<FormValues> | undefined
 
@@ -78,7 +82,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
     const { Form, SelectField, TextField } = typedFields<FormValues>(ui)
 
     return (
-      <AppQuery query={AccountForm.queries.AccountForm} variables={{ accountId }}>
+      <AppQuery query={queries.AccountForm} variables={{ accountId }}>
         {({ appDb }) => {
           if (!appDb) {
             throw new Error('db not open')
@@ -93,7 +97,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
 
           return (
             <AppMutation
-              mutation={AccountForm.mutations.SaveAccount}
+              mutation={mutations.SaveAccount}
               refetchQueries={[{ query: HomePage.queries.HomePage }]}
             >
               {saveAccount => (
@@ -181,7 +185,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
 
                         {accountId && (
                           <AppMutation
-                            mutation={AccountForm.mutations.DeleteAccount}
+                            mutation={mutations.DeleteAccount}
                             variables={{ accountId }}
                             refetchQueries={[{ query: HomePage.queries.HomePage }]}
                             onCompleted={() => {
