@@ -27,13 +27,14 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
 
     return (
       <AppQuery query={LoginForm.queries.LoginForm}>
-        {({ dbs }) => {
+        {query => {
+          const { dbs } = query
           const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
 
           return (
             <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
               <DialogBody>
-                <LoginForm ref={this.loginForm} />
+                <LoginForm ref={this.loginForm} query={query} />
               </DialogBody>
               <DialogFooter
                 primary={{

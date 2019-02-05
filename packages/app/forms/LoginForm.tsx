@@ -25,7 +25,7 @@ const initialValues: Values = {
 
 export namespace LoginForm {
   export interface Props {
-    dbId?: string
+    query: T.LoginForm.Query
   }
 }
 
@@ -73,113 +73,107 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
     const { ui, intl } = this.context
     const { Text, DeleteButton } = ui
     const { Form, TextField } = typedFields<Values>(ui)
+    const { dbs } = this.props.query
+    const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
+    const create = !dbId
 
     return (
-      <AppQuery query={LoginForm.queries.LoginForm}>
-        {({ dbs }) => {
-          const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
-          const create = !dbId
-
+      <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
+        mutation={create ? LoginForm.mutations.createDb : LoginForm.mutations.openDb}
+        refetchQueries={[
+          { query: LoginForm.queries.LoginForm }, //
+          { query: HomePage.queries.HomePage },
+        ]}
+      >
+        {runMutation => {
           return (
-            <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
-              mutation={create ? LoginForm.mutations.createDb : LoginForm.mutations.openDb}
-              refetchQueries={[
-                { query: LoginForm.queries.LoginForm }, //
-                { query: HomePage.queries.HomePage },
-              ]}
-            >
-              {runMutation => {
-                return (
-                  <>
-                    <Formik
-                      ref={this.formApi}
-                      validateOnBlur={false}
-                      initialValues={initialValues}
-                      validate={values => {
-                        const errors: FormikErrors<Values> = {}
-                        if (create) {
-                          if (!values.password.trim()) {
-                            errors.password = intl.formatMessage(messages.valueEmpty)
-                          }
-                          if (values.password !== values.passwordConfirm) {
-                            errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
-                          }
-                        } else {
-                          if (!values.password.trim()) {
-                            errors.password = intl.formatMessage(messages.valueEmpty)
-                          }
-                        }
-                        return errors
-                      }}
-                      onSubmit={async (values, factions) => {
-                        try {
-                          await runMutation({ variables: { ...values, dbId } })
-                          log('logged in')
-                        } finally {
-                          factions.setSubmitting(false)
-                        }
-                      }}
-                    >
-                      {formApi => (
-                        <Form onSubmit={formApi.handleSubmit}>
-                          <Text>
-                            {intl.formatMessage(
-                              create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
-                            )}
-                          </Text>
-                          <TextField
-                            autoFocus
-                            secure
-                            field='password'
-                            label={intl.formatMessage(messages.passwordLabel)}
-                            placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-                            // returnKeyType={create ? 'next' : 'go'}
-                            // onSubmitEditing={create ? this.focusConfirmInput :
-                            // formApi.submitForm}
-                          />
-                          {create && (
-                            <TextField
-                              secure
-                              field='passwordConfirm'
-                              label={intl.formatMessage(messages.passwordConfirmLabel)}
-                              placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
-                              // returnKeyType={'go'}
-                              onSubmitEditing={formApi.submitForm}
-                              // inputRef={this.inputRef}
-                            />
-                          )}
-                        </Form>
+            <>
+              <Formik
+                ref={this.formApi}
+                validateOnBlur={false}
+                initialValues={initialValues}
+                validate={values => {
+                  const errors: FormikErrors<Values> = {}
+                  if (create) {
+                    if (!values.password.trim()) {
+                      errors.password = intl.formatMessage(messages.valueEmpty)
+                    }
+                    if (values.password !== values.passwordConfirm) {
+                      errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
+                    }
+                  } else {
+                    if (!values.password.trim()) {
+                      errors.password = intl.formatMessage(messages.valueEmpty)
+                    }
+                  }
+                  return errors
+                }}
+                onSubmit={async (values, factions) => {
+                  try {
+                    await runMutation({ variables: { ...values, dbId } })
+                    log('logged in')
+                  } finally {
+                    factions.setSubmitting(false)
+                  }
+                }}
+              >
+                {formApi => (
+                  <Form onSubmit={formApi.handleSubmit}>
+                    <Text>
+                      {intl.formatMessage(
+                        create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
                       )}
-                    </Formik>
-
-                    {dbId && (
-                      <AppMutation
-                        mutation={LoginForm.mutations.deleteDb}
-                        variables={{ dbId }}
-                        refetchQueries={[{ query: LoginForm.queries.LoginForm }]}
-                      >
-                        {deleteDb => (
-                          <>
-                            <ConfirmButton
-                              message={intl.formatMessage(messages.deleteMessage)}
-                              component={DeleteButton}
-                              onConfirmed={deleteDb}
-                              ref={this.deleteDb}
-                              danger
-                            >
-                              <Text>{intl.formatMessage(messages.delete)}</Text>
-                            </ConfirmButton>
-                          </>
-                        )}
-                      </AppMutation>
+                    </Text>
+                    <TextField
+                      autoFocus
+                      secure
+                      field='password'
+                      label={intl.formatMessage(messages.passwordLabel)}
+                      placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+                      // returnKeyType={create ? 'next' : 'go'}
+                      // onSubmitEditing={create ? this.focusConfirmInput :
+                      // formApi.submitForm}
+                    />
+                    {create && (
+                      <TextField
+                        secure
+                        field='passwordConfirm'
+                        label={intl.formatMessage(messages.passwordConfirmLabel)}
+                        placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
+                        // returnKeyType={'go'}
+                        onSubmitEditing={formApi.submitForm}
+                        // inputRef={this.inputRef}
+                      />
                     )}
-                  </>
-                )
-              }}
-            </AppMutation>
+                  </Form>
+                )}
+              </Formik>
+
+              {dbId && (
+                <AppMutation
+                  mutation={LoginForm.mutations.deleteDb}
+                  variables={{ dbId }}
+                  refetchQueries={[{ query: LoginForm.queries.LoginForm }]}
+                >
+                  {deleteDb => (
+                    <>
+                      <ConfirmButton
+                        message={intl.formatMessage(messages.deleteMessage)}
+                        component={DeleteButton}
+                        onConfirmed={deleteDb}
+                        ref={this.deleteDb}
+                        danger
+                      >
+                        <Text>{intl.formatMessage(messages.delete)}</Text>
+                      </ConfirmButton>
+                    </>
+                  )}
+                </AppMutation>
+              )}
+            </>
           )
         }}
-      </AppQuery>
+      </AppMutation>
     )
   }
 
