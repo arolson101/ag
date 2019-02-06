@@ -1,6 +1,6 @@
 import assert from 'assert'
 import debug from 'debug'
-import ICO from 'icojs'
+import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
 import isUrl from 'is-url'
 import minidom from 'minidom'
 import { extname } from 'path'
@@ -118,15 +118,11 @@ export const getFavico = async (
         log('failed getting: %s', link)
         return
       }
-      log('%s => %o', link, response)
+      // log('%s => %o', link, response)
 
-      const blob = await response.blob()
-      const buf = await toBuffer(blob)
-      log('text: %O', buf.toString('hex'))
-
-      // const text = await response.text()
-      // const buf = Buffer.from(text, 'utf16le')
-      // log('buf: %O', { buf, hex: buf.toString('hex') })
+      const abuf = await response.arrayBuffer()
+      const buf = Buffer.from(abuf)
+      // log('%s: %O', link, { hex: buf.toString('hex'), abuf, buf })
 
       if (ICO.isICO(buf)) {
         const mime = 'image/png'
@@ -155,7 +151,7 @@ const makeFavicoFromImages = async (
   images: ImageUri[],
   context: AppContext
 ): Promise<FavicoProps> => {
-  log('making favico from %s (%d images %O)', from, images.length, [...images])
+  // log('making favico from %s (%d images %O)', from, images.length, [...images])
 
   const { resizeImage } = context
   // add resized images (iOS would rather upscale the 16x16 favico than use the better, larger one)
@@ -208,30 +204,4 @@ const toDataUri = (buf: Buffer, mime: string) => {
   const base64 = buf.toString('base64')
   const uri = `data:${mime};base64,${base64}`
   return uri
-}
-
-const toBuffer = (blob: Blob) => {
-  return new Promise<Buffer>((resolve, reject) => {
-    const fr = new FileReader()
-
-    const loadend = (e: any) => {
-      fr.removeEventListener('loadend', loadend, false)
-      if (e.error) {
-        reject(e.error)
-      } else {
-        const dataUrl = fr.result as string
-        const marker = 'base64,'
-        const idx = dataUrl.indexOf(marker)
-        if (idx) {
-          const buf = Buffer.from(dataUrl.substr(idx + marker.length), 'base64')
-          resolve(buf)
-        } else {
-          reject(new Error(`'${marker}' not found in string`))
-        }
-      }
-    }
-
-    fr.addEventListener('loadend', loadend, false)
-    fr.readAsDataURL(blob)
-  })
 }

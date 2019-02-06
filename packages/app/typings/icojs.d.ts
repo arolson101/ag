@@ -1,4 +1,4 @@
-declare module 'icojs' {
+declare module 'icojs/index.js' {
   export interface ParsedImage {
     width: number,
     height: number,

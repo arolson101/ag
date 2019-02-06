@@ -9,6 +9,7 @@
       "@ag/electron/sqlite3",
       "@ag/electron/electron*",
       "**/*react-native*",
+      "**/*rn-fetch-blob*",
       "@ag/rn/native-base*"
     ]
   },

@@ -3,6 +3,7 @@ package com.app_rn;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import org.pgsqlite.SQLitePluginPackage;
@@ -43,6 +44,7 @@ public class MainApplication extends NavigationApplication {
         // Add additional packages you require here
         // No need to add RnnPackage and MainReactPackage
         return Arrays.<ReactPackage>asList(
+            new RNFetchBlobPackage(),
             new PickerPackage(),
             new ImageResizerPackage(),
             new SQLitePluginPackage(),

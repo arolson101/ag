@@ -212,7 +212,7 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
   render() {
     const { value, loading, ...props } = this.props
     const favico = value ? (JSON.parse(value) as FavicoProps) : undefined
-    log('render %o', favico)
+    // log('render %o', favico)
     return (
       <Button {...props}>
         {loading ? (
