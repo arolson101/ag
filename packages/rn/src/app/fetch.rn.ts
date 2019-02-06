@@ -10,11 +10,10 @@ export const rnfetch = async (input: RequestInfo, init?: RequestInit): Promise<R
 
   init = init || {}
 
-  const task = RNFetchBlob.config({}).fetch(
-    (init.method as 'GET') || 'GET',
-    input,
-    init.headers as Record<string, string>
-  )
+  const task = RNFetchBlob.config({}).fetch((init.method as 'GET') || 'GET', input, {
+    ...((init.headers || {}) as Record<string, string>),
+    'RNFB-Response': 'base64',
+  })
 
   const listener = () => {
     log('fetch for %s is being cancelled', input)
@@ -43,12 +42,16 @@ export const rnfetch = async (input: RequestInfo, init?: RequestInit): Promise<R
     headers: {
       get: (name: string) => info.headers[name],
       has: (name: string) => name in info.headers,
+
+      raw: info.headers,
     },
 
     statusText: `HTTP status ${info.status} returned from server`,
 
     text: async () => rbresponse.text(),
     arrayBuffer: async (): Promise<ArrayBuffer> => Buffer.from(rbresponse.base64(), 'base64'),
+
+    rbresponse,
   } as any
 
   return response
