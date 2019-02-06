@@ -38,10 +38,6 @@ export const fixUrl = (from: string): string => {
     from = 'http://' + from
   }
 
-  const urlobj = url.parse(from)
-  urlobj.protocol = urlobj.protocol || 'http'
-  from = url.format(urlobj)
-
   return from
 }
 
@@ -122,10 +118,16 @@ export const getFavico = async (
         log('failed getting: %s', link)
         return
       }
-      // log('%s => %o', link, response)
+      log('%s => %o', link, response)
 
       const blob = await response.blob()
       const buf = await toBuffer(blob)
+      log('text: %O', buf.toString('hex'))
+
+      // const text = await response.text()
+      // const buf = Buffer.from(text, 'utf16le')
+      // log('buf: %O', { buf, hex: buf.toString('hex') })
+
       if (ICO.isICO(buf)) {
         const mime = 'image/png'
         const parsedImages = await ICO.parse(buf, mime)

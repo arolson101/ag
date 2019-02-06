@@ -1,4 +1,4 @@
-import { AppContext } from '@ag/app'
+import { AppContext, ImageUri } from '@ag/app'
 import { ImageSourcePropType, ImageURISource } from 'react-native'
 import RNFS from 'react-native-fs'
 import ImageCropPicker from 'react-native-image-crop-picker'
@@ -9,17 +9,17 @@ export interface FavicoProps {
   source: ImageSourcePropType
 }
 
-// export const resizeImage: AppContext['resizeImage'] = async (image, width, height, format) => {
-//   const result = await ImageResizer.createResizedImage(src.uri!, width, height, 'PNG', 100)
-//   try {
-//     const base64 = await RNFS.readFile(result.uri, 'base64')
-//     const mime = 'image/png'
-//     const uri = `data:${mime};base64,${base64}`
-//     images.push({ width, height, uri })
-//   } finally {
-//     await RNFS.unlink(result.uri)
-//   }
-// }
+export const resizeImage: AppContext['resizeImage'] = async (image, width, height, format) => {
+  const result = await ImageResizer.createResizedImage(image.uri, width, height, 'PNG', 100)
+  try {
+    const base64 = await RNFS.readFile(result.uri, 'base64')
+    const mime = 'image/png'
+    const uri = `data:${mime};base64,${base64}`
+    return { width, height, uri }
+  } finally {
+    await RNFS.unlink(result.uri)
+  }
+}
 
 // export const getFavicoFromLibrary = async () => {
 //   const image = await ImageCropPicker.openPicker({

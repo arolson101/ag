@@ -1,6 +1,9 @@
 PODS:
+  - QBImagePickerController (3.4.0)
   - React (0.57.8):
     - React/Core (= 0.57.8)
+  - react-native-image-resizer (1.0.0):
+    - React
   - react-native-randombytes (3.5.2):
     - React
   - react-native-sqlite-storage (3.3.9):
@@ -40,11 +43,17 @@ PODS:
     - React
   - RNFS (2.13.3):
     - React
+  - RNImageCropPicker (0.22.0):
+    - QBImagePickerController
+    - React/Core
+    - RSKImageCropper
   - RNVectorIcons (6.2.0):
     - React
+  - RSKImageCropper (2.2.1)
   - yoga (0.57.8.React)
 
 DEPENDENCIES:
+  - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - React/Core (from `../node_modules/react-native`)
@@ -61,12 +70,20 @@ DEPENDENCIES:
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - ReactNativeNavigation (from `../node_modules/react-native-navigation`)
   - RNFS (from `../node_modules/react-native-fs`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - QBImagePickerController
+    - RSKImageCropper
 
 EXTERNAL SOURCES:
   React:
     :path: "../node_modules/react-native"
+  react-native-image-resizer:
+    :path: "../node_modules/react-native-image-resizer"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
   react-native-sqlite-storage:
@@ -75,20 +92,26 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-navigation"
   RNFS:
     :path: "../node_modules/react-native-fs"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
+  react-native-image-resizer: 04a3409e7d4ad646c4468671c69dec490def139c
   react-native-randombytes: d3184d351604f78e019535178766590188bbc133
   react-native-sqlite-storage: 848fb96c0b6d17b3f70e169ac41f84434cdad94c
   ReactNativeNavigation: 20522060de61b1c293ec50681a6aa11488596286
   RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
+  RNImageCropPicker: 32ca4b9fef4e1b7b85ba69494242122948117e06
   RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
+  RSKImageCropper: 98296ad26b41753f796b6898d015509598f13d97
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: cc7c4f3909a04201a6c2188b6b63401dd8994abe
+PODFILE CHECKSUM: a57fa0315fc2082c8a96f1bc78034e7add4715c5
 
 COCOAPODS: 1.5.3

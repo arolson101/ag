@@ -1,5 +1,5 @@
 import { AbortController, AppContext, UrlFieldProps } from '@ag/app'
-import { FavicoProps, getFavico, getFavicoFromLibrary } from '@ag/app/online/getFavico'
+import { FavicoProps, fixUrl, getFavico, getFavicoFromLibrary } from '@ag/app/online/getFavico'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import isUrl from 'is-url'
@@ -27,15 +27,16 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
 
   private textInput = React.createRef<Input>()
   private form!: FormikProps<Values>
-  private originalValue: string | undefined = undefined
-  private controller = new AbortController()
+  private controller?: AbortController
 
   state: State = {
     gettingIcon: false,
   }
 
   componentWillUnmount() {
-    this.controller.abort()
+    if (this.controller) {
+      this.controller.abort()
+    }
   }
 
   focusTextInput = () => {
@@ -61,9 +62,6 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
           this.form = form
           const error = !!(form.touched[name] && form.errors[name])
           const inputProps = { autoFocus, onPress: this.focusTextInput }
-          if (this.originalValue === undefined) {
-            this.originalValue = field.value
-          }
           return (
             <Item inlineLabel error={error} {...inputProps} placeholder={placeholder}>
               <Label label={label} error={error} />
@@ -108,8 +106,12 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
     log('maybeGetIcon', { value })
     const { favicoField } = this.props
 
+    value = fixUrl(value)
+    // log('fixed: %s', value)
+
     if (!isUrl(value)) {
       log(`not looking up icon '${value}' is not an URL`)
+      this.form.setFieldValue(favicoField, undefined)
       return
     }
 
@@ -120,22 +122,21 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
         log(`not looking up icon because we already got it from ${value}`)
         return
       }
-
-      if (iconProps.from !== this.originalValue) {
-        log(`not changing icon because it was from ${iconProps.from}, not ${this.originalValue}`)
-        return
-      }
     }
 
     try {
+      if (this.controller) {
+        this.controller.abort()
+      }
+      this.controller = new AbortController()
       this.setState({ gettingIcon: true })
       const icon = await getFavico(value, this.controller.signal, this.context)
       this.form.setFieldValue(favicoField, JSON.stringify(icon))
-      this.originalValue = icon.from
     } catch (ex) {
       log(ex.message)
     } finally {
       this.setState({ gettingIcon: false })
+      this.controller = undefined
     }
   }
 
@@ -149,7 +150,6 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
     const { favicoField } = this.props
     const icon = await getFavicoFromLibrary(this.context)
     this.form.setFieldValue(favicoField, JSON.stringify(icon))
-    this.originalValue = icon.from
   }
 
   onIconButtonPressed = () => {
@@ -212,6 +212,7 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
   render() {
     const { value, loading, ...props } = this.props
     const favico = value ? (JSON.parse(value) as FavicoProps) : undefined
+    log('render %o', favico)
     return (
       <Button {...props}>
         {loading ? (

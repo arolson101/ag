@@ -3,6 +3,8 @@ package com.app_rn;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import org.pgsqlite.SQLitePluginPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.rnfs.RNFSPackage;
@@ -41,10 +43,12 @@ public class MainApplication extends NavigationApplication {
         // Add additional packages you require here
         // No need to add RnnPackage and MainReactPackage
         return Arrays.<ReactPackage>asList(
-          new SQLitePluginPackage(),
-          new RandomBytesPackage(),
-          new RNFSPackage(),
-          new VectorIconsPackage()
+            new PickerPackage(),
+            new ImageResizerPackage(),
+            new SQLitePluginPackage(),
+            new RandomBytesPackage(),
+            new RNFSPackage(),
+            new VectorIconsPackage()
         );
     }
 
