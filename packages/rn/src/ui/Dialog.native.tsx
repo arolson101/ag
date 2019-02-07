@@ -47,7 +47,7 @@ export class Dialog extends React.PureComponent<DialogProps> {
 
 export const DialogBody: UiContext['DialogBody'] = ({ children }) => (
   <Container>
-    <SafeAreaContent>{children}</SafeAreaContent>
+    <Content>{children}</Content>
   </Container>
 )
 DialogBody.displayName = 'DialogBody'

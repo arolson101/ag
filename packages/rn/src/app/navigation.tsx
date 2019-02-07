@@ -20,8 +20,8 @@ export const setDefaultOptions = () => {
     bottomTabs: {
       backgroundColor: Platform.select({ android: platform.tabActiveBgColor, default: undefined }),
       titleDisplayMode: 'alwaysShow',
-      translucent: true,
-      drawBehind: true,
+      // translucent: true,
+      // drawBehind: true,
     },
     bottomTab: {
       selectedTextColor: platform.tabBarActiveTextColor,
@@ -31,10 +31,10 @@ export const setDefaultOptions = () => {
     },
     topBar: {
       borderColor: platform.toolbarDefaultBorder,
-      drawBehind: true,
+      // drawBehind: true,
       background: {
         // color: platform.toolbarDefaultBg,
-        translucent: true,
+        // translucent: true,
         // blur: true,
       },
       title: {
