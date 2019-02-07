@@ -87,6 +87,9 @@ export interface UiContext {
   Page: ComponentType<{}>
   Container: ComponentType<{}>
   Collapsible: ComponentType<{ show: boolean }>
+
+  // controls
+  Spinner: ComponentType
   Link: ComponentType<{ onClick?: () => any }>
   Text: ComponentType<{ flex?: number; header?: boolean; muted?: boolean; onClick?: () => any }>
   SubmitButton: ComponentType<{ disabled?: boolean; onPress: () => any }>

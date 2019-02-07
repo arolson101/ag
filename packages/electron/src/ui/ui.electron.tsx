@@ -110,6 +110,9 @@ export const ui: UiContext = {
       {children}
     </Collapse>
   ),
+
+  // controls
+  Spinner,
   Link: ({ onClick, children }) => <a onClick={onClick}>{children}</a>,
   Text: ({ flex, header, muted, children, onClick }) => {
     const Component: React.ComponentType<any> = header ? H3 : Text

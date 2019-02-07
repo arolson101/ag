@@ -6,6 +6,7 @@ import {
   Content,
   H3,
   ListItem,
+  Spinner,
   Tab,
   Tabs,
   Text,
@@ -62,6 +63,9 @@ export const ui: UiContext = {
   Collapsible: ({ show, children }) => (
     <View style={{ display: show ? 'flex' : 'none' }}>{children}</View>
   ),
+
+  // controls
+  Spinner,
   Link: ({ onClick, children }) => (
     <Button transparent onPress={onClick}>
       <Text>{children}</Text>

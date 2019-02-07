@@ -57,7 +57,7 @@ export const registerComponents = (RnApp: React.ComponentType) => {
       <AppContext.Consumer>
         {appContext => (
           <DialogContext.Provider value={{ ...appContext, componentId }}>
-            <Dialog {...props as any} />
+            <Dialog {...props} />
           </DialogContext.Provider>
         )}
       </AppContext.Consumer>

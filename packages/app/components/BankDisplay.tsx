@@ -47,8 +47,8 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
             <Text header flex={1}>
               {bank.name}
             </Text>
-            <Link dispatch={actions.dlg.accountCreate({ bankId: bank.id })}>[add account]</Link>
-            <Link dispatch={actions.dlg.bankEdit({ bankId: bank.id })}>[edit]</Link>
+            <Link dispatch={actions.openDlg.accountCreate({ bankId: bank.id })}>[add account]</Link>
+            <Link dispatch={actions.openDlg.bankEdit({ bankId: bank.id })}>[edit]</Link>
           </Row>
         </Row>
         {!bank.accounts.length ? (
@@ -61,7 +61,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
               </Row>
               <Row>
                 <Link
-                  dispatch={actions.dlg.accountEdit({
+                  dispatch={actions.openDlg.accountEdit({
                     bankId: bank.id,
                     accountId: account.id,
                   })}

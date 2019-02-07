@@ -46,18 +46,14 @@ export const MockApp: React.FC<{ query?: Gql<any, any>; variables?: any; respons
     return (
       <MockedProvider mocks={mocks}>
         <IntlProvider locale='en'>
-          <ApolloConsumer>
-            {client => <AppContext.Provider value={appContext}>{children}</AppContext.Provider>}
-          </ApolloConsumer>
+          <AppContext.Provider value={appContext}>{children}</AppContext.Provider>
         </IntlProvider>
       </MockedProvider>
     )
   } else {
     return (
       <IntlProvider locale='en'>
-        <ApolloConsumer>
-          {client => <AppContext.Provider value={appContext}>{children}</AppContext.Provider>}
-        </ApolloConsumer>
+        <AppContext.Provider value={appContext}>{children}</AppContext.Provider>
       </IntlProvider>
     )
   }

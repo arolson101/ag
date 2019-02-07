@@ -1,4 +1,11 @@
-import { AccountDialog, AppContext, AppState, BankDialog, LoginDialog } from '@ag/app'
+import {
+  AccountDialog,
+  AppContext,
+  AppState,
+  BankDialog,
+  LoginDialog,
+  PictureDialog,
+} from '@ag/app'
 import debug from 'debug'
 import React from 'react'
 import shallowequal from 'shallowequal'
@@ -42,7 +49,8 @@ export class ElectronDialogs extends React.PureComponent<Props> {
 
     return (
       <>
-        {dialog.loginDialog && <LoginDialog isOpen={dialog.loginDialog.isOpen} />}
+        {dialog.loginDialog && <LoginDialog {...dialog.loginDialog} />}
+        {dialog.pictureDialog && <PictureDialog {...dialog.pictureDialog} />}
         {dialog.bankDialog && <BankDialog {...dialog.bankDialog} />}
         {dialog.accountDialog && <AccountDialog {...dialog.accountDialog} />}
       </>
