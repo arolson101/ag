@@ -11,7 +11,7 @@ import {
   Navigation,
 } from 'react-native-navigation'
 import * as Tabs from '../tabs'
-import { DialogContext } from '../ui/Dialog'
+import { DialogContext } from '../ui/Dialog.native'
 
 const log = debug('rn:navigation')
 
