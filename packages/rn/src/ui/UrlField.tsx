@@ -1,4 +1,4 @@
-import { AbortController, AppContext, UrlFieldProps } from '@ag/app'
+import { AppContext, UrlFieldProps } from '@ag/app'
 import { FavicoProps, fixUrl, getFavico, getFavicoFromLibrary } from '@ag/app/online/getFavico'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'

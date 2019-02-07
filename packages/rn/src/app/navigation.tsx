@@ -20,17 +20,22 @@ export const setDefaultOptions = () => {
     bottomTabs: {
       backgroundColor: Platform.select({ android: platform.tabActiveBgColor, default: undefined }),
       titleDisplayMode: 'alwaysShow',
+      translucent: true,
+      drawBehind: true,
     },
     bottomTab: {
-      selectedTextColor: platform.tabBarTextColor,
+      selectedTextColor: platform.tabBarActiveTextColor,
       selectedIconColor: platform.tabBarActiveTextColor,
       textColor: platform.tabBarTextColor,
       iconColor: platform.tabBarTextColor,
     },
     topBar: {
       borderColor: platform.toolbarDefaultBorder,
+      drawBehind: true,
       background: {
-        color: platform.toolbarDefaultBg,
+        // color: platform.toolbarDefaultBg,
+        translucent: true,
+        // blur: true,
       },
       title: {
         color: platform.toolbarBtnTextColor,

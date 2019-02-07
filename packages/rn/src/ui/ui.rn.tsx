@@ -1,5 +1,17 @@
 import { UiContext } from '@ag/app'
-import { Button, Card, H3, ListItem, Tab, Tabs, Text, Toast, View } from 'native-base'
+import {
+  Button,
+  Card,
+  Container,
+  Content,
+  H3,
+  ListItem,
+  Tab,
+  Tabs,
+  Text,
+  Toast,
+  View,
+} from 'native-base'
 import React from 'react'
 import { Image } from 'react-native'
 import { Alert } from './Alert'
@@ -35,13 +47,17 @@ export const ui: UiContext = {
   // layout
   Card: ({ children }) => <Card>{children}</Card>,
   Row: ({ left, right, center, flex, children }) => (
-    <View style={{ flexDirection: 'row', alignItems: 'baseline', flex }}>{children}</View>
+    <View style={{ flexDirection: 'row', alignItems: 'center', flex }}>{children}</View>
   ),
   Column: ({ top, bottom, center, flex, children }) => (
     <View style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</View>
   ),
 
-  Page: ({ children }) => <View>{children}</View>,
+  Page: ({ children }) => (
+    <Container>
+      <Content>{children}</Content>
+    </Container>
+  ),
   Container: ({ children }) => <View>{children}</View>,
   Collapsible: ({ show, children }) => (
     <View style={{ display: show ? 'flex' : 'none' }}>{children}</View>
@@ -61,12 +77,12 @@ export const ui: UiContext = {
   },
   SubmitButton: ({ onPress, disabled, children }) => (
     <Button onPress={onPress} disabled={disabled}>
-      <Text>{children}</Text>
+      {children}
     </Button>
   ),
   DeleteButton: ({ onPress, disabled, children }) => (
     <Button danger block onPress={onPress} disabled={disabled}>
-      <Text>{children}</Text>
+      {children}
     </Button>
   ),
 

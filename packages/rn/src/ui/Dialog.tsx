@@ -1,13 +1,17 @@
 import { AppContext, ButtonConfig, DialogFooterProps, DialogProps, UiContext } from '@ag/app'
 import debug from 'debug'
+import { Container, Content } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
-import { Platform } from 'react-native'
+import { Platform, SafeAreaView, ScrollView, View } from 'react-native'
 import {
   Navigation,
   NavigationButtonPressedEvent,
   OptionsTopBarButton,
 } from 'react-native-navigation'
+import { withSafeArea } from 'react-native-safe-area'
+
+const SafeAreaContent = withSafeArea(Content, 'contentInset', 'vertical')
 
 const log = debug('rn:dialog')
 
@@ -41,7 +45,11 @@ export class Dialog extends React.PureComponent<DialogProps> {
   }
 }
 
-export const DialogBody: UiContext['DialogBody'] = ({ children }) => <>{children}</>
+export const DialogBody: UiContext['DialogBody'] = ({ children }) => (
+  <Container>
+    <SafeAreaContent>{children}</SafeAreaContent>
+  </Container>
+)
 DialogBody.displayName = 'DialogBody'
 
 type TopButtonId = 'primary' | 'secondary'

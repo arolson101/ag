@@ -1,4 +1,3 @@
-import AbortController from 'abort-controller'
 import { ApolloClient } from 'apollo-client'
 import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
@@ -6,8 +5,6 @@ import { Connection, ConnectionOptions } from 'typeorm'
 import { AppAction } from '../actions'
 import { AppState, AppStore } from '../reducers'
 import { ImageUri, UiContext } from './uiContext'
-
-export { AbortController }
 
 export interface LibraryImage {
   image: ImageUri

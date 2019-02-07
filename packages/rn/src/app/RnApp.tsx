@@ -12,6 +12,7 @@ import { registerComponents, root, setDefaultOptions } from './navigation'
 import { deleteDb, openDb } from './openDb.native'
 
 YellowBox.ignoreWarnings(['Remote debugger is in a background tab'])
+YellowBox.ignoreWarnings(['Require cycle:'])
 
 const log = debug('rn:init')
 log.enabled = true
