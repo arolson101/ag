@@ -3,7 +3,7 @@ import debug from 'debug'
 import React from 'react'
 import shallowequal from 'shallowequal'
 
-const log = debug('electron:Dialogs')
+const log = debug('electron:ElectronDialogs')
 
 interface Props {}
 
@@ -15,7 +15,7 @@ const subState = (state: AppState): State => ({
   dialog: state.dialog,
 })
 
-export class Dialogs extends React.PureComponent<Props> {
+export class ElectronDialogs extends React.PureComponent<Props> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
