@@ -1,5 +1,4 @@
-import { App, AppContext } from '@ag/app'
-import * as Dialogs from '@ag/app/dialogs'
+import { AppContext, appDialogs } from '@ag/app'
 import debug from 'debug'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
@@ -48,22 +47,12 @@ export const setDefaultOptions = () => {
 }
 
 export const registerComponents = (RnApp: React.ComponentType) => {
-  for (const tab of [
-    Tabs.AccountsTab,
-    Tabs.BillsTab,
-    Tabs.BudgetsTab,
-    Tabs.CalendarTab,
-    Tabs.HomeTab,
-  ]) {
+  for (const tab of Tabs.rnTabs) {
     log('registered tab %s', tab.name)
     Navigation.registerComponentWithRedux(tab.name, () => tab, RnApp, undefined)
   }
 
-  for (const Dialog of [
-    Dialogs.LoginDialog, //
-    Dialogs.BankDialog,
-    Dialogs.AccountDialog,
-  ]) {
+  for (const Dialog of appDialogs) {
     const component: React.FC<DialogContext> = ({ componentId, ...props }) => (
       <AppContext.Consumer>
         {appContext => (
