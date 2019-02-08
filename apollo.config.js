@@ -1,7 +1,11 @@
+const path = require('path')
+
 module.exports = {
-  service: {
-    name: 'ag',
-    localSchemaFile: './dist/schema.json'
+  client: {
+    service: {
+      name: 'ag',
+      localSchemaFile: 'dist/schema.json'
+    },
+    includes: ['**/*.tsx'],
   },
-  includes: ['./projects/**/*.*'],
-};
+}
