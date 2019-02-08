@@ -1,8 +1,7 @@
 // tslint:disable:no-implicit-dependencies
-import { App, AppContext, AppStore, ClientDependencies, Gql } from '@ag/app'
+import { App, AppContext, ClientDependencies, Gql } from '@ag/app'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
-import { ApolloConsumer } from 'react-apollo'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { IntlProvider } from 'react-intl'
 import { ui } from '../src/ui'
@@ -15,7 +14,7 @@ const clientDependencies: ClientDependencies = {
   deleteDb: () => {
     throw new Error('no deleteDb')
   },
-  fetch: action('fetch') as any,
+  fetch,
   resizeImage: action('resizeImage') as any,
   getImageFromLibrary: action('getImageFromLibrary') as any,
 }
@@ -46,18 +45,14 @@ export const MockApp: React.FC<{ query?: Gql<any, any>; variables?: any; respons
     return (
       <MockedProvider mocks={mocks}>
         <IntlProvider locale='en'>
-          <ApolloConsumer>
-            {client => <AppContext.Provider value={appContext}>{children}</AppContext.Provider>}
-          </ApolloConsumer>
+          <AppContext.Provider value={appContext}>{children}</AppContext.Provider>
         </IntlProvider>
       </MockedProvider>
     )
   } else {
     return (
       <IntlProvider locale='en'>
-        <ApolloConsumer>
-          {client => <AppContext.Provider value={appContext}>{children}</AppContext.Provider>}
-        </ApolloConsumer>
+        <AppContext.Provider value={appContext}>{children}</AppContext.Provider>
       </IntlProvider>
     )
   }

@@ -59,13 +59,13 @@ export class AccountDialog extends React.PureComponent<AccountDialog.Props> {
     const { dispatch } = this.context
     if (this.AccountForm.current) {
       this.AccountForm.current.save()
-      dispatch(actions.dlg.close())
+      dispatch(actions.closeDlg('account'))
     }
   }
 
   close = () => {
     const { dispatch } = this.context
-    dispatch(actions.dlg.close())
+    dispatch(actions.closeDlg('account'))
   }
 }
 

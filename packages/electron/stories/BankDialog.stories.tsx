@@ -15,15 +15,17 @@ const emptyResponse = {
 const editResponse = {
   appDb: {
     bank: {
-      name: 'Aerospace FCU',
-      web: 'https://www.aerofcu.org',
-      address: '2310 E. El Segundo Blvd.\nEl Segundo,, CA 90245\nUSA',
+      name: 'Citi Cards',
+      web: 'http://www.citicards.com',
+      address: '8787 Baypine Road\nJacksonville, FL 32256\nUSA',
       notes: '',
-      favicon: '',
+      favicon:
+        // tslint:disable-next-line:max-line-length
+        '{"source":[{"width":16,"height":16,"uri":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABdElEQVQ4T7XTTSgDYBzH8e+zlSgvk4O9hAO5mDjIy5G8JCVCoXGQlbIcUEhxWNS0xQ6Ki9CkqZW2A5lS8nJQU2qhJOEm5SJvY9pzULIxyXN/Pv/f//88fxEMBoP84Yh/BWQ4pxPW1kCrBZMJodN9yhsxgbzc2Ql+PzQ3w8UFuFwSE3r9BxIZCFV1OGBhgdFZL8PGCmL2dsBmA7cbIYREvgBnlzc8PgfIyVRzfn1LUnws5cYZliwG0tQqHh5fSE1JCJ/AuX5Ix4gThUKwONaCedZLe20B/TYPedkaRruqOPBfYTZVfwVCPec1Wlm2tKFKjOPpOUBj7zy+lT5KDHa25rrZ2D35HtDXT+BfHZB64PWNwpbJ3wFZNeOceoZQKoQEilqnogdCVQ2DDpRKhWyhKDcD6/yWBEo7pqkryyVdk4zv+Dr8DELA7d09/Ta3nLR9sB770jbjPTW4No/w7p9ibCiWL9NUmf/zP4h2Pf53F6JJ8ecE70Q529FGCcDGAAAAAElFTkSuQmCC"}],"from":"http://www.citicards.com/"}',
       online: true,
-      fid: '1976',
-      org: 'ORCC',
-      ofx: 'https://www20.onlinebank.com/OROFX16Listener',
+      fid: '24909',
+      org: 'Citigroup',
+      ofx: 'https://www.accountonline.com/cards/svc/CitiOfxManager.do',
       username: '',
       password: '',
       __typename: 'Bank',

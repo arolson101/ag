@@ -41,7 +41,7 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
           query={HomePage.queries.HomePage}
           onCompleted={({ appDb }) => {
             if (!appDb) {
-              dispatch(actions.dlg.login())
+              dispatch(actions.openDlg.login())
             }
           }}
         >
@@ -50,7 +50,7 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
               <Text header>Accounts</Text>
               {appDb && appDb.banks.map(bank => <BankDisplay bank={bank} key={bank.id} />)}
               <Container>
-                <Link dispatch={actions.dlg.bankCreate()}>add bank</Link>
+                <Link dispatch={actions.openDlg.bankCreate()}>add bank</Link>
               </Container>
             </>
           )}

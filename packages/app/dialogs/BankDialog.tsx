@@ -44,7 +44,7 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
             onClick: this.save,
           }}
           secondary={{
-            title: intl.formatMessage(messages.cancel), //
+            title: intl.formatMessage(messages.cancel),
             onClick: this.close,
           }}
         />
@@ -56,13 +56,13 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
     const { dispatch } = this.context
     if (this.bankForm.current) {
       this.bankForm.current.save()
-      dispatch(actions.dlg.close())
+      dispatch(actions.closeDlg('bank'))
     }
   }
 
   close = () => {
     const { dispatch } = this.context
-    dispatch(actions.dlg.close())
+    dispatch(actions.closeDlg('bank'))
   }
 }
 

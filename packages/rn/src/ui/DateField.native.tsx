@@ -6,7 +6,7 @@ import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
 import { DatePickerIOS } from 'react-native'
 import Collapsible from 'react-native-collapsible'
-import { Label } from './Label'
+import { Label } from './Label.native'
 
 interface State {
   picking: boolean

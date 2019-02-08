@@ -3,7 +3,7 @@ import { Field, FieldProps } from 'formik'
 import { Item, Right, Switch } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
-import { Label } from './Label'
+import { Label } from './Label.native'
 
 export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
   render() {

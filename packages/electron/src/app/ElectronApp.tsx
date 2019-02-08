@@ -3,7 +3,7 @@ import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { store } from '../store'
 import { ui } from '../ui'
-import { Dialogs } from './Dialogs'
+import { ElectronDialogs } from './ElectronDialogs'
 import { ElectronRouter } from './ElectronRouter'
 import { resizeImage } from './image.electron'
 import { deleteDb, openDb } from './openDb.electron'
@@ -26,7 +26,7 @@ class ElectronApp extends React.PureComponent {
     return (
       <App context={context}>
         <ElectronRouter />
-        <Dialogs />
+        <ElectronDialogs />
       </App>
     )
   }

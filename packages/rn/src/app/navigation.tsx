@@ -1,5 +1,4 @@
-import { App, AppContext } from '@ag/app'
-import * as Dialogs from '@ag/app/dialogs'
+import { AppContext, appDialogs } from '@ag/app'
 import debug from 'debug'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
@@ -11,7 +10,7 @@ import {
   Navigation,
 } from 'react-native-navigation'
 import * as Tabs from '../tabs'
-import { DialogContext } from '../ui/Dialog'
+import { DialogContext } from '../ui/Dialog.native'
 
 const log = debug('rn:navigation')
 
@@ -20,17 +19,22 @@ export const setDefaultOptions = () => {
     bottomTabs: {
       backgroundColor: Platform.select({ android: platform.tabActiveBgColor, default: undefined }),
       titleDisplayMode: 'alwaysShow',
+      // translucent: true,
+      // drawBehind: true,
     },
     bottomTab: {
-      selectedTextColor: platform.tabBarTextColor,
+      selectedTextColor: platform.tabBarActiveTextColor,
       selectedIconColor: platform.tabBarActiveTextColor,
       textColor: platform.tabBarTextColor,
       iconColor: platform.tabBarTextColor,
     },
     topBar: {
       borderColor: platform.toolbarDefaultBorder,
+      // drawBehind: true,
       background: {
-        color: platform.toolbarDefaultBg,
+        // color: platform.toolbarDefaultBg,
+        // translucent: true,
+        // blur: true,
       },
       title: {
         color: platform.toolbarBtnTextColor,
@@ -43,27 +47,17 @@ export const setDefaultOptions = () => {
 }
 
 export const registerComponents = (RnApp: React.ComponentType) => {
-  for (const tab of [
-    Tabs.AccountsTab,
-    Tabs.BillsTab,
-    Tabs.BudgetsTab,
-    Tabs.CalendarTab,
-    Tabs.HomeTab,
-  ]) {
+  for (const tab of Tabs.rnTabs) {
     log('registered tab %s', tab.name)
     Navigation.registerComponentWithRedux(tab.name, () => tab, RnApp, undefined)
   }
 
-  for (const Dialog of [
-    Dialogs.LoginDialog, //
-    Dialogs.BankDialog,
-    Dialogs.AccountDialog,
-  ]) {
+  for (const Dialog of appDialogs) {
     const component: React.FC<DialogContext> = ({ componentId, ...props }) => (
       <AppContext.Consumer>
         {appContext => (
           <DialogContext.Provider value={{ ...appContext, componentId }}>
-            <Dialog {...props as any} />
+            <Dialog {...props} />
           </DialogContext.Provider>
         )}
       </AppContext.Consumer>

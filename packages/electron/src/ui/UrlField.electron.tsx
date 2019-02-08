@@ -1,12 +1,12 @@
 import {
   AppContext,
   FavicoProps,
-  fixUrl,
   getFavico,
   getFavicoFromLibrary,
   pickBestImageUri,
   UrlFieldProps,
 } from '@ag/app'
+import { fixUrl, isUrl } from '@ag/app/util/url'
 import {
   Button,
   FormGroup,
@@ -15,10 +15,11 @@ import {
   IInputGroupProps,
   InputGroup,
   Intent,
+  Menu,
+  Popover,
 } from '@blueprintjs/core'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
-import isUrl = require('is-url')
 import React from 'react'
 import { defineMessages } from 'react-intl'
 
@@ -32,7 +33,10 @@ interface State {
   gettingIcon: boolean
 }
 
-export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>, State> {
+export class UrlField<Values extends Record<string, any>> extends React.PureComponent<
+  UrlField.Props<Values>,
+  State
+> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
@@ -61,6 +65,7 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
   }
 
   render() {
+    const { intl } = this.context
     const { field: name, favicoField, autoFocus, label, disabled, placeholder } = this.props
     const id = name
 
@@ -88,11 +93,30 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
                 rightElement={
                   <Field name={favicoField} pure={false}>
                     {({ field: iconField }: FieldProps<Values>) => (
-                      <FavicoButton
-                        loading={this.state.gettingIcon}
-                        value={iconField.value}
-                        onClick={this.onIconButtonPressed}
-                      />
+                      <Popover
+                        content={
+                          <Menu>
+                            <Menu.Item
+                              text={intl.formatMessage(messages.redownload)}
+                              icon='refresh'
+                              onClick={this.onClickRedownload}
+                            />
+                            <Menu.Item
+                              text={intl.formatMessage(messages.library)}
+                              icon='folder-open'
+                              onClick={this.onClickLibrary}
+                            />
+                            <Menu.Divider />
+                            <Menu.Item
+                              text={intl.formatMessage(messages.reset)}
+                              icon='trash'
+                              onClick={this.onClickReset}
+                            />
+                          </Menu>
+                        }
+                      >
+                        <FavicoButton loading={this.state.gettingIcon} value={iconField.value} />
+                      </Popover>
                     )}
                   </Field>
                 }
@@ -123,7 +147,7 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
 
     const iconValue = this.form.values[favicoField]
     if (iconValue && !force) {
-      const iconProps = JSON.parse(iconValue as any) as FavicoProps
+      const iconProps = JSON.parse(iconValue) as FavicoProps
       if (iconProps.from === value) {
         log(`not looking up icon because we already got it from ${value}`)
         return
@@ -146,48 +170,21 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
     }
   }
 
-  redownload = async () => {
+  onClickRedownload = async () => {
     const { favicoField, field } = this.props
     this.form.setFieldValue(favicoField, '')
-    return this.maybeGetIcon(this.form.values[field] as any, true)
+    return this.maybeGetIcon(this.form.values[field], true)
   }
 
-  getFromLibrary = async () => {
+  onClickLibrary = async () => {
     const { favicoField } = this.props
     const icon = await getFavicoFromLibrary(this.context)
     this.form.setFieldValue(favicoField, JSON.stringify(icon))
   }
 
-  onIconButtonPressed = () => {
-    // const { intl } = this.context
-    // const { label, favicoField } = this.props
-    // const options: string[] = [
-    //   intl.formatMessage(messages.reset),
-    //   intl.formatMessage(messages.redownload),
-    //   intl.formatMessage(messages.library),
-    //   intl.formatMessage(messages.cancel),
-    // ]
-    // const cancelButtonIndex = 3
-    // ActionSheet.show(
-    //   {
-    //     options,
-    //     cancelButtonIndex,
-    //     title: label,
-    //   },
-    //   async buttonIndex => {
-    //     switch (buttonIndex) {
-    //       case 0: // reset
-    //         this.form.setFieldValue(favicoField, '')
-    //         return
-    //       case 1: // redownload
-    //         await this.redownload()
-    //         break
-    //       case 2: // library
-    //         await this.getFromLibrary()
-    //         break
-    //     }
-    //   }
-    // )
+  onClickReset = () => {
+    const { favicoField } = this.props
+    this.form.setFieldValue(favicoField, '')
   }
 }
 
@@ -222,11 +219,7 @@ class FavicoButton extends React.PureComponent<FavicoButtonProps> {
     return loading ? (
       <Button {...props} minimal loading />
     ) : favico ? (
-      <Button
-        {...props}
-        minimal
-        icon={<img width={16} height={16} src={pickBestImageUri(favico.source, 16)} />}
-      />
+      <Button {...props} minimal icon={<img {...pickBestImageUri(favico.source, 16)} />} />
     ) : (
       <Button {...props} minimal>
         {'...'}
@@ -236,24 +229,16 @@ class FavicoButton extends React.PureComponent<FavicoButtonProps> {
 }
 
 const messages = defineMessages({
-  empty: {
-    id: 'empty',
-    defaultMessage: '',
-  },
   library: {
-    id: 'UrlField.library',
-    defaultMessage: 'Choose from library',
+    id: 'UrlField.electron.library',
+    defaultMessage: 'Browse...',
   },
   reset: {
-    id: 'UrlField.reset',
+    id: 'UrlField.electron.reset',
     defaultMessage: 'Reset to default',
   },
   redownload: {
-    id: 'UrlField.redownload',
+    id: 'UrlField.electron.redownload',
     defaultMessage: 'Download again',
-  },
-  cancel: {
-    id: 'UrlField.cancel',
-    defaultMessage: 'Cancel',
   },
 })

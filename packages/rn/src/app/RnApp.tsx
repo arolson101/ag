@@ -6,12 +6,13 @@ import { Navigation } from 'react-native-navigation'
 import { iconInit } from '../icons'
 import { store } from '../store'
 import { ui } from '../ui'
-import { rnfetch } from './fetch.rn'
+import { rnfetch } from './fetch.native'
 import { resizeImage } from './image.native'
 import { registerComponents, root, setDefaultOptions } from './navigation'
 import { deleteDb, openDb } from './openDb.native'
 
 YellowBox.ignoreWarnings(['Remote debugger is in a background tab'])
+YellowBox.ignoreWarnings(['Require cycle:'])
 
 const log = debug('rn:init')
 log.enabled = true

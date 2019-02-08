@@ -1,9 +1,15 @@
 import { getType } from 'typesafe-actions'
 import { actions, AppAction } from '../actions'
+import { ImageUri } from '../context'
 
 export interface DialogState {
   loginDialog?: {
     isOpen: boolean
+  }
+  pictureDialog?: {
+    isOpen: boolean
+    url: string
+    onSelected: (uri: ImageUri) => any
   }
   bankDialog?: {
     isOpen: boolean
@@ -20,31 +26,56 @@ const initialState: DialogState = {}
 
 export const dialog = (state: DialogState = initialState, action: AppAction): DialogState => {
   switch (action.type) {
-    case getType(actions.dlg.login):
+    case getType(actions.openDlg.login):
     case getType(actions.closeApp):
       return { ...state, loginDialog: { isOpen: true } }
 
     case getType(actions.openApp):
       return { ...state, loginDialog: { isOpen: false } }
 
-    case getType(actions.dlg.bankCreate):
+    case getType(actions.openDlg.picture):
+      return { ...state, pictureDialog: { isOpen: true, ...action.payload } }
+
+    case getType(actions.openDlg.bankCreate):
       return { ...state, bankDialog: { isOpen: true } }
 
-    case getType(actions.dlg.bankEdit):
+    case getType(actions.openDlg.bankEdit):
       return { ...state, bankDialog: { isOpen: true, ...action.payload } }
 
-    case getType(actions.dlg.accountCreate):
+    case getType(actions.openDlg.accountCreate):
       return { ...state, accountDialog: { isOpen: true, ...action.payload } }
 
-    case getType(actions.dlg.accountEdit):
+    case getType(actions.openDlg.accountEdit):
       return { ...state, accountDialog: { isOpen: true, ...action.payload } }
 
-    case getType(actions.dlg.close):
-      return {
-        ...state,
-        loginDialog: state.loginDialog && { ...state.loginDialog, isOpen: false },
-        bankDialog: state.bankDialog && { ...state.bankDialog, isOpen: false },
-        accountDialog: state.accountDialog && { ...state.accountDialog, isOpen: false },
+    case getType(actions.closeDlg):
+      switch (action.payload) {
+        case 'login':
+          return {
+            ...state,
+            loginDialog: state.loginDialog && { ...state.loginDialog, isOpen: false },
+          }
+
+        case 'picture':
+          return {
+            ...state,
+            pictureDialog: state.pictureDialog && { ...state.pictureDialog, isOpen: false },
+          }
+
+        case 'account':
+          return {
+            ...state,
+            accountDialog: state.accountDialog && { ...state.accountDialog, isOpen: false },
+          }
+
+        case 'bank':
+          return {
+            ...state,
+            bankDialog: state.bankDialog && { ...state.bankDialog, isOpen: false },
+          }
+
+        default:
+          return state
       }
 
     default:

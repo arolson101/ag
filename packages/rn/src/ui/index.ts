@@ -1,1 +1,1 @@
-export * from './ui.rn'
+export * from './ui.native'

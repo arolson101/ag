@@ -3,7 +3,7 @@ import { Field, FieldProps } from 'formik'
 import { Icon, Input, Item, Textarea } from 'native-base'
 import React from 'react'
 import { TextInput } from 'react-native'
-import { Label } from './Label'
+import { Label } from './Label.native'
 
 export namespace TextField {
   export type Props<Values> = TextFieldProps<Values>

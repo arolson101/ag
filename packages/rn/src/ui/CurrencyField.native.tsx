@@ -4,7 +4,7 @@ import { Field, FieldProps, FormikProps } from 'formik'
 import { Icon, Input, Item } from 'native-base'
 import * as React from 'react'
 import { TextInput } from 'react-native'
-import { Label } from './Label'
+import { Label } from './Label.native'
 // import { CalculatorInput } from 'react-native-calculator'
 
 export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {

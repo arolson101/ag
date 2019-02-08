@@ -1,3 +1,4 @@
+import debug from 'debug'
 import { Formik, FormikErrors, FormikProps } from 'formik'
 import React from 'react'
 import { defineMessages } from 'react-intl'
@@ -8,6 +9,8 @@ import { Bank } from '../entities'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 import { pick } from '../util/pick'
+
+const log = debug('app:BankForm')
 
 export namespace BankForm {
   export interface Props {
@@ -102,6 +105,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
               ? pick(edit, Object.keys(Bank.defaultValues) as Array<keyof Bank.Props>)
               : Bank.defaultValues),
           }
+          // log('initial values: %o', initialValues)
           return (
             <AppMutation
               mutation={BankForm.mutations.SaveBank}

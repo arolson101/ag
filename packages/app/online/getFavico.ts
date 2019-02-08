@@ -1,13 +1,14 @@
 import assert from 'assert'
 import debug from 'debug'
 import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
-import isUrl from 'is-url'
 import minidom from 'minidom'
 import { extname } from 'path'
 import url from 'url'
 import urlRegex from 'url-regex'
 import { AppContext, ImageUri } from '../context'
 import { imageSize } from '../util/imageSize'
+import { fixUrl, isUrl } from '../util/url'
+import { getImages } from './getImages'
 
 const log = debug('app:getFavico')
 
@@ -23,23 +24,6 @@ const thumbnailSizes = {
 }
 
 const sizes = [32, 64]
-
-export const fixUrl = (from: string): string => {
-  if (!from) {
-    return from
-  }
-
-  const urlMatches = from.match(urlRegex())
-  if (urlMatches) {
-    from = urlMatches[0]
-  }
-
-  if (from.indexOf('://') === -1) {
-    from = 'http://' + from
-  }
-
-  return from
-}
 
 export const getFavico = async (
   from: string,
@@ -113,31 +97,14 @@ export const getFavico = async (
 
   await Promise.all(
     links.map(async link => {
-      const response = await fetch(link, { method: 'get', signal })
-      if (!response.ok) {
+      const dls = await getImages(link, signal, context)
+      if (!dls) {
         log('failed getting: %s', link)
         return
       }
-      // log('%s => %o', link, response)
 
-      const abuf = await response.arrayBuffer()
-      const buf = Buffer.from(abuf)
-      // log('%s: %O', link, { hex: buf.toString('hex'), abuf, buf })
-
-      if (ICO.isICO(buf)) {
-        const mime = 'image/png'
-        const parsedImages = await ICO.parse(buf, mime)
-        for (const parsedImage of parsedImages) {
-          const { width, height } = parsedImage
-          const uri = toDataUri(Buffer.from(parsedImage.buffer), mime)
-          images.push({ width, height, uri })
-        }
-      } else {
-        const ext = extname(link).substr(1)
-        const { width, height } = imageSize(buf, link)
-        const mime = response.headers.get('content-type') || `image/${ext}`
-        const uri = toDataUri(buf, mime)
-        images.push({ width, height, uri })
+      for (const dl of dls) {
+        images.push(dl)
       }
     })
   )
@@ -198,10 +165,4 @@ export const getFavicoFromLibrary = async (context: AppContext) => {
   const { image, path } = await getImageFromLibrary(128, 128)
   // log('%o', image)
   return makeFavicoFromImages(path, [image], context)
-}
-
-const toDataUri = (buf: Buffer, mime: string) => {
-  const base64 = buf.toString('base64')
-  const uri = `data:${mime};base64,${base64}`
-  return uri
 }

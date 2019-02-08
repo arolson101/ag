@@ -1,14 +1,13 @@
-import { AbortController, AppContext, UrlFieldProps } from '@ag/app'
-import { FavicoProps, fixUrl, getFavico, getFavicoFromLibrary } from '@ag/app/online/getFavico'
+import { AppContext, FavicoProps, getFavico, getFavicoFromLibrary, UrlFieldProps } from '@ag/app'
+import { fixUrl, isUrl } from '@ag/app/util/url'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
-import isUrl from 'is-url'
 import { ActionSheet, Button, Input, Item, NativeBase, Spinner, Thumbnail } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
 import { defineMessages } from 'react-intl'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { Label } from './Label'
+import { Label } from './Label.native'
 
 const log = debug('ag:UrlField')
 log.enabled = true
@@ -228,24 +227,20 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
 }
 
 const messages = defineMessages({
-  empty: {
-    id: 'empty',
-    defaultMessage: '',
-  },
   library: {
-    id: 'UrlField.library',
+    id: 'UrlField.native.library',
     defaultMessage: 'Choose from library',
   },
   reset: {
-    id: 'UrlField.reset',
+    id: 'UrlField.native.reset',
     defaultMessage: 'Reset to default',
   },
   redownload: {
-    id: 'UrlField.redownload',
+    id: 'UrlField.native.redownload',
     defaultMessage: 'Download again',
   },
   cancel: {
-    id: 'UrlField.cancel',
+    id: 'UrlField.native.cancel',
     defaultMessage: 'Cancel',
   },
 })

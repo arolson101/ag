@@ -22,13 +22,13 @@ import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import classNames from 'classnames'
 import 'normalize.css/normalize.css'
 import React from 'react'
-import { CheckboxField } from './CheckboxField'
-import { CurrencyField } from './CurrencyField'
-import { DateField } from './DateField'
-import { Form } from './Form'
-import { SelectField } from './SelectField'
-import { TextField } from './TextField'
-import { UrlField } from './UrlField'
+import { CheckboxField } from './CheckboxField.electron'
+import { CurrencyField } from './CurrencyField.electron'
+import { DateField } from './DateField.electron'
+import { Form } from './Form.electron'
+import { SelectField } from './SelectField.electron'
+import { TextField } from './TextField.electron'
+import { UrlField } from './UrlField.electron'
 
 export const AppToaster = Toaster.create({
   className: 'recipe-toaster',
@@ -73,7 +73,9 @@ export const ui: UiContext = {
     </Dialog>
   ),
 
-  DialogBody: ({ children }) => <div className={Classes.DIALOG_BODY}>{children}</div>,
+  DialogBody: ({ children }) => (
+    <div className={classNames(Classes.DIALOG_BODY, 'overflow-y: auto')}>{children}</div>
+  ),
   DialogFooter: ({ primary, secondary }) => (
     <div className={Classes.DIALOG_FOOTER}>
       <div className={Classes.DIALOG_FOOTER_ACTIONS}>
@@ -110,14 +112,17 @@ export const ui: UiContext = {
       {children}
     </Collapse>
   ),
+
+  // controls
+  Spinner,
   Link: ({ onClick, children }) => <a onClick={onClick}>{children}</a>,
   Text: ({ flex, header, muted, children, onClick }) => {
     const Component: React.ComponentType<any> = header ? H3 : Text
     return (
       <Component
-        style={{ flex }}
         className={classNames(
           Classes.UI_TEXT,
+          flex && Classes.FLEX_EXPANDER,
           muted && Classes.TEXT_MUTED,
           header && Classes.HEADING
         )}
@@ -137,6 +142,9 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
+  Image: ({ source, size, margin }) => {
+    return <img {...pickBestImageUri(source, size)} style={{ margin }} />
+  },
 
   // form
   Form,
@@ -150,9 +158,4 @@ export const ui: UiContext = {
 
   Tabs: Tabs as React.ComponentType<TabsProps>,
   Tab: Tab as React.ComponentType<TabProps>,
-
-  // image
-  Image: ({ source, size, margin }) => (
-    <img width={size} height={size} src={pickBestImageUri(source, size)} style={{ margin }} />
-  ),
 }
