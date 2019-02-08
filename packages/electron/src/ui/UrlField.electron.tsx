@@ -1,12 +1,12 @@
 import {
   AppContext,
   FavicoProps,
-  fixUrl,
   getFavico,
   getFavicoFromLibrary,
   pickBestImageUri,
   UrlFieldProps,
 } from '@ag/app'
+import { fixUrl, isUrl } from '@ag/app/util/url'
 import {
   Button,
   FormGroup,
@@ -20,7 +20,6 @@ import {
 } from '@blueprintjs/core'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
-import isUrl = require('is-url')
 import React from 'react'
 import { defineMessages } from 'react-intl'
 

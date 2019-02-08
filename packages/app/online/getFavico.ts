@@ -1,13 +1,13 @@
 import assert from 'assert'
 import debug from 'debug'
 import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
-import isUrl from 'is-url'
 import minidom from 'minidom'
 import { extname } from 'path'
 import url from 'url'
 import urlRegex from 'url-regex'
 import { AppContext, ImageUri } from '../context'
 import { imageSize } from '../util/imageSize'
+import { fixUrl, isUrl } from '../util/url'
 
 const log = debug('app:getFavico')
 
@@ -23,23 +23,6 @@ const thumbnailSizes = {
 }
 
 const sizes = [32, 64]
-
-export const fixUrl = (from: string): string => {
-  if (!from) {
-    return from
-  }
-
-  const urlMatches = from.match(urlRegex())
-  if (urlMatches) {
-    from = urlMatches[0]
-  }
-
-  if (from.indexOf('://') === -1) {
-    from = 'http://' + from
-  }
-
-  return from
-}
 
 export const getFavico = async (
   from: string,

@@ -2,6 +2,7 @@ import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, ImageUri } from '../context'
+import { getImageList } from '../online'
 
 interface Props {
   isOpen: boolean
@@ -12,6 +13,7 @@ interface Props {
 interface State {
   url: string
   loading: boolean
+  imageList: string[]
   images: ImageUri[]
 }
 
@@ -21,12 +23,16 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   static readonly id = 'PictureDialog'
 
+  controller: AbortController
+
   constructor(props: Props) {
     super(props)
 
+    this.controller = new AbortController()
     this.state = {
       url: props.url,
       loading: false,
+      imageList: [],
       images: [],
     }
   }
@@ -47,19 +53,31 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   getImages = async () => {
     const { url } = this.state
+    const imageList = await getImageList(url, this.controller.signal, this.context)
+    this.setState({ imageList })
   }
 
   render() {
-    const { isOpen } = this.props
+    const { isOpen, url } = this.props
     const {
       intl,
-      ui: { Dialog, DialogBody, DialogFooter, Spinner },
+      ui: { Dialog, DialogBody, DialogFooter, Spinner, Row, Column, Text },
     } = this.context
-    const { loading, images } = this.state
+    const { loading, imageList } = this.state
 
     return (
       <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
-        <DialogBody>{loading && <Spinner />}</DialogBody>
+        <DialogBody>
+          {loading && <Spinner />}
+          <Row>
+            <Text header>{url}</Text>
+          </Row>
+          <Column>
+            {imageList.map(imageName => (
+              <Text>{imageName}</Text>
+            ))}
+          </Column>
+        </DialogBody>
         <DialogFooter
           primary={{
             title: intl.formatMessage(messages.ok),
