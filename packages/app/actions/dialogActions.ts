@@ -8,7 +8,7 @@ export const dialogActions = {
     login: createStandardAction('dlg/login')(),
     picture: createStandardAction('dlg/picture')<{
       url: string
-      onSelected: (uri: ImageUri) => any
+      onSelected: (uri: ImageUri[]) => any
     }>(),
     bankCreate: createStandardAction('dlg/bankCreate')(),
     bankEdit: createStandardAction('dlg/bankEdit')<{ bankId: string }>(),

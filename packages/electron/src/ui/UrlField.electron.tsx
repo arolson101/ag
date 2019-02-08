@@ -1,8 +1,10 @@
 import {
+  actions,
   AppContext,
   FavicoProps,
   getFavico,
   getFavicoFromLibrary,
+  ImageUri,
   pickBestImageUri,
   UrlFieldProps,
 } from '@ag/app'
@@ -20,6 +22,7 @@ import {
 } from '@blueprintjs/core'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
+import { async } from 'q'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 
@@ -102,6 +105,11 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
                               onClick={this.onClickRedownload}
                             />
                             <Menu.Item
+                              text={intl.formatMessage(messages.selectImage)}
+                              // icon='refresh'
+                              onClick={this.onClickSelect}
+                            />
+                            <Menu.Item
                               text={intl.formatMessage(messages.library)}
                               icon='folder-open'
                               onClick={this.onClickLibrary}
@@ -176,6 +184,22 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     return this.maybeGetIcon(this.form.values[field], true)
   }
 
+  onClickSelect = () => {
+    const { field } = this.props
+    const { dispatch } = this.context
+    const url = this.form.values[field]
+    if (isUrl(url)) {
+      dispatch(actions.openDlg.picture({ url, onSelected: this.onPictureChosen }))
+    }
+  }
+
+  onPictureChosen = (source: ImageUri[]) => {
+    const { field, favicoField } = this.props
+    const from = this.form.values[field]
+    const favico: FavicoProps = { from, source }
+    this.form.setFieldValue(favicoField, JSON.stringify(favico))
+  }
+
   onClickLibrary = async () => {
     const { favicoField } = this.props
     const icon = await getFavicoFromLibrary(this.context)
@@ -240,5 +264,9 @@ const messages = defineMessages({
   redownload: {
     id: 'UrlField.electron.redownload',
     defaultMessage: 'Download again',
+  },
+  selectImage: {
+    id: 'UrlField.electron.selectImage',
+    defaultMessage: 'Choose image from webpage...',
   },
 })

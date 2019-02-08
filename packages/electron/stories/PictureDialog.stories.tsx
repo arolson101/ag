@@ -7,6 +7,6 @@ import { MockApp } from './helpers'
 
 storiesOf('Dialogs', module).add('PictureDialog', () => (
   <MockApp>
-    <PictureDialog onSelected={action('onselected')} url='http://www.uwcu.org' isOpen={true} />
+    <PictureDialog onSelected={action('onselected')} url='http://www.citicards.com' isOpen={true} />
   </MockApp>
 ))

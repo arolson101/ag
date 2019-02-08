@@ -9,7 +9,7 @@ export interface DialogState {
   pictureDialog?: {
     isOpen: boolean
     url: string
-    onSelected: (uri: ImageUri) => any
+    onSelected: (uri: ImageUri[]) => any
   }
   bankDialog?: {
     isOpen: boolean

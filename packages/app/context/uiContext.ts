@@ -44,6 +44,7 @@ export interface ButtonConfig {
   title: string
   onClick: () => any
   isDanger?: boolean
+  disabled?: boolean
 }
 
 export interface TabsProps {
@@ -84,8 +85,9 @@ export interface UiContext {
   Card: ComponentType<{}>
   Row: ComponentType<{ left?: boolean; right?: boolean; center?: boolean; flex?: number }>
   Column: ComponentType<{ top?: boolean; bottom?: boolean; center?: boolean; flex?: number }>
+  Grid: ComponentType<{ size: number; gap?: number }>
   Page: ComponentType<{}>
-  Container: ComponentType<{}>
+  Tile: ComponentType<{ size?: number; selected?: boolean; onClick?: () => any }>
   Collapsible: ComponentType<{ show: boolean }>
 
   // controls

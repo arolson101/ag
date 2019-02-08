@@ -33,7 +33,7 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
 
   render() {
     const { ui, dispatch } = this.context
-    const { Page, Container, Text } = ui
+    const { Page, Row, Text } = ui
 
     return (
       <Page>
@@ -49,9 +49,9 @@ export class HomePage extends React.PureComponent<HomePage.Props> {
             <>
               <Text header>Accounts</Text>
               {appDb && appDb.banks.map(bank => <BankDisplay bank={bank} key={bank.id} />)}
-              <Container>
+              <Row>
                 <Link dispatch={actions.openDlg.bankCreate()}>add bank</Link>
-              </Container>
+              </Row>
             </>
           )}
         </AppQuery>

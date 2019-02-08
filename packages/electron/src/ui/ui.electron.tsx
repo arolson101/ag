@@ -5,6 +5,7 @@ import {
   Card,
   Classes,
   Collapse,
+  Colors,
   Dialog,
   Divider,
   H3,
@@ -74,7 +75,12 @@ export const ui: UiContext = {
   ),
 
   DialogBody: ({ children }) => (
-    <div className={classNames(Classes.DIALOG_BODY, 'overflow-y: auto')}>{children}</div>
+    <div
+      style={{ padding: 5, maxHeight: 600, overflow: 'auto' }}
+      className={classNames(Classes.DIALOG_BODY)}
+    >
+      {children}
+    </div>
   ),
   DialogFooter: ({ primary, secondary }) => (
     <div className={Classes.DIALOG_FOOTER}>
@@ -83,11 +89,12 @@ export const ui: UiContext = {
           <Button
             onClick={secondary.onClick}
             intent={secondary.isDanger ? Intent.DANGER : Intent.NONE}
+            disabled={secondary.disabled}
           >
             {secondary.title}
           </Button>
         )}
-        <Button onClick={primary.onClick} intent={Intent.PRIMARY}>
+        <Button onClick={primary.onClick} intent={Intent.PRIMARY} disabled={primary.disabled}>
           {primary.title}
         </Button>
       </div>
@@ -104,9 +111,37 @@ export const ui: UiContext = {
   Column: ({ top, bottom, center, flex, children }) => (
     <div style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</div>
   ),
+  Grid: ({ size, gap, children }) => (
+    <div
+      style={{ display: 'grid', gridGap: gap, gridTemplateColumns: `repeat(auto-fill, ${size}px)` }}
+    >
+      {children}
+    </div>
+  ),
 
   Page: ({ children }) => <div>{children}</div>,
-  Container: ({ children }) => <div>{children}</div>,
+  Tile: ({ size, selected, onClick, children }) => (
+    <div
+      onClick={onClick}
+      style={{
+        cursor: onClick ? 'pointer' : undefined,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: size,
+        minWidth: size,
+        maxWidth: size,
+        height: size,
+        minHeight: size,
+        maxHeight: size,
+        overflow: 'visible',
+        boxShadow: selected ? `0px 0px 4px ${Colors.BLUE1}` : undefined,
+      }}
+    >
+      {children}
+    </div>
+  ),
   Collapsible: ({ show, children }) => (
     <Collapse isOpen={show} keepChildrenMounted>
       {children}

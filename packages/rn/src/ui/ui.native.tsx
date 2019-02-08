@@ -53,13 +53,18 @@ export const ui: UiContext = {
   Column: ({ top, bottom, center, flex, children }) => (
     <View style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</View>
   ),
+  Grid: ({ size, gap, children }) => (
+    <View style={{ display: 'flex', flexDirection: 'column' }}>{children}</View> // TODO
+  ),
 
   Page: ({ children }) => (
     <Container>
       <Content>{children}</Content>
     </Container>
   ),
-  Container: ({ children }) => <View>{children}</View>,
+  Tile: ({ children }) => (
+    <View style={{ flexDirection: 'column', alignItems: 'center' }}>{children}</View>
+  ),
   Collapsible: ({ show, children }) => (
     <View style={{ display: show ? 'flex' : 'none' }}>{children}</View>
   ),

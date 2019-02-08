@@ -8,13 +8,16 @@ import { getImageList, getImages } from '../online'
 interface Props {
   isOpen: boolean
   url: string
-  onSelected: (uri: ImageUri) => any
+  onSelected: (uri: ImageUri[]) => any
 }
 
 type State = Record<string, ImageUri[]> & {
   url: string
   links?: string[]
+  selection?: string
 }
+
+const thumbnailSize = 100
 
 export class PictureDialog extends React.PureComponent<Props, State> {
   static contextType = AppContext
@@ -37,7 +40,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     const { url } = this.props
     if (prevProps.url !== url) {
       this.cancel()
-      this.setState({ url }, this.getImages)
+      this.setState({ url, links: [] }, this.getImages)
     }
   }
 
@@ -67,9 +70,9 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     const { isOpen, url } = this.props
     const {
       intl,
-      ui: { Dialog, DialogBody, DialogFooter, Spinner, Row, Column, Image, Text },
+      ui: { Dialog, DialogBody, DialogFooter, Spinner, Row, Grid, Tile, Image, Text },
     } = this.context
-    const { links } = this.state
+    const { links, selection } = this.state
 
     return (
       <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
@@ -80,22 +83,29 @@ export class PictureDialog extends React.PureComponent<Props, State> {
           {!links ? (
             <Spinner />
           ) : (
-            <Column>
+            <Grid size={thumbnailSize} gap={5}>
               {links.map(link => (
-                <Row key={link}>
-                  <Text muted flex={1}>
-                    {Path.basename(link)}
-                  </Text>
-                  {!this.state[link] ? <Spinner /> : <Image size={100} source={this.state[link]} />}
-                </Row>
+                <Tile
+                  key={link}
+                  size={thumbnailSize}
+                  selected={link === selection}
+                  onClick={() => this.setState({ selection: link })}
+                >
+                  {!this.state[link] ? (
+                    <Spinner />
+                  ) : (
+                    <Image size={thumbnailSize} source={this.state[link]} />
+                  )}
+                </Tile>
               ))}
-            </Column>
+            </Grid>
           )}
         </DialogBody>
         <DialogFooter
           primary={{
             title: intl.formatMessage(messages.ok),
             onClick: this.select,
+            disabled: !selection,
           }}
           secondary={{
             title: intl.formatMessage(messages.cancel),
@@ -108,9 +118,10 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   select = () => {
     const { onSelected } = this.props
-    const { dispatch } = this.context
-    // onSelected()
-    dispatch(actions.closeDlg('picture'))
+    const { selection } = this.state
+    const uri = this.state[selection!]
+    onSelected(uri)
+    this.close()
   }
 
   close = () => {

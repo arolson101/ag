@@ -105,4 +105,5 @@ const makeButton = (id: TopButtonId, opts: ButtonConfig): OptionsTopBarButton =>
   id,
   text: opts.title,
   color: opts.isDanger ? 'red' : platform.toolbarBtnTextColor,
+  enabled: !opts.disabled,
 })

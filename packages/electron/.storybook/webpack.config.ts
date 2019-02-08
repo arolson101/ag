@@ -36,9 +36,15 @@ const config: webpack.Configuration = {
     fs: 'empty',
   },
   externals: {
+    'electron-devtools-installer': 'commonjs electron-devtools-installer',
     'react-native-sqlite-storage': 'commonjs react-native-sqlite-storage',
     sqlite3: 'commonjs sqlite3',
   },
+  plugins: [
+    new webpack.NormalModuleReplacementPlugin(/typeorm$/, (result: any) => {
+      result.request = result.request.replace(/typeorm/, 'typeorm/browser')
+    }),
+  ],
 }
 
 module.exports = config
