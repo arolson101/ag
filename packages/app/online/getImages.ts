@@ -1,8 +1,11 @@
 import debug from 'debug'
+import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
 import isUrl from 'is-url'
 import minidom from 'minidom'
+import { extname } from 'path'
 import url from 'url'
-import { AppContext } from '../context'
+import { AppContext, ImageUri } from '../context'
+import { imageSize } from '../util/imageSize'
 import { fixUrl } from '../util/url'
 
 const log = debug('app:getImages')
@@ -72,4 +75,45 @@ export const getImageList = async (from: string, signal: AbortSignal, context: A
   log('links: %o', links)
 
   return links
+}
+
+export const getImages = async (link: string, signal: AbortSignal, context: AppContext) => {
+  const { fetch } = context
+
+  const response = await fetch(link, { method: 'get', signal })
+  if (!response.ok) {
+    log('failed getting: %s', link)
+    return
+  }
+  // log('%s => %o', link, response)
+
+  const abuf = await response.arrayBuffer()
+  const buf = Buffer.from(abuf)
+  // log('%s: %O', link, { hex: buf.toString('hex'), abuf, buf })
+
+  const images: ImageUri[] = []
+
+  if (ICO.isICO(buf)) {
+    const mime = 'image/png'
+    const parsedImages = await ICO.parse(buf, mime)
+    for (const parsedImage of parsedImages) {
+      const { width, height } = parsedImage
+      const uri = toDataUri(Buffer.from(parsedImage.buffer), mime)
+      images.push({ width, height, uri })
+    }
+  } else {
+    const ext = extname(link).substr(1)
+    const { width, height } = imageSize(buf, link)
+    const mime = response.headers.get('content-type') || `image/${ext}`
+    const uri = toDataUri(buf, mime)
+    images.push({ width, height, uri })
+  }
+
+  return images
+}
+
+const toDataUri = (buf: Buffer, mime: string) => {
+  const base64 = buf.toString('base64')
+  const uri = `data:${mime};base64,${base64}`
+  return uri
 }

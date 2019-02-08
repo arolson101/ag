@@ -65,7 +65,7 @@ export interface ImageUri {
 
 export interface ImageProps {
   source: ImageUri[]
-  size: number
+  size?: number
   margin?: number
 }
 
@@ -94,6 +94,7 @@ export interface UiContext {
   Text: ComponentType<{ flex?: number; header?: boolean; muted?: boolean; onClick?: () => any }>
   SubmitButton: ComponentType<{ disabled?: boolean; onPress: () => any }>
   DeleteButton: ComponentType<{ disabled?: boolean; onPress: () => any }>
+  Image: React.ComponentType<ImageProps>
 
   // form
   Form: React.ComponentType<FormProps>
@@ -108,15 +109,28 @@ export interface UiContext {
   // tabs
   Tabs: React.ComponentType<TabsProps>
   Tab: React.ComponentType<TabProps>
-
-  // image
-  Image: React.ComponentType<ImageProps>
 }
 
-export const pickBestImageUri = (source: ImageUri[], size: number) => {
+export const pickBestImageUri = (source: ImageUri[], size?: number) => {
   if (!source.length) {
-    return undefined
+    return
   }
-  const best = source.find(img => img.width >= size) || source[source.length - 1]
-  return best.uri
+  if (!size) {
+    size = source.reduce((max, img) => Math.max(img.width, max), 0)
+  }
+  const best = source.find(img => img.width >= size!) || source[source.length - 1]
+
+  let { width, height } = best
+  if (size) {
+    const ratio = width / height
+    if (width > size) {
+      width = size
+      height = size / ratio
+    }
+    if (height > size) {
+      width = size * ratio
+      height = size
+    }
+  }
+  return { width, height, src: best.uri }
 }

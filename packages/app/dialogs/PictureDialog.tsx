@@ -1,8 +1,9 @@
+import Path from 'path'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, ImageUri } from '../context'
-import { getImageList } from '../online'
+import { getImageList, getImages } from '../online'
 
 interface Props {
   isOpen: boolean
@@ -10,11 +11,9 @@ interface Props {
   onSelected: (uri: ImageUri) => any
 }
 
-interface State {
+type State = Record<string, ImageUri[]> & {
   url: string
-  loading: boolean
-  imageList: string[]
-  images: ImageUri[]
+  links?: string[]
 }
 
 export class PictureDialog extends React.PureComponent<Props, State> {
@@ -31,10 +30,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     this.controller = new AbortController()
     this.state = {
       url: props.url,
-      loading: false,
-      imageList: [],
-      images: [],
-    }
+    } as State
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -53,30 +49,48 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   getImages = async () => {
     const { url } = this.state
-    const imageList = await getImageList(url, this.controller.signal, this.context)
-    this.setState({ imageList })
+    const links = await getImageList(url, this.controller.signal, this.context)
+    this.setState({ links })
+    await Promise.all(
+      links.map(async link => {
+        const dls = await getImages(link, this.controller.signal, this.context)
+        if (dls) {
+          this.setState({ [link]: dls })
+        } else {
+          this.setState({ [link]: [] })
+        }
+      })
+    )
   }
 
   render() {
     const { isOpen, url } = this.props
     const {
       intl,
-      ui: { Dialog, DialogBody, DialogFooter, Spinner, Row, Column, Text },
+      ui: { Dialog, DialogBody, DialogFooter, Spinner, Row, Column, Image, Text },
     } = this.context
-    const { loading, imageList } = this.state
+    const { links } = this.state
 
     return (
       <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
         <DialogBody>
-          {loading && <Spinner />}
           <Row>
             <Text header>{url}</Text>
           </Row>
-          <Column>
-            {imageList.map(imageName => (
-              <Text>{imageName}</Text>
-            ))}
-          </Column>
+          {!links ? (
+            <Spinner />
+          ) : (
+            <Column>
+              {links.map(link => (
+                <Row key={link}>
+                  <Text muted flex={1}>
+                    {Path.basename(link)}
+                  </Text>
+                  {!this.state[link] ? <Spinner /> : <Image size={100} source={this.state[link]} />}
+                </Row>
+              ))}
+            </Column>
+          )}
         </DialogBody>
         <DialogFooter
           primary={{
