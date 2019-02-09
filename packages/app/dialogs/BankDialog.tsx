@@ -53,10 +53,8 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
   }
 
   save = () => {
-    const { dispatch } = this.context
     if (this.bankForm.current) {
       this.bankForm.current.save()
-      dispatch(actions.closeDlg('bank'))
     }
   }
 

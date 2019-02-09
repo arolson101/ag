@@ -33,7 +33,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
   render() {
     const { bank } = this.props
     const { ui } = this.context
-    const { Card, Row, Column, Text, Image } = ui
+    const { Card, Row, Text, Image, Tile } = ui
 
     const favicon = bank.favicon ? (JSON.parse(bank.favicon) as FavicoProps) : undefined
     const size = 48
@@ -43,7 +43,9 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
       <Card key={bank.id}>
         <Row>
           <Row flex={1}>
-            <Image size={size} source={source} margin={4} />
+            <Tile size={size} margin={5}>
+              <Image size={size} source={source} />
+            </Tile>
             <Text header flex={1}>
               {bank.name}
             </Text>

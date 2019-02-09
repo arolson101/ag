@@ -1,12 +1,7 @@
-import assert from 'assert'
 import debug from 'debug'
-import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
 import minidom from 'minidom'
-import { extname } from 'path'
 import url from 'url'
-import urlRegex from 'url-regex'
 import { AppContext, ImageUri } from '../context'
-import { imageSize } from '../util/imageSize'
 import { fixUrl, isUrl } from '../util/url'
 import { getImages } from './getImages'
 
@@ -120,29 +115,29 @@ const makeFavicoFromImages = async (
 ): Promise<FavicoProps> => {
   // log('making favico from %s (%d images %O)', from, images.length, [...images])
 
-  const { resizeImage } = context
-  // add resized images (iOS would rather upscale the 16x16 favico than use the better, larger one)
-  await Promise.all(
-    sizes
-      .filter(size => !images.find(image => image.width === size))
-      .map(async size => {
-        // only resize down; find next larger image
-        // log(`gonna resize to ${size}`)
-        const src = images.find(image => image.width >= size)
-        if (src) {
-          // log(`found ${src}`)
-          const scale = Math.min(size / src.width!, size / src.height!)
-          const width = Math.trunc(src.width! * scale)
-          const height = Math.trunc(src.height! * scale)
-          assert(width <= size)
-          assert(height <= size)
-          assert(width === size || height === size)
-          const result = await resizeImage(src, width, height, 'PNG')
-          // log('resized image: %O', result)
-          images.push(result)
-        }
-      })
-  )
+  // const { resizeImage } = context
+  // // add resized images (iOS would rather upscale the 16x16 favico than use the larger one)
+  // await Promise.all(
+  //   sizes
+  //     .filter(size => !images.find(image => image.width === size))
+  //     .map(async size => {
+  //       // only resize down; find next larger image
+  //       // log(`gonna resize to ${size}`)
+  //       const src = images.find(image => image.width >= size)
+  //       if (src) {
+  //         // log(`found ${src}`)
+  //         const scale = Math.min(size / src.width!, size / src.height!)
+  //         const width = Math.trunc(src.width! * scale)
+  //         const height = Math.trunc(src.height! * scale)
+  //         assert(width <= size)
+  //         assert(height <= size)
+  //         assert(width === size || height === size)
+  //         const result = await resizeImage(src, width, height, 'PNG')
+  //         // log('resized image: %O', result)
+  //         images.push(result)
+  //       }
+  //     })
+  // )
   // log('images: %o', images)
 
   const source = images

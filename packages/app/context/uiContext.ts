@@ -1,3 +1,4 @@
+import debug from 'debug'
 import { ComponentType } from 'react'
 import {
   CheckboxFieldProps,
@@ -8,6 +9,8 @@ import {
   TextFieldProps,
   UrlFieldProps,
 } from './uiContextForms'
+
+const log = debug('app:uiContext')
 
 export interface AlertProps {
   title: string
@@ -42,7 +45,7 @@ export interface LoadingOverlayProps {
 
 export interface ButtonConfig {
   title: string
-  onClick: () => any
+  onClick: (e: React.SyntheticEvent) => any
   isDanger?: boolean
   disabled?: boolean
 }
@@ -68,6 +71,7 @@ export interface ImageProps {
   source: ImageUri[]
   size?: number
   margin?: number
+  title?: string
 }
 
 export interface UiContext {
@@ -85,17 +89,27 @@ export interface UiContext {
   Card: ComponentType<{}>
   Row: ComponentType<{ left?: boolean; right?: boolean; center?: boolean; flex?: number }>
   Column: ComponentType<{ top?: boolean; bottom?: boolean; center?: boolean; flex?: number }>
-  Grid: ComponentType<{ size: number; gap?: number }>
+  Grid: ComponentType<{ size: number; gap?: number; onClick?: (e: React.SyntheticEvent) => any }>
   Page: ComponentType<{}>
-  Tile: ComponentType<{ size?: number; selected?: boolean; onClick?: () => any }>
+  Tile: ComponentType<{
+    size?: number
+    margin?: number
+    selected?: boolean
+    onClick?: (e: React.SyntheticEvent) => any
+  }>
   Collapsible: ComponentType<{ show: boolean }>
 
   // controls
   Spinner: ComponentType
-  Link: ComponentType<{ onClick?: () => any }>
-  Text: ComponentType<{ flex?: number; header?: boolean; muted?: boolean; onClick?: () => any }>
-  SubmitButton: ComponentType<{ disabled?: boolean; onPress: () => any }>
-  DeleteButton: ComponentType<{ disabled?: boolean; onPress: () => any }>
+  Link: ComponentType<{ onClick?: (e: React.SyntheticEvent) => any }>
+  Text: ComponentType<{
+    flex?: number
+    header?: boolean
+    muted?: boolean
+    onClick?: (e: React.SyntheticEvent) => any
+  }>
+  SubmitButton: ComponentType<{ disabled?: boolean; onPress: (e: React.SyntheticEvent) => any }>
+  DeleteButton: ComponentType<{ disabled?: boolean; onPress: (e: React.SyntheticEvent) => any }>
   Image: React.ComponentType<ImageProps>
 
   // form
@@ -118,9 +132,11 @@ export const pickBestImageUri = (source: ImageUri[], size?: number) => {
     return
   }
   if (!size) {
-    size = source.reduce((max, img) => Math.max(img.width, max), 0)
+    size = Math.max(...source.map(x => x.width))
+    // log('pickBestImageUri- no size, using max of %d %o', size, source)
   }
   const best = source.find(img => img.width >= size!) || source[source.length - 1]
+  // log('pickBestImageUri- best is %dx%d, %o', best.width, best.height, source)
 
   let { width, height } = best
   if (size) {

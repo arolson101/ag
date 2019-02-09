@@ -111,8 +111,9 @@ export const ui: UiContext = {
   Column: ({ top, bottom, center, flex, children }) => (
     <div style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</div>
   ),
-  Grid: ({ size, gap, children }) => (
+  Grid: ({ size, gap, onClick, children }) => (
     <div
+      onClick={onClick}
       style={{ display: 'grid', gridGap: gap, gridTemplateColumns: `repeat(auto-fill, ${size}px)` }}
     >
       {children}
@@ -120,7 +121,7 @@ export const ui: UiContext = {
   ),
 
   Page: ({ children }) => <div>{children}</div>,
-  Tile: ({ size, selected, onClick, children }) => (
+  Tile: ({ size, margin, selected, onClick, children }) => (
     <div
       onClick={onClick}
       style={{
@@ -129,6 +130,7 @@ export const ui: UiContext = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
+        margin,
         width: size,
         minWidth: size,
         maxWidth: size,
@@ -177,8 +179,8 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
-  Image: ({ source, size, margin }) => {
-    return <img {...pickBestImageUri(source, size)} style={{ margin }} />
+  Image: ({ source, size, margin, title }) => {
+    return <img title={title} {...pickBestImageUri(source, size)} style={{ margin }} />
   },
 
   // form

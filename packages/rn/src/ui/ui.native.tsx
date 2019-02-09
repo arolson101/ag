@@ -72,7 +72,7 @@ export const ui: UiContext = {
   // controls
   Spinner,
   Link: ({ onClick, children }) => (
-    <Button transparent onPress={onClick}>
+    <Button transparent onPress={onClick as any}>
       <Text>{children}</Text>
     </Button>
   ),
@@ -85,12 +85,12 @@ export const ui: UiContext = {
     )
   },
   SubmitButton: ({ onPress, disabled, children }) => (
-    <Button onPress={onPress} disabled={disabled}>
+    <Button onPress={onPress as any} disabled={disabled}>
       {children}
     </Button>
   ),
   DeleteButton: ({ onPress, disabled, children }) => (
-    <Button danger block onPress={onPress} disabled={disabled}>
+    <Button danger block onPress={onPress as any} disabled={disabled}>
       {children}
     </Button>
   ),

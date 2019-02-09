@@ -1,4 +1,5 @@
 import { AppContext, FavicoProps, getFavico, getFavicoFromLibrary, UrlFieldProps } from '@ag/app'
+import { decodeFavico, encodeFavico } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
@@ -20,7 +21,10 @@ interface State {
   gettingIcon: boolean
 }
 
-export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>, State> {
+export class UrlField<Values extends Record<string, any>> extends React.PureComponent<
+  UrlField.Props<Values>,
+  State
+> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
@@ -116,7 +120,7 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
 
     const iconValue = this.form.values[favicoField]
     if (iconValue && !force) {
-      const iconProps = JSON.parse(iconValue as any) as FavicoProps
+      const iconProps = decodeFavico(iconValue)
       if (iconProps.from === value) {
         log(`not looking up icon because we already got it from ${value}`)
         return
@@ -130,7 +134,7 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
       this.controller = new AbortController()
       this.setState({ gettingIcon: true })
       const icon = await getFavico(value, this.controller.signal, this.context)
-      this.form.setFieldValue(favicoField, JSON.stringify(icon))
+      this.form.setFieldValue(favicoField, encodeFavico(icon))
     } catch (ex) {
       log(ex.message)
     } finally {
@@ -148,7 +152,7 @@ export class UrlField<Values> extends React.PureComponent<UrlField.Props<Values>
   getFromLibrary = async () => {
     const { favicoField } = this.props
     const icon = await getFavicoFromLibrary(this.context)
-    this.form.setFieldValue(favicoField, JSON.stringify(icon))
+    this.form.setFieldValue(favicoField, encodeFavico(icon))
   }
 
   onIconButtonPressed = () => {
@@ -210,7 +214,7 @@ interface FavicoButtonProps extends NativeBase.Button {
 class FavicoButton extends React.Component<FavicoButtonProps> {
   render() {
     const { value, loading, ...props } = this.props
-    const favico = value ? (JSON.parse(value) as FavicoProps) : undefined
+    const favico = value ? decodeFavico(value) : undefined
     // log('render %o', favico)
     return (
       <Button {...props}>

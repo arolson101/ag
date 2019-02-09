@@ -8,6 +8,7 @@ import {
   pickBestImageUri,
   UrlFieldProps,
 } from '@ag/app'
+import { decodeFavico, encodeFavico } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import {
   Button,
@@ -22,7 +23,6 @@ import {
 } from '@blueprintjs/core'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
-import { async } from 'q'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 
@@ -106,7 +106,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
                             />
                             <Menu.Item
                               text={intl.formatMessage(messages.selectImage)}
-                              // icon='refresh'
+                              icon='media'
                               onClick={this.onClickSelect}
                             />
                             <Menu.Item
@@ -155,7 +155,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
 
     const iconValue = this.form.values[favicoField]
     if (iconValue && !force) {
-      const iconProps = JSON.parse(iconValue) as FavicoProps
+      const iconProps = decodeFavico(iconValue)
       if (iconProps.from === value) {
         log(`not looking up icon because we already got it from ${value}`)
         return
@@ -169,7 +169,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       this.controller = new AbortController()
       this.setState({ gettingIcon: true })
       const icon = await getFavico(value, this.controller.signal, this.context)
-      this.form.setFieldValue(favicoField, JSON.stringify(icon))
+      this.form.setFieldValue(favicoField, encodeFavico(icon))
     } catch (ex) {
       log(ex.message)
     } finally {
@@ -187,7 +187,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   onClickSelect = () => {
     const { field } = this.props
     const { dispatch } = this.context
-    const url = this.form.values[field]
+    const url = fixUrl(this.form.values[field])
     if (isUrl(url)) {
       dispatch(actions.openDlg.picture({ url, onSelected: this.onPictureChosen }))
     }
@@ -196,14 +196,13 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   onPictureChosen = (source: ImageUri[]) => {
     const { field, favicoField } = this.props
     const from = this.form.values[field]
-    const favico: FavicoProps = { from, source }
-    this.form.setFieldValue(favicoField, JSON.stringify(favico))
+    this.form.setFieldValue(favicoField, encodeFavico({ from, source }))
   }
 
   onClickLibrary = async () => {
     const { favicoField } = this.props
     const icon = await getFavicoFromLibrary(this.context)
-    this.form.setFieldValue(favicoField, JSON.stringify(icon))
+    this.form.setFieldValue(favicoField, encodeFavico(icon))
   }
 
   onClickReset = () => {
@@ -239,7 +238,7 @@ interface FavicoButtonProps extends IButtonProps {
 class FavicoButton extends React.PureComponent<FavicoButtonProps> {
   render() {
     const { value, loading, ...props } = this.props
-    const favico = value ? (JSON.parse(value) as FavicoProps) : undefined
+    const favico = value ? decodeFavico(value) : undefined
     return loading ? (
       <Button {...props} minimal loading />
     ) : favico ? (
@@ -259,7 +258,7 @@ const messages = defineMessages({
   },
   reset: {
     id: 'UrlField.electron.reset',
-    defaultMessage: 'Reset to default',
+    defaultMessage: 'Clear',
   },
   redownload: {
     id: 'UrlField.electron.redownload',
@@ -267,6 +266,6 @@ const messages = defineMessages({
   },
   selectImage: {
     id: 'UrlField.electron.selectImage',
-    defaultMessage: 'Choose image from webpage...',
+    defaultMessage: 'Choose images...',
   },
 })

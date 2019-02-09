@@ -93,7 +93,7 @@ export class DialogFooter extends React.PureComponent<DialogFooterProps> {
 
   navigationButtonPressed(e: NavigationButtonPressedEvent) {
     log('navigationButtonPressed: %o', e)
-    this.props[e.buttonId as TopButtonId]!.onClick()
+    this.props[e.buttonId as TopButtonId]!.onClick(e as any)
   }
 
   render() {

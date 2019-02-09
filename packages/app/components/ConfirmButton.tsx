@@ -5,7 +5,7 @@ import { AppContext } from '../context'
 interface Props {
   message: string
   onConfirmed: () => any
-  component: React.ComponentType<{ onPress: () => any }>
+  component: React.ComponentType<{ onPress: (e: React.SyntheticEvent) => any }>
   danger?: boolean
 }
 
