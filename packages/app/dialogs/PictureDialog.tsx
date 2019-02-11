@@ -3,7 +3,7 @@ import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, ImageUri } from '../context'
-import { getImageList, getImages } from '../online'
+import { getImage, getImageList } from '../online'
 
 const log = debug('app:PictureDialog')
 
@@ -66,10 +66,16 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     this.setState({ links })
     await Promise.all(
       links.map(async link => {
-        const dls = await getImages(link, this.controller.signal, this.context)
-        if (dls) {
-          this.setState({ [link]: dls })
-        } else {
+        try {
+          const dls = await getImage(link, this.controller.signal, this.context)
+          // log(`${link}: success %o`, dls)
+          if (dls) {
+            this.setState({ [link]: dls })
+          } else {
+            this.setState({ [link]: [] })
+          }
+        } catch (err) {
+          log(`${link}: failed %o`, err)
           this.setState({ [link]: [] })
         }
       })
@@ -83,6 +89,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
       ui: { Dialog, DialogBody, DialogFooter, Spinner, Row, Grid, Tile, Image, Text },
     } = this.context
     const { links, selection } = this.state
+    // log('render')
 
     return (
       <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
@@ -93,22 +100,29 @@ export class PictureDialog extends React.PureComponent<Props, State> {
           {!links ? (
             <Spinner />
           ) : (
-            <Grid size={thumbnailSize} gap={5} onClick={this.deselect}>
-              {links.map(link => (
-                <Tile
-                  key={link}
-                  size={thumbnailSize}
-                  selected={selection.includes(link)}
-                  onClick={e => this.toggleSelection(e, link)}
-                >
-                  {!this.state[link] ? (
-                    <Spinner />
-                  ) : (
-                    <Image title={link} size={thumbnailSize} source={this.state[link]} />
-                  )}
-                </Tile>
-              ))}
-            </Grid>
+            <Grid
+              size={thumbnailSize}
+              onClick={this.deselect}
+              data={links}
+              keyExtractor={(link: string) => link}
+              renderItem={(link: string) => {
+                // log('renderItem %s', link)
+                return (
+                  <Tile
+                    key={link}
+                    size={thumbnailSize}
+                    selected={selection.includes(link)}
+                    onClick={e => this.toggleSelection(e, link)}
+                  >
+                    {!this.state[link] ? (
+                      <Spinner />
+                    ) : (
+                      <Image title={link} size={thumbnailSize - 2} source={this.state[link]} />
+                    )}
+                  </Tile>
+                )
+              }}
+            />
           )}
         </DialogBody>
         <DialogFooter
@@ -137,22 +151,25 @@ export class PictureDialog extends React.PureComponent<Props, State> {
   toggleSelection = (e: React.SyntheticEvent, link: string) => {
     e.stopPropagation()
     const selection = this.state.selection
+    if (this.state[link].length === 0) {
+      return
+    }
     if (selection.includes(link)) {
-      log('deselecting %s', link)
+      // log('deselecting %s', link)
       this.setState({ selection: selection.filter(x => x !== link) })
     } else {
-      log('selecting %s', link)
+      // log('selecting %s', link)
       this.setState({ selection: [...selection, link] })
     }
   }
 
   deselect = () => {
-    log('deselect all')
+    // log('deselect all')
     this.setState({ selection: [] })
   }
 
   close = () => {
-    log('close')
+    // log('close')
     const { dispatch } = this.context
     dispatch(actions.closeDlg('picture'))
   }

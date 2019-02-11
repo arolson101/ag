@@ -43,6 +43,14 @@ export interface LoadingOverlayProps {
   title: string
 }
 
+export interface GridProps<T = any> {
+  data: ReadonlyArray<T>
+  renderItem: (item: T) => JSX.Element
+  keyExtractor: (item: T, index: number) => string
+  size: number
+  onClick?: (e: React.SyntheticEvent) => any
+}
+
 export interface ButtonConfig {
   title: string
   onClick: (e: React.SyntheticEvent) => any
@@ -89,7 +97,7 @@ export interface UiContext {
   Card: ComponentType<{}>
   Row: ComponentType<{ left?: boolean; right?: boolean; center?: boolean; flex?: number }>
   Column: ComponentType<{ top?: boolean; bottom?: boolean; center?: boolean; flex?: number }>
-  Grid: ComponentType<{ size: number; gap?: number; onClick?: (e: React.SyntheticEvent) => any }>
+  Grid: ComponentType<GridProps>
   Page: ComponentType<{}>
   Tile: ComponentType<{
     size?: number

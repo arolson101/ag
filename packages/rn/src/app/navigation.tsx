@@ -32,7 +32,9 @@ export const setDefaultOptions = () => {
       borderColor: platform.toolbarDefaultBorder,
       // drawBehind: true,
       background: {
-        // color: platform.toolbarDefaultBg,
+        color: Platform.select({
+          android: platform.toolbarDefaultBg,
+        }),
         // translucent: true,
         // blur: true,
       },

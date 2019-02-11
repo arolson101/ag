@@ -33,6 +33,8 @@ export const rnfetch = async (input: RequestInfo, init?: RequestInit): Promise<R
     init.signal.removeEventListener('abort', listener)
   }
 
+  // log('%s: %o', input, rbresponse)
+
   const response: Response = {
     ok: info.status >= 200 && info.status <= 299,
     url: info.redirects[info.redirects.length - 1],

@@ -111,12 +111,18 @@ export const ui: UiContext = {
   Column: ({ top, bottom, center, flex, children }) => (
     <div style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</div>
   ),
-  Grid: ({ size, gap, onClick, children }) => (
+  Grid: ({ data, renderItem, size, onClick }) => (
     <div
       onClick={onClick}
-      style={{ display: 'grid', gridGap: gap, gridTemplateColumns: `repeat(auto-fill, ${size}px)` }}
+      style={{
+        display: 'grid',
+        justifyContent: 'space-between',
+        gridTemplateColumns: `repeat(auto-fill, ${size}px)`,
+      }}
     >
-      {children}
+      {data.map((item, idx) => (
+        <React.Fragment key={idx}>{renderItem(item)}</React.Fragment>
+      ))}
     </div>
   ),
 

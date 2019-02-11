@@ -10,6 +10,7 @@ import {
   OptionsTopBarButton,
 } from 'react-native-navigation'
 import { withSafeArea } from 'react-native-safe-area'
+import shallowequal from 'shallowequal'
 
 const SafeAreaContent = withSafeArea(Content, 'contentInset', 'vertical')
 
@@ -54,17 +55,24 @@ DialogBody.displayName = 'DialogBody'
 
 type TopButtonId = 'primary' | 'secondary'
 
-export class DialogFooter extends React.PureComponent<DialogFooterProps> {
+export class DialogFooter extends React.Component<DialogFooterProps> {
   static contextType = DialogContext
   context!: React.ContextType<typeof DialogContext>
 
+  shouldComponentUpdate(nextProps: DialogFooterProps) {
+    return !(
+      shallowequal(this.props.primary, nextProps.primary) &&
+      shallowequal(this.props.secondary, nextProps.secondary)
+    )
+  }
+
   componentDidMount() {
-    log('componentDidMount')
+    // log('componentDidMount')
     this.setButtons()
   }
 
   componentDidUpdate(prevProps: DialogFooterProps) {
-    log('componentDidUpdate %o %o', this.props, prevProps)
+    // log('componentDidUpdate %o %o', this.props, prevProps)
     this.setButtons()
   }
 
@@ -72,7 +80,7 @@ export class DialogFooter extends React.PureComponent<DialogFooterProps> {
     const { primary, secondary } = this.props
     const { componentId } = this.context
 
-    log('setting buttons')
+    // log('setting buttons')
     Navigation.mergeOptions(componentId, {
       topBar:
         Platform.OS === 'ios'
@@ -92,7 +100,7 @@ export class DialogFooter extends React.PureComponent<DialogFooterProps> {
   }
 
   navigationButtonPressed(e: NavigationButtonPressedEvent) {
-    log('navigationButtonPressed: %o', e)
+    // log('navigationButtonPressed: %o', e)
     this.props[e.buttonId as TopButtonId]!.onClick(e as any)
   }
 

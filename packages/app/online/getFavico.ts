@@ -3,7 +3,7 @@ import minidom from 'minidom'
 import url from 'url'
 import { AppContext, ImageUri } from '../context'
 import { fixUrl, isUrl } from '../util/url'
-import { getImages } from './getImages'
+import { getImage } from './getImages'
 
 const log = debug('app:getFavico')
 
@@ -92,7 +92,7 @@ export const getFavico = async (
 
   await Promise.all(
     links.map(async link => {
-      const dls = await getImages(link, signal, context)
+      const dls = await getImage(link, signal, context)
       if (!dls) {
         log('failed getting: %s', link)
         return

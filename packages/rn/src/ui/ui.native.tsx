@@ -1,4 +1,5 @@
 import { pickBestImageUri, UiContext } from '@ag/app'
+import debug from 'debug'
 import {
   Button,
   Card,
@@ -11,10 +12,11 @@ import {
   Tabs,
   Text,
   Toast,
+  View,
 } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
-import { Image, TouchableHighlight, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, TouchableOpacity } from 'react-native'
 import { Alert } from './Alert.native'
 import { CheckboxField } from './CheckboxField.native'
 import { CurrencyField } from './CurrencyField.native'
@@ -25,6 +27,8 @@ import { LoadingOverlay } from './LoadingOverlay.native'
 import { SelectField } from './SelectField.native'
 import { TextField } from './TextField.native'
 import { UrlField } from './UrlField.native'
+
+const log = debug('rn:ui')
 
 export const ui: UiContext = {
   // special ui
@@ -53,9 +57,26 @@ export const ui: UiContext = {
   Column: ({ top, bottom, center, flex, children }) => (
     <View style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</View>
   ),
-  Grid: ({ size, gap, children }) => (
-    <View style={{ display: 'flex', flexDirection: 'column', margin: gap }}>{children}</View>
-  ),
+  Grid: ({ data, renderItem, keyExtractor, size, onClick }) => {
+    const { width } = Dimensions.get('window')
+    const numColumns = Math.floor(width / size)
+    // log(
+    //   'numColumns: %d, width: %d, screen width: %d, size: %d',
+    //   numColumns,
+    //   width,
+    //   Dimensions.get('screen').width,
+    //   size
+    // )
+    return (
+      <FlatList
+        columnWrapperStyle={{ justifyContent: 'space-between', paddingVertical: 4 }}
+        data={data}
+        renderItem={({ item }) => renderItem(item)}
+        numColumns={numColumns}
+        keyExtractor={keyExtractor}
+      />
+    )
+  },
 
   Page: ({ children }) => (
     <Container>
@@ -63,7 +84,9 @@ export const ui: UiContext = {
     </Container>
   ),
   Tile: ({ size, margin, selected, onClick, children }) => (
-    <TouchableOpacity
+    <Button
+      transparent={!selected}
+      bordered={selected}
       onPress={onClick as any}
       style={{
         flexDirection: 'column',
@@ -77,12 +100,12 @@ export const ui: UiContext = {
         minHeight: size,
         maxHeight: size,
         overflow: 'visible',
-        backgroundColor: selected ? platform.brandPrimary : undefined,
-        boxShadow: selected ? `0px 0px 4px ${platform.brandPrimary}` : undefined,
+        // backgroundColor: selected ? platform.brandPrimary : undefined,
+        // boxShadow: selected ? `0px 0px 4px ${platform.brandPrimary}` : undefined,
       }}
     >
       {children}
-    </TouchableOpacity>
+    </Button>
   ),
   Collapsible: ({ show, children }) => (
     <View style={{ display: show ? 'flex' : 'none' }}>{children}</View>

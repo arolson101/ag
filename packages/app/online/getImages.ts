@@ -77,7 +77,7 @@ export const getImageList = async (from: string, signal: AbortSignal, context: A
   return links
 }
 
-export const getImages = async (link: string, signal: AbortSignal, context: AppContext) => {
+export const getImage = async (link: string, signal: AbortSignal, context: AppContext) => {
   const { fetch } = context
 
   const response = await fetch(link, { method: 'get', signal })
