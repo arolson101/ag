@@ -35,9 +35,7 @@ export const rnfetch = async (input: RequestInfo, init?: RequestInit): Promise<R
 
   const response: Response = {
     ok: info.status >= 200 && info.status <= 299,
-    url: (info.headers as any)['X-Originating-URL']
-      ? (info.headers as any)['X-Originating-URL']
-      : input,
+    url: info.redirects[info.redirects.length - 1],
 
     headers: {
       get: (name: string) => info.headers[name],

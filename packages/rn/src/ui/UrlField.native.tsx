@@ -1,4 +1,12 @@
-import { AppContext, FavicoProps, getFavico, getFavicoFromLibrary, UrlFieldProps } from '@ag/app'
+import {
+  actions,
+  AppContext,
+  FavicoProps,
+  getFavico,
+  getFavicoFromLibrary,
+  ImageUri,
+  UrlFieldProps,
+} from '@ag/app'
 import { decodeFavico, encodeFavico } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import debug from 'debug'
@@ -149,6 +157,21 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     return this.maybeGetIcon(this.form.values[field] as any, true)
   }
 
+  selectImage = async () => {
+    const { field } = this.props
+    const { dispatch } = this.context
+    const url = fixUrl(this.form.values[field])
+    if (isUrl(url)) {
+      dispatch(actions.openDlg.picture({ url, onSelected: this.onPictureChosen }))
+    }
+  }
+
+  onPictureChosen = (source: ImageUri[]) => {
+    const { field, favicoField } = this.props
+    const from = this.form.values[field]
+    this.form.setFieldValue(favicoField, encodeFavico({ from, source }))
+  }
+
   getFromLibrary = async () => {
     const { favicoField } = this.props
     const icon = await getFavicoFromLibrary(this.context)
@@ -159,12 +182,13 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     const { intl } = this.context
     const { label, favicoField } = this.props
     const options: string[] = [
-      intl.formatMessage(messages.reset),
       intl.formatMessage(messages.redownload),
+      intl.formatMessage(messages.selectImage),
       intl.formatMessage(messages.library),
+      intl.formatMessage(messages.reset),
       intl.formatMessage(messages.cancel),
     ]
-    const cancelButtonIndex = 3
+    const cancelButtonIndex = options.length
     ActionSheet.show(
       {
         options,
@@ -173,14 +197,17 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       },
       async buttonIndex => {
         switch (buttonIndex) {
-          case 0: // reset
-            this.form.setFieldValue(favicoField, '')
-            return
-          case 1: // redownload
+          case 0: // redownload
             await this.redownload()
+            break
+          case 1: // selectImage
+            await this.selectImage()
             break
           case 2: // library
             await this.getFromLibrary()
+            break
+          case 3: // reset
+            this.form.setFieldValue(favicoField, '')
             break
         }
       }
@@ -233,7 +260,7 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
 const messages = defineMessages({
   library: {
     id: 'UrlField.native.library',
-    defaultMessage: 'Choose from library',
+    defaultMessage: 'Choose from library...',
   },
   reset: {
     id: 'UrlField.native.reset',
@@ -242,6 +269,10 @@ const messages = defineMessages({
   redownload: {
     id: 'UrlField.native.redownload',
     defaultMessage: 'Download again',
+  },
+  selectImage: {
+    id: 'UrlField.native.selectImage',
+    defaultMessage: 'Choose images...',
   },
   cancel: {
     id: 'UrlField.native.cancel',

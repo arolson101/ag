@@ -64,7 +64,7 @@ export class DialogFooter extends React.PureComponent<DialogFooterProps> {
   }
 
   componentDidUpdate(prevProps: DialogFooterProps) {
-    log('componentDidUpdate')
+    log('componentDidUpdate %o %o', this.props, prevProps)
     this.setButtons()
   }
 

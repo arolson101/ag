@@ -1,4 +1,4 @@
-import { UiContext } from '@ag/app'
+import { pickBestImageUri, UiContext } from '@ag/app'
 import {
   Button,
   Card,
@@ -11,10 +11,10 @@ import {
   Tabs,
   Text,
   Toast,
-  View,
 } from 'native-base'
+import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
-import { Image } from 'react-native'
+import { Image, TouchableHighlight, TouchableOpacity, View } from 'react-native'
 import { Alert } from './Alert.native'
 import { CheckboxField } from './CheckboxField.native'
 import { CurrencyField } from './CurrencyField.native'
@@ -54,7 +54,7 @@ export const ui: UiContext = {
     <View style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</View>
   ),
   Grid: ({ size, gap, children }) => (
-    <View style={{ display: 'flex', flexDirection: 'column' }}>{children}</View> // TODO
+    <View style={{ display: 'flex', flexDirection: 'column', margin: gap }}>{children}</View>
   ),
 
   Page: ({ children }) => (
@@ -62,8 +62,27 @@ export const ui: UiContext = {
       <Content>{children}</Content>
     </Container>
   ),
-  Tile: ({ children }) => (
-    <View style={{ flexDirection: 'column', alignItems: 'center' }}>{children}</View>
+  Tile: ({ size, margin, selected, onClick, children }) => (
+    <TouchableOpacity
+      onPress={onClick as any}
+      style={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin,
+        width: size,
+        minWidth: size,
+        maxWidth: size,
+        height: size,
+        minHeight: size,
+        maxHeight: size,
+        overflow: 'visible',
+        backgroundColor: selected ? platform.brandPrimary : undefined,
+        boxShadow: selected ? `0px 0px 4px ${platform.brandPrimary}` : undefined,
+      }}
+    >
+      {children}
+    </TouchableOpacity>
   ),
   Collapsible: ({ show, children }) => (
     <View style={{ display: show ? 'flex' : 'none' }}>{children}</View>
@@ -94,6 +113,14 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
+  Image: ({ source, size, margin }) => (
+    <Image
+      source={source}
+      {...pickBestImageUri(source, size)}
+      {...{ src: undefined }}
+      style={{ margin }}
+    />
+  ),
 
   // form
   Form,
@@ -107,6 +134,4 @@ export const ui: UiContext = {
 
   Tabs: ({ children }) => <Tabs>{children}</Tabs>,
   Tab: ({ heading, panel }) => <Tab heading={heading}>{panel}</Tab>,
-
-  Image: ({ size, source }) => <Image width={size} height={size} source={source} />,
 }

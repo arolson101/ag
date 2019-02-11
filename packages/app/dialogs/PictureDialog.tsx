@@ -1,8 +1,11 @@
+import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, ImageUri } from '../context'
 import { getImageList, getImages } from '../online'
+
+const log = debug('app:PictureDialog')
 
 interface Props {
   isOpen: boolean
@@ -39,16 +42,19 @@ export class PictureDialog extends React.PureComponent<Props, State> {
   componentDidUpdate(prevProps: Props) {
     const { url } = this.props
     if (prevProps.url !== url) {
+      log('componentDidUpdate: url %s', url)
       this.cancel()
       this.setState({ url, selection: [], links: undefined }, this.getImages)
     }
   }
 
   componentDidMount() {
+    log('componentDidMount')
     this.getImages()
   }
 
   componentWillUnmount() {
+    log('componentWillUnmount')
     this.cancel()
   }
 
@@ -132,17 +138,21 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     e.stopPropagation()
     const selection = this.state.selection
     if (selection.includes(link)) {
+      log('deselecting %s', link)
       this.setState({ selection: selection.filter(x => x !== link) })
     } else {
+      log('selecting %s', link)
       this.setState({ selection: [...selection, link] })
     }
   }
 
   deselect = () => {
+    log('deselect all')
     this.setState({ selection: [] })
   }
 
   close = () => {
+    log('close')
     const { dispatch } = this.context
     dispatch(actions.closeDlg('picture'))
   }

@@ -1,4 +1,8 @@
 import 'node-libs-react-native/globals'
+import 'abortcontroller-polyfill'
+import flatMap from 'array.prototype.flatmap'
+
+Array.prototype.flatMap = flatMap.getPolyfill()
 
 // https://github.com/facebook/metro/issues/287#issuecomment-450903701
 if (__DEV__) {
