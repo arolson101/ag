@@ -16,7 +16,6 @@ interface Props {
 interface State {
   url: string
   links?: string[]
-  selection: string[]
   images: Record<string, ImageUri[]>
 }
 
@@ -36,7 +35,6 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     this.controller = new AbortController()
     this.state = {
       url: props.url,
-      selection: [],
       images: {},
     }
   }
@@ -46,7 +44,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     if (prevProps.url !== url) {
       log('componentDidUpdate: url %s', url)
       this.cancel()
-      this.setState({ url, selection: [], links: undefined }, this.getImages)
+      this.setState({ url, links: undefined }, this.getImages)
     }
   }
 
@@ -91,7 +89,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
       intl,
       ui: { Dialog, DialogBody, DialogFooter, Spinner, Row, Grid, Tile, Image, Text },
     } = this.context
-    const { links, selection, images } = this.state
+    const { links, images } = this.state
     // log('render')
 
     return (
@@ -105,18 +103,12 @@ export class PictureDialog extends React.PureComponent<Props, State> {
           ) : (
             <Grid
               size={thumbnailSize}
-              onClick={this.deselect}
               data={links}
               keyExtractor={(link: string) => link}
               renderItem={(link: string) => {
                 // log('renderItem %s', link)
                 return (
-                  <Tile
-                    key={link}
-                    size={thumbnailSize}
-                    selected={selection.includes(link)}
-                    onClick={e => this.toggleSelection(e, link)}
-                  >
+                  <Tile key={link} size={thumbnailSize} onClick={e => this.selectItem(e, link)}>
                     {!images[link] ? (
                       <Spinner />
                     ) : (
@@ -130,11 +122,6 @@ export class PictureDialog extends React.PureComponent<Props, State> {
         </DialogBody>
         <DialogFooter
           primary={{
-            title: intl.formatMessage(messages.ok),
-            onClick: this.onSubmit,
-            disabled: selection.length === 0,
-          }}
-          secondary={{
             title: intl.formatMessage(messages.cancel),
             onClick: this.close,
           }}
@@ -143,32 +130,15 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     )
   }
 
-  onSubmit = () => {
+  selectItem = (e: React.SyntheticEvent, link: string) => {
     const { onSelected } = this.props
-    const { selection, images } = this.state
-    const uri = selection.flatMap(x => images[x]).sort((a, b) => a.width! - b.width!)
-    onSelected(uri)
-    this.close()
-  }
-
-  toggleSelection = (e: React.SyntheticEvent, link: string) => {
-    e.stopPropagation()
-    const { selection, images } = this.state
-    if (images[link].length === 0) {
+    const { images } = this.state
+    const uri = images[link]
+    if (uri.length === 0) {
       return
     }
-    if (selection.includes(link)) {
-      // log('deselecting %s', link)
-      this.setState({ selection: selection.filter(x => x !== link) })
-    } else {
-      // log('selecting %s', link)
-      this.setState({ selection: [...selection, link] })
-    }
-  }
-
-  deselect = () => {
-    // log('deselect all')
-    this.setState({ selection: [] })
+    onSelected(uri)
+    this.close()
   }
 
   close = () => {
