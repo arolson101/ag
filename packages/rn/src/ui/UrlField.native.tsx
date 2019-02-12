@@ -1,12 +1,4 @@
-import {
-  actions,
-  AppContext,
-  FavicoProps,
-  getFavico,
-  getFavicoFromLibrary,
-  ImageUri,
-  UrlFieldProps,
-} from '@ag/app'
+import { actions, AppContext, getFavico, ImageUri, UrlFieldProps } from '@ag/app'
 import { decodeFavico, encodeFavico } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import debug from 'debug'
@@ -173,14 +165,21 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   }
 
   getFromLibrary = async () => {
-    const { favicoField } = this.props
-    const icon = await getFavicoFromLibrary(this.context)
-    this.form.setFieldValue(favicoField, encodeFavico(icon))
+    const { field, favicoField } = this.props
+    const { getImageFromLibrary } = this.context
+    const from = this.form.values[field]
+    const source = await getImageFromLibrary()
+    // log('getFromLibrary from %s %o', from, source)
+    if (source) {
+      const ico = encodeFavico({ from, source: [source] })
+      // log('ico %o', ico)
+      this.form.setFieldValue(favicoField, ico)
+    }
   }
 
   onIconButtonPressed = () => {
     const { intl } = this.context
-    const { label, favicoField } = this.props
+    const { favicoField } = this.props
     const options: string[] = [
       intl.formatMessage(messages.redownload),
       intl.formatMessage(messages.selectImage),

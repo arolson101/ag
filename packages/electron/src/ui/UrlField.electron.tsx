@@ -1,13 +1,4 @@
-import {
-  actions,
-  AppContext,
-  FavicoProps,
-  getFavico,
-  getFavicoFromLibrary,
-  ImageUri,
-  pickBestImageUri,
-  UrlFieldProps,
-} from '@ag/app'
+import { actions, AppContext, getFavico, ImageUri, pickBestImageUri, UrlFieldProps } from '@ag/app'
 import { decodeFavico, encodeFavico } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import {
@@ -200,9 +191,16 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   }
 
   onClickLibrary = async () => {
-    const { favicoField } = this.props
-    const icon = await getFavicoFromLibrary(this.context)
-    this.form.setFieldValue(favicoField, encodeFavico(icon))
+    const { field, favicoField } = this.props
+    const from = this.form.values[field]
+    const { getImageFromLibrary } = this.context
+    const source = await getImageFromLibrary()
+    // log('getFromLibrary from %s %o', from, source)
+    if (source) {
+      const ico = encodeFavico({ from, source: [source] })
+      // log('ico %o', ico)
+      this.form.setFieldValue(favicoField, ico)
+    }
   }
 
   onClickReset = () => {
@@ -266,6 +264,6 @@ const messages = defineMessages({
   },
   selectImage: {
     id: 'UrlField.electron.selectImage',
-    defaultMessage: 'Choose images...',
+    defaultMessage: 'Choose image...',
   },
 })

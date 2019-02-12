@@ -7,7 +7,7 @@ import { iconInit } from '../icons'
 import { store } from '../store'
 import { ui } from '../ui'
 import { rnfetch } from './fetch.native'
-import { resizeImage } from './image.native'
+import { getImageFromLibrary, resizeImage } from './image.native'
 import { registerComponents, root, setDefaultOptions } from './navigation'
 import { deleteDb, openDb } from './openDb.native'
 
@@ -24,7 +24,7 @@ export const dependencies: ClientDependencies = {
   deleteDb,
   fetch: rnfetch,
 
-  getImageFromLibrary: null as any,
+  getImageFromLibrary,
   resizeImage,
 }
 

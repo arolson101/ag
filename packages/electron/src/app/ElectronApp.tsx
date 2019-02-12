@@ -5,7 +5,7 @@ import { store } from '../store'
 import { ui } from '../ui'
 import { ElectronDialogs } from './ElectronDialogs'
 import { ElectronRouter } from './ElectronRouter'
-import { resizeImage } from './image.electron'
+import { getImageFromLibrary, resizeImage } from './image.electron'
 import { deleteDb, openDb } from './openDb.electron'
 
 export const dependencies: ClientDependencies = {
@@ -15,7 +15,7 @@ export const dependencies: ClientDependencies = {
   deleteDb,
   fetch,
 
-  getImageFromLibrary: null as any,
+  getImageFromLibrary,
   resizeImage,
 }
 

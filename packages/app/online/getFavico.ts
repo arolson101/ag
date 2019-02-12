@@ -154,10 +154,3 @@ const makeFavicoFromImages = async (
 
   return { source, from }
 }
-
-export const getFavicoFromLibrary = async (context: AppContext) => {
-  const { getImageFromLibrary } = context
-  const { image, path } = await getImageFromLibrary(128, 128)
-  // log('%o', image)
-  return makeFavicoFromImages(path, [image], context)
-}

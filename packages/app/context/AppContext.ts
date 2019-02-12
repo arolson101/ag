@@ -6,10 +6,7 @@ import { AppAction } from '../actions'
 import { AppState, AppStore } from '../reducers'
 import { ImageUri, UiContext } from './uiContext'
 
-export interface LibraryImage {
-  image: ImageUri
-  path: string
-}
+export const maxImageSize = 512
 
 export interface ClientDependencies {
   ui: UiContext
@@ -23,7 +20,7 @@ export interface ClientDependencies {
 
   fetch(input: RequestInfo, init?: RequestInit): Promise<Response>
 
-  getImageFromLibrary: (width: number, height: number) => Promise<LibraryImage>
+  getImageFromLibrary: () => Promise<ImageUri | undefined>
   resizeImage: (image: ImageUri, width: number, height: number, format: string) => Promise<ImageUri>
 }
 
