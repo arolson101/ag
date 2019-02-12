@@ -188,12 +188,12 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       intl.formatMessage(messages.reset),
       intl.formatMessage(messages.cancel),
     ]
-    const cancelButtonIndex = options.length
+    const cancelButtonIndex = options.length - 1
     ActionSheet.show(
       {
         options,
         cancelButtonIndex,
-        title: label,
+        title: intl.formatMessage(messages.title),
       },
       async buttonIndex => {
         switch (buttonIndex) {
@@ -258,6 +258,10 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
 }
 
 const messages = defineMessages({
+  title: {
+    id: 'UrlField.native.title',
+    defaultMessage: 'Customize Image',
+  },
   library: {
     id: 'UrlField.native.library',
     defaultMessage: 'Choose from library...',
@@ -272,7 +276,7 @@ const messages = defineMessages({
   },
   selectImage: {
     id: 'UrlField.native.selectImage',
-    defaultMessage: 'Choose images...',
+    defaultMessage: 'Choose image...',
   },
   cancel: {
     id: 'UrlField.native.cancel',
