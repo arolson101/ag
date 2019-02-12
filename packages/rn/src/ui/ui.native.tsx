@@ -1,4 +1,4 @@
-import { pickBestImageUri, UiContext } from '@ag/app'
+import { UiContext } from '@ag/app'
 import debug from 'debug'
 import {
   Button,
@@ -14,9 +14,8 @@ import {
   Toast,
   View,
 } from 'native-base'
-import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
-import { Dimensions, FlatList, Image, TouchableOpacity } from 'react-native'
+import { Dimensions, FlatList } from 'react-native'
 import { Alert } from './Alert.native'
 import { CheckboxField } from './CheckboxField.native'
 import { CurrencyField } from './CurrencyField.native'
@@ -24,6 +23,7 @@ import { DateField } from './DateField.native'
 import { Dialog, DialogBody, DialogFooter } from './Dialog.native'
 import { Form } from './Form.native'
 import { LoadingOverlay } from './LoadingOverlay.native'
+import { NativeImage } from './NativeImage'
 import { SelectField } from './SelectField.native'
 import { TextField } from './TextField.native'
 import { UrlField } from './UrlField.native'
@@ -136,14 +136,7 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
-  Image: ({ source, size, margin }) => (
-    <Image
-      source={source}
-      {...pickBestImageUri(source, size)}
-      {...{ src: undefined }}
-      style={{ margin }}
-    />
-  ),
+  Image: NativeImage,
 
   // form
   Form,

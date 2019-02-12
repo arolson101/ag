@@ -1,3 +1,20 @@
+import { CompressedJson, dehydrate, hydrate } from './dehydrate'
+
+export interface ImageBuf {
+  width: number
+  height: number
+  mime: string
+  buf: Buffer
+}
+
+export interface ImageSource {
+  width: number
+  height: number
+  uri: string
+}
+
+export type ImageString = CompressedJson<ImageSource>
+
 interface ImageSize {
   width: number
   height: number
@@ -54,3 +71,49 @@ export function imageSize(buffer: Buffer, filepath: string) {
   // throw up, if we don't understand the file
   throw new TypeError('unsupported file type: ' + type + ' (file: ' + filepath + ')')
 }
+
+export const toImageString = (image: ImageBuf | undefined): ImageString => {
+  if (image) {
+    const { buf, mime, width, height } = image
+    const base64 = buf.toString('base64')
+    const uri = `data:${mime};base64,${base64}`
+    const data: ImageSource = { width, height, uri }
+    return dehydrate(data)
+  } else {
+    return '' as ImageString
+  }
+}
+
+export const toImageSource = (imageString: ImageString | string): ImageSource | undefined => {
+  if (imageString) {
+    return hydrate(imageString as ImageString)
+  } else {
+    return undefined
+  }
+}
+
+// export const pickBestImageUri = (source: ImageUri[], size?: number) => {
+//   if (!source.length) {
+//     return
+//   }
+//   if (!size) {
+//     size = Math.max(...source.map(x => x.width))
+//     // log('pickBestImageUri- no size, using max of %d %o', size, source)
+//   }
+//   const best = source.find(img => img.width >= size!) || source[source.length - 1]
+//   // log('pickBestImageUri- best is %dx%d, %o', best.width, best.height, source)
+
+//   let { width, height } = best
+//   if (size) {
+//     const ratio = width / height
+//     if (width > size) {
+//       width = size
+//       height = size / ratio
+//     }
+//     if (height > size) {
+//       width = size * ratio
+//       height = size
+//     }
+//   }
+//   return { width, height, src: best.uri }
+// }

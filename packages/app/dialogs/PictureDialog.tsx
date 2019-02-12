@@ -2,21 +2,22 @@ import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppContext, ImageUri } from '../context'
+import { AppContext } from '../context'
 import { getImage, getImageList } from '../online'
+import { ImageString, toImageString } from '../util'
 
 const log = debug('app:PictureDialog')
 
 interface Props {
   isOpen: boolean
   url: string
-  onSelected: (uri: ImageUri[]) => any
+  onSelected: (uri: ImageString) => any
 }
 
 interface State {
   url: string
   links?: string[]
-  images: Record<string, ImageUri[]>
+  images: Record<string, ImageString>
 }
 
 const thumbnailSize = 100
@@ -72,11 +73,11 @@ export class PictureDialog extends React.PureComponent<Props, State> {
         try {
           const dls = await getImage(link, this.controller.signal, this.context)
           // log(`${link}: success %o`, dls)
-          const images = { ...this.state.images, [link]: dls || [] }
+          const images = { ...this.state.images, [link]: toImageString(dls) }
           this.setState({ images })
         } catch (err) {
           log(`${link}: failed %o`, err)
-          const images = { ...this.state.images, [link]: [] }
+          const images = { ...this.state.images, [link]: toImageString(undefined) }
           this.setState({ images })
         }
       })
@@ -112,7 +113,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
                     {!images[link] ? (
                       <Spinner />
                     ) : (
-                      <Image title={link} size={thumbnailSize - 2} source={images[link]} />
+                      <Image title={link} size={thumbnailSize - 2} src={images[link]} />
                     )}
                   </Tile>
                 )

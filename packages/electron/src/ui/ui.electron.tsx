@@ -1,4 +1,4 @@
-import { pickBestImageUri, TabProps, TabsProps, UiContext } from '@ag/app'
+import { TabProps, TabsProps, UiContext } from '@ag/app'
 import {
   Alert,
   Button,
@@ -26,6 +26,7 @@ import React from 'react'
 import { CheckboxField } from './CheckboxField.electron'
 import { CurrencyField } from './CurrencyField.electron'
 import { DateField } from './DateField.electron'
+import { ElectronImage } from './ElectronImage'
 import { Form } from './Form.electron'
 import { SelectField } from './SelectField.electron'
 import { TextField } from './TextField.electron'
@@ -185,9 +186,7 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
-  Image: ({ source, size, margin, title }) => {
-    return <img title={title} {...pickBestImageUri(source, size)} style={{ margin }} />
-  },
+  Image: ElectronImage,
 
   // form
   Form,

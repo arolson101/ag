@@ -4,9 +4,8 @@ import isUrl from 'is-url'
 import minidom from 'minidom'
 import { extname } from 'path'
 import url from 'url'
-import { AppContext, ImageUri } from '../context'
-import { imageSize } from '../util/imageSize'
-import { fixUrl } from '../util/url'
+import { AppContext } from '../context'
+import { fixUrl, ImageBuf, imageSize } from '../util'
 
 const log = debug('app:getImages')
 
@@ -91,29 +90,23 @@ export const getImage = async (link: string, signal: AbortSignal, context: AppCo
   const buf = Buffer.from(abuf)
   // log('%s: %O', link, { hex: buf.toString('hex'), abuf, buf })
 
-  const images: ImageUri[] = []
+  const images: ImageBuf[] = []
 
   if (ICO.isICO(buf)) {
     const mime = 'image/png'
     const parsedImages = await ICO.parse(buf, mime)
     for (const parsedImage of parsedImages) {
       const { width, height } = parsedImage
-      const uri = toDataUri(Buffer.from(parsedImage.buffer), mime)
-      images.push({ width, height, uri })
+      images.push({ width, height, mime, buf: Buffer.from(parsedImage.buffer) })
     }
   } else {
     const ext = extname(link).substr(1)
     const { width, height } = imageSize(buf, link)
     const mime = response.headers.get('content-type') || `image/${ext}`
-    const uri = toDataUri(buf, mime)
-    images.push({ width, height, uri })
+    images.push({ width, height, mime, buf })
   }
 
-  return images
-}
-
-const toDataUri = (buf: Buffer, mime: string) => {
-  const base64 = buf.toString('base64')
-  const uri = `data:${mime};base64,${base64}`
-  return uri
+  // sort by descending size
+  images.sort((a, b) => b.width - a.width)
+  return images[0]
 }

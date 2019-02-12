@@ -1,5 +1,5 @@
-import { actions, AppContext, getFavico, ImageUri, UrlFieldProps } from '@ag/app'
-import { decodeFavico, encodeFavico } from '@ag/app/util'
+import { actions, AppContext, getFavico, UrlFieldProps } from '@ag/app'
+import { ImageString, memoizeOne, toImageSource, toImageString } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
@@ -118,15 +118,6 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       return
     }
 
-    const iconValue = this.form.values[favicoField]
-    if (iconValue && !force) {
-      const iconProps = decodeFavico(iconValue)
-      if (iconProps.from === value) {
-        log(`not looking up icon because we already got it from ${value}`)
-        return
-      }
-    }
-
     try {
       if (this.controller) {
         this.controller.abort()
@@ -134,7 +125,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       this.controller = new AbortController()
       this.setState({ gettingIcon: true })
       const icon = await getFavico(value, this.controller.signal, this.context)
-      this.form.setFieldValue(favicoField, encodeFavico(icon))
+      this.form.setFieldValue(favicoField, toImageString(icon))
     } catch (ex) {
       log(ex.message)
     } finally {
@@ -158,10 +149,9 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     }
   }
 
-  onPictureChosen = (source: ImageUri[]) => {
-    const { field, favicoField } = this.props
-    const from = this.form.values[field]
-    this.form.setFieldValue(favicoField, encodeFavico({ from, source }))
+  onPictureChosen = (uri: ImageString) => {
+    const { favicoField } = this.props
+    this.form.setFieldValue(favicoField, uri)
   }
 
   getFromLibrary = async () => {
@@ -171,9 +161,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     const source = await getImageFromLibrary()
     // log('getFromLibrary from %s %o', from, source)
     if (source) {
-      const ico = encodeFavico({ from, source: [source] })
-      // log('ico %o', ico)
-      this.form.setFieldValue(favicoField, ico)
+      this.form.setFieldValue(favicoField, toImageString(source))
     }
   }
 
@@ -238,16 +226,22 @@ interface FavicoButtonProps extends NativeBase.Button {
 }
 
 class FavicoButton extends React.Component<FavicoButtonProps> {
+  decodeImage = memoizeOne(toImageSource)
+
   render() {
     const { value, loading, ...props } = this.props
-    const favico = value ? decodeFavico(value) : undefined
     // log('render %o', favico)
     return (
       <Button {...props}>
         {loading ? (
           <Spinner />
-        ) : favico ? (
-          <Thumbnail style={{ backgroundColor: 'transparent' }} square small {...favico} />
+        ) : value ? (
+          <Thumbnail
+            style={{ backgroundColor: 'transparent' }}
+            square
+            small
+            source={this.decodeImage(value)!}
+          />
         ) : (
           <FontAwesome name='bank' />
         )}
