@@ -89,7 +89,12 @@ export class TransactionForm extends React.Component<TransactionForm.Props> {
             : Transaction.defaultValues()
 
           return (
-            <AppMutation mutation={TransactionForm.mutations.SaveTransaction}>
+            <AppMutation
+              mutation={TransactionForm.mutations.SaveTransaction}
+              refetchQueries={[
+                { query: TransactionForm.queries.Transaction, variables: { transactionId } },
+              ]}
+            >
               {saveTransaction => (
                 <>
                   <Formik<FormValues>

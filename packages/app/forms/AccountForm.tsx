@@ -98,7 +98,10 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
           return (
             <AppMutation
               mutation={mutations.SaveAccount}
-              refetchQueries={[{ query: HomePage.queries.HomePage }]}
+              refetchQueries={[
+                { query: queries.AccountForm, variables: { accountId } },
+                { query: HomePage.queries.HomePage },
+              ]}
             >
               {saveAccount => (
                 <Formik<FormValues>

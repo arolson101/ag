@@ -109,7 +109,10 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
           return (
             <AppMutation
               mutation={BankForm.mutations.SaveBank}
-              refetchQueries={[{ query: HomePage.queries.HomePage }]}
+              refetchQueries={[
+                { query: BankForm.queries.BankForm, variables: { bankId } },
+                { query: HomePage.queries.HomePage },
+              ]}
             >
               {saveBank => (
                 <>
