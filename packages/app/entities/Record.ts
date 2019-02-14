@@ -1,7 +1,10 @@
 import assert from 'assert'
+import debug from 'debug'
 import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
 import { CompressedJson, dehydrate, hydrate } from '../util/dehydrate'
 import { ISpec, iupdate } from '../util/iupdate'
+
+const log = debug('app:Record')
 
 type Change<T> = Partial<ISpec<T>>
 
@@ -29,6 +32,7 @@ export abstract class Record<Props extends {}> {
     if (props) {
       assert(!['id', '_deleted', '_base', '_history'].some(key => key in props))
       Object.assign(this, props)
+      // log('props %o this %o', props, this)
     }
 
     if (id) {

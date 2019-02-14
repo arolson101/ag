@@ -18,7 +18,7 @@ export class Bank extends Record<Bank.Props> {
   @Column() @Field() web!: string
   @Column() @Field() address!: string
   @Column() @Field() notes!: string
-  @Column(type => ImageSource) @Field() favicon: ImageSource = new ImageSource()
+  @Column(type => ImageSource) @Field() favicon!: ImageSource
 
   @Column() @Field() online!: boolean
 

@@ -128,6 +128,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                     }}
                     onSubmit={async ({ fi, ...input }, factions) => {
                       try {
+                        // log('onSubmit %o', { input, bankId })
                         await saveBank({ variables: { input, bankId } })
                         showToast(
                           intl.formatMessage(bankId ? messages.saved : messages.created, {
@@ -422,14 +423,14 @@ const messages = defineMessages({
   },
   saved: {
     id: 'BankForm.saved',
-    defaultMessage: '{name} saved',
+    defaultMessage: `'{name}' saved`,
   },
   created: {
     id: 'BankForm.created',
-    defaultMessage: '{name} added',
+    defaultMessage: `'{name}' added`,
   },
   deleted: {
     id: 'BankForm.deleted',
-    defaultMessage: '{name} deleted',
+    defaultMessage: `'{name}' deleted`,
   },
 })
