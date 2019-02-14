@@ -1,3 +1,53 @@
+import debug from 'debug'
+import { Column } from 'typeorm'
+import { CompressedJson, dehydrate, hydrate } from './dehydrate'
+
+const log = debug('app:ImageSource')
+
+export interface ImageBuf {
+  width: number
+  height: number
+  mime: string
+  buf: Buffer
+}
+
+export class ImageSource {
+  @Column() width: number
+  @Column() height: number
+  @Column() uri: string
+
+  constructor(props?: { width: number; height: number; uri: string }) {
+    this.width = props ? props.width : 0
+    this.height = props ? props.height : 0
+    this.uri = props ? props.uri : ''
+    // log('ImageSource constructor %o', this)
+  }
+
+  encodeString(): string {
+    return dehydrate({ width: this.width, height: this.height, uri: this.uri })
+  }
+
+  static fromString(data: CompressedJson<ImageSource> | string): ImageSource {
+    if (data) {
+      const props = hydrate(data as CompressedJson<ImageSource>)
+      return new ImageSource(props)
+    } else {
+      return new ImageSource()
+    }
+  }
+
+  static fromImageBuf(data: ImageBuf | undefined): ImageSource {
+    if (data) {
+      const { buf, mime, width, height } = data
+      const base64 = buf.toString('base64')
+      const uri = `data:${mime};base64,${base64}`
+      return new ImageSource({ width, height, uri })
+    } else {
+      return new ImageSource()
+    }
+  }
+}
+
 interface ImageSize {
   width: number
   height: number

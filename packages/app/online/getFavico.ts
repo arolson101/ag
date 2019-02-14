@@ -1,30 +1,18 @@
 import debug from 'debug'
 import minidom from 'minidom'
 import url from 'url'
-import { AppContext, ImageUri } from '../context'
+import { AppContext } from '../context'
+import { ImageBuf } from '../util'
 import { fixUrl, isUrl } from '../util/url'
 import { getImage } from './getImages'
 
 const log = debug('app:getFavico')
 
-export interface FavicoProps {
-  from: string // some sort of identifier to identify where this came from (e.g. url, path)
-  source: ImageUri[]
-}
-
-const thumbnailSizes = {
-  small: 36,
-  medium: 56,
-  large: 80,
-}
-
-const sizes = [32, 64]
-
 export const getFavico = async (
   from: string,
   signal: AbortSignal,
   context: AppContext
-): Promise<FavicoProps> => {
+): Promise<ImageBuf | undefined> => {
   from = fixUrl(from)
 
   if (!isUrl(from)) {
@@ -88,69 +76,21 @@ export const getFavico = async (
     )
   log('links: %o', links)
 
-  const images: ImageUri[] = []
+  const images: ImageBuf[] = []
 
   await Promise.all(
     links.map(async link => {
-      const dls = await getImage(link, signal, context)
-      if (!dls) {
+      const dl = await getImage(link, signal, context)
+      if (!dl) {
         log('failed getting: %s', link)
-        return
-      }
-
-      for (const dl of dls) {
+      } else {
         images.push(dl)
       }
     })
   )
   // log('%s images: %d %O', from, images.length, [...images])
 
-  return makeFavicoFromImages(from, images, context)
-}
-
-const makeFavicoFromImages = async (
-  from: string,
-  images: ImageUri[],
-  context: AppContext
-): Promise<FavicoProps> => {
-  // log('making favico from %s (%d images %O)', from, images.length, [...images])
-
-  // const { resizeImage } = context
-  // // add resized images (iOS would rather upscale the 16x16 favico than use the larger one)
-  // await Promise.all(
-  //   sizes
-  //     .filter(size => !images.find(image => image.width === size))
-  //     .map(async size => {
-  //       // only resize down; find next larger image
-  //       // log(`gonna resize to ${size}`)
-  //       const src = images.find(image => image.width >= size)
-  //       if (src) {
-  //         // log(`found ${src}`)
-  //         const scale = Math.min(size / src.width!, size / src.height!)
-  //         const width = Math.trunc(src.width! * scale)
-  //         const height = Math.trunc(src.height! * scale)
-  //         assert(width <= size)
-  //         assert(height <= size)
-  //         assert(width === size || height === size)
-  //         const result = await resizeImage(src, width, height, 'PNG')
-  //         // log('resized image: %O', result)
-  //         images.push(result)
-  //       }
-  //     })
-  // )
-  // log('images: %o', images)
-
-  const source = images
-    .filter(
-      (value, index, array) =>
-        index === array.findIndex(a => a.width === value.width && a.height === value.height)
-    )
-    .sort((a, b) => a.width! - b.width!)
-  log('source: %s %o', from, source)
-
-  if (source.length === 0) {
-    throw new Error('no images found')
-  }
-
-  return { source, from }
+  // sort by descending size
+  images.sort((a, b) => b.width - a.width)
+  return images[0]
 }

@@ -25,7 +25,7 @@ export interface BankInput {
 
   notes?: Maybe<string>
 
-  favicon?: Maybe<string>
+  favicon?: Maybe<ImageSource>
 
   online?: Maybe<boolean>
 
@@ -65,6 +65,9 @@ export type AccountTypeValueMap = {
   CREDITLINE: AccountType
   CREDITCARD: AccountType
 }
+
+/** An object containing image data */
+export type ImageSource = any
 
 /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
 export type DateTime = any
@@ -316,7 +319,7 @@ export namespace BankDisplay {
 
     name: string
 
-    favicon: string
+    favicon: ImageSource
 
     accounts: Accounts[]
   }
@@ -364,7 +367,7 @@ export namespace BankFields {
 
     notes: string
 
-    favicon: string
+    favicon: ImageSource
 
     online: boolean
 

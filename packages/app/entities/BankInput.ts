@@ -1,4 +1,5 @@
 import { Field, InputType } from 'type-graphql'
+import { ImageSource } from '../util'
 
 @InputType()
 export class BankInput {
@@ -6,7 +7,7 @@ export class BankInput {
   @Field({ nullable: true }) web?: string
   @Field({ nullable: true }) address?: string
   @Field({ nullable: true }) notes?: string
-  @Field({ nullable: true }) favicon?: string
+  @Field({ nullable: true }) favicon?: ImageSource
 
   @Field({ nullable: true }) online?: boolean
 

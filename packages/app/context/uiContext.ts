@@ -1,5 +1,6 @@
 import debug from 'debug'
 import { ComponentType } from 'react'
+import { ImageSource } from '../util'
 import {
   CheckboxFieldProps,
   CurrencyFieldProps,
@@ -69,14 +70,8 @@ export interface TabProps {
   panel: JSX.Element
 }
 
-export interface ImageUri {
-  width: number
-  height: number
-  uri: string
-}
-
 export interface ImageProps {
-  source: ImageUri[]
+  src: ImageSource
   size?: number
   margin?: number
   title?: string
@@ -133,30 +128,4 @@ export interface UiContext {
   // tabs
   Tabs: React.ComponentType<TabsProps>
   Tab: React.ComponentType<TabProps>
-}
-
-export const pickBestImageUri = (source: ImageUri[], size?: number) => {
-  if (!source.length) {
-    return
-  }
-  if (!size) {
-    size = Math.max(...source.map(x => x.width))
-    // log('pickBestImageUri- no size, using max of %d %o', size, source)
-  }
-  const best = source.find(img => img.width >= size!) || source[source.length - 1]
-  // log('pickBestImageUri- best is %dx%d, %o', best.width, best.height, source)
-
-  let { width, height } = best
-  if (size) {
-    const ratio = width / height
-    if (width > size) {
-      width = size
-      height = size / ratio
-    }
-    if (height > size) {
-      width = size * ratio
-      height = size
-    }
-  }
-  return { width, height, src: best.uri }
 }

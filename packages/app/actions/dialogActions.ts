@@ -1,5 +1,5 @@
 import { createStandardAction } from 'typesafe-actions'
-import { ImageUri } from '../context'
+import { ImageSource } from '../util'
 
 export type DialogType = 'login' | 'picture' | 'bank' | 'account'
 
@@ -8,7 +8,7 @@ export const dialogActions = {
     login: createStandardAction('dlg/login')(),
     picture: createStandardAction('dlg/picture')<{
       url: string
-      onSelected: (uri: ImageUri[]) => any
+      onSelected: (uri: ImageSource) => any
     }>(),
     bankCreate: createStandardAction('dlg/bankCreate')(),
     bankEdit: createStandardAction('dlg/bankEdit')<{ bankId: string }>(),

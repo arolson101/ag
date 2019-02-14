@@ -1,9 +1,8 @@
 import gql from 'graphql-tag'
 import React from 'react'
 import { actions } from '../actions'
-import { AppContext, pickBestImageUri } from '../context'
+import { AppContext } from '../context'
 import * as T from '../graphql-types'
-import { FavicoProps } from '../online'
 import { Link } from './Link'
 
 export namespace BankDisplay {
@@ -35,16 +34,14 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
     const { ui } = this.context
     const { Card, Row, Text, Image, Tile } = ui
 
-    const favicon = bank.favicon ? (JSON.parse(bank.favicon) as FavicoProps) : undefined
     const size = 48
-    const source = favicon ? favicon.source : []
 
     return (
       <Card key={bank.id}>
         <Row>
           <Row flex={1}>
             <Tile size={size} margin={5}>
-              <Image size={size} source={source} />
+              <Image size={size} src={bank.favicon} />
             </Tile>
             <Text header flex={1}>
               {bank.name}

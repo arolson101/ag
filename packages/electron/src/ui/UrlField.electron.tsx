@@ -1,5 +1,5 @@
-import { actions, AppContext, getFavico, ImageUri, pickBestImageUri, UrlFieldProps } from '@ag/app'
-import { decodeFavico, encodeFavico } from '@ag/app/util'
+import { actions, AppContext, getFavico, UrlFieldProps } from '@ag/app'
+import { ImageSource } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import {
   Button,
@@ -16,6 +16,7 @@ import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import React from 'react'
 import { defineMessages } from 'react-intl'
+import { ElectronImage } from './ElectronImage'
 
 const log = debug('electron:UrlField')
 
@@ -144,15 +145,6 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       return
     }
 
-    const iconValue = this.form.values[favicoField]
-    if (iconValue && !force) {
-      const iconProps = decodeFavico(iconValue)
-      if (iconProps.from === value) {
-        log(`not looking up icon because we already got it from ${value}`)
-        return
-      }
-    }
-
     try {
       if (this.controller) {
         this.controller.abort()
@@ -160,7 +152,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       this.controller = new AbortController()
       this.setState({ gettingIcon: true })
       const icon = await getFavico(value, this.controller.signal, this.context)
-      this.form.setFieldValue(favicoField, encodeFavico(icon))
+      this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(icon))
     } catch (ex) {
       log(ex.message)
     } finally {
@@ -184,10 +176,9 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     }
   }
 
-  onPictureChosen = (source: ImageUri[]) => {
-    const { field, favicoField } = this.props
-    const from = this.form.values[field]
-    this.form.setFieldValue(favicoField, encodeFavico({ from, source }))
+  onPictureChosen = (source: ImageSource) => {
+    const { favicoField } = this.props
+    this.form.setFieldValue(favicoField, source)
   }
 
   onClickLibrary = async () => {
@@ -197,9 +188,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     const source = await getImageFromLibrary()
     // log('getFromLibrary from %s %o', from, source)
     if (source) {
-      const ico = encodeFavico({ from, source: [source] })
-      // log('ico %o', ico)
-      this.form.setFieldValue(favicoField, ico)
+      this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(source))
     }
   }
 
@@ -229,18 +218,17 @@ class NotifyingInput extends React.PureComponent<NotifyingInputProps & HTMLInput
 }
 
 interface FavicoButtonProps extends IButtonProps {
-  value: string
+  value: ImageSource
   loading: boolean
 }
 
 class FavicoButton extends React.PureComponent<FavicoButtonProps> {
   render() {
     const { value, loading, ...props } = this.props
-    const favico = value ? decodeFavico(value) : undefined
     return loading ? (
       <Button {...props} minimal loading />
-    ) : favico ? (
-      <Button {...props} minimal icon={<img {...pickBestImageUri(favico.source, 16)} />} />
+    ) : value ? (
+      <Button {...props} minimal icon={<ElectronImage size={20} src={value} />} />
     ) : (
       <Button {...props} minimal>
         {'...'}

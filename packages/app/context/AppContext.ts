@@ -4,7 +4,8 @@ import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { AppAction } from '../actions'
 import { AppState, AppStore } from '../reducers'
-import { ImageUri, UiContext } from './uiContext'
+import { ImageBuf } from '../util'
+import { UiContext } from './uiContext'
 
 export const maxImageSize = 512
 
@@ -20,8 +21,8 @@ export interface ClientDependencies {
 
   fetch(input: RequestInfo, init?: RequestInit): Promise<Response>
 
-  getImageFromLibrary: () => Promise<ImageUri | undefined>
-  resizeImage: (image: ImageUri, width: number, height: number, format: string) => Promise<ImageUri>
+  getImageFromLibrary: () => Promise<ImageBuf | undefined>
+  resizeImage: (image: ImageBuf, width: number, height: number) => Promise<ImageBuf>
 }
 
 export interface AppContext extends ClientDependencies {

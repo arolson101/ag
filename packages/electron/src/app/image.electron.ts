@@ -3,16 +3,12 @@ import electron, { nativeImage } from 'electron'
 
 const dialog = (electron.remote || electron).dialog
 
-export const resizeImage: ClientDependencies['resizeImage'] = async (
-  image,
-  width,
-  height,
-  format
-) => {
-  const img = nativeImage.createFromDataURL(image.uri)
+export const resizeImage: ClientDependencies['resizeImage'] = async (image, width, height) => {
+  const img = nativeImage.createFromBuffer(image.buf, { height: image.height, width: image.width })
   const resized = img.resize({ width, height })
-  const uri = resized.toDataURL()
-  return { ...resized.getSize(), uri }
+  const buf = img.toPNG()
+  const mime = 'image/png'
+  return { ...resized.getSize(), mime, buf }
 }
 
 export const getImageFromLibrary: ClientDependencies['getImageFromLibrary'] = async () => {
@@ -23,10 +19,12 @@ export const getImageFromLibrary: ClientDependencies['getImageFromLibrary'] = as
     ],
     properties: ['openFile'],
   })
+
   if (res && res.length === 1) {
     const path = res[0]
     const img = nativeImage.createFromPath(path)
-    const uri = img.toDataURL()
-    return { ...img.getSize(), uri }
+    const buf = img.toPNG()
+    const mime = 'image/png'
+    return { ...img.getSize(), mime, buf }
   }
 }

@@ -1,11 +1,14 @@
 import assert from 'assert'
 import cuid from 'cuid'
+import debug from 'debug'
 import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
 import { AppContext } from '../context'
 import { Account, Bank, BankInput } from '../entities'
 import { selectors } from '../reducers'
 import { diff } from '../util/diff'
 import { dbWrite } from './dbWrite'
+
+const log = debug('app:BankResolver')
 
 @Resolver(Bank)
 export class BankResolver {
@@ -39,9 +42,12 @@ export class BankResolver {
       bankId = bank.id
       changes = [Bank.change.add(t, bank)]
     }
+    // log('dbwrite %o', changes)
     await dbWrite(app.connection, changes)
     assert.equal(bankId, bank.id)
+    // log('get bank %s', bankId)
     assert.deepEqual(bank, await app.banks.get(bankId))
+    // log('done')
     return bank
   }
 
