@@ -1,9 +1,13 @@
+import debug from 'debug'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { DbChange } from '../resolvers/dbWrite'
+import { ImageSource } from '../util'
 import { ISpec } from '../util/iupdate'
 import { BankInput } from './BankInput'
 import { Record } from './Record'
+
+const log = debug('app:Bank')
 
 @ObjectType()
 @Entity({ name: 'banks' })
@@ -14,7 +18,7 @@ export class Bank extends Record<Bank.Props> {
   @Column() @Field() web!: string
   @Column() @Field() address!: string
   @Column() @Field() notes!: string
-  @Column() @Field() favicon!: string // JSON stringified FavicoProps
+  @Column(type => ImageSource) @Field() favicon: ImageSource = new ImageSource()
 
   @Column() @Field() online!: boolean
 
@@ -27,6 +31,7 @@ export class Bank extends Record<Bank.Props> {
 
   constructor(id?: string, props?: BankInput) {
     super(id, { ...Bank.defaultValues, ...props })
+    // log('Bank constructor %o', this)
   }
 }
 
@@ -59,7 +64,7 @@ export namespace Bank {
     web: '',
     address: '',
     notes: '',
-    favicon: '',
+    favicon: ImageSource.fromString(''),
 
     online: true,
 

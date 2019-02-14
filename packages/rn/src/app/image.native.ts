@@ -1,5 +1,5 @@
 import { AppContext } from '@ag/app'
-import { imageSize, toImageString } from '@ag/app/util'
+import { imageSize, ImageSource } from '@ag/app/util'
 import debug from 'debug'
 import { ImageSourcePropType } from 'react-native'
 import RNFS from 'react-native-fs'
@@ -14,8 +14,8 @@ export interface FavicoProps {
 }
 
 export const resizeImage: AppContext['resizeImage'] = async (image, width, height) => {
-  const uri = toImageString(image)
-  const result = await ImageResizer.createResizedImage(uri, width, height, 'PNG', 100)
+  const source = ImageSource.fromImageBuf(image)
+  const result = await ImageResizer.createResizedImage(source.uri, width, height, 'PNG', 100)
   try {
     const base64 = await RNFS.readFile(result.uri, 'base64')
     const buf = Buffer.from(base64, 'base64')

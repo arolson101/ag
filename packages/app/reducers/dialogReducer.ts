@@ -1,6 +1,6 @@
 import { getType } from 'typesafe-actions'
 import { actions, AppAction } from '../actions'
-import { ImageString } from '../util'
+import { ImageSource } from '../util'
 
 export interface DialogState {
   loginDialog?: {
@@ -9,7 +9,7 @@ export interface DialogState {
   pictureDialog?: {
     isOpen: boolean
     url: string
-    onSelected: (uri: ImageString) => any
+    onSelected: (uri: ImageSource) => any
   }
   bankDialog?: {
     isOpen: boolean

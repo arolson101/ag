@@ -1,5 +1,5 @@
 import { actions, AppContext, getFavico, UrlFieldProps } from '@ag/app'
-import { ImageString, memoizeOne, toImageSource, toImageString } from '@ag/app/util'
+import { ImageSource, memoizeOne } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
@@ -125,7 +125,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       this.controller = new AbortController()
       this.setState({ gettingIcon: true })
       const icon = await getFavico(value, this.controller.signal, this.context)
-      this.form.setFieldValue(favicoField, toImageString(icon))
+      this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(icon))
     } catch (ex) {
       log(ex.message)
     } finally {
@@ -149,7 +149,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     }
   }
 
-  onPictureChosen = (uri: ImageString) => {
+  onPictureChosen = (uri: ImageSource) => {
     const { favicoField } = this.props
     this.form.setFieldValue(favicoField, uri)
   }
@@ -161,7 +161,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     const source = await getImageFromLibrary()
     // log('getFromLibrary from %s %o', from, source)
     if (source) {
-      this.form.setFieldValue(favicoField, toImageString(source))
+      this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(source))
     }
   }
 
@@ -221,13 +221,11 @@ class NotifyingInput extends React.Component<NotifyingInputProps> {
 }
 
 interface FavicoButtonProps extends NativeBase.Button {
-  value: string
+  value: ImageSource
   loading: boolean
 }
 
 class FavicoButton extends React.Component<FavicoButtonProps> {
-  decodeImage = memoizeOne(toImageSource)
-
   render() {
     const { value, loading, ...props } = this.props
     // log('render %o', favico)
@@ -235,13 +233,8 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
       <Button {...props}>
         {loading ? (
           <Spinner />
-        ) : value ? (
-          <Thumbnail
-            style={{ backgroundColor: 'transparent' }}
-            square
-            small
-            source={this.decodeImage(value)!}
-          />
+        ) : value && value.uri ? (
+          <Thumbnail style={{ backgroundColor: 'transparent' }} square small source={value} />
         ) : (
           <FontAwesome name='bank' />
         )}

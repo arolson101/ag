@@ -1,6 +1,6 @@
 import debug from 'debug'
 import { ComponentType } from 'react'
-import { ImageSource, ImageString } from '../util'
+import { ImageSource } from '../util'
 import {
   CheckboxFieldProps,
   CurrencyFieldProps,
@@ -71,7 +71,7 @@ export interface TabProps {
 }
 
 export interface ImageProps {
-  src: ImageString
+  src: ImageSource
   size?: number
   margin?: number
   title?: string

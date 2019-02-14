@@ -1,5 +1,5 @@
 import { actions, AppContext, getFavico, UrlFieldProps } from '@ag/app'
-import { ImageString, toImageString } from '@ag/app/util'
+import { ImageSource } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import {
   Button,
@@ -152,7 +152,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       this.controller = new AbortController()
       this.setState({ gettingIcon: true })
       const icon = await getFavico(value, this.controller.signal, this.context)
-      this.form.setFieldValue(favicoField, toImageString(icon))
+      this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(icon))
     } catch (ex) {
       log(ex.message)
     } finally {
@@ -176,7 +176,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     }
   }
 
-  onPictureChosen = (source: ImageString) => {
+  onPictureChosen = (source: ImageSource) => {
     const { favicoField } = this.props
     this.form.setFieldValue(favicoField, source)
   }
@@ -188,7 +188,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     const source = await getImageFromLibrary()
     // log('getFromLibrary from %s %o', from, source)
     if (source) {
-      this.form.setFieldValue(favicoField, toImageString(source))
+      this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(source))
     }
   }
 
@@ -218,7 +218,7 @@ class NotifyingInput extends React.PureComponent<NotifyingInputProps & HTMLInput
 }
 
 interface FavicoButtonProps extends IButtonProps {
-  value: ImageString
+  value: ImageSource
   loading: boolean
 }
 
