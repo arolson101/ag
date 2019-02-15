@@ -5,6 +5,7 @@ import { ImageSourcePropType } from 'react-native'
 import RNFS from 'react-native-fs'
 import ImageCropPicker from 'react-native-image-crop-picker'
 import ImageResizer from 'react-native-image-resizer'
+import * as svg from 'react-native-svg'
 
 const log = debug('rn:image')
 
@@ -14,6 +15,10 @@ export interface FavicoProps {
 }
 
 export const resizeImage: AppContext['resizeImage'] = async (image, width, height) => {
+  // if(image.mime.startsWith('image/svg')) {
+  //   image = svg.
+  // }
+
   const source = ImageSource.fromImageBuf(image)
   const result = await ImageResizer.createResizedImage(source.uri, width, height, 'PNG', 100)
   try {

@@ -9,6 +9,7 @@ import * as React from 'react'
 import { defineMessages } from 'react-intl'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Label } from './Label.native'
+import { NativeImage } from './NativeImage'
 
 const log = debug('ag:UrlField')
 log.enabled = true
@@ -233,8 +234,8 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
       <Button {...props}>
         {loading ? (
           <Spinner />
-        ) : value && value.uri ? (
-          <Thumbnail style={{ backgroundColor: 'transparent' }} square small source={value} />
+        ) : value ? (
+          <NativeImage size={16} src={value} />
         ) : (
           <FontAwesome name='bank' />
         )}

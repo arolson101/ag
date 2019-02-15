@@ -152,6 +152,7 @@ configurations.all {
 }
 
 dependencies {
+    implementation project(':react-native-svg')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-image-crop-picker')
     implementation project(':react-native-image-resizer')

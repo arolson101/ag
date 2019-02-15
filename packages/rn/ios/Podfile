@@ -41,4 +41,6 @@ target 'app_rn' do
 
   pod 'react-native-safe-area', :path => '../node_modules/react-native-safe-area'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
 end

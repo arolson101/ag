@@ -75,7 +75,7 @@ const typeHandlers: TypeHandlerMap = {
   // dds: require('image-size/lib/types/dds'),
   // psd: require('image-size/lib/types/psd'),
   // tiff: require('image-size/lib/types/tiff'),
-  // webp: require('image-size/lib/types/webp'),
+  webp: require('image-size/lib/types/webp'),
 }
 
 const detector = (buffer: Buffer, filepath: string) => {

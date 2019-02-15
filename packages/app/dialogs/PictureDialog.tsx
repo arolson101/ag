@@ -1,6 +1,7 @@
 import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'
+import { NativeImage } from '../../rn/src/ui/NativeImage'
 import { actions } from '../actions'
 import { AppContext } from '../context'
 import { getImage, getImageList } from '../online'
@@ -113,7 +114,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
                     {!images[link] ? (
                       <Spinner />
                     ) : (
-                      <Image title={link} size={thumbnailSize - 2} src={images[link]} />
+                      <NativeImage title={link} size={thumbnailSize - 2} src={images[link]} />
                     )}
                   </Tile>
                 )

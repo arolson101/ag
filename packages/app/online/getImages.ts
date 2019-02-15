@@ -77,36 +77,41 @@ export const getImageList = async (from: string, signal: AbortSignal, context: A
 }
 
 export const getImage = async (link: string, signal: AbortSignal, context: AppContext) => {
-  const { fetch } = context
+  try {
+    const { fetch } = context
 
-  const response = await fetch(link, { method: 'get', signal })
-  if (!response.ok) {
-    log('failed getting: %s', link)
-    return
-  }
-  // log('%s => %o', link, response)
-
-  const abuf = await response.arrayBuffer()
-  const buf = Buffer.from(abuf)
-  // log('%s: %O', link, { hex: buf.toString('hex'), abuf, buf })
-
-  const images: ImageBuf[] = []
-
-  if (ICO.isICO(buf)) {
-    const mime = 'image/png'
-    const parsedImages = await ICO.parse(buf, mime)
-    for (const parsedImage of parsedImages) {
-      const { width, height } = parsedImage
-      images.push({ width, height, mime, buf: Buffer.from(parsedImage.buffer) })
+    const response = await fetch(link, { method: 'get', signal })
+    if (!response.ok) {
+      log('failed getting: %s', link)
+      return
     }
-  } else {
-    const ext = extname(link).substr(1)
-    const { width, height } = imageSize(buf, link)
-    const mime = response.headers.get('content-type') || `image/${ext}`
-    images.push({ width, height, mime, buf })
-  }
+    // log('%s => %o', link, response)
 
-  // sort by descending size
-  images.sort((a, b) => b.width - a.width)
-  return images[0]
+    const abuf = await response.arrayBuffer()
+    const buf = Buffer.from(abuf)
+    // log('%s: %O', link, { hex: buf.toString('hex'), abuf, buf })
+    let image: ImageBuf
+
+    if (ICO.isICO(buf)) {
+      const mime = 'image/png'
+      const parsedImages = await ICO.parse(buf, mime)
+      const images: ImageBuf[] = parsedImages
+        .map(({ width, height, buffer }) => {
+          return { width, height, mime, buf: Buffer.from(buffer) }
+        })
+        .sort((a, b) => b.width - a.width) // sort by descending size
+      image = images[0]
+    } else {
+      const ext = extname(link).substr(1)
+      const { width, height } = imageSize(buf, link)
+      const mime = response.headers.get('content-type') || `image/${ext}`
+      image = { width, height, mime, buf }
+    }
+
+    log('getImage %s => %o', link, image)
+    return image
+  } catch (error) {
+    log('error %o', error)
+    throw error
+  }
 }
