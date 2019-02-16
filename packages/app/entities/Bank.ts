@@ -31,6 +31,7 @@ export class Bank extends Record<Bank.Props> {
 
   constructor(id?: string, props?: BankInput) {
     super(id, { ...Bank.defaultValues, ...props })
+    this.favicon = new ImageSource(this.favicon)
     // log('Bank constructor %o', this)
   }
 }

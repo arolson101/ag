@@ -2,163 +2,30 @@ import css, { Declaration, Rule } from 'css'
 import debug from 'debug'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { ImageURISource, StyleProp, View, ViewStyle } from 'react-native'
-const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource')
-import xmldom from 'xmldom'
-
-const log = debug('rn:react-native-svg-uri')
-
+import { ImageProperties, ImageURISource, StyleProp, View, ViewStyle } from 'react-native'
+import * as rnsvg from 'react-native-svg'
+// tslint:disable-next-line:no-duplicate-imports
 import Svg, {
   Circle,
-  CircleProps,
+  ClipPath,
   Defs,
   Ellipse,
   G,
-  GProps,
   Line,
   LinearGradient,
   Path,
-  PathProps,
   Polygon,
   Polyline,
   RadialGradient,
   Rect,
   Stop,
-  SvgProps,
   Text,
   TSpan,
   Use,
 } from 'react-native-svg'
+import xmldom from 'xmldom'
 
-namespace utils {
-  export const camelCase = (value: string) => value.replace(/-([a-z])/g, g => g[1].toUpperCase())
-
-  export const camelCaseNodeName = ({ nodeName, nodeValue }: any) => ({
-    nodeName: camelCase(nodeName),
-    nodeValue,
-  })
-
-  export const removePixelsFromNodeValue = ({ nodeName, nodeValue }: any) => ({
-    nodeName,
-    nodeValue: nodeValue.replace('px', ''),
-  })
-
-  export const transformStyle = ({ nodeName, nodeValue, fillProp }: any) => {
-    if (nodeName === 'style') {
-      return nodeValue.split(';').reduce((acc: object, attribute: string) => {
-        const [property, value] = attribute.split(':')
-        if (property === '') {
-          return acc
-        } else {
-          return {
-            ...acc,
-            [camelCase(property)]: fillProp && property === 'fill' ? fillProp : value,
-          }
-        }
-      }, {})
-    }
-    return null
-  }
-
-  export const getEnabledAttributes = (enabledAttributes: string[]) => ({ nodeName }: any) =>
-    enabledAttributes.includes(camelCase(nodeName))
-}
-
-const ACCEPTED_SVG_ELEMENTS = [
-  'svg',
-  'g',
-  'circle',
-  'path',
-  'rect',
-  'defs',
-  'line',
-  'linearGradient',
-  'radialGradient',
-  'stop',
-  'ellipse',
-  'polygon',
-  'polyline',
-  'text',
-  'tspan',
-  'use',
-]
-
-// Attributes from SVG elements that are mapped directly.
-const SVG_ATTS = ['viewBox', 'width', 'height']
-const G_ATTS = [] as string[]
-
-const CIRCLE_ATTS = ['cx', 'cy', 'r']
-const PATH_ATTS = ['d']
-const RECT_ATTS = ['width', 'height', 'rx', 'ry']
-const LINE_ATTS = ['x1', 'y1', 'x2', 'y2']
-const LINEARG_ATTS = LINE_ATTS.concat(['gradientUnits'])
-const RADIALG_ATTS = CIRCLE_ATTS.concat(['gradientUnits'])
-const STOP_ATTS = ['offset', 'stopColor']
-const ELLIPSE_ATTS = ['cx', 'cy', 'rx', 'ry']
-
-const TEXT_ATTS = ['fontFamily', 'fontSize', 'fontWeight', 'textAnchor']
-
-const POLYGON_ATTS = ['points']
-const POLYLINE_ATTS = ['points']
-
-const USE_ATTS = ['href']
-
-const COMMON_ATTS = [
-  'id',
-  'fill',
-  'fillOpacity',
-  'stroke',
-  'strokeWidth',
-  'strokeOpacity',
-  'opacity',
-  'strokeLinecap',
-  'strokeLinejoin',
-  'strokeDasharray',
-  'strokeDashoffset',
-  'x',
-  'y',
-  'rotate',
-  'scale',
-  'origin',
-  'originX',
-  'originY',
-  'transform',
-  'clipPath',
-]
-
-type ArrayElements = Array<string | JSX.Element>
-
-let ind = 0
-
-// https://developer.mozilla.org/en-US/docs/Web/SVG/Element/use#Attributes
-const fixXlinkHref = (node: Element) => {
-  if (node.attributes) {
-    const hrefAttr = Object.keys(node.attributes).find(
-      a => node.attributes[a as any].name === 'href'
-    )
-    const legacyHrefAttr = Object.keys(node.attributes).find(
-      a => node.attributes[a as any].name === 'xlink:href'
-    )
-
-    return node.attributes[(hrefAttr || legacyHrefAttr) as any].value
-  }
-  return null
-}
-
-const fixYPosition = (y: React.ReactText, node: Element): React.ReactText => {
-  if (node.attributes) {
-    const fontSizeAttr = Object.keys(node.attributes).find(
-      a => node.attributes[a as any].name === 'font-size'
-    )
-    if (fontSizeAttr) {
-      return '' + (parseFloat(y as string) - parseFloat(node.attributes[fontSizeAttr as any].value))
-    }
-  }
-  if (!node.parentNode) {
-    return y
-  }
-  return fixYPosition(y, node.parentNode as any)
-}
+const log = debug('rn:react-native-svg-uri')
 
 interface SvgUriProps {
   /**
@@ -175,29 +42,26 @@ interface SvgUriProps {
    * Source path for the .svg file
    * Expects a require('path') to the file or object with uri.
    * e.g. source={require('my-path')}
-   * e.g. source={{ur: 'my-path'}}
+   * e.g. source={{uri: 'my-path'}}
    */
-  source?: ImageURISource
-
-  /**
-   * Direct svg code to render. Similar to inline svg
-   */
-  svgXmlData?: string
+  source: ImageURISource
 
   /**
    * Fill color for the svg object
    */
   fill?: string
 
-  onLoad?: () => any
+  /**
+   * Style properties for the containing View
+   */
   style?: StyleProp<ViewStyle>
-  fillAll?: boolean
+
+  fetcher: typeof fetch
 }
 
 interface State {
-  fill?: string
-  svgXmlData?: string
-  source?: ImageURISource
+  doc?: Document
+  text?: string
 }
 
 export class SvgUri extends Component<SvgUriProps, State> {
@@ -212,379 +76,72 @@ export class SvgUri extends Component<SvgUriProps, State> {
     fillAll: PropTypes.bool,
   }
 
-  private isComponentMounted: boolean
-  state: State
-
-  constructor(props: SvgUriProps) {
-    super(props)
-
-    this.state = { fill: props.fill, svgXmlData: props.svgXmlData }
-    this.isComponentMounted = false
-  }
+  private controller?: AbortController
+  state: State = { doc: undefined }
 
   async componentDidMount() {
-    this.isComponentMounted = true
+    const { source } = this.props
+    this.load(source.uri)
+  }
 
-    // Gets the image data from an URL or a static file
-    if (this.props.source) {
-      const source = resolveAssetSource(this.props.source) || {}
-      const svgXmlData = await this.fetchSVGData(source.uri)
-      // log('svgXmlData %o', svgXmlData)
-
-      // if (this.isComponentMounted) {
-      this.setState({ svgXmlData }, () => {
-        const { onLoad } = this.props
-        if (onLoad) {
-          onLoad()
-        }
-      })
-      // }
+  async componentDidUpdate(prevProps: SvgUriProps) {
+    const { source } = this.props
+    if (source.uri !== prevProps.source.uri) {
+      this.load(source.uri)
     }
   }
 
-  // static getDerivedStateFromProps(nextProps: SvgUriProps, state: State) {
-  //   const newState = {}
+  async load(uri: string | undefined) {
+    if (this.controller) {
+      this.controller.abort()
+    }
+    this.controller = new AbortController()
 
-  //   if (nextProps.svgXmlData !== state.svgXmlData) {
-  //     Object.assign(newState, { svgXmlData: nextProps.svgXmlData })
-  //   }
-
-  //   if (nextProps.fill !== state.fill) {
-  //     Object.assign(newState, { fill: nextProps.fill })
-  //   }
-
-  //   return Object.keys(newState).length > 0 ? newState : null
-  // }
-
-  async componentDidUpdate(prevProps: SvgUriProps, prevState: State) {
-    const { source } = this.props
-    if (source) {
-      const newSource = resolveAssetSource(source) || {}
-      const oldSource = resolveAssetSource(prevProps.source) || {}
-      if (newSource.uri !== oldSource.uri) {
-        log('componentDidUpdate %O', {
-          newSourceURI: newSource.uri,
-          oldSourceURI: oldSource.uri,
-          prevProps,
-          prevState,
-          props: this.props,
-          state: this.state,
-        })
-        const svgXmlData = await this.fetchSVGData(newSource.uri)
-        this.setState({ svgXmlData })
+    if (!uri) {
+      this.setState({ text: undefined, doc: undefined })
+    } else {
+      const { fetcher } = this.props
+      const data = await fetcher(uri, { signal: this.controller.signal })
+      if (data) {
+        const text = await data.text()
+        const doc = new xmldom.DOMParser().parseFromString(text)
+        if (doc) {
+          this.setState({ doc, text })
+        } else {
+          log('no document from string %s', text)
+        }
+      } else {
+        log('no data from uri %s', uri)
       }
     }
   }
 
   componentWillUnmount() {
-    this.isComponentMounted = false
-  }
-
-  fetchSVGData = async (uri: string) => {
-    // log('fetchSVGData %s', uri)
-    try {
-      const dataSig = 'data:image/svg+xml;'
-      if (uri.startsWith(dataSig)) {
-        const encoding = uri.substring(dataSig.length, uri.indexOf(',', dataSig.length))
-        const data = uri.substring(dataSig.length + encoding.length + 1)
-        // log('data uri: encoding %s %o', encoding, { uri, data })
-        return Buffer.from(data, encoding).toString('utf8')
-      } else {
-        const response = await fetch(uri)
-        return await response.text()
-      }
-    } catch (e) {
-      console.error('ERROR SVG', e)
+    if (this.controller) {
+      this.controller.abort()
     }
-  }
-
-  // Remove empty strings from children array
-  trimElementChilden(children: ArrayElements) {
-    for (const child of children) {
-      if (typeof child === 'string') {
-        if (child.trim().length === 0) {
-          children.splice(children.indexOf(child), 1)
-        }
-      }
-    }
-  }
-
-  createSVGElement = (node: Element, childs: ArrayElements): JSX.Element | null => {
-    this.trimElementChilden(childs)
-    let componentAtts = {} as Record<string, React.ReactText>
-    const i = ind++
-    switch (node.nodeName) {
-      case 'svg':
-        componentAtts = this.obtainComponentAtts(node, SVG_ATTS)
-        if (this.props.width) {
-          componentAtts.width = this.props.width
-        }
-        if (this.props.height) {
-          componentAtts.height = this.props.height
-        }
-
-        return (
-          <Svg key={i} {...componentAtts}>
-            {childs}
-          </Svg>
-        )
-      case 'g':
-        componentAtts = this.obtainComponentAtts(node, G_ATTS)
-        return (
-          <G key={i} {...componentAtts}>
-            {childs}
-          </G>
-        )
-      case 'path':
-        componentAtts = this.obtainComponentAtts(node, PATH_ATTS)
-        if (!componentAtts.d) {
-          throw new Error('path does not have d!')
-        }
-        return (
-          <Path key={i} d='' {...componentAtts}>
-            {childs}
-          </Path>
-        )
-      case 'circle':
-        componentAtts = this.obtainComponentAtts(node, CIRCLE_ATTS)
-        return (
-          <Circle key={i} {...componentAtts}>
-            {childs}
-          </Circle>
-        )
-      case 'rect':
-        componentAtts = this.obtainComponentAtts(node, RECT_ATTS)
-        return (
-          <Rect key={i} {...componentAtts}>
-            {childs}
-          </Rect>
-        )
-      case 'line':
-        componentAtts = this.obtainComponentAtts(node, LINE_ATTS)
-        return (
-          <Line key={i} {...componentAtts}>
-            {childs}
-          </Line>
-        )
-      case 'defs':
-        return <Defs key={i}>{childs}</Defs>
-      case 'use':
-        componentAtts = this.obtainComponentAtts(node, USE_ATTS)
-        componentAtts.href = fixXlinkHref(node)!
-        return <Use key={i} href='' {...componentAtts} />
-      case 'linearGradient':
-        componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS)
-        return (
-          <LinearGradient id={node.id + '_lg_' + i} key={i} {...componentAtts}>
-            {childs}
-          </LinearGradient>
-        )
-      case 'radialGradient':
-        componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS)
-        return (
-          <RadialGradient id={node.id + '_rg_' + i} key={i} {...componentAtts}>
-            {childs}
-          </RadialGradient>
-        )
-      case 'stop':
-        componentAtts = this.obtainComponentAtts(node, STOP_ATTS)
-        return (
-          <Stop key={i} {...componentAtts}>
-            {childs}
-          </Stop>
-        )
-      case 'ellipse':
-        componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS)
-        return (
-          <Ellipse key={i} {...componentAtts}>
-            {childs}
-          </Ellipse>
-        )
-      case 'polygon':
-        componentAtts = this.obtainComponentAtts(node, POLYGON_ATTS)
-        if (!componentAtts.points) {
-          throw new Error('polygon does not have points!')
-        }
-        return (
-          <Polygon key={i} points={[]} {...componentAtts}>
-            {childs}
-          </Polygon>
-        )
-      case 'polyline':
-        componentAtts = this.obtainComponentAtts(node, POLYLINE_ATTS)
-        if (!componentAtts.points) {
-          throw new Error('polyline does not have points!')
-        }
-        return (
-          <Polyline key={i} points={[]} {...componentAtts}>
-            {childs}
-          </Polyline>
-        )
-      case 'text':
-        componentAtts = this.obtainComponentAtts(node, TEXT_ATTS)
-        return (
-          <Text key={i} {...componentAtts}>
-            {childs}
-          </Text>
-        )
-      case 'tspan':
-        componentAtts = this.obtainComponentAtts(node, TEXT_ATTS)
-        if (componentAtts.y) {
-          componentAtts.y = fixYPosition(componentAtts.y, node)
-        }
-        return (
-          <TSpan key={i} {...componentAtts}>
-            {childs}
-          </TSpan>
-        )
-      default:
-        log('unhandled type %s %o', node.nodeName, node)
-        return null
-    }
-  }
-
-  obtainComponentAtts = ({ attributes }: Element, enabledAttributes: string[]) => {
-    const styleAtts = {} as Record<string, string>
-
-    if (this.state.fill && this.props.fillAll) {
-      styleAtts.fill = this.state.fill
-    }
-
-    Array.from(attributes).forEach(({ nodeName, nodeValue }) => {
-      Object.assign(
-        styleAtts,
-        utils.transformStyle({
-          nodeName,
-          nodeValue,
-          fillProp: this.state.fill,
-        })
-      )
-    })
-
-    const componentAtts = Array.from(attributes)
-      .map(utils.camelCaseNodeName)
-      .map(utils.removePixelsFromNodeValue)
-      .filter(utils.getEnabledAttributes(enabledAttributes.concat(COMMON_ATTS)))
-      .reduce(
-        (acc, { nodeName, nodeValue }) => {
-          acc[nodeName] =
-            this.state.fill && nodeName === 'fill' && nodeValue !== 'none'
-              ? this.state.fill
-              : nodeValue
-          return acc
-        },
-        {} as Record<string, string>
-      )
-    Object.assign(componentAtts, styleAtts)
-
-    return componentAtts
-  }
-
-  inspectNode = (node: ChildNode): JSX.Element | null => {
-    // Only process accepted elements
-    if (!ACCEPTED_SVG_ELEMENTS.includes(node.nodeName)) {
-      return <View key={ind++} />
-    }
-
-    // Process the xml node
-    const arrayElements: ArrayElements = []
-
-    // if have children process them.
-    // Recursive function.
-    if (node.childNodes && node.childNodes.length > 0) {
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < node.childNodes.length; i++) {
-        const isTextValue = node.childNodes[i].nodeValue
-        if (isTextValue) {
-          arrayElements.push(node.childNodes[i].nodeValue as string)
-        } else {
-          const nodo = this.inspectNode(node.childNodes[i])
-          if (nodo != null) {
-            arrayElements.push(nodo)
-          }
-        }
-      }
-    }
-
-    return this.createSVGElement(node as any, arrayElements)
   }
 
   render() {
-    try {
-      if (this.state.svgXmlData == null) {
-        return null
-      }
-
-      ind = 0
-      const inputSVG = this.state.svgXmlData
-        .substring(
-          this.state.svgXmlData.indexOf('<svg '),
-          this.state.svgXmlData.indexOf('</svg>') + 6
-        )
-        .replace(/<!-(.*?)->/g, '')
-
-      // const doc = new xmldom.DOMParser().parseFromString(inputSVG)
-      const doc = new xmldom.DOMParser().parseFromString(this.state.svgXmlData)
-
-      log('doc %o', doc)
-      // const rootSVG = this.inspectNode(doc.childNodes[0])
-      const rootSVG = renderNode('root', {}, doc as any)
-
-      return <View style={this.props.style}>{rootSVG}</View>
-    } catch (e) {
-      console.error('ERROR SVG', e)
+    const { doc } = this.state
+    if (doc == null) {
       return null
     }
+
+    const overrideSvgProps = {
+      width: this.props.width,
+      height: this.props.height,
+      fill: this.props.fill,
+    }
+
+    return (
+      <View style={this.props.style}>{renderNode(overrideSvgProps, 'root', {}, doc as any)}</View>
+    )
   }
 }
 
 type NodeProps = Record<string, React.ReactText>
 type Styles = Record<string, NodeProps>
-
-const obtainProps = <T extends {}>(
-  styles: Styles,
-  { attributes }: Element,
-  enabledAttributes: Array<keyof T>
-): T => {
-  const props = {} as Record<string, string>
-
-  // if (this.state.fill && this.props.fillAll) {
-  //   styleAtts.fill = this.state.fill
-  // }
-
-  Array.from(attributes).forEach(({ nodeName, nodeValue }) => {
-    Object.assign(
-      props,
-      utils.transformStyle({
-        nodeName,
-        nodeValue,
-      })
-    )
-  })
-
-  const componentAtts = Array.from(attributes)
-    .map(utils.camelCaseNodeName)
-    .map(utils.removePixelsFromNodeValue)
-    .filter(utils.getEnabledAttributes((enabledAttributes as string[]).concat(COMMON_ATTS)))
-    .reduce(
-      (acc, { nodeName, nodeValue }) => {
-        acc[nodeName] =
-          // this.state.fill && nodeName === 'fill' && nodeValue !== 'none'
-          //   ? this.state.fill
-          // : nodeValue
-          nodeValue
-        return acc
-      },
-      {} as Record<string, string>
-    )
-  // Object.assign(componentAtts, styleAtts)
-
-  if (componentAtts.class) {
-    Object.assign(componentAtts, styles[componentAtts.class], componentAtts)
-  }
-
-  return componentAtts as any
-}
 
 const parseStyles = (node: Element): Styles => {
   const res = css.parse(node.textContent || '', { silent: true })
@@ -624,163 +181,572 @@ const parseStyles = (node: Element): Styles => {
   return styles
 }
 
-const renderNode = (path: string, styles: Styles, node: Element): React.ReactNode => {
+const stringAttribute = (node: Element, attr: string): string | undefined => {
+  if (node.hasAttribute(attr)) {
+    return node.getAttribute(attr) as string
+  }
+}
+
+const requiredStringAttribute = (node: Element, attr: string): string => {
+  const value = stringAttribute(node, attr)
+  if (!value) {
+    throw new Error(`required attribute '${attr}' was not present`)
+  }
+  return value
+}
+
+const hrefAttribute = (node: Element): ImageProperties['source'] | undefined => {
+  return stringAttribute(node, 'href') || (stringAttribute(node, 'xlink:href') as any)
+}
+
+const requiredHrefAttribute = (node: Element): ImageProperties['source'] => {
+  const value = hrefAttribute(node)
+  if (!value) {
+    throw new Error(`required attribute 'href' was not present`)
+  }
+  return value
+}
+
+type NumberProp = string | number
+const numericAttribute = (node: Element, attr: string): NumberProp | undefined => {
+  if (node.hasAttribute(attr)) {
+    return node.getAttribute(attr) as string
+  }
+}
+
+const numericOrArrayAttribute = (node: Element, attr: string): number | number[] | undefined => {
+  const str = stringAttribute(node, attr)
+  if (str) {
+    const arr = str.split(/(,| )/g).map(parseFloat)
+    if (arr.length === 1) {
+      return arr[0]
+    } else {
+      return arr
+    }
+  }
+}
+
+const filter = <T extends { [key: string]: any }>(o: T): T => {
+  return Object.keys(o)
+    .filter(key => typeof o[key] !== 'undefined')
+    .reduce(
+      (res, key) => {
+        res[key] = o[key]
+        return res
+      },
+      {} as T
+    )
+}
+
+const fillProps = (node: Element): rnsvg.FillProps =>
+  filter({
+    fill: stringAttribute(node, 'fill'),
+    fillOpacity: numericAttribute(node, 'fill-opacity'),
+    fillRule: stringAttribute(node, 'fill-rule') as rnsvg.FillRule,
+  })
+
+const clipProps = (node: Element): rnsvg.ClipProps =>
+  filter({
+    clipRule: stringAttribute(node, 'clip-rule') as rnsvg.FillRule,
+    clipPath: stringAttribute(node, 'clip-path'),
+  })
+
+const definitionProps = (node: Element): rnsvg.DefinitionProps =>
+  filter({
+    id: stringAttribute(node, 'id'),
+  })
+
+const strokeProps = (node: Element): rnsvg.StrokeProps =>
+  filter({
+    stroke: stringAttribute(node, 'stroke'),
+    strokeWidth: numericAttribute(node, 'stroke-width'),
+    strokeOpacity: numericAttribute(node, 'stroke-opacity'),
+    strokeDasharray: numericOrArrayAttribute(node, 'stroke-dasharray'),
+    strokeDashoffset: numericAttribute(node, 'stroke-dashoffset'),
+    strokeLinecap: stringAttribute(node, 'stroke-linecap') as rnsvg.Linecap,
+    strokeLinejoin: stringAttribute(node, 'stroke-linejoin') as rnsvg.Linejoin,
+    strokeMiterlimit: numericAttribute(node, 'stroke-miterlimit'),
+  })
+
+const fontObject = (node: Element): rnsvg.FontObject =>
+  filter({
+    fontStyle: stringAttribute(node, 'font-style') as rnsvg.FontStyle,
+    fontVariant: stringAttribute(node, 'font-variant') as rnsvg.FontVariant,
+    fontWeight: stringAttribute(node, 'font-weight') as rnsvg.FontWeight,
+    fontStretch: stringAttribute(node, 'font-stretch') as rnsvg.FontStretch,
+    fontSize: numericAttribute(node, 'font-size'),
+    fontFamily: stringAttribute(node, 'font-family'),
+    textAnchor: stringAttribute(node, 'text-anchor') as rnsvg.TextAnchor,
+    textDecoration: stringAttribute(node, 'text-decoration') as rnsvg.TextDecoration,
+    letterSpacing: numericAttribute(node, 'letter-spacing'),
+    wordSpacing: numericAttribute(node, 'word-spacing'),
+    kerning: numericAttribute(node, 'kerning'),
+    fontVariantLigatures: stringAttribute(
+      node,
+      'fontVariantLigatures'
+    ) as rnsvg.FontVariantLigatures,
+  })
+
+const fontProps = (node: Element): rnsvg.FontProps =>
+  filter({
+    ...fontObject(node),
+  })
+
+const transformObject = (node: Element): rnsvg.TransformObject =>
+  filter({
+    scale: numericAttribute(node, 'scale'),
+    rotate: numericAttribute(node, 'rotate'),
+    rotation: numericAttribute(node, 'rotation'),
+    translate: numericAttribute(node, 'translate'),
+    // translateX: numericAttribute(node, 'translateX'),
+    // translateY: numericAttribute(node, 'translateY'),
+    x: numericAttribute(node, 'x'),
+    y: numericAttribute(node, 'y'),
+    origin: numericAttribute(node, 'origin'),
+    // originX: numericAttribute(node, 'originX'),
+    // originY: numericAttribute(node, 'originY'),
+    skew: numericAttribute(node, 'skew'),
+    // skewX: numericAttribute(node, 'skewX'),
+    // skewY: numericAttribute(node, 'skewY'),
+  })
+
+const transformProps = (node: Element): rnsvg.TransformProps =>
+  filter({
+    ...transformObject(node),
+    // transform?: ColumnMajorTransformMatrix | string | TransformObject,
+  })
+
+const commonMaskProps = (node: Element): rnsvg.CommonMaskProps =>
+  filter({
+    mask: stringAttribute(node, 'mask'),
+  })
+
+const commonPathProps = (node: Element): rnsvg.CommonPathProps =>
+  filter({
+    ...fillProps(node),
+    ...strokeProps(node),
+    ...clipProps(node),
+    ...transformProps(node),
+    ...definitionProps(node),
+    ...commonMaskProps(node),
+  })
+
+const applyClass = (styles: Styles, node: Element): object => {
+  const class1 = node.getAttribute('class')
+  if (class1) {
+    if (styles[class1]) {
+      return styles[class1]
+    } else {
+      log('no style for class %s (%o)', class1, styles)
+    }
+  }
+  return {}
+}
+
+// Element props
+const circleProps = (styles: Styles, node: Element): rnsvg.CircleProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      cx: numericAttribute(node, 'cx'),
+      cy: numericAttribute(node, 'cy'),
+      opacity: numericAttribute(node, 'opacity'),
+      r: numericAttribute(node, 'r'),
+    }),
+  })
+
+const clipPathProps = (styles: Styles, node: Element): rnsvg.ClipPathProps =>
+  filter({
+    ...applyClass(styles, node),
+    id: requiredStringAttribute(node, 'id'),
+  })
+
+const ellipseProps = (styles: Styles, node: Element): rnsvg.EllipseProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      cx: numericAttribute(node, 'cx'),
+      cy: numericAttribute(node, 'cy'),
+      opacity: numericAttribute(node, 'opacity'),
+      rx: numericAttribute(node, 'rx'),
+      ry: numericAttribute(node, 'ry'),
+    }),
+  })
+
+const gProps = (styles: Styles, node: Element): rnsvg.GProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      opacity: numericAttribute(node, 'opacity'),
+    }),
+  })
+
+const imageProps = (styles: Styles, node: Element): rnsvg.ImageProps =>
+  filter({
+    x: numericAttribute(node, 'x'),
+    y: numericAttribute(node, 'y'),
+    width: numericAttribute(node, 'width'),
+    height: numericAttribute(node, 'height'),
+    href: requiredHrefAttribute(node),
+    preserveAspectRatio: stringAttribute(node, 'preserveAspectRatio'),
+    opacity: numericAttribute(node, 'opacity'),
+  })
+
+const lineProps = (styles: Styles, node: Element): rnsvg.LineProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      opacity: numericAttribute(node, 'opacity'),
+      x1: numericAttribute(node, 'x1'),
+      x2: numericAttribute(node, 'x2'),
+      y1: numericAttribute(node, 'y1'),
+      y2: numericAttribute(node, 'y2'),
+    }),
+  })
+
+const linearGradientProps = (styles: Styles, node: Element): rnsvg.LinearGradientProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...filter({
+      x1: numericAttribute(node, 'x1'),
+      x2: numericAttribute(node, 'x2'),
+      y1: numericAttribute(node, 'y1'),
+      y2: numericAttribute(node, 'y2'),
+      gradientUnits: numericAttribute(node, 'gradientUnits') as rnsvg.Units,
+      id: requiredStringAttribute(node, 'id'),
+    }),
+  })
+
+const pathProps = (styles: Styles, node: Element): rnsvg.PathProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      d: requiredStringAttribute(node, 'd'),
+      opacity: numericAttribute(node, 'opacity'),
+    }),
+  })
+
+const patternProps = (styles: Styles, node: Element): rnsvg.PatternProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...filter({
+      id: requiredStringAttribute(node, 'id'),
+      x: numericAttribute(node, 'x'),
+      y: numericAttribute(node, 'y'),
+      width: numericAttribute(node, 'width'),
+      height: numericAttribute(node, 'height'),
+      patternTransform: stringAttribute(node, 'patternTransform'),
+      patternUnits: numericAttribute(node, 'patternUnits') as rnsvg.Units,
+      patternContentUnits: numericAttribute(node, 'patternContentUnits') as rnsvg.Units,
+      viewBox: stringAttribute(node, 'viewBox'),
+      preserveAspectRatio: stringAttribute(node, 'preserveAspectRatio'),
+    }),
+  })
+
+const polygonProps = (styles: Styles, node: Element): rnsvg.PolygonProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      opacity: numericAttribute(node, 'opacity'),
+      points: requiredStringAttribute(node, 'points'),
+    }),
+  })
+
+const polylineProps = (styles: Styles, node: Element): rnsvg.PolylineProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      opacity: numericAttribute(node, 'opacity'),
+      points: requiredStringAttribute(node, 'points'),
+    }),
+  })
+
+const radialGradientProps = (styles: Styles, node: Element): rnsvg.RadialGradientProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...filter({
+      fx: numericAttribute(node, 'fx'),
+      fy: numericAttribute(node, 'fy'),
+      rx: numericAttribute(node, 'rx'),
+      ry: numericAttribute(node, 'ry'),
+      cx: numericAttribute(node, 'cx'),
+      cy: numericAttribute(node, 'cy'),
+      r: numericAttribute(node, 'r'),
+      gradientUnits: numericAttribute(node, 'gradientUnits') as rnsvg.Units,
+      id: requiredStringAttribute(node, 'id'),
+    }),
+  })
+
+const rectProps = (styles: Styles, node: Element): rnsvg.RectProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      x: numericAttribute(node, 'x'),
+      y: numericAttribute(node, 'y'),
+      width: numericAttribute(node, 'width'),
+      height: numericAttribute(node, 'height'),
+      rx: numericAttribute(node, 'rx'),
+      ry: numericAttribute(node, 'ry'),
+      opacity: numericAttribute(node, 'opacity'),
+    }),
+  })
+
+const stopProps = (styles: Styles, node: Element): rnsvg.StopProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...filter({
+      stopColor: stringAttribute(node, 'stop-color'),
+      stopOpacity: numericAttribute(node, 'stop-opacity'),
+      offset: numericAttribute(node, 'offset'),
+    }),
+  })
+
+const svgProps = (styles: Styles, node: Element): rnsvg.SvgProps =>
+  filter({
+    ...filter({
+      width: numericAttribute(node, 'width'),
+      height: numericAttribute(node, 'height'),
+      viewBox: stringAttribute(node, 'viewBox'),
+      preserveAspectRatio: stringAttribute(node, 'preserveAspectRatio'),
+    }),
+  })
+
+const symbolProps = (styles: Styles, node: Element): rnsvg.SymbolProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...filter({
+      id: requiredStringAttribute(node, 'id'),
+      viewBox: stringAttribute(node, 'viewBox'),
+      preserveAspectRatio: stringAttribute(node, 'preserveAspectRatio'),
+      opacity: numericAttribute(node, 'opacity'),
+    }),
+  })
+
+const tSpanProps = (styles: Styles, node: Element): rnsvg.TSpanProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...fontProps(node),
+    ...filter({
+      dx: numericAttribute(node, 'dx'),
+      dy: numericAttribute(node, 'dy'),
+    }),
+  })
+
+const textSpecificProps = (node: Element): rnsvg.TextSpecificProps =>
+  filter({
+    ...commonPathProps(node),
+    ...fontProps(node),
+    ...filter({
+      alignmentBaseline: stringAttribute(node, 'alignment-baseline') as rnsvg.AlignmentBaseline,
+      baselineShift: stringAttribute(node, 'baseline-shift') as rnsvg.BaselineShift,
+      // verticalAlign: numericAttribute(node, 'vertical-align'),
+      lengthAdjust: stringAttribute(node, 'lengthAdjust') as rnsvg.LengthAdjust,
+      textLength: numericAttribute(node, 'textLength'),
+      // fontData?: null | { [name: string]: any },
+      fontFeatureSettings: stringAttribute(node, 'fontFeatureSettings'),
+    }),
+  })
+
+const textProps = (styles: Styles, node: Element): rnsvg.TextProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...textSpecificProps(node),
+    ...filter({
+      dx: numericAttribute(node, 'dx'),
+      dy: numericAttribute(node, 'dy'),
+      opacity: numericAttribute(node, 'opacity'),
+    }),
+  })
+
+const textPathProps = (styles: Styles, node: Element): rnsvg.TextPathProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...textSpecificProps(node),
+    ...filter({
+      xlinkHref: stringAttribute(node, 'xlink:href'),
+      href: requiredStringAttribute(node, 'href'),
+      startOffset: numericAttribute(node, 'startOffset'),
+      method: stringAttribute(node, 'method') as rnsvg.TextPathMethod,
+      spacing: stringAttribute(node, 'spacing') as rnsvg.TextPathSpacing,
+      midLine: stringAttribute(node, 'midLine') as rnsvg.TextPathMidLine,
+    }),
+  })
+
+const useProps = (styles: Styles, node: Element): rnsvg.UseProps =>
+  filter({
+    ...applyClass(styles, node),
+    ...commonPathProps(node),
+    ...filter({
+      xlinkHref: stringAttribute(node, 'xlink:href'),
+      href: requiredStringAttribute(node, 'href'),
+      width: numericAttribute(node, 'width'),
+      height: numericAttribute(node, 'height'),
+      x: numericAttribute(node, 'x'),
+      y: numericAttribute(node, 'y'),
+      opacity: numericAttribute(node, 'opacity'),
+    }),
+  })
+
+interface SvgProps {
+  width?: number | string
+  height?: number | string
+  fill?: string
+}
+
+const renderNode = (
+  overrideSvgProps: SvgProps,
+  path: string,
+  styles: Styles,
+  node: Element
+): React.ReactNode => {
   if (!node.nodeName) {
     return null
   }
 
-  const key = `${path}.${node.nodeName || ''}`
+  const key = path + '.' + node.nodeName
+  const children = node.childNodes
+    ? Array.from(node.childNodes).map((child, i) =>
+        renderNode(overrideSvgProps, key + '[' + i + ']', styles, child as Element)
+      )
+    : null
 
   switch (node.nodeName) {
     case 'xml':
     case '#document':
-      return (
-        <React.Fragment>
-          {Array.from(node.childNodes).map(child => renderNode(key, styles, child as Element))}
-        </React.Fragment>
-      )
+      return children
 
     case '#comment':
     case '#text':
       return null
 
-    case 'svg': {
-      const props = obtainProps<SvgProps>(styles, node, [])
-      return (
-        <Svg key={key} {...props}>
-          <React.Fragment>
-            {Array.from(node.childNodes).map((child, i) =>
-              renderNode(`${key}${i}`, styles, child as Element)
-            )}
-          </React.Fragment>
-        </Svg>
-      )
-    }
+    case 'svg':
+      if (node.attributes) {
+        return (
+          <Svg key={key} {...svgProps(styles, node)} {...overrideSvgProps}>
+            {children}
+          </Svg>
+        )
+      } else {
+        return null
+      }
 
-    case 'style': {
-      styles = { ...styles, ...parseStyles(node) }
+    case 'style':
+      Object.assign(styles, styles, parseStyles(node))
       return null
-    }
 
-    case 'g': {
-      const props = obtainProps<GProps>(styles, node, [])
+    case 'g':
       return (
-        <G key={key} {...props}>
-          <React.Fragment>
-            {Array.from(node.childNodes).map((child, i) =>
-              renderNode(`${key}${i}`, styles, child as Element)
-            )}
-          </React.Fragment>
+        <G key={key} {...gProps(styles, node)}>
+          {children}
         </G>
       )
-    }
-    case 'path': {
-      const props = obtainProps<PathProps>(styles, node, PATH_ATTS as any)
+
+    case 'path':
       return (
-        <Path key={key} {...props}>
-          <React.Fragment>
-            {Array.from(node.childNodes).map((child, i) =>
-              renderNode(`${key}${i}`, styles, child as Element)
-            )}
-          </React.Fragment>
+        <Path key={key} {...pathProps(styles, node)}>
+          {children}
         </Path>
       )
-    }
-    case 'circle': {
-      const props = obtainProps<CircleProps>(styles, node, CIRCLE_ATTS as any)
+
+    case 'clipPath':
       return (
-        <Circle key={key} {...props}>
-          {Array.from(node.childNodes).map((child, i) =>
-            renderNode(`${key}${i}`, styles, child as Element)
-          )}
+        <ClipPath key={key} {...clipPathProps(styles, node)}>
+          {children}
+        </ClipPath>
+      )
+
+    case 'circle':
+      return (
+        <Circle key={key} {...circleProps(styles, node)}>
+          {children}
         </Circle>
       )
-    }
-    // case 'rect':
-    //   componentAtts = this.obtainComponentAtts(node, RECT_ATTS)
-    //   return (
-    //     <Rect key={i} {...componentAtts}>
-    //       {childs}
-    //     </Rect>
-    //   )
-    // case 'line':
-    //   componentAtts = this.obtainComponentAtts(node, LINE_ATTS)
-    //   return (
-    //     <Line key={i} {...componentAtts}>
-    //       {childs}
-    //     </Line>
-    //   )
-    // case 'defs':
-    //   return <Defs key={i}>{childs}</Defs>
-    // case 'use':
-    //   componentAtts = this.obtainComponentAtts(node, USE_ATTS)
-    //   componentAtts.href = fixXlinkHref(node)!
-    //   return <Use key={i} href='' {...componentAtts} />
-    // case 'linearGradient':
-    //   componentAtts = this.obtainComponentAtts(node, LINEARG_ATTS)
-    //   return (
-    //     <LinearGradient id={node.id + '_lg_' + i} key={i} {...componentAtts}>
-    //       {childs}
-    //     </LinearGradient>
-    //   )
-    // case 'radialGradient':
-    //   componentAtts = this.obtainComponentAtts(node, RADIALG_ATTS)
-    //   return (
-    //     <RadialGradient id={node.id + '_rg_' + i} key={i} {...componentAtts}>
-    //       {childs}
-    //     </RadialGradient>
-    //   )
-    // case 'stop':
-    //   componentAtts = this.obtainComponentAtts(node, STOP_ATTS)
-    //   return (
-    //     <Stop key={i} {...componentAtts}>
-    //       {childs}
-    //     </Stop>
-    //   )
-    // case 'ellipse':
-    //   componentAtts = this.obtainComponentAtts(node, ELLIPSE_ATTS)
-    //   return (
-    //     <Ellipse key={i} {...componentAtts}>
-    //       {childs}
-    //     </Ellipse>
-    //   )
-    // case 'polygon':
-    //   componentAtts = this.obtainComponentAtts(node, POLYGON_ATTS)
-    //   if (!componentAtts.points) {
-    //     throw new Error('polygon does not have points!')
-    //   }
-    //   return (
-    //     <Polygon key={i} points={[]} {...componentAtts}>
-    //       {childs}
-    //     </Polygon>
-    //   )
-    // case 'polyline':
-    //   componentAtts = this.obtainComponentAtts(node, POLYLINE_ATTS)
-    //   if (!componentAtts.points) {
-    //     throw new Error('polyline does not have points!')
-    //   }
-    //   return (
-    //     <Polyline key={i} points={[]} {...componentAtts}>
-    //       {childs}
-    //     </Polyline>
-    //   )
-    // case 'text':
-    //   componentAtts = this.obtainComponentAtts(node, TEXT_ATTS)
-    //   return (
-    //     <Text key={i} {...componentAtts}>
-    //       {childs}
-    //     </Text>
-    //   )
-    // case 'tspan':
-    //   componentAtts = this.obtainComponentAtts(node, TEXT_ATTS)
-    //   if (componentAtts.y) {
-    //     componentAtts.y = fixYPosition(componentAtts.y, node)
-    //   }
-    //   return (
-    //     <TSpan key={i} {...componentAtts}>
-    //       {childs}
-    //     </TSpan>
-    //   )
+
+    case 'rect':
+      return (
+        <Rect key={key} {...rectProps(styles, node)}>
+          {children}
+        </Rect>
+      )
+
+    case 'line':
+      return (
+        <Line key={key} {...lineProps(styles, node)}>
+          {children}
+        </Line>
+      )
+
+    case 'defs':
+      return <Defs key={key}>{children}</Defs>
+
+    case 'use':
+      return <Use key={key} {...useProps(styles, node)} />
+
+    case 'linearGradient':
+      return (
+        <LinearGradient key={key} {...linearGradientProps(styles, node)}>
+          {children}
+        </LinearGradient>
+      )
+
+    case 'radialGradient':
+      return (
+        <RadialGradient key={key} {...radialGradientProps(styles, node)}>
+          {children}
+        </RadialGradient>
+      )
+
+    case 'stop':
+      return (
+        <Stop key={key} {...stopProps(styles, node)}>
+          {children}
+        </Stop>
+      )
+
+    case 'ellipse':
+      return (
+        <Ellipse key={key} {...ellipseProps(styles, node)}>
+          {children}
+        </Ellipse>
+      )
+
+    case 'polygon':
+      return (
+        <Polygon key={key} {...polygonProps(styles, node)}>
+          {children}
+        </Polygon>
+      )
+
+    case 'polyline':
+      return (
+        <Polyline key={key} {...polylineProps(styles, node)}>
+          {children}
+        </Polyline>
+      )
+
+    case 'text':
+      return (
+        <Text key={key} {...textProps(styles, node)}>
+          {children}
+        </Text>
+      )
+
+    case 'tspan':
+      return (
+        <TSpan key={key} {...tSpanProps(styles, node)}>
+          {children}
+        </TSpan>
+      )
+
     default:
       log('unhandled type %s %o', node.nodeName, node)
       return null

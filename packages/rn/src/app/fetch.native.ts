@@ -40,7 +40,7 @@ export const rnfetch = async (input: RequestInfo, init?: RequestInit): Promise<R
 
         statusText: `Data URI`,
 
-        text: async () => base64,
+        text: async () => Buffer.from(base64, encoding).toString(),
         arrayBuffer: async (): Promise<ArrayBuffer> => Buffer.from(base64, encoding),
       } as any
     } else {
