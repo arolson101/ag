@@ -217,7 +217,15 @@ class NotifyingInput extends React.Component<NotifyingInputProps> {
   }
 
   render() {
-    return <Input {...this.props} ref={this.props.textRef} />
+    return (
+      <Input
+        {...this.props}
+        ref={this.props.textRef}
+        autoCapitalize='none'
+        autoCorrect={false}
+        keyboardType='url'
+      />
+    )
   }
 }
 

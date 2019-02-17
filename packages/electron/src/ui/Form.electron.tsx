@@ -4,7 +4,11 @@ import React from 'react'
 export class Form extends React.PureComponent<FormProps> {
   render() {
     const { children } = this.props
-    return <form onSubmit={this.onSubmit}>{children}</form>
+    return (
+      <form style={{ flex: 1 }} onSubmit={this.onSubmit}>
+        {children}
+      </form>
+    )
   }
 
   onSubmit = (event: React.FormEvent<HTMLFormElement>) => {

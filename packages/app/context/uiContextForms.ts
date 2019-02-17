@@ -1,27 +1,5 @@
 import { UiContext } from './uiContext'
 
-export interface CheckboxFieldProps<Values = any> {
-  field: keyof Values & string
-  label: string
-  disabled?: boolean
-}
-
-export interface CurrencyFieldProps<Values = any> {
-  field: keyof Values & string
-  label: string
-  placeholder?: string
-  autoFocus?: boolean
-  onSubmitEditing?: () => any
-  disabled?: boolean
-}
-
-export interface DateFieldProps<Values = any> {
-  field: keyof Values & string
-  label: string
-  collapsed?: boolean
-  disabled?: boolean
-}
-
 export interface FormProps<Values = any> {
   onSubmit: () => void
 }
@@ -31,18 +9,32 @@ export interface SelectFieldItem {
   value: string | number
 }
 
-export interface SelectFieldProps<Values = any> {
+interface CommonFieldProps<Values> {
   field: keyof Values & string
   label: string
+  disabled?: boolean
+  flex?: number
+}
+
+export interface CheckboxFieldProps<Values = any> extends CommonFieldProps<Values> {}
+
+export interface CurrencyFieldProps<Values = any> extends CommonFieldProps<Values> {
+  placeholder?: string
+  autoFocus?: boolean
+  onSubmitEditing?: () => any
+}
+
+export interface DateFieldProps<Values = any> extends CommonFieldProps<Values> {
+  collapsed?: boolean
+}
+
+export interface SelectFieldProps<Values = any> extends CommonFieldProps<Values> {
   items: SelectFieldItem[]
   onValueChange?: (value: string | number) => any
   searchable?: boolean
-  disabled?: boolean
 }
 
-export interface TextFieldProps<Values = any> {
-  field: keyof Values & string
-  label: string
+export interface TextFieldProps<Values = any> extends CommonFieldProps<Values> {
   placeholder?: string
   secure?: boolean
   rows?: number
@@ -51,17 +43,13 @@ export interface TextFieldProps<Values = any> {
   onSubmitEditing?: () => any
   noCorrect?: boolean
   inputRef?: any
-  disabled?: boolean
 }
 
-export interface UrlFieldProps<Values = any> {
-  field: keyof Values & string
+export interface UrlFieldProps<Values = any> extends CommonFieldProps<Values> {
   favicoField: keyof Values & string
-  label: string
   placeholder?: string
   autoFocus?: boolean
   onSubmitEditing?: () => any
-  disabled?: boolean
 }
 
 export const typedFields = <V extends {}>(uiContext: UiContext) => {

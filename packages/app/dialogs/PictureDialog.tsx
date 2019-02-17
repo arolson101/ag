@@ -1,8 +1,9 @@
 import debug from 'debug'
+import { Formik } from 'formik'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppContext } from '../context'
+import { AppContext, typedFields } from '../context'
 import { getImage, getImageList } from '../online'
 import { ImageSource } from '../util'
 
@@ -18,6 +19,10 @@ interface State {
   url: string
   links?: string[]
   images: Record<string, ImageSource>
+}
+
+interface Values {
+  url: string
 }
 
 const thumbnailSize = 100
@@ -66,6 +71,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   getImages = async () => {
     const { url } = this.state
+    log('getImages %s', url)
     const links = await getImageList(url, this.controller.signal, this.context)
     this.setState({ links })
     await Promise.all(
@@ -86,23 +92,44 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   render() {
     const { isOpen, url } = this.props
-    const {
-      intl,
-      ui: { Dialog, DialogBody, DialogFooter, Spinner, Row, Grid, Tile, Image, Text },
-    } = this.context
+    const { intl, ui } = this.context
+    const { Dialog, DialogBody, DialogFooter, Spinner, Row, Grid, Tile, Image } = ui
+    const { Form, TextField } = typedFields<Values>(ui)
     const { links, images } = this.state
+
+    const initialValues: Values = {
+      url,
+    }
     // log('render')
 
     return (
       <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
         <DialogBody>
           <Row>
-            <Text header>{url}</Text>
+            <Formik<Values>
+              initialValues={initialValues}
+              onSubmit={async (values, factions) => {
+                try {
+                  log('onSubmit %o', values)
+                  this.setState({ url: values.url, links: undefined }, this.getImages)
+                } finally {
+                  factions.setSubmitting(false)
+                }
+              }}
+            >
+              {formApi => (
+                <Form onSubmit={formApi.handleSubmit}>
+                  <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
+                </Form>
+              )}
+            </Formik>
           </Row>
           {!links ? (
             <Spinner />
           ) : (
             <Grid
+              flex={1}
+              scrollable
               size={thumbnailSize}
               data={links}
               keyExtractor={(link: string) => link}
@@ -161,5 +188,13 @@ const messages = defineMessages({
   cancel: {
     id: 'PictureDialog.cancel',
     defaultMessage: 'Cancel',
+  },
+  update: {
+    id: 'PictureDialog.update',
+    defaultMessage: 'Update',
+  },
+  urlLabel: {
+    id: 'PictureDialog.urlLabel',
+    defaultMessage: 'URL',
   },
 })

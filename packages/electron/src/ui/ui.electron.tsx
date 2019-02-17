@@ -77,7 +77,13 @@ export const ui: UiContext = {
 
   DialogBody: ({ children }) => (
     <div
-      style={{ padding: 5, maxHeight: 600, overflow: 'auto' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 5,
+        maxHeight: 600,
+        overflow: 'auto',
+      }}
       className={classNames(Classes.DIALOG_BODY)}
     >
       {children}
@@ -112,13 +118,15 @@ export const ui: UiContext = {
   Column: ({ top, bottom, center, flex, children }) => (
     <div style={{ display: 'flex', flexDirection: 'column', flex }}>{children}</div>
   ),
-  Grid: ({ data, renderItem, size, onClick }) => (
+  Grid: ({ data, renderItem, size, onClick, flex, scrollable }) => (
     <div
       onClick={onClick}
       style={{
         display: 'grid',
         justifyContent: 'space-between',
         gridTemplateColumns: `repeat(auto-fill, ${size}px)`,
+        flex,
+        overflow: scrollable ? 'auto' : undefined,
       }}
     >
       {data.map((item, idx) => (

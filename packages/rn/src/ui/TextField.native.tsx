@@ -69,6 +69,7 @@ export class TextField<Values> extends React.PureComponent<TextField.Props<Value
                   secureTextEntry={secure}
                   numberOfLines={rows}
                   autoCapitalize={noCorrect ? 'none' : undefined}
+                  autoCorrect={noCorrect ? false : undefined}
                   multiline={rows ? rows > 0 : undefined}
                   // returnKeyType={returnKeyType}
                   ref={this.textInput}

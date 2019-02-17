@@ -1,5 +1,5 @@
 import { TextFieldProps } from '@ag/app'
-import { FormGroup, InputGroup, Intent, TextArea } from '@blueprintjs/core'
+import { Classes, FormGroup, InputGroup, Intent, TextArea } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
 
@@ -15,7 +15,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
   }
 
   render() {
-    const { field: name, label, disabled, autoFocus, placeholder, secure, rows } = this.props
+    const { field: name, label, autoFocus, placeholder, secure, rows, flex, disabled } = this.props
     const id = name
     return (
       <Field name={name}>
@@ -29,6 +29,8 @@ export class TextField extends React.PureComponent<TextFieldProps> {
               label={label}
               labelFor={id}
               disabled={disabled}
+              style={{ flex }}
+              contentClassName={Classes.FLEX_EXPANDER}
             >
               {rows && rows > 1 ? (
                 <TextArea
@@ -39,6 +41,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   inputRef={this.inputRef}
                   fill
                   disabled={disabled}
+                  style={{ flex: 1 }}
                   {...field}
                 />
               ) : (
@@ -50,6 +53,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   placeholder={placeholder}
                   inputRef={this.inputRef}
                   disabled={disabled}
+                  style={{ flex: 1 }}
                   {...field}
                 />
               )}

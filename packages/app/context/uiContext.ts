@@ -50,6 +50,8 @@ export interface GridProps<T = any> {
   keyExtractor: (item: T, index: number) => string
   size: number
   onClick?: (e: React.SyntheticEvent) => any
+  flex?: number
+  scrollable?: boolean
 }
 
 export interface ButtonConfig {

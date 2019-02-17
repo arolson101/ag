@@ -26,6 +26,11 @@ export const getImageList = async (from: string, signal: AbortSignal, context: A
     throw new Error(result.statusText)
   }
 
+  const contentType = result.headers.get('content-type')
+  if (contentType && contentType.startsWith('image/')) {
+    return [from]
+  }
+
   const body = await result.text()
   // log('body %O', { body })
 

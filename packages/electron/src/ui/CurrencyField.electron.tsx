@@ -1,11 +1,11 @@
 import { CurrencyFieldProps } from '@ag/app'
-import { FormGroup, Intent } from '@blueprintjs/core'
+import { Classes, FormGroup, Intent } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
 
 export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
   render() {
-    const { field: name, label, placeholder, disabled } = this.props
+    const { field: name, label, placeholder, flex, disabled } = this.props
     const id = name
     return (
       <Field name={name}>
@@ -18,6 +18,8 @@ export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
               label={label}
               labelFor={id}
               disabled={disabled}
+              style={{ flex }}
+              contentClassName={Classes.FLEX_EXPANDER}
             >
               <input
                 id={id}

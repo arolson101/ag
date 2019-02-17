@@ -3,6 +3,7 @@ import { ImageSource } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import {
   Button,
+  Classes,
   FormGroup,
   HTMLInputProps,
   IButtonProps,
@@ -61,7 +62,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
 
   render() {
     const { intl } = this.context
-    const { field: name, favicoField, autoFocus, label, disabled, placeholder } = this.props
+    const { field: name, favicoField, autoFocus, label, flex, disabled, placeholder } = this.props
     const id = name
 
     return (
@@ -77,6 +78,8 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
               label={label}
               labelFor={id}
               disabled={disabled}
+              style={{ flex }}
+              contentClassName={Classes.FLEX_EXPANDER}
             >
               <NotifyingInput
                 {...field}
