@@ -6,6 +6,7 @@ interface Props {
   message: string
   onConfirmed: () => any
   component: React.ComponentType<{ onPress: (e: React.SyntheticEvent) => any }>
+  type: 'delete'
   danger?: boolean
 }
 
@@ -24,10 +25,10 @@ export class ConfirmButton extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { message, danger, component: Component, children, ...props } = this.props
+    const { message, danger, component: Component, children, type, ...props } = this.props
 
     const { intl, ui } = this.context
-    const { Alert, DeleteButton } = ui
+    const { Alert } = ui
 
     return (
       <>
@@ -37,7 +38,11 @@ export class ConfirmButton extends React.PureComponent<Props, State> {
         <Alert
           title={intl.formatMessage(messages.title)}
           body={[message]}
-          confirmText={intl.formatMessage(messages.ok)}
+          confirmText={
+            type === 'delete'
+              ? intl.formatMessage(messages.delete)
+              : intl.formatMessage(messages.ok)
+          }
           danger={danger}
           onConfirm={this.onConfirm}
           cancelText={intl.formatMessage(messages.cancel)}
@@ -70,6 +75,10 @@ const messages = defineMessages({
   ok: {
     id: 'ConfirmButton.ok',
     defaultMessage: 'Ok',
+  },
+  delete: {
+    id: 'ConfirmButton.delete',
+    defaultMessage: 'Delete',
   },
   cancel: {
     id: 'ConfirmButton.cancel',

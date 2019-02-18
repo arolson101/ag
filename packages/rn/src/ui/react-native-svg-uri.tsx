@@ -177,7 +177,7 @@ const parseStyles = (node: Element): Styles => {
     }
   }
 
-  log('parseStyles %o', styles)
+  // log('parseStyles %o', styles)
   return styles
 }
 

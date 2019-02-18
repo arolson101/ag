@@ -82,6 +82,18 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
             <Item inlineLabel error={error} {...inputProps} placeholder={placeholder}>
               <Label label={label} error={error} />
 
+              <NotifyingInput
+                style={{ flex: 1 }}
+                keyboardType='url'
+                autoFocus={autoFocus}
+                onChangeText={text => form.setFieldValue(name, text)}
+                value={field.value}
+                onSubmitEditing={onSubmitEditing}
+                textRef={this.textInput}
+                {...this.state.commonTextFieldProps}
+                onValueChanged={this.onValueChanged}
+              />
+
               <Field name={favicoField} pure={false}>
                 {({ field: iconField }: FieldProps<Values>) => {
                   return (
@@ -95,18 +107,6 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
                   )
                 }}
               </Field>
-
-              <NotifyingInput
-                style={{ flex: 1 }}
-                keyboardType='url'
-                autoFocus={autoFocus}
-                onChangeText={text => form.setFieldValue(name, text)}
-                value={field.value}
-                onSubmitEditing={onSubmitEditing}
-                textRef={this.textInput}
-                {...this.state.commonTextFieldProps}
-                onValueChanged={this.onValueChanged}
-              />
             </Item>
           )
         }}
@@ -168,10 +168,10 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   }
 
   getFromLibrary = async () => {
-    const { field, favicoField } = this.props
+    const { field, favicoField, favicoWidth, favicoHeight } = this.props
     const { getImageFromLibrary } = this.context
     const from = this.form.values[field]
-    const source = await getImageFromLibrary()
+    const source = await getImageFromLibrary(favicoWidth, favicoHeight)
     // log('getFromLibrary from %s %o', from, source)
     if (source) {
       this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(source))
@@ -255,7 +255,7 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
         {loading ? (
           <Spinner />
         ) : value ? (
-          <NativeImage size={16} src={value} />
+          <NativeImage size={platform.inputLineHeight} src={value} />
         ) : (
           <FontAwesome name='bank' />
         )}

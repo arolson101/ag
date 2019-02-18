@@ -5,7 +5,7 @@ import { store } from '../store'
 import { ui } from '../ui'
 import { ElectronDialogs } from './ElectronDialogs'
 import { ElectronRouter } from './ElectronRouter'
-import { getImageFromLibrary, resizeImage } from './image.electron'
+import { getImageFromLibrary, openCropper, scaleImage } from './image.electron'
 import { deleteDb, openDb } from './openDb.electron'
 
 export const dependencies: ClientDependencies = {
@@ -16,7 +16,8 @@ export const dependencies: ClientDependencies = {
   fetch,
 
   getImageFromLibrary,
-  resizeImage,
+  openCropper,
+  scaleImage,
 }
 
 const context = App.createContext(store, dependencies)

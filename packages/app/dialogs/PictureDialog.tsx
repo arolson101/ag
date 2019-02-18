@@ -158,14 +158,26 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     )
   }
 
-  selectItem = (e: React.SyntheticEvent, link: string) => {
+  selectItem = async (e: React.SyntheticEvent, link: string) => {
     const { onSelected } = this.props
     const { images } = this.state
+    const { openCropper, scaleImage } = this.context
     const source = images[link]
     if (!source.uri) {
       return
     }
-    onSelected(source)
+    let image = source.toImageBuf()
+    // image = await openCropper(source.toImageBuf())
+    // if (!image) {
+    //   return
+    // }
+
+    const scale = Math.min(thumbnailSize / image.width, thumbnailSize / image.height)
+    if (scale < 1.0) {
+      image = await scaleImage(image, scale)
+    }
+
+    onSelected(ImageSource.fromImageBuf(image))
     this.close()
   }
 

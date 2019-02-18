@@ -71,7 +71,7 @@ export class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
   }
 
   showOverlay() {
-    log('showOverlay %s', this.id)
+    // log('showOverlay %s', this.id)
     const { title } = this.props
     Navigation.showOverlay({
       component: {
@@ -84,7 +84,7 @@ export class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
   }
 
   hideOverlay() {
-    log('hideOverlay %s', this.id)
+    // log('hideOverlay %s', this.id)
     Navigation.dismissOverlay(this.id)
     this.shown = false
   }

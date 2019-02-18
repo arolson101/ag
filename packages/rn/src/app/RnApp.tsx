@@ -7,7 +7,7 @@ import { iconInit } from '../icons'
 import { store } from '../store'
 import { ui } from '../ui'
 import { rnfetch } from './fetch.native'
-import { getImageFromLibrary, resizeImage } from './image.native'
+import { getImageFromLibrary, openCropper, scaleImage } from './image.native'
 import { registerComponents, root, setDefaultOptions } from './navigation'
 import { deleteDb, openDb } from './openDb.native'
 
@@ -25,7 +25,8 @@ export const dependencies: ClientDependencies = {
   fetch: rnfetch,
 
   getImageFromLibrary,
-  resizeImage,
+  openCropper,
+  scaleImage,
 }
 
 const context = App.createContext(store, dependencies)

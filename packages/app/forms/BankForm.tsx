@@ -189,6 +189,8 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                   <UrlField
                                     field='web'
                                     favicoField='favicon'
+                                    favicoWidth={100}
+                                    favicoHeight={100}
                                     label={intl.formatMessage(messages.web)}
                                   />
                                   <TextField
@@ -214,6 +216,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                       {deleteBank => (
                                         <>
                                           <ConfirmButton
+                                            type='delete'
                                             message={intl.formatMessage(
                                               messages.confirmDeleteMessage
                                             )}

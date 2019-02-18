@@ -1,3 +1,5 @@
+export * from './ciLookup'
+export * from './datauri'
 export * from './date'
 export * from './dehydrate'
 export * from './diff'

@@ -159,6 +159,7 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                   {deleteDb => (
                     <>
                       <ConfirmButton
+                        type='delete'
                         message={intl.formatMessage(messages.deleteMessage)}
                         component={DeleteButton}
                         onConfirmed={deleteDb}

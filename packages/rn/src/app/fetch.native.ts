@@ -1,3 +1,4 @@
+import { ciLookup, decodeDataURI, isDataURI } from '@ag/app/util'
 import debug from 'debug'
 import RNFetchBlob, { FetchBlobResponse } from 'rn-fetch-blob'
 
@@ -13,15 +14,8 @@ export const rnfetch = async (input: RequestInfo, init?: RequestInit): Promise<R
     let response: Response
 
     // handle data URI
-    const dataSig = 'data:'
-
-    if (input.startsWith(dataSig)) {
-      const colon = input.indexOf(':')
-      const semi = input.indexOf(';')
-      const comma = input.indexOf(',')
-      const mime = input.substring(colon + 1, semi)
-      const encoding = input.substring(semi + 1, comma)
-      const base64 = input.substring(comma + 1)
+    if (isDataURI(input)) {
+      const { mime, buf } = decodeDataURI(input)
 
       // log('data uri %o', { mime, encoding, base64 })
 
@@ -32,16 +26,16 @@ export const rnfetch = async (input: RequestInfo, init?: RequestInit): Promise<R
         url: input,
 
         headers: {
-          get: (name: string) => headers[name],
-          has: (name: string) => name in headers,
+          get: (name: string) => ciLookup(headers, name),
+          has: (name: string) => ciLookup(headers, name) !== undefined,
 
           raw: headers,
         },
 
         statusText: `Data URI`,
 
-        text: async () => Buffer.from(base64, encoding).toString(),
-        arrayBuffer: async (): Promise<ArrayBuffer> => Buffer.from(base64, encoding),
+        text: async () => buf.toString(),
+        arrayBuffer: async (): Promise<ArrayBuffer> => buf,
       } as any
     } else {
       init = init || {}

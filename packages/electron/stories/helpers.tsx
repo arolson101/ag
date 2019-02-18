@@ -15,7 +15,8 @@ const clientDependencies: ClientDependencies = {
     throw new Error('no deleteDb')
   },
   fetch,
-  resizeImage: action('resizeImage') as any,
+  scaleImage: action('scaleImage') as any,
+  openCropper: action('openCropper') as any,
   getImageFromLibrary: action('getImageFromLibrary') as any,
 }
 

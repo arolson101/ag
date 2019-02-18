@@ -57,6 +57,8 @@ export interface UrlFieldProps<Values = any>
   extends CommonFieldProps<Values>,
     CommonTextFieldProps {
   favicoField: keyof Values & string
+  favicoWidth: number
+  favicoHeight: number
   placeholder?: string
 }
 

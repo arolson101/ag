@@ -185,11 +185,10 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   }
 
   onClickLibrary = async () => {
-    const { field, favicoField } = this.props
-    const from = this.form.values[field]
+    const { favicoField, favicoWidth, favicoHeight } = this.props
     const { getImageFromLibrary } = this.context
-    const source = await getImageFromLibrary()
-    // log('getFromLibrary from %s %o', from, source)
+    const source = await getImageFromLibrary(favicoWidth, favicoHeight)
+    // log('getImageFromLibrary from %o', source)
     if (source) {
       this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(source))
     }

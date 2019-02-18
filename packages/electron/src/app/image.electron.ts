@@ -3,15 +3,10 @@ import electron, { nativeImage } from 'electron'
 
 const dialog = (electron.remote || electron).dialog
 
-export const resizeImage: ClientDependencies['resizeImage'] = async (image, width, height) => {
-  const img = nativeImage.createFromBuffer(image.buf, { height: image.height, width: image.width })
-  const resized = img.resize({ width, height })
-  const buf = img.toPNG()
-  const mime = 'image/png'
-  return { ...resized.getSize(), mime, buf }
-}
-
-export const getImageFromLibrary: ClientDependencies['getImageFromLibrary'] = async () => {
+export const getImageFromLibrary: ClientDependencies['getImageFromLibrary'] = async (
+  width,
+  height
+) => {
   const res = dialog.showOpenDialog({
     filters: [
       { name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif'] },
@@ -27,4 +22,18 @@ export const getImageFromLibrary: ClientDependencies['getImageFromLibrary'] = as
     const mime = 'image/png'
     return { ...img.getSize(), mime, buf }
   }
+}
+
+export const openCropper: ClientDependencies['openCropper'] = async image => {
+  return undefined
+}
+
+export const scaleImage: ClientDependencies['scaleImage'] = async (image, scale) => {
+  const width = image.width * scale
+  const height = image.height * scale
+  const img = nativeImage.createFromBuffer(image.buf, { height: image.height, width: image.width })
+  const resized = img.resize({ width, height })
+  const buf = img.toPNG()
+  const mime = 'image/png'
+  return { ...resized.getSize(), mime, buf }
 }

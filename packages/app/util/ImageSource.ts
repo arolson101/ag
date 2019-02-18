@@ -1,5 +1,6 @@
 import debug from 'debug'
 import { Column } from 'typeorm'
+import { decodeDataURI, encodeDataURI } from './datauri'
 import { CompressedJson, dehydrate, hydrate } from './dehydrate'
 
 const log = debug('app:ImageSource')
@@ -27,6 +28,12 @@ export class ImageSource {
     return dehydrate({ width: this.width, height: this.height, uri: this.uri })
   }
 
+  toImageBuf(): ImageBuf {
+    const { width, height, uri } = this
+    const { buf, mime } = decodeDataURI(uri)
+    return { width, height, mime, buf }
+  }
+
   static fromString(data: CompressedJson<ImageSource> | string): ImageSource {
     if (data) {
       const props = hydrate(data as CompressedJson<ImageSource>)
@@ -39,8 +46,7 @@ export class ImageSource {
   static fromImageBuf(data: ImageBuf | undefined): ImageSource {
     if (data) {
       const { buf, mime, width, height } = data
-      const base64 = buf.toString('base64')
-      const uri = `data:${mime};base64,${base64}`
+      const uri = encodeDataURI({ mime, buf })
       return new ImageSource({ width, height, uri })
     } else {
       return new ImageSource()

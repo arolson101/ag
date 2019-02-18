@@ -204,6 +204,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
                             {deleteAccount => (
                               <>
                                 <ConfirmButton
+                                  type='delete'
                                   message={intl.formatMessage(messages.confirmDeleteMessage)}
                                   component={DeleteButton}
                                   onConfirmed={deleteAccount}

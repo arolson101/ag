@@ -21,8 +21,9 @@ export interface ClientDependencies {
 
   fetch(input: RequestInfo, init?: RequestInit): Promise<Response>
 
-  getImageFromLibrary: () => Promise<ImageBuf | undefined>
-  resizeImage: (image: ImageBuf, width: number, height: number) => Promise<ImageBuf>
+  getImageFromLibrary: (width: number, height: number) => Promise<ImageBuf | undefined>
+  openCropper: (image: ImageBuf) => Promise<ImageBuf | undefined>
+  scaleImage: (image: ImageBuf, scale: number) => Promise<ImageBuf>
 }
 
 export interface AppContext extends ClientDependencies {
