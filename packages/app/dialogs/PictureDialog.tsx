@@ -118,7 +118,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
               }}
             >
               {formApi => (
-                <Form onSubmit={formApi.handleSubmit}>
+                <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
                   <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
                 </Form>
               )}

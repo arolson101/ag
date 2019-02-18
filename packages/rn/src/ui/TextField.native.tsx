@@ -1,20 +1,38 @@
-import { TextFieldProps } from '@ag/app'
+import { CommonTextFieldProps, TextFieldProps } from '@ag/app'
 import { Field, FieldProps } from 'formik'
 import { Icon, Input, Item, Textarea } from 'native-base'
 import React from 'react'
 import { TextInput } from 'react-native'
+import { FormContext } from './Form.native'
 import { Label } from './Label.native'
 
-export namespace TextField {
-  export type Props<Values> = TextFieldProps<Values>
+interface State {
+  commonTextFieldProps: CommonTextFieldProps
 }
 
-export class TextField<Values> extends React.PureComponent<TextField.Props<Values>> {
+export class TextField<Values> extends React.PureComponent<TextFieldProps<Values>, State> {
+  static contextType = FormContext
+  context!: React.ContextType<typeof FormContext>
+
+  state: State = { commonTextFieldProps: {} }
+
   private textInput = React.createRef<TextInput & Textarea>()
 
-  focusTextInput = () => {
+  componentWillMount() {
+    this.context.addField(this)
+  }
+
+  componentWillUnmount() {
+    this.context.rmvField(this)
+  }
+
+  setCommonTextFieldProps = (commonTextFieldProps: CommonTextFieldProps) => {
+    this.setState({ commonTextFieldProps })
+  }
+
+  focus = () => {
     const ref: any = this.textInput.current
-    if (ref && ref._root) {
+    if (ref && ref._root && ref._root.focus) {
       ref._root.focus()
     }
   }
@@ -30,14 +48,13 @@ export class TextField<Values> extends React.PureComponent<TextField.Props<Value
       rows,
       onSubmitEditing,
       disabled,
-      // returnKeyType,
       noCorrect,
     } = this.props
     return (
       <Field name={name}>
         {({ field, form }: FieldProps<Values>) => {
           const error = !!(form.touched[name] && form.errors[name])
-          const itemProps = { onPress: this.focusTextInput }
+          const itemProps = { onPress: this.focus }
           const inputProps = { autoFocus }
           const inputStyle = color ? { color } : {}
           return (
@@ -71,8 +88,8 @@ export class TextField<Values> extends React.PureComponent<TextField.Props<Value
                   autoCapitalize={noCorrect ? 'none' : undefined}
                   autoCorrect={noCorrect ? false : undefined}
                   multiline={rows ? rows > 0 : undefined}
-                  // returnKeyType={returnKeyType}
                   ref={this.textInput}
+                  {...this.state.commonTextFieldProps}
                   {...inputProps}
                 />
               )}

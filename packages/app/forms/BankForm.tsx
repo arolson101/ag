@@ -1,5 +1,5 @@
 import debug from 'debug'
-import { Formik, FormikErrors, FormikProps } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { AppMutation, AppQuery, ConfirmButton, gql, Gql } from '../components'
@@ -81,7 +81,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
     ` as Gql<T.DeleteBank.Mutation, T.DeleteBank.Variables>,
   }
 
-  private formApi: FormikProps<FormValues> | undefined
+  private formApi = React.createRef<Formik<FormValues>>()
 
   render() {
     const { ui, intl } = this.context
@@ -117,6 +117,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
               {saveBank => (
                 <>
                   <Formik<FormValues>
+                    ref={this.formApi}
                     validateOnBlur={false}
                     initialValues={initialValues}
                     validate={values => {
@@ -142,7 +143,6 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                     }}
                   >
                     {formApi => {
-                      this.formApi = formApi
                       return (
                         <Form onSubmit={formApi.handleSubmit}>
                           <Tabs id='BankForm'>
@@ -161,23 +161,15 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                         items={filist.map(fi => ({ label: fi.name, value: fi.id }))}
                                         label={intl.formatMessage(messages.fi)}
                                         onValueChange={value => {
-                                          if (formApi) {
-                                            value = +value // coax to number
-                                            const fi = filist[value]
-                                            formApi.setFieldValue(
-                                              'name',
-                                              value ? fi.name || '' : ''
-                                            )
-                                            formApi.setFieldValue('web', fi.profile.siteURL || '')
-                                            formApi.setFieldValue('favicon', '')
-                                            formApi.setFieldValue(
-                                              'address',
-                                              formatAddress(fi) || ''
-                                            )
-                                            formApi.setFieldValue('fid', fi.fid || '')
-                                            formApi.setFieldValue('org', fi.org || '')
-                                            formApi.setFieldValue('ofx', fi.ofx || '')
-                                          }
+                                          value = +value // coax to number
+                                          const fi = filist[value]
+                                          formApi.setFieldValue('name', value ? fi.name || '' : '')
+                                          formApi.setFieldValue('web', fi.profile.siteURL || '')
+                                          formApi.setFieldValue('favicon', '')
+                                          formApi.setFieldValue('address', formatAddress(fi) || '')
+                                          formApi.setFieldValue('fid', fi.fid || '')
+                                          formApi.setFieldValue('org', fi.org || '')
+                                          formApi.setFieldValue('ofx', fi.ofx || '')
                                         }}
                                         searchable
                                       />
@@ -302,8 +294,8 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
   }
 
   save = () => {
-    if (this.formApi) {
-      this.formApi.submitForm()
+    if (this.formApi.current) {
+      this.formApi.current.submitForm()
     }
   }
 }

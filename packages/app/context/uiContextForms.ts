@@ -2,6 +2,7 @@ import { UiContext } from './uiContext'
 
 export interface FormProps<Values = any> {
   onSubmit: () => void
+  lastFieldSubmit?: boolean
 }
 
 export interface SelectFieldItem {
@@ -16,12 +17,19 @@ interface CommonFieldProps<Values> {
   flex?: number
 }
 
+export interface CommonTextFieldProps {
+  autoFocus?: boolean
+  returnKeyType?: 'done' | 'go' | 'next' | 'search' | 'send'
+  onSubmitEditing?: () => any
+  blurOnSubmit?: boolean
+}
+
 export interface CheckboxFieldProps<Values = any> extends CommonFieldProps<Values> {}
 
-export interface CurrencyFieldProps<Values = any> extends CommonFieldProps<Values> {
+export interface CurrencyFieldProps<Values = any>
+  extends CommonFieldProps<Values>,
+    CommonTextFieldProps {
   placeholder?: string
-  autoFocus?: boolean
-  onSubmitEditing?: () => any
 }
 
 export interface DateFieldProps<Values = any> extends CommonFieldProps<Values> {
@@ -34,22 +42,22 @@ export interface SelectFieldProps<Values = any> extends CommonFieldProps<Values>
   searchable?: boolean
 }
 
-export interface TextFieldProps<Values = any> extends CommonFieldProps<Values> {
+export interface TextFieldProps<Values = any>
+  extends CommonFieldProps<Values>,
+    CommonTextFieldProps {
   placeholder?: string
   secure?: boolean
   rows?: number
   color?: string
-  autoFocus?: boolean
-  onSubmitEditing?: () => any
   noCorrect?: boolean
   inputRef?: any
 }
 
-export interface UrlFieldProps<Values = any> extends CommonFieldProps<Values> {
+export interface UrlFieldProps<Values = any>
+  extends CommonFieldProps<Values>,
+    CommonTextFieldProps {
   favicoField: keyof Values & string
   placeholder?: string
-  autoFocus?: boolean
-  onSubmitEditing?: () => any
 }
 
 export const typedFields = <V extends {}>(uiContext: UiContext) => {

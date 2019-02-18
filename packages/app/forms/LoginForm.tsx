@@ -119,7 +119,7 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                 }}
               >
                 {formApi => (
-                  <Form onSubmit={formApi.handleSubmit}>
+                  <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
                     <Text>
                       {intl.formatMessage(
                         create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen

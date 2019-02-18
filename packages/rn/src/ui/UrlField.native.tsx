@@ -1,4 +1,4 @@
-import { actions, AppContext, getFavico, UrlFieldProps } from '@ag/app'
+import { actions, AppContext, CommonTextFieldProps, getFavico, UrlFieldProps } from '@ag/app'
 import { ImageSource } from '@ag/app/util'
 import { fixUrl, isUrl } from '@ag/app/util/url'
 import debug from 'debug'
@@ -8,6 +8,7 @@ import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
 import { defineMessages } from 'react-intl'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { FormContext } from './Form.native'
 import { Label } from './Label.native'
 import { NativeImage } from './NativeImage'
 
@@ -20,14 +21,15 @@ export namespace UrlField {
 
 interface State {
   gettingIcon: boolean
+  commonTextFieldProps: CommonTextFieldProps
 }
 
 export class UrlField<Values extends Record<string, any>> extends React.PureComponent<
   UrlField.Props<Values>,
   State
 > {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = FormContext
+  context!: React.ContextType<typeof FormContext>
 
   private textInput = React.createRef<Input>()
   private form!: FormikProps<Values>
@@ -35,15 +37,25 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
 
   state: State = {
     gettingIcon: false,
+    commonTextFieldProps: {},
+  }
+
+  componentWillMount() {
+    this.context.addField(this)
   }
 
   componentWillUnmount() {
+    this.context.rmvField(this)
     if (this.controller) {
       this.controller.abort()
     }
   }
 
-  focusTextInput = () => {
+  setCommonTextFieldProps = (commonTextFieldProps: CommonTextFieldProps) => {
+    this.setState({ commonTextFieldProps })
+  }
+
+  focus = () => {
     const ref: any = this.textInput.current
     if (ref && ref._root) {
       ref._root.focus()
@@ -65,7 +77,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
         {({ field, form }: FieldProps<Values>) => {
           this.form = form
           const error = !!(form.touched[name] && form.errors[name])
-          const inputProps = { autoFocus, onPress: this.focusTextInput }
+          const inputProps = { autoFocus, onPress: this.focus }
           return (
             <Item inlineLabel error={error} {...inputProps} placeholder={placeholder}>
               <Label label={label} error={error} />
@@ -91,8 +103,8 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
                 onChangeText={text => form.setFieldValue(name, text)}
                 value={field.value}
                 onSubmitEditing={onSubmitEditing}
-                // returnKeyType={returnKeyType}
                 textRef={this.textInput}
+                {...this.state.commonTextFieldProps}
                 onValueChanged={this.onValueChanged}
               />
             </Item>

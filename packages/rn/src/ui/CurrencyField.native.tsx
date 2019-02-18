@@ -1,17 +1,39 @@
-import { CurrencyFieldProps } from '@ag/app'
+import { CommonTextFieldProps, CurrencyFieldProps } from '@ag/app'
 import accounting from 'accounting'
 import { Field, FieldProps, FormikProps } from 'formik'
 import { Icon, Input, Item } from 'native-base'
 import * as React from 'react'
 import { TextInput } from 'react-native'
+import { FormContext } from './Form.native'
 import { Label } from './Label.native'
 // import { CalculatorInput } from 'react-native-calculator'
 
+interface State {
+  commonTextFieldProps: CommonTextFieldProps
+}
+
 export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
+  static contextType = FormContext
+  context!: React.ContextType<typeof FormContext>
+
+  state: State = { commonTextFieldProps: {} }
+
   private textInput = React.createRef<TextInput>()
   private form?: FormikProps<any>
 
-  focusTextInput = () => {
+  componentWillMount() {
+    this.context.addField(this)
+  }
+
+  componentWillUnmount() {
+    this.context.rmvField(this)
+  }
+
+  setCommonTextFieldProps = (commonTextFieldProps: CommonTextFieldProps) => {
+    this.setState({ commonTextFieldProps })
+  }
+
+  focus = () => {
     const ref: any = this.textInput.current
     if (ref && ref._root) {
       ref._root.focus()
@@ -32,7 +54,7 @@ export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
         {({ field, form }: FieldProps) => {
           this.form = form
           const error = !!(form.touched[name] && form.errors[name])
-          const itemProps = { onPress: this.focusTextInput }
+          const itemProps = { onPress: this.focus }
           const inputProps = { autoFocus }
           return (
             <Item {...itemProps} error={error} placeholder={placeholder}>
@@ -56,6 +78,7 @@ export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
                 // returnKeyType={returnKeyType}
                 keyboardType='numeric'
                 ref={this.textInput}
+                {...this.state.commonTextFieldProps}
                 {...inputProps}
               />
               {error && <Icon name='close-circle' />}
