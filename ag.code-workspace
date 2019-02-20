@@ -13,6 +13,14 @@
       "name": "target: react-native"
     },
     {
+      "path": "packages/ui-blueprint",
+      "name": "ui-blueprint"
+    },
+    {
+      "path": "packages/ui-react-native",
+      "name": "ui-react-native"
+    },
+    {
       "path": "."
     }
   ],

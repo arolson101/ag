@@ -18,9 +18,7 @@
   },
   "dependencies": {
     "@ag/app": "^0.0.0",
-    "@blueprintjs/core": "^3.11.0",
-    "@blueprintjs/icons": "^3.4.0",
-    "@blueprintjs/select": "^3.4.0",
+    "@ag/ui-blueprint": "^0.0.0",
     "classnames": "^2.2.6",
     "commander": "^2.19.0",
     "debug": "^4.1.1",

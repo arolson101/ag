@@ -24,7 +24,7 @@
     "lint": "tslint -c tslint.json --fix \"**/*{.ts,.tsx}\"",
     "test": "jest",
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
-    "prettier-package-json": "prettier-package-json --write --key-order ./package.json packages/app/package.json packages/target_electron/package.json packages/target_rn/package.json --key-order name,private,version,description,license,author,maintainers,contributors,homepage,repository,bugs,workspaces,main,build,module,browser,man,preferGlobal,bin,files,directories,scripts,config,jest,optionalDependencies,dependencies,bundleDependencies,bundledDependencies,peerDependencies,devDependencies,keywords,engines,engine-strict,engineStrict,os,cpu,publishConfig"
+    "prettier-package-json": "prettier-package-json --write --key-order ./package.json packages/*/package.json --key-order name,private,version,description,license,author,maintainers,contributors,homepage,repository,bugs,workspaces,main,build,module,browser,man,preferGlobal,bin,files,directories,scripts,config,jest,optionalDependencies,dependencies,bundleDependencies,bundledDependencies,peerDependencies,devDependencies,keywords,engines,engine-strict,engineStrict,os,cpu,publishConfig"
   },
   "dependencies": {},
   "devDependencies": {

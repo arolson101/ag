@@ -17,7 +17,7 @@ import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { ElectronImage } from './ElectronImage'
+import { Image } from './Image.blueprint'
 
 const log = debug('electron:UrlField')
 
@@ -230,7 +230,7 @@ class FavicoButton extends React.PureComponent<FavicoButtonProps> {
     return loading ? (
       <Button {...props} minimal loading />
     ) : value ? (
-      <Button {...props} minimal icon={<ElectronImage size={20} src={value} />} />
+      <Button {...props} minimal icon={<Image size={20} src={value} />} />
     ) : (
       <Button {...props} minimal>
         {'...'}

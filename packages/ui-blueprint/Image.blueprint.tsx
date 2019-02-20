@@ -1,7 +1,7 @@
 import { ImageProps } from '@ag/app'
 import React from 'react'
 
-export class ElectronImage extends React.PureComponent<ImageProps> {
+export class Image extends React.PureComponent<ImageProps> {
   render() {
     const { src, size, margin, title } = this.props
     if (!src.uri) {

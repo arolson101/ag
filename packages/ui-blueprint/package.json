@@ -1,0 +1,29 @@
+{
+  "name": "@ag/ui-blueprint",
+  "version": "0.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@ag/app": "^0.0.0",
+    "@blueprintjs/core": "^3.11.0",
+    "@blueprintjs/icons": "^3.4.0",
+    "@blueprintjs/select": "^3.4.0",
+    "classnames": "^2.2.6",
+    "debug": "^4.1.1",
+    "formik": "^1.4.2",
+    "normalize.css": "^8.0.1",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-intl": "^2.7.2"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.7",
+    "@types/react": "^16.7.18",
+    "@types/react-dom": "^16.0.11"
+  }
+}

@@ -23,14 +23,14 @@ import '@blueprintjs/icons/lib/css/blueprint-icons.css'
 import classNames from 'classnames'
 import 'normalize.css/normalize.css'
 import React from 'react'
-import { CheckboxField } from './CheckboxField.electron'
-import { CurrencyField } from './CurrencyField.electron'
-import { DateField } from './DateField.electron'
-import { ElectronImage } from './ElectronImage'
-import { Form } from './Form.electron'
-import { SelectField } from './SelectField.electron'
-import { TextField } from './TextField.electron'
-import { UrlField } from './UrlField.electron'
+import { CheckboxField } from './CheckboxField.blueprint'
+import { CurrencyField } from './CurrencyField.blueprint'
+import { DateField } from './DateField.blueprint'
+import { Form } from './Form.blueprint'
+import { Image } from './Image.blueprint'
+import { SelectField } from './SelectField.blueprint'
+import { TextField } from './TextField.blueprint'
+import { UrlField } from './UrlField.blueprint'
 
 export const AppToaster = Toaster.create({
   className: 'recipe-toaster',
@@ -194,7 +194,7 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
-  Image: ElectronImage,
+  Image,
 
   // form
   Form,
