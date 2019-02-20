@@ -6,27 +6,31 @@ import React from 'react'
 import { MockApp } from './helpers'
 
 const emptyResponse = {
-  appDb: {
-    account: null,
-    __typename: 'AppDb',
+  data: {
+    appDb: {
+      account: null,
+      __typename: 'AppDb',
+    },
   },
 }
 
 const editResponse = {
-  appDb: {
-    account: {
-      id: 'cjrbhh3dw0000415s5awimr3f',
-      bankId: 'cjrbfiy580000415s2ibuxm2c',
-      name: 'Savings',
-      type: 'SAVINGS',
-      color: '#19ff75',
-      number: '123456',
-      visible: true,
-      routing: '5551212',
-      key: '',
-      __typename: 'Account',
+  data: {
+    appDb: {
+      account: {
+        id: 'cjrbhh3dw0000415s5awimr3f',
+        bankId: 'cjrbfiy580000415s2ibuxm2c',
+        name: 'Savings',
+        type: 'SAVINGS',
+        color: '#19ff75',
+        number: '123456',
+        visible: true,
+        routing: '5551212',
+        key: '',
+        __typename: 'Account',
+      },
+      __typename: 'AppDb',
     },
-    __typename: 'AppDb',
   },
 }
 

@@ -34,27 +34,20 @@ export const MockApp: React.FC<{ query?: Gql<any, any>; variables?: any; respons
   response,
   children,
 }) => {
-  if (query && response) {
-    const mocks: MockedResponse[] = [
-      {
-        request: { query, variables },
-        result: {
-          data: response,
-        },
-      },
-    ]
-    return (
-      <MockedProvider mocks={mocks}>
-        <IntlProvider locale='en'>
-          <AppContext.Provider value={appContext}>{children}</AppContext.Provider>
-        </IntlProvider>
-      </MockedProvider>
-    )
-  } else {
-    return (
+  const mocks: MockedResponse[] =
+    query && response
+      ? [
+          {
+            request: { query, variables },
+            result: response,
+          },
+        ]
+      : []
+  return (
+    <MockedProvider mocks={mocks}>
       <IntlProvider locale='en'>
         <AppContext.Provider value={appContext}>{children}</AppContext.Provider>
       </IntlProvider>
-    )
-  }
+    </MockedProvider>
+  )
 }

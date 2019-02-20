@@ -20,7 +20,7 @@ export const getImageList = async (from: string, signal: AbortSignal, context: A
   const { fetch } = context
 
   const result = await fetch(from, { method: 'get', signal })
-  log('fetch %s %o', from, result)
+  // log('fetch %s %o', from, result)
   if (!result.ok) {
     log(result.statusText)
     throw new Error(result.statusText)
