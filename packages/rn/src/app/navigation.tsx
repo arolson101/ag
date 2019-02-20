@@ -1,6 +1,6 @@
 import { AppContext, appDialogs } from '@ag/app'
+import { platform } from '@ag/ui-nativebase'
 import debug from 'debug'
-import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
 import { Platform } from 'react-native'
 import {

@@ -3,8 +3,8 @@ import { Field, FieldProps } from 'formik'
 import { Icon, Input, Item, Textarea } from 'native-base'
 import React from 'react'
 import { TextInput } from 'react-native'
-import { FormContext } from './Form.native'
-import { Label } from './Label.native'
+import { FormContext } from './Form.nativebase'
+import { Label } from './Label.nativebase'
 
 interface State {
   commonTextFieldProps: CommonTextFieldProps

@@ -105,7 +105,7 @@ export interface UiContext {
   Collapsible: ComponentType<{ show: boolean }>
 
   // controls
-  Spinner: ComponentType
+  Spinner: ComponentType<{ color?: string }>
   Link: ComponentType<{ onClick?: (e: React.SyntheticEvent) => any }>
   Text: ComponentType<{
     flex?: number

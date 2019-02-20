@@ -1,12 +1,12 @@
 import { AppContext, ImageProps } from '@ag/app'
 import debug from 'debug'
 import React from 'react'
-import { Image, ImageStyle, StyleProp } from 'react-native'
+import { Image as RNImage, ImageStyle, StyleProp } from 'react-native'
 import { SvgUri } from './react-native-svg-uri'
 
 const log = debug('rn:NativeImage')
 
-export class NativeImage extends React.PureComponent<ImageProps> {
+export class Image extends React.PureComponent<ImageProps> {
   static contextType = AppContext
   context!: React.ContextType<typeof AppContext>
 
@@ -35,7 +35,7 @@ export class NativeImage extends React.PureComponent<ImageProps> {
       )
     } else {
       // log('not svg, src %o style %o', src, style)
-      return <Image source={src} style={style} />
+      return <RNImage source={src} style={style} />
     }
   }
 }

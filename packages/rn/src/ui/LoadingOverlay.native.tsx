@@ -1,9 +1,8 @@
 import { AppContext, LoadingOverlayProps } from '@ag/app'
+import { platform, Spinner } from '@ag/ui-nativebase'
 import debug from 'debug'
-import { Spinner as NBSpinner, Text, View } from 'native-base'
-import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
-import { Dimensions, StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet, View } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 
 const log = debug('rn:LoadingOverlay')
@@ -20,7 +19,7 @@ class Overlay extends React.PureComponent<OverlayProps> {
       <View style={[styles.modalBackground, { height, width }]}>
         <View style={styles.activityIndicatorWrapper}>
           {/* <Text>{title}</Text> */}
-          <NBSpinner color={platform.brandInfo} />
+          <Spinner color={platform.brandInfo} />
         </View>
       </View>
     )
@@ -73,11 +72,12 @@ export class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
   showOverlay() {
     // log('showOverlay %s', this.id)
     const { title } = this.props
+    const passProps: OverlayProps = { title }
     Navigation.showOverlay({
       component: {
         id: this.id,
         name: overlayName,
-        passProps: { title },
+        passProps,
       },
     })
     this.shown = true

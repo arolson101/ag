@@ -2,7 +2,7 @@ import { SelectFieldProps } from '@ag/app'
 import { Field, FieldProps, FormikProps } from 'formik'
 import { Body, Icon, ListItem, Picker } from 'native-base'
 import * as React from 'react'
-import { Label } from './Label.native'
+import { Label } from './Label.nativebase'
 
 export class SelectField<Values> extends React.PureComponent<SelectFieldProps<Values>> {
   private form?: FormikProps<Values>

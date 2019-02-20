@@ -10,8 +10,8 @@
       "@ag/electron/electron*",
       "**/*react-native*",
       "**/*rn-fetch-blob*",
-      "@ag/rn/css",
-      "@ag/rn/native-base*"
+      "**/css",
+      "**/native-base*"
     ]
   },
   "jest": {

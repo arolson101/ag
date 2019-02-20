@@ -8,9 +8,9 @@ import platform from 'native-base/dist/src/theme/variables/platform'
 import * as React from 'react'
 import { defineMessages } from 'react-intl'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { FormContext } from './Form.native'
-import { Label } from './Label.native'
-import { NativeImage } from './NativeImage'
+import { FormContext } from './Form.nativebase'
+import { Image } from './Image.nativebase'
+import { Label } from './Label.nativebase'
 
 const log = debug('ag:UrlField')
 log.enabled = true
@@ -255,7 +255,7 @@ class FavicoButton extends React.Component<FavicoButtonProps> {
         {loading ? (
           <Spinner />
         ) : value ? (
-          <NativeImage size={platform.inputLineHeight} src={value} />
+          <Image size={platform.inputLineHeight} src={value} />
         ) : (
           <FontAwesome name='bank' />
         )}

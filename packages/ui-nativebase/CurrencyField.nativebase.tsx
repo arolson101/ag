@@ -4,8 +4,8 @@ import { Field, FieldProps, FormikProps } from 'formik'
 import { Icon, Input, Item } from 'native-base'
 import * as React from 'react'
 import { TextInput } from 'react-native'
-import { FormContext } from './Form.native'
-import { Label } from './Label.native'
+import { FormContext } from './Form.nativebase'
+import { Label } from './Label.nativebase'
 // import { CalculatorInput } from 'react-native-calculator'
 
 interface State {
@@ -18,7 +18,7 @@ export class CurrencyField extends React.PureComponent<CurrencyFieldProps> {
 
   state: State = { commonTextFieldProps: {} }
 
-  private textInput = React.createRef<TextInput>()
+  private textInput = React.createRef<Input>()
   private form?: FormikProps<any>
 
   componentWillMount() {

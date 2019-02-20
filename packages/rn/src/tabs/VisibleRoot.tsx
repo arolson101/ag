@@ -1,5 +1,5 @@
+import { Root, View } from '@ag/ui-nativebase'
 import debug from 'debug'
-import { Root, View } from 'native-base'
 import React from 'react'
 import { Navigation } from 'react-native-navigation'
 

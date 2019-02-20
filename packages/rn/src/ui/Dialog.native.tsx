@@ -1,18 +1,14 @@
 import { AppContext, ButtonConfig, DialogFooterProps, DialogProps, UiContext } from '@ag/app'
+import { Container, Content, platform } from '@ag/ui-nativebase'
 import debug from 'debug'
-import { Container, Content } from 'native-base'
-import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
-import { Platform, SafeAreaView, ScrollView, View } from 'react-native'
+import { Platform } from 'react-native'
 import {
   Navigation,
   NavigationButtonPressedEvent,
   OptionsTopBarButton,
 } from 'react-native-navigation'
-import { withSafeArea } from 'react-native-safe-area'
 import shallowequal from 'shallowequal'
-
-const SafeAreaContent = withSafeArea(Content, 'contentInset', 'vertical')
 
 const log = debug('rn:dialog')
 

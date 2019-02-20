@@ -17,8 +17,8 @@
       "name": "ui-blueprint"
     },
     {
-      "path": "packages/ui-react-native",
-      "name": "ui-react-native"
+      "path": "packages/ui-nativebase",
+      "name": "ui-nativebase"
     },
     {
       "path": "."
