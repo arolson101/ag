@@ -1,32 +1,54 @@
 {
   "name": "storybook",
-  "version": "0.0.1",
   "private": true,
+  "version": "0.0.1",
+  "main": "electron.js",
+  "build": {
+    "appId": "com.example.ag"
+  },
   "scripts": {
     "android": "react-native run-android",
+    "electron": "concurrently --raw --kill-others \"yarn:electron:server\" \"yarn:electron:main\"",
+    "electron:main": "wait-on http://localhost:6006/ && electron . --url http://localhost:6006/",
+    "electron:server": "start-storybook --ci --quiet -p 6006",
     "preios": "cd ./ios && pod install",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest"
   },
+  "jest": {
+    "preset": "react-native"
+  },
   "dependencies": {
+    "@ag/app": "^0.0.0",
+    "@ag/ui-nativebase": "^0.0.0",
+    "@ag/ui-blueprint": "^0.0.0",
     "@storybook/addon-actions": "^4.1.4",
     "@storybook/addon-links": "^4.1.4",
     "@storybook/addon-ondevice-knobs": "^4.1.13",
     "@storybook/addons": "^4.1.4",
+    "@storybook/react": "^4.1.4",
     "@storybook/react-native": "^4.1.4",
+    "node-libs-react-native": "^1.0.3",
+    "commander": "^2.19.0",
+    "debug": "^4.1.1",
+    "electron": "^4.0.1",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-window-state": "^5.0.3",
+    "typeorm": "0.2.11",
     "react": "16.6.3",
     "react-native": "0.58.5"
   },
   "devDependencies": {
+    "@types/electron-window-state": "^2.0.33",
+    "@types/storybook__addon-actions": "^3.4.1",
+    "@types/storybook__addon-links": "^3.3.3",
+    "@types/storybook__react": "^4.0.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "24.1.0",
     "jest": "24.1.0",
     "metro-react-native-babel-preset": "0.52.0",
     "react-native-typescript-transformer": "^1.2.11",
     "react-test-renderer": "16.6.3"
-  },
-  "jest": {
-    "preset": "react-native"
   }
 }

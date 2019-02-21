@@ -4,7 +4,7 @@ import webpack from 'webpack'
 
 const config: webpack.Configuration = {
   resolve: {
-    extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
+    extensions: ['.ts', '.tsx', '.electron.ts', '.electron.tsx', '.mjs', '.js', '.jsx', '.json'],
   },
   target: 'web',
   module: {

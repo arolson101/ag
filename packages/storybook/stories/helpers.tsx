@@ -1,10 +1,10 @@
 // tslint:disable:no-implicit-dependencies
 import { App, AppContext, ClientDependencies, Gql } from '@ag/app'
-import { ui } from '@ag/ui-blueprint'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { IntlProvider } from 'react-intl'
+import { ui } from './ui'
 
 const clientDependencies: ClientDependencies = {
   ui,

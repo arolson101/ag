@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@ag/app": "^0.0.0",
+    "@ag/ui-blueprint": "^0.0.0",
     "@ag/ui-nativebase": "^0.0.0",
     "@babel/polyfill": "^7.2.5",
     "abortcontroller-polyfill": "^1.2.3",

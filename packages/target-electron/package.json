@@ -11,10 +11,7 @@
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "dev": "ts-node ./dev.ts",
-    "electron-builder": "electron-builder install-app-deps",
-    "storybook": "concurrently --raw --kill-others \"yarn:storybook:server\" \"yarn:storybook:electron\"",
-    "storybook:electron": "wait-on http://localhost:6006/ && electron dist --url http://localhost:6006/",
-    "storybook:server": "start-storybook --ci --quiet -p 6006"
+    "electron-builder": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@ag/app": "^0.0.0",
@@ -47,10 +44,6 @@
     "utility-types": "^3.4.1"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^4.1.4",
-    "@storybook/addon-links": "^4.1.4",
-    "@storybook/addons": "^4.1.4",
-    "@storybook/react": "^4.1.4",
     "@types/classnames": "^2.2.7",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/electron-is-dev": "^0.3.0",
@@ -62,12 +55,8 @@
     "@types/react-router-dom": "^4.3.1",
     "@types/shallowequal": "^1.1.0",
     "@types/sqlite3": "^3.1.3",
-    "@types/storybook__addon-actions": "^3.4.1",
-    "@types/storybook__addon-links": "^3.3.3",
-    "@types/storybook__react": "^4.0.0",
     "chalk": "^2.4.2",
     "electron-builder": "^20.38.5",
-    "electron-devtools-installer": "^2.2.4",
-    "electron-react-devtools": "^0.5.3"
+    "electron-devtools-installer": "^2.2.4"
   }
 }
