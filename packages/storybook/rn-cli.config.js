@@ -163,18 +163,18 @@ module.exports = (async () => {
         /typeorm\/(?!browser).*/,
         /electron/,
         /ui-nativebase\/node_modules\/react-native\/.*/,
-        /storybook/,
+        /target-react-native/,
       ]),
       extraNodeModules: {
-        ...require('node-libs-react-native'),
-        fs: require.resolve('react-native-fs'),
-        vm: require.resolve('vm-browserify/index.js'),
-        stream: require.resolve('react-native-stream'),
+        // ...require('node-libs-react-native'),
+        // fs: require.resolve('react-native-fs'),
+        // vm: require.resolve('vm-browserify/index.js'),
+        // stream: require.resolve('react-native-stream'),
 
-        // 'react-native-sqlite-storage': require.resolve('react-native-sqlcipher-storage/sqlite.js'),
-        typeorm: require.resolve('typeorm/browser'),
+        // // 'react-native-sqlite-storage': require.resolve('react-native-sqlcipher-storage/sqlite.js'),
+        // typeorm: require.resolve('typeorm/browser'),
 
-        ...extraNodeModules,
+        // ...extraNodeModules,
       },
 
       sourceExts: [...sourceExts, 'mjs'],

@@ -5,6 +5,10 @@
       "name": "app"
     },
     {
+      "path": "packages/storybook",
+      "name": "storybook"
+    },
+    {
       "path": "packages/target-electron",
       "name": "target-electron"
     },
