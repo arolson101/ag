@@ -5,12 +5,14 @@ import webpack from 'webpack'
 import apppkg from '../app/package.json'
 import electronpkg from './package.json'
 
+const mainProcessDeps = ['commander', 'electron-is-dev', 'electron-window-state']
+
 const packages = Object.keys({
   ...apppkg.dependencies,
   ...electronpkg.dependencies,
-}).filter(
-  dep => !['@ag/app', 'commander', 'electron-is-dev', 'electron-window-state'].includes(dep)
-)
+})
+  .filter(dep => !dep.startsWith('@ag/'))
+  .filter(dep => !mainProcessDeps.includes(dep))
 
 const config: webpack.Configuration = {
   name: 'vendor',
