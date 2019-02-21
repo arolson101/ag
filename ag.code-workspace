@@ -5,12 +5,12 @@
       "name": "app"
     },
     {
-      "path": "packages/electron",
-      "name": "target: electron"
+      "path": "packages/target-electron",
+      "name": "target-electron"
     },
     {
-      "path": "packages/rn",
-      "name": "target: react-native"
+      "path": "packages/target-react-native",
+      "name": "target-react-native"
     },
     {
       "path": "packages/ui-blueprint",
