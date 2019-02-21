@@ -107,7 +107,7 @@ export const ui: Omit<UiContext, RNNTypes> = {
   ),
 
   // controls
-  Spinner: ({ color }) => <Spinner color={color} />,
+  Spinner,
   Link: ({ onClick, children }) => (
     <Button transparent onPress={onClick as any}>
       <Text>{children}</Text>
