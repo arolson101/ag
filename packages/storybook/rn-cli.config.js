@@ -164,6 +164,7 @@ module.exports = (async () => {
         /typeorm\/(?!browser).*/,
         /electron/,
         /ui-nativebase\/node_modules\/.*/,
+        /react-native-svg-image\/node_modules\/react-native.*/,
         // /ui-nativebase\/node_modules\/react-native-svg\/.*/,
         // /ui-nativebase\/node_modules\/react-native-vector-icons\/.*/,
         /target-react-native\/.*/,

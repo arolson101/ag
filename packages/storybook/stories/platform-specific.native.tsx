@@ -2,12 +2,12 @@ import { UiContext } from '@ag/app'
 import { ui as nbUi } from '@ag/ui-nativebase'
 import { storiesOf } from '@storybook/react-native'
 import React from 'react'
-import { Text, View } from 'react-native'
+import { View } from 'react-native'
 
 const ui: UiContext = {
   ...nbUi,
 
-  LoadingOverlay: () => <Text>loading overlay</Text>,
+  LoadingOverlay: () => null,
 
   Dialog: props => <View>{props.children}</View>,
   DialogBody: props => <View>{props.children}</View>,

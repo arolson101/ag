@@ -4,6 +4,9 @@
       "path": "packages/app"
     },
     {
+      "path": "packages/react-native-svg-image"
+    },
+    {
       "path": "packages/storybook"
     },
     {
@@ -11,9 +14,6 @@
     },
     {
       "path": "packages/target-react-native"
-    },
-    {
-      "path": "packages/react-native-svg-image"
     },
     {
       "path": "packages/ui-blueprint"

@@ -3,29 +3,10 @@ import debug from 'debug'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { ImageProperties, ImageURISource, StyleProp, View, ViewStyle } from 'react-native'
-import * as rnsvg from 'react-native-svg'
-// tslint:disable-next-line:no-duplicate-imports
-import Svg, {
-  Circle,
-  ClipPath,
-  Defs,
-  Ellipse,
-  G,
-  Line,
-  LinearGradient,
-  Path,
-  Polygon,
-  Polyline,
-  RadialGradient,
-  Rect,
-  Stop,
-  Text,
-  TSpan,
-  Use,
-} from 'react-native-svg'
+import * as RnSvg from 'react-native-svg'
 import xmldom from 'xmldom'
 
-const log = debug('rn:react-native-svg-uri')
+const log = debug('react-native-svg-image')
 
 interface SvgUriProps {
   /**
@@ -238,61 +219,61 @@ const filter = <T extends { [key: string]: any }>(o: T): T => {
     )
 }
 
-const fillProps = (node: Element): rnsvg.FillProps =>
+const fillProps = (node: Element): RnSvg.FillProps =>
   filter({
     fill: stringAttribute(node, 'fill'),
     fillOpacity: numericAttribute(node, 'fill-opacity'),
-    fillRule: stringAttribute(node, 'fill-rule') as rnsvg.FillRule,
+    fillRule: stringAttribute(node, 'fill-rule') as RnSvg.FillRule,
   })
 
-const clipProps = (node: Element): rnsvg.ClipProps =>
+const clipProps = (node: Element): RnSvg.ClipProps =>
   filter({
-    clipRule: stringAttribute(node, 'clip-rule') as rnsvg.FillRule,
+    clipRule: stringAttribute(node, 'clip-rule') as RnSvg.FillRule,
     clipPath: stringAttribute(node, 'clip-path'),
   })
 
-const definitionProps = (node: Element): rnsvg.DefinitionProps =>
+const definitionProps = (node: Element): RnSvg.DefinitionProps =>
   filter({
     id: stringAttribute(node, 'id'),
   })
 
-const strokeProps = (node: Element): rnsvg.StrokeProps =>
+const strokeProps = (node: Element): RnSvg.StrokeProps =>
   filter({
     stroke: stringAttribute(node, 'stroke'),
     strokeWidth: numericAttribute(node, 'stroke-width'),
     strokeOpacity: numericAttribute(node, 'stroke-opacity'),
     strokeDasharray: numericOrArrayAttribute(node, 'stroke-dasharray'),
     strokeDashoffset: numericAttribute(node, 'stroke-dashoffset'),
-    strokeLinecap: stringAttribute(node, 'stroke-linecap') as rnsvg.Linecap,
-    strokeLinejoin: stringAttribute(node, 'stroke-linejoin') as rnsvg.Linejoin,
+    strokeLinecap: stringAttribute(node, 'stroke-linecap') as RnSvg.Linecap,
+    strokeLinejoin: stringAttribute(node, 'stroke-linejoin') as RnSvg.Linejoin,
     strokeMiterlimit: numericAttribute(node, 'stroke-miterlimit'),
   })
 
-const fontObject = (node: Element): rnsvg.FontObject =>
+const fontObject = (node: Element): RnSvg.FontObject =>
   filter({
-    fontStyle: stringAttribute(node, 'font-style') as rnsvg.FontStyle,
-    fontVariant: stringAttribute(node, 'font-variant') as rnsvg.FontVariant,
-    fontWeight: stringAttribute(node, 'font-weight') as rnsvg.FontWeight,
-    fontStretch: stringAttribute(node, 'font-stretch') as rnsvg.FontStretch,
+    fontStyle: stringAttribute(node, 'font-style') as RnSvg.FontStyle,
+    fontVariant: stringAttribute(node, 'font-variant') as RnSvg.FontVariant,
+    fontWeight: stringAttribute(node, 'font-weight') as RnSvg.FontWeight,
+    fontStretch: stringAttribute(node, 'font-stretch') as RnSvg.FontStretch,
     fontSize: numericAttribute(node, 'font-size'),
     fontFamily: stringAttribute(node, 'font-family'),
-    textAnchor: stringAttribute(node, 'text-anchor') as rnsvg.TextAnchor,
-    textDecoration: stringAttribute(node, 'text-decoration') as rnsvg.TextDecoration,
+    textAnchor: stringAttribute(node, 'text-anchor') as RnSvg.TextAnchor,
+    textDecoration: stringAttribute(node, 'text-decoration') as RnSvg.TextDecoration,
     letterSpacing: numericAttribute(node, 'letter-spacing'),
     wordSpacing: numericAttribute(node, 'word-spacing'),
     kerning: numericAttribute(node, 'kerning'),
     fontVariantLigatures: stringAttribute(
       node,
       'fontVariantLigatures'
-    ) as rnsvg.FontVariantLigatures,
+    ) as RnSvg.FontVariantLigatures,
   })
 
-const fontProps = (node: Element): rnsvg.FontProps =>
+const fontProps = (node: Element): RnSvg.FontProps =>
   filter({
     ...fontObject(node),
   })
 
-const transformObject = (node: Element): rnsvg.TransformObject =>
+const transformObject = (node: Element): RnSvg.TransformObject =>
   filter({
     scale: numericAttribute(node, 'scale'),
     rotate: numericAttribute(node, 'rotate'),
@@ -310,18 +291,18 @@ const transformObject = (node: Element): rnsvg.TransformObject =>
     // skewY: numericAttribute(node, 'skewY'),
   })
 
-const transformProps = (node: Element): rnsvg.TransformProps =>
+const transformProps = (node: Element): RnSvg.TransformProps =>
   filter({
     ...transformObject(node),
     // transform?: ColumnMajorTransformMatrix | string | TransformObject,
   })
 
-const commonMaskProps = (node: Element): rnsvg.CommonMaskProps =>
+const commonMaskProps = (node: Element): RnSvg.CommonMaskProps =>
   filter({
     mask: stringAttribute(node, 'mask'),
   })
 
-const commonPathProps = (node: Element): rnsvg.CommonPathProps =>
+const commonPathProps = (node: Element): RnSvg.CommonPathProps =>
   filter({
     ...fillProps(node),
     ...strokeProps(node),
@@ -344,7 +325,7 @@ const applyClass = (styles: Styles, node: Element): object => {
 }
 
 // Element props
-const circleProps = (styles: Styles, node: Element): rnsvg.CircleProps =>
+const circleProps = (styles: Styles, node: Element): RnSvg.CircleProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -356,13 +337,13 @@ const circleProps = (styles: Styles, node: Element): rnsvg.CircleProps =>
     }),
   })
 
-const clipPathProps = (styles: Styles, node: Element): rnsvg.ClipPathProps =>
+const clipPathProps = (styles: Styles, node: Element): RnSvg.ClipPathProps =>
   filter({
     ...applyClass(styles, node),
     id: requiredStringAttribute(node, 'id'),
   })
 
-const ellipseProps = (styles: Styles, node: Element): rnsvg.EllipseProps =>
+const ellipseProps = (styles: Styles, node: Element): RnSvg.EllipseProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -375,7 +356,7 @@ const ellipseProps = (styles: Styles, node: Element): rnsvg.EllipseProps =>
     }),
   })
 
-const gProps = (styles: Styles, node: Element): rnsvg.GProps =>
+const gProps = (styles: Styles, node: Element): RnSvg.GProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -384,7 +365,7 @@ const gProps = (styles: Styles, node: Element): rnsvg.GProps =>
     }),
   })
 
-const imageProps = (styles: Styles, node: Element): rnsvg.ImageProps =>
+const imageProps = (styles: Styles, node: Element): RnSvg.ImageProps =>
   filter({
     x: numericAttribute(node, 'x'),
     y: numericAttribute(node, 'y'),
@@ -395,7 +376,7 @@ const imageProps = (styles: Styles, node: Element): rnsvg.ImageProps =>
     opacity: numericAttribute(node, 'opacity'),
   })
 
-const lineProps = (styles: Styles, node: Element): rnsvg.LineProps =>
+const lineProps = (styles: Styles, node: Element): RnSvg.LineProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -408,7 +389,7 @@ const lineProps = (styles: Styles, node: Element): rnsvg.LineProps =>
     }),
   })
 
-const linearGradientProps = (styles: Styles, node: Element): rnsvg.LinearGradientProps =>
+const linearGradientProps = (styles: Styles, node: Element): RnSvg.LinearGradientProps =>
   filter({
     ...applyClass(styles, node),
     ...filter({
@@ -416,12 +397,12 @@ const linearGradientProps = (styles: Styles, node: Element): rnsvg.LinearGradien
       x2: numericAttribute(node, 'x2'),
       y1: numericAttribute(node, 'y1'),
       y2: numericAttribute(node, 'y2'),
-      gradientUnits: numericAttribute(node, 'gradientUnits') as rnsvg.Units,
+      gradientUnits: numericAttribute(node, 'gradientUnits') as RnSvg.Units,
       id: requiredStringAttribute(node, 'id'),
     }),
   })
 
-const pathProps = (styles: Styles, node: Element): rnsvg.PathProps =>
+const pathProps = (styles: Styles, node: Element): RnSvg.PathProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -431,7 +412,7 @@ const pathProps = (styles: Styles, node: Element): rnsvg.PathProps =>
     }),
   })
 
-const patternProps = (styles: Styles, node: Element): rnsvg.PatternProps =>
+const patternProps = (styles: Styles, node: Element): RnSvg.PatternProps =>
   filter({
     ...applyClass(styles, node),
     ...filter({
@@ -441,14 +422,14 @@ const patternProps = (styles: Styles, node: Element): rnsvg.PatternProps =>
       width: numericAttribute(node, 'width'),
       height: numericAttribute(node, 'height'),
       patternTransform: stringAttribute(node, 'patternTransform'),
-      patternUnits: numericAttribute(node, 'patternUnits') as rnsvg.Units,
-      patternContentUnits: numericAttribute(node, 'patternContentUnits') as rnsvg.Units,
+      patternUnits: numericAttribute(node, 'patternUnits') as RnSvg.Units,
+      patternContentUnits: numericAttribute(node, 'patternContentUnits') as RnSvg.Units,
       viewBox: stringAttribute(node, 'viewBox'),
       preserveAspectRatio: stringAttribute(node, 'preserveAspectRatio'),
     }),
   })
 
-const polygonProps = (styles: Styles, node: Element): rnsvg.PolygonProps =>
+const polygonProps = (styles: Styles, node: Element): RnSvg.PolygonProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -458,7 +439,7 @@ const polygonProps = (styles: Styles, node: Element): rnsvg.PolygonProps =>
     }),
   })
 
-const polylineProps = (styles: Styles, node: Element): rnsvg.PolylineProps =>
+const polylineProps = (styles: Styles, node: Element): RnSvg.PolylineProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -468,7 +449,7 @@ const polylineProps = (styles: Styles, node: Element): rnsvg.PolylineProps =>
     }),
   })
 
-const radialGradientProps = (styles: Styles, node: Element): rnsvg.RadialGradientProps =>
+const radialGradientProps = (styles: Styles, node: Element): RnSvg.RadialGradientProps =>
   filter({
     ...applyClass(styles, node),
     ...filter({
@@ -479,12 +460,12 @@ const radialGradientProps = (styles: Styles, node: Element): rnsvg.RadialGradien
       cx: numericAttribute(node, 'cx'),
       cy: numericAttribute(node, 'cy'),
       r: numericAttribute(node, 'r'),
-      gradientUnits: numericAttribute(node, 'gradientUnits') as rnsvg.Units,
+      gradientUnits: numericAttribute(node, 'gradientUnits') as RnSvg.Units,
       id: requiredStringAttribute(node, 'id'),
     }),
   })
 
-const rectProps = (styles: Styles, node: Element): rnsvg.RectProps =>
+const rectProps = (styles: Styles, node: Element): RnSvg.RectProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -499,7 +480,7 @@ const rectProps = (styles: Styles, node: Element): rnsvg.RectProps =>
     }),
   })
 
-const stopProps = (styles: Styles, node: Element): rnsvg.StopProps =>
+const stopProps = (styles: Styles, node: Element): RnSvg.StopProps =>
   filter({
     ...applyClass(styles, node),
     ...filter({
@@ -509,7 +490,7 @@ const stopProps = (styles: Styles, node: Element): rnsvg.StopProps =>
     }),
   })
 
-const svgProps = (styles: Styles, node: Element): rnsvg.SvgProps =>
+const svgProps = (styles: Styles, node: Element): RnSvg.SvgProps =>
   filter({
     ...filter({
       width: numericAttribute(node, 'width'),
@@ -519,7 +500,7 @@ const svgProps = (styles: Styles, node: Element): rnsvg.SvgProps =>
     }),
   })
 
-const symbolProps = (styles: Styles, node: Element): rnsvg.SymbolProps =>
+const symbolProps = (styles: Styles, node: Element): RnSvg.SymbolProps =>
   filter({
     ...applyClass(styles, node),
     ...filter({
@@ -530,7 +511,7 @@ const symbolProps = (styles: Styles, node: Element): rnsvg.SymbolProps =>
     }),
   })
 
-const tSpanProps = (styles: Styles, node: Element): rnsvg.TSpanProps =>
+const tSpanProps = (styles: Styles, node: Element): RnSvg.TSpanProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -541,22 +522,22 @@ const tSpanProps = (styles: Styles, node: Element): rnsvg.TSpanProps =>
     }),
   })
 
-const textSpecificProps = (node: Element): rnsvg.TextSpecificProps =>
+const textSpecificProps = (node: Element): RnSvg.TextSpecificProps =>
   filter({
     ...commonPathProps(node),
     ...fontProps(node),
     ...filter({
-      alignmentBaseline: stringAttribute(node, 'alignment-baseline') as rnsvg.AlignmentBaseline,
-      baselineShift: stringAttribute(node, 'baseline-shift') as rnsvg.BaselineShift,
+      alignmentBaseline: stringAttribute(node, 'alignment-baseline') as RnSvg.AlignmentBaseline,
+      baselineShift: stringAttribute(node, 'baseline-shift') as RnSvg.BaselineShift,
       // verticalAlign: numericAttribute(node, 'vertical-align'),
-      lengthAdjust: stringAttribute(node, 'lengthAdjust') as rnsvg.LengthAdjust,
+      lengthAdjust: stringAttribute(node, 'lengthAdjust') as RnSvg.LengthAdjust,
       textLength: numericAttribute(node, 'textLength'),
       // fontData?: null | { [name: string]: any },
       fontFeatureSettings: stringAttribute(node, 'fontFeatureSettings'),
     }),
   })
 
-const textProps = (styles: Styles, node: Element): rnsvg.TextProps =>
+const textProps = (styles: Styles, node: Element): RnSvg.TextProps =>
   filter({
     ...applyClass(styles, node),
     ...textSpecificProps(node),
@@ -567,7 +548,7 @@ const textProps = (styles: Styles, node: Element): rnsvg.TextProps =>
     }),
   })
 
-const textPathProps = (styles: Styles, node: Element): rnsvg.TextPathProps =>
+const textPathProps = (styles: Styles, node: Element): RnSvg.TextPathProps =>
   filter({
     ...applyClass(styles, node),
     ...textSpecificProps(node),
@@ -575,13 +556,13 @@ const textPathProps = (styles: Styles, node: Element): rnsvg.TextPathProps =>
       xlinkHref: stringAttribute(node, 'xlink:href'),
       href: requiredStringAttribute(node, 'href'),
       startOffset: numericAttribute(node, 'startOffset'),
-      method: stringAttribute(node, 'method') as rnsvg.TextPathMethod,
-      spacing: stringAttribute(node, 'spacing') as rnsvg.TextPathSpacing,
-      midLine: stringAttribute(node, 'midLine') as rnsvg.TextPathMidLine,
+      method: stringAttribute(node, 'method') as RnSvg.TextPathMethod,
+      spacing: stringAttribute(node, 'spacing') as RnSvg.TextPathSpacing,
+      midLine: stringAttribute(node, 'midLine') as RnSvg.TextPathMidLine,
     }),
   })
 
-const useProps = (styles: Styles, node: Element): rnsvg.UseProps =>
+const useProps = (styles: Styles, node: Element): RnSvg.UseProps =>
   filter({
     ...applyClass(styles, node),
     ...commonPathProps(node),
@@ -631,9 +612,9 @@ const renderNode = (
     case 'svg':
       if (node.attributes) {
         return (
-          <Svg key={key} {...svgProps(styles, node)} {...overrideSvgProps}>
+          <RnSvg.Svg key={key} {...svgProps(styles, node)} {...overrideSvgProps}>
             {children}
-          </Svg>
+          </RnSvg.Svg>
         )
       } else {
         return null
@@ -645,106 +626,106 @@ const renderNode = (
 
     case 'g':
       return (
-        <G key={key} {...gProps(styles, node)}>
+        <RnSvg.G key={key} {...gProps(styles, node)}>
           {children}
-        </G>
+        </RnSvg.G>
       )
 
     case 'path':
       return (
-        <Path key={key} {...pathProps(styles, node)}>
+        <RnSvg.Path key={key} {...pathProps(styles, node)}>
           {children}
-        </Path>
+        </RnSvg.Path>
       )
 
     case 'clipPath':
       return (
-        <ClipPath key={key} {...clipPathProps(styles, node)}>
+        <RnSvg.ClipPath key={key} {...clipPathProps(styles, node)}>
           {children}
-        </ClipPath>
+        </RnSvg.ClipPath>
       )
 
     case 'circle':
       return (
-        <Circle key={key} {...circleProps(styles, node)}>
+        <RnSvg.Circle key={key} {...circleProps(styles, node)}>
           {children}
-        </Circle>
+        </RnSvg.Circle>
       )
 
     case 'rect':
       return (
-        <Rect key={key} {...rectProps(styles, node)}>
+        <RnSvg.Rect key={key} {...rectProps(styles, node)}>
           {children}
-        </Rect>
+        </RnSvg.Rect>
       )
 
     case 'line':
       return (
-        <Line key={key} {...lineProps(styles, node)}>
+        <RnSvg.Line key={key} {...lineProps(styles, node)}>
           {children}
-        </Line>
+        </RnSvg.Line>
       )
 
     case 'defs':
-      return <Defs key={key}>{children}</Defs>
+      return <RnSvg.Defs key={key}>{children}</RnSvg.Defs>
 
     case 'use':
-      return <Use key={key} {...useProps(styles, node)} />
+      return <RnSvg.Use key={key} {...useProps(styles, node)} />
 
     case 'linearGradient':
       return (
-        <LinearGradient key={key} {...linearGradientProps(styles, node)}>
+        <RnSvg.LinearGradient key={key} {...linearGradientProps(styles, node)}>
           {children}
-        </LinearGradient>
+        </RnSvg.LinearGradient>
       )
 
     case 'radialGradient':
       return (
-        <RadialGradient key={key} {...radialGradientProps(styles, node)}>
+        <RnSvg.RadialGradient key={key} {...radialGradientProps(styles, node)}>
           {children}
-        </RadialGradient>
+        </RnSvg.RadialGradient>
       )
 
     case 'stop':
       return (
-        <Stop key={key} {...stopProps(styles, node)}>
+        <RnSvg.Stop key={key} {...stopProps(styles, node)}>
           {children}
-        </Stop>
+        </RnSvg.Stop>
       )
 
     case 'ellipse':
       return (
-        <Ellipse key={key} {...ellipseProps(styles, node)}>
+        <RnSvg.Ellipse key={key} {...ellipseProps(styles, node)}>
           {children}
-        </Ellipse>
+        </RnSvg.Ellipse>
       )
 
     case 'polygon':
       return (
-        <Polygon key={key} {...polygonProps(styles, node)}>
+        <RnSvg.Polygon key={key} {...polygonProps(styles, node)}>
           {children}
-        </Polygon>
+        </RnSvg.Polygon>
       )
 
     case 'polyline':
       return (
-        <Polyline key={key} {...polylineProps(styles, node)}>
+        <RnSvg.Polyline key={key} {...polylineProps(styles, node)}>
           {children}
-        </Polyline>
+        </RnSvg.Polyline>
       )
 
     case 'text':
       return (
-        <Text key={key} {...textProps(styles, node)}>
+        <RnSvg.Text key={key} {...textProps(styles, node)}>
           {children}
-        </Text>
+        </RnSvg.Text>
       )
 
     case 'tspan':
       return (
-        <TSpan key={key} {...tSpanProps(styles, node)}>
+        <RnSvg.TSpan key={key} {...tSpanProps(styles, node)}>
           {children}
-        </TSpan>
+        </RnSvg.TSpan>
       )
 
     default:

@@ -7,6 +7,6 @@ module.exports = {
       localSchemaFile: 'dist/schema.json'
     },
     includes: ['**/*.tsx'],
-    excludes: ['**/dist/**', '**/@types/**']
+    excludes: ['**/dist/**', '**/@types/**', '*.asar']
   },
 }
