@@ -1,8 +1,8 @@
 import { AppContext, ImageProps } from '@ag/app'
+import { SvgUri } from '@ag/react-native-svg-image'
 import debug from 'debug'
 import React from 'react'
 import { Image as RNImage, ImageStyle, StyleProp } from 'react-native'
-import { SvgUri } from './react-native-svg-uri'
 
 const log = debug('rn:NativeImage')
 

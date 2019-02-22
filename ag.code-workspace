@@ -1,28 +1,25 @@
 {
   "folders": [
     {
-      "path": "packages/app",
-      "name": "app"
+      "path": "packages/app"
     },
     {
-      "path": "packages/storybook",
-      "name": "storybook"
+      "path": "packages/storybook"
     },
     {
-      "path": "packages/target-electron",
-      "name": "target-electron"
+      "path": "packages/target-electron"
     },
     {
-      "path": "packages/target-react-native",
-      "name": "target-react-native"
+      "path": "packages/target-react-native"
     },
     {
-      "path": "packages/ui-blueprint",
-      "name": "ui-blueprint"
+      "path": "packages/react-native-svg-image"
     },
     {
-      "path": "packages/ui-nativebase",
-      "name": "ui-nativebase"
+      "path": "packages/ui-blueprint"
+    },
+    {
+      "path": "packages/ui-nativebase"
     },
     {
       "path": "."

@@ -58,7 +58,6 @@
     "@babel/plugin-transform-flow-strip-types": "^7.2.3",
     "@types/accounting": "^0.4.1",
     "@types/array.prototype.flatmap": "^1.2.0",
-    "@types/css": "^0.0.31",
     "@types/react": "^16.7.18",
     "@types/react-native": "^0.57.32",
     "@types/react-native-fs": "^2.8.2",
