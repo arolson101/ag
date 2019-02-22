@@ -1,7 +1,7 @@
 import * as electron from './ui.electron'
 import * as native from './ui.native'
 
-declare foo: typeof electron
-declare foo: typeof native
+declare var foo: typeof electron
+// declare var foo: typeof native
 
-export * from electron
+export * from './ui.electron'
