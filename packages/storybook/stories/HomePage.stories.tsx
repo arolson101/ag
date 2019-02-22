@@ -1,8 +1,7 @@
-// tslint:disable:no-implicit-dependencies max-line-length
+// tslint:disable:max-line-length
 import { HomePage } from '@ag/app'
-import { storiesOf } from '@storybook/react'
 import React from 'react'
-import { MockApp } from './helpers'
+import { MockApp, storiesOf } from './helpers'
 
 const emptyResponse = {
   data: {

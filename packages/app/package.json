@@ -40,7 +40,7 @@
     "memoize-one": "^5.0.0",
     "minidom": "^1.0.0",
     "ofx4js": "^2.0.1",
-    "prop-types": "^15.6.2",
+    "prop-types": "^15.7.2",
     "randomcolor": "^0.5.3",
     "react": "^16.7.0",
     "react-apollo": "^2.3.3",

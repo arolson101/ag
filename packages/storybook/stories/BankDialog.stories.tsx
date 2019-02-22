@@ -1,9 +1,7 @@
-// tslint:disable:no-implicit-dependencies
+// tslint:disable:max-line-length
 import { BankDialog, BankForm } from '@ag/app'
-import { action } from '@storybook/addon-actions'
-import { storiesOf } from '@storybook/react'
 import React from 'react'
-import { MockApp } from './helpers'
+import { action, MockApp, storiesOf } from './helpers'
 
 const emptyResponse = {
   data: {
@@ -23,7 +21,6 @@ const editResponse = {
         address: '8787 Baypine Road\nJacksonville, FL 32256\nUSA',
         notes: '',
         favicon:
-          // tslint:disable-next-line:max-line-length
           '{"source":[{"width":16,"height":16,"uri":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABdElEQVQ4T7XTTSgDYBzH8e+zlSgvk4O9hAO5mDjIy5G8JCVCoXGQlbIcUEhxWNS0xQ6Ki9CkqZW2A5lS8nJQU2qhJOEm5SJvY9pzULIxyXN/Pv/f//88fxEMBoP84Yh/BWQ4pxPW1kCrBZMJodN9yhsxgbzc2Ql+PzQ3w8UFuFwSE3r9BxIZCFV1OGBhgdFZL8PGCmL2dsBmA7cbIYREvgBnlzc8PgfIyVRzfn1LUnws5cYZliwG0tQqHh5fSE1JCJ/AuX5Ix4gThUKwONaCedZLe20B/TYPedkaRruqOPBfYTZVfwVCPec1Wlm2tKFKjOPpOUBj7zy+lT5KDHa25rrZ2D35HtDXT+BfHZB64PWNwpbJ3wFZNeOceoZQKoQEilqnogdCVQ2DDpRKhWyhKDcD6/yWBEo7pqkryyVdk4zv+Dr8DELA7d09/Ta3nLR9sB770jbjPTW4No/w7p9ibCiWL9NUmf/zP4h2Pf53F6JJ8ecE70Q529FGCcDGAAAAAElFTkSuQmCC"}],"from":"http://www.citicards.com/"}',
         online: true,
         fid: '24909',

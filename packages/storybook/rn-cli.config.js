@@ -133,6 +133,7 @@ const baseModulePath = resolvePath(__dirname, 'node_modules'),
   // resolution of modules in external roots
   extraNodeModules = buildModuleResolutionMap()
 
+alternateRoots.push(resolvePath(__dirname, '..', 'ui-nativebase'))
 alternateRoots.push(resolvePath(__dirname, '..', '..'))
 
 const moduleBlacklist = alternateRoots.map(
@@ -162,14 +163,18 @@ module.exports = (async () => {
         ...moduleBlacklist,
         /typeorm\/(?!browser).*/,
         /electron/,
-        /ui-nativebase\/node_modules\/react-native\/.*/,
-        /target-react-native/,
+        /ui-nativebase\/node_modules\/.*/,
+        // /ui-nativebase\/node_modules\/react-native-svg\/.*/,
+        // /ui-nativebase\/node_modules\/react-native-vector-icons\/.*/,
+        /target-react-native\/.*/,
+        /@storybook\/addon-ondevice-knobs\/node_modules\/react-native\/.*/,
+        // /storybook\/node_modules\/react-native.*/,
       ]),
       extraNodeModules: {
         ...require('node-libs-react-native'),
-        // fs: require.resolve('react-native-fs'),
-        // vm: require.resolve('vm-browserify/index.js'),
-        // stream: require.resolve('react-native-stream'),
+        fs: require.resolve('react-native-fs'),
+        vm: require.resolve('vm-browserify/index.js'),
+        stream: require.resolve('react-native-stream'),
 
         // 'react-native-sqlite-storage': require.resolve('react-native-sqlcipher-storage/sqlite.js'),
         typeorm: require.resolve('typeorm/browser'),

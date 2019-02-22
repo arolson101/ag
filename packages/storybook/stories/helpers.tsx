@@ -4,7 +4,9 @@ import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { IntlProvider } from 'react-intl'
-import { ui } from './ui'
+import { storiesOf, ui } from './platform-specific'
+
+export { action, storiesOf }
 
 const clientDependencies: ClientDependencies = {
   ui,

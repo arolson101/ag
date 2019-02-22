@@ -1,9 +1,6 @@
-// tslint:disable:no-implicit-dependencies
 import { PictureDialog } from '@ag/app'
-import { action } from '@storybook/addon-actions'
-import { storiesOf } from '@storybook/react'
 import React from 'react'
-import { MockApp } from './helpers'
+import { action, MockApp, storiesOf } from './helpers'
 
 const props = {
   isOpen: true,
