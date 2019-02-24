@@ -1,8 +1,8 @@
 {
   "name": "@ag/react-native-fetch",
   "version": "0.0.0",
-  "main": "react-native-fetch.ts",
   "license": "MIT",
+  "main": "react-native-fetch.ts",
   "dependencies": {
     "@ag/app": "^0.0.0",
     "debug": "^4.1.1",

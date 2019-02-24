@@ -20,11 +20,13 @@
   },
   "scripts": {
     "postinstall": "patch-package",
+    "check-packages": "npm-check",
     "lerna-semver-sync": "lerna-semver-sync",
     "lint": "tslint -c tslint.json --fix \"**/*{.ts,.tsx}\"",
     "test": "jest",
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
-    "prettier-package-json": "prettier-package-json --write --key-order ./package.json packages/*/package.json --key-order name,private,version,description,license,author,maintainers,contributors,homepage,repository,bugs,workspaces,main,build,module,browser,man,preferGlobal,bin,files,directories,scripts,config,jest,optionalDependencies,dependencies,bundleDependencies,bundledDependencies,peerDependencies,devDependencies,keywords,engines,engine-strict,engineStrict,os,cpu,publishConfig"
+    "prettier-package-json": "prettier-package-json --write --key-order ./package.json packages/*/package.json --key-order name,private,version,description,license,author,maintainers,contributors,homepage,repository,bugs,workspaces,main,build,module,browser,man,preferGlobal,bin,files,directories,scripts,config,jest,optionalDependencies,dependencies,bundleDependencies,bundledDependencies,peerDependencies,devDependencies,keywords,engines,engine-strict,engineStrict,os,cpu,publishConfig",
+    "update-packages": "lerna exec -- ncu --upgrade --upgradeAll"
   },
   "dependencies": {},
   "devDependencies": {
@@ -54,6 +56,8 @@
     "lerna": "^3.4.3",
     "lerna-semver-sync": "^1.3.1",
     "nodemon": "^1.18.9",
+    "npm-check": "^5.9.0",
+    "npm-check-updates": "^2.15.0",
     "patch-package": "^5.1.1",
     "postinstall-postinstall": "^2.0.0",
     "prettier": "^1.15.3",

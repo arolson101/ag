@@ -1,8 +1,8 @@
 {
   "name": "@ag/react-native-svg-image",
   "version": "0.0.0",
-  "main": "index.tsx",
   "license": "MIT",
+  "main": "index.tsx",
   "dependencies": {
     "css": "^2.2.4",
     "debug": "^4.1.1",
