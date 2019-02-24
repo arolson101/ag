@@ -4,6 +4,9 @@
       "path": "packages/app"
     },
     {
+      "path": "packages/react-native-fetch"
+    },
+    {
       "path": "packages/react-native-svg-image"
     },
     {

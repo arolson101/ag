@@ -1,7 +1,7 @@
 {
   "name": "storybook",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.0",
   "main": "electron.js",
   "build": {
     "appId": "com.example.ag"
@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@ag/app": "^0.0.0",
+    "@ag/react-native-fetch": "^0.0.0",
+    "@ag/react-native-svg-image": "^0.0.0",
     "@ag/ui-blueprint": "^0.0.0",
     "@ag/ui-nativebase": "^0.0.0",
     "@storybook/addon-actions": "^4.1.4",
@@ -49,7 +51,6 @@
     "react-native-randombytes": "^3.5.2",
     "react-native-sqlite-storage": "^3.3.9",
     "react-native-stream": "^0.1.9",
-    "react-native-svg": "^9.2.4",
     "react-native-vector-icons": "^6.2.0",
     "rn-fetch-blob": "^0.10.15",
     "typeorm": "0.2.11"

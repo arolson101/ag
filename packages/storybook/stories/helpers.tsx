@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { IntlProvider } from 'react-intl'
-import { storiesOf, ui } from './platform-specific'
+import { fetch, storiesOf, ui } from './platform-specific'
 
 export { action, storiesOf }
 

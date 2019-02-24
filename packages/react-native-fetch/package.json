@@ -1,0 +1,14 @@
+{
+  "name": "@ag/react-native-fetch",
+  "version": "0.0.0",
+  "main": "react-native-fetch.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@ag/app": "^0.0.0",
+    "debug": "^4.1.1",
+    "rn-fetch-blob": "^0.10.15"
+  },
+  "devDependencies": {
+    "@types/rn-fetch-blob": "^1.2.0"
+  }
+}
