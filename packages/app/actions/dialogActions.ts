@@ -1,5 +1,5 @@
+import { ImageSource } from '@ag/lib-util'
 import { createStandardAction } from 'typesafe-actions'
-import { ImageSource } from '../util'
 
 export type DialogType = 'login' | 'picture' | 'bank' | 'account'
 

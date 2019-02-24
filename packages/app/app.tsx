@@ -1,14 +1,16 @@
+import { createClient, ExecuteLink } from '@ag/lib-db'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
 import { AppContext, ClientDependencies } from './context'
-import { client, ExecuteLink } from './db'
 import { AppStore } from './reducers'
 
 const log = debug('app:app')
 log.enabled = true
+
+const client = createClient()
 
 export namespace App {
   export interface Props {

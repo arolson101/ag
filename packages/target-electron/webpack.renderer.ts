@@ -1,5 +1,6 @@
 /* tslint:disable:no-implicit-dependencies */
 import HtmlWebpackPlugin from 'html-webpack-plugin'
+import path from 'path'
 import { getTransformer } from 'ts-transform-graphql-tag'
 import webpack from 'webpack'
 import pkg from './package.json'
@@ -13,6 +14,7 @@ const config: webpack.Configuration = {
   target: 'electron-renderer',
   entry: `./src/index.ts`,
   output: {
+    path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
     // devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]?[loaders]',
 

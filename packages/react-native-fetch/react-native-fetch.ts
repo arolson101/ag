@@ -1,4 +1,4 @@
-import { ciLookup, decodeDataURI, isDataURI } from '@ag/app/util'
+import { ciLookup, decodeDataURI, isDataURI } from '@ag/lib-util'
 import debug from 'debug'
 import RNFetchBlob, { FetchBlobResponse } from 'rn-fetch-blob'
 

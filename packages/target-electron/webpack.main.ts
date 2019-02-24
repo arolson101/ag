@@ -1,12 +1,8 @@
 /* tslint:disable:no-implicit-dependencies */
+import path from 'path'
 import webpack from 'webpack'
-import pkg from './package.json'
 
-const CreateFileWebpack = require('create-file-webpack')
-
-const appName = 'Ag-electron'
-
-const outputFilename = 'main.js'
+export const outputFilename = 'main.js'
 
 const config: webpack.Configuration = {
   context: __dirname,
@@ -14,6 +10,7 @@ const config: webpack.Configuration = {
   target: 'electron-main',
   entry: `./src/main.ts`,
   output: {
+    path: path.resolve(__dirname, 'dist'),
     filename: outputFilename,
     // devtoolModuleFilenameTemplate: 'webpack://[namespace]/[resource-path]?[loaders]',
 
@@ -35,25 +32,6 @@ const config: webpack.Configuration = {
       },
     ],
   },
-  plugins: [
-    // create package.json
-    new CreateFileWebpack({
-      path: 'dist',
-      fileName: 'package.json',
-      content: JSON.stringify(
-        {
-          name: appName,
-          version: pkg.version,
-          main: outputFilename,
-          dependencies: {
-            sqlite3: pkg.dependencies.sqlite3,
-          },
-        },
-        null,
-        '  '
-      ),
-    }),
-  ],
   externals: {
     'electron-devtools-installer': 'commonjs electron-devtools-installer', //
   },

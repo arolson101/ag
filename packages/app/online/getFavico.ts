@@ -1,9 +1,8 @@
+import { fixUrl, ImageBuf, isUrl } from '@ag/lib-util'
 import debug from 'debug'
 import minidom from 'minidom'
 import url from 'url'
 import { AppContext } from '../context'
-import { ImageBuf } from '../util'
-import { fixUrl, isUrl } from '../util/url'
 import { getImage } from './getImages'
 
 const log = debug('app:getFavico')

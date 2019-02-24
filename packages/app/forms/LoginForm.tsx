@@ -4,6 +4,7 @@ import { Formik, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
+import { actions } from '../actions'
 import { AppMutation, ConfirmButton, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
@@ -111,8 +112,10 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                 }}
                 onSubmit={async (values, factions) => {
                   try {
+                    const { dispatch } = this.context
                     await runMutation({ variables: { ...values, dbId } })
                     log('logged in')
+                    dispatch(actions.closeDlg('login'))
                   } finally {
                     factions.setSubmitting(false)
                   }

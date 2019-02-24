@@ -5,7 +5,7 @@ import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, typedFields } from '../context'
 import { getImage, getImageList } from '../online'
-import { ImageSource } from '../util'
+import { ImageSource } from '@ag/lib-util'
 
 const log = debug('app:PictureDialog')
 

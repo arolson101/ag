@@ -1,9 +1,9 @@
+import { Account, Bank } from '@ag/lib-entities'
 import assert from 'assert'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { defineMessages } from 'react-intl'
 import { AppContext } from '../context'
-import { Account, Bank } from '../entities'
 
 const log = debug('app:ofx')
 

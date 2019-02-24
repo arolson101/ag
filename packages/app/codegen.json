@@ -1,13 +1,13 @@
 {
   "overwrite": true,
-  "schema": "./dist/schema.json",
+  "schema": "../lib-db/dist/schema.json",
   "documents": "**/*.tsx",
   "generates": {
     "graphql-types.d.ts": {
       "config": {
         "noNamespaces": false,
         "enums": {
-          "AccountType": "./entities/AccountType#AccountType"
+          "AccountType": "@ag/lib-entities/AccountType#AccountType"
         }
       },
       "plugins": ["typescript-common", "typescript-client"]

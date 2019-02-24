@@ -1,10 +1,10 @@
+import { ImageBuf } from '@ag/lib-util'
 import { ApolloClient } from 'apollo-client'
 import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { AppAction } from '../actions'
 import { AppState, AppStore } from '../reducers'
-import { ImageBuf } from '../util'
 import { UiContext } from './uiContext'
 
 export const maxImageSize = 512

@@ -5,7 +5,7 @@ import minidom from 'minidom'
 import { extname } from 'path'
 import url from 'url'
 import { AppContext } from '../context'
-import { fixUrl, ImageBuf, imageSize } from '../util'
+import { fixUrl, ImageBuf, imageSize } from '@ag/lib-util'
 
 const log = debug('app:getImages')
 

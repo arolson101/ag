@@ -1,6 +1,6 @@
+import { ImageSource } from '@ag/lib-util'
 import { getType } from 'typesafe-actions'
 import { actions, AppAction } from '../actions'
-import { ImageSource } from '../util'
 
 export interface DialogState {
   loginDialog?: {
@@ -27,11 +27,7 @@ const initialState: DialogState = {}
 export const dialog = (state: DialogState = initialState, action: AppAction): DialogState => {
   switch (action.type) {
     case getType(actions.openDlg.login):
-    case getType(actions.closeApp):
       return { ...state, loginDialog: { isOpen: true } }
-
-    case getType(actions.openApp):
-      return { ...state, loginDialog: { isOpen: false } }
 
     case getType(actions.openDlg.picture):
       return { ...state, pictureDialog: { isOpen: true, ...action.payload } }

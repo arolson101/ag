@@ -2,5 +2,46 @@
   "name": "@ag/lib-db",
   "version": "0.0.0",
   "license": "MIT",
-  "main": "index.ts"
+  "main": "index.ts",
+  "scripts": {
+    "pregraphdoc": "yarn run schema",
+    "graphdoc": "graphdoc --force -s ./dist/schema.json -o ./dist/graphdoc",
+    "schema": "node -r ts-node/register/transpile-only ./scripts/buildSchema.ts ./dist/schema.json",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@ag/lib-entities": "^0.0.0",
+    "@ag/lib-util": "^0.0.0",
+    "apollo-cache-inmemory": "^1.4.2",
+    "apollo-client": "^2.4.12",
+    "apollo-link": "^1.2.6",
+    "cuid": "^2.1.4",
+    "debug": "^4.1.1",
+    "graphql": "^14.0.2",
+    "sanitize-filename": "^1.6.1",
+    "type-graphql": "^0.16.0",
+    "typedi": "^0.8.0",
+    "typeorm": "0.2.11"
+  },
+  "devDependencies": {
+    "@2fd/graphdoc": "^2.4.0",
+    "@types/debug": "^0.0.31",
+    "@types/graphql": "^14.0.4",
+    "@types/image-size": "^0.7.0",
+    "@types/lodash.omit": "^4.5.4",
+    "@types/lodash.pick": "^4.4.4",
+    "@types/luxon": "^1.4.1",
+    "@types/memoize-one": "^4.1.0",
+    "@types/react": "^16.7.18",
+    "@types/react-redux": "^6.0.12",
+    "@types/sanitize-filename": "^1.1.28",
+    "@types/url-regex": "^4.1.0",
+    "bufferutil": "^4.0.1",
+    "commander": "^2.19.0",
+    "graphql-code-generator": "^0.16.0",
+    "graphql-codegen-typescript-client": "^0.16.0",
+    "graphql-codegen-typescript-common": "^0.16.0",
+    "rxjs-marbles": "^5.0.0",
+    "utf-8-validate": "^5.0.2"
+  }
 }

@@ -4,6 +4,15 @@
       "path": "packages/app"
     },
     {
+      "path": "packages/lib-db"
+    },
+    {
+      "path": "packages/lib-entities"
+    },
+    {
+      "path": "packages/lib-util"
+    },
+    {
       "path": "packages/react-native-fetch"
     },
     {

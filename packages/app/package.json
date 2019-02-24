@@ -4,11 +4,8 @@
   "license": "MIT",
   "main": "index.ts",
   "scripts": {
-    "precodegen": "yarn run schema",
+    "precodegen": "lerna run schema --loglevel silent",
     "codegen": "gql-gen",
-    "pregraphdoc": "yarn run schema",
-    "graphdoc": "graphdoc --force -s ./dist/schema.json -o ./dist/graphdoc",
-    "schema": "node -r ts-node/register/transpile-only ./scripts/buildSchema.ts ./dist/schema.json",
     "test": "jest"
   },
   "jest": {
@@ -16,14 +13,11 @@
     "testEnvironment": "node"
   },
   "dependencies": {
+    "@ag/lib-db": "^0.0.0",
+    "@ag/lib-entities": "^0.0.0",
+    "@ag/lib-util": "^0.0.0",
     "accounting": "^0.4.1",
-    "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
-    "apollo-link": "^1.2.6",
-    "apollo-link-state": "^0.4.2",
-    "apollo-server": "^2.3.1",
-    "apollo-server-core": "^2.3.1",
-    "cuid": "^2.1.4",
     "debug": "^4.1.1",
     "filist": "^1.0.3",
     "formik": "^1.4.2",

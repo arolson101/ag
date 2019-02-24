@@ -1,6 +1,6 @@
 import debug from 'debug'
 import { ComponentType } from 'react'
-import { ImageSource } from '../util'
+import { ImageSource } from '@ag/lib-util'
 import {
   CheckboxFieldProps,
   CurrencyFieldProps,

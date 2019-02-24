@@ -1,6 +1,5 @@
-import { actions, AppContext, CommonTextFieldProps, getFavico, UrlFieldProps } from '@ag/app'
-import { ImageSource } from '@ag/app/util'
-import { fixUrl, isUrl } from '@ag/app/util/url'
+import { actions, CommonTextFieldProps, getFavico, UrlFieldProps } from '@ag/app'
+import { fixUrl, ImageSource, isUrl } from '@ag/lib-util'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import { ActionSheet, Button, Input, Item, NativeBase, Spinner } from 'native-base'
@@ -9,8 +8,8 @@ import * as React from 'react'
 import { defineMessages } from 'react-intl'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { FormContext } from './Form.nativebase'
-import { Image } from './Image.nativebase'
 import { Label } from './Label.nativebase'
+import { Image } from './NativeImage'
 
 const log = debug('ag:UrlField')
 log.enabled = true

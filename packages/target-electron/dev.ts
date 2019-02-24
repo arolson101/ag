@@ -1,11 +1,16 @@
 /* tslint:disable:no-console no-implicit-dependencies */
 import chalk from 'chalk'
 import { ChildProcess, spawn } from 'child_process'
+import rebuild from 'electron-rebuild'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
+import pkg from './package.json'
+// import { outputFilename } from './webpack.main'
+
+const appName = 'Ag-electron'
 
 process.env.DEBUG = 'app:*,electron:*'
 
@@ -22,7 +27,7 @@ let server: WebpackDevServer | undefined
 const channels = {
   patch: chalk.dim.green(`[patch]`),
   dll: chalk.dim.green(`[dll]`),
-  lib: chalk.dim.green(`[lib]`),
+  compile: chalk.dim.green(`[compile]`),
   webpack: chalk.rgb(83, 154, 199)(`[main]`),
   electron: chalk.rgb(160, 234, 249)(`[electron]`),
   wds: chalk.rgb(115, 175, 203)(`[wds]`),
@@ -92,7 +97,7 @@ const checkVendorDll = async (promises: Array<Promise<any>>) => {
 
   return new Promise(resolve => {
     const configPath = './webpack.dll.ts'
-    const vendorDllFile = './dist/vendor.js' //
+    const vendorDllFile = './app/vendor.js' //
     const dependencies = [
       './package.json', //
       '../../package.json',
@@ -121,8 +126,32 @@ const checkVendorDll = async (promises: Array<Promise<any>>) => {
   })
 }
 
-const checkSqlite = () => {
-  return new Promise(resolve => {
+const appPackageJson = async () => {
+  // const appDir = path.join('.', 'dist')
+  // if (!fs.existsSync(appDir)) {
+  //   fs.mkdirSync(appDir)
+  // }
+  // const packageJson = path.join(appDir, 'package.json')
+  // const content = JSON.stringify(
+  //   {
+  //     name: appName,
+  //     version: pkg.version,
+  //     main: outputFilename,
+  //     dependencies: {
+  //       sqlite3: pkg.dependencies.sqlite3,
+  //     },
+  //   },
+  //   null,
+  //   '  '
+  // )
+  // fs.writeFileSync(packageJson, content)
+}
+
+const checkSqlite = async (promises: Array<Promise<any>>) => {
+  await Promise.all(promises)
+
+  return new Promise(async (resolve, reject) => {
+    // require.resolve('sqlite3')
     const libPath = path.join(
       '.',
       'node_modules',
@@ -133,27 +162,28 @@ const checkSqlite = () => {
       'node_sqlite3.node'
     )
     if (!fs.existsSync(libPath)) {
-      print(channels.lib, `${libPath} not found; building`)
-      const child = spawn(wrapCmd('electron-builder'), ['install-app-deps'])
+      print(channels.compile, `${libPath} not found; building`)
 
-      child.stdout.on('data', data => {
-        print(channels.lib, data.toString())
-      })
-      child.stderr.on('data', data => {
-        print(channels.lib, data.toString())
-      })
+      try {
+        await rebuild({
+          buildPath: __dirname,
+          useCache: false,
+          force: true,
+          electronVersion: pkg.dependencies.electron.replace('^', ''),
+        })
+      } catch (error) {
+        reject(error)
+      }
 
-      child.on('exit', code => {
-        if (code === 0) {
-          print(channels.lib, chalk.green('✓') + ` built ${libPath}`)
-          resolve()
-        } else {
-          closeEverything(channels.lib)
-          throw new Error(`building ${libPath} failed`)
-        }
-      })
+      if (fs.existsSync(libPath)) {
+        print(channels.compile, chalk.green('✓') + ` built ${libPath}`)
+        resolve()
+      } else {
+        closeEverything(channels.compile)
+        reject(new Error(`building ${libPath} failed`))
+      }
     } else {
-      print(channels.lib, chalk.green('✓') + ` ${libPath}`)
+      print(channels.compile, chalk.green('✓') + ` ${libPath}`)
       resolve()
     }
   })
@@ -189,7 +219,7 @@ const runWebpackForMain = async (promises: Array<Promise<any>>) => {
   return new Promise((resolve, reject) => {
     print(channels.webpack, 'starting webpack')
     const mainConfig = require('./webpack.main')
-    const compiler = webpack({ ...mainConfig, ...devConfig })
+    const compiler = webpack({ ...mainConfig, ...devConfig /*, devServer: { hot: false }*/ })
     webpackWatching = compiler.watch({}, (err, stats) => {
       if (err) {
         console.log('Error in main config: %o', err)
@@ -257,7 +287,8 @@ const closeEverything = (channel: string) => {
 
 const patchPromise = patchPackage()
 const vendorPromise = checkVendorDll([patchPromise])
-const libPromise = checkSqlite()
+const appPackageJsonPromise = appPackageJson()
+const libPromise = checkSqlite([appPackageJsonPromise])
 const wdsPromise = runWebpackDevServer([vendorPromise])
 const mainPromise = runWebpackForMain([libPromise])
 Promise.all([wdsPromise, mainPromise]).then(() => {
