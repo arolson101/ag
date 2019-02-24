@@ -15,8 +15,9 @@
   },
   "dependencies": {
     "@ag/core": "^0.0.0",
-    "@ag/util": "^0.0.0",
+    "@ag/db": "^0.0.0",
     "@ag/ui-blueprint": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "@storybook/react": "^4.1.4",
     "classnames": "^2.2.6",
     "commander": "^2.19.0",
@@ -30,6 +31,7 @@
     "normalize.css": "^8.0.1",
     "query-string": "^6.2.0",
     "react": "^16.7.0",
+    "react-apollo": "^2.3.3",
     "react-dom": "^16.7.0",
     "react-hot-loader": "^4.6.3",
     "react-intl": "^2.7.2",

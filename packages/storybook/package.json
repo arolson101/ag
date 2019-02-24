@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "@ag/core": "^0.0.0",
-    "@ag/util": "^0.0.0",
     "@ag/react-native-fetch": "^0.0.0",
     "@ag/react-native-svg-image": "^0.0.0",
     "@ag/ui-blueprint": "^0.0.0",
     "@ag/ui-nativebase": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "@storybook/addon-actions": "^4.1.4",
     "@storybook/addon-links": "^4.1.4",
     "@storybook/addon-ondevice-knobs": "^4.1.13",
