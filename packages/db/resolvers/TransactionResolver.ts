@@ -1,4 +1,4 @@
-import { diff } from '@ag/lib-util'
+import { diff } from '@ag/util'
 import cuid from 'cuid'
 import { Arg, Mutation, Resolver } from 'type-graphql'
 import { DbChange, Transaction, TransactionInput } from '../entities'

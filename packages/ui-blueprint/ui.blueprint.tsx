@@ -1,4 +1,4 @@
-import { TabProps, TabsProps, UiContext } from '@ag/app'
+import { TabProps, TabsProps, UiContext } from '@ag/core'
 import {
   Alert,
   Button,

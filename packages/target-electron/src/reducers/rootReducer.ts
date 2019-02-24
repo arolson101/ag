@@ -1,4 +1,4 @@
-import { appReducers, AppState } from '@ag/app'
+import { appReducers, AppState } from '@ag/core'
 import { combineReducers } from 'redux'
 import { router, RouterState } from './routeReducer'
 

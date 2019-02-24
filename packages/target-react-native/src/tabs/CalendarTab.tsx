@@ -1,4 +1,4 @@
-import { AppContext } from '@ag/app'
+import { AppContext } from '@ag/core'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { Text } from 'react-native'

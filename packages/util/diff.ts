@@ -1,4 +1,4 @@
-import { ISpec } from '@ag/lib-util'
+import { ISpec } from '@ag/util'
 
 export const diff = <T extends Record<string, any>>(base: T, next: Partial<T>): ISpec<T> => {
   return Object.keys(next).reduce(

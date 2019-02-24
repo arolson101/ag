@@ -1,4 +1,4 @@
-import { ClientDependencies } from '@ag/app'
+import { ClientDependencies } from '@ag/core'
 import electron, { nativeImage } from 'electron'
 
 const dialog = (electron.remote || electron).dialog

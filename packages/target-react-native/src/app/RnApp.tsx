@@ -1,5 +1,5 @@
-import { App, ClientDependencies } from '@ag/app'
-import { createClient } from '@ag/lib-db'
+import { App, ClientDependencies } from '@ag/core'
+import { createClient } from '@ag/db'
 import { rnfetch } from '@ag/react-native-fetch'
 import debug from 'debug'
 import React from 'react'

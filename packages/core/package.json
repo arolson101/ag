@@ -1,5 +1,5 @@
 {
-  "name": "@ag/app",
+  "name": "@ag/core",
   "version": "0.0.0",
   "license": "MIT",
   "main": "index.ts",
@@ -13,8 +13,8 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@ag/lib-db": "^0.0.0",
-    "@ag/lib-util": "^0.0.0",
+    "@ag/db": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "accounting": "^0.4.1",
     "apollo-client": "^2.4.12",
     "debug": "^4.1.1",

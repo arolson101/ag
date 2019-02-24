@@ -1,4 +1,4 @@
-import { AppContext, appDialogs } from '@ag/app'
+import { AppContext, appDialogs } from '@ag/core'
 import { platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React from 'react'

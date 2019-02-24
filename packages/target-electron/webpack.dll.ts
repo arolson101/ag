@@ -2,7 +2,7 @@
 import path from 'path'
 import webpack from 'webpack'
 
-import apppkg from '../app/package.json'
+import apppkg from '../core/package.json'
 import electronpkg from './package.json'
 
 const mainProcessDeps = ['commander', 'electron-is-dev', 'electron-window-state']

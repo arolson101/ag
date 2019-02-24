@@ -5,7 +5,7 @@ import {
   BankDialog,
   LoginDialog,
   PictureDialog,
-} from '@ag/app'
+} from '@ag/core'
 import debug from 'debug'
 import React from 'react'
 import shallowequal from 'shallowequal'

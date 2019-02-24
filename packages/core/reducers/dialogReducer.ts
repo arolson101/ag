@@ -1,4 +1,4 @@
-import { ImageSource } from '@ag/lib-util'
+import { ImageSource } from '@ag/util'
 import { getType } from 'typesafe-actions'
 import { actions, AppAction } from '../actions'
 

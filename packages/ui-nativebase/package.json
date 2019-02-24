@@ -9,8 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@ag/app": "^0.0.0",
-    "@ag/lib-util": "^0.0.0",
+    "@ag/core": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "@ag/react-native-svg-image": "^0.0.0",
     "accounting": "^0.4.1",
     "debug": "^4.1.1",

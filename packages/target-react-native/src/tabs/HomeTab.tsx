@@ -1,4 +1,4 @@
-import { AppContext, HomePage } from '@ag/app'
+import { AppContext, HomePage } from '@ag/core'
 import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'

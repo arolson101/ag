@@ -1,4 +1,4 @@
-import { AlertProps } from '@ag/app'
+import { AlertProps } from '@ag/core'
 import debug from 'debug'
 import React from 'react'
 import { Alert as RnAlert } from 'react-native'

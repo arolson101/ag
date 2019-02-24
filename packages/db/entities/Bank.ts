@@ -1,4 +1,4 @@
-import { ImageSource, ISpec } from '@ag/lib-util'
+import { ImageSource, ISpec } from '@ag/util'
 import debug from 'debug'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'

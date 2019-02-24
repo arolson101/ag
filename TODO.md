@@ -1,3 +1,6 @@
+# fixes
+* webpack vendor dll loading new libs
+
 # testing
 * mock http requests
 * jest snapshots

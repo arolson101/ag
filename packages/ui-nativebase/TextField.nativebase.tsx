@@ -1,4 +1,4 @@
-import { CommonTextFieldProps, TextFieldProps } from '@ag/app'
+import { CommonTextFieldProps, TextFieldProps } from '@ag/core'
 import { Field, FieldProps } from 'formik'
 import { Icon, Input, Item, Textarea } from 'native-base'
 import React from 'react'

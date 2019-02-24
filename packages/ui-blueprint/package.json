@@ -9,8 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@ag/app": "^0.0.0",
-    "@ag/lib-util": "^0.0.0",
+    "@ag/core": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "@blueprintjs/core": "^3.11.0",
     "@blueprintjs/icons": "^3.4.0",
     "@blueprintjs/select": "^3.4.0",

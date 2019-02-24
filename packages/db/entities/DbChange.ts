@@ -1,4 +1,4 @@
-import { ISpec } from '@ag/lib-util'
+import { ISpec } from '@ag/util'
 import { Record } from './Record'
 
 export interface DbRecordEdit {

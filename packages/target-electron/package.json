@@ -14,8 +14,8 @@
     "electron-builder": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "@ag/app": "^0.0.0",
-    "@ag/lib-util": "^0.0.0",
+    "@ag/core": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "@ag/ui-blueprint": "^0.0.0",
     "@storybook/react": "^4.1.4",
     "classnames": "^2.2.6",

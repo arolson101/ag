@@ -1,5 +1,5 @@
 // tslint:disable:max-line-length
-import { BankDialog, BankForm } from '@ag/app'
+import { BankDialog, BankForm } from '@ag/core'
 import React from 'react'
 import { action, MockApp, storiesOf } from './helpers'
 

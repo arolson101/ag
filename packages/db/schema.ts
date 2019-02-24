@@ -1,4 +1,4 @@
-import { ImageSource } from '@ag/lib-util'
+import { ImageSource } from '@ag/util'
 import { buildSchemaSync, useContainer as gqlUseContainer } from 'type-graphql'
 import { Container } from 'typedi'
 import { useContainer as ormUseContainer } from 'typeorm'

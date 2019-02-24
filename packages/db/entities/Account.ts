@@ -1,4 +1,4 @@
-import { ISpec } from '@ag/lib-util'
+import { ISpec } from '@ag/util'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Field, ObjectType } from 'type-graphql'

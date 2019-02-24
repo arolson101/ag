@@ -7,7 +7,7 @@
       "config": {
         "noNamespaces": false,
         "enums": {
-          "AccountType": "@ag/lib-db#AccountType"
+          "AccountType": "@ag/db#AccountType"
         }
       },
       "plugins": ["typescript-common", "typescript-client"]

@@ -1,4 +1,4 @@
-import { ImageSource } from '@ag/lib-util'
+import { ImageSource } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
 import { GraphQLScalarType, GraphQLScalarTypeConfig, Kind } from 'graphql'

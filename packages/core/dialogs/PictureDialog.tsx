@@ -1,3 +1,4 @@
+import { ImageSource } from '@ag/util'
 import debug from 'debug'
 import { Formik } from 'formik'
 import React from 'react'
@@ -5,7 +6,6 @@ import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, typedFields } from '../context'
 import { getImage, getImageList } from '../online'
-import { ImageSource } from '@ag/lib-util'
 
 const log = debug('app:PictureDialog')
 

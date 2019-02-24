@@ -1,4 +1,4 @@
-import { AppAction, appReducers, AppState } from '@ag/app'
+import { AppAction, appReducers, AppState } from '@ag/core'
 import { combineReducers, Store } from 'redux'
 
 const rnReducers = {}

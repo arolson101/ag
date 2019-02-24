@@ -1,4 +1,4 @@
-import { LoginDialog, LoginForm } from '@ag/app'
+import { LoginDialog, LoginForm } from '@ag/core'
 import React from 'react'
 import { MockApp, storiesOf } from './helpers'
 

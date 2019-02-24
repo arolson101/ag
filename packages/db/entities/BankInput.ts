@@ -1,4 +1,4 @@
-import { ImageSource } from '@ag/lib-util'
+import { ImageSource } from '@ag/util'
 import { Field, InputType } from 'type-graphql'
 
 @InputType()

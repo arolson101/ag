@@ -1,4 +1,4 @@
-import { AppContext, LoadingOverlayProps } from '@ag/app'
+import { AppContext, LoadingOverlayProps } from '@ag/core'
 import { platform, Spinner } from '@ag/ui-nativebase'
 import debug from 'debug'
 import * as React from 'react'

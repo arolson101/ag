@@ -14,8 +14,8 @@
     "preset": "react-native"
   },
   "dependencies": {
-    "@ag/app": "^0.0.0",
-    "@ag/lib-util": "^0.0.0",
+    "@ag/core": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "@ag/react-native-fetch": "^0.0.0",
     "@ag/ui-blueprint": "^0.0.0",
     "@ag/ui-nativebase": "^0.0.0",

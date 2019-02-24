@@ -1,4 +1,4 @@
-import { AppAction, AppState, Dependencies } from '@ag/app'
+import { AppAction, AppState, Dependencies } from '@ag/core'
 import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'

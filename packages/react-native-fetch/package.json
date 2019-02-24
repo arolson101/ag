@@ -4,7 +4,7 @@
   "license": "MIT",
   "main": "react-native-fetch.ts",
   "dependencies": {
-    "@ag/lib-util": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "debug": "^4.1.1",
     "rn-fetch-blob": "^0.10.15"
   },

@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { App, AppContext, ClientDependencies, Gql } from '@ag/app'
+import { App, AppContext, ClientDependencies, Gql } from '@ag/core'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'

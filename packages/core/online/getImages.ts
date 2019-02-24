@@ -1,3 +1,4 @@
+import { fixUrl, ImageBuf, imageSize } from '@ag/util'
 import debug from 'debug'
 import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
 import isUrl from 'is-url'
@@ -5,7 +6,6 @@ import minidom from 'minidom'
 import { extname } from 'path'
 import url from 'url'
 import { AppContext } from '../context'
-import { fixUrl, ImageBuf, imageSize } from '@ag/lib-util'
 
 const log = debug('app:getImages')
 

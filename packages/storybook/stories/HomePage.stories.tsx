@@ -1,5 +1,5 @@
 // tslint:disable:max-line-length
-import { HomePage } from '@ag/app'
+import { HomePage } from '@ag/core'
 import React from 'react'
 import { MockApp, storiesOf } from './helpers'
 

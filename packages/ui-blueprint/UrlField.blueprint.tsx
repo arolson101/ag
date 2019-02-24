@@ -1,5 +1,5 @@
-import { actions, AppContext, getFavico, UrlFieldProps } from '@ag/app'
-import { fixUrl, ImageSource, isUrl } from '@ag/lib-util'
+import { actions, AppContext, getFavico, UrlFieldProps } from '@ag/core'
+import { fixUrl, ImageSource, isUrl } from '@ag/util'
 import {
   Button,
   Classes,

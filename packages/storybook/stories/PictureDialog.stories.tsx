@@ -1,4 +1,4 @@
-import { PictureDialog } from '@ag/app'
+import { PictureDialog } from '@ag/core'
 import React from 'react'
 import { action, MockApp, storiesOf } from './helpers'
 

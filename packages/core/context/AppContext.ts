@@ -1,4 +1,4 @@
-import { ImageBuf } from '@ag/lib-util'
+import { ImageBuf } from '@ag/util'
 import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { AppAction } from '../actions'

@@ -1,4 +1,4 @@
-import { CurrencyFieldProps } from '@ag/app'
+import { CurrencyFieldProps } from '@ag/core'
 import { Classes, FormGroup, Intent } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'

@@ -1,4 +1,4 @@
-import { UiContext } from '@ag/app'
+import { UiContext } from '@ag/core'
 import debug from 'debug'
 import {
   Button,

@@ -1,4 +1,4 @@
-import { fixUrl, ImageBuf, isUrl } from '@ag/lib-util'
+import { fixUrl, ImageBuf, isUrl } from '@ag/util'
 import debug from 'debug'
 import minidom from 'minidom'
 import url from 'url'

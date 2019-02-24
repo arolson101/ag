@@ -1,4 +1,4 @@
-import { actions, AppAction, HomePage } from '@ag/app'
+import { actions, AppAction, HomePage } from '@ag/core'
 import { createBrowserHistory, History } from 'history'
 import { stringify } from 'query-string'
 import { getType } from 'typesafe-actions'

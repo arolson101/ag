@@ -1,4 +1,4 @@
-import { CommonTextFieldProps, CurrencyFieldProps } from '@ag/app'
+import { CommonTextFieldProps, CurrencyFieldProps } from '@ag/core'
 import accounting from 'accounting'
 import { Field, FieldProps, FormikProps } from 'formik'
 import { Icon, Input, Item } from 'native-base'

@@ -1,5 +1,5 @@
-import { App, ClientDependencies } from '@ag/app'
-import { createClient } from '@ag/lib-db'
+import { App, ClientDependencies } from '@ag/core'
+import { createClient } from '@ag/db'
 import { ui } from '@ag/ui-blueprint'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'

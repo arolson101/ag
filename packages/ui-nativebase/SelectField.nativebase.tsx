@@ -1,4 +1,4 @@
-import { SelectFieldProps } from '@ag/app'
+import { SelectFieldProps } from '@ag/core'
 import { Field, FieldProps, FormikProps } from 'formik'
 import { Body, Icon, ListItem, Picker } from 'native-base'
 import * as React from 'react'

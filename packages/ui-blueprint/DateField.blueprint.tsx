@@ -1,4 +1,4 @@
-import { DateFieldProps } from '@ag/app'
+import { DateFieldProps } from '@ag/core'
 import { Classes, FormGroup, InputGroup, Intent } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'

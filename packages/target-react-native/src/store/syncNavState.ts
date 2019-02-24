@@ -1,4 +1,4 @@
-import { AccountDialog, BankDialog, LoginDialog, PictureDialog } from '@ag/app'
+import { AccountDialog, BankDialog, LoginDialog, PictureDialog } from '@ag/core'
 import assert from 'assert'
 import debug from 'debug'
 import { Navigation } from 'react-native-navigation'

@@ -1,4 +1,4 @@
-import { ImageProps } from '@ag/app'
+import { ImageProps } from '@ag/core'
 import React from 'react'
 
 export class Image extends React.PureComponent<ImageProps> {

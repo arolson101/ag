@@ -1,4 +1,4 @@
-import { AppContext } from '@ag/app'
+import { AppContext } from '@ag/core'
 import { ui } from '@ag/ui-blueprint'
 import { storiesOf } from '@storybook/react'
 

@@ -1,6 +1,6 @@
+import { ISpec } from '@ag/util'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { ISpec } from '@ag/lib-util'
 import { CategoryInput } from './CategoryInput'
 import { Record } from './Record'
 

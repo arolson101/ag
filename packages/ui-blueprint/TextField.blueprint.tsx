@@ -1,4 +1,4 @@
-import { TextFieldProps } from '@ag/app'
+import { TextFieldProps } from '@ag/core'
 import { Classes, FormGroup, InputGroup, Intent, TextArea } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'

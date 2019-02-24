@@ -1,5 +1,5 @@
-import { ClientDependencies } from '@ag/app'
-import { imageSize, ImageSource } from '@ag/lib-util'
+import { ClientDependencies } from '@ag/core'
+import { imageSize, ImageSource } from '@ag/util'
 import crypto from 'crypto'
 import debug from 'debug'
 import Path from 'path'

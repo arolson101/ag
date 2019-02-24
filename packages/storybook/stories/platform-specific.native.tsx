@@ -1,4 +1,4 @@
-import { UiContext } from '@ag/app'
+import { UiContext } from '@ag/core'
 import { rnfetch } from '@ag/react-native-fetch'
 import { ui as nbUi } from '@ag/ui-nativebase'
 import { storiesOf } from '@storybook/react-native'

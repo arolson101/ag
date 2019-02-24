@@ -1,4 +1,4 @@
-import { CompressedJson, dehydrate, hydrate, ISpec, iupdate } from '@ag/lib-util'
+import { CompressedJson, dehydrate, hydrate, ISpec, iupdate } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
 import { Column, Entity, Index, PrimaryColumn } from 'typeorm'

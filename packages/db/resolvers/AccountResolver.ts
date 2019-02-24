@@ -1,4 +1,4 @@
-import { diff } from '@ag/lib-util'
+import { diff } from '@ag/util'
 import assert from 'assert'
 import cuid from 'cuid'
 import debug from 'debug'

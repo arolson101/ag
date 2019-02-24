@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { AccountDialog, AccountForm } from '@ag/app'
+import { AccountDialog, AccountForm } from '@ag/core'
 import React from 'react'
 import { action, MockApp, storiesOf } from './helpers'
 

@@ -1,4 +1,4 @@
-import { formatDate, ISpec, standardizeDate } from '@ag/lib-util'
+import { formatDate, ISpec, standardizeDate } from '@ag/util'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { Record } from './Record'
