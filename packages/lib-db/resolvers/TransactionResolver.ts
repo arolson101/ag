@@ -1,7 +1,7 @@
-import { DbChange, Transaction, TransactionInput } from '@ag/lib-entities'
 import { diff } from '@ag/lib-util'
 import cuid from 'cuid'
 import { Arg, Mutation, Resolver } from 'type-graphql'
+import { DbChange, Transaction, TransactionInput } from '../entities'
 import { AppDb } from './AppDb'
 
 @Resolver(objectType => Transaction)

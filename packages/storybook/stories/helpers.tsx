@@ -8,14 +8,8 @@ import { fetch, storiesOf, ui } from './platform-specific'
 
 export { action, storiesOf }
 
-const clientDependencies: ClientDependencies = {
+const deps: ClientDependencies = {
   ui,
-  openDb: () => {
-    throw new Error('no openDb')
-  },
-  deleteDb: () => {
-    throw new Error('no deleteDb')
-  },
   fetch,
   scaleImage: action('scaleImage') as any,
   openCropper: action('openCropper') as any,
@@ -28,7 +22,8 @@ const store = {
   },
   dispatch: action('dispatch'),
 } as any
-const appContext = App.createContext(store, clientDependencies)
+
+const context = App.createContext({ store, deps })
 
 export const MockApp: React.FC<{ query?: Gql<any, any>; variables?: any; response?: object }> = ({
   query,
@@ -48,7 +43,7 @@ export const MockApp: React.FC<{ query?: Gql<any, any>; variables?: any; respons
   return (
     <MockedProvider mocks={mocks}>
       <IntlProvider locale='en'>
-        <AppContext.Provider value={appContext}>{children}</AppContext.Provider>
+        <AppContext.Provider value={context}>{children}</AppContext.Provider>
       </IntlProvider>
     </MockedProvider>
   )

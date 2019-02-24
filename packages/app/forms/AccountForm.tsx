@@ -1,4 +1,4 @@
-import { Account, AccountType } from '@ag/lib-entities'
+import { Account } from '@ag/lib-db'
 import { pick } from '@ag/lib-util'
 import { Formik, FormikErrors, FormikProps } from 'formik'
 import * as React from 'react'
@@ -16,7 +16,7 @@ export namespace AccountForm {
   }
 }
 
-type FormValues = Required<Account.Props>
+type FormValues = ReturnType<typeof Account.defaultValues>
 
 const fragments = {
   accountFields: gql`
@@ -160,7 +160,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
                           onValueChange={type => {
                             formApi.setFieldValue(
                               'color',
-                              Account.generateColor(type as AccountType)
+                              Account.generateColor(type as Account.Type)
                             )
                           }}
                         />

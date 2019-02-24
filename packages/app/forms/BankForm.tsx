@@ -1,9 +1,10 @@
-import { Bank } from '@ag/lib-entities'
+import { Bank } from '@ag/lib-db'
 import { pick } from '@ag/lib-util'
 import debug from 'debug'
 import { Formik, FormikErrors } from 'formik'
 import React from 'react'
 import { defineMessages } from 'react-intl'
+import { Omit } from 'utility-types'
 import { AppMutation, AppQuery, ConfirmButton, gql, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
@@ -19,7 +20,7 @@ export namespace BankForm {
   }
 }
 
-interface FormValues extends Required<Bank.Props> {
+type FormValues = typeof Bank.defaultValues & {
   fi: number
 }
 

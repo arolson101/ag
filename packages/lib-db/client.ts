@@ -3,25 +3,27 @@ import ApolloClient from 'apollo-client'
 import { ApolloLink, FetchResult, NextLink, Observable, Operation } from 'apollo-link'
 import debug from 'debug'
 import { execute } from 'graphql'
-import { DbContext } from './dbContext'
+import { DbContext } from './DbContext'
 import { schema } from './schema'
 
 const log = debug('app:client')
 log.enabled = false // process.env.NODE_ENV !== 'production'
 
 export class ExecuteLink extends ApolloLink {
-  static context: DbContext
+  constructor(private context: DbContext) {
+    super()
+  }
 
   request(operation: Operation, forward?: NextLink): Observable<FetchResult> | null {
     return new Observable(observer => {
-      log('ExecuteLink %o', { operation, context: ExecuteLink.context })
+      log('ExecuteLink %o', { operation, context: this.context })
       Promise.resolve(
         execute({
           schema,
           document: operation.query,
           variableValues: operation.variables,
           operationName: operation.operationName,
-          contextValue: ExecuteLink.context,
+          contextValue: this.context,
         })
       )
         .then(data => {
@@ -37,8 +39,8 @@ export class ExecuteLink extends ApolloLink {
   }
 }
 
-export const createClient = () =>
+export const createClient = (context: DbContext) =>
   new ApolloClient({
-    link: new ExecuteLink(),
+    link: new ExecuteLink(context),
     cache: new InMemoryCache(),
   })

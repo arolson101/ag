@@ -1,8 +1,8 @@
-import { Account, Bank, DbChange, Record, Transaction } from '@ag/lib-entities'
 import { fail } from 'assert'
 import debug from 'debug'
 import { Arg, Field, ObjectType } from 'type-graphql'
 import { Connection } from 'typeorm'
+import { Account, Bank, DbChange, Record, Transaction } from '../entities'
 import { AccountRepository, BankRepository, TransactionRepository } from '../repositories'
 
 const log = debug('db:AppDb')

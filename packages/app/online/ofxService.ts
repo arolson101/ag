@@ -1,4 +1,4 @@
-import { Account, Bank } from '@ag/lib-entities'
+import { Account, Bank } from '@ag/lib-db/entities'
 import assert from 'assert'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'

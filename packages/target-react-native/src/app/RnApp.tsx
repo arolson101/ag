@@ -1,7 +1,9 @@
 import { App, ClientDependencies } from '@ag/app'
+import { createClient } from '@ag/lib-db'
 import { rnfetch } from '@ag/react-native-fetch'
 import debug from 'debug'
 import React from 'react'
+import { ApolloProvider } from 'react-apollo'
 import { YellowBox } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { iconInit } from '../icons'
@@ -17,11 +19,9 @@ YellowBox.ignoreWarnings(['Require cycle:'])
 const log = debug('rn:init')
 log.enabled = true
 
-export const dependencies: ClientDependencies = {
+export const deps: ClientDependencies = {
   ui,
 
-  openDb,
-  deleteDb,
   fetch: rnfetch,
 
   getImageFromLibrary,
@@ -29,9 +29,14 @@ export const dependencies: ClientDependencies = {
   scaleImage,
 }
 
-const context = App.createContext(store, dependencies)
+const client = createClient({ openDb, deleteDb })
+const context = App.createContext({ store, deps })
 
-const RnApp: React.FC = ({ children }) => <App context={context}>{children}</App>
+const RnApp: React.FC = ({ children }) => (
+  <ApolloProvider client={client}>
+    <App context={context}>{children}</App>
+  </ApolloProvider>
+)
 
 registerComponents(RnApp)
 

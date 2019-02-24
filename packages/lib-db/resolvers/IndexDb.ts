@@ -1,5 +1,5 @@
-import { Db } from '@ag/lib-entities'
 import { Connection, Repository } from 'typeorm'
+import { Db } from '../entities'
 
 export class IndexDb {
   connection: Connection

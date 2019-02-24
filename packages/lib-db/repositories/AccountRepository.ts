@@ -1,5 +1,5 @@
-import { Account } from '@ag/lib-entities'
 import { EntityRepository } from 'typeorm'
+import { Account } from '../entities'
 import { RecordRepository } from './RecordRepository'
 
 @EntityRepository(Account)

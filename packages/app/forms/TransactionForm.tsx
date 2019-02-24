@@ -1,4 +1,4 @@
-import { Transaction } from '@ag/lib-entities'
+import { Transaction } from '@ag/lib-db'
 import { pick } from '@ag/lib-util'
 import accounting from 'accounting'
 import { Formik, FormikErrors, FormikProps } from 'formik'
@@ -13,11 +13,10 @@ export namespace TransactionForm {
   export interface Props {
     accountId: string
     transactionId?: string
-    onClosed: () => any
   }
 }
 
-type FormValues = Required<Transaction.Props>
+type FormValues = ReturnType<typeof Transaction.defaultValues>
 
 export class TransactionForm extends React.Component<TransactionForm.Props> {
   static readonly fragments = {
@@ -74,7 +73,7 @@ export class TransactionForm extends React.Component<TransactionForm.Props> {
 
   render() {
     const { ui, intl } = this.context
-    const { accountId, transactionId, onClosed } = this.props
+    const { accountId, transactionId } = this.props
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
 
     return (

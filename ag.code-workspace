@@ -7,9 +7,6 @@
       "path": "packages/lib-db"
     },
     {
-      "path": "packages/lib-entities"
-    },
-    {
       "path": "packages/lib-util"
     },
     {

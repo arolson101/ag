@@ -1,9 +1,9 @@
-import { Account, Bank, BankInput } from '@ag/lib-entities'
 import { diff } from '@ag/lib-util'
 import assert from 'assert'
 import cuid from 'cuid'
 import debug from 'debug'
 import { Arg, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
+import { Account, Bank, BankInput } from '../entities'
 import { AppDb } from './AppDb'
 
 const log = debug('app:BankResolver')

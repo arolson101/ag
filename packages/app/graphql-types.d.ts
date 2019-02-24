@@ -56,7 +56,7 @@ export interface TransactionInput {
   amount?: Maybe<number>
 }
 
-import { AccountType } from '@ag/lib-entities/AccountType'
+import { AccountType } from '@ag/lib-db'
 
 export type AccountTypeValueMap = {
   CHECKING: AccountType

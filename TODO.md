@@ -1,7 +1,6 @@
 # testing
 * mock http requests
 * jest snapshots
-* react-native storybook
 * add functionality tests
 * ensure stories work
 
