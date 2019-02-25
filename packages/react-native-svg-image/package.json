@@ -14,7 +14,9 @@
   },
   "devDependencies": {
     "@types/css": "^0.0.31",
+    "@types/debug": "^0.0.31",
     "@types/react": "^16.7.18",
-    "@types/react-native": "^0.57.32"
+    "@types/react-native": "^0.57.32",
+    "@types/xmldom": "^0.1.29"
   }
 }

@@ -9,6 +9,7 @@
 
 # functionality
 * get accounts from server
+* import/export
 * add bills
 * add transactions
 * download transactions

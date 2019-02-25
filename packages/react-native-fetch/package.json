@@ -9,6 +9,7 @@
     "rn-fetch-blob": "^0.10.15"
   },
   "devDependencies": {
+    "@types/debug": "^0.0.31",
     "@types/rn-fetch-blob": "^1.2.0"
   }
 }

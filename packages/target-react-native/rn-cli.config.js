@@ -162,7 +162,8 @@ module.exports = (async () => {
         ...moduleBlacklist,
         /typeorm\/(?!browser).*/,
         /electron/,
-        /ui-nativebase\/node_modules\/react-native\/.*/,
+        /ui-nativebase\/node_modules\/(?!react-native-collapsible).*/,
+        /react-native-svg-image\/node_modules\/(?!react-native-svg|css).*/,
         /storybook/,
       ]),
       extraNodeModules: {

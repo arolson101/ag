@@ -70,7 +70,7 @@ const wrapCmd = (name: string): string => {
 }
 
 const patchPackage = () => {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const child = spawn(wrapCmd('patch-package'), { cwd: path.resolve(__dirname, '..', '..') })
 
     child.stdout.on('data', data => {
@@ -86,7 +86,7 @@ const patchPackage = () => {
         resolve()
       } else {
         closeEverything(channels.patch)
-        throw new Error(`patch-packages failed`)
+        reject(new Error(`patch-packages failed`))
       }
     })
   })
@@ -95,7 +95,7 @@ const patchPackage = () => {
 const checkVendorDll = async (promises: Array<Promise<any>>) => {
   await Promise.all(promises)
 
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const configPath = './webpack.dll.ts'
     const vendorDllFile = './app/vendor.js' //
     const dependencies = [
@@ -114,7 +114,7 @@ const checkVendorDll = async (promises: Array<Promise<any>>) => {
         print(channels.dll, stats.toString(minimalStats))
         if (err) {
           closeEverything(channels.dll)
-          throw new Error(`failed building vendor dll`)
+          reject(new Error(`failed building vendor dll`))
         }
         print(channels.dll, chalk.green('✓') + ` built ${vendorDllFile}`)
         resolve()
@@ -151,6 +151,10 @@ const checkSqlite = async (promises: Array<Promise<any>>) => {
   await Promise.all(promises)
 
   return new Promise(async (resolve, reject) => {
+    if (!fs.existsSync(path.join('.', 'node_modules', 'sqlite3'))) {
+      reject(new Error('sqlite3 module not found'))
+    }
+
     // require.resolve('sqlite3')
     const libPath = path.join(
       '.',
@@ -180,7 +184,7 @@ const checkSqlite = async (promises: Array<Promise<any>>) => {
         resolve()
       } else {
         closeEverything(channels.compile)
-        reject(new Error(`building ${libPath} failed`))
+        reject(new Error(`building ${libPath} failed - file does not exist`))
       }
     } else {
       print(channels.compile, chalk.green('✓') + ` ${libPath}`)
@@ -224,7 +228,7 @@ const runWebpackForMain = async (promises: Array<Promise<any>>) => {
       if (err) {
         console.log('Error in main config: %o', err)
         closeEverything(channels.webpack)
-        throw err
+        reject(err)
       }
       if (stats) {
         print(channels.webpack, stats.toString(minimalStats))
@@ -291,6 +295,10 @@ const appPackageJsonPromise = appPackageJson()
 const libPromise = checkSqlite([appPackageJsonPromise])
 const wdsPromise = runWebpackDevServer([vendorPromise])
 const mainPromise = runWebpackForMain([libPromise])
-Promise.all([wdsPromise, mainPromise]).then(() => {
-  runElectron()
-})
+Promise.all([wdsPromise, mainPromise])
+  .then(() => {
+    runElectron()
+  })
+  .catch(err => {
+    console.log(err)
+  })

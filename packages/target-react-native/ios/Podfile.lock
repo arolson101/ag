@@ -6,8 +6,6 @@ PODS:
     - React
   - react-native-randombytes (3.5.2):
     - React
-  - react-native-safe-area (0.5.0):
-    - React
   - react-native-sqlite-storage (3.3.9):
     - React
   - React/Core (0.57.8):
@@ -61,7 +59,6 @@ PODS:
 DEPENDENCIES:
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
-  - react-native-safe-area (from `../node_modules/react-native-safe-area`)
   - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - React/Core (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
@@ -79,7 +76,7 @@ DEPENDENCIES:
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
-  - RNSVG (from `../node_modules/react-native-svg`)
+  - RNSVG (from `../../react-native-svg-image/node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -95,8 +92,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-resizer"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
-  react-native-safe-area:
-    :path: "../node_modules/react-native-safe-area"
   react-native-sqlite-storage:
     :path: "../node_modules/react-native-sqlite-storage"
   ReactNativeNavigation:
@@ -108,7 +103,7 @@ EXTERNAL SOURCES:
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
   RNSVG:
-    :path: "../node_modules/react-native-svg"
+    :path: "../../react-native-svg-image/node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
   yoga:
@@ -119,7 +114,6 @@ SPEC CHECKSUMS:
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-image-resizer: 04a3409e7d4ad646c4468671c69dec490def139c
   react-native-randombytes: d3184d351604f78e019535178766590188bbc133
-  react-native-safe-area: cec86d422df9430ab60511916a3fa18f87d21e1e
   react-native-sqlite-storage: 848fb96c0b6d17b3f70e169ac41f84434cdad94c
   ReactNativeNavigation: 20522060de61b1c293ec50681a6aa11488596286
   rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
@@ -130,6 +124,6 @@ SPEC CHECKSUMS:
   RSKImageCropper: 98296ad26b41753f796b6898d015509598f13d97
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 37db6ba484534becaa6c690679132cef40770587
+PODFILE CHECKSUM: e1c6a8eab0f28dfad03e2a6cc6baaef11e31b858
 
 COCOAPODS: 1.5.3

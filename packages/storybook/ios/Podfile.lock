@@ -60,8 +60,8 @@ DEPENDENCIES:
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - RNFS (from `../node_modules/react-native-fs`)
-  - RNSVG (from `../node_modules/react-native-svg`)
-  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - RNSVG (from `../../react-native-svg-image/node_modules/react-native-svg`)
+  - RNVectorIcons (from `../../ui-nativebase/node_modules/react-native-vector-icons`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
@@ -74,9 +74,9 @@ EXTERNAL SOURCES:
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNSVG:
-    :path: "../node_modules/react-native-svg"
+    :path: "../../react-native-svg-image/node_modules/react-native-svg"
   RNVectorIcons:
-    :path: "../node_modules/react-native-vector-icons"
+    :path: "../../ui-nativebase/node_modules/react-native-vector-icons"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -89,6 +89,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 86854b07b429a7bfc0ec4b966022792196fc90e3
+PODFILE CHECKSUM: 82c6bdc264685ce03e7cdd60909b0c13b1f08bfa
 
 COCOAPODS: 1.5.3
