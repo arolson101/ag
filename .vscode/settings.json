@@ -1,0 +1,10 @@
+{
+  "kanban": {
+      "columns": {
+          "done": "Finished",
+          "inProgress": "Next",
+          "testing": "In Progress",
+          "todo": "Backlog"
+      }
+  }
+}

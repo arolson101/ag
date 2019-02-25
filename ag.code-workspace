@@ -36,5 +36,14 @@
   ],
   "settings": {
     "java.configuration.updateBuildConfiguration": "disabled"
+  },
+  "extensions": {
+    "recommendations": [
+      "mkloubert.vscode-kanban",
+      "esbenp.prettier-vscode",
+      "ms-vscode.vscode-typescript-tslint-plugin",
+      "kumar-harsh.graphql-for-vscode"
+    ],
+    "unwantedRecommendations": []
   }
 }
