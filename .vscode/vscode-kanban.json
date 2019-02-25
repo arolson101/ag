@@ -21,6 +21,19 @@
         "name": "arolson101"
       },
       "category": "features",
+      "creation_time": "2019-02-25T21:51:37.313Z",
+      "id": "7",
+      "prio": 10,
+      "references": [],
+      "title": "import/export data"
+    }
+  ],
+  "testing": [
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
+      "category": "features",
       "creation_time": "2019-02-25T21:34:47.301Z",
       "id": "6",
       "prio": 15,
@@ -31,15 +44,16 @@
       "assignedTo": {
         "name": "arolson101"
       },
-      "category": "features",
-      "creation_time": "2019-02-25T21:51:37.313Z",
-      "id": "7",
-      "prio": 10,
+      "creation_time": "2019-02-25T22:59:57.129Z",
+      "description": {
+        "content": "graphql service should do the online things",
+        "mime": "text/markdown"
+      },
+      "id": "17",
       "references": [],
-      "title": "import/export data"
+      "title": "move online stuff to db"
     }
   ],
-  "testing": [],
   "todo": [
     {
       "assignedTo": {
@@ -141,6 +155,19 @@
       "assignedTo": {
         "name": "arolson101"
       },
+      "creation_time": "2019-02-25T22:45:41.835Z",
+      "description": {
+        "content": "a random-colored box with the bank initials on it for banks with no favico",
+        "mime": "text/markdown"
+      },
+      "id": "15",
+      "references": [],
+      "title": "bank 'avatar'"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
       "category": "testing",
       "creation_time": "2019-02-25T21:33:32.756Z",
       "description": {
@@ -160,6 +187,32 @@
       "id": "3",
       "references": [],
       "title": "jest snapshots"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
+      "creation_time": "2019-02-25T22:48:36.150Z",
+      "description": {
+        "content": "the native-base toast is weaksauce.  Is there a 3rd party one that user can dismiss with swipes and looks pretty?\nperhaps react-native-simple-toast or react-native-dropdownalert",
+        "mime": "text/markdown"
+      },
+      "id": "16",
+      "references": [],
+      "title": "react-native-simple-toast"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
+      "creation_time": "2019-02-25T22:45:06.034Z",
+      "description": {
+        "content": "package.json way to run all scripts, compiles, etc to ensure nothing is broken",
+        "mime": "text/markdown"
+      },
+      "id": "14",
+      "references": [],
+      "title": "run all the things"
     }
   ]
 }

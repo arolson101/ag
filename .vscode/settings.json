@@ -1,10 +1,11 @@
 {
   "kanban": {
-      "columns": {
-          "done": "Finished",
-          "inProgress": "Next",
-          "testing": "In Progress",
-          "todo": "Backlog"
-      }
+    "openOnStartup": true,
+    "columns": {
+      "done": "Finished",
+      "inProgress": "Next",
+      "testing": "In Progress",
+      "todo": "Backlog"
+    }
   }
 }
