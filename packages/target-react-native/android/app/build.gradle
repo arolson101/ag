@@ -74,10 +74,9 @@ import com.android.build.OutputFile
 
 project.ext.react = [
     entryFile: "index.js"
-//    cliPath: "node_modules/haul/bin/cli.js"
 ]
 
-apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../../../node_modules/react-native/react.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:

@@ -6,12 +6,6 @@
       "packages/*"
     ],
     "nohoist": [
-      "@ag/target-electron/sqlite3",
-      "@ag/target-electron/electron*",
-      "**/*react-native*",
-      "**/*rn-fetch-blob*",
-      "**/css",
-      "**/native-base*"
     ]
   },
   "jest": {

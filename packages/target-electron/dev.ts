@@ -1,7 +1,7 @@
 /* tslint:disable:no-console no-implicit-dependencies */
 import chalk from 'chalk'
 import { ChildProcess, spawn } from 'child_process'
-import rebuild from 'electron-rebuild'
+import electronRebuild from 'electron-rebuild'
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
@@ -151,15 +151,14 @@ const checkSqlite = async (promises: Array<Promise<any>>) => {
   await Promise.all(promises)
 
   return new Promise(async (resolve, reject) => {
-    if (!fs.existsSync(path.join('.', 'node_modules', 'sqlite3'))) {
+    if (!fs.existsSync(require.resolve('sqlite3'))) {
       reject(new Error('sqlite3 module not found'))
     }
 
-    // require.resolve('sqlite3')
+    const sqlite3dir = path.dirname(require.resolve('sqlite3/package.json'))
+    console.log(sqlite3dir)
     const libPath = path.join(
-      '.',
-      'node_modules',
-      'sqlite3',
+      sqlite3dir,
       'lib',
       'binding',
       `electron-v4.0-${os.platform()}-${os.arch()}`,
@@ -169,8 +168,8 @@ const checkSqlite = async (promises: Array<Promise<any>>) => {
       print(channels.compile, `${libPath} not found; building`)
 
       try {
-        await rebuild({
-          buildPath: __dirname,
+        await electronRebuild({
+          buildPath: sqlite3dir,
           useCache: false,
           force: true,
           electronVersion: pkg.dependencies.electron.replace('^', ''),

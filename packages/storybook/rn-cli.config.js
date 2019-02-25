@@ -133,7 +133,7 @@ const baseModulePath = resolvePath(__dirname, 'node_modules'),
   // resolution of modules in external roots
   extraNodeModules = buildModuleResolutionMap()
 
-alternateRoots.push(resolvePath(__dirname, '..', 'ui-nativebase'))
+alternateRoots.push(resolvePath(__dirname))
 alternateRoots.push(resolvePath(__dirname, '..', '..'))
 
 const moduleBlacklist = alternateRoots.map(
@@ -160,15 +160,10 @@ module.exports = (async () => {
     },
     resolver: {
       blacklistRE: blacklist([
-        ...moduleBlacklist,
+        // ...moduleBlacklist,
         /typeorm\/(?!browser).*/,
         /electron/,
-        /ui-nativebase\/node_modules\/(?!react-native-collapsible).*/,
-        /react-native-svg-image\/node_modules\/(?!react-native-svg|css).*/,
-        // /ui-nativebase\/node_modules\/react-native-vector-icons\/.*/,
         /target-react-native\/.*/,
-        /@storybook\/addon-ondevice-knobs\/node_modules\/react-native\/.*/,
-        // /storybook\/node_modules\/react-native.*/,
       ]),
       extraNodeModules: {
         ...require('node-libs-react-native'),

@@ -3,12 +3,13 @@
   "private": true,
   "version": "0.0.1",
   "scripts": {
-    "android": "react-native run-android",
-    "bundle-ios": "yarn run react-native bundle --platform ios --dev true --entry-file index.js --bundle-output dist/bundle.ios.dev.js",
+    "android": "cross-env-shell react-native run-android --config $INIT_CWD/rn-cli.config.js",
+    "bundle-android": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform android --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.android.dev.js",
+    "bundle-ios": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform ios --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.ios.dev.js",
     "debug": "react-native-debugger",
     "preios": "cd ./ios && pod install",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
+    "ios": "cross-env-shell react-native run-ios --config $INIT_CWD/rn-cli.config.js",
+    "start": "cross-env-shell react-native start --config $INIT_CWD/rn-cli.config.js",
     "test": "jest"
   },
   "jest": {
@@ -53,6 +54,7 @@
     "@types/react-native-sqlite-storage": "^3.3.1",
     "@types/react-native-vector-icons": "^4.6.4",
     "@types/shallowequal": "^1.1.0",
+    "cross-env": "^5.2.0",
     "jest": "^23.6.0",
     "metro-react-native-babel-preset": "^0.45.0",
     "react-native-typescript-transformer": "^1.2.11"
