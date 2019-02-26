@@ -1,12 +1,15 @@
 import { ImageSource } from '@ag/util'
-import { CancelTokenSource } from 'axios'
+import cuid from 'cuid'
 import debug from 'debug'
 import { Formik } from 'formik'
+import gql from 'graphql-tag'
 import React from 'react'
+import { Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
+import { AppMutation, ErrorDisplay, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
-import { getImage, getImageList } from '../online'
+import * as T from '../graphql-types'
 
 const log = debug('app:PictureDialog')
 
@@ -18,8 +21,7 @@ interface Props {
 
 interface State {
   url: string
-  links?: string[]
-  images: Record<string, ImageSource>
+  cancelToken: string
 }
 
 interface Values {
@@ -34,14 +36,36 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   static readonly id = 'PictureDialog'
 
-  cancelSource?: CancelTokenSource
+  static readonly queries = {
+    getImageList: gql`
+      query GetImageList($url: String!, $cancelToken: String!) {
+        getImageList(url: $url, cancelToken: $cancelToken)
+      }
+    ` as Gql<T.GetImageList.Query, T.GetImageList.Variables>,
+
+    getImage: gql`
+      query GetImage($url: String!, $cancelToken: String!) {
+        getImage(url: $url, cancelToken: $cancelToken)
+      }
+    ` as Gql<T.GetImage.Query, T.GetImage.Variables>,
+  }
+
+  static readonly mutations = {
+    cancel: gql`
+      mutation Cancel($cancelToken: String!) {
+        cancel(cancelToken: $cancelToken)
+      }
+    ` as Gql<T.Cancel.Mutation, T.Cancel.Variables>,
+  }
+
+  cancel?: () => any
 
   constructor(props: Props) {
     super(props)
 
     this.state = {
       url: props.url,
-      images: {},
+      cancelToken: cuid(),
     }
   }
 
@@ -49,8 +73,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     const { url } = this.props
     if (prevProps.url !== url) {
       log('componentDidUpdate: url %s', url)
-      this.cancel()
-      this.setState({ url, links: undefined }, this.getImages)
+      this.setState({ url })
     }
   }
 
@@ -58,52 +81,33 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     log('componentDidMount')
     const { axios } = this.context
 
-    this.getImages()
+    // this.getImages()
   }
 
   componentWillUnmount() {
     log('componentWillUnmount')
-    this.cancel()
-  }
-
-  cancel = () => {
-    if (this.cancelSource) {
-      this.cancelSource.cancel()
-      this.cancelSource = undefined
+    if (this.cancel) {
+      this.cancel()
     }
   }
 
-  getImages = async () => {
-    const { url } = this.state
-    const { axios } = this.context
-    log('getImages %s', url)
-    this.cancel()
-    const tokenSource = axios.CancelToken.source()
-    this.cancelSource = tokenSource
-    const links = await getImageList(url, tokenSource.token, this.context)
-    this.setState({ links })
-    await Promise.all(
-      links.map(async link => {
-        try {
-          const dls = await getImage(link, tokenSource.token, this.context)
-          // log(`${link}: success %o`, dls)
-          const images = { ...this.state.images, [link]: ImageSource.fromImageBuf(dls) }
-          this.setState({ images })
-        } catch (err) {
-          log(`${link}: failed %o`, err)
-          const images = { ...this.state.images, [link]: ImageSource.fromImageBuf(undefined) }
-          this.setState({ images })
-        }
-      })
-    )
-  }
-
   render() {
-    const { isOpen, url } = this.props
+    const { isOpen } = this.props
+    const { url, cancelToken } = this.state
     const { intl, ui } = this.context
-    const { Dialog, DialogBody, DialogFooter, Spinner, Row, Grid, Tile, Image } = ui
+    const {
+      Dialog,
+      DialogBody,
+      DialogFooter,
+      SubmitButton,
+      Spinner,
+      Row,
+      Grid,
+      Tile,
+      Text,
+      Image,
+    } = ui
     const { Form, TextField } = typedFields<Values>(ui)
-    const { links, images } = this.state
 
     const initialValues: Values = {
       url,
@@ -113,48 +117,94 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     return (
       <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
         <DialogBody>
-          <Row>
-            <Formik<Values>
-              initialValues={initialValues}
-              onSubmit={async (values, factions) => {
-                try {
-                  log('onSubmit %o', values)
-                  this.setState({ url: values.url, links: undefined }, this.getImages)
-                } finally {
-                  factions.setSubmitting(false)
-                }
-              }}
-            >
-              {formApi => (
-                <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
-                  <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
-                </Form>
-              )}
-            </Formik>
-          </Row>
-          {!links ? (
-            <Spinner />
-          ) : (
-            <Grid
-              flex={1}
-              scrollable
-              size={thumbnailSize}
-              data={links}
-              keyExtractor={(link: string) => link}
-              renderItem={(link: string) => {
-                // log('renderItem %s', link)
-                return (
-                  <Tile key={link} size={thumbnailSize} onClick={e => this.selectItem(e, link)}>
-                    {!images[link] ? (
-                      <Spinner />
-                    ) : (
-                      <Image title={link} size={thumbnailSize - 2} src={images[link]} />
-                    )}
-                  </Tile>
-                )
-              }}
-            />
-          )}
+          <AppMutation mutation={PictureDialog.mutations.cancel} variables={{ cancelToken }}>
+            {cancel => {
+              this.cancel = cancel
+              return (
+                <>
+                  <Row>
+                    <Formik<Values>
+                      initialValues={initialValues}
+                      onSubmit={async (values, factions) => {
+                        try {
+                          log('onSubmit %o', values)
+                          await cancel()
+                          this.setState({ url: values.url, cancelToken: cuid() })
+                        } finally {
+                          factions.setSubmitting(false)
+                        }
+                      }}
+                    >
+                      {formApi => (
+                        <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
+                          <TextField
+                            field='url'
+                            label={intl.formatMessage(messages.urlLabel)}
+                            noCorrect
+                          />
+                        </Form>
+                      )}
+                    </Formik>
+                  </Row>
+                  <Query<T.GetImageList.Query, T.GetImageList.Variables>
+                    query={PictureDialog.queries.getImageList}
+                    variables={{ url, cancelToken }}
+                  >
+                    {({ loading: listLoading, error: listError, data: listData }) =>
+                      listLoading ? (
+                        <Spinner />
+                      ) : listError ? (
+                        <ErrorDisplay error={listError} />
+                      ) : (
+                        <Grid
+                          flex={1}
+                          scrollable
+                          size={thumbnailSize}
+                          data={listData ? listData.getImageList : []}
+                          keyExtractor={(link: string) => link}
+                          renderItem={(link: string) => {
+                            // log('renderItem %s', link)
+                            return (
+                              <Tile key={link} size={thumbnailSize}>
+                                <Query<T.GetImage.Query, T.GetImage.Variables>
+                                  query={PictureDialog.queries.getImage}
+                                  variables={{ url: link, cancelToken }}
+                                >
+                                  {({
+                                    loading: imageLoading,
+                                    error: imageError,
+                                    data: imageData,
+                                  }) =>
+                                    imageLoading ? (
+                                      <Spinner />
+                                    ) : imageError ? (
+                                      <Text>error</Text>
+                                    ) : !imageData ? (
+                                      <Text>no data</Text>
+                                    ) : (
+                                      <SubmitButton
+                                        onPress={e => this.selectItem(e, imageData.getImage)}
+                                      >
+                                        <Image
+                                          title={link}
+                                          size={thumbnailSize - 2}
+                                          src={imageData.getImage.toImageBuf()}
+                                        />
+                                      </SubmitButton>
+                                    )
+                                  }
+                                </Query>
+                              </Tile>
+                            )
+                          }}
+                        />
+                      )
+                    }
+                  </Query>
+                </>
+              )
+            }}
+          </AppMutation>
         </DialogBody>
         <DialogFooter
           primary={{
@@ -166,14 +216,9 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     )
   }
 
-  selectItem = async (e: React.SyntheticEvent, link: string) => {
+  selectItem = async (e: React.SyntheticEvent, source: ImageSource) => {
     const { onSelected } = this.props
-    const { images } = this.state
     const { openCropper, scaleImage } = this.context
-    const source = images[link]
-    if (!source.uri) {
-      return
-    }
     let image = source.toImageBuf()
     // image = await openCropper(source.toImageBuf())
     // if (!image) {

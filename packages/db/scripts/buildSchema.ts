@@ -1,4 +1,6 @@
 /* tslint:disable:no-console no-implicit-dependencies */
+require.extensions['.mjs'] = require.extensions['.ts']
+
 import program from 'commander'
 import fs from 'fs'
 import { getIntrospectionQuery, graphqlSync } from 'graphql'

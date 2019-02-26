@@ -76,6 +76,44 @@ export type DateTime = any
 // Documents
 // ====================================================
 
+export namespace GetImageList {
+  export type Variables = {
+    url: string
+    cancelToken: string
+  }
+
+  export type Query = {
+    __typename?: 'Query'
+
+    getImageList: string[]
+  }
+}
+
+export namespace GetImage {
+  export type Variables = {
+    url: string
+    cancelToken: string
+  }
+
+  export type Query = {
+    __typename?: 'Query'
+
+    getImage: ImageSource
+  }
+}
+
+export namespace Cancel {
+  export type Variables = {
+    cancelToken: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    cancel: boolean
+  }
+}
+
 export namespace AccountForm {
   export type Variables = {
     accountId?: Maybe<string>

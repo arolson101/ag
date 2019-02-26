@@ -1,17 +1,17 @@
-import { getFinalUrl, getImage } from '@ag/db/online/getImages'
 import { fixUrl, ImageBuf, isUrl } from '@ag/util'
 import Axios, { CancelToken } from 'axios'
 import debug from 'debug'
 import minidom from 'minidom'
 import url from 'url'
-import { AppContext } from '../context'
+import { DbContext } from '../DbContext'
+import { getFinalUrl, getImage } from './getImages'
 
 const log = debug('app:getFavico')
 
 export const getFavico = async (
   from: string,
   cancelToken: CancelToken,
-  context: AppContext
+  context: DbContext
 ): Promise<ImageBuf | undefined> => {
   from = fixUrl(from)
 
@@ -77,7 +77,7 @@ export const getFavico = async (
 
   await Promise.all(
     links.map(async link => {
-      const dl = await getImage(link, cancelToken, context as any)
+      const dl = await getImage(link, cancelToken, context)
       if (!dl) {
         log('failed getting: %s', link)
       } else {

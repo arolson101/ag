@@ -6,7 +6,7 @@ import isUrl from 'is-url'
 import minidom from 'minidom'
 import { extname } from 'path'
 import url from 'url'
-import { AppContext } from '../context'
+import { DbContext } from '../DbContext'
 
 const log = debug('app:getImages')
 
@@ -19,7 +19,7 @@ export const getFinalUrl = (requestedUrl: string, response: AxiosResponse<any>):
   }
 }
 
-export const getImageList = async (from: string, cancelToken: CancelToken, context: AppContext) => {
+export const getImageList = async (from: string, cancelToken: CancelToken, context: DbContext) => {
   from = fixUrl(from)
 
   if (!isUrl(from)) {
@@ -90,7 +90,7 @@ export const getImageList = async (from: string, cancelToken: CancelToken, conte
   return links
 }
 
-export const getImage = async (link: string, cancelToken: CancelToken, context: AppContext) => {
+export const getImage = async (link: string, cancelToken: CancelToken, context: DbContext) => {
   try {
     let buf: Buffer
     let mime: string

@@ -13339,10 +13339,10 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
-ofx4js@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/ofx4js/-/ofx4js-2.0.1.tgz#2b3376c9b5a8411008dd6076d3f93e0254b3a698"
-  integrity sha512-l5GWv1Q/n4kCousOefu3sDf6dZ4o46yJ5CngVaW2A1V38MdNGHD4P+AT0d1EIS9nCeisqaabsf16E6Bevp8xPQ==
+ofx4js@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/ofx4js/-/ofx4js-2.1.0.tgz#24f4afb273c97bc2e2d6177e5f54b7573eb7dec4"
+  integrity sha512-i23gyBOI5NS/+HxYJvaqKvWfPWQH0PXrSHHD3DQbAv64lZggJMpmEKhmYpnGIdGxAbqitj4WuYay0bsYMiqcYQ==
   dependencies:
     assert "^1.4.1"
     debug "^4.1.1"

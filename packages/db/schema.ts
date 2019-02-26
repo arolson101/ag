@@ -10,6 +10,8 @@ import {
   BudgetResolver,
   CategoryResolver,
   DbResolver,
+  ImageResolver,
+  OnlineResolver,
   TransactionResolver,
 } from './resolvers'
 
@@ -25,6 +27,8 @@ export const schema = buildSchemaSync({
     TransactionResolver,
     BudgetResolver,
     CategoryResolver,
+    ImageResolver,
+    OnlineResolver,
   ],
   scalarsMap: [{ type: ImageSource, scalar: ImageSourceScalar }],
   validate: false, // https://github.com/19majkel94/type-graphql/issues/150

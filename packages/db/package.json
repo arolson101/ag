@@ -6,7 +6,7 @@
   "scripts": {
     "pregraphdoc": "yarn run schema",
     "graphdoc": "graphdoc --force -s ./dist/schema.json -o ./dist/graphdoc",
-    "schema": "node -r ts-node/register/transpile-only ./scripts/buildSchema.ts ./dist/schema.json",
+    "schema": "node  -r ts-node/register/transpile-only ./scripts/buildSchema.ts ./dist/schema.json",
     "test": "jest"
   },
   "dependencies": {
@@ -18,7 +18,7 @@
     "cuid": "^2.1.4",
     "debug": "^4.1.1",
     "graphql": "^14.0.2",
-    "ofx4js": "^2.0.1",
+    "ofx4js": "^2.1.0",
     "randomcolor": "^0.5.3",
     "react-intl": "^2.7.2",
     "sanitize-filename": "^1.6.1",
