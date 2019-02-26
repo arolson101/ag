@@ -10,7 +10,7 @@ export class Transaction extends Record<Transaction.Props> {
   @PrimaryColumn() @Field() id!: string
   @Column() @Field() accountId!: string
 
-  @Column() @Field() time!: string
+  @Column() @Field() time!: Date
   @Column() @Field() account!: string
   @Column() @Field() serverid!: string
   @Column() @Field() type!: string
@@ -20,7 +20,7 @@ export class Transaction extends Record<Transaction.Props> {
   @Column({ default: 0 }) @Field() balance!: number
   // split: Split
 
-  constructor(id?: string, accountId?: string, props?: TransactionInput) {
+  constructor(accountId?: string, id?: string, props?: TransactionInput) {
     super(id, { ...Transaction.defaultValues(), ...props })
     if (accountId) {
       this.accountId = accountId
@@ -35,7 +35,7 @@ export namespace Transaction {
   export const defaultValues = () => ({
     account: '',
     serverid: '',
-    time: formatDate(standardizeDate(new Date())),
+    time: standardizeDate(new Date()),
     type: '',
     name: '',
     memo: '',

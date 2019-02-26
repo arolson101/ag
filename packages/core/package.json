@@ -25,7 +25,6 @@
     "icojs": "^0.12.3",
     "is-url": "^1.2.4",
     "minidom": "^1.0.0",
-    "ofx4js": "^2.0.1",
     "react": "^16.7.0",
     "react-apollo": "^2.3.3",
     "react-intl": "^2.7.2",

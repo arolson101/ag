@@ -28,8 +28,8 @@ export const deps: ClientDependencies = {
   scaleImage,
 }
 
-const client = createClient({ openDb, deleteDb })
 const context = App.createContext({ store, deps })
+const client = createClient({ openDb, deleteDb, ...context })
 
 const RnApp: React.FC = ({ children }) => (
   <ApolloProvider client={client}>

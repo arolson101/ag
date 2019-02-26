@@ -45,7 +45,7 @@ export interface TransactionInput {
 
   serverid?: Maybe<string>
 
-  time?: Maybe<string>
+  time?: Maybe<DateTime>
 
   type?: Maybe<string>
 
@@ -391,7 +391,7 @@ export namespace TransactionFields {
 
     serverid: string
 
-    time: string
+    time: DateTime
 
     type: string
 

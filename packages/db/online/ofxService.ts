@@ -1,12 +1,12 @@
-import { Account, Bank } from '@ag/db/entities'
 import assert from 'assert'
 import Axios, { CancelToken } from 'axios'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { defineMessages } from 'react-intl'
-import { AppContext } from '../context'
+import { DbContext } from '../DbContext'
+import { Account, Bank } from '../entities'
 
-const log = debug('app:ofx')
+const log = debug('db:ofx')
 
 const ajaxHandler = (cancelToken: CancelToken): ofx4js.AjaxHandler => async (
   url,
@@ -28,7 +28,7 @@ const ajaxHandler = (cancelToken: CancelToken): ofx4js.AjaxHandler => async (
 interface OfxServiceParams {
   bank: Bank
   cancelToken: CancelToken
-  context: AppContext
+  context: DbContext
 }
 
 export const ofxService = ({
@@ -78,7 +78,7 @@ interface Login {
 
 interface CheckLoginParams {
   bank: Bank
-  context: AppContext
+  context: DbContext
 }
 
 export const checkLogin = ({ bank, context: { intl } }: CheckLoginParams): Login => {
@@ -113,7 +113,7 @@ interface GetFinancialAccountParams {
   service: ofx4js.FinancialInstitutionImpl
   bank: Bank
   account: Account
-  context: AppContext
+  context: DbContext
 }
 
 export const getFinancialAccount = ({
