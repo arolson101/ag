@@ -4,9 +4,9 @@ module.exports = {
   client: {
     service: {
       name: 'ag',
-      localSchemaFile: 'dist/schema.json'
+      localSchemaFile: path.join(__dirname, 'packages', 'db', 'dist', 'schema.json')
     },
     includes: ['**/*.tsx'],
-    excludes: ['**/dist/**', '**/@types/**', '*.asar']
+    excludes: ['**/dist/**', '**/node_modules/**', '*.asar']
   },
 }
