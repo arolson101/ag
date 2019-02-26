@@ -1,5 +1,4 @@
 import { UiContext } from '@ag/core'
-import { rnfetch } from '@ag/react-native-fetch'
 import { ui as nbUi } from '@ag/ui-nativebase'
 import { storiesOf } from '@storybook/react-native'
 import {
@@ -66,4 +65,4 @@ const ui: UiContext = {
   ),
 }
 
-export { rnfetch as fetch, ui, storiesOf }
+export { ui, storiesOf }

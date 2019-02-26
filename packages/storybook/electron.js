@@ -5,6 +5,8 @@ const windowStateKeeper = require('electron-window-state')
 const path = require('path')
 const url = require('url')
 
+process.env.DEBUG = '*'
+
 const log = debug('app:main')
 log.enabled = process.env.NODE_ENV !== 'production'
 
@@ -26,9 +28,7 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true'
 
 async function createWindow() {
   const { default: installExtension, ...exts } = require('electron-devtools-installer')
-  for (const ext of [
-    exts.REACT_DEVELOPER_TOOLS,
-  ]) {
+  for (const ext of [exts.REACT_DEVELOPER_TOOLS]) {
     try {
       const name = await installExtension(ext)
       log(`Added Extension:  ${name}`)

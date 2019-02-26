@@ -1,4 +1,5 @@
 import { ImageSource } from '@ag/util'
+import { CancelTokenSource } from 'axios'
 import debug from 'debug'
 import { Formik } from 'formik'
 import React from 'react'
@@ -33,12 +34,11 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   static readonly id = 'PictureDialog'
 
-  controller: AbortController
+  cancelSource?: CancelTokenSource
 
   constructor(props: Props) {
     super(props)
 
-    this.controller = new AbortController()
     this.state = {
       url: props.url,
       images: {},
@@ -56,6 +56,8 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     log('componentDidMount')
+    const { axios } = this.context
+
     this.getImages()
   }
 
@@ -65,19 +67,25 @@ export class PictureDialog extends React.PureComponent<Props, State> {
   }
 
   cancel = () => {
-    this.controller.abort()
-    this.controller = new AbortController()
+    if (this.cancelSource) {
+      this.cancelSource.cancel()
+      this.cancelSource = undefined
+    }
   }
 
   getImages = async () => {
     const { url } = this.state
+    const { axios } = this.context
     log('getImages %s', url)
-    const links = await getImageList(url, this.controller.signal, this.context)
+    this.cancel()
+    const tokenSource = axios.CancelToken.source()
+    this.cancelSource = tokenSource
+    const links = await getImageList(url, tokenSource.token, this.context)
     this.setState({ links })
     await Promise.all(
       links.map(async link => {
         try {
-          const dls = await getImage(link, this.controller.signal, this.context)
+          const dls = await getImage(link, tokenSource.token, this.context)
           // log(`${link}: success %o`, dls)
           const images = { ...this.state.images, [link]: ImageSource.fromImageBuf(dls) }
           this.setState({ images })

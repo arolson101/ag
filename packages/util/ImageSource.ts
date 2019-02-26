@@ -70,18 +70,18 @@ interface TypeHandlerMap {
 }
 
 const typeHandlers: TypeHandlerMap = {
-  png: require('image-size/lib/types/png'),
+  'image/png': require('image-size/lib/types/png'),
   // ico: require('image-size/lib/types/ico'),
-  jpg: require('image-size/lib/types/jpg'),
-  gif: require('image-size/lib/types/gif'),
+  'image/jpeg': require('image-size/lib/types/jpg'),
+  'image/gif': require('image-size/lib/types/gif'),
   icns: require('image-size/lib/types/icns'),
-  bmp: require('image-size/lib/types/bmp'),
-  svg: require('image-size/lib/types/svg'),
+  'image/bmp': require('image-size/lib/types/bmp'),
+  'image/svg+xml': require('image-size/lib/types/svg'),
   // cur: require('image-size/lib/types/cur'),
   // dds: require('image-size/lib/types/dds'),
   // psd: require('image-size/lib/types/psd'),
   // tiff: require('image-size/lib/types/tiff'),
-  webp: require('image-size/lib/types/webp'),
+  'image/webp': require('image-size/lib/types/webp'),
 }
 
 const detector = (buffer: Buffer, filepath: string) => {
@@ -108,5 +108,5 @@ export function imageSize(buffer: Buffer, filepath: string) {
   }
 
   // throw up, if we don't understand the file
-  throw new TypeError('unsupported file type: ' + type + ' (file: ' + filepath + ')')
+  throw new Error('unsupported file type: ' + filepath)
 }

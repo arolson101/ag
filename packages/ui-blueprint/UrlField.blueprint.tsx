@@ -12,6 +12,7 @@ import {
   Menu,
   Popover,
 } from '@blueprintjs/core'
+import Axios, { CancelTokenSource } from 'axios'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import React from 'react'
@@ -37,15 +38,20 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
 
   private textInput: HTMLInputElement | null = null
   private form!: FormikProps<Values>
-  private controller?: AbortController
+  private cancelSource?: CancelTokenSource
 
   state: State = {
     gettingIcon: false,
   }
 
   componentWillUnmount() {
-    if (this.controller) {
-      this.controller.abort()
+    this.cancel()
+  }
+
+  cancel = () => {
+    if (this.cancelSource) {
+      this.cancelSource.cancel()
+      this.cancelSource = undefined
     }
   }
 
@@ -137,6 +143,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   maybeGetIcon = async (value: string, force: boolean = false) => {
     // log('maybeGetIcon %s', value)
     const { favicoField } = this.props
+    const { axios } = this.context
 
     value = fixUrl(value)
     // log('fixed: %s', value)
@@ -148,18 +155,16 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     }
 
     try {
-      if (this.controller) {
-        this.controller.abort()
-      }
-      this.controller = new AbortController()
+      this.cancel()
+      this.cancelSource = axios.CancelToken.source()
       this.setState({ gettingIcon: true })
-      const icon = await getFavico(value, this.controller.signal, this.context)
+      const icon = await getFavico(value, this.cancelSource.token, this.context)
       this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(icon))
     } catch (ex) {
       log(ex.message)
     } finally {
       this.setState({ gettingIcon: false })
-      this.controller = undefined
+      this.cancelSource = undefined
     }
   }
 

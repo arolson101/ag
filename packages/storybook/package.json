@@ -7,14 +7,15 @@
     "appId": "com.example.ag"
   },
   "scripts": {
-    "android": "react-native run-android",
-    "bundle-ios": "yarn run react-native bundle --platform ios --dev true --entry-file index.js --bundle-output dist/bundle.ios.dev.js",
+    "android": "cross-env-shell react-native run-android --no-packager --config $INIT_CWD/rn-cli.config.js",
+    "bundle-android": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform android --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.android.dev.js",
+    "bundle-ios": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform ios --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.ios.dev.js",
     "electron": "concurrently --raw --kill-others \"yarn:electron:server\" \"yarn:electron:main\"",
     "electron:main": "wait-on http://localhost:6006/ && electron . --url http://localhost:6006/",
     "electron:server": "start-storybook --ci --quiet -p 6006",
     "preios": "cd ./ios && pod install",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
+    "ios": "cross-env-shell react-native run-ios --no-packager --config $INIT_CWD/rn-cli.config.js",
+    "start": "cross-env-shell react-native start --config $INIT_CWD/rn-cli.config.js",
     "test": "jest"
   },
   "jest": {
@@ -22,7 +23,6 @@
   },
   "dependencies": {
     "@ag/core": "^0.0.0",
-    "@ag/react-native-fetch": "^0.0.0",
     "@ag/ui-blueprint": "^0.0.0",
     "@ag/ui-nativebase": "^0.0.0",
     "@storybook/addon-actions": "^4.1.4",
@@ -30,6 +30,7 @@
     "@storybook/addon-ondevice-knobs": "^4.1.13",
     "@storybook/react": "^4.1.4",
     "@storybook/react-native": "^4.1.4",
+    "axios": "^0.18.0",
     "commander": "^2.19.0",
     "debug": "^4.1.1",
     "electron": "^4.0.1",
@@ -54,11 +55,12 @@
     "@types/react-intl": "^2.3.14",
     "@types/react-native": "^0.57.32",
     "@types/react-native-fs": "^2.8.2",
+    "@types/react-native-sqlite-storage": "^3.3.1",
     "@types/storybook__addon-actions": "^3.4.1",
     "@types/storybook__addon-links": "^3.3.3",
     "@types/storybook__react": "^4.0.0",
     "@types/storybook__react-native": "^3.0.4",
-    "babel-core": "^7.0.0-0",
+    "ts-transform-graphql-tag": "^0.2.1",
     "jest": "^23.6.0",
     "metro-react-native-babel-preset": "^0.45.0",
     "react-native-typescript-transformer": "^1.2.11"

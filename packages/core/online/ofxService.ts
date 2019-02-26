@@ -1,5 +1,6 @@
 import { Account, Bank } from '@ag/db/entities'
 import assert from 'assert'
+import Axios, { CancelToken } from 'axios'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { defineMessages } from 'react-intl'
@@ -7,18 +8,18 @@ import { AppContext } from '../context'
 
 const log = debug('app:ofx')
 
-const ajaxHandler = ({ fetch }: AppContext, signal: AbortSignal): ofx4js.AjaxHandler => async (
+const ajaxHandler = (cancelToken: CancelToken): ofx4js.AjaxHandler => async (
   url,
   verb,
   headers,
   body,
   async
 ): Promise<string> => {
-  const res = await fetch(url, { method: verb.toLowerCase(), headers, body, signal })
+  const res = await Axios({ url, method: verb.toLowerCase(), headers, data: body, cancelToken })
   if (res.status !== 200) {
     throw new Error(res.statusText)
   }
-  const text = await res.text()
+  const text = res.data
   assert(typeof body === 'string')
   log('ajaxHandler %s %s %o %o', url, verb, body, text)
   return text
@@ -26,13 +27,13 @@ const ajaxHandler = ({ fetch }: AppContext, signal: AbortSignal): ofx4js.AjaxHan
 
 interface OfxServiceParams {
   bank: Bank
-  signal: AbortSignal
+  cancelToken: CancelToken
   context: AppContext
 }
 
 export const ofxService = ({
   bank,
-  signal,
+  cancelToken,
   context,
 }: OfxServiceParams): ofx4js.FinancialInstitutionImpl => {
   const DefaultApplicationContext = ofx4js.DefaultApplicationContext
@@ -61,7 +62,7 @@ export const ofxService = ({
   fiData.setName(name)
 
   const connection = new ofx4js.OFXV1Connection()
-  connection.setAjax(ajaxHandler(context, signal))
+  connection.setAjax(ajaxHandler(cancelToken))
 
   // NOTE: making an OFX connection will fail security checks in browsers.  On Chrome you
   // can make it run with the "--disable-web-security" command-line option

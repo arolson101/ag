@@ -1,6 +1,7 @@
 import { App, ClientDependencies } from '@ag/core'
 import { createClient } from '@ag/db'
 import { ui } from '@ag/ui-blueprint'
+import axios from 'axios'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { hot } from 'react-hot-loader/root'
@@ -12,8 +13,7 @@ import { deleteDb, openDb } from './openDb.electron'
 
 export const deps: ClientDependencies = {
   ui,
-
-  fetch,
+  axios,
 
   getImageFromLibrary,
   openCropper,

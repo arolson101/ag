@@ -17,6 +17,7 @@
     "@ag/util": "^0.0.0",
     "accounting": "^0.4.1",
     "apollo-client": "^2.4.12",
+    "axios": "^0.18.0",
     "debug": "^4.1.1",
     "filist": "^1.0.3",
     "formik": "^1.4.2",

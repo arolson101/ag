@@ -1,3 +1,5 @@
+import { decodeDataURI, isDataURI } from '@ag/util'
+import Axios, { CancelTokenSource } from 'axios'
 import css, { Declaration, Rule } from 'css'
 import debug from 'debug'
 import PropTypes from 'prop-types'
@@ -37,7 +39,7 @@ interface SvgUriProps {
    */
   style?: StyleProp<ViewStyle>
 
-  fetcher: typeof fetch
+  axios: typeof Axios
 }
 
 interface State {
@@ -57,7 +59,7 @@ export class SvgUri extends Component<SvgUriProps, State> {
     fillAll: PropTypes.bool,
   }
 
-  private controller?: AbortController
+  private cancelSource?: CancelTokenSource
   state: State = { doc: undefined }
 
   async componentDidMount() {
@@ -73,33 +75,36 @@ export class SvgUri extends Component<SvgUriProps, State> {
   }
 
   async load(uri: string | undefined) {
-    if (this.controller) {
-      this.controller.abort()
+    const { axios } = this.props
+    if (this.cancelSource) {
+      this.cancelSource.cancel()
     }
-    this.controller = new AbortController()
+    this.cancelSource = axios.CancelToken.source()
 
     if (!uri) {
       this.setState({ text: undefined, doc: undefined })
     } else {
-      const { fetcher } = this.props
-      const data = await fetcher(uri, { signal: this.controller.signal })
-      if (data) {
-        const text = await data.text()
-        const doc = new xmldom.DOMParser().parseFromString(text)
-        if (doc) {
-          this.setState({ doc, text })
-        } else {
-          log('no document from string %s', text)
-        }
+      let text: string
+      if (isDataURI(uri)) {
+        const { buf } = decodeDataURI(uri)
+        text = buf.toString()
       } else {
-        log('no data from uri %s', uri)
+        const data = await axios.get<string>(uri, { cancelToken: this.cancelSource.token })
+        text = data.data
+      }
+
+      const doc = text ? new xmldom.DOMParser().parseFromString(text) : undefined
+      if (doc) {
+        this.setState({ doc, text })
+      } else {
+        log('no document from string %s', text)
       }
     }
   }
 
   componentWillUnmount() {
-    if (this.controller) {
-      this.controller.abort()
+    if (this.cancelSource) {
+      this.cancelSource.cancel()
     }
   }
 

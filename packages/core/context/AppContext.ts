@@ -1,4 +1,5 @@
 import { ImageBuf } from '@ag/util'
+import Axios from 'axios'
 import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { AppAction } from '../actions'
@@ -10,7 +11,7 @@ export const maxImageSize = 512
 export interface ClientDependencies {
   ui: UiContext
 
-  fetch(input: RequestInfo, init?: RequestInit): Promise<Response>
+  axios: typeof Axios
 
   getImageFromLibrary: (width: number, height: number) => Promise<ImageBuf | undefined>
   openCropper: (image: ImageBuf) => Promise<ImageBuf | undefined>

@@ -1,15 +1,16 @@
 import { fixUrl, ImageBuf, isUrl } from '@ag/util'
+import Axios, { CancelToken } from 'axios'
 import debug from 'debug'
 import minidom from 'minidom'
 import url from 'url'
 import { AppContext } from '../context'
-import { getImage } from './getImages'
+import { getFinalUrl, getImage } from './getImages'
 
 const log = debug('app:getFavico')
 
 export const getFavico = async (
   from: string,
-  signal: AbortSignal,
+  cancelToken: CancelToken,
   context: AppContext
 ): Promise<ImageBuf | undefined> => {
   from = fixUrl(from)
@@ -19,16 +20,13 @@ export const getFavico = async (
     throw new Error(`${from} is not an URL`)
   }
 
-  const { fetch } = context
+  const { axios } = context
+  const result = await axios.get(from, { cancelToken, responseType: 'text' })
+  log('axios %s %o', from, result)
 
-  const result = await fetch(from, { method: 'get', signal })
-  // log('fetch %s %o', from, result)
-  if (!result.ok) {
-    log(result.statusText)
-    throw new Error(result.statusText)
-  }
+  const finalUrl = getFinalUrl(from, result)
 
-  const body = await result.text()
+  const body = result.data
   // log('body %O', { body })
 
   const doc = minidom(body)
@@ -66,7 +64,7 @@ export const getFavico = async (
         .filter((href): href is string => !!href)
     )
     .concat('/favicon.ico')
-    .map(href => url.resolve(result.url, href))
+    .map(href => url.resolve(finalUrl, href))
     .filter(
       (value, index, array): boolean => {
         // return only unique items
@@ -79,7 +77,7 @@ export const getFavico = async (
 
   await Promise.all(
     links.map(async link => {
-      const dl = await getImage(link, signal, context)
+      const dl = await getImage(link, cancelToken, context)
       if (!dl) {
         log('failed getting: %s', link)
       } else {

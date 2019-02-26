@@ -4,6 +4,8 @@
   "license": "MIT",
   "main": "index.ts",
   "dependencies": {
+    "@ag/util": "^0.0.0",
+    "axios": "^0.18.0",
     "css": "^2.2.4",
     "debug": "^4.1.1",
     "prop-types": "^15.7.2",

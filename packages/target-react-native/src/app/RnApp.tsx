@@ -1,6 +1,6 @@
 import { App, ClientDependencies } from '@ag/core'
 import { createClient } from '@ag/db'
-import { rnfetch } from '@ag/react-native-fetch'
+import axios from 'axios'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
@@ -21,8 +21,7 @@ log.enabled = true
 
 export const deps: ClientDependencies = {
   ui,
-
-  fetch: rnfetch,
+  axios,
 
   getImageFromLibrary,
   openCropper,

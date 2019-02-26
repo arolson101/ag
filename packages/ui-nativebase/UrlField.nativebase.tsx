@@ -1,5 +1,6 @@
 import { actions, CommonTextFieldProps, getFavico, UrlFieldProps } from '@ag/core'
 import { fixUrl, ImageSource, isUrl } from '@ag/util'
+import Axios, { CancelTokenSource } from 'axios'
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import { ActionSheet, Button, Input, Item, NativeBase, Spinner } from 'native-base'
@@ -32,7 +33,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
 
   private textInput = React.createRef<Input>()
   private form!: FormikProps<Values>
-  private controller?: AbortController
+  private cancelSource?: CancelTokenSource
 
   state: State = {
     gettingIcon: false,
@@ -45,8 +46,13 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
 
   componentWillUnmount() {
     this.context.rmvField(this)
-    if (this.controller) {
-      this.controller.abort()
+    this.cancel()
+  }
+
+  cancel = () => {
+    if (this.cancelSource) {
+      this.cancelSource.cancel()
+      this.cancelSource = undefined
     }
   }
 
@@ -120,29 +126,28 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   maybeGetIcon = async (value: string, force: boolean = false) => {
     log('maybeGetIcon', { value })
     const { favicoField } = this.props
+    const { axios } = this.context
 
     value = fixUrl(value)
     // log('fixed: %s', value)
 
     if (!isUrl(value)) {
-      log(`not looking up icon '${value}' is not an URL`)
+      // log(`not looking up icon '${value}' is not an URL`)
       this.form.setFieldValue(favicoField, undefined)
       return
     }
 
     try {
-      if (this.controller) {
-        this.controller.abort()
-      }
-      this.controller = new AbortController()
+      this.cancel()
+      this.cancelSource = axios.CancelToken.source()
       this.setState({ gettingIcon: true })
-      const icon = await getFavico(value, this.controller.signal, this.context)
+      const icon = await getFavico(value, this.cancelSource.token, this.context)
       this.form.setFieldValue(favicoField, ImageSource.fromImageBuf(icon))
     } catch (ex) {
       log(ex.message)
     } finally {
       this.setState({ gettingIcon: false })
-      this.controller = undefined
+      this.cancelSource = undefined
     }
   }
 

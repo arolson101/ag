@@ -1,4 +1,5 @@
-import { fixUrl, ImageBuf, imageSize } from '@ag/util'
+import { decodeDataURI, fixUrl, ImageBuf, imageSize, isDataURI } from '@ag/util'
+import { AxiosResponse, CancelToken } from 'axios'
 import debug from 'debug'
 import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
 import isUrl from 'is-url'
@@ -9,7 +10,16 @@ import { AppContext } from '../context'
 
 const log = debug('app:getImages')
 
-export const getImageList = async (from: string, signal: AbortSignal, context: AppContext) => {
+export const getFinalUrl = (requestedUrl: string, response: AxiosResponse<any>): string => {
+  if (response.request instanceof XMLHttpRequest) {
+    return response.request.responseURL
+  } else {
+    log('not an XMLHttpRequest: %o', response.request)
+    return requestedUrl
+  }
+}
+
+export const getImageList = async (from: string, cancelToken: CancelToken, context: AppContext) => {
   from = fixUrl(from)
 
   if (!isUrl(from)) {
@@ -17,21 +27,20 @@ export const getImageList = async (from: string, signal: AbortSignal, context: A
     throw new Error(`${from} is not an URL`)
   }
 
-  const { fetch } = context
+  const { axios } = context
+  const result = await axios.get<string>(from, { cancelToken, responseType: 'text' })
+  // const result = await fetch(from, { method: 'get', signal })
+  // log('axios %s %o', from, result)
 
-  const result = await fetch(from, { method: 'get', signal })
-  // log('fetch %s %o', from, result)
-  if (!result.ok) {
-    log(result.statusText)
-    throw new Error(result.statusText)
-  }
+  const finalUrl = getFinalUrl(from, result)
 
-  const contentType = result.headers.get('Content-Type')
+  const contentType = result.headers['content-type']
   if (contentType && contentType.startsWith('image/')) {
     return [from]
   }
 
-  const body = await result.text()
+  const body = result.data
+  // const body = await result.text()
   // log('body %O', { body })
 
   const doc = minidom(body)
@@ -69,36 +78,44 @@ export const getImageList = async (from: string, signal: AbortSignal, context: A
         .filter((href): href is string => !!href)
     )
     .concat('/favicon.ico')
-    .map(href => url.resolve(result.url, href))
+    .map(href => url.resolve(finalUrl, href))
     .filter(
       (value, index, array): boolean => {
         // return only unique items
         return index === array.indexOf(value)
       }
     )
-  log('links: %o', links)
+  // log('links: %o', links)
 
   return links
 }
 
-export const getImage = async (link: string, signal: AbortSignal, context: AppContext) => {
+export const getImage = async (link: string, cancelToken: CancelToken, context: AppContext) => {
   try {
-    const { fetch } = context
+    let buf: Buffer
+    let mime: string
 
-    const response = await fetch(link, { method: 'get', signal })
-    if (!response.ok) {
-      log('failed getting: %s', link)
-      return
+    if (isDataURI(link)) {
+      const data = decodeDataURI(link)
+      buf = data.buf
+      mime = data.mime
+    } else {
+      const { axios } = context
+      const response = await axios.get<ArrayBuffer>(link, {
+        cancelToken,
+        responseType: 'arraybuffer',
+      })
+      // log('%s => %o', link, response)
+
+      const ext = extname(link).substr(1)
+      buf = Buffer.from(response.data)
+      mime = response.headers['content-type'] || `image/${ext}`
     }
-    // log('%s => %o', link, response)
 
-    const abuf = await response.arrayBuffer()
-    const buf = Buffer.from(abuf)
-    // log('%s: %O', link, { hex: buf.toString('hex'), abuf, buf })
     let image: ImageBuf
 
     if (ICO.isICO(buf)) {
-      const mime = 'image/png'
+      mime = 'image/png'
       const parsedImages = await ICO.parse(buf, mime)
       const images: ImageBuf[] = parsedImages
         .map(({ width, height, buffer }) => {
@@ -107,13 +124,11 @@ export const getImage = async (link: string, signal: AbortSignal, context: AppCo
         .sort((a, b) => b.width - a.width) // sort by descending size
       image = images[0]
     } else {
-      const ext = extname(link).substr(1)
-      const { width, height } = imageSize(buf, link)
-      const mime = response.headers.get('content-type') || `image/${ext}`
-      image = { width, height, mime, buf }
+      const { width, height, type } = imageSize(buf, link)
+      image = { width, height, mime: type, buf }
     }
 
-    log('getImage %s => %o', link, image)
+    // log('getImage %s => %o', link, image)
     return image
   } catch (error) {
     log('error %o', error)
