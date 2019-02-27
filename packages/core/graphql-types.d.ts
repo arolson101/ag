@@ -76,6 +76,19 @@ export type DateTime = any
 // Documents
 // ====================================================
 
+export namespace GetFavico {
+  export type Variables = {
+    url: string
+    cancelToken: string
+  }
+
+  export type Query = {
+    __typename?: 'Query'
+
+    getFavico: ImageSource
+  }
+}
+
 export namespace GetImageList {
   export type Variables = {
     url: string

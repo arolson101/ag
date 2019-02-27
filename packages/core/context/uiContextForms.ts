@@ -1,4 +1,4 @@
-import { UiContext } from './uiContext'
+import { IconName, UiContext } from './uiContext'
 
 export interface FormProps<Values = any> {
   onSubmit: () => void
@@ -10,7 +10,7 @@ export interface SelectFieldItem {
   value: string | number
 }
 
-interface CommonFieldProps<Values> {
+export interface CommonFieldProps<Values> {
   field: keyof Values & string
   label: string
   disabled?: boolean
@@ -51,6 +51,9 @@ export interface TextFieldProps<Values = any>
   color?: string
   noCorrect?: boolean
   inputRef?: any
+  leftIcon?: IconName
+  rightElement?: React.ReactElement<any>
+  onValueChanged?: (value: string) => any
 }
 
 export interface UrlFieldProps<Values = any>

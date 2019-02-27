@@ -1,6 +1,7 @@
 import { ImageSource } from '@ag/util'
 import debug from 'debug'
 import { ComponentType } from 'react'
+import { Omit } from 'utility-types'
 import {
   CheckboxFieldProps,
   CurrencyFieldProps,
@@ -12,6 +13,8 @@ import {
 } from './uiContextForms'
 
 const log = debug('app:uiContext')
+
+export type IconName = 'url' | 'refresh' | 'image' | 'library' | 'trash'
 
 export interface AlertProps {
   title: string
@@ -34,6 +37,7 @@ export interface ButtonProps {
   minimal?: boolean
   disabled?: boolean
   onPress: (e: React.SyntheticEvent) => any
+  icon?: IconName | React.ReactElement<any>
 }
 
 export interface DialogProps {
@@ -87,6 +91,19 @@ export interface ImageProps {
   title?: string
 }
 
+export interface PopoverItem {
+  divider?: boolean
+  text?: string
+  icon?: IconName
+  onClick?: () => any
+}
+
+export interface PopoverButtonProps extends Omit<ButtonProps, 'onPress'> {
+  content: PopoverItem[]
+  minimal?: boolean
+  loading?: boolean
+}
+
 export interface UiContext {
   // special ui
   showToast: (message: string, danger?: boolean) => any
@@ -121,6 +138,7 @@ export interface UiContext {
     muted?: boolean
     onClick?: (e: React.SyntheticEvent) => any
   }>
+  PopoverButton: ComponentType<PopoverButtonProps>
   Button: ComponentType<ButtonProps>
   DeleteButton: ComponentType<{ disabled?: boolean; onPress: (e: React.SyntheticEvent) => any }>
   Image: React.ComponentType<ImageProps>

@@ -6,6 +6,7 @@ import React from 'react'
 import { defineMessages } from 'react-intl'
 import { Omit } from 'utility-types'
 import { AppMutation, AppQuery, ConfirmButton, gql, Gql } from '../components'
+import { UrlField } from '../components/UrlField'
 import { AppContext, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
@@ -87,9 +88,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
   render() {
     const { ui, intl } = this.context
     const { Tabs, Tab, Text, DeleteButton, showToast } = ui
-    const { Form, CheckboxField, Divider, SelectField, TextField, UrlField } = typedFields<
-      FormValues
-    >(ui)
+    const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
     const { bankId, onClosed } = this.props
 
     return (
