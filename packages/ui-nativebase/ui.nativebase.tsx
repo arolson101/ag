@@ -121,7 +121,7 @@ export const ui: Omit<UiContext, RNNTypes> = {
       </Component>
     )
   },
-  SubmitButton: ({ onPress, disabled, children }) => (
+  Button: ({ onPress, disabled, children }) => (
     <Button onPress={onPress as any} disabled={disabled}>
       {children}
     </Button>

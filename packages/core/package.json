@@ -41,6 +41,7 @@
     "@types/react-intl": "^2.3.14",
     "@types/react-redux": "^6.0.12",
     "graphql-code-generator": "^0.16.0",
+    "graphql-codegen-add": "^0.17.0",
     "graphql-codegen-typescript-client": "^0.16.0",
     "graphql-codegen-typescript-common": "^0.16.0"
   }

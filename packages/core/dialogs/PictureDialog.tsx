@@ -17,6 +17,7 @@ interface Props {
   isOpen: boolean
   url: string
   onSelected: (uri: ImageSource) => any
+  cancelToken?: string
 }
 
 interface State {
@@ -65,7 +66,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
     this.state = {
       url: props.url,
-      cancelToken: cuid(),
+      cancelToken: props.cancelToken || cuid(),
     }
   }
 
@@ -95,18 +96,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     const { isOpen } = this.props
     const { url, cancelToken } = this.state
     const { intl, ui } = this.context
-    const {
-      Dialog,
-      DialogBody,
-      DialogFooter,
-      SubmitButton,
-      Spinner,
-      Row,
-      Grid,
-      Tile,
-      Text,
-      Image,
-    } = ui
+    const { Dialog, DialogBody, DialogFooter, Button, Spinner, Row, Grid, Tile, Text, Image } = ui
     const { Form, TextField } = typedFields<Values>(ui)
 
     const initialValues: Values = {
@@ -129,7 +119,10 @@ export class PictureDialog extends React.PureComponent<Props, State> {
                         try {
                           log('onSubmit %o', values)
                           await cancel()
-                          this.setState({ url: values.url, cancelToken: cuid() })
+                          this.setState({
+                            url: values.url,
+                            cancelToken: this.props.cancelToken || cuid(),
+                          })
                         } finally {
                           factions.setSubmitting(false)
                         }
@@ -174,25 +167,20 @@ export class PictureDialog extends React.PureComponent<Props, State> {
                                     loading: imageLoading,
                                     error: imageError,
                                     data: imageData,
-                                  }) =>
-                                    imageLoading ? (
+                                  }) => {
+                                    const image = imageData && imageData.getImage
+                                    return imageLoading ? (
                                       <Spinner />
                                     ) : imageError ? (
                                       <Text>error</Text>
-                                    ) : !imageData ? (
+                                    ) : !image ? (
                                       <Text>no data</Text>
                                     ) : (
-                                      <SubmitButton
-                                        onPress={e => this.selectItem(e, imageData.getImage)}
-                                      >
-                                        <Image
-                                          title={link}
-                                          size={thumbnailSize - 2}
-                                          src={imageData.getImage.toImageBuf()}
-                                        />
-                                      </SubmitButton>
+                                      <Button fill minimal onPress={e => this.selectItem(e, image)}>
+                                        <Image title={link} size={thumbnailSize - 2} src={image} />
+                                      </Button>
                                     )
-                                  }
+                                  }}
                                 </Query>
                               </Tile>
                             )

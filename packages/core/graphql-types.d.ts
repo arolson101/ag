@@ -1,3 +1,4 @@
+import { ImageSource } from '@ag/util'
 export type Maybe<T> = T | null
 
 export interface AccountInput {
@@ -67,7 +68,6 @@ export type AccountTypeValueMap = {
 }
 
 /** An object containing image data */
-export type ImageSource = any
 
 /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
 export type DateTime = any

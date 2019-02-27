@@ -2,44 +2,54 @@ import { LoginDialog, LoginForm } from '@ag/core'
 import React from 'react'
 import { MockApp, storiesOf } from './helpers'
 
-const createResponse = {
-  data: {
-    dbs: [],
-  },
-}
-
-const loginResponse = {
-  data: {
-    dbs: [
-      {
-        __typename: 'Db',
-        dbId: 'oLhHJYViPrw=',
-        name: 'appdb',
+const createMocks = [
+  {
+    request: { query: LoginForm.queries.LoginForm },
+    result: {
+      data: {
+        dbs: [],
       },
-    ],
+    },
   },
-}
+]
+
+const loginMocks = [
+  {
+    request: { query: LoginForm.queries.LoginForm },
+    result: {
+      data: {
+        dbs: [
+          {
+            __typename: 'Db' as 'Db',
+            dbId: 'oLhHJYViPrw=',
+            name: 'appdb',
+          },
+        ],
+      },
+    },
+  },
+]
 
 storiesOf('Forms/LoginForm', module)
   .add('create', () => (
     <MockApp>
-      <LoginForm query={createResponse.data} />
+      <LoginForm query={createMocks[0].result.data} />
     </MockApp>
   ))
   .add('login', () => (
     <MockApp>
-      <LoginForm query={loginResponse.data as any} />
+      <LoginForm query={loginMocks[0].result.data} />
     </MockApp>
   ))
 
 storiesOf('Dialogs/LoginDialog', module)
   .add('create', () => (
-    <MockApp query={LoginForm.queries.LoginForm} response={createResponse}>
+    <MockApp mocks={createMocks}>
       <LoginDialog isOpen />
     </MockApp>
   ))
   .add('login', () => (
-    <MockApp query={LoginForm.queries.LoginForm} response={loginResponse}>
+    <MockApp mocks={loginMocks}>
       <LoginDialog isOpen />
     </MockApp>
   ))

@@ -28,6 +28,14 @@ export interface AlertProps {
   show: boolean
 }
 
+export interface ButtonProps {
+  danger?: boolean
+  fill?: boolean
+  minimal?: boolean
+  disabled?: boolean
+  onPress: (e: React.SyntheticEvent) => any
+}
+
 export interface DialogProps {
   title: string
   isOpen: boolean
@@ -113,7 +121,7 @@ export interface UiContext {
     muted?: boolean
     onClick?: (e: React.SyntheticEvent) => any
   }>
-  SubmitButton: ComponentType<{ disabled?: boolean; onPress: (e: React.SyntheticEvent) => any }>
+  Button: ComponentType<ButtonProps>
   DeleteButton: ComponentType<{ disabled?: boolean; onPress: (e: React.SyntheticEvent) => any }>
   Image: React.ComponentType<ImageProps>
 

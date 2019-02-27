@@ -26,21 +26,7 @@ const store = {
 
 const context = App.createContext({ store, deps })
 
-export const MockApp: React.FC<{ query?: Gql<any, any>; variables?: any; response?: object }> = ({
-  query,
-  variables,
-  response,
-  children,
-}) => {
-  const mocks: MockedResponse[] =
-    query && response
-      ? [
-          {
-            request: { query, variables },
-            result: response,
-          },
-        ]
-      : []
+export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, children }) => {
   return (
     <MockedProvider mocks={mocks}>
       <IntlProvider locale='en'>

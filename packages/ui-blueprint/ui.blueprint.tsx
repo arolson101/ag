@@ -122,6 +122,7 @@ export const ui: UiContext = {
     <div
       onClick={onClick}
       style={{
+        padding: 5,
         display: 'grid',
         justifyContent: 'space-between',
         gridTemplateColumns: `repeat(auto-fill, ${size}px)`,
@@ -184,8 +185,16 @@ export const ui: UiContext = {
       </Component>
     )
   },
-  SubmitButton: ({ onPress, disabled, children }) => (
-    <Button type='submit' onClick={onPress} disabled={disabled}>
+  Button: ({ danger, minimal, fill, onPress, disabled, children }) => (
+    <Button
+      type='button'
+      onClick={onPress}
+      disabled={disabled}
+      fill={fill}
+      intent={danger ? Intent.DANGER : undefined}
+      minimal={minimal}
+      style={{ height: fill ? '100%' : undefined }}
+    >
       {children}
     </Button>
   ),

@@ -4,13 +4,20 @@
   "documents": "**/*.tsx",
   "generates": {
     "graphql-types.d.ts": {
+      "plugins": [
+        { "add": "import { ImageSource } from '@ag/util'" },
+        "typescript-common",
+        "typescript-client"
+      ],
       "config": {
         "noNamespaces": false,
         "enums": {
           "AccountType": "@ag/db#AccountType"
+        },
+        "scalars": {
+          "ImageSource": "ImageSource"
         }
-      },
-      "plugins": ["typescript-common", "typescript-client"]
+      }
     }
   }
 }
