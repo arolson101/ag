@@ -1,6 +1,6 @@
 import { TextFieldProps } from '@ag/core'
 import { Classes, FormGroup, InputGroup, Intent, TextArea } from '@blueprintjs/core'
-import { Field, FieldProps } from 'formik'
+import { Field, FieldProps, FormikProps } from 'formik'
 import React from 'react'
 import { mapIconName } from './ui.blueprint'
 
@@ -8,6 +8,7 @@ type InputRefType = HTMLTextAreaElement | HTMLInputElement | null
 
 export class TextField extends React.PureComponent<TextFieldProps> {
   private textInput: InputRefType = null
+  private form!: FormikProps<any>
 
   focusTextInput = () => {
     if (this.textInput) {
@@ -32,6 +33,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
+          this.form = form
           const error = form.errors[name]
           const intent = error ? Intent.DANGER : undefined
           return (
@@ -55,6 +57,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   disabled={disabled}
                   style={{ flex: 1 }}
                   {...field}
+                  onChange={this.onChange}
                 />
               ) : (
                 <InputGroup
@@ -69,6 +72,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   leftIcon={mapIconName(leftIcon)}
                   rightElement={rightElement}
                   {...field}
+                  onChange={this.onChange}
                 />
               )}
             </FormGroup>
@@ -80,5 +84,14 @@ export class TextField extends React.PureComponent<TextFieldProps> {
 
   inputRef = (ref: InputRefType) => {
     this.textInput = ref
+  }
+
+  onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { field, onValueChanged } = this.props
+    const value = e.currentTarget.value
+    this.form.setFieldValue(field, value)
+    if (onValueChanged) {
+      onValueChanged(value)
+    }
   }
 }

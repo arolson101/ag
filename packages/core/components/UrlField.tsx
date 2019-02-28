@@ -138,7 +138,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   }
 
   maybeGetIcon = async (value: string, force: boolean = false) => {
-    // log('maybeGetIcon %s', value)
+    log('maybeGetIcon %s', value)
     const { favicoField } = this.props
     value = fixUrl(value)
     // log('fixed: %s', value)
