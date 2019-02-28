@@ -107,6 +107,10 @@ export const getImage = async (link: string, cancelToken: CancelToken, context: 
       })
       // log('%s => %o', link, response)
 
+      if (response.data.byteLength === 0) {
+        throw new Error(`empty data returned from ${link}`)
+      }
+
       const ext = extname(link).substr(1)
       buf = Buffer.from(response.data)
       mime = response.headers['content-type'] || `image/${ext}`

@@ -13,10 +13,15 @@ const config: GraphQLScalarTypeConfig<ImageSource, ImageSource> = {
 
   parseValue(value) {
     // log('parseValue %o', value)
-    if (!(value instanceof ImageSource)) {
-      throw new Error('not an imagesource')
+    if (value instanceof ImageSource) {
+      return value
     }
-    return value
+
+    if (typeof value === 'string') {
+      return ImageSource.fromString(value)
+    }
+
+    throw new Error('not an imagesource')
   },
 
   serialize(value) {

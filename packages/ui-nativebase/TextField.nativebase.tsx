@@ -1,10 +1,13 @@
 import { CommonTextFieldProps, TextFieldProps } from '@ag/core'
-import { Field, FieldProps } from 'formik'
+import debug from 'debug'
+import { Field, FieldProps, FormikProps } from 'formik'
 import { Icon, Input, Item, Textarea } from 'native-base'
 import React from 'react'
 import { TextInput } from 'react-native'
 import { FormContext } from './Form.nativebase'
 import { Label } from './Label.nativebase'
+
+const log = debug('app:TextField.nativebase')
 
 interface State {
   commonTextFieldProps: CommonTextFieldProps
@@ -17,6 +20,7 @@ export class TextField<Values> extends React.PureComponent<TextFieldProps<Values
   state: State = { commonTextFieldProps: {} }
 
   private textInput = React.createRef<TextInput & Textarea>()
+  private form!: FormikProps<Values>
 
   componentWillMount() {
     this.context.addField(this)
@@ -55,6 +59,7 @@ export class TextField<Values> extends React.PureComponent<TextFieldProps<Values
     return (
       <Field name={name}>
         {({ field, form }: FieldProps<Values>) => {
+          this.form = form
           const error = !!(form.touched[name] && form.errors[name])
           const itemProps = { onPress: this.focus }
           const inputProps = { autoFocus }
@@ -74,7 +79,7 @@ export class TextField<Values> extends React.PureComponent<TextFieldProps<Values
                   bordered={false}
                   style={{ flex: 1 }}
                   rowSpan={rows}
-                  onChangeText={form.handleChange(name)}
+                  onChangeText={this.onChangeText}
                   value={field.value}
                   ref={this.textInput}
                 />
@@ -82,7 +87,7 @@ export class TextField<Values> extends React.PureComponent<TextFieldProps<Values
                 <Input
                   disabled={disabled}
                   style={{ flex: 1, ...inputStyle }}
-                  onChangeText={form.handleChange(name)}
+                  onChangeText={this.onChangeText}
                   value={field.value.toString()}
                   onSubmitEditing={onSubmitEditing}
                   secureTextEntry={secure}
@@ -102,5 +107,14 @@ export class TextField<Values> extends React.PureComponent<TextFieldProps<Values
         }}
       </Field>
     )
+  }
+
+  onChangeText = (text: string) => {
+    // log('onChangeText %s', text)
+    const { field, onValueChanged } = this.props
+    this.form.setFieldValue(field, text)
+    if (onValueChanged) {
+      onValueChanged(text)
+    }
   }
 }
