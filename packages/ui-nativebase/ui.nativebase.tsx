@@ -1,11 +1,13 @@
-import { UiContext } from '@ag/core'
+import { AppContext, PopoverButtonProps, UiContext } from '@ag/core'
 import debug from 'debug'
 import {
+  ActionSheet,
   Button,
   Card,
   Container,
   Content,
   H3,
+  Icon,
   ListItem,
   Spinner,
   Tab,
@@ -15,7 +17,9 @@ import {
   View,
 } from 'native-base'
 import React from 'react'
+import { defineMessages } from 'react-intl'
 import { Dimensions, FlatList } from 'react-native'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Omit } from 'utility-types'
 import { Alert } from './Alert.nativebase'
 import { CheckboxField } from './CheckboxField.nativebase'
@@ -25,7 +29,6 @@ import { Form } from './Form.nativebase'
 import { Image } from './NativeImage'
 import { SelectField } from './SelectField.nativebase'
 import { TextField } from './TextField.nativebase'
-import { UrlField } from './UrlField.nativebase'
 
 const log = debug('rn:ui')
 
@@ -121,6 +124,58 @@ export const ui: Omit<UiContext, RNNTypes> = {
       </Component>
     )
   },
+  PopoverButton: class Popover extends React.PureComponent<PopoverButtonProps> {
+    static contextType = AppContext
+    context!: React.ContextType<typeof AppContext>
+
+    render() {
+      const { loading, icon, children, minimal } = this.props
+      return (
+        <Button
+          onPress={this.onPress}
+          transparent={minimal}
+          bordered={minimal}
+          style={{
+            minWidth: 40,
+            justifyContent: 'space-around',
+          }}
+        >
+          {loading ? (
+            <Spinner />
+          ) : typeof icon === 'string' ? (
+            <FontAwesome name={icon} />
+          ) : icon && React.isValidElement(icon) ? (
+            icon
+          ) : (
+            children
+          )}
+        </Button>
+      )
+    }
+
+    onPress = () => {
+      const { intl } = this.context
+      const { content } = this.props
+      const realOptions = content.filter(opt => !opt.divider)
+      const options: string[] = realOptions
+        .map(opt => opt.text!)
+        .concat(intl.formatMessage(messages.cancel))
+      const cancelButtonIndex = realOptions.length
+
+      ActionSheet.show(
+        {
+          options,
+          cancelButtonIndex,
+          // title: intl.formatMessage(messages.title),
+        },
+        async buttonIndex => {
+          if (buttonIndex !== cancelButtonIndex) {
+            realOptions[buttonIndex].onClick!()
+          }
+        }
+      )
+    }
+  },
   Button: ({ onPress, disabled, children }) => (
     <Button onPress={onPress as any} disabled={disabled}>
       {children}
@@ -141,8 +196,14 @@ export const ui: Omit<UiContext, RNNTypes> = {
   Divider: () => <ListItem itemDivider />,
   SelectField,
   TextField,
-  UrlField,
 
   Tabs: ({ children }) => <Tabs>{children}</Tabs>,
   Tab: ({ heading, panel }) => <Tab heading={heading}>{panel}</Tab>,
 }
+
+const messages = defineMessages({
+  cancel: {
+    id: 'ui.nativebase.cancel',
+    defaultMessage: 'Cancel',
+  },
+})

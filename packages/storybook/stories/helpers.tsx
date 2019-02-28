@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { App, AppContext, ClientDependencies, Gql } from '@ag/core'
+import { App, AppContext, cancelOperation, ClientDependencies, Gql } from '@ag/core'
 import { action } from '@storybook/addon-actions'
 import axios from 'axios'
 import React from 'react'
@@ -35,3 +35,15 @@ export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, childre
     </MockedProvider>
   )
 }
+
+export const createCancelMutation = (cancelToken: string) => ({
+  request: {
+    query: cancelOperation.mutations.cancel,
+    variables: { cancelToken },
+  },
+  result: {
+    data: {
+      cancel: true,
+    },
+  },
+})

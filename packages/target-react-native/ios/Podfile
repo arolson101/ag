@@ -22,21 +22,21 @@ target 'app_rn' do
     'RCTWebSocket',
     'DevSupport'
   ]
-  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
-  pod 'ReactNativeNavigation', :path => '../node_modules/react-native-navigation'
+  pod 'yoga', :path => '../../../node_modules/react-native/ReactCommon/yoga'
+  pod 'ReactNativeNavigation', :path => '../../../node_modules/react-native-navigation'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+  pod 'RNVectorIcons', :path => '../../../node_modules/react-native-vector-icons'
 
-  pod 'RNFS', :path => '../node_modules/react-native-fs'
+  pod 'RNFS', :path => '../../../node_modules/react-native-fs'
 
-  pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
+  pod 'react-native-randombytes', :path => '../../../node_modules/react-native-randombytes'
 
-  pod 'react-native-sqlite-storage', :path => '../node_modules/react-native-sqlite-storage'
+  pod 'react-native-sqlite-storage', :path => '../../../node_modules/react-native-sqlite-storage'
 
-  pod 'react-native-image-resizer', :path => '../node_modules/react-native-image-resizer'
+  pod 'react-native-image-resizer', :path => '../../../node_modules/react-native-image-resizer'
 
-  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+  pod 'RNImageCropPicker', :path => '../../../node_modules/react-native-image-crop-picker'
 
-  pod 'RNSVG', :path => '../../react-native-svg-image/node_modules/react-native-svg'
+  pod 'RNSVG', :path => '../../../node_modules/react-native-svg'
 
 end

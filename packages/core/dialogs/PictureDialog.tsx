@@ -1,4 +1,5 @@
 import { ImageSource } from '@ag/util'
+import ApolloClient from 'apollo-client'
 import cuid from 'cuid'
 import debug from 'debug'
 import { Formik } from 'formik'
@@ -7,7 +8,7 @@ import React from 'react'
 import { Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppMutation, ErrorDisplay, Gql } from '../components'
+import { AppMutation, cancelOperation, ErrorDisplay, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
@@ -51,15 +52,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     ` as Gql<T.GetImage.Query, T.GetImage.Variables>,
   }
 
-  static readonly mutations = {
-    cancel: gql`
-      mutation Cancel($cancelToken: String!) {
-        cancel(cancelToken: $cancelToken)
-      }
-    ` as Gql<T.Cancel.Mutation, T.Cancel.Variables>,
-  }
-
-  cancel?: () => any
+  client!: ApolloClient<any>
 
   constructor(props: Props) {
     super(props)
@@ -87,8 +80,13 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   componentWillUnmount() {
     log('componentWillUnmount')
-    if (this.cancel) {
-      this.cancel()
+    this.cancel()
+  }
+
+  cancel = async () => {
+    const { cancelToken } = this.state
+    if (this.client && cancelToken) {
+      cancelOperation(this.client, cancelToken)
     }
   }
 
@@ -107,92 +105,76 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     return (
       <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
         <DialogBody>
-          <AppMutation mutation={PictureDialog.mutations.cancel} variables={{ cancelToken }}>
-            {cancel => {
-              this.cancel = cancel
-              return (
-                <>
-                  <Row>
-                    <Formik<Values>
-                      initialValues={initialValues}
-                      onSubmit={async (values, factions) => {
-                        try {
-                          log('onSubmit %o', values)
-                          await cancel()
-                          this.setState({
-                            url: values.url,
-                            cancelToken: this.props.cancelToken || cuid(),
-                          })
-                        } finally {
-                          factions.setSubmitting(false)
-                        }
-                      }}
-                    >
-                      {formApi => (
-                        <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
-                          <TextField
-                            field='url'
-                            label={intl.formatMessage(messages.urlLabel)}
-                            noCorrect
-                          />
-                        </Form>
-                      )}
-                    </Formik>
-                  </Row>
-                  <Query<T.GetImageList.Query, T.GetImageList.Variables>
-                    query={PictureDialog.queries.getImageList}
-                    variables={{ url, cancelToken }}
-                  >
-                    {({ loading: listLoading, error: listError, data: listData }) =>
-                      listLoading ? (
-                        <Spinner />
-                      ) : listError ? (
-                        <ErrorDisplay error={listError} />
-                      ) : (
-                        <Grid
-                          flex={1}
-                          scrollable
-                          size={thumbnailSize}
-                          data={listData ? listData.getImageList : []}
-                          keyExtractor={(link: string) => link}
-                          renderItem={(link: string) => {
-                            // log('renderItem %s', link)
-                            return (
-                              <Tile key={link} size={thumbnailSize}>
-                                <Query<T.GetImage.Query, T.GetImage.Variables>
-                                  query={PictureDialog.queries.getImage}
-                                  variables={{ url: link, cancelToken }}
-                                >
-                                  {({
-                                    loading: imageLoading,
-                                    error: imageError,
-                                    data: imageData,
-                                  }) => {
-                                    const image = imageData && imageData.getImage
-                                    return imageLoading ? (
-                                      <Spinner />
-                                    ) : imageError ? (
-                                      <Text>error</Text>
-                                    ) : !image ? (
-                                      <Text>no data</Text>
-                                    ) : (
-                                      <Button fill minimal onPress={e => this.selectItem(e, image)}>
-                                        <Image title={link} size={thumbnailSize - 2} src={image} />
-                                      </Button>
-                                    )
-                                  }}
-                                </Query>
-                              </Tile>
+          <Row>
+            <Formik<Values>
+              initialValues={initialValues}
+              onSubmit={async (values, factions) => {
+                try {
+                  log('onSubmit %o', values)
+                  await this.cancel()
+                  this.setState({
+                    url: values.url,
+                    cancelToken: this.props.cancelToken || cuid(),
+                  })
+                } finally {
+                  factions.setSubmitting(false)
+                }
+              }}
+            >
+              {formApi => (
+                <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
+                  <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
+                </Form>
+              )}
+            </Formik>
+          </Row>
+          <Query<T.GetImageList.Query, T.GetImageList.Variables>
+            query={PictureDialog.queries.getImageList}
+            variables={{ url, cancelToken }}
+          >
+            {({ loading: listLoading, error: listError, data: listData, client }) => {
+              this.client = client
+              return listLoading ? (
+                <Spinner />
+              ) : listError ? (
+                <ErrorDisplay error={listError} />
+              ) : (
+                <Grid
+                  flex={1}
+                  scrollable
+                  size={thumbnailSize}
+                  data={listData ? listData.getImageList : []}
+                  keyExtractor={(link: string) => link}
+                  renderItem={(link: string) => {
+                    // log('renderItem %s', link)
+                    return (
+                      <Tile key={link} size={thumbnailSize}>
+                        <Query<T.GetImage.Query, T.GetImage.Variables>
+                          query={PictureDialog.queries.getImage}
+                          variables={{ url: link, cancelToken }}
+                        >
+                          {({ loading: imageLoading, error: imageError, data: imageData }) => {
+                            const image = imageData && imageData.getImage
+                            return imageLoading ? (
+                              <Spinner />
+                            ) : imageError ? (
+                              <Text>error</Text>
+                            ) : !image ? (
+                              <Text>no data</Text>
+                            ) : (
+                              <Button fill minimal onPress={e => this.selectItem(e, image)}>
+                                <Image title={link} size={thumbnailSize - 2} src={image} />
+                              </Button>
                             )
                           }}
-                        />
-                      )
-                    }
-                  </Query>
-                </>
+                        </Query>
+                      </Tile>
+                    )
+                  }}
+                />
               )
             }}
-          </AppMutation>
+          </Query>
         </DialogBody>
         <DialogFooter
           primary={{

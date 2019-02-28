@@ -12,7 +12,7 @@ import pkg from './package.json'
 
 const appName = 'Ag-electron'
 
-process.env.DEBUG = 'app:*,electron:*'
+process.env.DEBUG = '*'
 
 const devConfig: Partial<webpack.Configuration> = {
   mode: 'development',

@@ -4,7 +4,6 @@ import debug from 'debug'
 import { Formik, FormikErrors } from 'formik'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { Omit } from 'utility-types'
 import { AppMutation, AppQuery, ConfirmButton, gql, Gql } from '../components'
 import { UrlField } from '../components/UrlField'
 import { AppContext, typedFields } from '../context'
@@ -18,6 +17,7 @@ export namespace BankForm {
   export interface Props {
     bankId?: string
     onClosed: () => any
+    cancelToken?: string
   }
 }
 
@@ -89,7 +89,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
     const { ui, intl } = this.context
     const { Tabs, Tab, Text, DeleteButton, showToast } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
-    const { bankId, onClosed } = this.props
+    const { bankId, onClosed, cancelToken } = this.props
 
     return (
       <AppQuery query={BankForm.queries.BankForm} variables={{ bankId }}>
@@ -192,6 +192,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                     favicoWidth={100}
                                     favicoHeight={100}
                                     label={intl.formatMessage(messages.web)}
+                                    cancelToken={cancelToken}
                                   />
                                   <TextField
                                     field='notes'

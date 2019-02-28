@@ -2,6 +2,7 @@ import { TextFieldProps } from '@ag/core'
 import { Classes, FormGroup, InputGroup, Intent, TextArea } from '@blueprintjs/core'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
+import { mapIconName } from './ui.blueprint'
 
 type InputRefType = HTMLTextAreaElement | HTMLInputElement | null
 
@@ -15,7 +16,18 @@ export class TextField extends React.PureComponent<TextFieldProps> {
   }
 
   render() {
-    const { field: name, label, autoFocus, placeholder, secure, rows, flex, disabled } = this.props
+    const {
+      field: name,
+      label,
+      leftIcon,
+      rightElement,
+      autoFocus,
+      placeholder,
+      secure,
+      rows,
+      flex,
+      disabled,
+    } = this.props
     const id = name
     return (
       <Field name={name}>
@@ -54,6 +66,8 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   inputRef={this.inputRef}
                   disabled={disabled}
                   style={{ flex: 1 }}
+                  leftIcon={mapIconName(leftIcon)}
+                  rightElement={rightElement}
                   {...field}
                 />
               )}

@@ -76,6 +76,18 @@ export type DateTime = any
 // Documents
 // ====================================================
 
+export namespace Cancel {
+  export type Variables = {
+    cancelToken: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    cancel: boolean
+  }
+}
+
 export namespace GetFavico {
   export type Variables = {
     url: string
@@ -112,18 +124,6 @@ export namespace GetImage {
     __typename?: 'Query'
 
     getImage: ImageSource
-  }
-}
-
-export namespace Cancel {
-  export type Variables = {
-    cancelToken: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    cancel: boolean
   }
 }
 

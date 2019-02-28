@@ -34,8 +34,6 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
-  - rn-fetch-blob (0.10.6):
-    - React/Core
   - RNFS (2.13.3):
     - React
   - RNSVG (9.2.4):
@@ -45,50 +43,46 @@ PODS:
   - yoga (0.57.8.React)
 
 DEPENDENCIES:
-  - react-native-randombytes (from `../node_modules/react-native-randombytes`)
-  - React/Core (from `../node_modules/react-native`)
-  - React/DevSupport (from `../node_modules/react-native`)
-  - React/RCTActionSheet (from `../node_modules/react-native`)
-  - React/RCTAnimation (from `../node_modules/react-native`)
-  - React/RCTGeolocation (from `../node_modules/react-native`)
-  - React/RCTImage (from `../node_modules/react-native`)
-  - React/RCTLinkingIOS (from `../node_modules/react-native`)
-  - React/RCTNetwork (from `../node_modules/react-native`)
-  - React/RCTSettings (from `../node_modules/react-native`)
-  - React/RCTText (from `../node_modules/react-native`)
-  - React/RCTVibration (from `../node_modules/react-native`)
-  - React/RCTWebSocket (from `../node_modules/react-native`)
-  - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
-  - RNFS (from `../node_modules/react-native-fs`)
-  - RNSVG (from `../../react-native-svg-image/node_modules/react-native-svg`)
-  - RNVectorIcons (from `../../ui-nativebase/node_modules/react-native-vector-icons`)
-  - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+  - react-native-randombytes (from `../../../node_modules/react-native-randombytes`)
+  - React/Core (from `../../../node_modules/react-native`)
+  - React/DevSupport (from `../../../node_modules/react-native`)
+  - React/RCTActionSheet (from `../../../node_modules/react-native`)
+  - React/RCTAnimation (from `../../../node_modules/react-native`)
+  - React/RCTGeolocation (from `../../../node_modules/react-native`)
+  - React/RCTImage (from `../../../node_modules/react-native`)
+  - React/RCTLinkingIOS (from `../../../node_modules/react-native`)
+  - React/RCTNetwork (from `../../../node_modules/react-native`)
+  - React/RCTSettings (from `../../../node_modules/react-native`)
+  - React/RCTText (from `../../../node_modules/react-native`)
+  - React/RCTVibration (from `../../../node_modules/react-native`)
+  - React/RCTWebSocket (from `../../../node_modules/react-native`)
+  - RNFS (from `../../../node_modules/react-native-fs`)
+  - RNSVG (from `../../../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../../../node_modules/react-native-vector-icons`)
+  - yoga (from `../../../node_modules/react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
   React:
-    :path: "../node_modules/react-native"
+    :path: "../../../node_modules/react-native"
   react-native-randombytes:
-    :path: "../node_modules/react-native-randombytes"
-  rn-fetch-blob:
-    :path: "../node_modules/rn-fetch-blob"
+    :path: "../../../node_modules/react-native-randombytes"
   RNFS:
-    :path: "../node_modules/react-native-fs"
+    :path: "../../../node_modules/react-native-fs"
   RNSVG:
-    :path: "../../react-native-svg-image/node_modules/react-native-svg"
+    :path: "../../../node_modules/react-native-svg"
   RNVectorIcons:
-    :path: "../../ui-nativebase/node_modules/react-native-vector-icons"
+    :path: "../../../node_modules/react-native-vector-icons"
   yoga:
-    :path: "../node_modules/react-native/ReactCommon/yoga"
+    :path: "../../../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-randombytes: d3184d351604f78e019535178766590188bbc133
-  rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
   RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
   RNSVG: 4834be1d644eb77f0e3f6de851881b83758a3124
   RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 82c6bdc264685ce03e7cdd60909b0c13b1f08bfa
+PODFILE CHECKSUM: e79ba6fa73acb7d2f033017b760a43f7d698d288
 
 COCOAPODS: 1.5.3

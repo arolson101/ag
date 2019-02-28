@@ -6,7 +6,7 @@ target 'storybook' do
   # use_frameworks!
 
   # Pods for storybook
-  pod 'React', :path => '../node_modules/react-native', :subspecs =>
+  pod 'React', :path => '../../../node_modules/react-native', :subspecs =>
   [
     'Core',
     'RCTActionSheet',
@@ -22,13 +22,13 @@ target 'storybook' do
     'RCTWebSocket',
     'DevSupport'
   ]
-  pod 'yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
-  pod 'RNSVG', :path => '../../react-native-svg-image/node_modules/react-native-svg'
+  pod 'yoga', :path => '../../../node_modules/react-native/ReactCommon/yoga'
+  pod 'RNSVG', :path => '../../../node_modules/react-native-svg'
 
-  pod 'RNFS', :path => '../node_modules/react-native-fs'
+  pod 'RNFS', :path => '../../../node_modules/react-native-fs'
 
-  pod 'react-native-randombytes', :path => '../node_modules/react-native-randombytes'
+  pod 'react-native-randombytes', :path => '../../../node_modules/react-native-randombytes'
 
-  pod 'RNVectorIcons', :path => '../../ui-nativebase/node_modules/react-native-vector-icons'
+  pod 'RNVectorIcons', :path => '../../../node_modules/react-native-vector-icons'
 
 end

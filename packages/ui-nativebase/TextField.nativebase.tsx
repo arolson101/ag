@@ -49,6 +49,8 @@ export class TextField<Values> extends React.PureComponent<TextFieldProps<Values
       onSubmitEditing,
       disabled,
       noCorrect,
+      leftIcon,
+      rightElement,
     } = this.props
     return (
       <Field name={name}>
@@ -94,6 +96,7 @@ export class TextField<Values> extends React.PureComponent<TextFieldProps<Values
                 />
               )}
               {error && <Icon name='close-circle' />}
+              {rightElement}
             </Item>
           )
         }}

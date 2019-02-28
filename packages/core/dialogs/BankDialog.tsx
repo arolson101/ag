@@ -11,6 +11,7 @@ export namespace BankDialog {
   export interface Props {
     bankId?: string
     isOpen: boolean
+    cancelToken?: string
   }
 }
 
@@ -23,7 +24,7 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
   bankForm = React.createRef<BankForm>()
 
   render() {
-    const { bankId, isOpen } = this.props
+    const { bankId, isOpen, cancelToken } = this.props
     const {
       intl,
       ui: { Dialog, DialogBody, DialogFooter },
@@ -36,7 +37,12 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
         title={intl.formatMessage(bankId ? messages.titleEdit : messages.titleCreate)}
       >
         <DialogBody>
-          <BankForm onClosed={this.close} ref={this.bankForm} bankId={bankId} />
+          <BankForm
+            onClosed={this.close}
+            ref={this.bankForm}
+            bankId={bankId}
+            cancelToken={cancelToken}
+          />
         </DialogBody>
         <DialogFooter
           primary={{

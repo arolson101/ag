@@ -9,7 +9,6 @@ import {
   FormProps,
   SelectFieldProps,
   TextFieldProps,
-  UrlFieldProps,
 } from './uiContextForms'
 
 const log = debug('app:uiContext')
@@ -151,7 +150,6 @@ export interface UiContext {
   Divider: React.ComponentType
   SelectField: React.ComponentType<SelectFieldProps>
   TextField: React.ComponentType<TextFieldProps>
-  UrlField: React.ComponentType<UrlFieldProps>
 
   // tabs
   Tabs: React.ComponentType<TabsProps>

@@ -1,27 +1,16 @@
 // tslint:disable:max-line-length
-import { PictureDialog } from '@ag/core'
+import { cancelOperation, PictureDialog } from '@ag/core'
 import { ImageSource } from '@ag/util'
 import React from 'react'
-import { action, MockApp, storiesOf } from './helpers'
+import { action, createCancelMutation, MockApp, storiesOf } from './helpers'
 
 const cancelToken = 'cjsmnf3gh00004a5uqmf82n64'
+const cancelMutation = createCancelMutation(cancelToken)
 
 const props = {
   isOpen: true,
   onSelected: action('onSelected'),
   cancelToken,
-}
-
-const cancelMutation = {
-  request: {
-    query: PictureDialog.mutations.cancel,
-    variables: { cancelToken },
-  },
-  result: {
-    data: {
-      cancel: true,
-    },
-  },
 }
 
 const getImageResponse = (

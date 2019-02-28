@@ -11,6 +11,7 @@ import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, CommonFieldProps, CommonTextFieldProps, typedFields } from '../context'
 import * as T from '../graphql-types'
+import { cancelOperation } from './cancelOperation'
 import { Gql } from './Gql'
 
 const log = debug('core:UrlField')
@@ -59,15 +60,19 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     this.cancel()
   }
 
-  cancel = () => {}
+  cancel = async () => {
+    const { cancelToken } = this.state
+    if (this.client && cancelToken) {
+      return cancelOperation(this.client, cancelToken)
+    }
+  }
 
   render() {
     const { intl, ui } = this.context
-    const { PopoverButton, Image } = ui
+    const { PopoverButton, Image, Text } = ui
     const { TextField } = typedFields<Values>(ui)
     const { favicoField, ...props } = this.props
-
-    const loading = false
+    const { gettingIcon } = this.state
 
     return (
       <>
@@ -85,6 +90,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
             <Field name={favicoField} pure={false}>
               {({ field: iconField, form }: FieldProps<Values>) => {
                 this.form = form
+                const value = iconField.value as ImageSource
                 return (
                   <PopoverButton
                     content={[
@@ -113,10 +119,10 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
                       },
                     ]}
                     minimal
-                    loading={loading}
-                    icon={iconField.value && <Image size={20} src={iconField.value} />}
+                    loading={gettingIcon}
+                    icon={value && value.width ? <Image size={20} src={value} /> : undefined}
                   >
-                    {!loading && !iconField.value && '...'}
+                    {!gettingIcon && (!value || !value.width) && <Text>...</Text>}
                   </PopoverButton>
                 )
               }}
@@ -150,6 +156,11 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
         query: UrlField.queries.getFavico,
         variables: { url: value, cancelToken },
       })
+
+      // log('favico query: %O', {
+      //   request: { query: 'UrlField.queries.getFavico', variables: { url: value, cancelToken } },
+      //   result,
+      // })
 
       assert(!result.loading)
       const icon = result.data!.getFavico

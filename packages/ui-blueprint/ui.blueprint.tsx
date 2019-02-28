@@ -1,4 +1,4 @@
-import { TabProps, TabsProps, UiContext } from '@ag/core'
+import { IconName, TabProps, TabsProps, UiContext } from '@ag/core'
 import {
   Alert,
   Button,
@@ -9,8 +9,12 @@ import {
   Dialog,
   Divider,
   H3,
+  Icon,
+  IconName as BlueprintIconName,
   Intent,
+  Menu,
   Overlay,
+  Popover,
   Position,
   Spinner,
   Tab,
@@ -30,7 +34,6 @@ import { Form } from './Form.blueprint'
 import { Image } from './Image.blueprint'
 import { SelectField } from './SelectField.blueprint'
 import { TextField } from './TextField.blueprint'
-import { UrlField } from './UrlField.blueprint'
 
 export const AppToaster = Toaster.create({
   className: 'recipe-toaster',
@@ -198,6 +201,36 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
+  PopoverButton: ({ icon, disabled, content, minimal, loading, children }) => (
+    <Popover
+      content={
+        <Menu>
+          {content.map(({ divider, text, icon: itemIcon, onClick }, i) =>
+            divider ? (
+              <Menu.Divider key={i} />
+            ) : (
+              <Menu.Item key={i} text={text} icon={mapIconName(itemIcon)} onClick={onClick} />
+            )
+          )}
+        </Menu>
+      }
+    >
+      <Button
+        loading={loading}
+        minimal={minimal}
+        disabled={disabled}
+        icon={
+          typeof icon === 'string'
+            ? mapIconName(icon)
+            : React.isValidElement(icon)
+            ? icon
+            : undefined
+        }
+      >
+        {children}
+      </Button>
+    </Popover>
+  ),
   DeleteButton: ({ onPress, disabled, children }) => (
     <Button type='button' intent={Intent.DANGER} fill minimal onClick={onPress} disabled={disabled}>
       {children}
@@ -213,8 +246,24 @@ export const ui: UiContext = {
   Divider,
   SelectField,
   TextField,
-  UrlField,
 
   Tabs: Tabs as React.ComponentType<TabsProps>,
   Tab: Tab as React.ComponentType<TabProps>,
+}
+
+export const mapIconName = (icon?: IconName): BlueprintIconName | undefined => {
+  switch (icon) {
+    case 'url':
+      return 'globe-network'
+
+    case 'image':
+      return 'media'
+
+    case 'library':
+      return 'folder-open'
+
+    case 'refresh':
+    case 'trash':
+      return icon
+  }
 }

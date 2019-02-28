@@ -1,7 +1,41 @@
 // tslint:disable:max-line-length
-import { BankDialog, BankForm } from '@ag/core'
+import { BankDialog, BankForm, UrlField } from '@ag/core'
+import { ImageSource } from '@ag/util'
 import React from 'react'
-import { action, MockApp, storiesOf } from './helpers'
+import { action, createCancelMutation, MockApp, storiesOf } from './helpers'
+
+const cancelToken = 'cjso7o0ca00014a5uezsiw3dy'
+const cancelMutation = createCancelMutation(cancelToken)
+const bankId = 'cjr9drbdp0001415uh38a4g9j'
+
+const formProps = {
+  cancelToken,
+  onClosed: action('onClosed'),
+}
+
+const dialogProps = {
+  ...formProps,
+  isOpen: true,
+}
+
+const downloadRequests = [
+  {
+    request: {
+      query: UrlField.queries.getFavico,
+      variables: { url: 'http://www.citicards.com', cancelToken },
+    },
+    result: {
+      data: {
+        getFavico: new ImageSource({
+          width: 32,
+          height: 32,
+          uri:
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACl0lEQVR4AcXBMWscRxiA4XeW2VKVrlIRUlxqIb4rlqv0F9ylumIRe5gp07hQoeIKNy6XMIPYwkVq/wRBwAyBD0WQ8kABQwLBlVVeMbndLMdmkUmUYO3zGGstU8qYWMbEMiaWMbGMiVn+p12Mic0GPnwAVQ5EQASk4tO333B8fGx4hLHW8l/sYkxsNvDuHQciHKhyIALekxeFYcRYa3mqXV0n1ms6IlBV5M4ZRnZ1nQgBVOl4T+6cYcBYa3mK3avLxOaKTlWRN41hoCxjOr+Ys1rODL3dq8vE5orO5RX5642hl/FUf/wGVQXekzeNYeD0NKYQlIfbLUP5643Be6gq+OVnhixPlDeNodU0fM7R2Zyx3DnDI4y1lrEYdykERZWOCDRNYeiVZUzsVZVQFLl5+/5jurneEgJ7ioggAiLgXGHYK8uY2GuawjBgGSnLmBaLwJAqezH98NOc1XJmQmBPEaHz5uUWVeUvgqqiCiJCK8ZdWiwCLWv5G8tAWcYUgtISEaqKTgigqtxc0xEBVTg6m9P67vs5D7ewDoAqVSWIwNHZnNWSAWHM0otxlxYLpeW94FxhnOPA+5icKwyPWC1nhj05jUmB84s5q+XM8C9k9FQVUBDBucIw4lxh+AIyeqp0KuFZZYyo8qwyeucXc1qqynPK6K2WMwNCqyxjYqQsY+ILsAx4D+s1hKBATFVFJwQIQRGJ6e6uMPyDNy+31HVMIcDdXWH4ms/KGHCuMN4LIgIoISghKKCICN4LLeVx3gstVWW9Vg5+paeMGWstY/f39+nH34+4ud7SOr+Ys1rODL237z+mh9stL158xcnJiWGkrmNiz7nC0KvrmI7O5qyWM8OAsdYypYyJZUwsY2IZE8uYWMbEMib2J2Tx9ZNXxshWAAAAAElFTkSuQmCC',
+        }),
+      },
+    },
+  },
+]
 
 const emptyMocks = [
   {
@@ -18,13 +52,15 @@ const emptyMocks = [
       },
     },
   },
+  ...downloadRequests,
+  cancelMutation,
 ]
 
 const editMocks = [
   {
     request: {
       query: BankForm.queries.BankForm,
-      variables: { bankId: 'cjr9drbdp0001415uh38a4g9j' },
+      variables: { bankId },
     },
     result: {
       data: {
@@ -34,8 +70,12 @@ const editMocks = [
             web: 'http://www.citicards.com',
             address: '8787 Baypine Road\nJacksonville, FL 32256\nUSA',
             notes: '',
-            favicon:
-              '{"source":[{"width":16,"height":16,"uri":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABdElEQVQ4T7XTTSgDYBzH8e+zlSgvk4O9hAO5mDjIy5G8JCVCoXGQlbIcUEhxWNS0xQ6Ki9CkqZW2A5lS8nJQU2qhJOEm5SJvY9pzULIxyXN/Pv/f//88fxEMBoP84Yh/BWQ4pxPW1kCrBZMJodN9yhsxgbzc2Ql+PzQ3w8UFuFwSE3r9BxIZCFV1OGBhgdFZL8PGCmL2dsBmA7cbIYREvgBnlzc8PgfIyVRzfn1LUnws5cYZliwG0tQqHh5fSE1JCJ/AuX5Ix4gThUKwONaCedZLe20B/TYPedkaRruqOPBfYTZVfwVCPec1Wlm2tKFKjOPpOUBj7zy+lT5KDHa25rrZ2D35HtDXT+BfHZB64PWNwpbJ3wFZNeOceoZQKoQEilqnogdCVQ2DDpRKhWyhKDcD6/yWBEo7pqkryyVdk4zv+Dr8DELA7d09/Ta3nLR9sB770jbjPTW4No/w7p9ibCiWL9NUmf/zP4h2Pf53F6JJ8ecE70Q529FGCcDGAAAAAElFTkSuQmCC"}],"from":"http://www.citicards.com/"}',
+            favicon: new ImageSource({
+              width: 32,
+              height: 32,
+              uri:
+                'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACl0lEQVR4AcXBMWscRxiA4XeW2VKVrlIRUlxqIb4rlqv0F9ylumIRe5gp07hQoeIKNy6XMIPYwkVq/wRBwAyBD0WQ8kABQwLBlVVeMbndLMdmkUmUYO3zGGstU8qYWMbEMiaWMbGMiVn+p12Mic0GPnwAVQ5EQASk4tO333B8fGx4hLHW8l/sYkxsNvDuHQciHKhyIALekxeFYcRYa3mqXV0n1ms6IlBV5M4ZRnZ1nQgBVOl4T+6cYcBYa3mK3avLxOaKTlWRN41hoCxjOr+Ys1rODL3dq8vE5orO5RX5642hl/FUf/wGVQXekzeNYeD0NKYQlIfbLUP5643Be6gq+OVnhixPlDeNodU0fM7R2Zyx3DnDI4y1lrEYdykERZWOCDRNYeiVZUzsVZVQFLl5+/5jurneEgJ7ioggAiLgXGHYK8uY2GuawjBgGSnLmBaLwJAqezH98NOc1XJmQmBPEaHz5uUWVeUvgqqiCiJCK8ZdWiwCLWv5G8tAWcYUgtISEaqKTgigqtxc0xEBVTg6m9P67vs5D7ewDoAqVSWIwNHZnNWSAWHM0otxlxYLpeW94FxhnOPA+5icKwyPWC1nhj05jUmB84s5q+XM8C9k9FQVUBDBucIw4lxh+AIyeqp0KuFZZYyo8qwyeucXc1qqynPK6K2WMwNCqyxjYqQsY+ILsAx4D+s1hKBATFVFJwQIQRGJ6e6uMPyDNy+31HVMIcDdXWH4ms/KGHCuMN4LIgIoISghKKCICN4LLeVx3gstVWW9Vg5+paeMGWstY/f39+nH34+4ud7SOr+Ys1rODL237z+mh9stL158xcnJiWGkrmNiz7nC0KvrmI7O5qyWM8OAsdYypYyJZUwsY2IZE8uYWMbEMib2J2Tx9ZNXxshWAAAAAElFTkSuQmCC',
+            }),
             online: true,
             fid: '24909',
             org: 'Citigroup',
@@ -49,28 +89,30 @@ const editMocks = [
       },
     },
   },
+  ...downloadRequests,
+  cancelMutation,
 ]
 
 storiesOf('Dialogs/BankDialog', module)
   .add('create', () => (
     <MockApp mocks={emptyMocks}>
-      <BankDialog isOpen />
+      <BankDialog {...dialogProps} />
     </MockApp>
   ))
   .add('edit', () => (
     <MockApp mocks={editMocks}>
-      <BankDialog isOpen bankId={'cjr9drbdp0001415uh38a4g9j'} />
+      <BankDialog {...dialogProps} bankId={bankId} />
     </MockApp>
   ))
 
 storiesOf('Forms/BankForm', module)
   .add('create', () => (
     <MockApp mocks={emptyMocks}>
-      <BankForm onClosed={action('onClosed')} />
+      <BankForm {...formProps} />
     </MockApp>
   ))
   .add('edit', () => (
     <MockApp mocks={editMocks}>
-      <BankForm onClosed={action('onClosed')} bankId={'cjr9drbdp0001415uh38a4g9j'} />
+      <BankForm {...formProps} bankId={bankId} />
     </MockApp>
   ))

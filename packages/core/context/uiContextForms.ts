@@ -56,15 +56,6 @@ export interface TextFieldProps<Values = any>
   onValueChanged?: (value: string) => any
 }
 
-export interface UrlFieldProps<Values = any>
-  extends CommonFieldProps<Values>,
-    CommonTextFieldProps {
-  favicoField: keyof Values & string
-  favicoWidth: number
-  favicoHeight: number
-  placeholder?: string
-}
-
 export const typedFields = <V extends {}>(uiContext: UiContext) => {
   return {
     Form: uiContext.Form as React.ComponentType<FormProps<V>>,
@@ -74,7 +65,6 @@ export const typedFields = <V extends {}>(uiContext: UiContext) => {
     Divider: uiContext.Divider,
     SelectField: uiContext.SelectField as React.ComponentType<SelectFieldProps<V>>,
     TextField: uiContext.TextField as React.ComponentType<TextFieldProps<V>>,
-    UrlField: uiContext.UrlField as React.ComponentType<UrlFieldProps<V>>,
     // AccountField: AccountField as React.ComponentClass<AccountFieldProps<V>>,
     // BudgetField: BudgetField as React.ComponentClass<BudgetFieldProps<V>>,
     // ColorAddon: ColorAddonField as React.ComponentClass<ColorAddonFieldProps<V>>,
