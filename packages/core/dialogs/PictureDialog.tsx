@@ -73,8 +73,6 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     log('componentDidMount')
-    const { axios } = this.context
-
     // this.getImages()
   }
 

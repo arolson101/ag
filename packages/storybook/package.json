@@ -31,7 +31,6 @@
     "@storybook/addon-ondevice-knobs": "^4.1.13",
     "@storybook/react": "^4.1.4",
     "@storybook/react-native": "^4.1.4",
-    "axios": "^0.18.0",
     "commander": "^2.19.0",
     "debug": "^4.1.1",
     "electron": "^4.0.1",
@@ -64,6 +63,7 @@
     "jest": "^23.6.0",
     "metro-react-native-babel-preset": "^0.45.0",
     "react-native-typescript-transformer": "^1.2.11",
-    "ts-transform-graphql-tag": "^0.2.1"
+    "ts-transform-graphql-tag": "^0.2.1",
+    "webpack": "^4.28.3"
   }
 }

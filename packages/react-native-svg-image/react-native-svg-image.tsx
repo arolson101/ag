@@ -38,8 +38,6 @@ interface SvgUriProps {
    * Style properties for the containing View
    */
   style?: StyleProp<ViewStyle>
-
-  axios: typeof Axios
 }
 
 interface State {
@@ -75,11 +73,10 @@ export class SvgUri extends Component<SvgUriProps, State> {
   }
 
   async load(uri: string | undefined) {
-    const { axios } = this.props
     if (this.cancelSource) {
       this.cancelSource.cancel()
     }
-    this.cancelSource = axios.CancelToken.source()
+    this.cancelSource = Axios.CancelToken.source()
 
     if (!uri) {
       this.setState({ text: undefined, doc: undefined })
@@ -89,7 +86,7 @@ export class SvgUri extends Component<SvgUriProps, State> {
         const { buf } = decodeDataURI(uri)
         text = buf.toString()
       } else {
-        const data = await axios.get<string>(uri, { cancelToken: this.cancelSource.token })
+        const data = await Axios.get<string>(uri, { cancelToken: this.cancelSource.token })
         text = data.data
       }
 

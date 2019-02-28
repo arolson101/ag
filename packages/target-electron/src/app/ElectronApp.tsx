@@ -13,7 +13,6 @@ import { deleteDb, openDb } from './openDb.electron'
 
 export const deps: ClientDependencies = {
   ui,
-  axios,
 
   getImageFromLibrary,
   openCropper,
@@ -21,7 +20,7 @@ export const deps: ClientDependencies = {
 }
 
 const context = App.createContext({ store, deps })
-const client = createClient({ openDb, deleteDb, ...context })
+const client = createClient({ openDb, deleteDb, axios, ...context })
 
 class ElectronApp extends React.PureComponent {
   render() {

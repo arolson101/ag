@@ -1,7 +1,6 @@
 // tslint:disable:no-implicit-dependencies
 import { App, AppContext, cancelOperation, ClientDependencies, Gql } from '@ag/core'
 import { action } from '@storybook/addon-actions'
-import axios from 'axios'
 import React from 'react'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { IntlProvider } from 'react-intl'
@@ -11,7 +10,6 @@ export { action, storiesOf }
 
 const deps: ClientDependencies = {
   ui,
-  axios,
   scaleImage: action('scaleImage') as any,
   openCropper: action('openCropper') as any,
   getImageFromLibrary: action('getImageFromLibrary') as any,

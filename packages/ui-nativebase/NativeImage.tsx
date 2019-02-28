@@ -24,9 +24,7 @@ export class Image extends React.PureComponent<ImageProps> {
 
     // log('uri %s', src.uri)
     if (src.uri.startsWith('data:image/svg')) {
-      return (
-        <SvgUri source={src} style={style} width={size} height={size} axios={this.context.axios} />
-      )
+      return <SvgUri source={src} style={style} width={size} height={size} />
     } else {
       // log('not svg, src %o style %o', src, style)
       return <RNImage source={src} style={style} />

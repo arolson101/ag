@@ -13,7 +13,6 @@
     "@ag/react-native-svg-image": "^0.0.0",
     "@ag/util": "^0.0.0",
     "accounting": "^0.4.1",
-    "axios": "^0.18.0",
     "debug": "^4.1.1",
     "formik": "^1.4.2",
     "native-base": "^2.10.0",
