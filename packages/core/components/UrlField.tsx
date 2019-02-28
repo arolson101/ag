@@ -11,14 +11,14 @@ import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, CommonFieldProps, CommonTextFieldProps, typedFields } from '../context'
 import * as T from '../graphql-types'
-import { cancelOperation } from './cancelOperation'
+import { cancelOperation, isCancel } from './cancelOperation'
 import { Gql } from './Gql'
 
 const log = debug('core:UrlField')
+log.enabled = true
 
 interface State {
   gettingIcon: boolean
-  cancelToken: string
 }
 
 export interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldProps {
@@ -46,14 +46,21 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
 
   form!: FormikProps<Values>
   client!: ApolloClient<any>
+  cancelToken?: string
 
   constructor(props: Props) {
     super(props)
 
     this.state = {
       gettingIcon: false,
-      cancelToken: props.cancelToken || cuid(),
     }
+  }
+
+  initCancelToken() {
+    if (!this.cancelToken) {
+      this.cancelToken = this.props.cancelToken || cuid()
+    }
+    return this.cancelToken
   }
 
   componentWillUnmount() {
@@ -61,9 +68,8 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   }
 
   cancel = async () => {
-    const { cancelToken } = this.state
-    if (this.client && cancelToken) {
-      return cancelOperation(this.client, cancelToken)
+    if (this.client && this.cancelToken) {
+      return cancelOperation(this.client, this.cancelToken)
     }
   }
 
@@ -151,7 +157,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       this.cancel()
       this.setState({ gettingIcon: true })
 
-      const cancelToken = this.props.cancelToken || cuid()
+      const cancelToken = this.initCancelToken()
       const result = await this.client.query<T.GetFavico.Query, T.GetFavico.Variables>({
         query: UrlField.queries.getFavico,
         variables: { url: value, cancelToken },
@@ -166,10 +172,11 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       const icon = result.data!.getFavico
 
       this.form.setFieldValue(favicoField, icon)
-    } catch (ex) {
-      log(ex.message)
-    } finally {
       this.setState({ gettingIcon: false })
+    } catch (ex) {
+      if (!isCancel(ex)) {
+        this.setState({ gettingIcon: false })
+      }
     }
   }
 

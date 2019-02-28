@@ -8,7 +8,7 @@ import React from 'react'
 import { Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppMutation, cancelOperation, ErrorDisplay, Gql } from '../components'
+import { cancelOperation, ErrorDisplay, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 

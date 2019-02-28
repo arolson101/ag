@@ -20,10 +20,12 @@ export class ImageResolver {
     @Arg('cancelToken') cancelToken: string
   ): Promise<string[]> {
     try {
+      // log('getImageList %s %s', url, cancelToken)
       const source = this.online.register(context, cancelToken)
       return getImageList(url, source.token, context)
     } finally {
       this.online.delete(cancelToken)
+      // log('getImageList end')
     }
   }
 
@@ -34,11 +36,13 @@ export class ImageResolver {
     @Arg('cancelToken') cancelToken: string
   ): Promise<ImageSource> {
     try {
+      // log('getImage %s %s', url, cancelToken)
       const source = this.online.register(context, cancelToken)
       const res = await getImage(url, source.token, context)
       return ImageSource.fromImageBuf(res)
     } finally {
       this.online.delete(cancelToken)
+      // log('getImage end')
     }
   }
 
@@ -49,11 +53,13 @@ export class ImageResolver {
     @Arg('cancelToken') cancelToken: string
   ): Promise<ImageSource> {
     try {
+      // log('getFavico %s %s', url, cancelToken)
       const source = this.online.register(context, cancelToken)
       const res = await getFavico(url, source.token, context)
       return ImageSource.fromImageBuf(res)
     } finally {
       this.online.delete(cancelToken)
+      // log('getFavico end')
     }
   }
 }
