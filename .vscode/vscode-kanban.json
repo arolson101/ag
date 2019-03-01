@@ -5,6 +5,19 @@
       "assignedTo": {
         "name": "arolson101"
       },
+      "creation_time": "2019-02-25T22:59:57.129Z",
+      "description": {
+        "content": "graphql service should do the online things",
+        "mime": "text/markdown"
+      },
+      "id": "17",
+      "references": [],
+      "title": "move online stuff to db"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
       "creation_time": "2019-02-25T22:05:48.145Z",
       "description": {
         "content": "nohoist adds extra complexity to rn-cli.config.js because it can't handle two (identical) packages.  Also, linking native modules from (internal) libs like react-native-svg-image is a PITA",
@@ -22,6 +35,19 @@
       "id": "19",
       "references": [],
       "title": "use axios instead of fetch"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
+      "creation_time": "2019-02-25T22:45:41.835Z",
+      "description": {
+        "content": "a random-colored box with the bank initials on it for banks with no favico",
+        "mime": "text/markdown"
+      },
+      "id": "15",
+      "references": [],
+      "title": "bank 'avatar'"
     }
   ],
   "in-progress": [
@@ -61,19 +87,6 @@
       "prio": 15,
       "references": [],
       "title": "get accounts from server"
-    },
-    {
-      "assignedTo": {
-        "name": "arolson101"
-      },
-      "creation_time": "2019-02-25T22:59:57.129Z",
-      "description": {
-        "content": "graphql service should do the online things",
-        "mime": "text/markdown"
-      },
-      "id": "17",
-      "references": [],
-      "title": "move online stuff to db"
     }
   ],
   "todo": [
@@ -171,19 +184,6 @@
       "prio": 0,
       "references": [],
       "title": "add functionality tests"
-    },
-    {
-      "assignedTo": {
-        "name": "arolson101"
-      },
-      "creation_time": "2019-02-25T22:45:41.835Z",
-      "description": {
-        "content": "a random-colored box with the bank initials on it for banks with no favico",
-        "mime": "text/markdown"
-      },
-      "id": "15",
-      "references": [],
-      "title": "bank 'avatar'"
     },
     {
       "assignedTo": {

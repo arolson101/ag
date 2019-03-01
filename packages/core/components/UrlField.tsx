@@ -1,4 +1,4 @@
-import { fixUrl, ImageSource, isUrl } from '@ag/util'
+import { fixUrl, generateAvatar, ImageSource, isUrl } from '@ag/util'
 import ApolloClient from 'apollo-client'
 import assert from 'assert'
 import cuid = require('cuid')
@@ -22,6 +22,7 @@ interface State {
 }
 
 export interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldProps {
+  nameField: keyof Values & string
   favicoField: keyof Values & string
   favicoWidth: number
   favicoHeight: number
@@ -143,6 +144,14 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     await this.maybeGetIcon(value)
   }
 
+  generateDefaultIcon() {
+    const { nameField } = this.props
+    const name = this.form.values[nameField]
+    if (name) {
+      return generateAvatar(name)
+    }
+  }
+
   maybeGetIcon = async (value: string, force: boolean = false) => {
     log('maybeGetIcon %s', value)
     const { favicoField } = this.props
@@ -150,7 +159,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
     // log('fixed: %s', value)
     if (!isUrl(value)) {
       // log(`not looking up icon '${value}' is not an URL`)
-      this.form.setFieldValue(favicoField, undefined)
+      this.form.setFieldValue(favicoField, this.generateDefaultIcon())
       return
     }
     try {
@@ -175,6 +184,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
       this.setState({ gettingIcon: false })
     } catch (ex) {
       if (!isCancel(ex)) {
+        this.form.setFieldValue(favicoField, this.generateDefaultIcon())
         this.setState({ gettingIcon: false })
       }
     }
@@ -212,7 +222,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
 
   onClickReset = () => {
     const { favicoField } = this.props
-    this.form.setFieldValue(favicoField, '')
+    this.form.setFieldValue(favicoField, this.generateDefaultIcon())
   }
 }
 

@@ -1,5 +1,5 @@
 import { Bank } from '@ag/db'
-import { pick } from '@ag/util'
+import { generateAvatar, pick } from '@ag/util'
 import debug from 'debug'
 import { Formik, FormikErrors } from 'formik'
 import React from 'react'
@@ -24,6 +24,8 @@ export namespace BankForm {
 type FormValues = typeof Bank.defaultValues & {
   fi: number
 }
+
+export const bankAvatarSize = 100
 
 export class BankForm extends React.PureComponent<BankForm.Props> {
   static contextType = AppContext
@@ -163,13 +165,17 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                         onValueChange={value => {
                                           value = +value // coax to number
                                           const fi = filist[value]
-                                          formApi.setFieldValue('name', value ? fi.name || '' : '')
-                                          formApi.setFieldValue('web', fi.profile.siteURL || '')
-                                          formApi.setFieldValue('favicon', '')
-                                          formApi.setFieldValue('address', formatAddress(fi) || '')
-                                          formApi.setFieldValue('fid', fi.fid || '')
-                                          formApi.setFieldValue('org', fi.org || '')
-                                          formApi.setFieldValue('ofx', fi.ofx || '')
+                                          const name = value ? fi.name || '' : ''
+                                          const values: Partial<FormValues> = {
+                                            name,
+                                            web: fi.profile.siteURL || '',
+                                            favicon: generateAvatar(name),
+                                            address: formatAddress(fi) || '',
+                                            fid: fi.fid || '',
+                                            org: fi.org || '',
+                                            ofx: fi.ofx || '',
+                                          }
+                                          formApi.setValues(values as any)
                                         }}
                                         searchable
                                       />
@@ -188,9 +194,10 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                   />
                                   <UrlField
                                     field='web'
+                                    nameField='name'
                                     favicoField='favicon'
-                                    favicoWidth={100}
-                                    favicoHeight={100}
+                                    favicoWidth={bankAvatarSize}
+                                    favicoHeight={bankAvatarSize}
                                     label={intl.formatMessage(messages.web)}
                                     cancelToken={cancelToken}
                                   />

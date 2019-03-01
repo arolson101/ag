@@ -36,10 +36,11 @@
   },
   "extensions": {
     "recommendations": [
-      "mkloubert.vscode-kanban",
       "esbenp.prettier-vscode",
-      "ms-vscode.vscode-typescript-tslint-plugin",
-      "kumar-harsh.graphql-for-vscode"
+      "kuhe.html-untagged",
+      "kumar-harsh.graphql-for-vscode",
+      "mkloubert.vscode-kanban",
+      "ms-vscode.vscode-typescript-tslint-plugin"
     ],
     "unwantedRecommendations": []
   }
