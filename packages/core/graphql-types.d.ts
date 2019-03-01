@@ -76,6 +76,20 @@ export type DateTime = any
 // Documents
 // ====================================================
 
+export namespace SyncAccounts {
+  export type Variables = {
+    bankId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    syncAccounts: SyncAccounts
+  }
+
+  export type SyncAccounts = BankDisplay.Fragment
+}
+
 export namespace Cancel {
   export type Variables = {
     cancelToken: string

@@ -4,6 +4,7 @@ import { Container } from 'typedi'
 import { useContainer as ormUseContainer } from 'typeorm'
 import { ImageSourceScalar } from './customTypes'
 import {
+  AccountOnlineResolver,
   AccountResolver,
   BankResolver,
   BillResolver,
@@ -23,6 +24,7 @@ export const schema = buildSchemaSync({
     DbResolver,
     BankResolver,
     AccountResolver,
+    AccountOnlineResolver,
     BillResolver,
     TransactionResolver,
     BudgetResolver,

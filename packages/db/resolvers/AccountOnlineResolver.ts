@@ -18,6 +18,7 @@ import { AppDb } from './AppDb'
 import { OnlineResolver } from './OnlineResolver'
 
 const log = debug('db:AccountOnlineResolver')
+log.enabled = true
 
 @Resolver()
 export class AccountOnlineResolver {
@@ -25,6 +26,15 @@ export class AccountOnlineResolver {
     private appDb: AppDb, //
     private online: OnlineResolver
   ) {}
+
+  @Mutation(returns => Bank)
+  async syncAccounts(
+    @Ctx() context: DbContext, //
+    @Arg('bankId') bankId: string
+  ): Promise<Bank> {
+    const bank = await this.downloadAccountList(context, bankId, cuid())
+    return bank
+  }
 
   @Mutation(returns => Bank)
   async downloadAccountList(
