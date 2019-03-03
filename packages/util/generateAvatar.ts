@@ -46,7 +46,7 @@ export const generateAvatar = (text: string): ImageSource => {
   `)
 
   const mime = 'image/svg+xml'
-  const uri = encodeDataURI({ buf, mime }, 'utf8')
+  const uri = encodeDataURI({ buf, mime }, 'base64')
   return new ImageSource({ width, height, uri })
 }
 
