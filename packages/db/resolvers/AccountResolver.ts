@@ -33,7 +33,7 @@ export class AccountResolver {
       if (!bankId) {
         throw new Error('when creating an account, bankId must be specified')
       }
-      account = new Account(cuid(), bankId, input)
+      account = new Account(bankId, cuid(), input)
       accountId = account.id
       changes = [Account.change.add(t, account)]
     }

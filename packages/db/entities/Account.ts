@@ -22,7 +22,7 @@ export class Account extends Record<Account.Props> {
   @Column() @Field() routing!: string
   @Column() @Field() key!: string
 
-  constructor(id?: string, bankId?: string, props?: AccountInput) {
+  constructor(bankId?: string, id?: string, props?: AccountInput) {
     super(id, { ...Account.defaultValues(), ...props })
     if (bankId) {
       this.bankId = bankId
