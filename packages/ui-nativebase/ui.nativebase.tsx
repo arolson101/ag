@@ -116,10 +116,10 @@ export const ui: Omit<UiContext, RNNTypes> = {
       <Text>{children}</Text>
     </Button>
   ),
-  Text: ({ header, muted, children, onClick }) => {
+  Text: ({ header, muted, flex, children, onClick }) => {
     const Component: React.ComponentType<any> = header ? H3 : Text
     return (
-      <Component note={muted} onClick={onClick}>
+      <Component note={muted} onClick={onClick} style={{ flex }}>
         {children}
       </Component>
     )

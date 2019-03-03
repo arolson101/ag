@@ -6,7 +6,7 @@ target 'app_rn' do
   # use_frameworks!
 
   # Pods for app_rn
-  pod 'React', :path => '../node_modules/react-native', :subspecs =>
+  pod 'React', :path => '../../../node_modules/react-native', :subspecs =>
   [
     'Core',
     'RCTActionSheet',
