@@ -43,11 +43,15 @@ export interface DialogProps {
   title: string
   isOpen: boolean
   onClose?: () => any
-}
-
-export interface DialogFooterProps {
   primary: ButtonConfig
   secondary?: ButtonConfig
+}
+
+export interface ListItemProps {
+  image?: ImageSource
+  title?: string
+  subtitle?: string
+  actions?: PopoverItem[]
 }
 
 export interface LoadingOverlayProps {
@@ -111,7 +115,6 @@ export interface UiContext {
   Alert: ComponentType<AlertProps>
   Dialog: ComponentType<DialogProps>
   DialogBody: ComponentType
-  DialogFooter: ComponentType<DialogFooterProps>
   LoadingOverlay: ComponentType<LoadingOverlayProps>
 
   // layout
@@ -123,10 +126,12 @@ export interface UiContext {
   Tile: ComponentType<{
     size?: number
     margin?: number
-    selected?: boolean
-    onClick?: (e: React.SyntheticEvent) => any
   }>
   Collapsible: ComponentType<{ show: boolean }>
+
+  // list
+  List: ComponentType<{}>
+  ListItem: ComponentType<ListItemProps>
 
   // controls
   Spinner: ComponentType

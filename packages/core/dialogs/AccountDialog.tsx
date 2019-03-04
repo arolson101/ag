@@ -24,7 +24,7 @@ export class AccountDialog extends React.PureComponent<AccountDialog.Props> {
     const { bankId, accountId, isOpen } = this.props
     const {
       intl,
-      ui: { Dialog, DialogBody, DialogFooter },
+      ui: { Dialog, DialogBody },
     } = this.context
 
     return (
@@ -32,6 +32,14 @@ export class AccountDialog extends React.PureComponent<AccountDialog.Props> {
         isOpen={isOpen}
         onClose={this.close}
         title={intl.formatMessage(accountId ? messages.titleEdit : messages.titleCreate)}
+        primary={{
+          title: intl.formatMessage(accountId ? messages.save : messages.create),
+          onClick: this.save,
+        }}
+        secondary={{
+          title: intl.formatMessage(messages.cancel), //
+          onClick: this.close,
+        }}
       >
         <DialogBody>
           <AccountForm
@@ -41,16 +49,6 @@ export class AccountDialog extends React.PureComponent<AccountDialog.Props> {
             accountId={accountId}
           />
         </DialogBody>
-        <DialogFooter
-          primary={{
-            title: intl.formatMessage(accountId ? messages.save : messages.create),
-            onClick: this.save,
-          }}
-          secondary={{
-            title: intl.formatMessage(messages.cancel), //
-            onClick: this.close,
-          }}
-        />
       </Dialog>
     )
   }

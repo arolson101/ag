@@ -27,7 +27,7 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
     const { bankId, isOpen, cancelToken } = this.props
     const {
       intl,
-      ui: { Dialog, DialogBody, DialogFooter },
+      ui: { Dialog, DialogBody },
     } = this.context
 
     return (
@@ -35,6 +35,14 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
         isOpen={isOpen}
         onClose={this.close}
         title={intl.formatMessage(bankId ? messages.titleEdit : messages.titleCreate)}
+        primary={{
+          title: intl.formatMessage(bankId ? messages.save : messages.create),
+          onClick: this.save,
+        }}
+        secondary={{
+          title: intl.formatMessage(messages.cancel),
+          onClick: this.close,
+        }}
       >
         <DialogBody>
           <BankForm
@@ -44,16 +52,6 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
             cancelToken={cancelToken}
           />
         </DialogBody>
-        <DialogFooter
-          primary={{
-            title: intl.formatMessage(bankId ? messages.save : messages.create),
-            onClick: this.save,
-          }}
-          secondary={{
-            title: intl.formatMessage(messages.cancel),
-            onClick: this.close,
-          }}
-        />
       </Dialog>
     )
   }

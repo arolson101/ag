@@ -8,6 +8,7 @@ import {
   Content,
   H3,
   Icon,
+  List,
   ListItem,
   Spinner,
   Tab,
@@ -58,13 +59,6 @@ export const ui: Omit<UiContext, RNNTypes> = {
   Grid: ({ data, renderItem, keyExtractor, size, onClick }) => {
     const { width } = Dimensions.get('window')
     const numColumns = Math.floor(width / size)
-    // log(
-    //   'numColumns: %d, width: %d, screen width: %d, size: %d',
-    //   numColumns,
-    //   width,
-    //   Dimensions.get('screen').width,
-    //   size
-    // )
     return (
       <FlatList
         columnWrapperStyle={{ justifyContent: 'space-between', paddingVertical: 4 }}
@@ -81,11 +75,8 @@ export const ui: Omit<UiContext, RNNTypes> = {
       <Content>{children}</Content>
     </Container>
   ),
-  Tile: ({ size, margin, selected, onClick, children }) => (
-    <Button
-      transparent={!selected}
-      bordered={selected}
-      onPress={onClick as any}
+  Tile: ({ size, margin, children }) => (
+    <Container
       style={{
         flexDirection: 'column',
         alignItems: 'center',
@@ -98,16 +89,18 @@ export const ui: Omit<UiContext, RNNTypes> = {
         minHeight: size,
         maxHeight: size,
         overflow: 'visible',
-        // backgroundColor: selected ? platform.brandPrimary : undefined,
-        // boxShadow: selected ? `0px 0px 4px ${platform.brandPrimary}` : undefined,
       }}
     >
       {children}
-    </Button>
+    </Container>
   ),
   Collapsible: ({ show, children }) => (
     <View style={{ display: show ? 'flex' : 'none' }}>{children}</View>
   ),
+
+  // list
+  List: ({ children }) => <List>{children}</List>,
+  ListItem: ({ title, image, children, actions }) => <ListItem>{children}</ListItem>,
 
   // controls
   Spinner,

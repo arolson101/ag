@@ -1,4 +1,4 @@
-import { AppContext, ButtonConfig, DialogFooterProps, DialogProps, UiContext } from '@ag/core'
+import { AppContext, ButtonConfig, DialogProps, UiContext } from '@ag/core'
 import { Container, Content, platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React from 'react'
@@ -8,7 +8,6 @@ import {
   NavigationButtonPressedEvent,
   OptionsTopBarButton,
 } from 'react-native-navigation'
-import shallowequal from 'shallowequal'
 
 const log = debug('rn:dialog')
 
@@ -35,39 +34,10 @@ export class Dialog extends React.PureComponent<DialogProps> {
         },
       },
     })
-  }
-
-  render() {
-    return <>{this.props.children}</>
-  }
-}
-
-export const DialogBody: UiContext['DialogBody'] = ({ children }) => (
-  <Container>
-    <Content>{children}</Content>
-  </Container>
-)
-DialogBody.displayName = 'DialogBody'
-
-type TopButtonId = 'primary' | 'secondary'
-
-export class DialogFooter extends React.Component<DialogFooterProps> {
-  static contextType = DialogContext
-  context!: React.ContextType<typeof DialogContext>
-
-  shouldComponentUpdate(nextProps: DialogFooterProps) {
-    return !(
-      shallowequal(this.props.primary, nextProps.primary) &&
-      shallowequal(this.props.secondary, nextProps.secondary)
-    )
-  }
-
-  componentDidMount() {
-    // log('componentDidMount')
     this.setButtons()
   }
 
-  componentDidUpdate(prevProps: DialogFooterProps) {
+  componentDidUpdate() {
     // log('componentDidUpdate %o %o', this.props, prevProps)
     this.setButtons()
   }
@@ -101,9 +71,18 @@ export class DialogFooter extends React.Component<DialogFooterProps> {
   }
 
   render() {
-    return null
+    return <>{this.props.children}</>
   }
 }
+
+export const DialogBody: UiContext['DialogBody'] = ({ children }) => (
+  <Container>
+    <Content>{children}</Content>
+  </Container>
+)
+DialogBody.displayName = 'DialogBody'
+
+type TopButtonId = 'primary' | 'secondary'
 
 const makeButton = (id: TopButtonId, opts: ButtonConfig): OptionsTopBarButton => ({
   id,

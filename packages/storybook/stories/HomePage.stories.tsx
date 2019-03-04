@@ -69,7 +69,89 @@ const fullMocks = [
                 uri:
                   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVR4AaXBzyuDYQDA8e/7bDm9TsSBq79g7SD/B1HCAQd/gRNbTkpylQPtsFY4UDsoB2ktP0qSMBNWmt5mo722d3u8PaYc1mNrr/b5GPyS+YLKrqxR2N2jmn3lhxkM0DU2TPf4KMLvN2jAoObz4lLdj0wgLYtGOocGGYht4TNNA41wbVs9TM4iLYtmiokkmfkFGhEvS8tUnjO0kotEKSZPFBrxFtvGq1wkik58Fd7xqnyXQufnHxInp9Qo6oiO/j68SrsSneiZnsILiWKnWkIneudmMIMBWtlwbNKuROcLhcOh1eTxonOTovL4hE6iWHdsNp0iir8M6uT34+rj4JDS1TVH52fcupJ4tUzalTRj0JzCA0GbBG0StOkb5Lpwz7f9C7EAAAAASUVORK5CYII=',
               },
-              accounts: [],
+
+              accounts: [
+                {
+                  id: 'cjssfc94o00044a5um4koumke',
+                  name: 'EMERGENCY FUND',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o000f4a5uml1lqjsl',
+                  name: 'HOME EQUITY LINE OF CREDIT',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o000e4a5u5ep1qgfc',
+                  name: 'HOME EQUITY LINE OF CREDIT',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o000d4a5uer0l1xyr',
+                  name: 'Home Equity Loan',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o00084a5uer0iym1d',
+                  name: 'House Bills (04)',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o00094a5uivyp1zjl',
+                  name: 'Household Checking (05)',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o00024a5um1cocscl',
+                  name: 'Household Savings (03)',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o00014a5u6l7k9vj6',
+                  name: 'Kids (02)',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o00074a5ufts42amb',
+                  name: 'My Savings',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o000b4a5usmzpopp5',
+                  name: 'My Stipend',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o00034a5uo0gjpx0a',
+                  name: 'Nest Egg',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o000a4a5uq9rppq3n',
+                  name: 'PREMIUM CHECKING',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o000c4a5uteuz4nac',
+                  name: 'RESERVE LINE OF CREDIT',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o00064a5u1mg2l1e8',
+                  name: 'Social Security Reserve',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o00054a5ufe4dyxzf',
+                  name: 'Taxes',
+                  __typename: 'Account',
+                },
+                {
+                  id: 'cjssfc94o000g4a5uzouudp30',
+                  name: 'VISA PLATINUM CASH REWARDS',
+                  __typename: 'Account',
+                },
+              ],
               __typename: 'Bank',
             },
           ],

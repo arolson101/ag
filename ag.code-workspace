@@ -22,6 +22,9 @@
       "path": "packages/target-react-native"
     },
     {
+      "path": "packages/ui-antd"
+    },
+    {
       "path": "packages/ui-blueprint"
     },
     {

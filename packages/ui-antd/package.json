@@ -1,0 +1,10 @@
+{
+  "name": "@ag/ui-antd",
+  "version": "0.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@ag/core": "^0.0.0",
+    "antd": "^3.13.6"
+  }
+}

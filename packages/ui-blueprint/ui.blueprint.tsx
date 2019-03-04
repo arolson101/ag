@@ -66,7 +66,7 @@ export const ui: UiContext = {
     </Overlay>
   ),
 
-  Dialog: ({ isOpen, title, onClose, children }) => (
+  Dialog: ({ isOpen, title, onClose, primary, secondary, children }) => (
     <Dialog
       title={title}
       isOpen={isOpen}
@@ -75,6 +75,22 @@ export const ui: UiContext = {
       canOutsideClickClose={false}
     >
       {children}
+      <div className={Classes.DIALOG_FOOTER}>
+        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          {secondary && (
+            <Button
+              onClick={secondary.onClick}
+              intent={secondary.isDanger ? Intent.DANGER : Intent.NONE}
+              disabled={secondary.disabled}
+            >
+              {secondary.title}
+            </Button>
+          )}
+          <Button onClick={primary.onClick} intent={Intent.PRIMARY} disabled={primary.disabled}>
+            {primary.title}
+          </Button>
+        </div>
+      </div>
     </Dialog>
   ),
 
@@ -90,24 +106,6 @@ export const ui: UiContext = {
       className={classNames(Classes.DIALOG_BODY)}
     >
       {children}
-    </div>
-  ),
-  DialogFooter: ({ primary, secondary }) => (
-    <div className={Classes.DIALOG_FOOTER}>
-      <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-        {secondary && (
-          <Button
-            onClick={secondary.onClick}
-            intent={secondary.isDanger ? Intent.DANGER : Intent.NONE}
-            disabled={secondary.disabled}
-          >
-            {secondary.title}
-          </Button>
-        )}
-        <Button onClick={primary.onClick} intent={Intent.PRIMARY} disabled={primary.disabled}>
-          {primary.title}
-        </Button>
-      </div>
     </div>
   ),
 
@@ -140,11 +138,9 @@ export const ui: UiContext = {
   ),
 
   Page: ({ children }) => <div>{children}</div>,
-  Tile: ({ size, margin, selected, onClick, children }) => (
+  Tile: ({ size, margin, children }) => (
     <div
-      onClick={onClick}
       style={{
-        cursor: onClick ? 'pointer' : undefined,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -157,7 +153,6 @@ export const ui: UiContext = {
         minHeight: size,
         maxHeight: size,
         overflow: 'visible',
-        boxShadow: selected ? `0px 0px 4px ${Colors.BLUE1}` : undefined,
       }}
     >
       {children}
@@ -167,6 +162,32 @@ export const ui: UiContext = {
     <Collapse isOpen={show} keepChildrenMounted>
       {children}
     </Collapse>
+  ),
+
+  // list
+  List: ({ children }) => <Card>{children}</Card>,
+  ListItem: ({ title, image, subtitle, children, actions }) => (
+    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        {title && (
+          <H3 style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+            {image && (
+              <div
+                style={{
+                  background: `center no-repeat url(${image.uri})`,
+                  backgroundSize: 'contain',
+                  width: 24,
+                  height: 24,
+                  margin: 5,
+                }}
+              />
+            )}
+            {title}
+          </H3>
+        )}
+        {subtitle && <p className={classNames(Classes.TEXT_MUTED)}>{subtitle}</p>}
+      </div>
+    </div>
   ),
 
   // controls

@@ -22,7 +22,7 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
     const { isOpen } = this.props
     const {
       intl,
-      ui: { Dialog, DialogBody, DialogFooter },
+      ui: { Dialog, DialogBody },
     } = this.context
 
     return (
@@ -32,16 +32,17 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
           const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
 
           return (
-            <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
+            <Dialog
+              isOpen={isOpen}
+              title={intl.formatMessage(messages.title)}
+              primary={{
+                title: intl.formatMessage(dbId ? messages.open : messages.create),
+                onClick: this.open,
+              }}
+            >
               <DialogBody>
                 <LoginForm ref={this.loginForm} query={query} />
               </DialogBody>
-              <DialogFooter
-                primary={{
-                  title: intl.formatMessage(dbId ? messages.open : messages.create),
-                  onClick: this.open,
-                }}
-              />
             </Dialog>
           )
         }}

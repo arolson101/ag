@@ -46,74 +46,64 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
   render() {
     const { bank } = this.props
     const { dispatch, ui } = this.context
-    const { Card, Row, Column, Text, Image, Button, Tile, PopoverButton } = ui
+    const { Card, Row, Column, Text, Image, List, ListItem, Tile, PopoverButton } = ui
     const bankId = bank.id
 
     const size = 48
 
     return (
-      <Card key={bank.id}>
-        <Row>
-          <Row flex={1}>
-            <Tile size={size} margin={5}>
-              <Image size={size} src={bank.favicon} />
-            </Tile>
-            <Text header flex={1}>
-              {bank.name}
-            </Text>
-            <Column>
-              <AppMutation
-                mutation={BankDisplay.mutations.SyncAccounts}
-                variables={{ bankId }}
-                refetchQueries={[{ query: HomePage.queries.HomePage }]}
-              >
-                {syncAccounts => (
-                  <PopoverButton
-                    minimal
-                    content={[
-                      {
-                        text: 'edit',
-                        onClick: () => dispatch(actions.openDlg.bankEdit({ bankId })),
-                      },
-                      {
-                        text: 'add account',
-                        onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
-                      },
-                      {
-                        text: 'sync accounts',
-                        onClick: syncAccounts,
-                      },
-                    ]}
-                  >
-                    <Text>...</Text>
-                  </PopoverButton>
-                )}
-              </AppMutation>
-            </Column>
-          </Row>
-        </Row>
+      <List key={bank.id}>
+        <AppMutation
+          mutation={BankDisplay.mutations.SyncAccounts}
+          variables={{ bankId }}
+          refetchQueries={[{ query: HomePage.queries.HomePage }]}
+        >
+          {syncAccounts => (
+            <ListItem
+              title={bank.name}
+              image={bank.favicon}
+              actions={[
+                {
+                  text: 'edit',
+                  onClick: () => dispatch(actions.openDlg.bankEdit({ bankId })),
+                },
+                {
+                  text: 'add account',
+                  onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
+                },
+                {
+                  text: 'sync accounts',
+                  onClick: syncAccounts,
+                },
+              ]}
+            />
+          )}
+        </AppMutation>
         {!bank.accounts.length ? (
-          <Text>No accounts</Text>
+          <ListItem>
+            <Text>No accounts</Text>
+          </ListItem>
         ) : (
           bank.accounts.map(account => (
-            <Row key={account.id}>
-              <Row flex={1}>
-                <Text muted>{account.name}</Text>
-              </Row>
-              <Row>
-                <Link
-                  dispatch={actions.openDlg.accountEdit({
-                    bankId: bank.id,
-                    accountId: account.id,
-                  })}
-                >
-                  [edit]
-                </Link>
-              </Row>
-            </Row>
+            <ListItem
+              key={account.id}
+              subtitle={account.name}
+              actions={[
+                {
+                  text: 'edit',
+                  onClick: () =>
+                    dispatch(
+                      actions.openDlg.accountEdit({
+                        bankId: bank.id,
+                        accountId: account.id,
+                      })
+                    ),
+                },
+              ]}
+            />
           ))
         )}
-      </Card>
+      </List>
     )
   }
 }

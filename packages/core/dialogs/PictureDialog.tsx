@@ -92,7 +92,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     const { isOpen } = this.props
     const { url, cancelToken } = this.state
     const { intl, ui } = this.context
-    const { Dialog, DialogBody, DialogFooter, Button, Spinner, Row, Grid, Tile, Text, Image } = ui
+    const { Dialog, DialogBody, Button, Spinner, Row, Grid, Tile, Text, Image } = ui
     const { Form, TextField } = typedFields<Values>(ui)
 
     const initialValues: Values = {
@@ -101,7 +101,14 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     // log('render')
 
     return (
-      <Dialog isOpen={isOpen} title={intl.formatMessage(messages.title)}>
+      <Dialog
+        isOpen={isOpen}
+        title={intl.formatMessage(messages.title)}
+        primary={{
+          title: intl.formatMessage(messages.cancel),
+          onClick: this.close,
+        }}
+      >
         <DialogBody>
           <Row>
             <Formik<Values>
@@ -174,12 +181,6 @@ export class PictureDialog extends React.PureComponent<Props, State> {
             }}
           </Query>
         </DialogBody>
-        <DialogFooter
-          primary={{
-            title: intl.formatMessage(messages.cancel),
-            onClick: this.close,
-          }}
-        />
       </Dialog>
     )
   }
