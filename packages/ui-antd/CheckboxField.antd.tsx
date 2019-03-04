@@ -1,24 +1,29 @@
 import { CheckboxFieldProps } from '@ag/core'
-import { Switch } from '@blueprintjs/core'
+import { Form, Switch } from 'antd'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
 
 export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
   render() {
-    const { field: name, label, disabled } = this.props
-    const id = `${name}-input`
+    const { field: name, label, disabled, flex } = this.props
     return (
-      <Field name={name} disabled={disabled}>
+      <Field name={name}>
         {({ field, form }: FieldProps) => {
+          const error = form.errors[name]
+          const validateStatus = error ? 'error' : undefined
           return (
-            <Switch
-              id={id}
-              alignIndicator='right'
+            <Form.Item
+              validateStatus={validateStatus} //
+              help={error}
               label={label}
-              checked={field.value}
-              onChange={e => form.setFieldValue(name, e.currentTarget.checked)}
-              disabled={disabled}
-            />
+              style={{ flex }}
+            >
+              <Switch
+                checked={field.value}
+                onChange={value => form.setFieldValue(name, value)}
+                disabled={disabled}
+              />
+            </Form.Item>
           )
         }}
       </Field>

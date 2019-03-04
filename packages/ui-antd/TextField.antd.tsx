@@ -1,18 +1,19 @@
 import { TextFieldProps } from '@ag/core'
-import { Classes, FormGroup, InputGroup, Intent, TextArea } from '@blueprintjs/core'
+import { Form, Icon, Input } from 'antd'
 import { Field, FieldProps, FormikProps } from 'formik'
 import React from 'react'
-import { mapIconName } from './ui.blueprint'
 
-type InputRefType = HTMLTextAreaElement | HTMLInputElement | null
+type InputRefType = Input &
+  import('antd/lib/input/Password').default &
+  import('antd/lib/input/TextArea').default
 
 export class TextField extends React.PureComponent<TextFieldProps> {
-  private textInput: InputRefType = null
+  private textInput = React.createRef<InputRefType>()
   private form!: FormikProps<any>
 
   focusTextInput = () => {
-    if (this.textInput) {
-      this.textInput.focus()
+    if (this.textInput.current) {
+      this.textInput.current.focus()
     }
   }
 
@@ -29,61 +30,59 @@ export class TextField extends React.PureComponent<TextFieldProps> {
       flex,
       disabled,
     } = this.props
-    const id = name
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
           this.form = form
           const error = form.errors[name]
-          const intent = error ? Intent.DANGER : undefined
+          const validateStatus = error ? 'error' : undefined
           return (
-            <FormGroup
-              intent={intent}
-              helperText={error}
+            <Form.Item
+              validateStatus={validateStatus} //
+              help={error}
               label={label}
-              labelFor={id}
-              disabled={disabled}
               style={{ flex }}
-              contentClassName={Classes.FLEX_EXPANDER}
             >
               {rows && rows > 1 ? (
-                <TextArea
-                  id={id}
-                  intent={intent}
+                <Input.TextArea
                   placeholder={placeholder}
                   rows={rows}
-                  inputRef={this.inputRef}
-                  fill
+                  ref={this.textInput}
                   disabled={disabled}
                   style={{ flex: 1 }}
+                  {...field}
+                  onChange={this.onChange}
+                />
+              ) : secure ? (
+                <Input.Password
+                  autoFocus={autoFocus}
+                  placeholder={placeholder}
+                  ref={this.textInput}
+                  disabled={disabled}
+                  style={{ flex: 1 }}
+                  prefix={<Icon type={leftIcon} style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  suffix={rightElement}
                   {...field}
                   onChange={this.onChange}
                 />
               ) : (
-                <InputGroup
-                  id={id}
-                  type={secure ? 'password' : 'text'}
-                  intent={intent}
+                <Input
                   autoFocus={autoFocus}
                   placeholder={placeholder}
-                  inputRef={this.inputRef}
+                  ref={this.textInput}
                   disabled={disabled}
                   style={{ flex: 1 }}
-                  leftIcon={mapIconName(leftIcon)}
-                  rightElement={rightElement}
+                  prefix={<Icon type={leftIcon} style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  suffix={rightElement}
                   {...field}
                   onChange={this.onChange}
                 />
               )}
-            </FormGroup>
+            </Form.Item>
           )
         }}
       </Field>
     )
-  }
-
-  inputRef = (ref: InputRefType) => {
-    this.textInput = ref
   }
 
   onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

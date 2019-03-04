@@ -51,11 +51,10 @@ export const ui: UiContext = {
     }
   },
 
-  LoadingOverlay: ({ show }) => (
+  LoadingOverlay: ({ show }) =>
     // <Overlay isOpen={show} canEscapeKeyClose={false} canOutsideClickClose={false}>
-    <Spin />
+    show ? <Spin /> : null,
     // </Overlay>
-  ),
 
   Dialog: ({ isOpen, title, onClose, primary, secondary, children }) => (
     <Modal

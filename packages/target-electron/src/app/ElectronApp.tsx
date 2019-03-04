@@ -1,6 +1,6 @@
 import { App, ClientDependencies } from '@ag/core'
 import { createClient } from '@ag/db'
-import { ui } from '@ag/ui-blueprint'
+import { ui } from '@ag/ui-antd'
 import axios from 'axios'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'

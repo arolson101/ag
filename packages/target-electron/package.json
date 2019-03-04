@@ -16,7 +16,7 @@
   "dependencies": {
     "@ag/core": "^0.0.0",
     "@ag/db": "^0.0.0",
-    "@ag/ui-blueprint": "^0.0.0",
+    "@ag/ui-antd": "^0.0.0",
     "@storybook/react": "^4.1.4",
     "axios": "^0.18.0",
     "commander": "^2.19.0",
