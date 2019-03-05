@@ -1,41 +1,54 @@
 import { SelectFieldProps } from '@ag/core'
-import { FormGroup, HTMLSelect, Intent } from '@blueprintjs/core'
+import { Form, Select } from 'antd'
+import debug from 'debug'
 import { Field, FieldProps } from 'formik'
 import React from 'react'
 
-export class SelectField extends React.PureComponent<SelectFieldProps> {
+const log = debug('ui-antd:SelectField')
+log.enabled = true
+
+export class SelectField extends React.Component<SelectFieldProps> {
   render() {
-    const { field: name, label, disabled, items, flex, onValueChange } = this.props
+    const { field: name, label, disabled, items, flex, searchable, onValueChange } = this.props
+    log('render %o', name)
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
           const error = form.errors[name]
+          const validateStatus = error ? 'error' : undefined
+          // log('field %s', field.value)
           return (
-            <FormGroup
-              intent={error ? Intent.DANGER : undefined} //
-              helperText={error}
+            <Form.Item
+              validateStatus={validateStatus} //
+              help={error}
               label={label}
-              disabled={disabled}
               style={{ flex }}
             >
-              <HTMLSelect
-                {...field}
-                fill
+              <Select<string>
+                style={{ flex: 1 }}
                 disabled={disabled}
-                onChange={e => {
-                  field.onChange(e)
+                showSearch={searchable}
+                optionFilterProp='children'
+                filterOption={(input, option) =>
+                  option.props
+                    .children!.toString()
+                    .toLowerCase()
+                    .indexOf(input.toLowerCase()) >= 0
+                }
+                value={field.value || ''}
+                onChange={value => {
+                  const e: React.ChangeEvent = { target: { value } } as any
+                  form.setFieldValue(name, value)
                   if (onValueChange) {
-                    onValueChange(e.currentTarget.value)
+                    onValueChange(value)
                   }
                 }}
               >
                 {items.map(item => (
-                  <option key={item.value} value={item.value}>
-                    {item.label}
-                  </option>
+                  <Select.Option key={item.value}>{item.label}</Select.Option>
                 ))}
-              </HTMLSelect>
-            </FormGroup>
+              </Select>
+            </Form.Item>
           )
         }}
       </Field>

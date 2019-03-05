@@ -58,7 +58,7 @@ export class SelectField<Values> extends React.PureComponent<SelectFieldProps<Va
     // }
   }
 
-  onValueChange = (value: string | number) => {
+  onValueChange = (value: string) => {
     if (this.form) {
       const { onValueChange, field } = this.props
       this.form.setFieldValue(field, value)

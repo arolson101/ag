@@ -1,7 +1,8 @@
-import { AlertProps, IconName, TabProps, TabsProps, UiContext } from '@ag/core'
-import { Button, Card, Divider, Menu, message, Modal, Popover, Spin, Tabs } from 'antd'
+import { AlertProps, IconName, UiContext } from '@ag/core'
+import { Button, Card, Divider, Dropdown, Menu, message, Modal, Spin, Tabs } from 'antd'
 import 'antd/dist/antd.css'
 import { ModalFuncProps } from 'antd/lib/modal'
+import debug from 'debug'
 import React from 'react'
 import { CheckboxField } from './CheckboxField.antd'
 import { CurrencyField } from './CurrencyField.antd'
@@ -14,6 +15,9 @@ import { TextField } from './TextField.antd'
 const Text: React.FC = ({ children }) => <span>{children}</span>
 const Title: React.FC<{ style: any }> = ({ style, children }) => <h3>{children}</h3>
 const Paragraph: React.FC = ({ children }) => <p>{children}</p>
+
+const log = debug('ui-antd:ui')
+log.enabled = true
 
 export const ui: UiContext = {
   // special ui
@@ -64,6 +68,7 @@ export const ui: UiContext = {
       footer={[
         secondary ? (
           <Button
+            key='secondary'
             onClick={secondary.onClick}
             type={secondary.isDanger ? 'danger' : undefined}
             disabled={secondary.disabled}
@@ -71,7 +76,12 @@ export const ui: UiContext = {
             {secondary.title}
           </Button>
         ) : null,
-        <Button onClick={primary.onClick} type='primary' disabled={primary.disabled}>
+        <Button
+          key='primary' //
+          onClick={primary.onClick}
+          type='primary'
+          disabled={primary.disabled}
+        >
           {primary.title}
         </Button>,
       ]}
@@ -180,7 +190,27 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
-  PopoverButton: ({ icon, disabled, content, minimal, loading, children }) => null,
+  PopoverButton: ({ icon, disabled, content, minimal, loading, children }) => (
+    <Dropdown
+      overlay={
+        <Menu
+          onSelect={item => {
+            log('item selected %o', item)
+          }}
+        >
+          {content.map((item, i) =>
+            item.divider ? <Menu.Divider key={i} /> : <Menu.Item key={i}>{item.text}</Menu.Item>
+          )}
+        </Menu>
+      }
+      disabled={disabled}
+      trigger={['click']}
+    >
+      <Button loading={loading} size='small' style={{ border: 0 }}>
+        {React.isValidElement(icon) ? icon : children}
+      </Button>
+    </Dropdown>
+  ),
   DeleteButton: ({ onPress, disabled, children }) => (
     <Button type='danger' block ghost onClick={onPress} disabled={disabled}>
       {children}

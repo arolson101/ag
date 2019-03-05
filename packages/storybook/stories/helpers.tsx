@@ -6,7 +6,14 @@ import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { IntlProvider } from 'react-intl'
 import { storiesOf, ui } from './platform-specific'
 
+export { MockedResponse }
 export { action, storiesOf }
+
+export const forever = 2 ** 31 - 1
+
+export const addDelay = (responses: MockedResponse[], delay: number) => {
+  return responses.map(r => ({ ...r, delay }))
+}
 
 const deps: ClientDependencies = {
   ui,

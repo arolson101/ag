@@ -1,4 +1,4 @@
-import { AppContext, PopoverButtonProps, UiContext } from '@ag/core'
+import { AppContext, PopoverButtonProps, TabProps, TabsProps, UiContext } from '@ag/core'
 import debug from 'debug'
 import {
   ActionSheet,
@@ -190,8 +190,8 @@ export const ui: Omit<UiContext, RNNTypes> = {
   SelectField,
   TextField,
 
-  Tabs: ({ children }) => <Tabs>{children}</Tabs>,
-  Tab: ({ heading, panel }) => <Tab heading={heading}>{panel}</Tab>,
+  Tabs: Tabs as React.ComponentType<TabsProps>,
+  Tab: Tab as React.ComponentType<TabProps>,
 }
 
 const messages = defineMessages({

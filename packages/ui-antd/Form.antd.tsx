@@ -1,13 +1,14 @@
 import { FormProps } from '@ag/core'
+import { Form as AntdForm } from 'antd'
 import React from 'react'
 
 export class Form extends React.PureComponent<FormProps> {
   render() {
     const { children } = this.props
     return (
-      <form style={{ flex: 1 }} onSubmit={this.onSubmit}>
+      <AntdForm style={{ flex: 1 }} onSubmit={this.onSubmit}>
         {children}
-      </form>
+      </AntdForm>
     )
   }
 

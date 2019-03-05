@@ -14,7 +14,7 @@
     "@ag/util": "^0.0.0",
     "accounting": "^0.4.1",
     "debug": "^4.1.1",
-    "formik": "^1.4.2",
+    "formik": "^1.5.1",
     "native-base": "^2.10.0",
     "react": "^16.7.0",
     "react-intl": "^2.7.2",

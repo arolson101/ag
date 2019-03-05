@@ -2,7 +2,15 @@
 import { BankDialog, BankForm, UrlField } from '@ag/core'
 import { ImageSource } from '@ag/util'
 import React from 'react'
-import { action, createCancelMutation, MockApp, storiesOf } from './helpers'
+import {
+  action,
+  addDelay,
+  createCancelMutation,
+  forever,
+  MockApp,
+  MockedResponse,
+  storiesOf,
+} from './helpers'
 
 const cancelToken = 'cjso7o0ca00014a5uezsiw3dy'
 const cancelMutation = createCancelMutation(cancelToken)
@@ -18,12 +26,13 @@ const dialogProps = {
   isOpen: true,
 }
 
-const downloadRequests = [
+const downloadRequests: MockedResponse[] = [
   {
     request: {
       query: UrlField.queries.getFavico,
       variables: { url: 'http://www.citicards.com', cancelToken },
     },
+    delay: 5000,
     result: {
       data: {
         getFavico: new ImageSource({
@@ -37,7 +46,7 @@ const downloadRequests = [
   },
 ]
 
-const emptyMocks = [
+const emptyMocks: MockedResponse[] = [
   {
     request: {
       query: BankForm.queries.BankForm,
@@ -56,7 +65,7 @@ const emptyMocks = [
   cancelMutation,
 ]
 
-const editMocks = [
+const editMocks: MockedResponse[] = [
   {
     request: {
       query: BankForm.queries.BankForm,
@@ -104,6 +113,16 @@ storiesOf('Dialogs/BankDialog', module)
       <BankDialog {...dialogProps} bankId={bankId} />
     </MockApp>
   ))
+  .add('edit (slow)', () => (
+    <MockApp mocks={addDelay(editMocks, 1000)}>
+      <BankDialog {...dialogProps} bankId={bankId} />
+    </MockApp>
+  ))
+  .add('edit (forever)', () => (
+    <MockApp mocks={addDelay(editMocks, forever)}>
+      <BankDialog {...dialogProps} bankId={bankId} />
+    </MockApp>
+  ))
 
 storiesOf('Forms/BankForm', module)
   .add('create', () => (
@@ -112,7 +131,12 @@ storiesOf('Forms/BankForm', module)
     </MockApp>
   ))
   .add('edit', () => (
-    <MockApp mocks={editMocks}>
+    <MockApp mocks={addDelay(editMocks, 1000)}>
+      <BankForm {...formProps} bankId={bankId} />
+    </MockApp>
+  ))
+  .add('load forever', () => (
+    <MockApp mocks={addDelay(editMocks, forever)}>
       <BankForm {...formProps} bankId={bankId} />
     </MockApp>
   ))

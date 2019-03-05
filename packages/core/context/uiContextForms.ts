@@ -7,7 +7,7 @@ export interface FormProps<Values = any> {
 
 export interface SelectFieldItem {
   label: string
-  value: string | number
+  value: string
 }
 
 export interface CommonFieldProps<Values> {
@@ -38,7 +38,7 @@ export interface DateFieldProps<Values = any> extends CommonFieldProps<Values> {
 
 export interface SelectFieldProps<Values = any> extends CommonFieldProps<Values> {
   items: SelectFieldItem[]
-  onValueChange?: (value: string | number) => any
+  onValueChange?: (value: string) => any
   searchable?: boolean
 }
 

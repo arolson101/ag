@@ -3,9 +3,10 @@ import { Form, Icon, Input } from 'antd'
 import { Field, FieldProps, FormikProps } from 'formik'
 import React from 'react'
 
-type InputRefType = Input &
-  import('antd/lib/input/Password').default &
-  import('antd/lib/input/TextArea').default
+type Password = import('antd/lib/input/Password').default
+type TextArea = import('antd/lib/input/TextArea').default
+
+type InputRefType = Input & Password & TextArea
 
 export class TextField extends React.PureComponent<TextFieldProps> {
   private textInput = React.createRef<InputRefType>()
@@ -30,6 +31,7 @@ export class TextField extends React.PureComponent<TextFieldProps> {
       flex,
       disabled,
     } = this.props
+    const Component = secure ? Input.Password : Input
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {
@@ -53,26 +55,14 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   {...field}
                   onChange={this.onChange}
                 />
-              ) : secure ? (
-                <Input.Password
-                  autoFocus={autoFocus}
-                  placeholder={placeholder}
-                  ref={this.textInput}
-                  disabled={disabled}
-                  style={{ flex: 1 }}
-                  prefix={<Icon type={leftIcon} style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  suffix={rightElement}
-                  {...field}
-                  onChange={this.onChange}
-                />
               ) : (
-                <Input
+                <Component
                   autoFocus={autoFocus}
                   placeholder={placeholder}
                   ref={this.textInput}
                   disabled={disabled}
                   style={{ flex: 1 }}
-                  prefix={<Icon type={leftIcon} style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  prefix={leftIcon && <Icon type={leftIcon} style={{ color: 'rgba(0,0,0,.25)' }} />}
                   suffix={rightElement}
                   {...field}
                   onChange={this.onChange}

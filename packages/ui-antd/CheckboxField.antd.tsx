@@ -19,7 +19,7 @@ export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
               style={{ flex }}
             >
               <Switch
-                checked={field.value}
+                checked={field.value} //
                 onChange={value => form.setFieldValue(name, value)}
                 disabled={disabled}
               />

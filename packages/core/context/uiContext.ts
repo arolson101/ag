@@ -86,10 +86,12 @@ export interface TabProps {
   title: string // used by blueprintjs
   tab: string // used by antd
   heading: string // used by nativebase
-  panel: JSX.Element
+  // panel: JSX.Element
 }
 
-export const tabName = (name: string): Pick<TabProps, 'title' | 'tab' | 'heading'> => ({
+export const tabConfig = (id: string, name: string) => ({
+  id,
+  key: id,
   title: name,
   tab: name,
   heading: name,
