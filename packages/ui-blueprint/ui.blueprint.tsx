@@ -265,7 +265,7 @@ export const ui: UiContext = {
   SelectField,
   TextField,
 
-  Tabs: Tabs as React.ComponentType<TabsProps>,
+  Tabs: (Tabs as any) as React.ComponentType<TabsProps>,
   Tab: Tab as React.ComponentType<TabProps>,
 }
 

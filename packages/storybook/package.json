@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@ag/core": "^0.0.0",
+    "@ag/ui-antd": "^0.0.0",
     "@ag/ui-blueprint": "^0.0.0",
     "@ag/ui-nativebase": "^0.0.0",
     "@ag/util": "^0.0.0",

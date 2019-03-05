@@ -77,6 +77,7 @@ export interface ButtonConfig {
 }
 
 export interface TabsProps {
+  defaultActiveKey: string
   id: string
 }
 

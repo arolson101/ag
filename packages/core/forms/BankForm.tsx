@@ -147,9 +147,10 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                     {formApi => {
                       return (
                         <Form onSubmit={formApi.handleSubmit}>
-                          <Tabs id='BankForm'>
+                          <Tabs id='BankForm' defaultActiveKey='location'>
                             <Tab
                               id='location'
+                              key='location'
                               {...tabName(intl.formatMessage(messages.tabInfo))}
                               panel={
                                 <>
