@@ -92,7 +92,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
     const { isOpen } = this.props
     const { url, cancelToken } = this.state
     const { intl, ui } = this.context
-    const { Dialog, DialogBody, Button, Spinner, Row, Grid, Tile, Text, Image } = ui
+    const { Dialog, Button, Spinner, Row, Grid, Tile, Text, Image } = ui
     const { Form, TextField } = typedFields<Values>(ui)
 
     const initialValues: Values = {
@@ -109,78 +109,76 @@ export class PictureDialog extends React.PureComponent<Props, State> {
           onClick: this.close,
         }}
       >
-        <DialogBody>
-          <Row>
-            <Formik<Values>
-              initialValues={initialValues}
-              onSubmit={async (values, factions) => {
-                try {
-                  log('onSubmit %o', values)
-                  await this.cancel()
-                  this.setState({
-                    url: values.url,
-                    cancelToken: this.props.cancelToken || cuid(),
-                  })
-                } finally {
-                  factions.setSubmitting(false)
-                }
-              }}
-            >
-              {formApi => (
-                <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
-                  <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
-                </Form>
-              )}
-            </Formik>
-          </Row>
-          <Query<T.GetImageList.Query, T.GetImageList.Variables>
-            query={PictureDialog.queries.getImageList}
-            variables={{ url, cancelToken }}
-          >
-            {({ loading: listLoading, error: listError, data: listData, client }) => {
-              this.client = client
-              return listLoading ? (
-                <Spinner />
-              ) : listError ? (
-                <ErrorDisplay error={listError} />
-              ) : (
-                <Grid
-                  flex={1}
-                  scrollable
-                  size={thumbnailSize}
-                  data={listData ? listData.getImageList : []}
-                  keyExtractor={(link: string) => link}
-                  renderItem={(link: string) => {
-                    // log('renderItem %s', link)
-                    return (
-                      <Tile key={link} size={thumbnailSize}>
-                        <Query<T.GetImage.Query, T.GetImage.Variables>
-                          query={PictureDialog.queries.getImage}
-                          variables={{ url: link, cancelToken }}
-                        >
-                          {({ loading: imageLoading, error: imageError, data: imageData }) => {
-                            const image = imageData && imageData.getImage
-                            return imageLoading ? (
-                              <Spinner />
-                            ) : imageError ? (
-                              <Text>error</Text>
-                            ) : !image ? (
-                              <Text>no data</Text>
-                            ) : (
-                              <Button fill minimal onPress={e => this.selectItem(e, image)}>
-                                <Image title={link} size={thumbnailSize - 2} src={image} />
-                              </Button>
-                            )
-                          }}
-                        </Query>
-                      </Tile>
-                    )
-                  }}
-                />
-              )
+        <Row>
+          <Formik<Values>
+            initialValues={initialValues}
+            onSubmit={async (values, factions) => {
+              try {
+                log('onSubmit %o', values)
+                await this.cancel()
+                this.setState({
+                  url: values.url,
+                  cancelToken: this.props.cancelToken || cuid(),
+                })
+              } finally {
+                factions.setSubmitting(false)
+              }
             }}
-          </Query>
-        </DialogBody>
+          >
+            {formApi => (
+              <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
+                <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
+              </Form>
+            )}
+          </Formik>
+        </Row>
+        <Query<T.GetImageList.Query, T.GetImageList.Variables>
+          query={PictureDialog.queries.getImageList}
+          variables={{ url, cancelToken }}
+        >
+          {({ loading: listLoading, error: listError, data: listData, client }) => {
+            this.client = client
+            return listLoading ? (
+              <Spinner />
+            ) : listError ? (
+              <ErrorDisplay error={listError} />
+            ) : (
+              <Grid
+                flex={1}
+                scrollable
+                size={thumbnailSize}
+                data={listData ? listData.getImageList : []}
+                keyExtractor={(link: string) => link}
+                renderItem={(link: string) => {
+                  // log('renderItem %s', link)
+                  return (
+                    <Tile key={link} size={thumbnailSize}>
+                      <Query<T.GetImage.Query, T.GetImage.Variables>
+                        query={PictureDialog.queries.getImage}
+                        variables={{ url: link, cancelToken }}
+                      >
+                        {({ loading: imageLoading, error: imageError, data: imageData }) => {
+                          const image = imageData && imageData.getImage
+                          return imageLoading ? (
+                            <Spinner />
+                          ) : imageError ? (
+                            <Text>error</Text>
+                          ) : !image ? (
+                            <Text>no data</Text>
+                          ) : (
+                            <Button fill minimal onPress={e => this.selectItem(e, image)}>
+                              <Image title={link} size={thumbnailSize - 2} src={image} />
+                            </Button>
+                          )
+                        }}
+                      </Query>
+                    </Tile>
+                  )
+                }}
+              />
+            )
+          }}
+        </Query>
       </Dialog>
     )
   }

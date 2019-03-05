@@ -22,7 +22,7 @@ const ui: UiContext = {
 
   LoadingOverlay: () => null,
 
-  Dialog: ({ title, children }) => (
+  Dialog: ({ title, children, primary, secondary }) => (
     <Root>
       <Container>
         <Header>
@@ -32,36 +32,33 @@ const ui: UiContext = {
           </Body>
           <Right />
         </Header>
-        {children}
+        <Content>{children}</Content>
+        <Footer>
+          <FooterTab>
+            {primary && (
+              <Button
+                full
+                onPress={e => primary.onClick(e as any)}
+                disabled={primary.disabled}
+                danger={primary.isDanger}
+              >
+                <Text>{primary.title}</Text>
+              </Button>
+            )}
+            {secondary && (
+              <Button
+                full
+                onPress={e => secondary.onClick(e as any)}
+                disabled={secondary.disabled}
+                danger={secondary.isDanger}
+              >
+                <Text>{secondary.title}</Text>
+              </Button>
+            )}
+          </FooterTab>
+        </Footer>
       </Container>
     </Root>
-  ),
-  DialogBody: ({ children }) => <Content>{children}</Content>,
-  DialogFooter: ({ primary, secondary }) => (
-    <Footer>
-      <FooterTab>
-        {primary && (
-          <Button
-            full
-            onPress={e => primary.onClick(e as any)}
-            disabled={primary.disabled}
-            danger={primary.isDanger}
-          >
-            <Text>{primary.title}</Text>
-          </Button>
-        )}
-        {secondary && (
-          <Button
-            full
-            onPress={e => secondary.onClick(e as any)}
-            disabled={secondary.disabled}
-            danger={secondary.isDanger}
-          >
-            <Text>{secondary.title}</Text>
-          </Button>
-        )}
-      </FooterTab>
-    </Footer>
   ),
 }
 

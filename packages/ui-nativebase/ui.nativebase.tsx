@@ -33,7 +33,7 @@ import { TextField } from './TextField.nativebase'
 
 const log = debug('rn:ui')
 
-type RNNTypes = 'LoadingOverlay' | 'Dialog' | 'DialogBody' | 'DialogFooter'
+type RNNTypes = 'LoadingOverlay' | 'Dialog'
 
 export const ui: Omit<UiContext, RNNTypes> = {
   // special ui

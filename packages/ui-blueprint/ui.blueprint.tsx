@@ -74,7 +74,19 @@ export const ui: UiContext = {
       isCloseButtonShown={!!onClose}
       canOutsideClickClose={false}
     >
-      {children}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          padding: 5,
+          maxHeight: 600,
+          overflow: 'auto',
+        }}
+        className={classNames(Classes.DIALOG_BODY)}
+      >
+        {children}
+      </div>
+
       <div className={Classes.DIALOG_FOOTER}>
         <div className={Classes.DIALOG_FOOTER_ACTIONS}>
           {secondary && (
@@ -92,21 +104,6 @@ export const ui: UiContext = {
         </div>
       </div>
     </Dialog>
-  ),
-
-  DialogBody: ({ children }) => (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 5,
-        maxHeight: 600,
-        overflow: 'auto',
-      }}
-      className={classNames(Classes.DIALOG_BODY)}
-    >
-      {children}
-    </div>
   ),
 
   // layout

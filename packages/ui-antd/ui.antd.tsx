@@ -54,7 +54,7 @@ export const ui: UiContext = {
   LoadingOverlay: ({ show }) =>
     // <Overlay isOpen={show} canEscapeKeyClose={false} canOutsideClickClose={false}>
     show ? <Spin /> : null,
-    // </Overlay>
+  // </Overlay>
 
   Dialog: ({ isOpen, title, onClose, primary, secondary, children }) => (
     <Modal
@@ -78,20 +78,6 @@ export const ui: UiContext = {
     >
       {children}
     </Modal>
-  ),
-
-  DialogBody: ({ children }) => (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 5,
-        maxHeight: 600,
-        overflow: 'auto',
-      }}
-    >
-      {children}
-    </div>
   ),
 
   // layout
@@ -211,12 +197,8 @@ export const ui: UiContext = {
   SelectField,
   TextField,
 
-  Tabs: ({ children }) => <Tabs>{children}</Tabs>,
-  Tab: ({ id, title, heading, panel, children }) => (
-    <Tabs.TabPane tab={title} key={id}>
-      {panel}
-    </Tabs.TabPane>
-  ),
+  Tabs: Tabs as any,
+  Tab: Tabs.TabPane as any,
 }
 
 export const mapIconName = (icon?: IconName): string | undefined => {

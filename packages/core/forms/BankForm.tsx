@@ -6,7 +6,7 @@ import React from 'react'
 import { defineMessages } from 'react-intl'
 import { AppMutation, AppQuery, ConfirmButton, gql, Gql } from '../components'
 import { UrlField } from '../components/UrlField'
-import { AppContext, typedFields } from '../context'
+import { AppContext, tabName, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
@@ -150,8 +150,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                           <Tabs id='BankForm'>
                             <Tab
                               id='location'
-                              title={intl.formatMessage(messages.tabInfo)}
-                              heading={intl.formatMessage(messages.tabInfo)}
+                              {...tabName(intl.formatMessage(messages.tabInfo))}
                               panel={
                                 <>
                                   {!bankId && (
@@ -243,8 +242,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                             />
                             <Tab
                               id='online'
-                              title={intl.formatMessage(messages.tabOnline)}
-                              heading={intl.formatMessage(messages.tabOnline)}
+                              {...tabName(intl.formatMessage(messages.tabOnline))}
                               panel={
                                 <>
                                   <CheckboxField

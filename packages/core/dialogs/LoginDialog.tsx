@@ -22,7 +22,7 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
     const { isOpen } = this.props
     const {
       intl,
-      ui: { Dialog, DialogBody },
+      ui: { Dialog },
     } = this.context
 
     return (
@@ -40,9 +40,7 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
                 onClick: this.open,
               }}
             >
-              <DialogBody>
-                <LoginForm ref={this.loginForm} query={query} />
-              </DialogBody>
+              <LoginForm ref={this.loginForm} query={query} />
             </Dialog>
           )
         }}

@@ -27,7 +27,7 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
     const { bankId, isOpen, cancelToken } = this.props
     const {
       intl,
-      ui: { Dialog, DialogBody },
+      ui: { Dialog },
     } = this.context
 
     return (
@@ -44,14 +44,12 @@ export class BankDialog extends React.PureComponent<BankDialog.Props> {
           onClick: this.close,
         }}
       >
-        <DialogBody>
-          <BankForm
-            onClosed={this.close}
-            ref={this.bankForm}
-            bankId={bankId}
-            cancelToken={cancelToken}
-          />
-        </DialogBody>
+        <BankForm
+          onClosed={this.close}
+          ref={this.bankForm}
+          bankId={bankId}
+          cancelToken={cancelToken}
+        />
       </Dialog>
     )
   }

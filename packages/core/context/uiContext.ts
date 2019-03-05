@@ -82,10 +82,17 @@ export interface TabsProps {
 
 export interface TabProps {
   id: string
-  title: string
-  heading: string
+  title: string // used by blueprintjs
+  tab: string // used by antd
+  heading: string // used by nativebase
   panel: JSX.Element
 }
+
+export const tabName = (name: string): Pick<TabProps, 'title' | 'tab' | 'heading'> => ({
+  title: name,
+  tab: name,
+  heading: name,
+})
 
 export interface ImageProps {
   src: ImageSource
@@ -114,7 +121,6 @@ export interface UiContext {
   // dialog
   Alert: ComponentType<AlertProps>
   Dialog: ComponentType<DialogProps>
-  DialogBody: ComponentType
   LoadingOverlay: ComponentType<LoadingOverlayProps>
 
   // layout

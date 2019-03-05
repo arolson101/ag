@@ -75,13 +75,6 @@ export class Dialog extends React.PureComponent<DialogProps> {
   }
 }
 
-export const DialogBody: UiContext['DialogBody'] = ({ children }) => (
-  <Container>
-    <Content>{children}</Content>
-  </Container>
-)
-DialogBody.displayName = 'DialogBody'
-
 type TopButtonId = 'primary' | 'secondary'
 
 const makeButton = (id: TopButtonId, opts: ButtonConfig): OptionsTopBarButton => ({
