@@ -277,18 +277,6 @@ export namespace OpenDb {
   }
 }
 
-export namespace DeleteDb {
-  export type Variables = {
-    dbId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteDb: string
-  }
-}
-
 export namespace Transaction {
   export type Variables = {
     transactionId?: Maybe<string>
@@ -367,6 +355,18 @@ export namespace DeleteBank {
   }
 }
 
+export namespace DeleteDb {
+  export type Variables = {
+    dbId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    deleteDb: string
+  }
+}
+
 export namespace HomePage {
   export type Variables = {}
 
@@ -394,6 +394,8 @@ export namespace BankDisplay {
     name: string
 
     favicon: ImageSource
+
+    online: boolean
 
     accounts: Accounts[]
   }

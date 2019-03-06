@@ -20,6 +20,7 @@ export interface AlertParams {
 
   body?: string
   danger?: boolean
+  error?: boolean
 
   onConfirm: () => any
   confirmText: string
@@ -49,7 +50,7 @@ export interface ListItem {
   image?: ImageSource
   title?: string
   subtitle?: React.ReactNode
-  actions?: PopoverItem[]
+  actions?: ActionItem[]
   contextMenuHeader?: string
 }
 
@@ -102,15 +103,16 @@ export interface ImageProps {
   title?: string
 }
 
-export interface PopoverItem {
+export interface ActionItem {
   divider?: boolean
   text?: string
   icon?: IconName
+  disabled?: boolean
   onClick?: () => any
 }
 
 export interface PopoverButtonProps extends Omit<ButtonProps, 'onPress'> {
-  content: PopoverItem[]
+  content: ActionItem[]
   minimal?: boolean
   loading?: boolean
 }

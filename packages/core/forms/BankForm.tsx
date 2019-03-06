@@ -80,6 +80,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
   }
 
   private formApi = React.createRef<Formik<FormValues>>()
+  private favicoField = React.createRef<UrlField<FormValues>>()
 
   render() {
     const { ui, intl } = this.context
@@ -158,14 +159,18 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                       const value = +valueStr // coax to number
                                       const fi = filist[value]
                                       const name = value ? fi.name || '' : ''
+                                      const web = fi.profile.siteURL || ''
                                       formApi.setFieldValue('name', name)
                                       formApi.setFieldValue('fi', valueStr)
-                                      formApi.setFieldValue('web', fi.profile.siteURL || '')
+                                      formApi.setFieldValue('web', web)
                                       formApi.setFieldValue('favicon', generateAvatar(name))
                                       formApi.setFieldValue('address', formatAddress(fi) || '')
                                       formApi.setFieldValue('fid', fi.fid || '')
                                       formApi.setFieldValue('org', fi.org || '')
                                       formApi.setFieldValue('ofx', fi.ofx || '')
+                                      if (this.favicoField.current) {
+                                        this.favicoField.current.onValueChanged(web)
+                                      }
                                     }}
                                     searchable
                                   />
@@ -190,6 +195,7 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                 favicoHeight={bankAvatarSize}
                                 label={intl.formatMessage(messages.web)}
                                 cancelToken={cancelToken}
+                                ref={this.favicoField}
                               />
                               <TextField
                                 field='notes'

@@ -42,8 +42,8 @@ export class ErrorDisplay extends React.PureComponent<Props> {
       body: (errors as Error[]).map(e => e.message).join('\n'),
       confirmText: intl.formatMessage(messages.ok),
       onConfirm: this.onConfirm,
+      error: true,
     })
-    this.setState({ show: true })
   }
 
   render() {

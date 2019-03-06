@@ -36,8 +36,9 @@ log.enabled = true
 export const ui: UiContext = {
   // special ui
   showToast: (text, danger) => (danger ? message.error(text) : message.success(text)),
-  alert: ({ title, body, danger, onConfirm, confirmText, onCancel, cancelText }) => {
-    Modal.confirm({
+  alert: ({ title, body, danger, error, onConfirm, confirmText, onCancel, cancelText }) => {
+    ;(cancelText ? Modal.confirm : error ? Modal.error : Modal.info)({
+      centered: true,
       title,
       content: body,
       onOk: onConfirm,
@@ -45,7 +46,6 @@ export const ui: UiContext = {
       okText: confirmText,
       okType: danger ? 'danger' : 'primary',
       cancelText,
-      type: '',
     })
   },
 
@@ -56,6 +56,8 @@ export const ui: UiContext = {
       visible={isOpen}
       onCancel={onClose}
       maskClosable={false}
+      centered
+      bodyStyle={{ maxHeight: 'calc(100vh - 325px)', overflowY: 'auto' }}
       footer={[
         secondary ? (
           <Button
@@ -176,7 +178,7 @@ export const ui: UiContext = {
                   item.divider ? (
                     <Menu.Divider key={i} />
                   ) : (
-                    <Menu.Item disabled={!item.onClick} key={i}>
+                    <Menu.Item disabled={!item.onClick || item.disabled} key={i}>
                       <Icon type={mapIconName(item.icon)} />
                       {item.text}
                     </Menu.Item>
@@ -250,7 +252,7 @@ export const ui: UiContext = {
       trigger={['click']}
     >
       <Button loading={loading} size='small' style={{ border: 0 }}>
-        {React.isValidElement(icon) ? icon : children}
+        {loading ? null : React.isValidElement(icon) ? icon : children}
       </Button>
     </Dropdown>
   ),

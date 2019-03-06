@@ -8,6 +8,12 @@ export class Image extends React.PureComponent<ImageProps> {
       return null
     }
 
-    return <img title={title} src={src.uri} style={{ margin, maxWidth: size, maxHeight: size }} />
+    return (
+      <img
+        title={title}
+        src={src.uri}
+        style={{ margin, maxWidth: size, maxHeight: size, minWidth: size }}
+      />
+    )
   }
 }

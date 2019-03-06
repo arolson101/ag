@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppContext, ListItem } from '../context'
+import { ActionItem, AppContext, ListItem } from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
 import { HomePage } from '../pages'
@@ -30,6 +30,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
         id
         name
         favicon
+        online
         accounts {
           id
           name
@@ -89,11 +90,16 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                       text: intl.formatMessage(messages.accountCreate),
                       onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
                     },
-                    {
-                      icon: 'sync',
-                      text: intl.formatMessage(messages.syncAccounts),
-                      onClick: syncAccounts,
-                    },
+                    ...(bank.online
+                      ? [
+                          {
+                            icon: 'sync',
+                            text: intl.formatMessage(messages.syncAccounts),
+                            onClick: syncAccounts,
+                            disabled: !bank.online,
+                          } as ActionItem,
+                        ]
+                      : []),
                   ],
                 },
                 ...bank.accounts.map<ListItem>(

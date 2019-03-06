@@ -2,6 +2,7 @@ import { TextFieldProps } from '@ag/core'
 import { Form, Icon, Input } from 'antd'
 import { Field, FieldProps, FormikProps } from 'formik'
 import React from 'react'
+import { mapIconName } from './ui.antd'
 
 type Password = import('antd/lib/input/Password').default
 type TextArea = import('antd/lib/input/TextArea').default
@@ -62,7 +63,11 @@ export class TextField extends React.PureComponent<TextFieldProps> {
                   ref={this.textInput}
                   disabled={disabled}
                   style={{ flex: 1 }}
-                  prefix={leftIcon && <Icon type={leftIcon} style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  prefix={
+                    leftIcon && (
+                      <Icon type={mapIconName(leftIcon)} style={{ color: 'rgba(0,0,0,.25)' }} />
+                    )
+                  }
                   suffix={rightElement}
                   {...field}
                   onChange={this.onChange}
