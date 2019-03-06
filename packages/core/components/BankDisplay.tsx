@@ -52,7 +52,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
   render() {
     const { bank } = this.props
     const { dispatch, ui, intl } = this.context
-    const { Card, Row, Column, Text, Image, List, Tile, PopoverButton } = ui
+    const { Column, Text, List } = ui
     const bankId = bank.id
 
     const size = 48
@@ -76,7 +76,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                   actions: [
                     {
                       icon: 'edit',
-                      text: intl.formatMessage(messages.editBank),
+                      text: intl.formatMessage(messages.bankEdit),
                       onClick: () => dispatch(actions.openDlg.bankEdit({ bankId })),
                     },
                     {
@@ -86,12 +86,12 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                     },
                     {
                       icon: 'add',
-                      text: intl.formatMessage(messages.addAccount),
+                      text: intl.formatMessage(messages.accountCreate),
                       onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
                     },
                     {
-                      text: 'sync accounts',
                       icon: 'sync',
+                      text: intl.formatMessage(messages.syncAccounts),
                       onClick: syncAccounts,
                     },
                   ],
@@ -107,7 +107,10 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                         <Text>latest transactions</Text>
                       </Column>
                     ),
-                    contextMenuHeader: `${bank.name} - ${account.name}`,
+                    contextMenuHeader: intl.formatMessage(messages.contextMenuHeader, {
+                      bankName: bank.name,
+                      accountName: account.name,
+                    }),
                     actions: [
                       {
                         icon: 'edit',
@@ -133,16 +136,24 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
 }
 
 const messages = defineMessages({
-  editBank: {
-    id: 'BankDisplay.editBank',
+  contextMenuHeader: {
+    id: 'BankDisplay.contextMenuHeader',
+    defaultMessage: '{bankName} - {accountName}',
+  },
+  bankEdit: {
+    id: 'BankDisplay.bankEdit',
     defaultMessage: 'Edit Bank',
   },
   deleteBank: {
     id: 'BankDisplay.deleteBank',
     defaultMessage: 'Delete Bank',
   },
-  addAccount: {
-    id: 'BankDisplay.addAccount',
+  syncAccounts: {
+    id: 'BankDisplay.syncAccounts',
+    defaultMessage: 'Sync Accounts',
+  },
+  accountCreate: {
+    id: 'BankDisplay.accountCreate',
     defaultMessage: 'Add Account',
   },
   editAccount: {

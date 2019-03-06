@@ -7,7 +7,7 @@ import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 
 const mutations = {
-  DeleteBank: gql`
+  deleteBank: gql`
     mutation DeleteBank($bankId: String!) {
       deleteBank(bankId: $bankId)
     }
@@ -39,7 +39,7 @@ export const deleteBank = ({ client, context, bank }: DeleteBankParams) => {
     onConfirm: async () => {
       const variables = { bankId: bank.id }
       const result = await client.mutate<T.DeleteBank.Mutation, T.DeleteBank.Variables>({
-        mutation: mutations.DeleteBank,
+        mutation: mutations.deleteBank,
         variables,
         refetchQueries: [{ query: HomePage.queries.HomePage }],
       })

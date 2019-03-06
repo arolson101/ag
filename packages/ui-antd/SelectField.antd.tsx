@@ -10,7 +10,7 @@ log.enabled = true
 export class SelectField extends React.Component<SelectFieldProps> {
   render() {
     const { field: name, label, disabled, items, flex, searchable, onValueChange } = this.props
-    log('render %o', name)
+    // log('render %o', name)
     return (
       <Field name={name}>
         {({ field, form }: FieldProps) => {

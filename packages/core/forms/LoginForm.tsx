@@ -60,12 +60,6 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
         openDb(dbId: $dbId, password: $password)
       }
     ` as Gql<T.OpenDb.Mutation, T.OpenDb.Variables>,
-
-    deleteDb: gql`
-      mutation DeleteDb($dbId: String!) {
-        deleteDb(dbId: $dbId)
-      }
-    ` as Gql<T.DeleteDb.Mutation, T.DeleteDb.Variables>,
   }
 
   formApi = React.createRef<Formik>()

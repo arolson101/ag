@@ -3,6 +3,7 @@ import { defineMessages } from 'react-intl'
 import { AppQuery } from '../components'
 import { AppContext } from '../context'
 import { LoginForm } from '../forms'
+import { deleteDb } from '../mutations'
 
 export namespace LoginDialog {
   export interface Props {
@@ -27,7 +28,7 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
 
     return (
       <AppQuery query={LoginForm.queries.LoginForm}>
-        {query => {
+        {(query, client) => {
           const { dbs } = query
           const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
 
@@ -39,6 +40,15 @@ export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
                 title: intl.formatMessage(dbId ? messages.open : messages.create),
                 onClick: this.open,
               }}
+              secondary={
+                dbId
+                  ? {
+                      title: intl.formatMessage(messages.delete),
+                      onClick: () => deleteDb({ context: this.context, dbId, client }),
+                      isDanger: true,
+                    }
+                  : undefined
+              }
             >
               <LoginForm ref={this.loginForm} query={query} />
             </Dialog>
@@ -67,5 +77,9 @@ const messages = defineMessages({
   open: {
     id: 'LoginDialog.open',
     defaultMessage: 'Open',
+  },
+  delete: {
+    id: 'LoginDialog.delete',
+    defaultMessage: 'Delete',
   },
 })

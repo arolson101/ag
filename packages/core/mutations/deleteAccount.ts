@@ -7,7 +7,7 @@ import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 
 const mutations = {
-  DeleteAccount: gql`
+  deleteAccount: gql`
     mutation DeleteAccount($accountId: String!) {
       deleteAccount(accountId: $accountId)
     }
@@ -39,7 +39,7 @@ export const deleteAccount = ({ client, context, account }: DeleteAccountParams)
     onConfirm: async () => {
       const variables = { accountId: account.id }
       const result = await client.mutate<T.DeleteAccount.Mutation, T.DeleteAccount.Variables>({
-        mutation: mutations.DeleteAccount,
+        mutation: mutations.deleteAccount,
         variables,
         refetchQueries: [{ query: HomePage.queries.HomePage }],
       })

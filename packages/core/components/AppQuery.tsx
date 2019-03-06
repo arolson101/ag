@@ -1,3 +1,4 @@
+import ApolloClient from 'apollo-client'
 import debug from 'debug'
 import React from 'react'
 import { Query, QueryProps } from 'react-apollo'
@@ -10,7 +11,7 @@ const log = debug('app:AppQuery')
 
 interface Props<D, V> extends Omit<QueryProps<D, V>, 'query' | 'children' | 'onCompleted'> {
   query: Gql<D, V>
-  children: (data: D) => React.ReactNode
+  children: (data: D, client: ApolloClient<any>) => React.ReactNode
   onCompleted?: (data: D) => void
 }
 
@@ -27,14 +28,14 @@ export class AppQuery<TData, TVariables> extends React.Component<Props<TData, TV
 
     return (
       <Query<TData, TVariables> {...props} onCompleted={onCompleted as any}>
-        {({ loading, error, data }) => (
+        {({ loading, error, data, client }) => (
           <>
             <LoadingOverlay
               show={loading}
               title={`query(${(props.query.definitions[0] as any).name.value})`}
             />
             {error && <ErrorDisplay error={error} />}
-            {!loading && children(data!)}
+            {!loading && children(data!, client)}
           </>
         )}
       </Query>
