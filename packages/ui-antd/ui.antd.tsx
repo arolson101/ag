@@ -1,5 +1,18 @@
-import { AlertProps, IconName, UiContext } from '@ag/core'
-import { Button, Card, Divider, Dropdown, Menu, message, Modal, Spin, Tabs } from 'antd'
+import { AlertProps, IconName, ListItem, UiContext } from '@ag/core'
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  Dropdown,
+  Icon,
+  List,
+  Menu,
+  message,
+  Modal,
+  Spin,
+  Tabs,
+} from 'antd'
 import 'antd/dist/antd.css'
 import { ModalFuncProps } from 'antd/lib/modal'
 import debug from 'debug'
@@ -142,29 +155,46 @@ export const ui: UiContext = {
   Collapsible: ({ show, children }) => <>{show ? children : null}</>,
 
   // list
-  List: ({ children }) => <Card>{children}</Card>,
-  ListItem: ({ title, image, subtitle, children, actions }) => (
-    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        {title && (
-          <Title style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-            {image && (
-              <div
-                style={{
-                  background: `center no-repeat url(${image.uri})`,
-                  backgroundSize: 'contain',
-                  width: 24,
-                  height: 24,
-                  margin: 5,
-                }}
-              />
-            )}
-            {title}
-          </Title>
-        )}
-        {subtitle && <p>{subtitle}</p>}
-      </div>
-    </div>
+  List: ({ items, header, footer }) => (
+    <List
+      // itemLayout='vertical'
+      dataSource={items}
+      renderItem={({ title, image, subtitle, actions }: ListItem) => (
+        <List.Item
+          actions={
+            actions && [
+              <Dropdown
+                overlay={
+                  <Menu
+                    onSelect={item => {
+                      actions[+item.key].onClick!()
+                    }}
+                  >
+                    {actions.map((item, i) =>
+                      item.divider ? (
+                        <Menu.Divider key={i} />
+                      ) : (
+                        <Menu.Item key={i}>{item.text}</Menu.Item>
+                      )
+                    )}
+                  </Menu>
+                }
+              >
+                <Icon type='down' />
+              </Dropdown>,
+            ]
+          }
+        >
+          <List.Item.Meta
+            title={title}
+            avatar={image && <Avatar shape='square' src={image.uri} />}
+            description={subtitle}
+          />
+        </List.Item>
+      )}
+      header={header}
+      footer={footer}
+    />
   ),
 
   // controls

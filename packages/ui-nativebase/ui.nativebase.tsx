@@ -100,7 +100,7 @@ export const ui: Omit<UiContext, RNNTypes> = {
 
   // list
   List: ({ children }) => <List>{children}</List>,
-  ListItem: ({ title, image, children, actions }) => <ListItem>{children}</ListItem>,
+  // ListItem: ({ title, image, children, actions }) => <ListItem>{children}</ListItem>,
 
   // controls
   Spinner,

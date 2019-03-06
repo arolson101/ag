@@ -1,7 +1,8 @@
+import { ImageSource } from '@ag/util'
 import gql from 'graphql-tag'
 import React from 'react'
 import { actions } from '../actions'
-import { AppContext } from '../context'
+import { AppContext, ListItem } from '../context'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 import { AppMutation } from './AppMutation'
@@ -46,64 +47,65 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
   render() {
     const { bank } = this.props
     const { dispatch, ui } = this.context
-    const { Card, Row, Column, Text, Image, List, ListItem, Tile, PopoverButton } = ui
+    const { Card, Row, Column, Text, Image, List, Tile, PopoverButton } = ui
     const bankId = bank.id
 
     const size = 48
 
     return (
-      <List key={bank.id}>
-        <AppMutation
-          mutation={BankDisplay.mutations.SyncAccounts}
-          variables={{ bankId }}
-          refetchQueries={[{ query: HomePage.queries.HomePage }]}
-        >
-          {syncAccounts => (
-            <ListItem
-              title={bank.name}
-              image={bank.favicon}
-              actions={[
+      <AppMutation
+        mutation={BankDisplay.mutations.SyncAccounts}
+        variables={{ bankId }}
+        refetchQueries={[{ query: HomePage.queries.HomePage }]}
+      >
+        {syncAccounts => (
+          <>
+            <List
+              key={bank.id}
+              items={[
                 {
-                  text: 'edit',
-                  onClick: () => dispatch(actions.openDlg.bankEdit({ bankId })),
+                  title: bank.name,
+                  image: bank.favicon,
+                  // subtitle: bank.accounts.length === 0 ? 'add an account' : undefined,
+                  actions: [
+                    {
+                      text: 'edit',
+                      onClick: () => dispatch(actions.openDlg.bankEdit({ bankId })),
+                    },
+                    {
+                      text: 'add account',
+                      onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
+                    },
+                    {
+                      text: 'sync accounts',
+                      onClick: syncAccounts,
+                    },
+                  ],
                 },
-                {
-                  text: 'add account',
-                  onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
-                },
-                {
-                  text: 'sync accounts',
-                  onClick: syncAccounts,
-                },
-              ]}
-            />
-          )}
-        </AppMutation>
-        {!bank.accounts.length ? (
-          <ListItem>
-            <Text>No accounts</Text>
-          </ListItem>
-        ) : (
-          bank.accounts.map(account => (
-            <ListItem
-              key={account.id}
-              subtitle={account.name}
-              actions={[
-                {
-                  text: 'edit',
-                  onClick: () =>
-                    dispatch(
-                      actions.openDlg.accountEdit({
-                        bankId: bank.id,
-                        accountId: account.id,
-                      })
+                ...bank.accounts.map(
+                  ({ name: title, id: accountId }): ListItem => ({
+                    image: new ImageSource(),
+                    // title: bank.name,
+                    title,
+                    subtitle: (
+                      <Column>
+                        <Text>$1000</Text>
+                        <Text>latest transactions</Text>
+                      </Column>
                     ),
-                },
+                    actions: [
+                      {
+                        text: 'edit',
+                        onClick: () => dispatch(actions.openDlg.accountEdit({ bankId, accountId })),
+                      },
+                    ],
+                  })
+                ),
               ]}
             />
-          ))
+          </>
         )}
-      </List>
+      </AppMutation>
     )
   }
 }

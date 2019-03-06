@@ -47,10 +47,10 @@ export interface DialogProps {
   secondary?: ButtonConfig
 }
 
-export interface ListItemProps {
+export interface ListItem {
   image?: ImageSource
   title?: string
-  subtitle?: string
+  subtitle?: React.ReactNode
   actions?: PopoverItem[]
 }
 
@@ -86,7 +86,6 @@ export interface TabProps {
   title: string // used by blueprintjs
   tab: string // used by antd
   heading: string // used by nativebase
-  // panel: JSX.Element
 }
 
 export const tabConfig = (id: string, name: string) => ({
@@ -139,8 +138,11 @@ export interface UiContext {
   Collapsible: ComponentType<{ show: boolean }>
 
   // list
-  List: ComponentType<{}>
-  ListItem: ComponentType<ListItemProps>
+  List: ComponentType<{
+    items: ListItem[]
+    header?: React.ReactElement<any>
+    footer?: React.ReactElement<any>
+  }>
 
   // controls
   Spinner: ComponentType

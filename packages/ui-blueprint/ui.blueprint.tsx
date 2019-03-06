@@ -163,29 +163,29 @@ export const ui: UiContext = {
 
   // list
   List: ({ children }) => <Card>{children}</Card>,
-  ListItem: ({ title, image, subtitle, children, actions }) => (
-    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        {title && (
-          <H3 style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
-            {image && (
-              <div
-                style={{
-                  background: `center no-repeat url(${image.uri})`,
-                  backgroundSize: 'contain',
-                  width: 24,
-                  height: 24,
-                  margin: 5,
-                }}
-              />
-            )}
-            {title}
-          </H3>
-        )}
-        {subtitle && <p className={classNames(Classes.TEXT_MUTED)}>{subtitle}</p>}
-      </div>
-    </div>
-  ),
+  // ListItem: ({ title, image, subtitle, children, actions }) => (
+  //   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+  //     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+  //       {title && (
+  //         <H3 style={{ flexDirection: 'row', display: 'flex', alignItems: 'center' }}>
+  //           {image && (
+  //             <div
+  //               style={{
+  //                 background: `center no-repeat url(${image.uri})`,
+  //                 backgroundSize: 'contain',
+  //                 width: 24,
+  //                 height: 24,
+  //                 margin: 5,
+  //               }}
+  //             />
+  //           )}
+  //           {title}
+  //         </H3>
+  //       )}
+  //       {subtitle && <p className={classNames(Classes.TEXT_MUTED)}>{subtitle}</p>}
+  //     </div>
+  //   </div>
+  // ),
 
   // controls
   Spinner,
