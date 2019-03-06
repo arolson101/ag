@@ -13,7 +13,8 @@ export const dialogActions = {
     bankCreate: createStandardAction('dlg/bankCreate')(),
     bankEdit: createStandardAction('dlg/bankEdit')<{ bankId: string }>(),
     accountCreate: createStandardAction('dlg/accountCreate')<{ bankId: string }>(),
-    accountEdit: createStandardAction('dlg/accountEdit')<{ bankId: string; accountId: string }>(),
+    accountEdit: createStandardAction('dlg/accountEdit')<{ accountId: string }>(),
+    accountDelete: createStandardAction('dlg/accountDelete')<{ accountId: string }>(),
   },
   closeDlg: createStandardAction('dlg/close')<DialogType>(),
 }

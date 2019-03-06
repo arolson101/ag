@@ -13,12 +13,12 @@ import {
 
 const log = debug('app:uiContext')
 
-export type IconName = 'url' | 'refresh' | 'image' | 'library' | 'trash'
+export type IconName = 'url' | 'refresh' | 'image' | 'library' | 'trash' | 'edit' | 'add' | 'sync'
 
-export interface AlertProps {
+export interface AlertParams {
   title: string
 
-  body?: string[]
+  body?: string
   danger?: boolean
 
   onConfirm: () => any
@@ -26,8 +26,6 @@ export interface AlertProps {
 
   onCancel?: () => any
   cancelText?: string
-
-  show: boolean
 }
 
 export interface ButtonProps {
@@ -52,6 +50,7 @@ export interface ListItem {
   title?: string
   subtitle?: React.ReactNode
   actions?: PopoverItem[]
+  contextMenuHeader?: string
 }
 
 export interface LoadingOverlayProps {
@@ -119,9 +118,9 @@ export interface PopoverButtonProps extends Omit<ButtonProps, 'onPress'> {
 export interface UiContext {
   // special ui
   showToast: (message: string, danger?: boolean) => any
+  alert: (params: AlertParams) => any
 
   // dialog
-  Alert: ComponentType<AlertProps>
   Dialog: ComponentType<DialogProps>
   LoadingOverlay: ComponentType<LoadingOverlayProps>
 

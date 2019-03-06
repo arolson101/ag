@@ -19,10 +19,9 @@ import {
 } from 'native-base'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { Dimensions, FlatList } from 'react-native'
+import { Alert as RnAlert, Dimensions, FlatList } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { Omit } from 'utility-types'
-import { Alert } from './Alert.nativebase'
 import { CheckboxField } from './CheckboxField.nativebase'
 import { CurrencyField } from './CurrencyField.nativebase'
 import { DateField } from './DateField.nativebase'
@@ -44,9 +43,17 @@ export const ui: Omit<UiContext, RNNTypes> = {
       duration: 5000,
       type: danger ? 'danger' : undefined,
     }),
-
-  // dialog
-  Alert,
+  alert: ({ title, body, danger, onConfirm, confirmText, onCancel, cancelText }) => {
+    RnAlert.alert(
+      title,
+      body,
+      [
+        { text: cancelText, onPress: onCancel, style: 'cancel' }, //
+        { text: confirmText, onPress: onConfirm, style: danger ? 'destructive' : 'default' },
+      ],
+      { cancelable: false }
+    )
+  },
 
   // layout
   Card: ({ children }) => <Card>{children}</Card>,

@@ -17,7 +17,7 @@ export interface DialogState {
   }
   accountDialog?: {
     isOpen: boolean
-    bankId: string
+    bankId?: string
     accountId?: string
   }
 }

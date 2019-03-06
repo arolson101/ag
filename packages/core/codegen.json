@@ -1,7 +1,7 @@
 {
   "overwrite": true,
   "schema": "../db/dist/schema.json",
-  "documents": "**/*.tsx",
+  "documents": "**/*.{ts,tsx}",
   "generates": {
     "graphql-types.d.ts": {
       "plugins": [

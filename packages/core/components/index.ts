@@ -1,6 +1,5 @@
 export * from './AppMutation'
 export * from './AppQuery'
-export * from './ConfirmButton'
 export * from './cancelOperation'
 export * from './ErrorDisplay'
 export * from './Gql'

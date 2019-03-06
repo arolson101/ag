@@ -6,7 +6,7 @@ import { AccountForm } from '../forms'
 
 export namespace AccountDialog {
   export interface Props {
-    bankId: string
+    bankId?: string
     accountId?: string
     isOpen: boolean
   }

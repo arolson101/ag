@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppMutation, ConfirmButton, Gql } from '../components'
+import { AppMutation, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
@@ -69,7 +69,6 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
   }
 
   formApi = React.createRef<Formik>()
-  deleteDb = React.createRef<ConfirmButton>()
 
   render() {
     const { ui, intl } = this.context
@@ -152,7 +151,7 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                   </Form>
                 )}
               </Formik>
-
+              {/*
               {dbId && (
                 <AppMutation
                   mutation={LoginForm.mutations.deleteDb}
@@ -174,18 +173,12 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                     </>
                   )}
                 </AppMutation>
-              )}
+              )} */}
             </>
           )
         }}
       </AppMutation>
     )
-  }
-
-  delete = () => {
-    if (this.deleteDb.current) {
-      this.deleteDb.current.onPress()
-    }
   }
 
   submit = () => {

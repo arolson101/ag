@@ -4,7 +4,7 @@ import debug from 'debug'
 import { Formik, FormikErrors } from 'formik'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery, ConfirmButton, gql, Gql } from '../components'
+import { AppMutation, AppQuery, gql, Gql } from '../components'
 import { UrlField } from '../components/UrlField'
 import { AppContext, tabConfig, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
@@ -77,19 +77,13 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
       }
       ${BankForm.fragments.bankFields}
     ` as Gql<T.SaveBank.Mutation, T.SaveBank.Variables>,
-
-    DeleteBank: gql`
-      mutation DeleteBank($bankId: String!) {
-        deleteBank(bankId: $bankId)
-      }
-    ` as Gql<T.DeleteBank.Mutation, T.DeleteBank.Variables>,
   }
 
   private formApi = React.createRef<Formik<FormValues>>()
 
   render() {
     const { ui, intl } = this.context
-    const { Tabs, Tab, Text, DeleteButton, showToast } = ui
+    const { Tabs, Tab, Text, showToast } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
     const { bankId, onClosed, cancelToken } = this.props
 
@@ -202,36 +196,6 @@ export class BankForm extends React.PureComponent<BankForm.Props> {
                                 label={intl.formatMessage(messages.notes)}
                                 rows={4}
                               />
-                              {bankId && (
-                                <AppMutation
-                                  mutation={BankForm.mutations.DeleteBank}
-                                  variables={{ bankId }}
-                                  refetchQueries={[{ query: HomePage.queries.HomePage }]}
-                                  onCompleted={() => {
-                                    showToast(
-                                      intl.formatMessage(messages.deleted, {
-                                        name: edit!.name,
-                                      }),
-                                      true
-                                    )
-                                    onClosed()
-                                  }}
-                                >
-                                  {deleteBank => (
-                                    <>
-                                      <ConfirmButton
-                                        type='delete'
-                                        message={intl.formatMessage(messages.confirmDeleteMessage)}
-                                        component={DeleteButton}
-                                        onConfirmed={deleteBank}
-                                        danger
-                                      >
-                                        <Text>{intl.formatMessage(messages.deleteBank)}</Text>
-                                      </ConfirmButton>
-                                    </>
-                                  )}
-                                </AppMutation>
-                              )}
                             </Tab>
                             <Tab {...tabConfig('online', intl.formatMessage(messages.tabOnline))}>
                               <CheckboxField
@@ -401,24 +365,12 @@ const messages = defineMessages({
     id: 'BankForm.passwordPlaceholder',
     defaultMessage: 'Required',
   },
-  deleteBank: {
-    id: 'BankForm.deleteBank',
-    defaultMessage: 'Delete Bank',
-  },
-  confirmDeleteMessage: {
-    id: 'BankForm.confirmDeleteMessage',
-    defaultMessage: 'This will delete the bank, its accounts and transactions.',
-  },
   saved: {
     id: 'BankForm.saved',
-    defaultMessage: `'{name}' saved`,
+    defaultMessage: `Bank '{name}' saved`,
   },
   created: {
     id: 'BankForm.created',
-    defaultMessage: `'{name}' added`,
-  },
-  deleted: {
-    id: 'BankForm.deleted',
-    defaultMessage: `'{name}' deleted`,
+    defaultMessage: `Bank '{name}' added`,
   },
 })

@@ -6,7 +6,7 @@ export class Form extends React.PureComponent<FormProps> {
   render() {
     const { children } = this.props
     return (
-      <AntdForm style={{ flex: 1 }} onSubmit={this.onSubmit}>
+      <AntdForm style={{ flex: 1 }} layout='vertical' onSubmit={this.onSubmit}>
         {children}
       </AntdForm>
     )

@@ -1,13 +1,18 @@
 import { ImageSource } from '@ag/util'
+import debug from 'debug'
 import gql from 'graphql-tag'
 import React from 'react'
+import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext, ListItem } from '../context'
 import * as T from '../graphql-types'
+import { deleteAccount, deleteBank } from '../mutations'
 import { HomePage } from '../pages'
 import { AppMutation } from './AppMutation'
 import { Gql } from './Gql'
-import { Link } from './Link'
+
+const log = debug('core:BankDisplay')
+log.enabled = true
 
 export namespace BankDisplay {
   export interface Props {
@@ -46,7 +51,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
 
   render() {
     const { bank } = this.props
-    const { dispatch, ui } = this.context
+    const { dispatch, ui, intl } = this.context
     const { Card, Row, Column, Text, Image, List, Tile, PopoverButton } = ui
     const bankId = bank.id
 
@@ -58,7 +63,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
         variables={{ bankId }}
         refetchQueries={[{ query: HomePage.queries.HomePage }]}
       >
-        {syncAccounts => (
+        {(syncAccounts, { client }) => (
           <>
             <List
               key={bank.id}
@@ -67,36 +72,53 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                   title: bank.name,
                   image: bank.favicon,
                   // subtitle: bank.accounts.length === 0 ? 'add an account' : undefined,
+                  contextMenuHeader: bank.name,
                   actions: [
                     {
-                      text: 'edit',
+                      icon: 'edit',
+                      text: intl.formatMessage(messages.editBank),
                       onClick: () => dispatch(actions.openDlg.bankEdit({ bankId })),
                     },
                     {
-                      text: 'add account',
+                      icon: 'trash',
+                      text: intl.formatMessage(messages.deleteBank),
+                      onClick: () => deleteBank({ context: this.context, bank, client }),
+                    },
+                    {
+                      icon: 'add',
+                      text: intl.formatMessage(messages.addAccount),
                       onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
                     },
                     {
                       text: 'sync accounts',
+                      icon: 'sync',
                       onClick: syncAccounts,
                     },
                   ],
                 },
-                ...bank.accounts.map(
-                  ({ name: title, id: accountId }): ListItem => ({
+                ...bank.accounts.map<ListItem>(
+                  (account): ListItem => ({
                     image: new ImageSource(),
                     // title: bank.name,
-                    title,
+                    title: account.name,
                     subtitle: (
                       <Column>
                         <Text>$1000</Text>
                         <Text>latest transactions</Text>
                       </Column>
                     ),
+                    contextMenuHeader: `${bank.name} - ${account.name}`,
                     actions: [
                       {
-                        text: 'edit',
-                        onClick: () => dispatch(actions.openDlg.accountEdit({ bankId, accountId })),
+                        icon: 'edit',
+                        text: intl.formatMessage(messages.editAccount),
+                        onClick: () =>
+                          dispatch(actions.openDlg.accountEdit({ accountId: account.id })),
+                      },
+                      {
+                        icon: 'trash',
+                        text: intl.formatMessage(messages.deleteAccount),
+                        onClick: () => deleteAccount({ context: this.context, account, client }),
                       },
                     ],
                   })
@@ -109,3 +131,26 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
     )
   }
 }
+
+const messages = defineMessages({
+  editBank: {
+    id: 'BankDisplay.editBank',
+    defaultMessage: 'Edit Bank',
+  },
+  deleteBank: {
+    id: 'BankDisplay.deleteBank',
+    defaultMessage: 'Delete Bank',
+  },
+  addAccount: {
+    id: 'BankDisplay.addAccount',
+    defaultMessage: 'Add Account',
+  },
+  editAccount: {
+    id: 'BankDisplay.editAccount',
+    defaultMessage: 'Edit Account',
+  },
+  deleteAccount: {
+    id: 'BankDisplay.deleteAccount',
+    defaultMessage: 'Delete Account',
+  },
+})

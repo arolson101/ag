@@ -144,6 +144,7 @@ export namespace GetImage {
 export namespace AccountForm {
   export type Variables = {
     accountId?: Maybe<string>
+    bankId?: Maybe<string>
   }
 
   export type Query = {
@@ -156,6 +157,8 @@ export namespace AccountForm {
     __typename?: 'AppDb'
 
     account: Maybe<Account>
+
+    bank: Maybe<Bank>
   }
 
   export type Account = {
@@ -163,6 +166,12 @@ export namespace AccountForm {
 
     id: string
   } & AccountFields.Fragment
+
+  export type Bank = {
+    __typename?: 'Bank'
+
+    name: string
+  }
 }
 
 export namespace SaveAccount {
@@ -183,18 +192,6 @@ export namespace SaveAccount {
 
     id: string
   } & AccountFields.Fragment
-}
-
-export namespace DeleteAccount {
-  export type Variables = {
-    accountId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteAccount: boolean
-  }
 }
 
 export namespace BankForm {
@@ -234,18 +231,6 @@ export namespace SaveBank {
 
     id: string
   } & BankFields.Fragment
-}
-
-export namespace DeleteBank {
-  export type Variables = {
-    bankId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteBank: boolean
-  }
 }
 
 export namespace LoginForm {
@@ -358,6 +343,30 @@ export namespace DeleteTransaction {
   }
 }
 
+export namespace DeleteAccount {
+  export type Variables = {
+    accountId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    deleteAccount: boolean
+  }
+}
+
+export namespace DeleteBank {
+  export type Variables = {
+    bankId: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    deleteBank: boolean
+  }
+}
+
 export namespace HomePage {
   export type Variables = {}
 
@@ -417,6 +426,14 @@ export namespace AccountFields {
     routing: string
 
     key: string
+
+    bank: Bank
+  }
+
+  export type Bank = {
+    __typename?: 'Bank'
+
+    name: string
   }
 }
 

@@ -1,4 +1,4 @@
-import { AlertProps, IconName, ListItem, UiContext } from '@ag/core'
+import { AlertParams, IconName, ListItem, LoadingOverlayProps, UiContext } from '@ag/core'
 import {
   Avatar,
   Button,
@@ -14,8 +14,9 @@ import {
   Tabs,
 } from 'antd'
 import 'antd/dist/antd.css'
-import { ModalFuncProps } from 'antd/lib/modal'
 import debug from 'debug'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import React from 'react'
 import { CheckboxField } from './CheckboxField.antd'
 import { CurrencyField } from './CurrencyField.antd'
@@ -34,50 +35,27 @@ log.enabled = true
 
 export const ui: UiContext = {
   // special ui
-  showToast: (text, danger) => (danger ? message.success(text) : message.error(text)),
-
-  // dialog
-  Alert: class Alert extends React.PureComponent<AlertProps> {
-    componentDidMount() {
-      this.maybeShow()
-    }
-    componentDidUpdate() {
-      this.maybeShow()
-    }
-    maybeShow() {
-      const { title, body, danger, onConfirm, confirmText, onCancel, cancelText, show } = this.props
-      if (show) {
-        const props: ModalFuncProps = {
-          title,
-          content: body && body.join('\n'),
-          onOk: onConfirm,
-          onCancel,
-          okText: confirmText,
-          cancelText,
-          type: '',
-        }
-        if (danger) {
-          Modal.warning(props)
-        } else {
-          Modal.confirm(props)
-        }
-      }
-    }
-    render() {
-      return null
-    }
+  showToast: (text, danger) => (danger ? message.error(text) : message.success(text)),
+  alert: ({ title, body, danger, onConfirm, confirmText, onCancel, cancelText }) => {
+    Modal.confirm({
+      title,
+      content: body,
+      onOk: onConfirm,
+      onCancel,
+      okText: confirmText,
+      okType: danger ? 'danger' : 'primary',
+      cancelText,
+      type: '',
+    })
   },
 
-  LoadingOverlay: ({ show }) =>
-    // <Overlay isOpen={show} canEscapeKeyClose={false} canOutsideClickClose={false}>
-    show ? <Spin /> : null,
-  // </Overlay>
-
+  // dialog
   Dialog: ({ isOpen, title, onClose, primary, secondary, children }) => (
     <Modal
       title={title}
       visible={isOpen}
       onCancel={onClose}
+      maskClosable={false}
       footer={[
         secondary ? (
           <Button
@@ -102,6 +80,27 @@ export const ui: UiContext = {
       {children}
     </Modal>
   ),
+  LoadingOverlay: class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
+    componentDidUpdate(prevProps: LoadingOverlayProps) {
+      if (this.props.show !== prevProps.show) {
+        this.update()
+      }
+    }
+    componentDidMount() {
+      this.update()
+    }
+    update() {
+      const { show } = this.props
+      if (show) {
+        NProgress.start()
+      } else {
+        NProgress.done()
+      }
+    }
+    render() {
+      return null
+    }
+  },
 
   // layout
   Card: ({ children }) => <Card>{children}</Card>,
@@ -159,38 +158,42 @@ export const ui: UiContext = {
     <List
       // itemLayout='vertical'
       dataSource={items}
-      renderItem={({ title, image, subtitle, actions }: ListItem) => (
-        <List.Item
-          actions={
-            actions && [
-              <Dropdown
-                overlay={
-                  <Menu
-                    onSelect={item => {
-                      actions[+item.key].onClick!()
-                    }}
-                  >
-                    {actions.map((item, i) =>
-                      item.divider ? (
-                        <Menu.Divider key={i} />
-                      ) : (
-                        <Menu.Item key={i}>{item.text}</Menu.Item>
-                      )
-                    )}
-                  </Menu>
-                }
+      renderItem={({ title, image, subtitle, actions, contextMenuHeader }: ListItem) => (
+        <Dropdown
+          trigger={['contextMenu']}
+          overlay={
+            actions && (
+              <Menu
+                onClick={item => {
+                  const action = actions[+item.key]
+                  if (action.onClick) {
+                    action.onClick()
+                  }
+                }}
               >
-                <Icon type='down' />
-              </Dropdown>,
-            ]
+                <Menu.ItemGroup title={contextMenuHeader} />
+                {actions.map((item, i) =>
+                  item.divider ? (
+                    <Menu.Divider key={i} />
+                  ) : (
+                    <Menu.Item disabled={!item.onClick} key={i}>
+                      <Icon type={mapIconName(item.icon)} />
+                      {item.text}
+                    </Menu.Item>
+                  )
+                )}
+              </Menu>
+            )
           }
         >
-          <List.Item.Meta
-            title={title}
-            avatar={image && <Avatar shape='square' src={image.uri} />}
-            description={subtitle}
-          />
-        </List.Item>
+          <List.Item>
+            <List.Item.Meta
+              title={title}
+              avatar={image && <Avatar shape='square' src={image.uri} />}
+              description={subtitle}
+            />
+          </List.Item>
+        </Dropdown>
       )}
       header={header}
       footer={footer}
@@ -224,12 +227,22 @@ export const ui: UiContext = {
     <Dropdown
       overlay={
         <Menu
-          onSelect={item => {
-            log('item selected %o', item)
+          onClick={item => {
+            const c = content[+item.key]
+            if (c.onClick) {
+              c.onClick()
+            }
           }}
         >
           {content.map((item, i) =>
-            item.divider ? <Menu.Divider key={i} /> : <Menu.Item key={i}>{item.text}</Menu.Item>
+            item.divider ? (
+              <Menu.Divider key={i} />
+            ) : (
+              <Menu.Item disabled={!item.onClick} key={i}>
+                <Icon type={mapIconName(item.icon)} />
+                {item.text}
+              </Menu.Item>
+            )
           )}
         </Menu>
       }
@@ -262,18 +275,29 @@ export const ui: UiContext = {
 }
 
 export const mapIconName = (icon?: IconName): string | undefined => {
+  // https://beta.ant.design/components/icon/
   switch (icon) {
     case 'url':
-      return 'globe-network'
+      return 'global'
 
     case 'image':
-      return 'media'
+      return 'picture'
 
     case 'library':
       return 'folder-open'
 
+    case 'add':
+      return 'file-add'
+
     case 'refresh':
+      return 'reload'
+
     case 'trash':
+      return 'delete'
+
+    case 'edit':
+    case 'sync':
+    default:
       return icon
   }
 }

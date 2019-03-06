@@ -2,8 +2,8 @@ import { diff } from '@ag/util'
 import assert from 'assert'
 import cuid from 'cuid'
 import debug from 'debug'
-import { Arg, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
-import { Account, AccountInput, Transaction } from '../entities'
+import { Arg, Field, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
+import { Account, AccountInput, Bank, Transaction } from '../entities'
 import { AppDb } from './AppDb'
 
 const log = debug('db:AccountResolver')
@@ -13,6 +13,12 @@ export class AccountResolver {
   constructor(
     private appDb: AppDb //
   ) {}
+
+  @FieldResolver(returns => Bank)
+  async bank(@Root() account: Account): Promise<Bank> {
+    const app = this.appDb
+    return app.bank(account.bankId)
+  }
 
   @Mutation(returns => Account)
   async saveAccount(

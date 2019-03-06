@@ -3,7 +3,7 @@ import { pick } from '@ag/util'
 import { Formik, FormikErrors, FormikProps } from 'formik'
 import * as React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery, ConfirmButton, Gql, gql } from '../components'
+import { AppMutation, AppQuery, Gql, gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
@@ -11,7 +11,7 @@ import { HomePage } from '../pages'
 export namespace AccountForm {
   export interface Props {
     accountId?: string
-    bankId: string
+    bankId?: string
     onClosed: () => any
   }
 }
@@ -29,17 +29,23 @@ const fragments = {
       visible
       routing
       key
+      bank {
+        name
+      }
     }
   `,
 }
 
 const queries = {
   AccountForm: gql`
-    query AccountForm($accountId: String) {
+    query AccountForm($accountId: String, $bankId: String) {
       appDb {
         account(accountId: $accountId) {
           id
           ...accountFields
+        }
+        bank(bankId: $bankId) {
+          name
         }
       }
     }
@@ -57,12 +63,6 @@ const mutations = {
     }
     ${fragments.accountFields}
   ` as Gql<T.SaveAccount.Mutation, T.SaveAccount.Variables>,
-
-  DeleteAccount: gql`
-    mutation DeleteAccount($accountId: String!) {
-      deleteAccount(accountId: $accountId)
-    }
-  ` as Gql<T.DeleteAccount.Mutation, T.DeleteAccount.Variables>,
 }
 
 export class AccountForm extends React.PureComponent<AccountForm.Props> {
@@ -78,17 +78,17 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
   render() {
     const { accountId, onClosed, bankId } = this.props
     const { intl, ui } = this.context
-    const { showToast, Text, DeleteButton } = ui
+    const { showToast, Text } = ui
     const { Form, SelectField, TextField } = typedFields<FormValues>(ui)
 
     return (
-      <AppQuery query={queries.AccountForm} variables={{ accountId }}>
+      <AppQuery query={queries.AccountForm} variables={{ accountId, bankId }}>
         {({ appDb }) => {
           if (!appDb) {
             throw new Error('db not open')
           }
 
-          const { account: edit } = appDb
+          const { account: edit, bank } = appDb
           const initialValues: FormValues = {
             ...(edit
               ? pick(edit, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
@@ -123,7 +123,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
                       }
                       await saveAccount({ variables } as any)
                       showToast(
-                        intl.formatMessage(bankId ? messages.saved : messages.created, {
+                        intl.formatMessage(accountId ? messages.saved : messages.created, {
                           name: input.name,
                         })
                       )
@@ -137,6 +137,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
                     this.formApi = formApi
                     return (
                       <Form onSubmit={formApi.handleSubmit}>
+                        <Text header>{edit ? edit.bank.name : bank ? bank.name : '<no bank>'}</Text>
                         <TextField
                           field='name'
                           label={intl.formatMessage(messages.name)}
@@ -184,37 +185,6 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
                             label={intl.formatMessage(messages.key)}
                             placeholder={intl.formatMessage(messages.keyPlaceholder)}
                           />
-                        )}
-
-                        {accountId && (
-                          <AppMutation
-                            mutation={mutations.DeleteAccount}
-                            variables={{ accountId }}
-                            refetchQueries={[{ query: HomePage.queries.HomePage }]}
-                            onCompleted={() => {
-                              showToast(
-                                intl.formatMessage(messages.deleted, {
-                                  name: edit!.name,
-                                }),
-                                true
-                              )
-                              onClosed()
-                            }}
-                          >
-                            {deleteAccount => (
-                              <>
-                                <ConfirmButton
-                                  type='delete'
-                                  message={intl.formatMessage(messages.confirmDeleteMessage)}
-                                  component={DeleteButton}
-                                  onConfirmed={deleteAccount}
-                                  danger
-                                >
-                                  <Text>{intl.formatMessage(messages.deleteAccount)}</Text>
-                                </ConfirmButton>
-                              </>
-                            )}
-                          </AppMutation>
                         )}
                       </Form>
                     )
@@ -321,24 +291,12 @@ const messages = defineMessages({
     id: 'AccountDialog.keyPlaceholder',
     defaultMessage: '(for international accounts)',
   },
-  confirmDeleteMessage: {
-    id: 'AccountDialog.confirmDeleteMessage',
-    defaultMessage: 'This will delete the account and all its transactions',
-  },
-  deleteAccount: {
-    id: 'AccountDialog.deleteAccount',
-    defaultMessage: 'Delete Account',
-  },
   saved: {
     id: 'AccountForm.saved',
-    defaultMessage: '{name} saved',
+    defaultMessage: "Account '{name}' saved",
   },
   created: {
     id: 'AccountForm.created',
-    defaultMessage: '{name} added',
-  },
-  deleted: {
-    id: 'AccountForm.deleted',
-    defaultMessage: '{name} deleted',
+    defaultMessage: "Account '{name}' added",
   },
 })
