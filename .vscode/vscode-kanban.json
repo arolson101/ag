@@ -5,6 +5,19 @@
       "assignedTo": {
         "name": "arolson101"
       },
+      "creation_time": "2019-02-25T22:45:41.835Z",
+      "description": {
+        "content": "a random-colored box with the bank initials on it for banks with no favico",
+        "mime": "text/markdown"
+      },
+      "id": "15",
+      "references": [],
+      "title": "bank 'avatar'"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
       "creation_time": "2019-02-25T22:59:57.129Z",
       "description": {
         "content": "graphql service should do the online things",
@@ -40,14 +53,12 @@
       "assignedTo": {
         "name": "arolson101"
       },
-      "creation_time": "2019-02-25T22:45:41.835Z",
-      "description": {
-        "content": "a random-colored box with the bank initials on it for banks with no favico",
-        "mime": "text/markdown"
-      },
-      "id": "15",
+      "category": "features",
+      "creation_time": "2019-02-25T21:34:47.301Z",
+      "id": "6",
+      "prio": 15,
       "references": [],
-      "title": "bank 'avatar'"
+      "title": "get accounts from server"
     }
   ],
   "in-progress": [
@@ -76,19 +87,7 @@
       "title": "rename App* to Core*"
     }
   ],
-  "testing": [
-    {
-      "assignedTo": {
-        "name": "arolson101"
-      },
-      "category": "features",
-      "creation_time": "2019-02-25T21:34:47.301Z",
-      "id": "6",
-      "prio": 15,
-      "references": [],
-      "title": "get accounts from server"
-    }
-  ],
+  "testing": [],
   "todo": [
     {
       "assignedTo": {
