@@ -7,12 +7,16 @@ const emptyMocks = [
   {
     request: {
       query: AccountForm.queries.AccountForm,
-      variables: { accountId: undefined },
+      variables: { accountId: undefined, bankId: 'cjrbfiy580000415s2ibuxm2c' },
     },
     result: {
       data: {
         appDb: {
           account: null,
+          bank: {
+            name: 'Citi Cards',
+            __typename: 'Bank',
+          },
           __typename: 'AppDb',
         },
       },
@@ -24,7 +28,7 @@ const editMocks = [
   {
     request: {
       query: AccountForm.queries.AccountForm,
-      variables: { accountId: 'cjrbhh3dw0000415s5awimr3f' },
+      variables: { accountId: 'cjrbhh3dw0000415s5awimr3f', bankId: undefined },
     },
     result: {
       data: {
@@ -39,8 +43,13 @@ const editMocks = [
             visible: true,
             routing: '5551212',
             key: '',
+            bank: {
+              name: 'Citi Cards',
+              __typename: 'Bank',
+            },
             __typename: 'Account',
           },
+          bank: null,
           __typename: 'AppDb',
         },
       },
@@ -56,11 +65,7 @@ storiesOf('Dialogs/AccountDialog', module)
   ))
   .add('edit', () => (
     <MockApp mocks={editMocks}>
-      <AccountDialog
-        isOpen={true}
-        bankId={'cjrbfiy580000415s2ibuxm2c'}
-        accountId={'cjrbhh3dw0000415s5awimr3f'}
-      />
+      <AccountDialog isOpen={true} accountId={'cjrbhh3dw0000415s5awimr3f'} />
     </MockApp>
   ))
 
@@ -72,10 +77,6 @@ storiesOf('Forms/AccountForm', module)
   ))
   .add('edit', () => (
     <MockApp mocks={editMocks}>
-      <AccountForm
-        onClosed={action('onClosed')}
-        bankId={'cjrbfiy580000415s2ibuxm2c'}
-        accountId={'cjrbhh3dw0000415s5awimr3f'}
-      />
+      <AccountForm onClosed={action('onClosed')} accountId={'cjrbhh3dw0000415s5awimr3f'} />
     </MockApp>
   ))

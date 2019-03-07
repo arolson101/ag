@@ -47,7 +47,7 @@ export class DbResolver {
 
   @Query(returns => [Db])
   async dbs(@Ctx() ctx: DbContext): Promise<Db[]> {
-    log('dbs query')
+    // log('dbs query')
     const dbs = await this.getDbs(ctx)
     const all = await dbs.find()
     return all
@@ -59,7 +59,7 @@ export class DbResolver {
     @Arg('password', { description: 'the password for the database' }) password: string,
     @Ctx() ctx: DbContext
   ): Promise<boolean> {
-    log('createDb')
+    // log('createDb')
     const { openDb } = ctx
     const dbInfo = new Db()
     dbInfo.dbId = crypto.randomBytes(8).toString('base64')
@@ -83,7 +83,7 @@ export class DbResolver {
     @Arg('password', { description: 'the password for the database' }) password: string,
     @Ctx() ctx: DbContext
   ): Promise<boolean> {
-    log('openDb')
+    // log('openDb')
     const { openDb } = ctx
     const dbs = await this.getDbs(ctx)
     const dbInfo = await dbs.findOneOrFail(dbId)
@@ -97,7 +97,7 @@ export class DbResolver {
 
   @Mutation(returns => Boolean)
   async closeDb(): Promise<boolean> {
-    log('closeDb')
+    // log('closeDb')
     await this.appDb.close()
     return true
   }
@@ -107,7 +107,7 @@ export class DbResolver {
     @Arg('dbId') dbId: string, //
     @Ctx() ctx: DbContext
   ): Promise<string> {
-    log('deleteDb')
+    // log('deleteDb')
     const { deleteDb } = ctx
     const dbs = await this.getDbs(ctx)
     const dbInfo = await dbs.findOneOrFail(dbId)

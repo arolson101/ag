@@ -104,7 +104,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
       <Dialog
         isOpen={isOpen}
         title={intl.formatMessage(messages.title)}
-        primary={{
+        secondary={{
           title: intl.formatMessage(messages.cancel),
           onClick: this.close,
         }}
@@ -167,7 +167,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
                             <Text>no data</Text>
                           ) : (
                             <Button fill minimal onPress={e => this.selectItem(e, image)}>
-                              <Image title={link} size={thumbnailSize - 2} src={image} />
+                              <Image title={link} size={thumbnailSize - 30} src={image} />
                             </Button>
                           )
                         }}

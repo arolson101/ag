@@ -51,12 +51,12 @@ export class Dialog extends React.PureComponent<DialogProps> {
       topBar:
         Platform.OS === 'ios'
           ? {
-              rightButtons: [makeButton('primary', primary)],
+              rightButtons: primary && [makeButton('primary', primary)],
               leftButtons: secondary && [makeButton('secondary', secondary)],
             }
           : {
               rightButtons: [
-                makeButton('primary', primary),
+                ...(primary ? [makeButton('primary', primary)] : []),
                 ...(secondary ? [makeButton('secondary', secondary)] : []),
               ],
             },

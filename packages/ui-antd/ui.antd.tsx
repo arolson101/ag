@@ -69,14 +69,16 @@ export const ui: UiContext = {
             {secondary.title}
           </Button>
         ) : null,
-        <Button
-          key='primary' //
-          onClick={primary.onClick}
-          type='primary'
-          disabled={primary.disabled}
-        >
-          {primary.title}
-        </Button>,
+        primary ? (
+          <Button
+            key='primary' //
+            onClick={primary.onClick}
+            type='primary'
+            disabled={primary.disabled}
+          >
+            {primary.title}
+          </Button>
+        ) : null,
       ]}
     >
       {children}

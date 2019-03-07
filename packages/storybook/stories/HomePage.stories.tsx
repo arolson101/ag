@@ -27,6 +27,7 @@ const fullMocks = [
             {
               id: 'cjs8g926v00004a5t2hior4uf',
               name: 'Citibank',
+              online: false,
               favicon: {
                 width: 32,
                 height: 32,
@@ -39,6 +40,7 @@ const fullMocks = [
             {
               id: 'cjsckksbw00004a5tnvmnur9k',
               name: 'American Express',
+              online: false,
               favicon: {
                 width: 45,
                 height: 45,
@@ -51,6 +53,7 @@ const fullMocks = [
             {
               id: 'cjsckllse00014a5tf4y5oo5r',
               name: 'Chase',
+              online: false,
               favicon: {
                 width: 152,
                 height: 152,
@@ -63,6 +66,7 @@ const fullMocks = [
             {
               id: 'cjsckndi900024a5t6ayom1r6',
               name: 'UW Credit Union',
+              online: true,
               favicon: {
                 width: 16,
                 height: 16,

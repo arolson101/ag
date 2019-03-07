@@ -42,7 +42,7 @@ export interface DialogProps {
   title: string
   isOpen: boolean
   onClose?: () => any
-  primary: ButtonConfig
+  primary?: ButtonConfig
   secondary?: ButtonConfig
 }
 
