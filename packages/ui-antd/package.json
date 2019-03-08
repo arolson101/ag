@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "@ag/core": "^0.0.0",
+    "@ag/util": "^0.0.0",
     "antd": "^3.13.6",
     "debug": "^4.1.1",
     "formik": "^1.5.1",
