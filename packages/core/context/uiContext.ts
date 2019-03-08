@@ -48,8 +48,9 @@ export interface DialogProps {
 
 export interface ListItem {
   image?: ImageSource
-  title?: string
+  title?: React.ReactNode
   subtitle?: React.ReactNode
+  content?: React.ReactNode
   actions?: ActionItem[]
   contextMenuHeader?: string
 }

@@ -160,9 +160,14 @@ export const ui: UiContext = {
   // list
   List: ({ items, header, footer }) => (
     <List
+      // grid={{
+      //   gutter: 16,
+      //   column: 8,
+      // }}
       // itemLayout='vertical'
+      size='small'
       dataSource={items}
-      renderItem={({ title, image, subtitle, actions, contextMenuHeader }: ListItem) => (
+      renderItem={({ title, image, subtitle, content, actions, contextMenuHeader }: ListItem) => (
         <Dropdown
           trigger={['contextMenu']}
           overlay={
@@ -193,9 +198,20 @@ export const ui: UiContext = {
           <List.Item>
             <List.Item.Meta
               title={title}
-              avatar={image && <Avatar shape='square' src={image.uri} />}
+              avatar={
+                image && (
+                  <Avatar style={{ opacity: 0.25 }} size='small' shape='square' src={image.uri} />
+                )
+              }
               description={subtitle}
+              // description={
+              //   <>
+              //     {image && <Avatar size='small' shape='square' src={image.uri} />}
+              //     {subtitle}
+              //   </>
+              // }
             />
+            {content}
           </List.Item>
         </Dropdown>
       )}

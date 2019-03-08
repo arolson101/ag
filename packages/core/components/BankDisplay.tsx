@@ -70,7 +70,8 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
               key={bank.id}
               items={[
                 {
-                  title: bank.name,
+                  title: <Text header>{bank.name}</Text>,
+                  // title: bank.name,
                   image: bank.favicon,
                   // subtitle: bank.accounts.length === 0 ? 'add an account' : undefined,
                   contextMenuHeader: bank.name,
@@ -104,15 +105,11 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                 },
                 ...bank.accounts.map<ListItem>(
                   (account): ListItem => ({
-                    image: new ImageSource(),
+                    // image: new ImageSource(),
+                    image: bank.favicon,
                     // title: bank.name,
-                    title: account.name,
-                    subtitle: (
-                      <Column>
-                        <Text>$1000</Text>
-                        <Text>latest transactions</Text>
-                      </Column>
-                    ),
+                    subtitle: account.name,
+                    content: '$' + Math.trunc(Math.random() * 100000) / 100,
                     contextMenuHeader: intl.formatMessage(messages.contextMenuHeader, {
                       bankName: bank.name,
                       accountName: account.name,
