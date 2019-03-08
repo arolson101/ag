@@ -392,5 +392,11 @@ export const mapIconName = (icon?: IconName): string | undefined => {
 }
 
 const ImageSourceIcon: React.FC<{ src: ImageSource | undefined }> = ({ src }) => (
-  <Icon component={src ? () => <Image size={24} src={src} /> : undefined} />
+  <Icon
+    component={
+      src
+        ? () => <Avatar size='small' shape='square' style={{ borderRadius: 0 }} src={src.uri} />
+        : undefined
+    }
+  />
 )
