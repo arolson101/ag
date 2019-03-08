@@ -1,4 +1,12 @@
-import { AlertParams, IconName, ListItem, LoadingOverlayProps, UiContext } from '@ag/core'
+import {
+  AlertParams,
+  IconName,
+  ListItem,
+  LoadingOverlayProps,
+  NavMenuItem,
+  UiContext,
+} from '@ag/core'
+import { ImageSource } from '@ag/util'
 import {
   Avatar,
   Button,
@@ -6,6 +14,7 @@ import {
   Divider,
   Dropdown,
   Icon,
+  Layout,
   List,
   Menu,
   message,
@@ -106,8 +115,36 @@ export const ui: UiContext = {
     }
   },
 
+  // navigation
+  NavMenu: ({ items }) => (
+    <Layout.Sider>
+      <Menu
+        defaultOpenKeys={items.flatMap(getNavMenuOpenKeys)}
+        selectedKeys={items.flatMap(getNavMenuSelectedKeys)}
+        selectable
+        inlineIndent={10}
+        mode='inline'
+        style={{ height: '100%' }}
+        onClick={item => {
+          log('NavMenu onClick %o', item)
+        }}
+      >
+        {items.map(buildNavMenu)}
+      </Menu>
+    </Layout.Sider>
+  ),
+
   // layout
-  Card: ({ children }) => <Card>{children}</Card>,
+  Card: ({ image, title, children }) => (
+    <Card title={title} extra={undefined}>
+      <Card.Meta
+        avatar={image && <ImageSourceIcon src={image} />}
+        title={title}
+        // description="This is the description"
+      />
+      {children}
+    </Card>
+  ),
   Row: ({ left, right, center, flex, children }) => (
     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex }}>
       {children}
@@ -198,15 +235,11 @@ export const ui: UiContext = {
           <List.Item>
             <List.Item.Meta
               title={title}
-              avatar={
-                image && (
-                  <Avatar style={{ opacity: 0.25 }} size='small' shape='square' src={image.uri} />
-                )
-              }
+              avatar={image && <ImageSourceIcon src={image} />}
               description={subtitle}
               // description={
               //   <>
-              //     {image && <Avatar size='small' shape='square' src={image.uri} />}
+              //     {image && <ImageSourceIcon src={image} />}
               //     {subtitle}
               //   </>
               // }
@@ -294,6 +327,42 @@ export const ui: UiContext = {
   Tab: Tabs.TabPane as any,
 }
 
+const buildNavMenu = (item: NavMenuItem) =>
+  item.divider ? (
+    <Menu.Divider key={item.key} />
+  ) : item.subitems ? (
+    <Menu.SubMenu
+      key={item.key}
+      title={
+        <span>
+          {item.image && <Icon component={() => <ImageSourceIcon src={item.image} />} />}
+          <span>{item.title}</span>
+        </span>
+      }
+    >
+      {item.subitems.map(buildNavMenu)}
+    </Menu.SubMenu>
+  ) : (
+    <Menu.Item key={item.key} onClick={item.onClick} title={item.title}>
+      <span>
+        {item.image && <Icon component={() => <ImageSourceIcon src={item.image} />} />}
+        <span>{item.title}</span>
+        <br />
+        <span>{item.title}</span>
+      </span>
+    </Menu.Item>
+  )
+
+const getNavMenuOpenKeys = (item: NavMenuItem): string[] => [
+  ...(item.subitems ? [item.key] : []),
+  ...(item.subitems ? item.subitems.flatMap(getNavMenuOpenKeys) : []),
+]
+
+const getNavMenuSelectedKeys = (item: NavMenuItem): string[] => [
+  ...(item.active ? [item.key] : []),
+  ...(item.subitems ? item.subitems.flatMap(getNavMenuSelectedKeys) : []),
+]
+
 export const mapIconName = (icon?: IconName): string | undefined => {
   // https://beta.ant.design/components/icon/
   switch (icon) {
@@ -321,3 +390,7 @@ export const mapIconName = (icon?: IconName): string | undefined => {
       return icon
   }
 }
+
+const ImageSourceIcon: React.FC<{ src: ImageSource | undefined }> = ({ src }) => (
+  <Icon component={src ? () => <Image size={24} src={src} /> : undefined} />
+)

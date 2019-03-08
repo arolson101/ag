@@ -55,6 +55,9 @@ export const ui: Omit<UiContext, RNNTypes> = {
     )
   },
 
+  // navigation
+  NavMenu: ({ items }) => null,
+
   // layout
   Card: ({ children }) => <Card>{children}</Card>,
   Row: ({ left, right, center, flex, children }) => (

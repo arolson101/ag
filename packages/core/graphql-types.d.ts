@@ -102,6 +102,42 @@ export namespace Cancel {
   }
 }
 
+export namespace MenuBar {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    banks: Banks[]
+  }
+
+  export type Banks = {
+    __typename?: 'Bank'
+
+    id: string
+
+    name: string
+
+    favicon: ImageSource
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
+  }
+}
+
 export namespace GetFavico {
   export type Variables = {
     url: string

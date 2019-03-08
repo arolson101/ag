@@ -38,6 +38,11 @@ export interface ButtonProps {
   icon?: IconName | React.ReactElement<any>
 }
 
+export interface CardProps {
+  image?: ImageSource
+  title?: string
+}
+
 export interface DialogProps {
   title: string
   isOpen: boolean
@@ -77,6 +82,21 @@ export interface ButtonConfig {
   disabled?: boolean
 }
 
+export interface NavMenuItem {
+  key: string
+  divider?: boolean
+  image?: ImageSource
+  title?: string
+  active?: boolean
+  onClick?: () => any
+  subitems?: NavMenuItem[]
+  actions?: ActionItem[]
+}
+
+export interface NavMenuProps {
+  items: NavMenuItem[]
+}
+
 export interface TabsProps {
   defaultActiveKey: string
   id: string
@@ -99,7 +119,7 @@ export const tabConfig = (id: string, name: string) => ({
 
 export interface ImageProps {
   src: ImageSource
-  size?: number
+  size?: number | string
   margin?: number
   title?: string
 }
@@ -127,8 +147,11 @@ export interface UiContext {
   Dialog: ComponentType<DialogProps>
   LoadingOverlay: ComponentType<LoadingOverlayProps>
 
+  // navigation
+  NavMenu: ComponentType<NavMenuProps>
+
   // layout
-  Card: ComponentType<{}>
+  Card: ComponentType<CardProps>
   Row: ComponentType<{ left?: boolean; right?: boolean; center?: boolean; flex?: number }>
   Column: ComponentType<{ top?: boolean; bottom?: boolean; center?: boolean; flex?: number }>
   Grid: ComponentType<GridProps>
