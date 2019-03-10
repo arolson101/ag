@@ -77,7 +77,7 @@ export interface GridProps<T = any> {
 
 export interface ButtonConfig {
   title: string
-  onClick: (e: React.SyntheticEvent) => any
+  onClick: () => any
   isDanger?: boolean
   disabled?: boolean
 }

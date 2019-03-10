@@ -1,29 +1,40 @@
-patch-package
+diff --git a/node_modules/typeorm/.DS_Store b/node_modules/typeorm/.DS_Store
+new file mode 100644
+index 0000000..d9d0c1f
+Binary files /dev/null and b/node_modules/typeorm/.DS_Store differ
+diff --git a/node_modules/typeorm/driver/.DS_Store b/node_modules/typeorm/driver/.DS_Store
+new file mode 100644
+index 0000000..eccfcdc
+Binary files /dev/null and b/node_modules/typeorm/driver/.DS_Store differ
+diff --git a/node_modules/typeorm/driver/sqlite/SqliteDriver.js b/node_modules/typeorm/driver/sqlite/SqliteDriver.js
+index 4d4bb98..8f15190 100644
 --- a/node_modules/typeorm/driver/sqlite/SqliteDriver.js
 +++ b/node_modules/typeorm/driver/sqlite/SqliteDriver.js
-@@ -147,7 +147,7 @@ var SqliteDriver = /** @class */ (function (_super) {
+@@ -103,7 +103,7 @@ var SqliteDriver = /** @class */ (function (_super) {
       */
      SqliteDriver.prototype.loadDependencies = function () {
          try {
 -            this.sqlite = PlatformTools_1.PlatformTools.load("sqlite3").verbose();
-+            this.sqlite = require("sqlite3").verbose();
++            this.sqlite = require.load("sqlite3").verbose();
          }
          catch (e) {
              throw new DriverPackageNotInstalledError_1.DriverPackageNotInstalledError("SQLite", "sqlite3");
-@@ -158,8 +158,8 @@ var SqliteDriver = /** @class */ (function (_super) {
+@@ -114,8 +114,8 @@ var SqliteDriver = /** @class */ (function (_super) {
       */
      SqliteDriver.prototype.createDatabaseDirectory = function (fullPath) {
          return new Promise(function (resolve, reject) {
 -            var mkdirp = PlatformTools_1.PlatformTools.load("mkdirp");
 -            var path = PlatformTools_1.PlatformTools.load("path");
-+            var mkdirp = require("mkdirp");
-+            var path = require("path");
++            var mkdirp = require.load("mkdirp");
++            var path = require.load("path");
              mkdirp(path.dirname(fullPath), function (err) { return err ? reject(err) : resolve(); });
          });
      };
+diff --git a/node_modules/typeorm/platform/PlatformTools.js b/node_modules/typeorm/platform/PlatformTools.js
+index 0305ed1..ced6996 100644
 --- a/node_modules/typeorm/platform/PlatformTools.js
 +++ b/node_modules/typeorm/platform/PlatformTools.js
-@@ -73,71 +73,71 @@ var PlatformTools = /** @class */ (function () {
+@@ -39,77 +39,77 @@ var PlatformTools = /** @class */ (function () {
                  * mongodb
                  */
                  case "mongodb":
@@ -62,6 +73,13 @@ patch-package
                  case "redis":
 -                    return require("redis");
 +                    throw new Error('driver loading disabled') // return require("redis");
+                 /**
+                  * ioredis
+                  */
+                 case "ioredis":
+                 case "ioredis/cluster":
+-                    return require("ioredis");
++                    throw new Error('driver loading disabled') // return require("ioredis");
                  /**
                  * sqlite
                  */

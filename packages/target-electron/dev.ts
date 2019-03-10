@@ -73,10 +73,10 @@ const patchPackage = () => {
   return new Promise((resolve, reject) => {
     const child = spawn(wrapCmd('patch-package'), { cwd: path.resolve(__dirname, '..', '..') })
 
-    child.stdout.on('data', data => {
+    child.stdout!.on('data', data => {
       print(channels.patch, data.toString())
     })
-    child.stderr.on('data', data => {
+    child.stderr!.on('data', data => {
       print(channels.patch, data.toString())
     })
 
@@ -207,10 +207,10 @@ const runElectron = () => {
   const args = ['--remote-debugging-port=9223', 'dist', '--url', `http://localhost:${port}`]
   print(channels.electron, 'electron ' + args.join(' '))
   electronProcess = spawn(wrapCmd('electron'), args)
-  electronProcess.stdout.on('data', data => {
+  electronProcess.stdout!.on('data', data => {
     print(channels.electron, data.toString())
   })
-  electronProcess.stderr.on('data', data => {
+  electronProcess.stderr!.on('data', data => {
     print(channels.electron, data.toString())
   })
   electronProcess.on('exit', electronExit)

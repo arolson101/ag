@@ -45,7 +45,7 @@
     "react-native-fs": "^2.13.3",
     "react-native-sqlite-storage": "^3.3.9",
     "react-native-stream": "^0.1.9",
-    "typeorm": "0.2.11"
+    "typeorm": "^0.2.14"
   },
   "devDependencies": {
     "@types/debug": "^0.0.31",
@@ -60,10 +60,14 @@
     "@types/storybook__addon-links": "^3.3.3",
     "@types/storybook__react": "^4.0.0",
     "@types/storybook__react-native": "^3.0.4",
-    "jest": "^23.6.0",
+    "@types/webpack": "^4.4.25",
+    "css-loader": "^2.1.1",
+    "jest": "^24.3.1",
     "metro-react-native-babel-preset": "^0.45.0",
     "react-native-typescript-transformer": "^1.2.11",
+    "style-loader": "^0.23.1",
     "ts-transform-graphql-tag": "^0.2.1",
-    "webpack": "^4.28.3"
+    "wait-on": "^3.2.0",
+    "webpack": "^4.29.6"
   }
 }

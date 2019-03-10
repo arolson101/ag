@@ -38,7 +38,7 @@ const ui: UiContext = {
             {primary && (
               <Button
                 full
-                onPress={e => primary.onClick(e as any)}
+                onPress={primary.onClick}
                 disabled={primary.disabled}
                 danger={primary.isDanger}
               >
@@ -48,7 +48,7 @@ const ui: UiContext = {
             {secondary && (
               <Button
                 full
-                onPress={e => secondary.onClick(e as any)}
+                onPress={secondary.onClick}
                 disabled={secondary.disabled}
                 danger={secondary.isDanger}
               >

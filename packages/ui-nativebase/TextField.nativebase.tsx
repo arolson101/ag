@@ -76,7 +76,6 @@ export class TextField<Values> extends React.PureComponent<TextFieldProps<Values
               {rows && rows > 0 ? (
                 <Textarea
                   editable={!disabled}
-                  bordered={false}
                   style={{ flex: 1 }}
                   rowSpan={rows}
                   onChangeText={this.onChangeText}

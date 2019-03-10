@@ -17,7 +17,7 @@
     "axios": "^0.18.0",
     "cuid": "^2.1.4",
     "debug": "^4.1.1",
-    "graphql": "^14.0.2",
+    "graphql": "^14.1.1",
     "icojs": "^0.12.3",
     "is-url": "^1.2.4",
     "minidom": "^1.0.0",
@@ -27,7 +27,7 @@
     "sanitize-filename": "^1.6.1",
     "type-graphql": "^0.16.0",
     "typedi": "^0.8.0",
-    "typeorm": "0.2.11"
+    "typeorm": "^0.2.14"
   },
   "devDependencies": {
     "@2fd/graphdoc": "^2.4.0",

@@ -67,7 +67,7 @@ export class Dialog extends React.PureComponent<DialogProps> {
 
   navigationButtonPressed(e: NavigationButtonPressedEvent) {
     // log('navigationButtonPressed: %o', e)
-    this.props[e.buttonId as TopButtonId]!.onClick(e as any)
+    this.props[e.buttonId as TopButtonId]!.onClick()
   }
 
   render() {
