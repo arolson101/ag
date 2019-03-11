@@ -20,7 +20,7 @@
     "test": "jest",
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
     "prettier-package-json": "prettier-package-json --write --key-order ./package.json packages/*/package.json --key-order name,private,version,description,license,author,maintainers,contributors,homepage,repository,bugs,workspaces,main,build,module,browser,man,preferGlobal,bin,files,directories,scripts,config,jest,optionalDependencies,dependencies,bundleDependencies,bundledDependencies,peerDependencies,devDependencies,keywords,engines,engine-strict,engineStrict,os,cpu,publishConfig",
-    "update-packages": "lerna exec --concurrency 1 -- yarn upgrade --latest"
+    "update-packages": "lerna exec --concurrency 1 -- ncu -u"
   },
   "dependencies": {},
   "devDependencies": {
@@ -58,6 +58,7 @@
     "tslint": "^5.13.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.0.1",
+    "type-graphql": "^0.17.0",
     "typeorm": "^0.2.14",
     "typescript": "^3.3.3333",
     "webpack": "^4.29.6",

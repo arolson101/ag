@@ -15,20 +15,20 @@
     "accounting": "^0.4.1",
     "debug": "^4.1.1",
     "formik": "^1.5.1",
-    "native-base": "^2.10.0",
-    "react": "^16.7.0",
-    "react-intl": "^2.7.2",
-    "react-native": "^0.57.8",
+    "native-base": "^2.12.1",
+    "react": "^16.8.4",
+    "react-intl": "^2.8.0",
+    "react-native": "^0.58.6",
     "react-native-collapsible": "^1.4.0",
-    "react-native-vector-icons": "^6.2.0",
+    "react-native-vector-icons": "^6.3.0",
     "utility-types": "^3.4.1"
   },
   "devDependencies": {
     "@types/accounting": "^0.4.1",
-    "@types/debug": "^0.0.31",
-    "@types/react": "^16.7.18",
-    "@types/react-intl": "^2.3.14",
-    "@types/react-native": "^0.57.32",
+    "@types/debug": "^4.1.2",
+    "@types/react": "^16.8.7",
+    "@types/react-intl": "^2.3.17",
+    "@types/react-native": "^0.57.38",
     "@types/react-native-vector-icons": "^4.6.4"
   }
 }

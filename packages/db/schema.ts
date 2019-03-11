@@ -1,5 +1,5 @@
 import { ImageSource } from '@ag/util'
-import { buildSchemaSync, useContainer as gqlUseContainer } from 'type-graphql'
+import { buildSchemaSync } from 'type-graphql'
 import { Container } from 'typedi'
 import { useContainer as ormUseContainer } from 'typeorm'
 import { ImageSourceScalar } from './customTypes'
@@ -16,7 +16,6 @@ import {
   TransactionResolver,
 } from './resolvers'
 
-gqlUseContainer(Container)
 ormUseContainer(Container)
 
 export const schema = buildSchemaSync({
@@ -32,6 +31,7 @@ export const schema = buildSchemaSync({
     ImageResolver,
     OnlineResolver,
   ],
+  container: Container,
   scalarsMap: [{ type: ImageSource, scalar: ImageSourceScalar }],
   validate: false, // https://github.com/19majkel94/type-graphql/issues/150
 })

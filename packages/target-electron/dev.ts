@@ -261,10 +261,6 @@ const runWebpackDevServer = async (promises: Array<Promise<any>>) => {
       stats: minimalStats,
     }
     WebpackDevServer.addDevServerEntrypoints(config, options)
-    config.plugins = [
-      ...(config.plugins || []), //
-      new webpack.HotModuleReplacementPlugin(),
-    ]
     const compiler = webpack(config)
     server = new WebpackDevServer(compiler, options)
     server.listen(port, host, () => {
