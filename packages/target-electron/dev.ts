@@ -240,6 +240,9 @@ const runWebpackForMain = async (promises: Array<Promise<any>>) => {
         if (!stats.hasErrors()) {
           // restart electron
           runElectron()
+        } else {
+          closeEverything(channels.webpack)
+          reject(err)
         }
       }
     })

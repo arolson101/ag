@@ -1,23 +1,32 @@
 /* tslint:disable:no-implicit-dependencies */
 import path from 'path'
 import webpack from 'webpack'
-
-import apppkg from '../core/package.json'
 import electronpkg from './package.json'
 
-const mainProcessDeps = ['commander', 'electron-is-dev', 'electron-window-state']
+const externals = [
+  ...Object.keys(require('./webpack.main').externals), //
+]
 
-const packages = Object.keys({
-  ...apppkg.dependencies,
-  ...electronpkg.dependencies,
-})
-  .filter(dep => !dep.startsWith('@ag/'))
-  .filter(dep => !mainProcessDeps.includes(dep))
+const isInternalProject = (name: string) => name.startsWith('@ag/')
+
+const packages = Object.keys(electronpkg.dependencies)
+  .flatMap(dep =>
+    isInternalProject(dep)
+      ? Object.keys(require(`${dep}/package.json`).dependencies) //
+      : []
+  )
+  .filter(dep => !isInternalProject(dep))
+  .filter(dep => !externals.includes(dep))
+  .filter((dep, i, arr) => arr.indexOf(dep) === i)
+  .sort()
+
+// console.log('deps: ', packages)
 
 const config: webpack.Configuration = {
   name: 'vendor',
   // mode: "development || "production",
   resolve: {
+    aliasFields: [],
     extensions: ['.mjs', '.js', '.jsx'],
   },
   module: {

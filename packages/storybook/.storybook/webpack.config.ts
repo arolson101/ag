@@ -4,6 +4,7 @@ import webpack from 'webpack'
 
 const config: webpack.Configuration = {
   resolve: {
+    aliasFields: [],
     extensions: ['.ts', '.tsx', '.electron.ts', '.electron.tsx', '.mjs', '.js', '.jsx', '.json'],
   },
   target: 'web',

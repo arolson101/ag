@@ -24,6 +24,7 @@ const config: webpack.Configuration = {
     // },
   },
   resolve: {
+    aliasFields: [],
     extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
   },
   module: {

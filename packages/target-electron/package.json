@@ -11,7 +11,8 @@
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
     "dev": "ts-node ./dev.ts",
-    "electron-builder": "electron-builder install-app-deps"
+    "electron-builder": "electron-builder install-app-deps",
+    "vendor": "webpack --config webpack.dll.ts --mode development"
   },
   "dependencies": {
     "@ag/core": "^0.0.0",
