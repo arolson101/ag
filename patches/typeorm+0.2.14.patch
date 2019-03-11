@@ -1,35 +1,11 @@
 diff --git a/node_modules/typeorm/.DS_Store b/node_modules/typeorm/.DS_Store
 new file mode 100644
 index 0000000..e69de29
-diff --git a/node_modules/typeorm/browser/driver/sqlite/SqliteDriver.js b/node_modules/typeorm/browser/driver/sqlite/SqliteDriver.js
-index 0a79ea6..0536cf3 100644
---- a/node_modules/typeorm/browser/driver/sqlite/SqliteDriver.js
-+++ b/node_modules/typeorm/browser/driver/sqlite/SqliteDriver.js
-@@ -101,7 +101,7 @@ var SqliteDriver = /** @class */ (function (_super) {
-      */
-     SqliteDriver.prototype.loadDependencies = function () {
-         try {
--            this.sqlite = PlatformTools.load("sqlite3").verbose();
-+            this.sqlite = require("sqlite3").verbose();
-         }
-         catch (e) {
-             throw new DriverPackageNotInstalledError("SQLite", "sqlite3");
-@@ -112,8 +112,8 @@ var SqliteDriver = /** @class */ (function (_super) {
-      */
-     SqliteDriver.prototype.createDatabaseDirectory = function (fullPath) {
-         return new Promise(function (resolve, reject) {
--            var mkdirp = PlatformTools.load("mkdirp");
--            var path = PlatformTools.load("path");
-+            var mkdirp = require("mkdirp");
-+            var path = require("path");
-             mkdirp(path.dirname(fullPath), function (err) { return err ? reject(err) : resolve(); });
-         });
-     };
 diff --git a/node_modules/typeorm/driver/.DS_Store b/node_modules/typeorm/driver/.DS_Store
 new file mode 100644
 index 0000000..e69de29
 diff --git a/node_modules/typeorm/driver/sqlite/SqliteDriver.js b/node_modules/typeorm/driver/sqlite/SqliteDriver.js
-index 4d4bb98..8f15190 100644
+index 4d4bb98..5f83cd0 100644
 --- a/node_modules/typeorm/driver/sqlite/SqliteDriver.js
 +++ b/node_modules/typeorm/driver/sqlite/SqliteDriver.js
 @@ -103,7 +103,7 @@ var SqliteDriver = /** @class */ (function (_super) {
@@ -37,7 +13,7 @@ index 4d4bb98..8f15190 100644
      SqliteDriver.prototype.loadDependencies = function () {
          try {
 -            this.sqlite = PlatformTools_1.PlatformTools.load("sqlite3").verbose();
-+            this.sqlite = require.load("sqlite3").verbose();
++            this.sqlite = require("sqlite3").verbose();
          }
          catch (e) {
              throw new DriverPackageNotInstalledError_1.DriverPackageNotInstalledError("SQLite", "sqlite3");
@@ -47,8 +23,8 @@ index 4d4bb98..8f15190 100644
          return new Promise(function (resolve, reject) {
 -            var mkdirp = PlatformTools_1.PlatformTools.load("mkdirp");
 -            var path = PlatformTools_1.PlatformTools.load("path");
-+            var mkdirp = require.load("mkdirp");
-+            var path = require.load("path");
++            var mkdirp = require("mkdirp");
++            var path = require("path");
              mkdirp(path.dirname(fullPath), function (err) { return err ? reject(err) : resolve(); });
          });
      };
