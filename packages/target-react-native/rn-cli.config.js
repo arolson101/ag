@@ -164,6 +164,10 @@ module.exports = (async () => {
         /typeorm\/(?!browser).*/,
         /electron/,
         /storybook/,
+        /osenv.*/,
+        /nopt.*/,
+        /node-pre-gyp.*/,
+        /sqlite3.*/,
       ]),
       extraNodeModules: {
         ...require('node-libs-react-native'),
@@ -177,7 +181,7 @@ module.exports = (async () => {
         ...extraNodeModules,
       },
 
-      sourceExts: [...sourceExts, 'mjs'],
+      // sourceExts: [...sourceExts, 'mjs'],
     },
     watchFolders: alternateRoots,
     serializer: {
