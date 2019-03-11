@@ -10,11 +10,11 @@ const config: webpack.Configuration = {
   target: 'web',
   module: {
     rules: [
-      {
-        test: /\.mjs$/,
-        include: /node_modules/,
-        type: 'javascript/auto',
-      },
+      // {
+      //   test: /\.mjs$/,
+      //   include: /node_modules/,
+      //   type: 'javascript/auto',
+      // },
       {
         test: /\.tsx?$/,
         exclude: '/node_modules/',
@@ -23,10 +23,10 @@ const config: webpack.Configuration = {
           getCustomTransformers: () => ({ before: [getTransformer()] }),
         },
       },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
+      // {
+      //   test: /\.css$/,
+      //   use: ['style-loader', 'css-loader'],
+      // },
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         loader: 'file-loader?name=font/[name].[ext]',
