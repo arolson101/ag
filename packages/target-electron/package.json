@@ -30,6 +30,7 @@
     "query-string": "^6.3.0",
     "react": "^16.8.4",
     "react-apollo": "^2.5.2",
+    "react-apollo-hooks": "^0.4.3",
     "react-dom": "^16.8.4",
     "react-hot-loader": "^4.8.0",
     "react-router-dom": "^4.3.1",

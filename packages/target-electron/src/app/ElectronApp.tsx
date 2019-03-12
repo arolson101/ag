@@ -4,6 +4,7 @@ import { ui } from '@ag/ui-antd'
 import axios from 'axios'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { hot } from 'react-hot-loader/root'
 import { store } from '../store'
 import { ElectronDialogs } from './ElectronDialogs'
@@ -26,10 +27,12 @@ class ElectronApp extends React.PureComponent {
   render() {
     return (
       <ApolloProvider client={client}>
-        <App context={context}>
-          <ElectronRouter />
-          <ElectronDialogs />
-        </App>
+        <ApolloHooksProvider client={client}>
+          <App context={context}>
+            <ElectronRouter />
+            <ElectronDialogs />
+          </App>
+        </ApolloHooksProvider>
       </ApolloProvider>
     )
   }

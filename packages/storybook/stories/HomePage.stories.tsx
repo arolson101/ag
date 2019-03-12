@@ -1,5 +1,5 @@
 // tslint:disable:max-line-length
-import { HomePage } from '@ag/core'
+import { HomePage, HomePageComponent } from '@ag/core'
 import React from 'react'
 import { MockApp, storiesOf } from './helpers'
 
@@ -177,3 +177,4 @@ storiesOf('Pages/HomePage', module) //
       <HomePage />
     </MockApp>
   ))
+  .add('test', () => <HomePageComponent {...fullMocks[0].result as any} />)

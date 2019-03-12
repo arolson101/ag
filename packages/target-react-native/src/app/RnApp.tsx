@@ -4,6 +4,7 @@ import axios from 'axios'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { YellowBox } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { iconInit } from '../icons'
@@ -32,7 +33,9 @@ const client = createClient({ openDb, deleteDb, axios, ...context })
 
 const RnApp: React.FC = ({ children }) => (
   <ApolloProvider client={client}>
-    <App context={context}>{children}</App>
+    <ApolloHooksProvider client={client}>
+      <App context={context}>{children}</App>
+    </ApolloHooksProvider>
   </ApolloProvider>
 )
 

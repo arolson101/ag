@@ -1,7 +1,8 @@
 import debug from 'debug'
-import React from 'react'
+import React, { useContext, useState } from 'react'
+import { QueryHookResult } from 'react-apollo-hooks'
 import { actions } from '../actions'
-import { AppQuery, gql, Gql, Link } from '../components'
+import { gql, Gql, Link, useAppQuery } from '../components'
 import { BankDisplay } from '../components/BankDisplay'
 import { AppContext } from '../context'
 import * as T from '../graphql-types'
@@ -12,50 +13,50 @@ export namespace HomePage {
   export interface Props {}
 }
 
-export class HomePage extends React.PureComponent<HomePage.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+export const HomePage = (props: HomePage.Props) => {
+  const { dispatch } = useContext(AppContext)
+  const [dispatched, setDispatched] = useState(false)
+  const q = useAppQuery(HomePage.queries.HomePage)
 
-  static readonly id = 'HomePage'
+  if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
+    dispatch(actions.openDlg.login())
+    setDispatched(true)
+  }
 
-  static readonly queries = {
-    HomePage: gql`
-      query HomePage {
-        appDb {
-          banks {
-            ...BankDisplay
-          }
+  return <HomePageComponent {...q} />
+}
+
+HomePage.id = 'HomePage'
+
+HomePage.queries = {
+  HomePage: gql`
+    query HomePage {
+      appDb {
+        banks {
+          ...BankDisplay
         }
       }
-      ${BankDisplay.fragments.BankDisplay}
-    ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
-  }
+    }
+    ${BankDisplay.fragments.BankDisplay}
+  ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
+}
 
-  render() {
-    const { ui, dispatch } = this.context
-    const { Page, Row, Text } = ui
+export const HomePageComponent: React.FC<
+  QueryHookResult<T.HomePage.Query, T.HomePage.Variables>
+> = ({ data, loading }) => {
+  const {
+    ui: { Page, Row, Text },
+  } = useContext(AppContext)
 
-    return (
-      <Page>
-        <AppQuery
-          query={HomePage.queries.HomePage}
-          onCompleted={({ appDb }) => {
-            if (!appDb) {
-              dispatch(actions.openDlg.login())
-            }
-          }}
-        >
-          {({ appDb }) => (
-            <>
-              <Text header>Accounts</Text>
-              {appDb && appDb.banks.map(bank => <BankDisplay bank={bank} key={bank.id} />)}
-              <Row>
-                <Link dispatch={actions.openDlg.bankCreate()}>add bank</Link>
-              </Row>
-            </>
-          )}
-        </AppQuery>
-      </Page>
-    )
-  }
+  return (
+    <Page>
+      <Text header>Accounts</Text>
+      {data &&
+        data.appDb &&
+        data.appDb.banks.map(bank => <BankDisplay bank={bank} key={bank.id} />)}
+      <Row>
+        <Link dispatch={actions.openDlg.bankCreate()}>add bank</Link>
+      </Row>
+    </Page>
+  )
 }
