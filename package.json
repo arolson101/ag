@@ -29,6 +29,7 @@
     "@babel/runtime": "^7.3.4",
     "@types/depcheck": "^0.6.0",
     "@types/jest": "^24.0.11",
+    "@types/graphql": "^14.0.7",
     "@types/webpack-bundle-analyzer": "^2.13.1",
     "babel-core": "^7.0.0-0",
     "babel-loader": "^8.0.4",

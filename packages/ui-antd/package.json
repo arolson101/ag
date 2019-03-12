@@ -10,7 +10,8 @@
     "debug": "^4.1.1",
     "formik": "^1.5.1",
     "nprogress": "^0.2.0",
-    "react": "^16.8.4"
+    "react": "^16.8.4",
+    "react-dom": "^16.8.4"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.7",

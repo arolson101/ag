@@ -41,6 +41,8 @@ interface PackageJson {
           'cross-env',
           'sqlite3',
           'electron-builder',
+          'react-dom',
+          'prop-types',
 
           'jest',
 
