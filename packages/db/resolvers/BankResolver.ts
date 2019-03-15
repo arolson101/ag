@@ -1,8 +1,8 @@
 import { diff } from '@ag/util'
 import assert from 'assert'
-import cuid from 'cuid'
 import debug from 'debug'
-import { Arg, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
+import { DbContext } from '../DbContext'
 import { Account, Bank, BankInput } from '../entities'
 import { AppDb } from './AppDb'
 
@@ -27,6 +27,7 @@ export class BankResolver {
 
   @Mutation(returns => Bank)
   async saveBank(
+    @Ctx() context: DbContext,
     @Arg('input') input: BankInput,
     @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Bank> {
@@ -40,7 +41,8 @@ export class BankResolver {
       changes = [Bank.change.edit(t, bankId, q)]
       bank.update(t, q)
     } else {
-      bank = new Bank(cuid(), input)
+      const { uniqueId } = context
+      bank = new Bank(uniqueId(), input)
       bankId = bank.id
       changes = [Bank.change.add(t, bank)]
     }

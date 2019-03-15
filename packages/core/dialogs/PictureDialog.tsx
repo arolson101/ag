@@ -1,6 +1,5 @@
 import { ImageSource } from '@ag/util'
 import ApolloClient from 'apollo-client'
-import cuid from 'cuid'
 import debug from 'debug'
 import { Formik } from 'formik'
 import gql from 'graphql-tag'
@@ -59,7 +58,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
     this.state = {
       url: props.url,
-      cancelToken: props.cancelToken || cuid(),
+      cancelToken: props.cancelToken || '',
     }
   }
 
@@ -73,6 +72,8 @@ export class PictureDialog extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     log('componentDidMount')
+    const { uniqueId } = this.context
+    this.setState({ cancelToken: this.props.cancelToken || uniqueId() })
     // this.getImages()
   }
 
@@ -91,7 +92,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
   render() {
     const { isOpen } = this.props
     const { url, cancelToken } = this.state
-    const { intl, ui } = this.context
+    const { intl, ui, uniqueId } = this.context
     const { Dialog, Button, Spinner, Row, Grid, Tile, Text, Image } = ui
     const { Form, TextField } = typedFields<Values>(ui)
 
@@ -118,7 +119,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
                 await this.cancel()
                 this.setState({
                   url: values.url,
-                  cancelToken: this.props.cancelToken || cuid(),
+                  cancelToken: this.props.cancelToken || uniqueId(),
                 })
               } finally {
                 factions.setSubmitting(false)

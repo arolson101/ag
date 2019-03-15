@@ -1,7 +1,6 @@
 import { fixUrl, generateAvatar, ImageSource, isUrl } from '@ag/util'
 import ApolloClient from 'apollo-client'
 import assert from 'assert'
-import cuid = require('cuid')
 import debug from 'debug'
 import { Field, FieldProps, FormikProps } from 'formik'
 import gql from 'graphql-tag'
@@ -58,8 +57,9 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   }
 
   initCancelToken() {
+    const { uniqueId } = this.context
     if (!this.cancelToken) {
-      this.cancelToken = this.props.cancelToken || cuid()
+      this.cancelToken = this.props.cancelToken || uniqueId()
     }
     return this.cancelToken
   }

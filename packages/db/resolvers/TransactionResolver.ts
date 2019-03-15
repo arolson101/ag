@@ -1,6 +1,6 @@
 import { diff } from '@ag/util'
-import cuid from 'cuid'
-import { Arg, Mutation, Resolver } from 'type-graphql'
+import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
+import { DbContext } from '../DbContext'
 import { DbChange, Transaction, TransactionInput } from '../entities'
 import { AppDb } from './AppDb'
 
@@ -10,6 +10,7 @@ export class TransactionResolver {
 
   @Mutation(returns => Transaction)
   async saveTransaction(
+    @Ctx() context: DbContext,
     @Arg('input') input: TransactionInput,
     @Arg('transactionId', { nullable: true }) transactionId: string,
     @Arg('accountId', { nullable: true }) accountId?: string
@@ -28,7 +29,8 @@ export class TransactionResolver {
       if (!accountId) {
         throw new Error('when creating an transaction, accountId must be specified')
       }
-      transaction = new Transaction(cuid(), accountId, input)
+      const { uniqueId } = context
+      transaction = new Transaction(uniqueId(), accountId, input)
       transactionId = transaction.id
       changes = [{ table, t, adds: [transaction] }]
     }

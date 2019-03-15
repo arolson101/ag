@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import debug from 'debug'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
@@ -29,6 +30,10 @@ export class App extends React.PureComponent<App.Props> {
   }
 }
 
+const uniqueId = () => {
+  return crypto.randomBytes(16).toString('base64')
+}
+
 export namespace App {
   interface CreateContextParams {
     store: AppStore
@@ -39,6 +44,7 @@ export namespace App {
     const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
 
     const context: AppContext = {
+      uniqueId,
       store,
       dispatch,
       getState,

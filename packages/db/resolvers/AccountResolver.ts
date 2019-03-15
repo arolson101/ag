@@ -1,8 +1,8 @@
 import { diff } from '@ag/util'
 import assert from 'assert'
-import cuid from 'cuid'
 import debug from 'debug'
-import { Arg, Field, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
+import { Arg, Ctx, Field, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
+import { DbContext } from '../DbContext'
 import { Account, AccountInput, Bank, Transaction } from '../entities'
 import { AppDb } from './AppDb'
 
@@ -22,6 +22,7 @@ export class AccountResolver {
 
   @Mutation(returns => Account)
   async saveAccount(
+    @Ctx() context: DbContext,
     @Arg('input') input: AccountInput,
     @Arg('accountId', { nullable: true }) accountId?: string,
     @Arg('bankId', { nullable: true }) bankId?: string
@@ -39,7 +40,8 @@ export class AccountResolver {
       if (!bankId) {
         throw new Error('when creating an account, bankId must be specified')
       }
-      account = new Account(bankId, cuid(), input)
+      const { uniqueId } = context
+      account = new Account(bankId, uniqueId(), input)
       accountId = account.id
       changes = [Account.change.add(t, account)]
     }

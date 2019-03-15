@@ -20,6 +20,7 @@ export interface AppContext extends ClientDependencies {
   store: AppStore
   dispatch: Dispatch<AppAction>
   getState: () => AppState
+  uniqueId: () => string
 }
 
 const defaultContext: AppContext = null as any

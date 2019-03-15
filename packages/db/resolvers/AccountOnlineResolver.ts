@@ -1,5 +1,4 @@
 import { diff } from '@ag/util'
-import cuid from 'cuid'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
@@ -32,7 +31,8 @@ export class AccountOnlineResolver {
     @Ctx() context: DbContext, //
     @Arg('bankId') bankId: string
   ): Promise<Bank> {
-    const bank = await this.downloadAccountList(context, bankId, cuid())
+    const { uniqueId } = context
+    const bank = await this.downloadAccountList(context, bankId, uniqueId())
     return bank
   }
 
@@ -42,6 +42,7 @@ export class AccountOnlineResolver {
     @Arg('bankId') bankId: string,
     @Arg('cancelToken') cancelToken: string
   ): Promise<Bank> {
+    const { uniqueId } = context
     const app = this.appDb
     const bank = await app.bank(bankId)
     if (!bank.online) {
@@ -67,7 +68,7 @@ export class AccountOnlineResolver {
 
         const adds = accounts
           .filter(account => !existingAccounts.find(acct => accountsEqual(account, acct)))
-          .map(input => new Account(bankId, cuid(), input))
+          .map(input => new Account(bankId, uniqueId(), input))
 
         const edits = accounts
           .map(account => {
@@ -114,6 +115,7 @@ export class AccountOnlineResolver {
     @Arg('end') end: Date,
     @Arg('cancelToken') cancelToken: string
   ): Promise<Account> {
+    const { uniqueId } = context
     const app = this.appDb
     const bank = await app.bank(bankId)
     if (!bank.online) {
@@ -151,7 +153,7 @@ export class AccountOnlineResolver {
 
         const adds = txInputs
           .filter(tx => !existingTransactions.find(etx => transactionsEqual(etx, tx)))
-          .map(tx => new Transaction(accountId, cuid(), tx))
+          .map(tx => new Transaction(accountId, uniqueId(), tx))
 
         const edits = txInputs
           .map(tx => {
