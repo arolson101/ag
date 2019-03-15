@@ -1,5 +1,5 @@
 import debug from 'debug'
-import React from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppContext } from '../context'
@@ -7,64 +7,49 @@ import { BankForm } from '../forms'
 
 const log = debug('app:BankDialog')
 
-export namespace BankDialog {
-  export interface Props {
-    bankId?: string
-    isOpen: boolean
-    cancelToken?: string
-  }
+export interface BankDialogProps {
+  bankId?: string
+  isOpen: boolean
+  cancelToken?: string
 }
 
-export class BankDialog extends React.PureComponent<BankDialog.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+export const BankDialog = React.memo<BankDialogProps>(({ bankId, isOpen, cancelToken }) => {
+  const {
+    intl,
+    ui: { Dialog },
+    dispatch,
+  } = useContext(AppContext)
 
-  static readonly id = 'BankDialog'
+  const bankForm = useRef<BankForm>(null)
 
-  bankForm = React.createRef<BankForm>()
-
-  render() {
-    const { bankId, isOpen, cancelToken } = this.props
-    const {
-      intl,
-      ui: { Dialog },
-    } = this.context
-
-    return (
-      <Dialog
-        isOpen={isOpen}
-        onClose={this.close}
-        title={intl.formatMessage(bankId ? messages.titleEdit : messages.titleCreate)}
-        primary={{
-          title: intl.formatMessage(bankId ? messages.save : messages.create),
-          onClick: this.save,
-        }}
-        secondary={{
-          title: intl.formatMessage(messages.cancel),
-          onClick: this.close,
-        }}
-      >
-        <BankForm
-          onClosed={this.close}
-          ref={this.bankForm}
-          bankId={bankId}
-          cancelToken={cancelToken}
-        />
-      </Dialog>
-    )
-  }
-
-  save = () => {
-    if (this.bankForm.current) {
-      this.bankForm.current.save()
+  const save = useCallback(() => {
+    if (bankForm.current) {
+      bankForm.current.save()
     }
-  }
+  }, [bankForm.current])
 
-  close = () => {
-    const { dispatch } = this.context
+  const close = useCallback(() => {
     dispatch(actions.closeDlg('bank'))
-  }
-}
+  }, [dispatch])
+
+  return (
+    <Dialog
+      isOpen={isOpen}
+      onClose={close}
+      title={intl.formatMessage(bankId ? messages.titleEdit : messages.titleCreate)}
+      primary={{
+        title: intl.formatMessage(bankId ? messages.save : messages.create),
+        onClick: save,
+      }}
+      secondary={{
+        title: intl.formatMessage(messages.cancel),
+        onClick: close,
+      }}
+    >
+      <BankForm onClosed={close} ref={bankForm} bankId={bankId} cancelToken={cancelToken} />
+    </Dialog>
+  )
+})
 
 const messages = defineMessages({
   titleEdit: {
