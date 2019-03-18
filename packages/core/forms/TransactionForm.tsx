@@ -97,6 +97,7 @@ export class TransactionForm extends React.Component<TransactionForm.Props> {
               {saveTransaction => (
                 <>
                   <Formik<FormValues>
+                    enableReinitialize
                     initialValues={initialValues}
                     validate={values => {
                       const errors: FormikErrors<FormValues> = {}

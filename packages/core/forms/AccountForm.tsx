@@ -106,6 +106,7 @@ export class AccountForm extends React.PureComponent<AccountForm.Props> {
               {saveAccount => (
                 <Formik<FormValues>
                   validateOnBlur={false}
+                  enableReinitialize
                   initialValues={initialValues}
                   validate={values => {
                     const errors: FormikErrors<FormValues> = {}

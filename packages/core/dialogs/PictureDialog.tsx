@@ -112,6 +112,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
       >
         <Row>
           <Formik<Values>
+            enableReinitialize
             initialValues={initialValues}
             onSubmit={async (values, factions) => {
               try {

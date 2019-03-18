@@ -70,6 +70,7 @@ const Component = React.forwardRef<
       <Formik<FormValues>
         ref={formik}
         validateOnBlur={false}
+        enableReinitialize
         initialValues={initialValues}
         validate={values => {
           const errors: FormikErrors<FormValues> = {}
@@ -302,6 +303,8 @@ export const BankForm = combine(
     Component,
   }
 )
+
+BankForm.displayName = 'BankForm'
 
 const messages = defineMessages({
   save: {
