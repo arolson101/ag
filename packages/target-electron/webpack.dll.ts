@@ -16,7 +16,7 @@ const packages = Object.keys(electronpkg.dependencies)
   .flatMap(dep =>
     isInternalProject(dep)
       ? Object.keys(require(`${dep}/package.json`).dependencies) //
-      : []
+      : [dep]
   )
   .filter(dep => !isInternalProject(dep))
   .filter(dep => !externals.includes(dep))
