@@ -20,7 +20,7 @@ interface State {
   gettingIcon: boolean
 }
 
-export interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldProps {
+interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldProps {
   nameField: keyof Values & string
   favicoField: keyof Values & string
   favicoWidth: number

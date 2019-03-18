@@ -19,6 +19,8 @@ const bankId = 'cjr9drbdp0001415uh38a4g9j'
 const formProps = {
   cancelToken,
   onClosed: action('onClosed'),
+  loading: false,
+  saveBank: action('saveBank') as any,
 }
 
 const dialogProps = {
@@ -46,6 +48,13 @@ const downloadRequests: MockedResponse[] = [
   },
 ]
 
+const emptyData = {
+  appDb: {
+    bank: null,
+    __typename: 'AppDb',
+  },
+}
+
 const emptyMocks: MockedResponse[] = [
   {
     request: {
@@ -53,12 +62,7 @@ const emptyMocks: MockedResponse[] = [
       variables: { bankId: undefined },
     },
     result: {
-      data: {
-        appDb: {
-          bank: null,
-          __typename: 'AppDb',
-        },
-      },
+      data: emptyData,
     },
   },
   ...downloadRequests,
@@ -126,17 +130,29 @@ storiesOf('Dialogs/BankDialog', module)
 
 storiesOf('Forms/BankForm', module)
   .add('create', () => (
-    <MockApp mocks={emptyMocks}>
-      <BankForm {...formProps} />
+    <MockApp>
+      <BankForm.Component
+        {...formProps} //
+        data={(emptyMocks[0].result as any).data}
+      />
     </MockApp>
   ))
   .add('edit', () => (
-    <MockApp mocks={addDelay(editMocks, 1000)}>
-      <BankForm {...formProps} bankId={bankId} />
+    <MockApp>
+      <BankForm.Component
+        {...formProps} //
+        bankId={bankId}
+        data={(editMocks[0].result as any).data}
+      />
     </MockApp>
   ))
   .add('load forever', () => (
-    <MockApp mocks={addDelay(editMocks, forever)}>
-      <BankForm {...formProps} bankId={bankId} />
+    <MockApp>
+      <BankForm.Component
+        {...formProps}
+        loading={true}
+        bankId={bankId}
+        data={(editMocks[0].result as any).data}
+      />
     </MockApp>
   ))
