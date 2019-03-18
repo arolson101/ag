@@ -5,7 +5,7 @@ import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 
-const log = debug('rn:Form')
+const log = debug('ui-nativebase:Form')
 
 export interface FormContextChild {
   focus: () => any

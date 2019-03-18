@@ -6,8 +6,7 @@ import { execute } from 'graphql'
 import { DbContext } from './DbContext'
 import { schema } from './schema'
 
-const log = debug('app:client')
-log.enabled = false // process.env.NODE_ENV !== 'production'
+const log = debug('db:client')
 
 export class ExecuteLink extends ApolloLink {
   constructor(private context: DbContext) {

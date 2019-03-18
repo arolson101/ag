@@ -11,7 +11,7 @@ import {
   TextFieldProps,
 } from './uiContextForms'
 
-const log = debug('app:uiContext')
+const log = debug('core:uiContext')
 
 export type IconName = 'url' | 'refresh' | 'image' | 'library' | 'trash' | 'edit' | 'add' | 'sync'
 

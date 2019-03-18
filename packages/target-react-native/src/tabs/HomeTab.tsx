@@ -7,7 +7,6 @@ import { icons } from '../icons'
 import { VisibleRoot } from './VisibleRoot'
 
 const log = debug('rn:HomeTab')
-log.enabled = true
 
 interface Props {
   componentId: string

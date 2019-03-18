@@ -7,7 +7,7 @@ import { AppContext } from '../context'
 import { ErrorDisplay } from './ErrorDisplay'
 import { Gql } from './Gql'
 
-const log = debug('app:AppQuery')
+const log = debug('core:AppQuery')
 
 interface Props<D, V> extends Omit<QueryProps<D, V>, 'query' | 'children' | 'onCompleted'> {
   query: Gql<D, V>

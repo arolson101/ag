@@ -2,7 +2,6 @@ import debug from 'debug'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 const log = debug('rn:navigation')
-log.enabled = true
 
 const tabSize = 24
 

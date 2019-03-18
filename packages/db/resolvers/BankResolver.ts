@@ -6,7 +6,7 @@ import { DbContext } from '../DbContext'
 import { Account, Bank, BankInput } from '../entities'
 import { AppDb } from './AppDb'
 
-const log = debug('app:BankResolver')
+const log = debug('db:BankResolver')
 
 @Resolver(Bank)
 export class BankResolver {

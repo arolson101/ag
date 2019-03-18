@@ -3,7 +3,7 @@ import assert from 'assert'
 import debug from 'debug'
 import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
 
-const log = debug('app:Record')
+const log = debug('db:Record')
 
 type Change<T> = Partial<ISpec<T>>
 

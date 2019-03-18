@@ -6,7 +6,7 @@ import { BankInput } from './BankInput'
 import { DbChange } from './DbChange'
 import { Record } from './Record'
 
-const log = debug('app:Bank')
+const log = debug('db:Bank')
 
 @ObjectType()
 @Entity({ name: 'banks' })

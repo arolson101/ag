@@ -8,8 +8,7 @@ import { Account, Bank, Bill, Budget, Category, Db, Transaction } from '../entit
 import { AppDb } from './AppDb'
 import { IndexDb } from './IndexDb'
 
-const log = debug('app:DbResolver')
-// log.enabled = false // process.env.NODE_ENV !== 'production'
+const log = debug('db:DbResolver')
 
 const indexEntities = [
   Db, //

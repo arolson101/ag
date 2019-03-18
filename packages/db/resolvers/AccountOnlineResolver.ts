@@ -17,7 +17,6 @@ import { AppDb } from './AppDb'
 import { OnlineResolver } from './OnlineResolver'
 
 const log = debug('db:AccountOnlineResolver')
-log.enabled = true
 
 @Resolver()
 export class AccountOnlineResolver {

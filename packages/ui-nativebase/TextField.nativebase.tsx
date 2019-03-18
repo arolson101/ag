@@ -7,7 +7,7 @@ import { TextInput } from 'react-native'
 import { FormContext } from './Form.nativebase'
 import { Label } from './Label.nativebase'
 
-const log = debug('app:TextField.nativebase')
+const log = debug('ui-nativebase:TextField.nativebase')
 
 interface State {
   commonTextFieldProps: CommonTextFieldProps

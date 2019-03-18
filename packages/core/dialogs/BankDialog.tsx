@@ -5,7 +5,7 @@ import { actions } from '../actions'
 import { AppContext } from '../context'
 import { BankForm } from '../forms'
 
-const log = debug('app:BankDialog')
+const log = debug('core:BankDialog')
 
 export interface BankDialogProps {
   bankId?: string

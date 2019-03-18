@@ -1,7 +1,10 @@
 /* tslint:disable:no-implicit-dependencies */
+import flatMap from 'array.prototype.flatmap'
 import path from 'path'
 import webpack from 'webpack'
 import electronpkg from './package.json'
+
+flatMap.shim()
 
 const externals = [
   ...Object.keys(require('./webpack.main').externals), //

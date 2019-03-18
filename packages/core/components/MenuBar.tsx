@@ -5,7 +5,7 @@ import { actions } from '../actions'
 import { AppContext, NavMenuItem } from '../context'
 import * as T from '../graphql-types'
 
-const log = debug('app:MenuBar')
+const log = debug('core:MenuBar')
 
 export namespace MenuBar {
   export interface Props {}

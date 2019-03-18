@@ -5,7 +5,6 @@ import { Field, FieldProps } from 'formik'
 import React from 'react'
 
 const log = debug('ui-antd:SelectField')
-log.enabled = true
 
 export class SelectField extends React.Component<SelectFieldProps> {
   render() {

@@ -40,7 +40,6 @@ const Title: React.FC<{ style: any }> = ({ style, children }) => <h3>{children}<
 const Paragraph: React.FC = ({ children }) => <p>{children}</p>
 
 const log = debug('ui-antd:ui')
-log.enabled = true
 
 export const ui: UiContext = {
   // special ui

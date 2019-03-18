@@ -5,7 +5,6 @@ import { Arg, Mutation, Resolver } from 'type-graphql'
 import { DbContext } from '../DbContext'
 
 const log = debug('db:OnlineResolver')
-// log.enabled = true
 
 interface Info {
   refcount: number

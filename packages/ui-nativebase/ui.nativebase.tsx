@@ -30,7 +30,7 @@ import { Image } from './NativeImage'
 import { SelectField } from './SelectField.nativebase'
 import { TextField } from './TextField.nativebase'
 
-const log = debug('rn:ui')
+const log = debug('ui-nativebase:ui')
 
 type RNNTypes = 'LoadingOverlay' | 'Dialog'
 

@@ -12,7 +12,7 @@ import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 
-const log = debug('app:BankForm')
+const log = debug('core:BankForm')
 
 type FormValues = typeof Bank.defaultValues & {
   fi: string

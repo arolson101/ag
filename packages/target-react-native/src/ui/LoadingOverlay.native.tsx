@@ -6,7 +6,6 @@ import { Dimensions, StyleSheet, View } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 
 const log = debug('rn:LoadingOverlay')
-log.enabled = true
 
 interface OverlayProps {
   title: string

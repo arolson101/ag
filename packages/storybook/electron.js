@@ -5,10 +5,8 @@ const windowStateKeeper = require('electron-window-state')
 const path = require('path')
 const url = require('url')
 
-process.env.DEBUG = '*'
-
-const log = debug('app:main')
-log.enabled = process.env.NODE_ENV !== 'production'
+const log = debug('storybook:electron')
+debug.enable('*')
 
 // prettier-ignore
 program

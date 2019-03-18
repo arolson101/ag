@@ -11,7 +11,7 @@ import { cancelOperation, ErrorDisplay, Gql } from '../components'
 import { AppContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
-const log = debug('app:PictureDialog')
+const log = debug('core:PictureDialog')
 
 interface Props {
   isOpen: boolean

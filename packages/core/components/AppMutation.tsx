@@ -6,7 +6,7 @@ import { AppContext } from '../context'
 import { ErrorDisplay } from './ErrorDisplay'
 import { Gql } from './Gql'
 
-const log = debug('app:AppMutation')
+const log = debug('core:AppMutation')
 
 interface Props<D, V> extends Omit<MutationProps<D, V>, 'mutation' | 'children'> {
   mutation: Gql<D, V>

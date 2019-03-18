@@ -4,7 +4,7 @@ import debug from 'debug'
 import React from 'react'
 import { Image as RNImage, ImageStyle, StyleProp } from 'react-native'
 
-const log = debug('rn:NativeImage')
+const log = debug('ui-nativebase:NativeImage')
 
 export class Image extends React.PureComponent<ImageProps> {
   static contextType = AppContext

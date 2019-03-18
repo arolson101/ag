@@ -1,6 +1,7 @@
 import 'node-libs-react-native/globals'
 import 'abortcontroller-polyfill'
 import flatMap from 'array.prototype.flatmap'
+import debug from 'debug'
 
 Array.prototype.flatMap = flatMap.getPolyfill()
 
@@ -35,10 +36,11 @@ if (!window.localStorage)
     removeItem: (name: string) => undefined,
   }
 
-process.env.DEBUG = '*'
 
 // bypass lodash exceptions 'process.binding is not supported'
 process.binding = () => undefined
+
+debug.enable('*')
 
 require('./src/app')
 

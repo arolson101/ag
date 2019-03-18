@@ -8,7 +8,7 @@ import { extname } from 'path'
 import url from 'url'
 import { DbContext } from '../DbContext'
 
-const log = debug('app:getImages')
+const log = debug('db:getImages')
 
 export const getFinalUrl = (requestedUrl: string, response: AxiosResponse<any>): string => {
   if (response.request instanceof XMLHttpRequest) {

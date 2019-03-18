@@ -6,8 +6,7 @@ import { Provider } from 'react-redux'
 import { AppContext, ClientDependencies } from './context'
 import { AppStore } from './reducers'
 
-const log = debug('app:app')
-log.enabled = true
+const log = debug('core:app')
 
 export namespace App {
   export interface Props {

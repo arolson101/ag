@@ -4,8 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { Connection, ConnectionOptions, createConnection } from 'typeorm'
 
-const log = debug('electron:db')
-log.enabled = process.env.NODE_ENV !== 'production'
+const log = debug('electron:openDb')
 
 const userData = (electron.remote || electron).app.getPath('userData')
 

@@ -117,7 +117,7 @@ storiesOf('Dialogs/BankDialog', module)
       <BankDialog {...dialogProps} bankId={bankId} />
     </MockApp>
   ))
-  .add('edit (slow)', () => (
+  .add('edit (loading)', () => (
     <MockApp mocks={addDelay(editMocks, 1000)}>
       <BankDialog {...dialogProps} bankId={bankId} />
     </MockApp>
@@ -146,7 +146,7 @@ storiesOf('Forms/BankForm', module)
       />
     </MockApp>
   ))
-  .add('load forever', () => (
+  .add('loading', () => (
     <MockApp>
       <BankForm.Component
         {...formProps}

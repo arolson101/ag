@@ -11,7 +11,7 @@
     "bundle-android": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform android --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.android.dev.js",
     "bundle-ios": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform ios --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.ios.dev.js",
     "electron": "concurrently --raw --kill-others \"yarn:electron:server\" \"yarn:electron:main\"",
-    "electron:main": "wait-on http://localhost:6006/ && electron . --url http://localhost:6006/",
+    "electron:main": "wait-on http://localhost:6006/ && cross-env DEBUG=* electron . --url http://localhost:6006/",
     "electron:server": "start-storybook --ci --quiet -p 6006",
     "preios": "cd ./ios && pod install",
     "ios": "cross-env-shell react-native run-ios --no-packager --config $INIT_CWD/rn-cli.config.js",

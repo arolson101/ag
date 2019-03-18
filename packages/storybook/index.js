@@ -36,8 +36,6 @@ if (!window.localStorage)
     removeItem: (name: string) => undefined,
   }
 
-process.env.DEBUG = '*'
-
 // bypass lodash exceptions 'process.binding is not supported'
 process.binding = () => undefined
 

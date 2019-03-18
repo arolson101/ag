@@ -6,8 +6,7 @@ import windowStateKeeper from 'electron-window-state'
 import path from 'path'
 import url from 'url'
 
-const log = debug('app:main')
-log.enabled = process.env.NODE_ENV !== 'production'
+const log = debug('electron:main')
 
 const defaultUrl = url.format({
   pathname: path.join(__dirname, 'index.html'),

@@ -14,7 +14,6 @@ import { cancelOperation, isCancel } from './cancelOperation'
 import { Gql } from './Gql'
 
 const log = debug('core:UrlField')
-log.enabled = true
 
 interface State {
   gettingIcon: boolean

@@ -6,7 +6,6 @@ import { Redirect, Route, Router as ReactRouter, Switch } from 'react-router-dom
 import { history } from '../reducers'
 
 const log = debug('electron:router')
-log.enabled = process.env.NODE_ENV !== 'production'
 
 type ComponentWithId = React.ComponentType<any> & { id: string }
 

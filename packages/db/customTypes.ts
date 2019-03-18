@@ -3,7 +3,7 @@ import assert from 'assert'
 import debug from 'debug'
 import { GraphQLScalarType, GraphQLScalarTypeConfig, Kind } from 'graphql'
 
-const log = debug('app:customTypes')
+const log = debug('db:customTypes')
 
 // https://19majkel94.github.io/type-graphql/docs/scalars.html
 

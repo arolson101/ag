@@ -3,7 +3,6 @@ import SqlitePlugin from 'react-native-sqlite-storage'
 import { Connection, ConnectionOptions, createConnection } from 'typeorm'
 
 const log = debug('rn:db')
-log.enabled = process.env.NODE_ENV !== 'production'
 
 // https://github.com/andpor/react-native-sqlite-storage#opening-a-database
 const iosDatabaseLocation: SqlitePlugin.Location = 'Documents'

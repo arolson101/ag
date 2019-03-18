@@ -3,7 +3,7 @@ import { Column } from 'typeorm'
 import { decodeDataURI, encodeDataURI } from './datauri'
 import { CompressedJson, dehydrate, hydrate } from './dehydrate'
 
-const log = debug('app:ImageSource')
+const log = debug('util:ImageSource')
 
 export interface ImageBuf {
   width: number

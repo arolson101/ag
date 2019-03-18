@@ -6,7 +6,7 @@ import url from 'url'
 import { DbContext } from '../DbContext'
 import { getFinalUrl, getImage } from './getImages'
 
-const log = debug('app:getFavico')
+const log = debug('db:getFavico')
 
 export const getFavico = async (
   from: string,

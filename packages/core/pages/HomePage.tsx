@@ -7,7 +7,7 @@ import { BankDisplay } from '../components/BankDisplay'
 import { AppContext } from '../context'
 import * as T from '../graphql-types'
 
-const log = debug('app:HomePage')
+const log = debug('core:HomePage')
 
 export namespace HomePage {
   export interface Props {}

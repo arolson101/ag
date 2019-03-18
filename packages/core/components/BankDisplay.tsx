@@ -12,7 +12,6 @@ import { AppMutation } from './AppMutation'
 import { Gql } from './Gql'
 
 const log = debug('core:BankDisplay')
-log.enabled = true
 
 export namespace BankDisplay {
   export interface Props {

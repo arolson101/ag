@@ -18,7 +18,6 @@ YellowBox.ignoreWarnings(['Remote debugger is in a background tab'])
 YellowBox.ignoreWarnings(['Require cycle:'])
 
 const log = debug('rn:init')
-log.enabled = true
 
 export const deps: ClientDependencies = {
   ui,
