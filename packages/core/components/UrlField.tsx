@@ -99,6 +99,7 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
                 const value = iconField.value as ImageSource
                 return (
                   <PopoverButton
+                    disabled={props.disabled}
                     content={[
                       {
                         text: intl.formatMessage(messages.redownload),

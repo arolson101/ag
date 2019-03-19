@@ -215,8 +215,6 @@ const Component = React.forwardRef<
   )
 })
 
-const id = 'BankForm'
-
 const fragments = {
   bankFields: gql`
     fragment bankFields on Bank {
@@ -267,12 +265,7 @@ export interface BankForm {
   save: () => any
 }
 
-const combine = <T1 extends {}, T2 extends {}>(t1: T1, t2: T2) => ({
-  ...t1,
-  ...t2,
-})
-
-export const BankForm = combine(
+export const BankForm = Object.assign(
   React.forwardRef((props: BankForm.Props, ref: React.Ref<BankForm>) => {
     const { bankId } = props
 
@@ -296,7 +289,7 @@ export const BankForm = combine(
     return <Component ref={component} {...{ ...props, saveBank, data, loading }} />
   }),
   {
-    id,
+    id: 'BankForm',
     queries,
     mutations,
     fragments,
