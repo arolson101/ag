@@ -1,4 +1,4 @@
-import { AppContext } from '@ag/core'
+import { CoreContext } from '@ag/core'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { Text } from 'react-native'
@@ -14,7 +14,7 @@ export class AccountsTab extends React.PureComponent<Props> {
   static readonly id = 'AccountsTab'
   static readonly stackId = 'AccountsTabStack'
 
-  static options = ({ intl }: AppContext): Options => {
+  static options = ({ intl }: CoreContext): Options => {
     return {
       bottomTab: {
         text: intl.formatMessage(messages.tabText),

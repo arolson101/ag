@@ -8,7 +8,7 @@ import { Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { cancelOperation, ErrorDisplay, Gql } from '../components'
-import { AppContext, typedFields } from '../context'
+import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:PictureDialog')
@@ -32,8 +32,8 @@ interface Values {
 const thumbnailSize = 100
 
 export class PictureDialog extends React.PureComponent<Props, State> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly id = 'PictureDialog'
 

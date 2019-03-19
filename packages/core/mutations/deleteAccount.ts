@@ -2,7 +2,7 @@ import ApolloClient from 'apollo-client'
 import assert from 'assert'
 import { defineMessages } from 'react-intl'
 import { Gql, gql } from '../components'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 
@@ -16,7 +16,7 @@ const mutations = {
 
 interface DeleteAccountParams {
   client: ApolloClient<any>
-  context: AppContext
+  context: CoreContext
   account: {
     id: string
     name: string

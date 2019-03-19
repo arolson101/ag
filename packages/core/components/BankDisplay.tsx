@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { ActionItem, AppContext, ListItem } from '../context'
+import { ActionItem, CoreContext, ListItem } from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
 import { HomePage } from '../pages'
@@ -20,8 +20,8 @@ export namespace BankDisplay {
 }
 
 export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly fragments = {
     BankDisplay: gql`

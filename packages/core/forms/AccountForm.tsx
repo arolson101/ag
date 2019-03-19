@@ -4,7 +4,7 @@ import { Formik, FormikErrors, FormikProps } from 'formik'
 import * as React from 'react'
 import { defineMessages } from 'react-intl'
 import { AppMutation, AppQuery, Gql, gql } from '../components'
-import { AppContext, typedFields } from '../context'
+import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 
@@ -66,8 +66,8 @@ const mutations = {
 }
 
 export class AccountForm extends React.PureComponent<AccountForm.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly fragments = fragments
   static readonly queries = queries

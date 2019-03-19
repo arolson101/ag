@@ -2,9 +2,9 @@ import debug from 'debug'
 import React, { useContext, useState } from 'react'
 import { QueryHookResult } from 'react-apollo-hooks'
 import { actions } from '../actions'
-import { gql, Gql, Link, useAppQuery } from '../components'
+import { gql, Gql, Link, useQuery } from '../components'
 import { BankDisplay } from '../components/BankDisplay'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:HomePage')
@@ -14,9 +14,9 @@ export namespace HomePage {
 }
 
 export const HomePage = (props: HomePage.Props) => {
-  const { dispatch } = useContext(AppContext)
+  const { dispatch } = useContext(CoreContext)
   const [dispatched, setDispatched] = useState(false)
-  const q = useAppQuery(HomePage.queries.HomePage)
+  const q = useQuery(HomePage.queries.HomePage)
 
   if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
     dispatch(actions.openDlg.login())
@@ -46,7 +46,7 @@ export const HomePageComponent: React.FC<
 > = ({ data, loading }) => {
   const {
     ui: { Page, Row, Text },
-  } = useContext(AppContext)
+  } = useContext(CoreContext)
 
   return (
     <Page>

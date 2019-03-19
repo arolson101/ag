@@ -1,5 +1,5 @@
-import { AppEpic, appEpics } from '@ag/core'
+import { CoreEpic, coreEpics } from '@ag/core'
 
-export const epics: AppEpic[] = [
-  ...appEpics, //
+export const epics: CoreEpic[] = [
+  ...coreEpics, //
 ]

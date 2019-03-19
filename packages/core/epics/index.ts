@@ -1,8 +1,8 @@
 import { DocumentNode, ExecutionArgs, ExecutionResult } from 'graphql'
 import { Epic } from 'redux-observable'
 import { ObservableInput } from 'rxjs'
-import { AppAction } from '../actions'
-import { AppState } from '../reducers'
+import { CoreAction } from '../actions'
+import { CoreState } from '../reducers'
 
 export interface Dependencies {
   runQuery: <Variables = ExecutionArgs['variableValues'], Result = object>(
@@ -11,6 +11,6 @@ export interface Dependencies {
   ) => ObservableInput<ExecutionResult<Result>>
 }
 
-export interface AppEpic extends Epic<AppAction, AppAction, AppState, Dependencies> {}
+export interface CoreEpic extends Epic<CoreAction, CoreAction, CoreState, Dependencies> {}
 
-export const appEpics = []
+export const coreEpics = []

@@ -1,4 +1,4 @@
-import { actions, AppAction, HomePage } from '@ag/core'
+import { actions, CoreAction, HomePage } from '@ag/core'
 import { createBrowserHistory, History } from 'history'
 import { stringify } from 'query-string'
 import { getType } from 'typesafe-actions'
@@ -21,7 +21,7 @@ const href = (id: string, props?: object) =>
     state: {},
   })
 
-export const router = (state: RouterState = initialState, action: AppAction): RouterState => {
+export const router = (state: RouterState = initialState, action: CoreAction): RouterState => {
   switch (action.type) {
     // case getType(actions.nav.login):
     //   state.history.push(href(LoginPage.id))

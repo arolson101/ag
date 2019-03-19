@@ -1,8 +1,8 @@
 import {
   AccountDialog,
-  AppContext,
-  AppState,
   BankDialog,
+  CoreContext,
+  CoreState,
   LoginDialog,
   PictureDialog,
 } from '@ag/core'
@@ -15,21 +15,21 @@ const log = debug('electron:ElectronDialogs')
 interface Props {}
 
 interface State {
-  dialog: AppState['dialog']
+  dialog: CoreState['dialog']
 }
 
-const subState = (state: AppState): State => ({
+const subState = (state: CoreState): State => ({
   dialog: state.dialog,
 })
 
 export class ElectronDialogs extends React.PureComponent<Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   state: State
   unsubscribe!: () => void
 
-  constructor(props: Props, context: React.ContextType<typeof AppContext>) {
+  constructor(props: Props, context: React.ContextType<typeof CoreContext>) {
     super(props)
     this.state = subState(context.store.getState() as any)
     this.unsubscribe = context.store.subscribe(() => {

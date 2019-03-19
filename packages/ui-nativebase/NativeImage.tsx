@@ -1,4 +1,4 @@
-import { AppContext, ImageProps } from '@ag/core'
+import { CoreContext, ImageProps } from '@ag/core'
 import { SvgUri } from '@ag/react-native-svg-image'
 import debug from 'debug'
 import React from 'react'
@@ -7,8 +7,8 @@ import { Image as RNImage, ImageStyle, StyleProp } from 'react-native'
 const log = debug('ui-nativebase:NativeImage')
 
 export class Image extends React.PureComponent<ImageProps> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   render() {
     const { src, size, margin } = this.props

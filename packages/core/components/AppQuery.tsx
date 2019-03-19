@@ -3,7 +3,7 @@ import debug from 'debug'
 import React from 'react'
 import { Query, QueryProps } from 'react-apollo'
 import { Omit } from 'utility-types'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 import { ErrorDisplay } from './ErrorDisplay'
 import { Gql } from './Gql'
 
@@ -16,8 +16,8 @@ interface Props<D, V> extends Omit<QueryProps<D, V>, 'query' | 'children' | 'onC
 }
 
 export class AppQuery<TData, TVariables> extends React.Component<Props<TData, TVariables>> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   render() {
     const { children, onCompleted, ...props } = this.props

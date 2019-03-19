@@ -7,4 +7,4 @@ export const actions = {
   ...navActions,
 }
 
-export type AppAction = ActionType<typeof actions>
+export type CoreAction = ActionType<typeof actions>

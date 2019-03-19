@@ -1,4 +1,4 @@
-import { AppContext, HomePage } from '@ag/core'
+import { CoreContext, HomePage } from '@ag/core'
 import debug from 'debug'
 import React from 'react'
 import { defineMessages } from 'react-intl'
@@ -13,13 +13,13 @@ interface Props {
 }
 
 export class HomeTab extends React.PureComponent<Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly id = 'HomeTab'
   static readonly stackId = 'HomeTabStack'
 
-  static options = ({ intl }: AppContext): Options => ({
+  static options = ({ intl }: CoreContext): Options => ({
     bottomTab: {
       text: intl.formatMessage(messages.tabText),
       icon: icons.home,

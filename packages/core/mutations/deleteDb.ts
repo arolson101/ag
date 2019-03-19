@@ -1,7 +1,7 @@
 import ApolloClient from 'apollo-client'
 import { defineMessages } from 'react-intl'
 import { Gql, gql } from '../components'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 import { LoginForm } from '../forms'
 import * as T from '../graphql-types'
 
@@ -15,7 +15,7 @@ const mutations = {
 
 interface DeleteDbParams {
   client: ApolloClient<any>
-  context: AppContext
+  context: CoreContext
   dbId: string
 }
 

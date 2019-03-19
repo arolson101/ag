@@ -1,4 +1,4 @@
-import { appReducers, AppState } from '@ag/core'
+import { appReducers, CoreState } from '@ag/core'
 import { combineReducers } from 'redux'
 import { router, RouterState } from './routeReducer'
 
@@ -11,6 +11,6 @@ export const rootReducer = combineReducers({
   ...electronReducers,
 })
 
-export interface ElectronState extends AppState {
+export interface ElectronState extends CoreState {
   router: RouterState
 }

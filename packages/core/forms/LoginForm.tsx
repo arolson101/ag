@@ -6,7 +6,7 @@ import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppMutation, Gql } from '../components'
-import { AppContext, typedFields } from '../context'
+import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 
@@ -31,8 +31,8 @@ export namespace LoginForm {
 }
 
 export class LoginForm extends React.PureComponent<LoginForm.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly id = `LoginForm`
 

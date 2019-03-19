@@ -1,4 +1,4 @@
-import { AppContext, PopoverButtonProps, TabProps, TabsProps, UiContext } from '@ag/core'
+import { CoreContext, PopoverButtonProps, TabProps, TabsProps, UiContext } from '@ag/core'
 import debug from 'debug'
 import {
   ActionSheet,
@@ -128,8 +128,8 @@ export const ui: Omit<UiContext, RNNTypes> = {
     )
   },
   PopoverButton: class Popover extends React.PureComponent<PopoverButtonProps> {
-    static contextType = AppContext
-    context!: React.ContextType<typeof AppContext>
+    static contextType = CoreContext
+    context!: React.ContextType<typeof CoreContext>
 
     render() {
       const { loading, icon, children, minimal } = this.props

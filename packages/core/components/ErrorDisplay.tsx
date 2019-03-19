@@ -1,15 +1,15 @@
 import { ApolloError } from 'apollo-client'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 
 interface Props {
   error: undefined | Error | Error[] | ReadonlyArray<Error>
 }
 
 export class ErrorDisplay extends React.PureComponent<Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   componentDidMount() {
     this.showError()

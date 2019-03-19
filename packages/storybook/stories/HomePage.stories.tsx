@@ -177,4 +177,8 @@ storiesOf('Pages/HomePage', module) //
       <HomePage />
     </MockApp>
   ))
-  .add('test', () => <HomePageComponent {...fullMocks[0].result as any} />)
+  .add('test', () => (
+    <MockApp>
+      <HomePageComponent {...fullMocks[0].result as any} />
+    </MockApp>
+  ))

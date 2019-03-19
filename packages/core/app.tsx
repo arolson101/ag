@@ -3,14 +3,14 @@ import debug from 'debug'
 import React from 'react'
 import { IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
-import { AppContext, ClientDependencies } from './context'
-import { AppStore } from './reducers'
+import { ClientDependencies, CoreContext } from './context'
+import { CoreStore } from './reducers'
 
 const log = debug('core:app')
 
 export namespace App {
   export interface Props {
-    context: AppContext
+    context: CoreContext
   }
 }
 
@@ -20,10 +20,10 @@ export class App extends React.PureComponent<App.Props> {
 
     return (
       <Provider store={context.store}>
-        <AppContext.Provider value={context}>
+        <CoreContext.Provider value={context}>
           {/* tslint:disable-next-line:prettier */}
             {children}
-        </AppContext.Provider>
+        </CoreContext.Provider>
       </Provider>
     )
   }
@@ -35,14 +35,14 @@ const uniqueId = () => {
 
 export namespace App {
   interface CreateContextParams {
-    store: AppStore
+    store: CoreStore
     deps: ClientDependencies
   }
-  export const createContext = ({ store, deps }: CreateContextParams): AppContext => {
+  export const createContext = ({ store, deps }: CreateContextParams): CoreContext => {
     const { dispatch, getState } = store
     const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
 
-    const context: AppContext = {
+    const context: CoreContext = {
       uniqueId,
       store,
       dispatch,

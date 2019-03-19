@@ -1,4 +1,4 @@
-import { AppContext, HomePage } from '@ag/core'
+import { CoreContext, HomePage } from '@ag/core'
 import debug from 'debug'
 import { parse } from 'query-string'
 import React from 'react'
@@ -16,8 +16,8 @@ const routes: ComponentWithId[] = [
 interface Props {}
 
 export class ElectronRouter extends React.PureComponent<Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   render() {
     const fallback = `/${routes[0].id}`

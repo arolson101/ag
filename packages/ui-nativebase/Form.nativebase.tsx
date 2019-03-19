@@ -1,4 +1,4 @@
-import { AppContext, CommonTextFieldProps, FormProps } from '@ag/core'
+import { CommonTextFieldProps, CoreContext, FormProps } from '@ag/core'
 import debug from 'debug'
 import * as NB from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
@@ -15,15 +15,15 @@ export interface FormContextChild {
   setCommonTextFieldProps: (props: CommonTextFieldProps) => any
 }
 
-export interface FormContext extends AppContext {
+export interface FormContext extends CoreContext {
   addField: (field: FormContextChild) => any
   rmvField: (field: FormContextChild) => any
 }
 export const FormContext = React.createContext<FormContext>(null as any)
 
 export class Form<Values> extends React.PureComponent<FormProps<Values>> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   render() {
     const { children } = this.props

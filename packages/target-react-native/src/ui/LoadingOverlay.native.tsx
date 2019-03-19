@@ -1,4 +1,4 @@
-import { AppContext, LoadingOverlayProps } from '@ag/core'
+import { CoreContext, LoadingOverlayProps } from '@ag/core'
 import { platform, Spinner } from '@ag/ui-nativebase'
 import debug from 'debug'
 import * as React from 'react'
@@ -31,8 +31,8 @@ let idServer = 1
 Navigation.registerComponent(overlayName, () => Overlay)
 
 export class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   shown: boolean
   id: string

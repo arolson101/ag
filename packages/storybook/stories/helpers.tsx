@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { App, AppContext, cancelOperation, ClientDependencies } from '@ag/core'
+import { App, cancelOperation, ClientDependencies, CoreContext } from '@ag/core'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { ApolloConsumer } from 'react-apollo'
@@ -40,7 +40,7 @@ export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, childre
         {client => (
           <ApolloHooksProvider client={client}>
             <IntlProvider locale='en'>
-              <AppContext.Provider value={context}>{children}</AppContext.Provider>
+              <CoreContext.Provider value={context}>{children}</CoreContext.Provider>
             </IntlProvider>
           </ApolloHooksProvider>
         )}

@@ -1,14 +1,14 @@
 import React from 'react'
-import { AppAction } from '../actions'
-import { AppContext } from '../context'
+import { CoreAction } from '../actions'
+import { CoreContext } from '../context'
 
 interface Props {
-  dispatch: AppAction
+  dispatch: CoreAction
 }
 
 export class Link extends React.PureComponent<Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   render() {
     const { ui } = this.context

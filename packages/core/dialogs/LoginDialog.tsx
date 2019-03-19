@@ -1,7 +1,7 @@
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { AppQuery } from '../components'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
 
@@ -12,8 +12,8 @@ export namespace LoginDialog {
 }
 
 export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly id = `LoginDialog`
 

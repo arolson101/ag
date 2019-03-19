@@ -2,7 +2,7 @@ import debug from 'debug'
 import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 import { BankForm } from '../forms'
 
 const log = debug('core:BankDialog')
@@ -18,7 +18,7 @@ export const BankDialog = React.memo<BankDialogProps>(({ bankId, isOpen, cancelT
     intl,
     ui: { Dialog },
     dispatch,
-  } = useContext(AppContext)
+  } = useContext(CoreContext)
 
   const bankForm = useRef<BankForm>(null)
 

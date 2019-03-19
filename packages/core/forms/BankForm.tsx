@@ -5,9 +5,9 @@ import { Formik, FormikErrors } from 'formik'
 import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'react'
 import { MutationFn } from 'react-apollo-hooks'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery, gql, Gql, useAppMutation, useAppQuery } from '../components'
+import { AppMutation, AppQuery, gql, Gql, useMutation, useQuery } from '../components'
 import { UrlField } from '../components/UrlField'
-import { AppContext, tabConfig, typedFields } from '../context'
+import { CoreContext, tabConfig, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
@@ -36,7 +36,7 @@ const Component = React.forwardRef<
     saveBank: MutationFn<T.SaveBank.Mutation, T.SaveBank.Variables>
   }
 >(function BankFormComponent(props, ref) {
-  const { ui, intl } = useContext(AppContext)
+  const { ui, intl } = useContext(CoreContext)
   const { LoadingOverlay, Tabs, Tab, Text, showToast } = ui
   const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
   const { data, saveBank, loading, bankId, onClosed, cancelToken } = props
@@ -270,8 +270,8 @@ export const BankForm = Object.assign(
     const { bankId } = props
 
     const component = useRef<BankForm>(null)
-    const { data, loading } = useAppQuery(BankForm.queries.BankForm, { variables: { bankId } })
-    const saveBank = useAppMutation(BankForm.mutations.SaveBank, {
+    const { data, loading } = useQuery(BankForm.queries.BankForm, { variables: { bankId } })
+    const saveBank = useMutation(BankForm.mutations.SaveBank, {
       refetchQueries: [
         { query: BankForm.queries.BankForm, variables: { bankId } },
         { query: HomePage.queries.HomePage },

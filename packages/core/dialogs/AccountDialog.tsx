@@ -1,7 +1,7 @@
 import React from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 import { AccountForm } from '../forms'
 
 export namespace AccountDialog {
@@ -13,8 +13,8 @@ export namespace AccountDialog {
 }
 
 export class AccountDialog extends React.PureComponent<AccountDialog.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly id = 'AccountDialog'
 

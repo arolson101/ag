@@ -1,4 +1,4 @@
-import { AppContext, ButtonConfig, DialogProps, UiContext } from '@ag/core'
+import { ButtonConfig, CoreContext, DialogProps, UiContext } from '@ag/core'
 import { Container, Content, platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React from 'react'
@@ -11,7 +11,7 @@ import {
 
 const log = debug('rn:dialog')
 
-export interface DialogContext extends AppContext {
+export interface DialogContext extends CoreContext {
   componentId: string
 }
 export const DialogContext = React.createContext<DialogContext>({ componentId: 'NONE' } as any)

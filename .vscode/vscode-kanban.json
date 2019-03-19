@@ -16,6 +16,21 @@
       "assignedTo": {
         "name": "arolson101"
       },
+      "creation_time": "2019-02-25T21:30:17.392Z",
+      "description": {
+        "content": "need to include @ag/util, @ag/db, etc",
+        "mime": "text/markdown"
+      },
+      "id": "1",
+      "prio": 0,
+      "references": [],
+      "title": "webpack vendor dll isn't loading all libs",
+      "type": "bug"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
       "creation_time": "2019-02-25T22:45:41.835Z",
       "description": {
         "content": "a random-colored box with the bank initials on it for banks with no favico",
@@ -37,6 +52,19 @@
       "id": "17",
       "references": [],
       "title": "move online stuff to db"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
+      "creation_time": "2019-02-26T21:23:54.944Z",
+      "description": {
+        "content": "debug('app:...') => debug('core:...') or debug('db:...')",
+        "mime": "text/markdown"
+      },
+      "id": "20",
+      "references": [],
+      "title": "normalize debug categories"
     },
     {
       "assignedTo": {
@@ -64,16 +92,14 @@
       "assignedTo": {
         "name": "arolson101"
       },
-      "creation_time": "2019-02-25T21:30:17.392Z",
+      "creation_time": "2019-02-26T16:04:24.023Z",
       "description": {
-        "content": "need to include @ag/util, @ag/db, etc",
+        "content": "AppContext, AppState, etc",
         "mime": "text/markdown"
       },
-      "id": "1",
-      "prio": 0,
+      "id": "18",
       "references": [],
-      "title": "webpack vendor dll isn't loading all libs",
-      "type": "bug"
+      "title": "rename App* to Core*"
     }
   ],
   "in-progress": [
@@ -87,19 +113,6 @@
       "prio": 10,
       "references": [],
       "title": "import/export data"
-    },
-    {
-      "assignedTo": {
-        "name": "arolson101"
-      },
-      "creation_time": "2019-02-26T16:04:24.023Z",
-      "description": {
-        "content": "AppContext, AppState, etc",
-        "mime": "text/markdown"
-      },
-      "id": "18",
-      "references": [],
-      "title": "rename App* to Core*"
     }
   ],
   "testing": [],
@@ -207,19 +220,6 @@
       "id": "3",
       "references": [],
       "title": "jest snapshots"
-    },
-    {
-      "assignedTo": {
-        "name": "arolson101"
-      },
-      "creation_time": "2019-02-26T21:23:54.944Z",
-      "description": {
-        "content": "debug('app:...') => debug('core:...') or debug('db:...')",
-        "mime": "text/markdown"
-      },
-      "id": "20",
-      "references": [],
-      "title": "normalize debug categories"
     },
     {
       "assignedTo": {

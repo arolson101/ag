@@ -1,4 +1,4 @@
-import { AppContext, appDialogs } from '@ag/core'
+import { appDialogs, CoreContext } from '@ag/core'
 import { platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React from 'react'
@@ -56,13 +56,13 @@ export const registerComponents = (RnApp: React.ComponentType) => {
 
   for (const Dialog of appDialogs) {
     const component: React.FC<DialogContext> = ({ componentId, ...props }) => (
-      <AppContext.Consumer>
+      <CoreContext.Consumer>
         {appContext => (
           <DialogContext.Provider value={{ ...appContext, componentId }}>
             <Dialog {...props} />
           </DialogContext.Provider>
         )}
-      </AppContext.Consumer>
+      </CoreContext.Consumer>
     )
     component.displayName = `rnnDlg(${component.name})`
 
@@ -76,7 +76,7 @@ interface TabComponent {
   stackId: string
 }
 
-const makeTab = (tab: TabComponent, passProps: AppContext): LayoutBottomTabsChildren => ({
+const makeTab = (tab: TabComponent, passProps: CoreContext): LayoutBottomTabsChildren => ({
   stack: {
     id: tab.stackId,
     children: [
@@ -90,7 +90,7 @@ const makeTab = (tab: TabComponent, passProps: AppContext): LayoutBottomTabsChil
   },
 })
 
-const bottomTabs = (passProps: AppContext): LayoutBottomTabs => ({
+const bottomTabs = (passProps: CoreContext): LayoutBottomTabs => ({
   children: [
     makeTab(Tabs.HomeTab, passProps),
     makeTab(Tabs.AccountsTab, passProps),
@@ -100,7 +100,7 @@ const bottomTabs = (passProps: AppContext): LayoutBottomTabs => ({
   ],
 })
 
-export const root = (passProps: AppContext): LayoutRoot => ({
+export const root = (passProps: CoreContext): LayoutRoot => ({
   root: {
     bottomTabs: bottomTabs(passProps),
   },

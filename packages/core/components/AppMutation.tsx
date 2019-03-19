@@ -2,7 +2,7 @@ import debug from 'debug'
 import React from 'react'
 import { Mutation, MutationFn, MutationProps, MutationResult } from 'react-apollo'
 import { Omit } from 'utility-types'
-import { AppContext } from '../context'
+import { CoreContext } from '../context'
 import { ErrorDisplay } from './ErrorDisplay'
 import { Gql } from './Gql'
 
@@ -17,8 +17,8 @@ interface Props<D, V> extends Omit<MutationProps<D, V>, 'mutation' | 'children'>
 }
 
 export class AppMutation<TData, TVariables> extends React.PureComponent<Props<TData, TVariables>> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   render() {
     const { children, ...props } = this.props

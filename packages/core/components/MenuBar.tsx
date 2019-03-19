@@ -2,7 +2,7 @@ import debug from 'debug'
 import React from 'react'
 import { AppQuery, gql, Gql, Link } from '.'
 import { actions } from '../actions'
-import { AppContext, NavMenuItem } from '../context'
+import { CoreContext, NavMenuItem } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:MenuBar')
@@ -12,8 +12,8 @@ export namespace MenuBar {
 }
 
 export class MenuBar extends React.PureComponent<MenuBar.Props> {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly id = 'MenuBar'
 

@@ -8,7 +8,7 @@ import React from 'react'
 import { ApolloConsumer } from 'react-apollo'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { AppContext, CommonFieldProps, CommonTextFieldProps, typedFields } from '../context'
+import { CommonFieldProps, CommonTextFieldProps, CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 import { cancelOperation, isCancel } from './cancelOperation'
 import { Gql } from './Gql'
@@ -32,8 +32,8 @@ export class UrlField<Values extends Record<string, any>> extends React.PureComp
   Props<Values>,
   State
 > {
-  static contextType = AppContext
-  context!: React.ContextType<typeof AppContext>
+  static contextType = CoreContext
+  context!: React.ContextType<typeof CoreContext>
 
   static readonly queries = {
     getFavico: gql`
