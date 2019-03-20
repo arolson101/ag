@@ -13,22 +13,7 @@ export namespace HomePage {
   export interface Props {}
 }
 
-export const HomePage = (props: HomePage.Props) => {
-  const { dispatch } = useContext(CoreContext)
-  const [dispatched, setDispatched] = useState(false)
-  const q = useQuery(HomePage.queries.HomePage)
-
-  if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
-    dispatch(actions.openDlg.login())
-    setDispatched(true)
-  }
-
-  return <HomePageComponent {...q} />
-}
-
-HomePage.id = 'HomePage'
-
-HomePage.queries = {
+const queries = {
   HomePage: gql`
     query HomePage {
       appDb {
@@ -41,9 +26,9 @@ HomePage.queries = {
   ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
 }
 
-export const HomePageComponent: React.FC<
+const Component: React.FC<
   QueryHookResult<T.HomePage.Query, T.HomePage.Variables>
-> = ({ data, loading }) => {
+> = function HomePageComponent({ data, loading }) {
   const {
     ui: { Page, Row, Text },
   } = useContext(CoreContext)
@@ -60,3 +45,23 @@ export const HomePageComponent: React.FC<
     </Page>
   )
 }
+
+export const HomePage = Object.assign(
+  (props: HomePage.Props) => {
+    const { dispatch } = useContext(CoreContext)
+    const [dispatched, setDispatched] = useState(false)
+    const q = useQuery(HomePage.queries.HomePage)
+
+    if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
+      dispatch(actions.openDlg.login())
+      setDispatched(true)
+    }
+
+    return <Component {...q} />
+  },
+  {
+    id: 'HomePage',
+    queries,
+    Component,
+  }
+)

@@ -23,7 +23,6 @@ export const BankDialog = React.memo<BankDialogProps>(({ bankId, isOpen, cancelT
   const bankForm = useRef<BankForm>(null)
 
   const save = useCallback(() => {
-    log('BankDialog save')
     if (bankForm.current) {
       bankForm.current.save()
     }

@@ -2,10 +2,10 @@ import { Bank } from '@ag/db'
 import { generateAvatar, pick } from '@ag/util'
 import debug from 'debug'
 import { Formik, FormikErrors } from 'formik'
-import React, { forwardRef, useContext, useImperativeHandle, useRef } from 'react'
+import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { MutationFn } from 'react-apollo-hooks'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery, gql, Gql, useMutation, useQuery } from '../components'
+import { gql, Gql, useMutation, useQuery } from '../components'
 import { UrlField } from '../components/UrlField'
 import { CoreContext, tabConfig, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
@@ -28,6 +28,56 @@ export namespace BankForm {
 
 const bankAvatarSize = 100
 
+const fragments = {
+  bankFields: gql`
+    fragment bankFields on Bank {
+      name
+      web
+      address
+      notes
+      favicon
+
+      online
+
+      fid
+      org
+      ofx
+
+      username
+      password
+    }
+  `,
+}
+
+const queries = {
+  BankForm: gql`
+    query BankForm($bankId: String) {
+      appDb {
+        bank(bankId: $bankId) {
+          ...bankFields
+        }
+      }
+    }
+    ${fragments.bankFields}
+  ` as Gql<T.BankForm.Query, T.BankForm.Variables>,
+}
+
+const mutations = {
+  SaveBank: gql`
+    mutation SaveBank($input: BankInput!, $bankId: String) {
+      saveBank(input: $input, bankId: $bankId) {
+        id
+        ...bankFields
+      }
+    }
+    ${fragments.bankFields}
+  ` as Gql<T.SaveBank.Mutation, T.SaveBank.Variables>,
+}
+
+export interface BankForm {
+  save: () => any
+}
+
 const Component = React.forwardRef<
   BankForm,
   BankForm.Props & {
@@ -46,7 +96,6 @@ const Component = React.forwardRef<
 
   useImperativeHandle(ref, () => ({
     save: () => {
-      log('formik submitForm')
       formik.current!.submitForm()
     },
   }))
@@ -215,56 +264,6 @@ const Component = React.forwardRef<
   )
 })
 
-const fragments = {
-  bankFields: gql`
-    fragment bankFields on Bank {
-      name
-      web
-      address
-      notes
-      favicon
-
-      online
-
-      fid
-      org
-      ofx
-
-      username
-      password
-    }
-  `,
-}
-
-const queries = {
-  BankForm: gql`
-    query BankForm($bankId: String) {
-      appDb {
-        bank(bankId: $bankId) {
-          ...bankFields
-        }
-      }
-    }
-    ${fragments.bankFields}
-  ` as Gql<T.BankForm.Query, T.BankForm.Variables>,
-}
-
-const mutations = {
-  SaveBank: gql`
-    mutation SaveBank($input: BankInput!, $bankId: String) {
-      saveBank(input: $input, bankId: $bankId) {
-        id
-        ...bankFields
-      }
-    }
-    ${fragments.bankFields}
-  ` as Gql<T.SaveBank.Mutation, T.SaveBank.Variables>,
-}
-
-export interface BankForm {
-  save: () => any
-}
-
 export const BankForm = Object.assign(
   React.forwardRef((props: BankForm.Props, ref: React.Ref<BankForm>) => {
     const { bankId } = props
@@ -280,7 +279,6 @@ export const BankForm = Object.assign(
 
     useImperativeHandle(ref, () => ({
       save: () => {
-        log('component save')
         component.current!.save()
       },
     }))
@@ -290,14 +288,13 @@ export const BankForm = Object.assign(
   }),
   {
     id: 'BankForm',
+    displayName: 'BankForm',
     queries,
     mutations,
     fragments,
     Component,
   }
 )
-
-BankForm.displayName = 'BankForm'
 
 const messages = defineMessages({
   save: {
