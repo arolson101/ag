@@ -11,6 +11,7 @@ import {
   Avatar,
   Button,
   Card,
+  ConfigProvider,
   Divider,
   Dropdown,
   Icon,
@@ -20,6 +21,7 @@ import {
   message,
   Modal,
   Spin,
+  Table,
   Tabs,
 } from 'antd'
 import 'antd/dist/antd.css'
@@ -248,6 +250,19 @@ export const ui: UiContext = {
       header={header}
       footer={footer}
     />
+  ),
+
+  // table
+  Table: ({ title, emptyText, columns, rowKey, data }) => (
+    <ConfigProvider
+      renderEmpty={() => (
+        <div style={{ textAlign: 'center' }}>
+          <Text>{emptyText}</Text>
+        </div>
+      )}
+    >
+      <Table title={title} pagination={false} columns={columns} rowKey={rowKey} dataSource={data} />
+    </ConfigProvider>
   ),
 
   // controls

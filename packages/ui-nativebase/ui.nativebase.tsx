@@ -112,6 +112,9 @@ export const ui: Omit<UiContext, RNNTypes> = {
   List: ({ children }) => <List>{children}</List>,
   // ListItem: ({ title, image, children, actions }) => <ListItem>{children}</ListItem>,
 
+  // table
+  Table: ({ columns, data }) => null,
+
   // controls
   Spinner,
   Link: ({ onClick, children }) => (

@@ -97,6 +97,22 @@ export interface NavMenuProps {
   items: NavMenuItem[]
 }
 
+export interface TableColumn<T extends {}> {
+  dataIndex: keyof T & string
+  title: string
+  render?: (text: string, record: T, index: number) => React.ReactNode
+  width?: string | number
+  align?: 'left' | 'right' | 'center'
+}
+
+export interface TableProps<T extends {} = any> {
+  title?: () => React.ReactNode
+  rowKey: keyof T & string
+  emptyText?: string
+  data: T[]
+  columns: Array<TableColumn<T>>
+}
+
 export interface TabsProps {
   defaultActiveKey: string
   id: string
@@ -168,6 +184,9 @@ export interface UiContext {
     header?: React.ReactElement<any>
     footer?: React.ReactElement<any>
   }>
+
+  // table
+  Table: ComponentType<TableProps>
 
   // controls
   Spinner: ComponentType

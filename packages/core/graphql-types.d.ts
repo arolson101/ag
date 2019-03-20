@@ -452,7 +452,29 @@ export namespace AccountsPage {
     banks: Banks[]
   }
 
-  export type Banks = BankDisplay.Fragment
+  export type Banks = {
+    __typename?: 'Bank'
+
+    id: string
+
+    favicon: ImageSource
+
+    name: string
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
+
+    number: string
+
+    visible: boolean
+  }
 }
 
 export namespace BillsPage {

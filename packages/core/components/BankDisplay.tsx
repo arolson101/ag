@@ -108,7 +108,7 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                     image: bank.favicon,
                     // title: bank.name,
                     title: account.name,
-                    content: '$' + Math.trunc(Math.random() * 100000) / 100,
+                    // content: '$' + Math.trunc(Math.random() * 100000) / 100,
                     contextMenuHeader: intl.formatMessage(messages.contextMenuHeader, {
                       bankName: bank.name,
                       accountName: account.name,
