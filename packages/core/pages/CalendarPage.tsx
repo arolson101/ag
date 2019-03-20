@@ -2,6 +2,7 @@ import debug from 'debug'
 import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import { QueryHookResult } from 'react-apollo-hooks'
+import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { Gql, Link, useQuery } from '../components'
 import { BankDisplay } from '../components/BankDisplay'
@@ -45,6 +46,17 @@ const Component: React.FC<
   )
 }
 
+const messages = defineMessages({
+  tabText: {
+    id: 'CalendarPage.tabText',
+    defaultMessage: 'Calendar',
+  },
+  titleText: {
+    id: 'CalendarPage.titleText',
+    defaultMessage: 'Calendar',
+  },
+})
+
 export const CalendarPage = Object.assign(
   (props: CalendarPage.Props) => {
     const { dispatch } = useContext(CoreContext)
@@ -62,5 +74,6 @@ export const CalendarPage = Object.assign(
     id: 'CalendarPage',
     queries,
     Component,
+    messages,
   }
 )

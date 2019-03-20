@@ -2,6 +2,7 @@ import debug from 'debug'
 import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import { QueryHookResult } from 'react-apollo-hooks'
+import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { Gql, Link, useQuery } from '../components'
 import { BankDisplay } from '../components/BankDisplay'
@@ -18,9 +19,8 @@ const queries = {
   AccountsPage: gql`
     query AccountsPage {
       appDb {
-        accounts {
-          id
-          name
+        banks {
+          ...BankDisplay
         }
       }
     }
@@ -37,13 +37,26 @@ const Component: React.FC<
 
   return (
     <Page>
-      <Text header>Accounts</Text>
       {data &&
         data.appDb &&
-        data.appDb.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
+        data.appDb.banks.map(bank => <BankDisplay bank={bank} key={bank.id} />)}
+      <Row>
+        <Link dispatch={actions.openDlg.bankCreate()}>add bank</Link>
+      </Row>
     </Page>
   )
 }
+
+const messages = defineMessages({
+  tabText: {
+    id: 'AccountsPage.tabText',
+    defaultMessage: 'Accounts',
+  },
+  titleText: {
+    id: 'AccountsPage.titleText',
+    defaultMessage: 'Accounts',
+  },
+})
 
 export const AccountsPage = Object.assign(
   (props: AccountsPage.Props) => {
@@ -62,5 +75,6 @@ export const AccountsPage = Object.assign(
     id: 'AccountsPage',
     queries,
     Component,
+    messages,
   }
 )

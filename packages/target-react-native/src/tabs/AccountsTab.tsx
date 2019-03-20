@@ -1,7 +1,5 @@
-import { CoreContext } from '@ag/core'
+import { AccountsPage, CoreContext } from '@ag/core'
 import React from 'react'
-import { defineMessages } from 'react-intl'
-import { Text } from 'react-native'
 import { Options } from 'react-native-navigation'
 import { icons } from '../icons'
 import { VisibleRoot } from './VisibleRoot'
@@ -17,12 +15,12 @@ export class AccountsTab extends React.PureComponent<Props> {
   static options = ({ intl }: CoreContext): Options => {
     return {
       bottomTab: {
-        text: intl.formatMessage(messages.tabText),
+        text: intl.formatMessage(AccountsPage.messages.tabText),
         icon: icons.accounts,
       },
       topBar: {
         title: {
-          text: intl.formatMessage(messages.titleText),
+          text: intl.formatMessage(AccountsPage.messages.titleText),
         },
       },
     }
@@ -31,19 +29,8 @@ export class AccountsTab extends React.PureComponent<Props> {
   render() {
     return (
       <VisibleRoot componentId={this.props.componentId}>
-        <Text>Accounts</Text>
+        <AccountsPage />
       </VisibleRoot>
     )
   }
 }
-
-const messages = defineMessages({
-  tabText: {
-    id: 'AccountsTab.tabText',
-    defaultMessage: 'Accounts',
-  },
-  titleText: {
-    id: 'AccountsTab.titleText',
-    defaultMessage: 'Accounts',
-  },
-})

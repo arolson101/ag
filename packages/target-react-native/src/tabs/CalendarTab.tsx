@@ -1,7 +1,5 @@
-import { CoreContext } from '@ag/core'
+import { CalendarPage, CoreContext } from '@ag/core'
 import React from 'react'
-import { defineMessages } from 'react-intl'
-import { Text } from 'react-native'
 import { Options } from 'react-native-navigation'
 import { icons } from '../icons'
 import { VisibleRoot } from './VisibleRoot'
@@ -16,12 +14,12 @@ export class CalendarTab extends React.PureComponent<Props> {
 
   static options = ({ intl }: CoreContext): Options => ({
     bottomTab: {
-      text: intl.formatMessage(messages.tabText),
+      text: intl.formatMessage(CalendarPage.messages.tabText),
       icon: icons.calendar,
     },
     topBar: {
       title: {
-        text: intl.formatMessage(messages.titleText),
+        text: intl.formatMessage(CalendarPage.messages.titleText),
       },
     },
   })
@@ -29,19 +27,8 @@ export class CalendarTab extends React.PureComponent<Props> {
   render() {
     return (
       <VisibleRoot componentId={this.props.componentId}>
-        <Text>Calendar</Text>
+        <CalendarPage />
       </VisibleRoot>
     )
   }
 }
-
-const messages = defineMessages({
-  tabText: {
-    id: 'CalendarTab.tabText',
-    defaultMessage: 'Calendar',
-  },
-  titleText: {
-    id: 'CalendarTab.titleText',
-    defaultMessage: 'Calendar',
-  },
-})

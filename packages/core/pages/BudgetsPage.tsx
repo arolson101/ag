@@ -2,6 +2,7 @@ import debug from 'debug'
 import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import { QueryHookResult } from 'react-apollo-hooks'
+import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { Gql, Link, useQuery } from '../components'
 import { BankDisplay } from '../components/BankDisplay'
@@ -45,6 +46,17 @@ const Component: React.FC<
   )
 }
 
+const messages = defineMessages({
+  tabText: {
+    id: 'BudgetsPage.tabText',
+    defaultMessage: 'Budgets',
+  },
+  titleText: {
+    id: 'BudgetsPage.titleText',
+    defaultMessage: 'Budgets',
+  },
+})
+
 export const BudgetsPage = Object.assign(
   (props: BudgetsPage.Props) => {
     const { dispatch } = useContext(CoreContext)
@@ -62,5 +74,6 @@ export const BudgetsPage = Object.assign(
     id: 'BudgetsPage',
     queries,
     Component,
+    messages,
   }
 )

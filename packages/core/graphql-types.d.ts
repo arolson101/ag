@@ -449,16 +449,10 @@ export namespace AccountsPage {
   export type AppDb = {
     __typename?: 'AppDb'
 
-    accounts: Accounts[]
+    banks: Banks[]
   }
 
-  export type Accounts = {
-    __typename?: 'Account'
-
-    id: string
-
-    name: string
-  }
+  export type Banks = BankDisplay.Fragment
 }
 
 export namespace BillsPage {

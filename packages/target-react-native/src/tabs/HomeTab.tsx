@@ -1,7 +1,6 @@
 import { CoreContext, HomePage } from '@ag/core'
 import debug from 'debug'
 import React from 'react'
-import { defineMessages } from 'react-intl'
 import { Options } from 'react-native-navigation'
 import { icons } from '../icons'
 import { VisibleRoot } from './VisibleRoot'
@@ -21,12 +20,12 @@ export class HomeTab extends React.PureComponent<Props> {
 
   static options = ({ intl }: CoreContext): Options => ({
     bottomTab: {
-      text: intl.formatMessage(messages.tabText),
+      text: intl.formatMessage(HomePage.messages.tabText),
       icon: icons.home,
     },
     topBar: {
       title: {
-        text: intl.formatMessage(messages.titleText),
+        text: intl.formatMessage(HomePage.messages.titleText),
       },
     },
   })
@@ -39,14 +38,3 @@ export class HomeTab extends React.PureComponent<Props> {
     )
   }
 }
-
-const messages = defineMessages({
-  tabText: {
-    id: 'HomeTab.tabText',
-    defaultMessage: 'Home',
-  },
-  titleText: {
-    id: 'HomeTab.titleText',
-    defaultMessage: 'Home',
-  },
-})

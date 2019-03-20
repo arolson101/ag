@@ -11,7 +11,7 @@ import {
   useMutation,
   useQuery,
 } from '@ag/core'
-import { Content, Header, Icon, Layout, Menu, Sider } from '@ag/ui-antd'
+import { Content, Header, Icon, Layout, Menu, PageHeader, Sider } from '@ag/ui-antd'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import debug from 'debug'
@@ -31,6 +31,7 @@ import {
   faPiggyBank as iconBudgets,
   faUniversity as iconAccounts,
 } from '@fortawesome/free-solid-svg-icons'
+import { FormattedMessage } from 'react-intl'
 
 const log = debug('electron:router')
 
@@ -58,7 +59,12 @@ const mutations = {
   ` as Gql<T.SetSidebarWidth.Mutation, T.SetSidebarWidth.Variables>,
 }
 
-type ComponentWithId = React.ComponentType<any> & { id: string }
+type ComponentWithId = React.ComponentType<any> & {
+  id: string
+  messages: {
+    titleText: FormattedMessage.MessageDescriptor
+  }
+}
 
 const routes: ComponentWithId[] = [
   HomePage, //
@@ -77,7 +83,7 @@ const FontIcon: React.FC<{ icon: IconDefinition }> = ({ icon }) => (
 const url = (page: ComponentWithId) => `/${page.id}`
 
 export const ElectronRouter: React.FC<Props> = props => {
-  const { dispatch } = useContext(CoreContext)
+  const { dispatch, intl } = useContext(CoreContext)
   const { loading, data, error } = useQuery(queries.SidebarWidth)
   const setSidebarWidthMutation = useMutation(mutations.SetSidebarWidth, {
     refetchQueries: [{ query: queries.SidebarWidth }],
@@ -178,7 +184,13 @@ export const ElectronRouter: React.FC<Props> = props => {
                   key={Component.id}
                   path={`/${Component.id}`}
                   exact
-                  render={props => <Component {...parse(props.location.search)} />}
+                  render={({ location }) => (
+                    <Layout>
+                      <PageHeader title={intl.formatMessage(Component.messages.titleText)}>
+                        <Component {...parse(location.search)} />
+                      </PageHeader>
+                    </Layout>
+                  )}
                 />
               ))}
               <Route
