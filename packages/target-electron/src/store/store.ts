@@ -3,7 +3,7 @@ import { applyMiddleware, createStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { epics } from '../epics/epics'
-import { ElectronState, rootReducer } from '../reducers'
+import { electronReducer, ElectronState } from '../reducers'
 
 const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, Dependencies>({
   // dependencies,
@@ -15,7 +15,7 @@ const middleware = [
 ]
 
 export const store = createStore<ElectronState, CoreAction, {}, {}>(
-  rootReducer,
+  electronReducer,
   composeWithDevTools(applyMiddleware(...middleware))
 )
 
