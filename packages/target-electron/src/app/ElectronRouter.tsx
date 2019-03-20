@@ -1,4 +1,5 @@
-import { CoreContext, HomePage } from '@ag/core'
+import { CoreContext, HomePage, MenuBar } from '@ag/core'
+import { Content, Header, Layout, Menu, Sider } from '@ag/ui-antd'
 import debug from 'debug'
 import { parse } from 'query-string'
 import React from 'react'
@@ -24,22 +25,36 @@ export class ElectronRouter extends React.PureComponent<Props> {
 
     return (
       <ReactRouter history={history}>
-        <Switch>
-          {routes.map(Component => (
-            <Route
-              key={Component.id}
-              path={`/${Component.id}`}
-              exact
-              render={props => <Component {...parse(props.location.search)} />}
-            />
-          ))}
-          <Route
-            render={({ location }) => {
-              log(`"%s" (%O) not found- redirecting to ${fallback}`, location.pathname, location)
-              return <Redirect to={fallback} />
-            }}
-          />
-        </Switch>
+        <Layout>
+          <Layout>
+            <Sider width={300}>
+              <MenuBar />
+            </Sider>
+
+            <Content>
+              <Switch>
+                {routes.map(Component => (
+                  <Route
+                    key={Component.id}
+                    path={`/${Component.id}`}
+                    exact
+                    render={props => <Component {...parse(props.location.search)} />}
+                  />
+                ))}
+                <Route
+                  render={({ location }) => {
+                    log(
+                      `"%s" (%O) not found- redirecting to ${fallback}`,
+                      location.pathname,
+                      location
+                    )
+                    return <Redirect to={fallback} />
+                  }}
+                />
+              </Switch>
+            </Content>
+          </Layout>
+        </Layout>
       </ReactRouter>
     )
   }

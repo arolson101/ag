@@ -116,21 +116,19 @@ export const ui: UiContext = {
 
   // navigation
   NavMenu: ({ items }) => (
-    <Layout.Sider>
-      <Menu
-        defaultOpenKeys={items.flatMap(getNavMenuOpenKeys)}
-        selectedKeys={items.flatMap(getNavMenuSelectedKeys)}
-        selectable
-        inlineIndent={10}
-        mode='inline'
-        style={{ height: '100%' }}
-        onClick={item => {
-          log('NavMenu onClick %o', item)
-        }}
-      >
-        {items.map(buildNavMenu)}
-      </Menu>
-    </Layout.Sider>
+    <Menu
+      defaultOpenKeys={items.flatMap(getNavMenuOpenKeys)}
+      selectedKeys={items.flatMap(getNavMenuSelectedKeys)}
+      selectable
+      inlineIndent={10}
+      mode='inline'
+      style={{ height: '100%' }}
+      onClick={item => {
+        log('NavMenu onClick %o', item)
+      }}
+    >
+      {items.map(buildNavMenu)}
+    </Menu>
   ),
 
   // layout
