@@ -1,5 +1,5 @@
 export * from './ui.antd'
-export { Layout, Header, Content, Sider, Menu }
+export { Layout, Header, Icon, Content, Sider, Menu }
 
-import { Layout, Menu } from 'antd'
+import { Icon, Layout, Menu } from 'antd'
 const { Header, Content, Sider } = Layout

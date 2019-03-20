@@ -341,12 +341,8 @@ const buildNavMenu = (item: NavMenuItem) =>
     </Menu.SubMenu>
   ) : (
     <Menu.Item key={item.key} onClick={item.onClick} title={item.title}>
-      <span>
-        {item.image && <Icon component={() => <ImageSourceIcon src={item.image} />} />}
-        <span>{item.title}</span>
-        <br />
-        <span>{item.title}</span>
-      </span>
+      {item.image && <Icon component={() => <ImageSourceIcon src={item.image} />} />}
+      <span>{item.title}</span>
     </Menu.Item>
   )
 

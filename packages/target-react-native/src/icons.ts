@@ -8,6 +8,7 @@ const tabSize = 24
 type iconNames = keyof typeof iconSource
 
 // https://fontawesome.com/icons?d=gallery&m=free
+// see target-electron/src/app/ElectronRouter.tsx
 const iconSource = {
   accounts: 'university',
   home: 'home',
