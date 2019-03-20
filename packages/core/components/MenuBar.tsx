@@ -1,6 +1,7 @@
 import debug from 'debug'
+import gql from 'graphql-tag'
 import React from 'react'
-import { AppQuery, gql, Gql, Link } from '.'
+import { AppQuery, Gql, Link } from '.'
 import { actions } from '../actions'
 import { CoreContext, NavMenuItem } from '../context'
 import * as T from '../graphql-types'

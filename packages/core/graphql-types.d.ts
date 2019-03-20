@@ -57,6 +57,40 @@ export interface TransactionInput {
   amount?: Maybe<number>
 }
 
+export interface BillInput {
+  name?: Maybe<string>
+
+  group?: Maybe<string>
+
+  web?: Maybe<string>
+
+  favicon?: Maybe<string>
+
+  notes?: Maybe<string>
+
+  amount?: Maybe<number>
+
+  account?: Maybe<string>
+
+  category?: Maybe<string>
+
+  rruleString?: Maybe<string>
+
+  showAdvanced?: Maybe<boolean>
+}
+
+export interface BudgetInput {
+  name?: Maybe<string>
+
+  sortOrder?: Maybe<number>
+}
+
+export interface CategoryInput {
+  name?: Maybe<string>
+
+  amount?: Maybe<number>
+}
+
 import { AccountType } from '@ag/db'
 
 export type AccountTypeValueMap = {
@@ -400,6 +434,102 @@ export namespace DeleteDb {
     __typename?: 'Mutation'
 
     deleteDb: string
+  }
+}
+
+export namespace AccountsPage {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
+  }
+}
+
+export namespace BillsPage {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
+  }
+}
+
+export namespace BudgetsPage {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
+  }
+}
+
+export namespace CalendarPage {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
   }
 }
 

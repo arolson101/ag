@@ -1,0 +1,24 @@
+{
+  "overwrite": true,
+  "schema": "../db/dist/schema.json",
+  "documents": "**/*.{ts,tsx}",
+  "generates": {
+    "src/electron-graphql-types.d.ts": {
+      "plugins": [
+        { "add": "// tslint:disable all" },
+        { "add": "import { ImageSource } from '@ag/util'" },
+        "typescript-common",
+        "typescript-client"
+      ],
+      "config": {
+        "noNamespaces": false,
+        "enums": {
+          "AccountType": "@ag/db#AccountType"
+        },
+        "scalars": {
+          "ImageSource": "ImageSource"
+        }
+      }
+    }
+  }
+}

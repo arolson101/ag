@@ -1,4 +1,12 @@
-import { actions, CoreAction, HomePage } from '@ag/core'
+import {
+  AccountsPage,
+  actions,
+  BillsPage,
+  BudgetsPage,
+  CalendarPage,
+  CoreAction,
+  HomePage,
+} from '@ag/core'
 import { createBrowserHistory, History } from 'history'
 import { stringify } from 'query-string'
 import { getType } from 'typesafe-actions'
@@ -29,6 +37,22 @@ export const router = (state: RouterState = initialState, action: CoreAction): R
 
     case getType(actions.nav.home):
       state.history.push(href(HomePage.id))
+      break
+
+    case getType(actions.nav.accounts):
+      state.history.push(href(AccountsPage.id))
+      break
+
+    case getType(actions.nav.bills):
+      state.history.push(href(BillsPage.id))
+      break
+
+    case getType(actions.nav.budgets):
+      state.history.push(href(BudgetsPage.id))
+      break
+
+    case getType(actions.nav.calendar):
+      state.history.push(href(CalendarPage.id))
       break
 
     // case getType(actions.nav.bank):

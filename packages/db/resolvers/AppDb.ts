@@ -1,9 +1,14 @@
 import { fail } from 'assert'
 import debug from 'debug'
-import { Arg, Field, ObjectType } from 'type-graphql'
+import { Arg, Field, Mutation, ObjectType } from 'type-graphql'
 import { Connection } from 'typeorm'
-import { Account, Bank, DbChange, Record, Transaction } from '../entities'
-import { AccountRepository, BankRepository, TransactionRepository } from '../repositories'
+import { Account, Bank, DbChange, Record, Setting, Transaction } from '../entities'
+import {
+  AccountRepository,
+  BankRepository,
+  SettingsRepository,
+  TransactionRepository,
+} from '../repositories'
 
 const log = debug('db:AppDb')
 
@@ -15,6 +20,7 @@ export interface Change {
 @ObjectType()
 export class AppDb {
   private connection?: Connection
+  settingsRepository?: SettingsRepository
   banksRepository?: BankRepository
   accountsRepository?: AccountRepository
   transactionsRepository?: TransactionRepository
@@ -33,6 +39,7 @@ export class AppDb {
     }
     this.loggedIn = true
     this.connection = connection
+    this.settingsRepository = connection.getCustomRepository(SettingsRepository)
     this.banksRepository = connection.getCustomRepository(BankRepository)
     this.accountsRepository = connection.getCustomRepository(AccountRepository)
     this.transactionsRepository = connection.getCustomRepository(TransactionRepository)
@@ -44,9 +51,33 @@ export class AppDb {
       await this.connection.close()
       this.loggedIn = false
       this.connection = undefined
+      this.settingsRepository = undefined
       this.banksRepository = undefined
       this.accountsRepository = undefined
       this.transactionsRepository = undefined
+    }
+  }
+
+  @Field(returns => Setting, { nullable: true })
+  async get(
+    @Arg('key') key: string //
+  ): Promise<Setting | undefined> {
+    log('get %s', key)
+    if (this.settingsRepository) {
+      const setting = await this.settingsRepository.get(key)
+      return setting
+    }
+  }
+
+  @Mutation(returns => Setting, { nullable: true })
+  async set(
+    @Arg('key') key: string, //
+    @Arg('value') value: string
+  ): Promise<Setting | undefined> {
+    log('set %s %s', key, value)
+    if (this.settingsRepository) {
+      const setting = await this.settingsRepository.set(key, value)
+      return setting
     }
   }
 

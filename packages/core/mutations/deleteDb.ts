@@ -1,6 +1,7 @@
 import ApolloClient from 'apollo-client'
+import gql from 'graphql-tag'
 import { defineMessages } from 'react-intl'
-import { Gql, gql } from '../components'
+import { Gql } from '../components'
 import { CoreContext } from '../context'
 import { LoginForm } from '../forms'
 import * as T from '../graphql-types'

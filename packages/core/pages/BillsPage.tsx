@@ -8,50 +8,48 @@ import { BankDisplay } from '../components/BankDisplay'
 import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 
-const log = debug('core:HomePage')
+const log = debug('core:BillsPage')
 
-export namespace HomePage {
+export namespace BillsPage {
   export interface Props {}
 }
 
 const queries = {
-  HomePage: gql`
-    query HomePage {
+  BillsPage: gql`
+    query BillsPage {
       appDb {
-        banks {
-          ...BankDisplay
+        accounts {
+          id
+          name
         }
       }
     }
     ${BankDisplay.fragments.BankDisplay}
-  ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
+  ` as Gql<T.BillsPage.Query, T.BillsPage.Variables>,
 }
 
 const Component: React.FC<
-  QueryHookResult<T.HomePage.Query, T.HomePage.Variables>
-> = function HomePageComponent({ data, loading }) {
+  QueryHookResult<T.BillsPage.Query, T.BillsPage.Variables>
+> = function BillsPageComponent({ data, loading }) {
   const {
     ui: { Page, Row, Text },
   } = useContext(CoreContext)
 
   return (
     <Page>
-      <Text header>Home</Text>
+      <Text header>Bills</Text>
       {data &&
         data.appDb &&
-        data.appDb.banks.map(bank => <BankDisplay bank={bank} key={bank.id} />)}
-      <Row>
-        <Link dispatch={actions.openDlg.bankCreate()}>add bank</Link>
-      </Row>
+        data.appDb.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
     </Page>
   )
 }
 
-export const HomePage = Object.assign(
-  (props: HomePage.Props) => {
+export const BillsPage = Object.assign(
+  (props: BillsPage.Props) => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
-    const q = useQuery(HomePage.queries.HomePage)
+    const q = useQuery(BillsPage.queries.BillsPage)
 
     if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
       dispatch(actions.openDlg.login())
@@ -61,7 +59,7 @@ export const HomePage = Object.assign(
     return <Component {...q} />
   },
   {
-    id: 'HomePage',
+    id: 'BillsPage',
     queries,
     Component,
   }

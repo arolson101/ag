@@ -3,6 +3,7 @@ import debug from 'debug'
 import { Formik, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
 import React from 'react'
+import { ApolloConsumer } from 'react-apollo'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { AppMutation, Gql } from '../components'
@@ -72,79 +73,84 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
     const create = !dbId
 
     return (
-      <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
-        mutation={create ? LoginForm.mutations.createDb : LoginForm.mutations.openDb}
-        refetchQueries={[
-          { query: LoginForm.queries.LoginForm }, //
-          { query: HomePage.queries.HomePage },
-        ]}
-      >
-        {runMutation => {
-          return (
-            <>
-              <Formik
-                ref={this.formApi}
-                validateOnBlur={false}
-                initialValues={initialValues}
-                validate={values => {
-                  const errors: FormikErrors<Values> = {}
-                  if (create) {
-                    if (!values.password.trim()) {
-                      errors.password = intl.formatMessage(messages.valueEmpty)
-                    }
-                    if (values.password !== values.passwordConfirm) {
-                      errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
-                    }
-                  } else {
-                    if (!values.password.trim()) {
-                      errors.password = intl.formatMessage(messages.valueEmpty)
-                    }
-                  }
-                  return errors
-                }}
-                onSubmit={async (values, factions) => {
-                  try {
-                    const { dispatch } = this.context
-                    await runMutation({ variables: { ...values, dbId } })
-                    log('logged in')
-                    dispatch(actions.closeDlg('login'))
-                  } finally {
-                    factions.setSubmitting(false)
-                  }
-                }}
-              >
-                {formApi => (
-                  <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
-                    <Text>
-                      {intl.formatMessage(
-                        create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
-                      )}
-                    </Text>
-                    <TextField
-                      autoFocus
-                      secure
-                      field='password'
-                      label={intl.formatMessage(messages.passwordLabel)}
-                      placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-                      // returnKeyType={create ? 'next' : 'go'}
-                      // onSubmitEditing={create ? this.focusConfirmInput :
-                      // formApi.submitForm}
-                    />
-                    {create && (
-                      <TextField
-                        secure
-                        field='passwordConfirm'
-                        label={intl.formatMessage(messages.passwordConfirmLabel)}
-                        placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
-                        // returnKeyType={'go'}
-                        onSubmitEditing={formApi.submitForm}
-                        // inputRef={this.inputRef}
-                      />
+      <ApolloConsumer>
+        {client => (
+          <AppMutation<T.OpenDb.Mutation | T.CreateDb.Mutation, any>
+            mutation={create ? LoginForm.mutations.createDb : LoginForm.mutations.openDb}
+            refetchQueries={[
+              { query: LoginForm.queries.LoginForm }, //
+              { query: HomePage.queries.HomePage },
+            ]}
+            onCompleted={() => {
+              client.reFetchObservableQueries()
+            }}
+          >
+            {runMutation => {
+              return (
+                <>
+                  <Formik
+                    ref={this.formApi}
+                    validateOnBlur={false}
+                    initialValues={initialValues}
+                    validate={values => {
+                      const errors: FormikErrors<Values> = {}
+                      if (create) {
+                        if (!values.password.trim()) {
+                          errors.password = intl.formatMessage(messages.valueEmpty)
+                        }
+                        if (values.password !== values.passwordConfirm) {
+                          errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
+                        }
+                      } else {
+                        if (!values.password.trim()) {
+                          errors.password = intl.formatMessage(messages.valueEmpty)
+                        }
+                      }
+                      return errors
+                    }}
+                    onSubmit={async (values, factions) => {
+                      try {
+                        const { dispatch } = this.context
+                        await runMutation({ variables: { ...values, dbId } })
+                        log('logged in')
+                        dispatch(actions.closeDlg('login'))
+                      } finally {
+                        factions.setSubmitting(false)
+                      }
+                    }}
+                  >
+                    {formApi => (
+                      <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
+                        <Text>
+                          {intl.formatMessage(
+                            create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
+                          )}
+                        </Text>
+                        <TextField
+                          autoFocus
+                          secure
+                          field='password'
+                          label={intl.formatMessage(messages.passwordLabel)}
+                          placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+                          // returnKeyType={create ? 'next' : 'go'}
+                          // onSubmitEditing={create ? this.focusConfirmInput :
+                          // formApi.submitForm}
+                        />
+                        {create && (
+                          <TextField
+                            secure
+                            field='passwordConfirm'
+                            label={intl.formatMessage(messages.passwordConfirmLabel)}
+                            placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
+                            // returnKeyType={'go'}
+                            onSubmitEditing={formApi.submitForm}
+                            // inputRef={this.inputRef}
+                          />
+                        )}
+                      </Form>
                     )}
-                  </Form>
-                )}
-              </Formik>
-              {/*
+                  </Formik>
+                  {/*
               {dbId && (
                 <AppMutation
                   mutation={LoginForm.mutations.deleteDb}
@@ -167,10 +173,12 @@ export class LoginForm extends React.PureComponent<LoginForm.Props> {
                   )}
                 </AppMutation>
               )} */}
-            </>
-          )
-        }}
-      </AppMutation>
+                </>
+              )
+            }}
+          </AppMutation>
+        )}
+      </ApolloConsumer>
     )
   }
 

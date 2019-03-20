@@ -4,7 +4,7 @@ import sanitize from 'sanitize-filename'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { Service } from 'typedi'
 import { DbContext } from '../DbContext'
-import { Account, Bank, Bill, Budget, Category, Db, Transaction } from '../entities'
+import { Account, Bank, Bill, Budget, Category, Db, Setting, Transaction } from '../entities'
 import { AppDb } from './AppDb'
 import { IndexDb } from './IndexDb'
 
@@ -21,6 +21,7 @@ const appEntities = [
   Budget,
   Category,
   Transaction,
+  Setting,
 ]
 
 @Service()

@@ -6,7 +6,7 @@
   "scripts": {
     "pregraphdoc": "yarn run schema",
     "graphdoc": "graphdoc --force -s ./dist/schema.json -o ./dist/graphdoc",
-    "schema": "node  -r ts-node/register/transpile-only ./scripts/buildSchema.ts ./dist/schema.json",
+    "schema": "node -r ts-node/register/transpile-only ./scripts/buildSchema.ts ./dist/schema.json",
     "test": "jest"
   },
   "dependencies": {
