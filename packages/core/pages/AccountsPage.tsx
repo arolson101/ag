@@ -1,4 +1,3 @@
-import { ui } from '@ag/ui-antd'
 import debug from 'debug'
 import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
@@ -69,7 +68,7 @@ const Component: React.FC<
   const {
     intl,
     dispatch,
-    ui: { Column, Page, Row, Table, Text, Image },
+    ui: { Column, Page, Row, Table, showToast },
   } = context
 
   type Row = T.AccountsPage.Accounts
@@ -122,9 +121,7 @@ const Component: React.FC<
                       onClick: async () => {
                         try {
                           await syncAccounts({ variables: { bankId: bank.id } })
-                          ui.showToast(
-                            intl.formatMessage(messages.syncComplete, { name: bank.name })
-                          )
+                          showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
                         } catch (error) {
                           ErrorDisplay.show(context, error)
                         }
