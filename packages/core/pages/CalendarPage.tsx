@@ -5,7 +5,6 @@ import { QueryHookResult } from 'react-apollo-hooks'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { Gql, Link, useQuery } from '../components'
-import { BankDisplay } from '../components/BankDisplay'
 import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 
@@ -25,7 +24,6 @@ const queries = {
         }
       }
     }
-    ${BankDisplay.fragments.BankDisplay}
   ` as Gql<T.CalendarPage.Query, T.CalendarPage.Variables>,
 }
 

@@ -61,7 +61,8 @@ export interface ListItem {
   title?: React.ReactNode
   subtitle?: React.ReactNode
   content?: React.ReactNode
-  contextMenu?: ContextMenuProps
+  contextMenuHeader?: string
+  actions?: ActionItem[]
 }
 
 export interface LoadingOverlayProps {
@@ -112,7 +113,8 @@ export interface TableColumn<T extends {}> {
 export interface TableProps<T extends {} = any> {
   titleText: string
   titleImage?: ImageSource
-  titleContextMenu?: ContextMenuProps
+  titleContextMenuHeader?: string
+  titleActions?: ActionItem[]
   rowContextMenu?: (row: T) => ContextMenuProps
   rowKey: keyof T & string
   emptyText?: string

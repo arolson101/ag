@@ -1,14 +1,14 @@
-import { Bank } from '@ag/db'
 import { ui } from '@ag/ui-antd'
 import debug from 'debug'
 import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
-import { QueryHookResult } from 'react-apollo-hooks'
+import { QueryHookResult, useApolloClient } from 'react-apollo-hooks'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay, Gql, Link, useMutation, useQuery } from '../components'
 import { ActionItem, CoreContext, TableColumn } from '../context'
 import * as T from '../graphql-types'
+import { deleteAccount, deleteBank } from '../mutations'
 
 const log = debug('core:AccountsPage')
 
@@ -61,6 +61,7 @@ const Component: React.FC<
   QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
 > = function AccountsPageComponent({ data, loading }) {
   const context = useContext(CoreContext)
+  const client = useApolloClient()
   const syncAccounts = useMutation(mutations.SyncAccounts, {
     refetchQueries: [{ query: queries.AccountsPage }],
   })
@@ -96,45 +97,43 @@ const Component: React.FC<
             key={bank.id}
             titleText={bank.name}
             titleImage={bank.favicon}
-            titleContextMenu={{
-              header: bank.name,
-              actions: [
-                {
-                  icon: 'edit',
-                  text: intl.formatMessage(messages.bankEdit),
-                  onClick: () => dispatch(actions.openDlg.bankEdit({ bankId: bank.id })),
-                },
-                {
-                  icon: 'trash',
-                  text: intl.formatMessage(messages.deleteBank),
-                  // onClick: () => deleteBank({ context: this.context, bank, client }),
-                },
-                {
-                  icon: 'add',
-                  text: intl.formatMessage(messages.accountCreate),
-                  onClick: () => dispatch(actions.openDlg.accountCreate({ bankId: bank.id })),
-                },
-                ...(bank.online
-                  ? [
-                      {
-                        icon: 'sync',
-                        text: intl.formatMessage(messages.syncAccounts),
-                        onClick: async () => {
-                          try {
-                            await syncAccounts({ variables: { bankId: bank.id } })
-                            ui.showToast(
-                              intl.formatMessage(messages.syncComplete, { name: bank.name })
-                            )
-                          } catch (error) {
-                            ErrorDisplay.show(context, error)
-                          }
-                        },
-                        disabled: !bank.online,
-                      } as ActionItem,
-                    ]
-                  : []),
-              ],
-            }}
+            titleContextMenuHeader={bank.name}
+            titleActions={[
+              {
+                icon: 'edit',
+                text: intl.formatMessage(messages.bankEdit),
+                onClick: () => dispatch(actions.openDlg.bankEdit({ bankId: bank.id })),
+              },
+              {
+                icon: 'trash',
+                text: intl.formatMessage(messages.deleteBank),
+                onClick: () => deleteBank({ context, bank, client }),
+              },
+              {
+                icon: 'add',
+                text: intl.formatMessage(messages.accountCreate),
+                onClick: () => dispatch(actions.openDlg.accountCreate({ bankId: bank.id })),
+              },
+              ...(bank.online
+                ? [
+                    {
+                      icon: 'sync',
+                      text: intl.formatMessage(messages.syncAccounts),
+                      onClick: async () => {
+                        try {
+                          await syncAccounts({ variables: { bankId: bank.id } })
+                          ui.showToast(
+                            intl.formatMessage(messages.syncComplete, { name: bank.name })
+                          )
+                        } catch (error) {
+                          ErrorDisplay.show(context, error)
+                        }
+                      },
+                      disabled: !bank.online,
+                    } as ActionItem,
+                  ]
+                : []),
+            ]}
             rowKey={'id'}
             rowContextMenu={(account: Row) => ({
               header: intl.formatMessage(messages.contextMenuHeader, {
@@ -150,7 +149,7 @@ const Component: React.FC<
                 {
                   icon: 'trash',
                   text: intl.formatMessage(messages.deleteAccount),
-                  // onClick: () => deleteAccount({ context: this.context, account, client }),
+                  onClick: () => deleteAccount({ context, account, client }),
                 },
               ],
             })}

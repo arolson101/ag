@@ -204,8 +204,8 @@ export const ui: UiContext = {
       // itemLayout='vertical'
       size='small'
       dataSource={items}
-      renderItem={({ title, image, subtitle, content, contextMenu }: ListItem) => (
-        <ContextMenu {...contextMenu || {}}>
+      renderItem={({ title, image, subtitle, content, contextMenuHeader, actions }: ListItem) => (
+        <ContextMenu header={contextMenuHeader} actions={actions}>
           <List.Item>
             <List.Item.Meta
               title={title}
@@ -231,7 +231,8 @@ export const ui: UiContext = {
   Table: ({
     titleText,
     titleImage,
-    titleContextMenu,
+    titleContextMenuHeader,
+    titleActions,
     emptyText,
     columns,
     rowKey,
@@ -240,9 +241,9 @@ export const ui: UiContext = {
   }) => {
     const render = (text: string, row: any, index: number) => {
       return (
-        // <ContextMenu {...(rowContextMenu ? rowContextMenu(row) : {})}>
-        <div>{text}</div>
-        // </ContextMenu>
+        <ContextMenu {...(rowContextMenu ? rowContextMenu(row) : {})}>
+          <div style={{ margin: -16, padding: 16 }}>{text}</div>
+        </ContextMenu>
       )
     }
     return (
@@ -257,7 +258,7 @@ export const ui: UiContext = {
           title={
             titleText
               ? () => (
-                  <ContextMenu {...titleContextMenu || {}}>
+                  <ContextMenu header={titleContextMenuHeader} actions={titleActions}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                       {titleImage && (
                         <Icon
@@ -272,7 +273,7 @@ export const ui: UiContext = {
               : undefined
           }
           pagination={false}
-          columns={columns.map(col => ({ ...col }))}
+          columns={columns.map(col => ({ ...col, render }))}
           rowKey={rowKey}
           dataSource={data}
         />
