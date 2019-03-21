@@ -461,6 +461,8 @@ export namespace AccountsPage {
 
     name: string
 
+    online: boolean
+
     accounts: Accounts[]
   }
 

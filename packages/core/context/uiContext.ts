@@ -43,6 +43,11 @@ export interface CardProps {
   title?: string
 }
 
+export interface ContextMenuProps {
+  header?: string
+  actions?: ActionItem[]
+}
+
 export interface DialogProps {
   title: string
   isOpen: boolean
@@ -56,8 +61,7 @@ export interface ListItem {
   title?: React.ReactNode
   subtitle?: React.ReactNode
   content?: React.ReactNode
-  actions?: ActionItem[]
-  contextMenuHeader?: string
+  contextMenu?: ContextMenuProps
 }
 
 export interface LoadingOverlayProps {
@@ -106,7 +110,10 @@ export interface TableColumn<T extends {}> {
 }
 
 export interface TableProps<T extends {} = any> {
-  title?: () => React.ReactNode
+  titleText: string
+  titleImage?: ImageSource
+  titleContextMenu?: ContextMenuProps
+  rowContextMenu?: (row: T) => ContextMenuProps
   rowKey: keyof T & string
   emptyText?: string
   data: T[]

@@ -73,34 +73,36 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                   // title: bank.name,
                   image: bank.favicon,
                   // subtitle: bank.accounts.length === 0 ? 'add an account' : undefined,
-                  contextMenuHeader: bank.name,
-                  actions: [
-                    {
-                      icon: 'edit',
-                      text: intl.formatMessage(messages.bankEdit),
-                      onClick: () => dispatch(actions.openDlg.bankEdit({ bankId })),
-                    },
-                    {
-                      icon: 'trash',
-                      text: intl.formatMessage(messages.deleteBank),
-                      onClick: () => deleteBank({ context: this.context, bank, client }),
-                    },
-                    {
-                      icon: 'add',
-                      text: intl.formatMessage(messages.accountCreate),
-                      onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
-                    },
-                    ...(bank.online
-                      ? [
-                          {
-                            icon: 'sync',
-                            text: intl.formatMessage(messages.syncAccounts),
-                            onClick: syncAccounts,
-                            disabled: !bank.online,
-                          } as ActionItem,
-                        ]
-                      : []),
-                  ],
+                  contextMenu: {
+                    header: bank.name,
+                    actions: [
+                      {
+                        icon: 'edit',
+                        text: intl.formatMessage(messages.bankEdit),
+                        onClick: () => dispatch(actions.openDlg.bankEdit({ bankId })),
+                      },
+                      {
+                        icon: 'trash',
+                        text: intl.formatMessage(messages.deleteBank),
+                        onClick: () => deleteBank({ context: this.context, bank, client }),
+                      },
+                      {
+                        icon: 'add',
+                        text: intl.formatMessage(messages.accountCreate),
+                        onClick: () => dispatch(actions.openDlg.accountCreate({ bankId })),
+                      },
+                      ...(bank.online
+                        ? [
+                            {
+                              icon: 'sync',
+                              text: intl.formatMessage(messages.syncAccounts),
+                              onClick: syncAccounts,
+                              disabled: !bank.online,
+                            } as ActionItem,
+                          ]
+                        : []),
+                    ],
+                  },
                 },
                 ...bank.accounts.map<ListItem>(
                   (account): ListItem => ({
@@ -109,23 +111,25 @@ export class BankDisplay extends React.PureComponent<BankDisplay.Props> {
                     // title: bank.name,
                     title: account.name,
                     // content: '$' + Math.trunc(Math.random() * 100000) / 100,
-                    contextMenuHeader: intl.formatMessage(messages.contextMenuHeader, {
-                      bankName: bank.name,
-                      accountName: account.name,
-                    }),
-                    actions: [
-                      {
-                        icon: 'edit',
-                        text: intl.formatMessage(messages.editAccount),
-                        onClick: () =>
-                          dispatch(actions.openDlg.accountEdit({ accountId: account.id })),
-                      },
-                      {
-                        icon: 'trash',
-                        text: intl.formatMessage(messages.deleteAccount),
-                        onClick: () => deleteAccount({ context: this.context, account, client }),
-                      },
-                    ],
+                    contextMenu: {
+                      header: intl.formatMessage(messages.contextMenuHeader, {
+                        bankName: bank.name,
+                        accountName: account.name,
+                      }),
+                      actions: [
+                        {
+                          icon: 'edit',
+                          text: intl.formatMessage(messages.editAccount),
+                          onClick: () =>
+                            dispatch(actions.openDlg.accountEdit({ accountId: account.id })),
+                        },
+                        {
+                          icon: 'trash',
+                          text: intl.formatMessage(messages.deleteAccount),
+                          onClick: () => deleteAccount({ context: this.context, account, client }),
+                        },
+                      ],
+                    },
                   })
                 ),
               ]}

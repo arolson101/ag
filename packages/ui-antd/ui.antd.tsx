@@ -1,5 +1,6 @@
 import {
   AlertParams,
+  ContextMenuProps,
   IconName,
   ListItem,
   LoadingOverlayProps,
@@ -38,7 +39,7 @@ import { SelectField } from './SelectField.antd'
 import { TextField } from './TextField.antd'
 // const { Text, Title, Paragraph } = Typography
 const Text: React.FC = ({ children }) => <span>{children}</span>
-const Title: React.FC<{ style: any }> = ({ style, children }) => <h3>{children}</h3>
+const Title: React.FC = ({ children }) => <h3>{children}</h3>
 const Paragraph: React.FC = ({ children }) => <p>{children}</p>
 
 const log = debug('ui-antd:ui')
@@ -203,34 +204,8 @@ export const ui: UiContext = {
       // itemLayout='vertical'
       size='small'
       dataSource={items}
-      renderItem={({ title, image, subtitle, content, actions, contextMenuHeader }: ListItem) => (
-        <Dropdown
-          trigger={['contextMenu']}
-          overlay={
-            actions && (
-              <Menu
-                onClick={item => {
-                  const action = actions[+item.key]
-                  if (action.onClick) {
-                    action.onClick()
-                  }
-                }}
-              >
-                <Menu.ItemGroup title={contextMenuHeader} />
-                {actions.map((item, i) =>
-                  item.divider ? (
-                    <Menu.Divider key={i} />
-                  ) : (
-                    <Menu.Item disabled={!item.onClick || item.disabled} key={i}>
-                      <Icon type={mapIconName(item.icon)} />
-                      {item.text}
-                    </Menu.Item>
-                  )
-                )}
-              </Menu>
-            )
-          }
-        >
+      renderItem={({ title, image, subtitle, content, contextMenu }: ListItem) => (
+        <ContextMenu {...contextMenu || {}}>
           <List.Item>
             <List.Item.Meta
               title={title}
@@ -245,7 +220,7 @@ export const ui: UiContext = {
             />
             {content}
           </List.Item>
-        </Dropdown>
+        </ContextMenu>
       )}
       header={header}
       footer={footer}
@@ -253,17 +228,57 @@ export const ui: UiContext = {
   ),
 
   // table
-  Table: ({ title, emptyText, columns, rowKey, data }) => (
-    <ConfigProvider
-      renderEmpty={() => (
-        <div style={{ textAlign: 'center' }}>
-          <Text>{emptyText}</Text>
-        </div>
-      )}
-    >
-      <Table title={title} pagination={false} columns={columns} rowKey={rowKey} dataSource={data} />
-    </ConfigProvider>
-  ),
+  Table: ({
+    titleText,
+    titleImage,
+    titleContextMenu,
+    emptyText,
+    columns,
+    rowKey,
+    rowContextMenu,
+    data,
+  }) => {
+    const render = (text: string, row: any, index: number) => {
+      return (
+        // <ContextMenu {...(rowContextMenu ? rowContextMenu(row) : {})}>
+        <div>{text}</div>
+        // </ContextMenu>
+      )
+    }
+    return (
+      <ConfigProvider
+        renderEmpty={() => (
+          <div style={{ textAlign: 'center' }}>
+            <Text>{emptyText}</Text>
+          </div>
+        )}
+      >
+        <Table
+          title={
+            titleText
+              ? () => (
+                  <ContextMenu {...titleContextMenu || {}}>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                      {titleImage && (
+                        <Icon
+                          style={{ margin: 5 }}
+                          component={() => <ImageSourceIcon src={titleImage} />}
+                        />
+                      )}
+                      <Title>{titleText}</Title>
+                    </div>
+                  </ContextMenu>
+                )
+              : undefined
+          }
+          pagination={false}
+          columns={columns.map(col => ({ ...col }))}
+          rowKey={rowKey}
+          dataSource={data}
+        />
+      </ConfigProvider>
+    )
+  },
 
   // controls
   Spinner: Spin,
@@ -408,3 +423,41 @@ const ImageSourceIcon: React.FC<{ src: ImageSource | undefined }> = ({ src }) =>
     }
   />
 )
+
+const ContextMenu: React.FC<ContextMenuProps> = ({ header, actions, children }) => {
+  if (actions) {
+    return (
+      <Dropdown
+        trigger={['contextMenu']}
+        overlay={
+          actions && (
+            <Menu
+              onClick={item => {
+                const action = actions[+item.key]
+                if (action.onClick) {
+                  action.onClick()
+                }
+              }}
+            >
+              {header && <Menu.ItemGroup title={header} />}
+              {actions.map((item, i) =>
+                item.divider ? (
+                  <Menu.Divider key={i} />
+                ) : (
+                  <Menu.Item disabled={!item.onClick || item.disabled} key={i}>
+                    <Icon type={mapIconName(item.icon)} />
+                    {item.text}
+                  </Menu.Item>
+                )
+              )}
+            </Menu>
+          )
+        }
+      >
+        {children}
+      </Dropdown>
+    )
+  } else {
+    return <>{children}</>
+  }
+}

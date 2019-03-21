@@ -22,8 +22,11 @@ export class ErrorDisplay extends React.PureComponent<Props> {
   }
 
   showError() {
-    let { error: errors } = this.props
+    const { error } = this.props
+    ErrorDisplay.show(this.context, error)
+  }
 
+  static show(context: CoreContext, errors: Props['error']) {
     if (!errors) {
       return null
     }
@@ -34,14 +37,14 @@ export class ErrorDisplay extends React.PureComponent<Props> {
       errors = [errors]
     }
 
-    const { intl, ui } = this.context
+    const { intl, ui } = context
     const { alert } = ui
 
     alert({
       title: intl.formatMessage(messages.error),
       body: (errors as Error[]).map(e => e.message).join('\n'),
       confirmText: intl.formatMessage(messages.ok),
-      onConfirm: this.onConfirm,
+      onConfirm: () => undefined,
       error: true,
     })
   }
@@ -49,8 +52,6 @@ export class ErrorDisplay extends React.PureComponent<Props> {
   render() {
     return null
   }
-
-  onConfirm = () => {}
 }
 
 const messages = defineMessages({
