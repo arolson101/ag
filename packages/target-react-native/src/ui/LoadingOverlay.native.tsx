@@ -1,7 +1,7 @@
 import { CoreContext, LoadingOverlayProps } from '@ag/core'
 import { platform, Spinner } from '@ag/ui-nativebase'
 import debug from 'debug'
-import * as React from 'react'
+import React from 'react'
 import { Dimensions, StyleSheet, View } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 

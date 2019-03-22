@@ -2,7 +2,7 @@ import { CheckboxFieldProps } from '@ag/core'
 import { Field, FieldProps } from 'formik'
 import { Item, Right, Switch } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
-import * as React from 'react'
+import React from 'react'
 import { Label } from './Label.nativebase'
 
 export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {

@@ -1,13 +1,11 @@
 import { Account } from '@ag/db'
-import { Gql, pick } from '@ag/util'
-import { Formik, FormikErrors, FormikProps } from 'formik'
+import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
+import { Formik, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
-import * as React from 'react'
+import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery } from '../components'
 import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
-import { HomePage } from '../pages'
 
 interface Props {
   accountId?: string
@@ -64,146 +62,163 @@ const mutations = {
   ` as Gql<T.SaveAccount.Mutation, T.SaveAccount.Variables>,
 }
 
-export class AccountForm extends React.PureComponent<Props> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
+export interface AccountForm {
+  save: () => any
+}
 
-  static readonly fragments = fragments
-  static readonly queries = queries
-  static readonly mutations = mutations
+interface ComponentProps extends Props {
+  loading: boolean
+  data: T.AccountForm.Query | undefined
+  saveAccount: MutationFn<T.SaveAccount.Mutation, T.SaveAccount.Variables>
+}
 
-  private formApi: FormikProps<FormValues> | undefined
-
-  render() {
-    const { accountId, onClosed, bankId } = this.props
-    const { intl, ui } = this.context
+const Component = Object.assign(
+  React.forwardRef<AccountForm, ComponentProps>((props, ref) => {
+    const { ui, intl } = useContext(CoreContext)
     const { showToast, Text } = ui
     const { Form, SelectField, TextField } = typedFields<FormValues>(ui)
+    const { data, saveAccount, loading, accountId, bankId, onClosed } = props
+
+    const formik = useRef<Formik<FormValues>>(null)
+
+    useImperativeHandle(ref, () => ({
+      save: () => {
+        formik.current!.submitForm()
+      },
+    }))
+
+    if (!loading && (!data || !data.appDb)) {
+      throw new Error('db not open')
+    }
+
+    const account = loading ? undefined : data && data.appDb && data.appDb.account
+    const bank = loading ? undefined : data && data.appDb && data.appDb.bank
+    const initialValues: FormValues = {
+      ...(account
+        ? pick(account, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
+        : Account.defaultValues()),
+    }
 
     return (
-      <AppQuery query={queries.AccountForm} variables={{ accountId, bankId }}>
-        {({ appDb }) => {
-          if (!appDb) {
-            throw new Error('db not open')
+      <Formik<FormValues>
+        ref={formik}
+        validateOnBlur={false}
+        enableReinitialize
+        initialValues={initialValues}
+        validate={values => {
+          const errors: FormikErrors<FormValues> = {}
+          if (!values.name || !values.name.trim()) {
+            errors.name = intl.formatMessage(messages.valueEmpty)
           }
-
-          const { account: edit, bank } = appDb
-          const initialValues: FormValues = {
-            ...(edit
-              ? pick(edit, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
-              : Account.defaultValues()),
+          return errors
+        }}
+        onSubmit={async ({ ...input }, factions) => {
+          try {
+            const variables = {
+              bankId,
+              accountId,
+              input,
+            }
+            await saveAccount({ variables } as any)
+            showToast(
+              intl.formatMessage(accountId ? messages.saved : messages.created, {
+                name: input.name,
+              })
+            )
+            onClosed()
+          } finally {
+            factions.setSubmitting(false)
           }
-
+        }}
+      >
+        {formApi => {
           return (
-            <AppMutation
-              mutation={mutations.SaveAccount}
-              refetchQueries={[
-                { query: queries.AccountForm, variables: { accountId } },
-                { query: HomePage.queries.HomePage },
-              ]}
-            >
-              {saveAccount => (
-                <Formik<FormValues>
-                  validateOnBlur={false}
-                  enableReinitialize
-                  initialValues={initialValues}
-                  validate={values => {
-                    const errors: FormikErrors<FormValues> = {}
-                    if (!values.name || !values.name.trim()) {
-                      errors.name = intl.formatMessage(messages.valueEmpty)
-                    }
-                    return errors
-                  }}
-                  onSubmit={async ({ ...input }, factions) => {
-                    try {
-                      const variables = {
-                        bankId,
-                        accountId,
-                        input,
-                      }
-                      await saveAccount({ variables } as any)
-                      showToast(
-                        intl.formatMessage(accountId ? messages.saved : messages.created, {
-                          name: input.name,
-                        })
-                      )
-                      onClosed()
-                    } finally {
-                      factions.setSubmitting(false)
-                    }
-                  }}
-                >
-                  {formApi => {
-                    this.formApi = formApi
-                    return (
-                      <Form onSubmit={formApi.handleSubmit}>
-                        <Text header>{edit ? edit.bank.name : bank ? bank.name : '<no bank>'}</Text>
-                        <TextField
-                          field='name'
-                          label={intl.formatMessage(messages.name)}
-                          placeholder={intl.formatMessage(messages.namePlaceholder)}
-                          autoFocus={!edit}
-                        />
-                        <TextField
-                          field='number'
-                          label={intl.formatMessage(messages.number)}
-                          placeholder={intl.formatMessage(messages.numberPlaceholder)}
-                        />
-                        <SelectField
-                          field='type'
-                          items={Object.keys(Account.Type).map(acct => ({
-                            value: acct.toString(),
-                            label: intl.formatMessage(
-                              (Account.messages as Record<string, any>)[acct]
-                            ),
-                          }))}
-                          label={intl.formatMessage(messages.type)}
-                          onValueChange={type => {
-                            formApi.setFieldValue(
-                              'color',
-                              Account.generateColor(type as Account.Type)
-                            )
-                          }}
-                        />
-                        <TextField
-                          field='color'
-                          label={intl.formatMessage(messages.color)}
-                          placeholder={intl.formatMessage(messages.colorPlaceholder)}
-                          color={formApi.values.color}
-                        />
-                        {(formApi.values.type === Account.Type.CHECKING ||
-                          formApi.values.type === Account.Type.SAVINGS) && (
-                          <TextField
-                            field='routing'
-                            label={intl.formatMessage(messages.routing)}
-                            placeholder={intl.formatMessage(messages.routingPlaceholder)}
-                          />
-                        )}
-                        {formApi.values.type === Account.Type.CREDITCARD && (
-                          <TextField
-                            field='key'
-                            label={intl.formatMessage(messages.key)}
-                            placeholder={intl.formatMessage(messages.keyPlaceholder)}
-                          />
-                        )}
-                      </Form>
-                    )
-                  }}
-                </Formik>
+            <Form onSubmit={formApi.handleSubmit}>
+              <Text header>{account ? account.bank.name : bank ? bank.name : '<no bank>'}</Text>
+              <TextField
+                field='name'
+                label={intl.formatMessage(messages.name)}
+                placeholder={intl.formatMessage(messages.namePlaceholder)}
+                autoFocus={!account}
+              />
+              <TextField
+                field='number'
+                label={intl.formatMessage(messages.number)}
+                placeholder={intl.formatMessage(messages.numberPlaceholder)}
+              />
+              <SelectField
+                field='type'
+                items={Object.keys(Account.Type).map(acct => ({
+                  value: acct.toString(),
+                  label: intl.formatMessage((Account.messages as Record<string, any>)[acct]),
+                }))}
+                label={intl.formatMessage(messages.type)}
+                onValueChange={type => {
+                  formApi.setFieldValue('color', Account.generateColor(type as Account.Type))
+                }}
+              />
+              <TextField
+                field='color'
+                label={intl.formatMessage(messages.color)}
+                placeholder={intl.formatMessage(messages.colorPlaceholder)}
+                color={formApi.values.color}
+              />
+              {(formApi.values.type === Account.Type.CHECKING ||
+                formApi.values.type === Account.Type.SAVINGS) && (
+                <TextField
+                  field='routing'
+                  label={intl.formatMessage(messages.routing)}
+                  placeholder={intl.formatMessage(messages.routingPlaceholder)}
+                />
               )}
-            </AppMutation>
+              {formApi.values.type === Account.Type.CREDITCARD && (
+                <TextField
+                  field='key'
+                  label={intl.formatMessage(messages.key)}
+                  placeholder={intl.formatMessage(messages.keyPlaceholder)}
+                />
+              )}
+            </Form>
           )
         }}
-      </AppQuery>
+      </Formik>
     )
+  }),
+  {
+    displayName: 'AccountForm.Component',
   }
+)
 
-  save = () => {
-    if (this.formApi) {
-      this.formApi.submitForm()
-    }
+export const AccountForm = Object.assign(
+  React.forwardRef<AccountForm, Props>((props, ref) => {
+    const { accountId, onClosed, bankId } = props
+
+    const component = useRef<AccountForm>(null)
+    const { data, loading } = useQuery(queries.AccountForm, { variables: { accountId, bankId } })
+    const client = useApolloClient()
+    const saveAccount = useMutation(mutations.SaveAccount, {
+      update: () => {
+        client.reFetchObservableQueries()
+      },
+    })
+
+    useImperativeHandle(ref, () => ({
+      save: () => {
+        component.current!.save()
+      },
+    }))
+
+    return <Component ref={component} {...{ ...props, saveAccount, data, loading }} />
+  }),
+  {
+    id: 'AccountForm',
+    displayName: 'AccountForm',
+    queries,
+    mutations,
+    fragments,
+    Component,
   }
-}
+)
 
 const messages = defineMessages({
   save: {

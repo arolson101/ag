@@ -1,6 +1,6 @@
 import { Label as NBLabel } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
-import * as React from 'react'
+import React from 'react'
 
 export interface Props {
   error?: boolean
