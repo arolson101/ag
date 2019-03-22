@@ -1,12 +1,11 @@
 import { Transaction } from '@ag/db'
-import { Gql, pick } from '@ag/util'
+import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
 import accounting from 'accounting'
-import { Formik, FormikErrors, FormikProps } from 'formik'
+import { Formik, FormikErrors } from 'formik'
 import gql from 'graphql-tag'
-import React from 'react'
+import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery } from '../components'
-import { typedFields } from '../context'
+import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
 interface Props {
@@ -16,140 +15,161 @@ interface Props {
 
 type FormValues = ReturnType<typeof Transaction.defaultValues>
 
-export class TransactionForm extends React.Component<Props> {
-  static readonly fragments = {
-    transactionFields: gql`
-      fragment transactionFields on Transaction {
-        account
-        serverid
-        time
-        type
-        name
-        memo
-        amount
-      }
-    `,
-  }
+const fragments = {
+  transactionFields: gql`
+    fragment transactionFields on Transaction {
+      account
+      serverid
+      time
+      type
+      name
+      memo
+      amount
+    }
+  `,
+}
 
-  static readonly queries = {
-    Transaction: gql`
-      query Transaction($transactionId: String) {
-        appDb {
-          transaction(transactionId: $transactionId) {
-            ...transactionFields
-          }
-        }
-      }
-      ${TransactionForm.fragments.transactionFields}
-    ` as Gql<T.Transaction.Query, T.Transaction.Variables>,
-  }
-
-  static readonly mutations = {
-    SaveTransaction: gql`
-      mutation SaveTransaction(
-        $input: TransactionInput!
-        $transactionId: String
-        $accountId: String!
-      ) {
-        saveTransaction(input: $input, transactionId: $transactionId, accountId: $accountId) {
+const queries = {
+  Transaction: gql`
+    query Transaction($transactionId: String) {
+      appDb {
+        transaction(transactionId: $transactionId) {
           ...transactionFields
         }
       }
-      ${TransactionForm.fragments.transactionFields}
-    ` as Gql<T.SaveTransaction.Mutation, T.SaveTransaction.Variables>,
+    }
+    ${fragments.transactionFields}
+  ` as Gql<T.Transaction.Query, T.Transaction.Variables>,
+}
 
-    DeleteTransaction: gql`
-      mutation DeleteTransaction($transactionId: String!) {
-        deleteTransaction(transactionId: $transactionId) {
-          accountId
-        }
+const mutations = {
+  SaveTransaction: gql`
+    mutation SaveTransaction(
+      $input: TransactionInput!
+      $transactionId: String
+      $accountId: String!
+    ) {
+      saveTransaction(input: $input, transactionId: $transactionId, accountId: $accountId) {
+        ...transactionFields
       }
-    ` as Gql<T.DeleteTransaction.Mutation, T.DeleteTransaction.Variables>,
-  }
+    }
+    ${fragments.transactionFields}
+  ` as Gql<T.SaveTransaction.Mutation, T.SaveTransaction.Variables>,
 
-  private formApi?: FormikProps<FormValues>
+  DeleteTransaction: gql`
+    mutation DeleteTransaction($transactionId: String!) {
+      deleteTransaction(transactionId: $transactionId) {
+        accountId
+      }
+    }
+  ` as Gql<T.DeleteTransaction.Mutation, T.DeleteTransaction.Variables>,
+}
 
-  render() {
-    const { ui, intl } = this.context
-    const { accountId, transactionId } = this.props
+export interface TransactionForm {
+  save: () => any
+}
+
+interface ComponentProps extends Props {
+  loading: boolean
+  data: T.Transaction.Query | undefined
+  saveTransaction: MutationFn<T.SaveTransaction.Mutation, T.SaveTransaction.Variables>
+}
+
+const Component = Object.assign(
+  React.forwardRef<TransactionForm, ComponentProps>((props, ref) => {
+    const { ui, intl } = useContext(CoreContext)
+    const { showToast, Text } = ui
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
+    const { data, saveTransaction, loading, accountId, transactionId } = props
+
+    const formik = useRef<Formik<FormValues>>(null)
+
+    useImperativeHandle(ref, () => ({
+      save: () => {
+        formik.current!.submitForm()
+      },
+    }))
+
+    if (!loading && (!data || !data.appDb)) {
+      throw new Error('db not open')
+    }
+
+    const transaction = data && data.appDb && data.appDb.transaction
+    const initialValues = transaction
+      ? pick(transaction, Object.keys(Transaction.defaultValues()) as Array<
+          keyof Transaction.Props
+        >)
+      : Transaction.defaultValues()
 
     return (
-      <AppQuery query={TransactionForm.queries.Transaction} variables={{ transactionId }}>
-        {({ appDb }) => {
-          if (!appDb) {
-            throw new Error('db not open')
+      <Formik<FormValues>
+        ref={formik}
+        enableReinitialize
+        initialValues={initialValues}
+        validate={values => {
+          const errors: FormikErrors<FormValues> = {}
+          if (!values.name.trim()) {
+            errors.name = intl.formatMessage(messages.valueEmpty)
           }
-          const { transaction: edit } = appDb
-          const initialValues = edit
-            ? pick(edit, Object.keys(Transaction.defaultValues()) as Array<keyof Transaction.Props>)
-            : Transaction.defaultValues()
-
+          return errors
+        }}
+        onSubmit={input => {
+          const { amount } = input
+          const variables = {
+            accountId,
+            transactionId,
+            input: {
+              ...input,
+              amount: accounting.unformat(amount.toString()),
+            },
+          }
+          saveTransaction({ variables })
+        }}
+      >
+        {formApi => {
           return (
-            <AppMutation
-              mutation={TransactionForm.mutations.SaveTransaction}
-              refetchQueries={[
-                { query: TransactionForm.queries.Transaction, variables: { transactionId } },
-              ]}
-            >
-              {saveTransaction => (
-                <Formik<FormValues>
-                  enableReinitialize
-                  initialValues={initialValues}
-                  validate={values => {
-                    const errors: FormikErrors<FormValues> = {}
-                    if (!values.name.trim()) {
-                      errors.name = intl.formatMessage(messages.valueEmpty)
-                    }
-                    return errors
-                  }}
-                  onSubmit={input => {
-                    const { amount } = input
-                    const variables = {
-                      accountId,
-                      transactionId,
-                      input: {
-                        ...input,
-                        amount: accounting.unformat(amount.toString()),
-                      },
-                    }
-                    saveTransaction({ variables })
-                  }}
-                >
-                  {formApi => {
-                    this.formApi = formApi
-                    return (
-                      <Form onSubmit={formApi.handleSubmit}>
-                        <DateField field='time' label={intl.formatMessage(messages.date)} />
-                        <TextField
-                          field='name'
-                          autoFocus
-                          label={intl.formatMessage(messages.name)}
-                        />
-                        <CurrencyField field='amount' label={intl.formatMessage(messages.amount)} />
-                        <TextField field='memo' label={intl.formatMessage(messages.memo)} />
-                      </Form>
-                    )
-                  }}
-                </Formik>
-              )}
-            </AppMutation>
+            <Form onSubmit={formApi.handleSubmit}>
+              <DateField field='time' label={intl.formatMessage(messages.date)} />
+              <TextField field='name' autoFocus label={intl.formatMessage(messages.name)} />
+              <CurrencyField field='amount' label={intl.formatMessage(messages.amount)} />
+              <TextField field='memo' label={intl.formatMessage(messages.memo)} />
+            </Form>
           )
         }}
-      </AppQuery>
+      </Formik>
     )
+  }),
+  {
+    displayName: 'TransactionForm.Component',
   }
+)
 
-  getApi = (formApi: FormikProps<FormValues>) => {
-    this.formApi = formApi
-  }
+export const TransactionForm = Object.assign(
+  React.forwardRef<TransactionForm, Props>((props, ref) => {
+    const { transactionId, accountId } = props
 
-  save = () => {
-    if (this.formApi) {
-      this.formApi.submitForm()
-    }
+    const component = useRef<TransactionForm>(null)
+    const { data, loading } = useQuery(queries.Transaction, { variables: { transactionId } })
+    const client = useApolloClient()
+    const saveTransaction = useMutation(mutations.SaveTransaction, {
+      update: () => {
+        client.reFetchObservableQueries()
+      },
+    })
+    useImperativeHandle(ref, () => ({
+      save: () => {
+        component.current!.save()
+      },
+    }))
+
+    return <Component ref={component} {...{ ...props, saveTransaction, data, loading }} />
+  }),
+  {
+    id: 'TransactionForm',
+    displayName: 'TransactionForm',
+    Component,
   }
-}
+)
 
 const messages = defineMessages({
   save: {
