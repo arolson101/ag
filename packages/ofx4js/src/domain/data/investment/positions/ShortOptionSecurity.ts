@@ -13,6 +13,6 @@ export function ShortOptionSecurity_fromOfx(ofxVal: string): ShortOptionSecurity
   } else if ('COVERED' === ofxVal) {
     return ShortOptionSecurity.COVERED
   } else {
-    return null
+    throw new Error('invalid ShortOptionSecurity ' + ofxVal)
   }
 }

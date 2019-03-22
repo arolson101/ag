@@ -19,6 +19,6 @@ export function SubAccountType_fromOfx(ofxVal: string): SubAccountType {
   } else if ('OTHER' === ofxVal) {
     return SubAccountType.OTHER
   } else {
-    return null
+    throw new Error('invalid SubAccountType ' + ofxVal)
   }
 }

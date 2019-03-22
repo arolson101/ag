@@ -27,5 +27,10 @@ const ofxMapping: MappingType = {
 }
 
 export function Inv401KSource_fromOfx(ofxVal: string): Inv401KSource {
-  return ofxVal == null ? null : ofxMapping[ofxVal]
+  const val = ofxMapping[ofxVal]
+  if (val) {
+    return val
+  } else {
+    throw new Error('invalid Inv401KSource ' + ofxVal)
+  }
 }

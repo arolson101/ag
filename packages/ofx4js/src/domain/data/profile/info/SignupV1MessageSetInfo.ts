@@ -16,12 +16,12 @@ import { WebEnrollment } from './signup/WebEnrollment'
  * @see "Section 8.8 OFX Spec"
  */
 export class SignupV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private clientEnrollment: ClientEnrollment
-  private webEnrollment: WebEnrollment
-  private otherEnrollment: OtherEnrollment
-  private supportsClientUserInfoChanges: boolean
-  private supportsAvailableAccounts: boolean
-  private supportsClientServiceActivationRequests: boolean
+  private clientEnrollment!: ClientEnrollment
+  private webEnrollment!: WebEnrollment
+  private otherEnrollment!: OtherEnrollment
+  private supportsClientUserInfoChanges!: boolean
+  private supportsAvailableAccounts!: boolean
+  private supportsClientServiceActivationRequests!: boolean
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.signup

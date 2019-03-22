@@ -80,11 +80,7 @@ export class AggregateInfo {
    * comes after the order hint, or the latest if there
    * are none that come after the order hint, or null.
    */
-  getAttribute(
-    name: string,
-    orderHint: number,
-    assignableTo: any = null
-  ): AggregateAttribute | null {
+  getAttribute(name: string, orderHint: number, assignableTo: any = null): AggregateAttribute {
     const candidates: AggregateAttribute[] = new Array<AggregateAttribute>()
     let collectionBucket: AggregateAttribute | null = null
     for (const attribute of this.attributes.values()) {
@@ -119,7 +115,11 @@ export class AggregateInfo {
       }
     }
 
-    return collectionBucket
+    if (collectionBucket) {
+      return collectionBucket
+    } else {
+      throw new Error('attribute not found: ' + name)
+    }
   }
 
   /**

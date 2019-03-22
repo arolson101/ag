@@ -9,9 +9,9 @@ import { StringConversion } from './StringConversion'
  * Utility class for conversion to/from OFX strings.
  */
 export class DefaultStringConversion implements StringConversion {
-  toString(value: object): string | null {
+  toString(value: object): string {
     if (!value) {
-      return null
+      throw new Error('null value')
     } else if (typeof value === 'boolean') {
       return value ? 'Y' : 'N'
     } else if (value instanceof Date) {
@@ -23,9 +23,9 @@ export class DefaultStringConversion implements StringConversion {
     }
   }
 
-  fromString<E>(clazz: any, value: string): E | null {
+  fromString<E>(clazz: any, value: string): E {
     if (!value) {
-      return null
+      throw new Error('null value')
     } else if (clazz === StatusCode) {
       const code: number = (value as any) as number
       let statusCode: StatusCode = KnownCode.fromCode(code)

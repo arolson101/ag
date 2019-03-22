@@ -13,6 +13,6 @@ export function TransferAction_fromOfx(ofxVal: string): TransferAction {
   } else if ('OUT' === ofxVal) {
     return TransferAction.OUT
   } else {
-    return null
+    throw new Error('invalid TransferAction ' + ofxVal)
   }
 }

@@ -9,25 +9,25 @@ import { VersionSpecificMessageSetInfo } from '../VersionSpecificMessageSetInfo'
  * @see "Section 12.11.2 OFX Spec"
  */
 export class BillpayV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private daysWith: number
-  private defaultDaysToPay: number
-  private transferDaysWith: number
-  private transferDefaultDaysToPay: number
-  private processorDaysOff: ProcessorDayOff[]
-  private processorEndTime: string
-  private modelWindow: number
-  private postProcessorWindow: number
-  private supportsStatusUpdateViaPaymentModificationResponse: boolean
-  private supportsPaymentByAddress: boolean
-  private supportsPaymentByTransfer: boolean
-  private supportsPaymentByPayeeId: boolean
-  private userCanAddPayee: boolean
-  private supportsExtendedPayment: boolean
-  private canModifyPayments: boolean
-  private canModifyModels: boolean
-  private supportsDifferentFirstPayment: boolean
-  private supportsDifferentLastPayment: boolean
-  private supportsBillPresentmentContext: boolean
+  private daysWith!: number
+  private defaultDaysToPay!: number
+  private transferDaysWith!: number
+  private transferDefaultDaysToPay!: number
+  private processorDaysOff!: ProcessorDayOff[]
+  private processorEndTime!: string
+  private modelWindow!: number
+  private postProcessorWindow!: number
+  private supportsStatusUpdateViaPaymentModificationResponse!: boolean
+  private supportsPaymentByAddress!: boolean
+  private supportsPaymentByTransfer!: boolean
+  private supportsPaymentByPayeeId!: boolean
+  private userCanAddPayee!: boolean
+  private supportsExtendedPayment!: boolean
+  private canModifyPayments!: boolean
+  private canModifyModels!: boolean
+  private supportsDifferentFirstPayment!: boolean
+  private supportsDifferentLastPayment!: boolean
+  private supportsBillPresentmentContext!: boolean
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.payments
@@ -104,6 +104,7 @@ export class BillpayV1MessageSetInfo extends VersionSpecificMessageSetInfo {
   setSupportsStatusUpdateViaPaymentModificationResponse(
     supportsStatusUpdateViaPaymentModificationResponse: boolean
   ): void {
+    // tslint:disable-next-line:max-line-length
     this.supportsStatusUpdateViaPaymentModificationResponse = supportsStatusUpdateViaPaymentModificationResponse
   }
 

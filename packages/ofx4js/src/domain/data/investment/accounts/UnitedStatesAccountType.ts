@@ -58,5 +58,10 @@ const ofxMapping: OfxMappingType = {
 }
 
 export function UnitedStatesAccountType_fromOfx(ofxVal: string): UnitedStatesAccountType {
-  return ofxVal == null ? null : ofxMapping[ofxVal]
+  const val = ofxMapping[ofxVal]
+  if (val) {
+    return val
+  } else {
+    throw new Error('invalid UnitedStatesAccountType ' + ofxVal)
+  }
 }

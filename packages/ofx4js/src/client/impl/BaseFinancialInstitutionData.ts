@@ -6,19 +6,19 @@ import { FinancialInstitutionData } from '../FinancialInstitutionData'
  * Base bean for FI data.
  */
 export class BaseFinancialInstitutionData implements FinancialInstitutionData {
-  private id: string
-  private fid: string
-  private name: string
-  private organization: string
-  private ofxUrl: string
-  private brokerId: string
+  private id?: string
+  private fid?: string
+  private name?: string
+  private organization?: string
+  private ofxUrl?: string
+  private brokerId?: string
 
   constructor(id?: string) {
     this.id = id
   }
 
   getId(): string {
-    return this.id
+    return this.id!
   }
 
   setId(id: string): void {
@@ -26,7 +26,7 @@ export class BaseFinancialInstitutionData implements FinancialInstitutionData {
   }
 
   getFinancialInstitutionId(): string {
-    return this.fid
+    return this.fid!
   }
 
   setFinancialInstitutionId(id: string): void {
@@ -34,7 +34,7 @@ export class BaseFinancialInstitutionData implements FinancialInstitutionData {
   }
 
   getName(): string {
-    return this.name
+    return this.name!
   }
 
   setName(name: string): void {
@@ -42,7 +42,7 @@ export class BaseFinancialInstitutionData implements FinancialInstitutionData {
   }
 
   getOrganization(): string {
-    return this.organization
+    return this.organization!
   }
 
   setOrganization(organization: string): void {
@@ -50,7 +50,7 @@ export class BaseFinancialInstitutionData implements FinancialInstitutionData {
   }
 
   getOFXURL(): string {
-    return this.ofxUrl
+    return this.ofxUrl!
   }
 
   setOFXURL(OFXURL: string): void {
@@ -58,7 +58,7 @@ export class BaseFinancialInstitutionData implements FinancialInstitutionData {
   }
 
   getBrokerId(): string {
-    return this.brokerId
+    return this.brokerId!
   }
 
   setBrokerId(brokerId: string): void {

@@ -19,6 +19,6 @@ export function RelatedOptionType_fromOfx(ofxVal: string): RelatedOptionType {
   } else if ('OTHER' === ofxVal) {
     return RelatedOptionType.OTHER
   } else {
-    return null
+    throw new Error('invalid RelatedOptionType ' + ofxVal)
   }
 }

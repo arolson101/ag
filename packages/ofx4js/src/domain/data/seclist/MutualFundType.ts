@@ -16,6 +16,6 @@ export function MutualFundType_fromOfx(ofxVal: string): MutualFundType {
   } else if ('OTHER' === ofxVal) {
     return MutualFundType.OTHER
   } else {
-    return null
+    throw new Error('invalid MutualFundType ' + ofxVal)
   }
 }

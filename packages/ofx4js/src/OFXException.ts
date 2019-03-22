@@ -9,11 +9,10 @@ export declare class Error {
  * Base exception class.
  */
 export class OFXException extends Error {
-  private innerError: Error
+  private innerError?: Error
 
-  constructor(message: string = null, e: Error = null) {
+  constructor(message?: string, e?: Error) {
     super(message)
-    this.message = message
     this.innerError = e
   }
 }

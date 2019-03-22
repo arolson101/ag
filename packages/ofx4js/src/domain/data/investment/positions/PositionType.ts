@@ -13,6 +13,6 @@ export function PositionType_fromOfx(ofxVal: string): PositionType {
   } else if ('SHORT' === ofxVal) {
     return PositionType.SHORT
   } else {
-    return null
+    throw new Error('invalid PositionType ' + ofxVal)
   }
 }

@@ -56,6 +56,6 @@ export function AssetClass_fromOfx(ofxVal: string): AssetClass {
   } else if ('OTHER' === ofxVal) {
     return AssetClass.OTHER
   } else {
-    return null
+    throw new Error('invalid AssetClass ' + ofxVal)
   }
 }

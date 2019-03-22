@@ -22,6 +22,6 @@ export function IncomeType_fromOfx(ofxVal: string): IncomeType {
   } else if ('MISC' === ofxVal) {
     return IncomeType.MISC
   } else {
-    return null
+    throw new Error('invalid IncomeType ' + ofxVal)
   }
 }

@@ -13,6 +13,6 @@ export function BuyType_fromOfx(ofxVal: string): BuyType {
   } else if ('BUYTOCOVER' === ofxVal) {
     return BuyType.BUY_TO_COVER
   } else {
-    return null
+    throw new Error('invalid BuyType ' + ofxVal)
   }
 }

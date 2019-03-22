@@ -132,8 +132,8 @@ export class OFXV1Writer implements OFXWriter {
     this.writer.flush()
   }
 
-  /*protected*/ println(line: string = null): /*throws IOException*/ void {
-    if (line != null) {
+  /*protected*/ println(line?: string): /*throws IOException*/ void {
+    if (line !== undefined) {
       this.print(line)
     }
     this.writer.write(this.LINE_SEPARATOR)

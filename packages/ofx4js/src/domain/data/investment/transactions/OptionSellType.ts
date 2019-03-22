@@ -13,6 +13,6 @@ export function OptionSellType_fromOfx(ofxVal: string): OptionSellType {
   } else if ('SELLTOCLOSE' === ofxVal) {
     return OptionSellType.SELL_TO_CLOSE
   } else {
-    return null
+    throw new Error('invalid OptionSellType ' + ofxVal)
   }
 }

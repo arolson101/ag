@@ -6,7 +6,7 @@ export class Stack<T> {
   }
 
   push(...values: T[]): void {
-    return Array.prototype.push.apply(this.values, arguments)
+    this.values.push(...values)
   }
 
   pop(): T {
@@ -15,7 +15,7 @@ export class Stack<T> {
 
   peek(): T {
     if (this.values.length === 0) {
-      return null
+      throw new Error('peek: empty stack')
     } else {
       return this.values[this.values.length - 1]
     }

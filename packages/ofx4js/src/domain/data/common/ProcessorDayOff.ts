@@ -29,6 +29,6 @@ export function ProcessorDayOff_fromOfx(ofxVal: string): ProcessorDayOff {
   } else if ('SUNDAY' === ofxVal) {
     return ProcessorDayOff.SUNDAY
   } else {
-    return null
+    throw new Error('invalid ProcessorDayOff ' + ofxVal)
   }
 }

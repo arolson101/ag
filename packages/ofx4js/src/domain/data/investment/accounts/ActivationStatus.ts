@@ -16,6 +16,6 @@ export function ActivationStatus_fromOfx(ofxVal: string): ActivationStatus {
   } else if ('AVAIL' === ofxVal) {
     return ActivationStatus.AVAILABLE
   } else {
-    return null
+    throw new Error('invalid ActivationStatus ' + ofxVal)
   }
 }

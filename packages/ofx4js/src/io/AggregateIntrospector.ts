@@ -23,18 +23,19 @@ export class AggregateIntrospector {
     if (aggregate != null && aggregate.getOwner() === clazz) {
       return aggregate
     } else {
-      return null
+      throw new Error('null aggregate')
     }
   }
 
-  private static getAncestorAggregateInfo(clazz: Function): AggregateInfo {
-    // traverse inheritence hierarchy.  This is janky because of typescript's __extends function, and may break in the future
-    for (let proto: Function = clazz.prototype; proto; proto = Object.getPrototypeOf(proto)) {
-      if ((proto as any).constructor && (proto as any).constructor.Aggregate) {
-        return (proto as any).constructor.Aggregate
+  private static getAncestorAggregateInfo(clazz: () => any): AggregateInfo {
+    // traverse inheritence hierarchy.  This is janky because of typescript's __extends
+    // function, and may break in the future
+    for (let proto = clazz.prototype; proto; proto = Object.getPrototypeOf(proto)) {
+      if (proto.constructor && proto.constructor.Aggregate) {
+        return proto.constructor.Aggregate
       }
     }
-    return null
+    throw new Error("didn't find class")
   }
 
   /**
@@ -56,7 +57,7 @@ export class AggregateIntrospector {
       aggregateInfo.setName(name)
     } else {
       const parentInfo: AggregateInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
-      clazz.Aggregate = new AggregateInfo(name, clazz, parentInfo)
+      clazz.Aggregate = new AggregateInfo(name, clazz, parentInfo!)
     }
   }
 
@@ -67,7 +68,7 @@ export class AggregateIntrospector {
       aggregateInfo = clazz.Aggregate = new AggregateInfo(
         AggregateIntrospector.placeholderName,
         clazz,
-        parentInfo
+        parentInfo!
       )
     }
     assert(aggregateInfo != null)
@@ -83,7 +84,7 @@ export class AggregateIntrospector {
       aggregateInfo = clazz.Aggregate = new AggregateInfo(
         AggregateIntrospector.placeholderName,
         clazz,
-        parentInfo
+        parentInfo!
       )
     }
     assert(aggregateInfo != null)
@@ -99,7 +100,7 @@ export class AggregateIntrospector {
       aggregateInfo = clazz.Aggregate = new AggregateInfo(
         AggregateIntrospector.placeholderName,
         clazz,
-        parentInfo
+        parentInfo!
       )
     }
     assert(aggregateInfo != null)

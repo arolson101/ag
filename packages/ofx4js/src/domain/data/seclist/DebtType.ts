@@ -13,6 +13,6 @@ export function DebtType_fromOfx(ofxVal: string): DebtType {
   } else if ('ZERO' === ofxVal) {
     return DebtType.ZERO
   } else {
-    return null
+    throw new Error('invalid DebtType ' + ofxVal)
   }
 }

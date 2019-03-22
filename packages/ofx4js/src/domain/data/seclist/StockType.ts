@@ -19,6 +19,6 @@ export function StockType_fromOfx(ofxVal: string): StockType {
   } else if ('OTHER' === ofxVal) {
     return StockType.OTHER
   } else {
-    return null
+    throw new Error('invalid StockType ' + ofxVal)
   }
 }

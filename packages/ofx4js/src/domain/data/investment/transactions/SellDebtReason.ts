@@ -16,6 +16,6 @@ export function SellDebtReason_fromOfx(ofxVal: string): SellDebtReason {
   } else if ('MATURITY' === ofxVal) {
     return SellDebtReason.MATURITY
   } else {
-    return null
+    throw new Error('invalid SellDebtReason ' + ofxVal)
   }
 }

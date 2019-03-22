@@ -19,10 +19,10 @@ export class StringReader {
         return this.readChar()
       } else {
         offset = offset || 0
-        length = length || cbuf.length
+        length = length || cbuf!.length
         length = Math.min(length, this._text.length - this._cursor)
         for (let i = 0; i < length; i++) {
-          cbuf[offset + i] = this.readChar()
+          cbuf![offset + i] = this.readChar()
         }
         return length
       }
@@ -37,9 +37,9 @@ export class StringReader {
   }
 
   close(): void {
-    this._text = null
-    this._cursor = null
-    this._mark = null
+    this._text = ''
+    this._cursor = 0
+    this._mark = 0
   }
 
   mark(/*readLimit*/): void {

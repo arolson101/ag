@@ -22,6 +22,6 @@ export function CouponFrequency_fromOfx(ofxVal: string): CouponFrequency {
   } else if ('OTHER' === ofxVal) {
     return CouponFrequency.OTHER
   } else {
-    return null
+    throw new Error('invalid CouponFrequency ' + ofxVal)
   }
 }

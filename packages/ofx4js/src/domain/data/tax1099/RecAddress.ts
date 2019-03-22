@@ -2,14 +2,14 @@ import { Aggregate_add } from '../../../meta/Aggregate_Add'
 import { Element_add } from '../../../meta/Element_add'
 
 export class RecAddress {
-  private recName1: string
-  private recName2: string
-  private address1: string
-  private address2: string
-  private city: string
-  private state: string
-  private postalCode: string
-  private phone: string
+  private recName1!: string
+  private recName2!: string
+  private address1!: string
+  private address2!: string
+  private city!: string
+  private state!: string
+  private postalCode!: string
+  private phone!: string
   /**
    * @return the recName1
    */

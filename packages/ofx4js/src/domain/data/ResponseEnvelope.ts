@@ -88,14 +88,14 @@ export class ResponseEnvelope {
    *
    * @return The signon response, or null if none found.
    */
-  getSignonResponse(): SignonResponse | null {
+  getSignonResponse(): SignonResponse {
     const type: MessageSetType = MessageSetType.signon
-    const message: ResponseMessageSet | null = this.getMessageSet(type)
+    const message: ResponseMessageSet = this.getMessageSet(type)
 
     if (message != null) {
       return (message as SignonResponseMessageSet).getSignonResponse()
     } else {
-      return null
+      throw new Error('null message')
     }
   }
 
@@ -105,7 +105,7 @@ export class ResponseEnvelope {
    * @param type The type.
    * @return The message set, or null.
    */
-  getMessageSet(type: MessageSetType): ResponseMessageSet | null {
+  getMessageSet(type: MessageSetType): ResponseMessageSet {
     let message: ResponseMessageSet | null = null
     if (this.messageSets != null) {
       for (const messageSet of this.messageSets.values()) {
@@ -115,7 +115,11 @@ export class ResponseEnvelope {
         }
       }
     }
-    return message
+    if (message) {
+      return message
+    } else {
+      throw new Error('null message')
+    }
   }
 }
 

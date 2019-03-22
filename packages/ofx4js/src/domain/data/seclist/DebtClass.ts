@@ -19,6 +19,6 @@ export function DebtClass_fromOfx(ofxVal: string): DebtClass {
   } else if ('OTHER' === ofxVal) {
     return DebtClass.OTHER
   } else {
-    return null
+    throw new Error('invalid DebtClass ' + ofxVal)
   }
 }

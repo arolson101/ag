@@ -84,14 +84,14 @@ export class AggregateStackContentHandler<A extends object> implements OFXHandle
         .info!.setHeader(
           this.stack.peek().aggregate!,
           name,
-          this.conversion.fromString(headerType, value)!
+          this.conversion.fromString(headerType, value)
         )
     }
   }
 
   onElement(name: string, value: string): void {
     if (!this.stack.peek().isBeingSkipped()) {
-      const attribute: AggregateAttribute | null = this.stack
+      const attribute: AggregateAttribute = this.stack
         .peek()
         .info!.getAttribute(name, this.stack.peek().currentAttributeIndex)
       if (attribute != null && attribute.getType() === AggregateAttributeType.ELEMENT) {
@@ -129,7 +129,7 @@ export class AggregateStackContentHandler<A extends object> implements OFXHandle
     } else {
       let infoHolder: AggregateInfoHolder
 
-      const attribute: AggregateAttribute | null = this.stack
+      const attribute: AggregateAttribute = this.stack
         .peek()
         .info!.getAttribute(aggregateName, this.stack.peek().currentAttributeIndex)
       if (attribute != null) {
@@ -213,7 +213,7 @@ export class AggregateStackContentHandler<A extends object> implements OFXHandle
     if (!this.stack.isEmpty()) {
       if (!infoHolder.isSkipping(aggregateName)) {
         // we're not skipping the top aggregate, so process it.
-        const attribute: AggregateAttribute | null = this.stack
+        const attribute: AggregateAttribute = this.stack
           .peek()
           .info!.getAttribute(
             aggregateName,
@@ -234,7 +234,7 @@ export class AggregateStackContentHandler<A extends object> implements OFXHandle
             )
           }
         } catch (e) {
-          LOG.error('Unable to set ' + attribute!.toString() + '%o', e)
+          LOG.error('Unable to set ' + attribute.toString() + '%o', e)
         }
         if (attribute != null) {
           this.stack.peek().currentAttributeIndex = attribute.getOrder()

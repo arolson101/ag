@@ -13,6 +13,6 @@ export function OptionBuyType_fromOfx(ofxVal: string): OptionBuyType {
   } else if ('BUYTOCLOSE' === ofxVal) {
     return OptionBuyType.BUY_TO_CLOSE
   } else {
-    return null
+    throw new Error('invalid OptionBuyType ' + ofxVal)
   }
 }

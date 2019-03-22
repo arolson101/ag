@@ -8,7 +8,7 @@ export interface StringConversion {
    * @param value The value to convert to a string.
    * @return The string.
    */
-  toString(value: object): string | null
+  toString(value: object): string
 
   /**
    * Convert the specified value to an object of the specified type.
@@ -18,5 +18,5 @@ export interface StringConversion {
    * @return The converted value.
    * @throws OFXSyntaxException If there was something wrong with the syntax of the string.
    */
-  fromString<E>(clazz: any, value: string): /*throws OFXSyntaxException*/ E | null
+  fromString<E>(clazz: any, value: string): /*throws OFXSyntaxException*/ E
 }

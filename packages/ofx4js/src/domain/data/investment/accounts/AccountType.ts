@@ -20,6 +20,6 @@ export function InvestmentAccountType_fromOfx(ofxVal: string): InvestmentAccount
   } else if ('CORPORATE' === ofxVal) {
     return InvestmentAccountType.CORPORATE
   } else {
-    return null
+    throw new Error('invalid InvestmentAccountType ' + ofxVal)
   }
 }

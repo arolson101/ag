@@ -12,6 +12,6 @@ export function SellType_fromOfx(ofxVal: string): SellType {
   } else if ('SELLSHORT' === ofxVal) {
     return SellType.SELL_SHORT
   } else {
-    return null
+    throw new Error('invalid SellType ' + ofxVal)
   }
 }

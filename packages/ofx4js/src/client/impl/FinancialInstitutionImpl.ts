@@ -212,7 +212,7 @@ export class FinancialInstitutionImpl extends FinancialInstitutionInfo {
     }
 
     for (const requestSet of request.getMessageSets().values()) {
-      const responseSet: ResponseMessageSet | null = response.getMessageSet(requestSet.getType())
+      const responseSet: ResponseMessageSet = response.getMessageSet(requestSet.getType())
       if (responseSet == null) {
         throw new NoOFXResponseException(
           'No response for the ' + requestSet.getType() + ' request.'

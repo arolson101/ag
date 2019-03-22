@@ -13,6 +13,6 @@ export function OptionType_fromOfx(ofxVal: string): OptionType {
   } else if ('CALL' === ofxVal) {
     return OptionType.CALL
   } else {
-    return null
+    throw new Error('invalid OptionType ' + ofxVal)
   }
 }

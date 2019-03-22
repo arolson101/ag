@@ -16,6 +16,6 @@ export function CloseOptionAction_fromOfx(ofxVal: string): CloseOptionAction {
   } else if ('EXPIRE' === ofxVal) {
     return CloseOptionAction.EXPIRE
   } else {
-    return null
+    throw new Error('invalid CloseOptionAction ' + ofxVal)
   }
 }

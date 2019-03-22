@@ -19,6 +19,6 @@ export function CallType_fromOfx(ofxVal: string): CallType {
   } else if ('MATURITY' === ofxVal) {
     return CallType.MATURITY
   } else {
-    return null
+    throw new Error('invalid CallType ' + ofxVal)
   }
 }

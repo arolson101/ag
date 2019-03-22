@@ -37,7 +37,7 @@ export class AggregateMarshaller {
       const headerValues: HeaderValues = aggregateInfo.getHeaders(aggregate)
       const convertedValues: StringMap = {}
       for (const header of Object.keys(headerValues)) {
-        convertedValues[header] = this.getConversion().toString(headerValues[header])!
+        convertedValues[header] = this.getConversion().toString(headerValues[header])
       }
       writer.writeHeaders(convertedValues)
     }
@@ -103,7 +103,7 @@ export class AggregateMarshaller {
             }
             break
           case AggregateAttributeType.ELEMENT:
-            const strValue: string | null = this.getConversion().toString(childValue)
+            const strValue: string = this.getConversion().toString(childValue)
             if (strValue != null && '' !== strValue.trim()) {
               writer.writeElement(aggregateAttribute.getName(), strValue)
             }
