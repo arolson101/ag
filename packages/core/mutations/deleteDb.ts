@@ -3,7 +3,6 @@ import gql from 'graphql-tag'
 import { defineMessages } from 'react-intl'
 import { Gql } from '../components'
 import { CoreContext } from '../context'
-import { LoginForm } from '../forms'
 import * as T from '../graphql-types'
 
 const mutations = {
@@ -37,7 +36,9 @@ export const deleteDb = ({ client, context, dbId }: DeleteDbParams) => {
       const result = await client.mutate<T.DeleteDb.Mutation, T.DeleteDb.Variables>({
         mutation: mutations.deleteDb,
         variables,
-        refetchQueries: [{ query: LoginForm.queries.LoginForm }],
+        update: () => {
+          client.clearStore()
+        },
       })
 
       showToast(intl.formatMessage(messages.deleted), true)

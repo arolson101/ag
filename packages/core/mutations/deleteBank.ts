@@ -5,7 +5,6 @@ import { defineMessages } from 'react-intl'
 import { Gql } from '../components'
 import { CoreContext } from '../context'
 import * as T from '../graphql-types'
-import { HomePage } from '../pages'
 
 const mutations = {
   deleteBank: gql`
@@ -42,7 +41,9 @@ export const deleteBank = ({ client, context, bank }: DeleteBankParams) => {
       const result = await client.mutate<T.DeleteBank.Mutation, T.DeleteBank.Variables>({
         mutation: mutations.deleteBank,
         variables,
-        refetchQueries: [{ query: HomePage.queries.HomePage }],
+        update: () => {
+          client.reFetchObservableQueries()
+        },
       })
       assert(result.data && result.data.deleteBank)
 
