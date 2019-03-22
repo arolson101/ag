@@ -139,6 +139,7 @@ export class AppDb {
   }
 
   async dbWrite(changes: DbChange[]) {
+    log('dbWrite %o', changes)
     const db = this.connection
     if (!db) {
       throw new Error('app db is not open')
