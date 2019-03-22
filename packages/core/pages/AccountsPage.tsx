@@ -16,8 +16,8 @@ export namespace AccountsPage {
 }
 
 const fragments = {
-  BankFields: gql`
-    fragment BankFields on Bank {
+  accountsPageBankFields: gql`
+    fragment accountsPageBankFields on Bank {
       id
       name
       favicon
@@ -30,6 +30,21 @@ const fragments = {
       }
     }
   `,
+
+  accountsPageAccountFields: gql`
+    fragment accountsPageAccountFields on Account {
+      id
+      bankId
+
+      name
+      color
+      type
+      number
+      visible
+      routing
+      key
+    }
+  `,
 }
 
 const queries = {
@@ -37,11 +52,11 @@ const queries = {
     query AccountsPage {
       appDb {
         banks {
-          ...BankFields
+          ...accountsPageBankFields
         }
       }
     }
-    ${fragments.BankFields}
+    ${fragments.accountsPageBankFields}
   ` as Gql<T.AccountsPage.Query, T.AccountsPage.Variables>,
 }
 
@@ -49,11 +64,32 @@ const mutations = {
   SyncAccounts: gql`
     mutation SyncAccounts($bankId: String!) {
       syncAccounts(bankId: $bankId) {
-        ...BankFields
+        ...accountsPageBankFields
       }
     }
-    ${fragments.BankFields}
+    ${fragments.accountsPageBankFields}
   ` as Gql<T.SyncAccounts.Mutation, T.SyncAccounts.Variables>,
+
+  DownloadTransactions: gql`
+    mutation DownloadTransactions(
+      $bankId: String!
+      $accountId: String!
+      $start: DateTime!
+      $end: DateTime!
+      $cancelToken: String!
+    ) {
+      downloadTransactions(
+        bankId: $bankId
+        accountId: $accountId
+        start: $start
+        end: $end
+        cancelToken: $cancelToken
+      ) {
+        ...accountsPageAccountFields
+      }
+    }
+    ${fragments.accountsPageAccountFields}
+  ` as Gql<T.DownloadTransactions.Mutation, T.DownloadTransactions.Variables>,
 }
 
 const Component: React.FC<
@@ -71,7 +107,7 @@ const Component: React.FC<
     ui: { Column, Page, Row, Table, showToast },
   } = context
 
-  type Row = T.AccountsPage.Accounts
+  type Row = T.AccountsPageBankFields.Accounts
   const columns: Array<TableColumn<Row>> = [
     {
       dataIndex: 'name',

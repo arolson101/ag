@@ -110,20 +110,6 @@ export type DateTime = any
 // Documents
 // ====================================================
 
-export namespace SyncAccounts {
-  export type Variables = {
-    bankId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    syncAccounts: SyncAccounts
-  }
-
-  export type SyncAccounts = BankDisplay.Fragment
-}
-
 export namespace Cancel {
   export type Variables = {
     cancelToken: string
@@ -452,31 +438,39 @@ export namespace AccountsPage {
     banks: Banks[]
   }
 
-  export type Banks = {
-    __typename?: 'Bank'
+  export type Banks = AccountsPageBankFields.Fragment
+}
 
-    id: string
-
-    favicon: ImageSource
-
-    name: string
-
-    online: boolean
-
-    accounts: Accounts[]
+export namespace SyncAccounts {
+  export type Variables = {
+    bankId: string
   }
 
-  export type Accounts = {
-    __typename?: 'Account'
+  export type Mutation = {
+    __typename?: 'Mutation'
 
-    id: string
-
-    name: string
-
-    number: string
-
-    visible: boolean
+    syncAccounts: SyncAccounts
   }
+
+  export type SyncAccounts = AccountsPageBankFields.Fragment
+}
+
+export namespace DownloadTransactions {
+  export type Variables = {
+    bankId: string
+    accountId: string
+    start: DateTime
+    end: DateTime
+    cancelToken: string
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    downloadTransactions: DownloadTransactions
+  }
+
+  export type DownloadTransactions = AccountsPageAccountFields.Fragment
 }
 
 export namespace BillsPage {
@@ -566,30 +560,10 @@ export namespace HomePage {
     banks: Banks[]
   }
 
-  export type Banks = BankDisplay.Fragment
-}
-
-export namespace BankDisplay {
-  export type Fragment = {
+  export type Banks = {
     __typename?: 'Bank'
 
     id: string
-
-    name: string
-
-    favicon: ImageSource
-
-    online: boolean
-
-    accounts: Accounts[]
-  }
-
-  export type Accounts = {
-    __typename?: 'Account'
-
-    id: string
-
-    name: string
   }
 }
 
@@ -668,5 +642,57 @@ export namespace TransactionFields {
     memo: string
 
     amount: number
+  }
+}
+
+export namespace AccountsPageBankFields {
+  export type Fragment = {
+    __typename?: 'Bank'
+
+    id: string
+
+    name: string
+
+    favicon: ImageSource
+
+    online: boolean
+
+    accounts: Accounts[]
+  }
+
+  export type Accounts = {
+    __typename?: 'Account'
+
+    id: string
+
+    name: string
+
+    number: string
+
+    visible: boolean
+  }
+}
+
+export namespace AccountsPageAccountFields {
+  export type Fragment = {
+    __typename?: 'Account'
+
+    id: string
+
+    bankId: string
+
+    name: string
+
+    color: string
+
+    type: AccountType
+
+    number: string
+
+    visible: boolean
+
+    routing: string
+
+    key: string
   }
 }
