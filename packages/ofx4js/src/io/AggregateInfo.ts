@@ -1,43 +1,41 @@
-import { ok as assert } from "assert";
-import { SortedSet } from '../collections/SortedSet';
-import { ChildAggregate } from '../meta/ChildAggregate';
-import { Element } from '../meta/Element';
-import { Header } from '../meta/Header';
-import { isAssignableFrom } from '../meta/PropertyDescriptor';
-import { AggregateAttribute } from './AggregateAttribute';
+import { ok as assert } from 'assert'
+import { SortedSet } from '../collections/SortedSet'
+import { ChildAggregate } from '../meta/ChildAggregate'
+import { Element } from '../meta/Element'
+import { Header } from '../meta/Header'
+import { isAssignableFrom } from '../meta/PropertyDescriptor'
+import { AggregateAttribute } from './AggregateAttribute'
 
 export interface HeaderMap {
-  [key: string]: Header;
+  [key: string]: Header
 }
 
 export interface HeaderValues {
-  [key: string]: Object;
+  [key: string]: object
 }
 
 /**
  * Holder for meta information about an aggregate class.
  */
 export class AggregateInfo {
-
-  private name: string;
-  private attributes: SortedSet<AggregateAttribute>;
-  private headers: HeaderMap;
-  private owner: any;
+  private name: string
+  private attributes: SortedSet<AggregateAttribute>
+  private headers: HeaderMap
+  private owner: any
 
   constructor(name: string, owner: any, parentInfo?: AggregateInfo) {
-    this.name = name;
-    this.owner = owner;
-    this.headers = {};
-    this.attributes = new SortedSet<AggregateAttribute>(AggregateAttribute.contentCompare);
+    this.name = name
+    this.owner = owner
+    this.headers = {}
+    this.attributes = new SortedSet<AggregateAttribute>(AggregateAttribute.contentCompare)
 
-    if(parentInfo) {
-      for(var header in parentInfo.headers) {
-        this.headers[header] = parentInfo.headers[header];
+    if (parentInfo) {
+      for (const header of Object.keys(parentInfo.headers)) {
+        this.headers[header] = parentInfo.headers[header]
       }
-      var parentAttributes: Array<AggregateAttribute> = parentInfo.attributes.values();
-      for(var i in parentAttributes) {
-        var attribute: AggregateAttribute = parentAttributes[i];
-        this.attributes.insert(attribute);
+      const parentAttributes: AggregateAttribute[] = parentInfo.attributes.values()
+      for (const attribute of parentAttributes) {
+        this.attributes.insert(attribute)
       }
     }
   }
@@ -47,16 +45,16 @@ export class AggregateInfo {
    *
    * @return The name of the aggregate.
    */
-  public getName(): string {
-    return this.name;
+  getName(): string {
+    return this.name
   }
 
-  public setName(name: string): void {
-    this.name = name;
+  setName(name: string): void {
+    this.name = name
   }
 
-  public getOwner(): any {
-    return this.owner;
+  getOwner(): any {
+    return this.owner
   }
 
   /**
@@ -64,15 +62,16 @@ export class AggregateInfo {
    *
    * @return The attributes.
    */
-  public getAttributes(): SortedSet<AggregateAttribute> {
-    return this.attributes;
+  getAttributes(): SortedSet<AggregateAttribute> {
+    return this.attributes
   }
 
   /**
    * Get the attribute by the specified name.
    *
    * @param name The name of the attribute.
-   * @param orderHint The order at which the attribute should come after in case there are more than one candidates.
+   * @param orderHint The order at which the attribute should come after in case there are
+   * more than one candidates.
    * @param assignableTo The class this attribute must be assignable to
    * @return The attribute by the specified name,
    * or if there are more than one by that name,
@@ -81,44 +80,46 @@ export class AggregateInfo {
    * comes after the order hint, or the latest if there
    * are none that come after the order hint, or null.
    */
-  public getAttribute(name: string, orderHint: number, assignableTo: any = null): AggregateAttribute {
-    var candidates: Array<AggregateAttribute> = new Array<AggregateAttribute>();
-    var collectionBucket: AggregateAttribute = null;
-    for (var i in this.attributes.values()) {
-      var attribute: AggregateAttribute = this.attributes.values()[i];
+  getAttribute(
+    name: string,
+    orderHint: number,
+    assignableTo: any = null
+  ): AggregateAttribute | null {
+    const candidates: AggregateAttribute[] = new Array<AggregateAttribute>()
+    let collectionBucket: AggregateAttribute | null = null
+    for (const attribute of this.attributes.values()) {
       if (name === attribute.getName()) {
-        candidates.push(attribute);
-      }
-      else if (attribute.isArray()) {
+        candidates.push(attribute)
+      } else if (attribute.isArray()) {
         if (assignableTo != null) {
           // Verify it's the right generic type.
-          var entryType: any = attribute.getArrayEntryType();
+          const entryType: any = attribute.getArrayEntryType()
           if (entryType != null && !isAssignableFrom(entryType, assignableTo)) {
             // Array is of wrong type.
-            continue;
+            continue
           }
         }
         if (collectionBucket == null || collectionBucket.getOrder() < orderHint) {
-          //the default is the first collection that comes after the order hint, or the latest if there are none that come after the order hint.
-          collectionBucket = attribute;
+          // the default is the first collection that comes after the order hint, or the
+          // latest if there are none that come after the order hint.
+          collectionBucket = attribute
         }
       }
     }
 
-    if (candidates.length != 0) {
-      if (candidates.length == 1) {
-        return candidates[0];
-      }
-      else {
-        for (var candidate of candidates) {
+    if (candidates.length !== 0) {
+      if (candidates.length === 1) {
+        return candidates[0]
+      } else {
+        for (const candidate of candidates) {
           if (candidate.getOrder() >= orderHint) {
-            return candidate;
+            return candidate
           }
         }
       }
     }
 
-    return collectionBucket;
+    return collectionBucket
   }
 
   /**
@@ -126,8 +127,8 @@ export class AggregateInfo {
    *
    * @return Whether this aggregate has headers.
    */
-  public hasHeaders(): boolean {
-    return Object.keys(this.headers).length != 0;
+  hasHeaders(): boolean {
+    return Object.keys(this.headers).length !== 0
   }
 
   /**
@@ -136,14 +137,14 @@ export class AggregateInfo {
    * @param instance The aggregate instance.
    * @return The headers.
    */
-  public getHeaders(instance: Object): HeaderValues {
-    var headers: HeaderValues = {};
-    for (var headerKey in this.headers) {
-      var header: Header = this.headers[headerKey];
-      var headerValue: Object = header.getReadMethod().call(instance);
-      headers[header.name()] = headerValue;
+  getHeaders(instance: object): HeaderValues {
+    const headers: HeaderValues = {}
+    for (const headerKey of Object.keys(this.headers)) {
+      const header: Header = this.headers[headerKey]
+      const headerValue: object = header.getReadMethod().call(instance)
+      headers[header.name()] = headerValue
     }
-    return headers;
+    return headers
   }
 
   /**
@@ -152,8 +153,8 @@ export class AggregateInfo {
    * @param name The header name.
    * @return The header type, or null if no header by the specified name exists.
    */
-  public getHeaderType(name: string): any {
-    return (name in this.headers) ? this.headers[name].getPropertyType() : null;
+  getHeaderType(name: string): any {
+    return name in this.headers ? this.headers[name].getPropertyType() : null
   }
 
   /**
@@ -163,25 +164,24 @@ export class AggregateInfo {
    * @param name     The name of the header.
    * @param value    the value of the header.
    */
-  public setHeader(instance: Object, name: string, value: Object): void {
+  setHeader(instance: object, name: string, value: object): void {
     if (name in this.headers) {
-      this.headers[name].getWriteMethod().call(instance, value);
+      this.headers[name].getWriteMethod().call(instance, value)
     }
   }
 
-
-  public addChildAggregate(childAggregate: ChildAggregate): void {
-    var attribute = new AggregateAttribute(childAggregate);
-    this.attributes.insert(attribute);
+  addChildAggregate(childAggregate: ChildAggregate): void {
+    const attribute = new AggregateAttribute(childAggregate)
+    this.attributes.insert(attribute)
   }
 
-  public addElement(element: Element): void {
-    var attribute = new AggregateAttribute(element);
-    this.attributes.insert(attribute);
+  addElement(element: Element): void {
+    const attribute = new AggregateAttribute(element)
+    this.attributes.insert(attribute)
   }
 
-  public addHeader(header: Header): void {
-    assert(header.name());
-    this.headers[header.name()] = header;
+  addHeader(header: Header): void {
+    assert(header.name())
+    this.headers[header.name()] = header
   }
 }

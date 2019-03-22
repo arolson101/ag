@@ -1,16 +1,14 @@
-import { OFXConnectionException } from "./OFXConnectionException";
-
+import { OFXConnectionException } from './OFXConnectionException'
 
 export class OFXServerException extends OFXConnectionException {
-
-  private httpCode: number;
+  private httpCode: number
 
   constructor(message: string, httpCode: number) {
-    super(message);
-    this.httpCode = httpCode;
+    super(message)
+    this.httpCode = httpCode
   }
 
-  public getHttpCode(): number {
-    return this.httpCode;
+  getHttpCode(): number {
+    return this.httpCode
   }
 }

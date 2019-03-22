@@ -1,20 +1,18 @@
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ResponseMessageSet } from "../ResponseMessageSet";
-import { ProfileResponseTransaction } from "./ProfileResponseTransaction";
-import { MessageSetType } from "../MessageSetType";
-import { ResponseMessage } from "../ResponseMessage";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { ResponseMessage } from '../ResponseMessage'
+import { ResponseMessageSet } from '../ResponseMessageSet'
+import { ProfileResponseTransaction } from './ProfileResponseTransaction'
 
 /**
  * @see "Section 7 OFX Spec"
  */
 export class ProfileResponseMessageSet extends ResponseMessageSet {
+  private profileResponse: ProfileResponseTransaction
 
-  private profileResponse: ProfileResponseTransaction;
-
-  public getType(): MessageSetType {
-    return MessageSetType.profile;
+  getType(): MessageSetType {
+    return MessageSetType.profile
   }
 
   /**
@@ -22,8 +20,8 @@ export class ProfileResponseMessageSet extends ResponseMessageSet {
    *
    * @return The profile response.
    */
-  public getProfileResponse(): ProfileResponseTransaction {
-    return this.profileResponse;
+  getProfileResponse(): ProfileResponseTransaction {
+    return this.profileResponse
   }
 
   /**
@@ -31,21 +29,27 @@ export class ProfileResponseMessageSet extends ResponseMessageSet {
    *
    * @param profileResponse The profile response.
    */
-  public setProfileResponse(profileResponse: ProfileResponseTransaction): void {
-    this.profileResponse = profileResponse;
+  setProfileResponse(profileResponse: ProfileResponseTransaction): void {
+    this.profileResponse = profileResponse
   }
 
   // Inherited.
-  public getResponseMessages(): Array<ResponseMessage> {
-    var messages: Array<ResponseMessage> = new Array<ResponseMessage>();
+  getResponseMessages(): ResponseMessage[] {
+    const messages: ResponseMessage[] = new Array<ResponseMessage>()
 
     if (this.getProfileResponse() != null) {
-      messages.push(this.getProfileResponse());
+      messages.push(this.getProfileResponse())
     }
 
-    return messages;
+    return messages
   }
 }
 
-Aggregate_add(ProfileResponseMessageSet, "PROFMSGSRSV1");
-ChildAggregate_add(ProfileResponseMessageSet, { required: true, order: 0, type: ProfileResponseTransaction, read: ProfileResponseMessageSet.prototype.getProfileResponse, write: ProfileResponseMessageSet.prototype.setProfileResponse });
+Aggregate_add(ProfileResponseMessageSet, 'PROFMSGSRSV1')
+ChildAggregate_add(ProfileResponseMessageSet, {
+  required: true,
+  order: 0,
+  type: ProfileResponseTransaction,
+  read: ProfileResponseMessageSet.prototype.getProfileResponse,
+  write: ProfileResponseMessageSet.prototype.setProfileResponse,
+})

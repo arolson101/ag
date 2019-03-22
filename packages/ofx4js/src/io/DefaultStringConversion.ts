@@ -1,64 +1,55 @@
-import { ok as assert } from "assert";
-import { KnownCode } from '../domain/data/common/Status';
-import { StatusCode, Severity } from '../domain/data/common/StatusCode';
-import { UnknownStatusCode } from '../domain/data/common/UnknownStatusCode';
-import { isAssignableFrom } from '../meta/PropertyDescriptor';
-import { StringConversion } from './StringConversion';
+import { ok as assert } from 'assert'
+import { KnownCode } from '../domain/data/common/Status'
+import { Severity, StatusCode } from '../domain/data/common/StatusCode'
+import { UnknownStatusCode } from '../domain/data/common/UnknownStatusCode'
+import { isAssignableFrom } from '../meta/PropertyDescriptor'
+import { StringConversion } from './StringConversion'
 
 /**
  * Utility class for conversion to/from OFX strings.
  */
 export class DefaultStringConversion implements StringConversion {
-
-  public toString(value: Object): string {
+  toString(value: object): string | null {
     if (!value) {
-      return null;
-    }
-    else if (typeof value === "boolean") {
-      return value ? "Y" : "N";
-    }
-    else if (value instanceof Date) {
-      return this.formatDate(value);
-    }
-    else if (typeof value === "number") {
-      return value + "";
-    }
-    else {
-      return value.toString();
+      return null
+    } else if (typeof value === 'boolean') {
+      return value ? 'Y' : 'N'
+    } else if (value instanceof Date) {
+      return this.formatDate(value)
+    } else if (typeof value === 'number') {
+      return value + ''
+    } else {
+      return value.toString()
     }
   }
 
-  public fromString<E>(clazz: any, value: string): E {
+  fromString<E>(clazz: any, value: string): E | null {
     if (!value) {
-      return null;
-    }
-    else if (clazz === StatusCode) {
-      var code: number = <number><any>value;
-      var statusCode: StatusCode = KnownCode.fromCode(code);
+      return null
+    } else if (clazz === StatusCode) {
+      const code: number = (value as any) as number
+      let statusCode: StatusCode = KnownCode.fromCode(code)
       if (!statusCode) {
-        statusCode = new UnknownStatusCode(code, "Unknown status code.", Severity.ERROR);
+        statusCode = new UnknownStatusCode(code, 'Unknown status code.', Severity.ERROR)
       }
 
-      return <E><any>statusCode;
-    }
-    else if (isAssignableFrom(Number, clazz)) {
-      return <E><any>parseFloat(value)
-    }
-    else if (isAssignableFrom(Boolean, clazz)) {
-      return <E><any>("Y" === value.toUpperCase());
-    }
-    else if (isAssignableFrom(Date, clazz)) {
-      return <E><any>this.parseDate(value);
+      return (statusCode as any) as E
+    } else if (isAssignableFrom(Number, clazz)) {
+      return (parseFloat(value) as any) as E
+    } else if (isAssignableFrom(Boolean, clazz)) {
+      return (('Y' === value.toUpperCase()) as any) as E
+    } else if (isAssignableFrom(Date, clazz)) {
+      return (this.parseDate(value) as any) as E
     }
     // this goes last because a lot of things are objects
-    else if (typeof clazz === "object") {
+    else if (typeof clazz === 'object') {
       // enum
-      assert(value in clazz);
-      if(value in clazz) {
-        return clazz[value];
+      assert(value in clazz)
+      if (value in clazz) {
+        return clazz[value]
       }
     }
-    return <E><any>value;
+    return (value as any) as E
   }
 
   /**
@@ -68,27 +59,27 @@ export class DefaultStringConversion implements StringConversion {
    * @return The date value.
    */
   protected parseDate(value: string) {
-    var year: number = parseInt(value.substr(0, 4));
-    var month: number = parseInt(value.substr(4, 2)) - 1; // javascript month numbers are zero-based
-    var day: number = parseInt(value.substr(6, 2));
-    var hour: number = parseInt(value.substr(8, 2));
-    var minute: number = parseInt(value.substr(10, 2));
-    var second: number = parseInt(value.substr(12, 2)) || 0;
-    var milli: number = parseInt(value.substr(15, 3)) || 0;
+    const year: number = parseInt(value.substr(0, 4), 10)
+    const month: number = parseInt(value.substr(4, 2), 10) - 1 // js month numbers are zero-based
+    const day: number = parseInt(value.substr(6, 2), 10)
+    let hour: number = parseInt(value.substr(8, 2), 10)
+    const minute: number = parseInt(value.substr(10, 2), 10)
+    const second: number = parseInt(value.substr(12, 2), 10) || 0
+    const milli: number = parseInt(value.substr(15, 3), 10) || 0
 
     // add timezone offset
-    var bracket: number = value.indexOf("[");
-    if(bracket != -1) {
-      var close = value.indexOf(":");
-      if(close === -1) {
-        close = value.indexOf("]");
+    const bracket: number = value.indexOf('[')
+    if (bracket !== -1) {
+      let close = value.indexOf(':')
+      if (close === -1) {
+        close = value.indexOf(']')
       }
-      var gmtOffset: any = value.substring(bracket+1, close);
-      hour -= 1.0 * gmtOffset;
+      const gmtOffset: any = value.substring(bracket + 1, close)
+      hour -= 1.0 * gmtOffset
     }
 
     // create date as UTC
-    return new Date(Date.UTC(year, month, day, hour, minute, second, milli));
+    return new Date(Date.UTC(year, month, day, hour, minute, second, milli))
   }
 
   /**
@@ -98,17 +89,18 @@ export class DefaultStringConversion implements StringConversion {
    * @return The date format.
    */
   protected formatDate(date: Date): string {
-    var gmt = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
-    return this.pad(gmt.getFullYear(), 4) +
+    const gmt = new Date(date.valueOf() + date.getTimezoneOffset() * 60000)
+    return (
+      this.pad(gmt.getFullYear(), 4) +
       this.pad(gmt.getMonth() + 1, 2) +
       this.pad(gmt.getDate(), 2) +
       this.pad(gmt.getHours(), 2) +
       this.pad(gmt.getMinutes(), 2) +
       this.pad(gmt.getSeconds(), 2) +
-      "." +
-      this.dpad(gmt.getMilliseconds(), 3);
+      '.' +
+      this.dpad(gmt.getMilliseconds(), 3)
+    )
   }
-
 
   /**
    * Pad a number with leading zeroes until it is of <tt>size</tt> length
@@ -118,11 +110,11 @@ export class DefaultStringConversion implements StringConversion {
    * @return padded number
    */
   private pad(num: number, size: number): string {
-    var s = num+"";
+    let s = num + ''
     while (s.length < size) {
-      s = "0" + s;
+      s = '0' + s
     }
-    return s;
+    return s
   }
 
   /**
@@ -134,10 +126,10 @@ export class DefaultStringConversion implements StringConversion {
    * @return padded number
    */
   private dpad(num: number, size: number): string {
-    var s = num+"";
+    let s = num + ''
     while (s.length < size) {
-      s = s + "0";
+      s = s + '0'
     }
-    return s;
+    return s
   }
 }

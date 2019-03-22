@@ -1,18 +1,16 @@
-import { AssetClass_fromOfx, AssetClass } from "./AssetClass";
-import { BaseSecurityInfo } from "./BaseSecurityInfo";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { AssetClass, AssetClass_fromOfx } from './AssetClass'
+import { BaseSecurityInfo } from './BaseSecurityInfo'
 
 /**
  * Info about any other type of security.
  * @see "Section 13.8.5.5, OFX Spec"
  */
 export class OtherSecurityInfo extends BaseSecurityInfo {
-
-  private typeDesc: string;
-  private assetClass: string;
-  private fiAssetClass: string;
+  private typeDesc: string
+  private assetClass: string
+  private fiAssetClass: string
 
   /**
    * Gets a description of the type of security. This is an optional field according to the OFX
@@ -20,8 +18,8 @@ export class OtherSecurityInfo extends BaseSecurityInfo {
    *
    * @return the description of the security
    */
-  public getTypeDesc(): string {
-    return this.typeDesc;
+  getTypeDesc(): string {
+    return this.typeDesc
   }
 
   /**
@@ -30,8 +28,8 @@ export class OtherSecurityInfo extends BaseSecurityInfo {
    *
    * @param typeDesc the description of the security
    */
-  public setTypeDesc(typeDesc: string): void {
-    this.typeDesc = typeDesc;
+  setTypeDesc(typeDesc: string): void {
+    this.typeDesc = typeDesc
   }
 
   /**
@@ -39,8 +37,8 @@ export class OtherSecurityInfo extends BaseSecurityInfo {
    *
    * @return the asset class of the debt
    */
-  public getAssetClass(): string {
-    return this.assetClass;
+  getAssetClass(): string {
+    return this.assetClass
   }
 
   /**
@@ -48,8 +46,8 @@ export class OtherSecurityInfo extends BaseSecurityInfo {
    *
    * @param assetClass the asset class of the debt
    */
-  public setAssetClass(assetClass: string): void {
-    this.assetClass = assetClass;
+  setAssetClass(assetClass: string): void {
+    this.assetClass = assetClass
   }
 
   /**
@@ -57,8 +55,8 @@ export class OtherSecurityInfo extends BaseSecurityInfo {
    *
    * @return the asset class or null if it's not one of the well-known types
    */
-  public getAssetClassEnum(): AssetClass {
-    return AssetClass_fromOfx(this.getAssetClass());
+  getAssetClassEnum(): AssetClass {
+    return AssetClass_fromOfx(this.getAssetClass())
   }
 
   /**
@@ -67,8 +65,8 @@ export class OtherSecurityInfo extends BaseSecurityInfo {
    *
    * @return the FI-defined asset class of the debt
    */
-  public getFiAssetClass(): string {
-    return this.fiAssetClass;
+  getFiAssetClass(): string {
+    return this.fiAssetClass
   }
 
   /**
@@ -77,12 +75,30 @@ export class OtherSecurityInfo extends BaseSecurityInfo {
    *
    * @param fiAssetClass the FI-defined asset class of the debt
    */
-  public setFiAssetClass(fiAssetClass: string): void {
-    this.fiAssetClass = fiAssetClass;
+  setFiAssetClass(fiAssetClass: string): void {
+    this.fiAssetClass = fiAssetClass
   }
 }
 
-Aggregate_add( OtherSecurityInfo, "OTHERINFO" );
-Element_add(OtherSecurityInfo, { name: "TYPEDESC", order: 20, type: String, read: OtherSecurityInfo.prototype.getTypeDesc, write: OtherSecurityInfo.prototype.setTypeDesc });
-Element_add(OtherSecurityInfo, { name: "ASSETCLASS", order: 30, type: String, read: OtherSecurityInfo.prototype.getAssetClass, write: OtherSecurityInfo.prototype.setAssetClass });
-Element_add(OtherSecurityInfo, { name: "FIASSETCLASS", order: 40, type: String, read: OtherSecurityInfo.prototype.getFiAssetClass, write: OtherSecurityInfo.prototype.setFiAssetClass });
+Aggregate_add(OtherSecurityInfo, 'OTHERINFO')
+Element_add(OtherSecurityInfo, {
+  name: 'TYPEDESC',
+  order: 20,
+  type: String,
+  read: OtherSecurityInfo.prototype.getTypeDesc,
+  write: OtherSecurityInfo.prototype.setTypeDesc,
+})
+Element_add(OtherSecurityInfo, {
+  name: 'ASSETCLASS',
+  order: 30,
+  type: String,
+  read: OtherSecurityInfo.prototype.getAssetClass,
+  write: OtherSecurityInfo.prototype.setAssetClass,
+})
+Element_add(OtherSecurityInfo, {
+  name: 'FIASSETCLASS',
+  order: 40,
+  type: String,
+  read: OtherSecurityInfo.prototype.getFiAssetClass,
+  write: OtherSecurityInfo.prototype.setFiAssetClass,
+})

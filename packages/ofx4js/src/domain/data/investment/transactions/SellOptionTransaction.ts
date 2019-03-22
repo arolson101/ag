@@ -1,26 +1,24 @@
-import { BaseSellInvestmentTransaction } from "./BaseSellInvestmentTransaction";
-import { InvestmentTransactionType } from "./TransactionType";
-import { OptionSellType, OptionSellType_fromOfx } from "./OptionSellType";
-import { RelatedOptionType, RelatedOptionType_fromOfx } from "./RelatedOptionType";
-import { ShortOptionSecurity, ShortOptionSecurity_fromOfx } from "../positions/ShortOptionSecurity";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
+import { ShortOptionSecurity, ShortOptionSecurity_fromOfx } from '../positions/ShortOptionSecurity'
+import { BaseSellInvestmentTransaction } from './BaseSellInvestmentTransaction'
+import { OptionSellType, OptionSellType_fromOfx } from './OptionSellType'
+import { RelatedOptionType, RelatedOptionType_fromOfx } from './RelatedOptionType'
+import { InvestmentTransactionType } from './TransactionType'
 
 /**
  * Transaction for selling options.
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class SellOptionTransaction extends BaseSellInvestmentTransaction {
-
-  private optionSellType: string;
-  private sharesPerContact: number;
-  private relatedTransactionId: string;
-  private relatedType: string;
-  private secured: string;
+  private optionSellType: string
+  private sharesPerContact: number
+  private relatedTransactionId: string
+  private relatedType: string
+  private secured: string
 
   constructor() {
-    super(InvestmentTransactionType.SELL_OPTION);
+    super(InvestmentTransactionType.SELL_OPTION)
   }
 
   /**
@@ -30,8 +28,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @return the option sell type
    */
-  public getOptionSellType(): string {
-    return this.optionSellType;
+  getOptionSellType(): string {
+    return this.optionSellType
   }
 
   /**
@@ -41,8 +39,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @param optionSellType the option sell type
    */
-  public setOptionSellType(optionSellType: string): void {
-    this.optionSellType = optionSellType;
+  setOptionSellType(optionSellType: string): void {
+    this.optionSellType = optionSellType
   }
 
   /**
@@ -50,8 +48,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @return the type of sale or null if it's not known.
    */
-  public getOptionSellTypeEnum(): OptionSellType {
-    return OptionSellType_fromOfx(this.optionSellType);
+  getOptionSellTypeEnum(): OptionSellType {
+    return OptionSellType_fromOfx(this.optionSellType)
   }
 
   /**
@@ -60,8 +58,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @return the number of shares per contact
    */
-  public getSharesPerContact(): number {
-    return this.sharesPerContact;
+  getSharesPerContact(): number {
+    return this.sharesPerContact
   }
 
   /**
@@ -70,8 +68,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @param sharesPerContact the number of shares per contact
    */
-  public setSharesPerContact(sharesPerContact: number): void {
-    this.sharesPerContact = sharesPerContact;
+  setSharesPerContact(sharesPerContact: number): void {
+    this.sharesPerContact = sharesPerContact
   }
 
   /**
@@ -81,8 +79,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @return The related transaction id
    */
-  public getRelatedTransactionId(): string {
-    return this.relatedTransactionId;
+  getRelatedTransactionId(): string {
+    return this.relatedTransactionId
   }
 
   /**
@@ -92,8 +90,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @param relatedTransactionId The related transaction id
    */
-  public setRelatedTransactionId(relatedTransactionId: string): void {
-    this.relatedTransactionId = relatedTransactionId;
+  setRelatedTransactionId(relatedTransactionId: string): void {
+    this.relatedTransactionId = relatedTransactionId
   }
 
   /**
@@ -103,8 +101,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @return The related tansaction type
    */
-  public getRelatedType(): string {
-    return this.relatedType;
+  getRelatedType(): string {
+    return this.relatedType
   }
 
   /**
@@ -114,8 +112,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @param relatedType The related tansaction type
    */
-  public setRelatedType(relatedType: string): void {
-    this.relatedType = relatedType;
+  setRelatedType(relatedType: string): void {
+    this.relatedType = relatedType
   }
 
   /**
@@ -123,8 +121,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @return the related tansaction type or null if it's not well known
    */
-  public getRelatedTypeEnum(): RelatedOptionType {
-    return RelatedOptionType_fromOfx(this.getRelatedType());
+  getRelatedTypeEnum(): RelatedOptionType {
+    return RelatedOptionType_fromOfx(this.getRelatedType())
   }
 
   /**
@@ -134,8 +132,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @return how the option sale is secured
    */
-  public getSecured(): string {
-    return this.secured;
+  getSecured(): string {
+    return this.secured
   }
 
   /**
@@ -145,8 +143,8 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @param secured how the option sale is secured
    */
-  public setSecured(secured: string): void {
-    this.secured = secured;
+  setSecured(secured: string): void {
+    this.secured = secured
   }
 
   /**
@@ -154,14 +152,46 @@ export class SellOptionTransaction extends BaseSellInvestmentTransaction {
    *
    * @return the type indicating how the option is secured or null if it's not well known.
    */
-  public getSecuredEnum(): ShortOptionSecurity {
-    return ShortOptionSecurity_fromOfx(this.getSecured());
+  getSecuredEnum(): ShortOptionSecurity {
+    return ShortOptionSecurity_fromOfx(this.getSecured())
   }
 }
 
-Aggregate_add( SellOptionTransaction, "SELLOPT" );
-Element_add(SellOptionTransaction, { name: "OPTSELLTYPE", required: true, order: 20, type: String, read: SellOptionTransaction.prototype.getOptionSellType, write: SellOptionTransaction.prototype.setOptionSellType });
-Element_add(SellOptionTransaction, { name: "SHPERCTRCT", required: true, order: 30, type: Number, read: SellOptionTransaction.prototype.getSharesPerContact, write: SellOptionTransaction.prototype.setSharesPerContact });
-Element_add(SellOptionTransaction, { name: "RELFITID", order: 40, type: String, read: SellOptionTransaction.prototype.getRelatedTransactionId, write: SellOptionTransaction.prototype.setRelatedTransactionId });
-Element_add(SellOptionTransaction, { name: "RELTYPE", order: 50, type: String, read: SellOptionTransaction.prototype.getRelatedType, write: SellOptionTransaction.prototype.setRelatedType });
-Element_add(SellOptionTransaction, { name: "SECURED", order: 60, type: String, read: SellOptionTransaction.prototype.getSecured, write: SellOptionTransaction.prototype.setSecured });
+Aggregate_add(SellOptionTransaction, 'SELLOPT')
+Element_add(SellOptionTransaction, {
+  name: 'OPTSELLTYPE',
+  required: true,
+  order: 20,
+  type: String,
+  read: SellOptionTransaction.prototype.getOptionSellType,
+  write: SellOptionTransaction.prototype.setOptionSellType,
+})
+Element_add(SellOptionTransaction, {
+  name: 'SHPERCTRCT',
+  required: true,
+  order: 30,
+  type: Number,
+  read: SellOptionTransaction.prototype.getSharesPerContact,
+  write: SellOptionTransaction.prototype.setSharesPerContact,
+})
+Element_add(SellOptionTransaction, {
+  name: 'RELFITID',
+  order: 40,
+  type: String,
+  read: SellOptionTransaction.prototype.getRelatedTransactionId,
+  write: SellOptionTransaction.prototype.setRelatedTransactionId,
+})
+Element_add(SellOptionTransaction, {
+  name: 'RELTYPE',
+  order: 50,
+  type: String,
+  read: SellOptionTransaction.prototype.getRelatedType,
+  write: SellOptionTransaction.prototype.setRelatedType,
+})
+Element_add(SellOptionTransaction, {
+  name: 'SECURED',
+  order: 60,
+  type: String,
+  read: SellOptionTransaction.prototype.getSecured,
+  write: SellOptionTransaction.prototype.setSecured,
+})

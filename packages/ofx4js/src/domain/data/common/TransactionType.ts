@@ -1,6 +1,4 @@
-
 export enum TransactionType {
-
   /**
    * generic credit.
    */
@@ -84,5 +82,5 @@ export enum TransactionType {
   /**
    * other
    */
-  OTHER
+  OTHER,
 }

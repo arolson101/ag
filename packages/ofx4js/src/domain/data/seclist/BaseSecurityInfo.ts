@@ -1,7 +1,6 @@
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-import { SecurityInfo } from "./SecurityInfo";
-import { SecurityId } from "./SecurityId";
-
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { SecurityId } from './SecurityId'
+import { SecurityInfo } from './SecurityInfo'
 
 /**
  * Base class for info about the various types of securities.
@@ -12,15 +11,15 @@ import { SecurityId } from "./SecurityId";
  * developers who may not find the ofx aggregation model intuitive.
  */
 export class BaseSecurityInfo {
-  private securityInfo: SecurityInfo;
+  private securityInfo: SecurityInfo
 
   /**
    * Gets the security info aggregate.
    *
    * @return the security info aggregate.
    */
-  public getSecurityInfo(): SecurityInfo {
-    return this.securityInfo;
+  getSecurityInfo(): SecurityInfo {
+    return this.securityInfo
   }
 
   /**
@@ -28,8 +27,8 @@ export class BaseSecurityInfo {
    *
    * @param securityInfo the security info aggregate.
    */
-  public setSecurityInfo(securityInfo: SecurityInfo): void {
-    this.securityInfo = securityInfo;
+  setSecurityInfo(securityInfo: SecurityInfo): void {
+    this.securityInfo = securityInfo
   }
 
   /**
@@ -38,8 +37,8 @@ export class BaseSecurityInfo {
    *
    * @return the security id
    */
-  public getSecurityId(): SecurityId {
-    return this.getSecurityInfo().getSecurityId();
+  getSecurityId(): SecurityId {
+    return this.getSecurityInfo().getSecurityId()
   }
 
   /**
@@ -47,8 +46,8 @@ export class BaseSecurityInfo {
    *
    * @return the full name of the security.
    */
-  public getSecurityName(): string {
-    return this.getSecurityInfo().getSecurityName();
+  getSecurityName(): string {
+    return this.getSecurityInfo().getSecurityName()
   }
 
   /**
@@ -56,8 +55,8 @@ export class BaseSecurityInfo {
    *
    * @return the ticket symbol or null if there's no ticker symbol
    */
-  public getTickerSymbol(): string {
-    return this.getSecurityInfo().getTickerSymbol();
+  getTickerSymbol(): string {
+    return this.getSecurityInfo().getTickerSymbol()
   }
 
   /**
@@ -65,8 +64,8 @@ export class BaseSecurityInfo {
    *
    * @return the FI ID number for the security
    */
-  public getFiId(): string {
-    return this.getSecurityInfo().getFiId();
+  getFiId(): string {
+    return this.getSecurityInfo().getFiId()
   }
 
   /**
@@ -74,8 +73,8 @@ export class BaseSecurityInfo {
    *
    * @return the rating
    */
-  public getRating(): string {
-    return this.getSecurityInfo().getRating();
+  getRating(): string {
+    return this.getSecurityInfo().getRating()
   }
 
   /**
@@ -86,8 +85,8 @@ export class BaseSecurityInfo {
    *
    * @return the per unit price
    */
-  public getUnitPrice(): number {
-    return this.getSecurityInfo().getUnitPrice();
+  getUnitPrice(): number {
+    return this.getSecurityInfo().getUnitPrice()
   }
 
   /**
@@ -95,8 +94,8 @@ export class BaseSecurityInfo {
    *
    * @return the date as-of for the unit price
    */
-  public getUnitPriceAsOfDate(): Date {
-    return this.getSecurityInfo().getUnitPriceAsOfDate();
+  getUnitPriceAsOfDate(): Date {
+    return this.getSecurityInfo().getUnitPriceAsOfDate()
   }
 
   /**
@@ -105,8 +104,8 @@ export class BaseSecurityInfo {
    *
    * @return the overriding currency code or null to mean the default currency
    */
-  public getCurrencyCode(): string {
-    return this.getSecurityInfo().getCurrencyCode();
+  getCurrencyCode(): string {
+    return this.getSecurityInfo().getCurrencyCode()
   }
 
   /**
@@ -115,9 +114,15 @@ export class BaseSecurityInfo {
    *
    * @return the memo
    */
-  public getMemo(): string {
-    return this.getSecurityInfo().getMemo();
+  getMemo(): string {
+    return this.getSecurityInfo().getMemo()
   }
 }
 
-ChildAggregate_add(BaseSecurityInfo, { required: true, order: 10, type: SecurityInfo, read: BaseSecurityInfo.prototype.getSecurityInfo, write: BaseSecurityInfo.prototype.setSecurityInfo });
+ChildAggregate_add(BaseSecurityInfo, {
+  required: true,
+  order: 10,
+  type: SecurityInfo,
+  read: BaseSecurityInfo.prototype.getSecurityInfo,
+  write: BaseSecurityInfo.prototype.setSecurityInfo,
+})

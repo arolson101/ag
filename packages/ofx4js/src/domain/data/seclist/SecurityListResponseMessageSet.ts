@@ -1,19 +1,17 @@
-import { ResponseMessageSet } from "../ResponseMessageSet";
-import { SecurityListResponseTransaction } from "./SecurityListResponseTransaction";
-import { SecurityList } from "./SecurityList";
-import { MessageSetType } from "../MessageSetType";
-import { ResponseMessage } from "../ResponseMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { ResponseMessage } from '../ResponseMessage'
+import { ResponseMessageSet } from '../ResponseMessageSet'
+import { SecurityList } from './SecurityList'
+import { SecurityListResponseTransaction } from './SecurityListResponseTransaction'
 
 export class SecurityListResponseMessageSet extends ResponseMessageSet {
+  private securityListResponse: SecurityListResponseTransaction
+  private securityList: SecurityList
 
-  private securityListResponse: SecurityListResponseTransaction;
-  private securityList: SecurityList;
-
-  public getType(): MessageSetType {
-    return MessageSetType.investment_security;
+  getType(): MessageSetType {
+    return MessageSetType.investment_security
   }
 
   /**
@@ -23,8 +21,8 @@ export class SecurityListResponseMessageSet extends ResponseMessageSet {
    *
    * @return The security list response list.
    */
-  public getSecurityListResponse(): SecurityListResponseTransaction {
-    return this.securityListResponse;
+  getSecurityListResponse(): SecurityListResponseTransaction {
+    return this.securityListResponse
   }
 
   /**
@@ -32,26 +30,36 @@ export class SecurityListResponseMessageSet extends ResponseMessageSet {
    *
    * @param securityListResponse The security list response.
    */
-  public setSecurityListResponse(securityListResponse: SecurityListResponseTransaction) {
-    this.securityListResponse = securityListResponse;
+  setSecurityListResponse(securityListResponse: SecurityListResponseTransaction) {
+    this.securityListResponse = securityListResponse
   }
 
-  public getSecurityList(): SecurityList {
-    return this.securityList;
+  getSecurityList(): SecurityList {
+    return this.securityList
   }
 
-  public setSecurityList(securityList: SecurityList): void {
-    this.securityList = securityList;
+  setSecurityList(securityList: SecurityList): void {
+    this.securityList = securityList
   }
 
   // Inherited.
-  public getResponseMessages(): Array<ResponseMessage> {
-    var ret: Array<ResponseMessage> = new Array<ResponseMessage>();
-    ret.push(this.securityListResponse);
-    return ret;
+  getResponseMessages(): ResponseMessage[] {
+    const ret: ResponseMessage[] = new Array<ResponseMessage>()
+    ret.push(this.securityListResponse)
+    return ret
   }
 }
 
-Aggregate_add( SecurityListResponseMessageSet, "SECLISTMSGSRSV1" );
-ChildAggregate_add(SecurityListResponseMessageSet, { order: 0, type: SecurityListResponseTransaction, read: SecurityListResponseMessageSet.prototype.getSecurityListResponse, write: SecurityListResponseMessageSet.prototype.setSecurityListResponse });
-ChildAggregate_add(SecurityListResponseMessageSet, { order: 10, type: SecurityList, read: SecurityListResponseMessageSet.prototype.getSecurityList, write: SecurityListResponseMessageSet.prototype.setSecurityList });
+Aggregate_add(SecurityListResponseMessageSet, 'SECLISTMSGSRSV1')
+ChildAggregate_add(SecurityListResponseMessageSet, {
+  order: 0,
+  type: SecurityListResponseTransaction,
+  read: SecurityListResponseMessageSet.prototype.getSecurityListResponse,
+  write: SecurityListResponseMessageSet.prototype.setSecurityListResponse,
+})
+ChildAggregate_add(SecurityListResponseMessageSet, {
+  order: 10,
+  type: SecurityList,
+  read: SecurityListResponseMessageSet.prototype.getSecurityList,
+  write: SecurityListResponseMessageSet.prototype.setSecurityList,
+})

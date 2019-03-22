@@ -1,29 +1,28 @@
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-import { BaseOtherInvestmentTransaction } from "./BaseOtherInvestmentTransaction";
-import { SecurityId } from "../../seclist/SecurityId";
-import { OriginalCurrency } from "./OriginalCurrency";
-import { InvestmentTransactionType } from "./TransactionType";
-import { SubAccountType, SubAccountType_fromOfx } from "../accounts/SubAccountType";
-import { Inv401KSource, Inv401KSource_fromOfx } from "../positions/Inv401KSource";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { SecurityId } from '../../seclist/SecurityId'
+import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountType'
+import { Inv401KSource, Inv401KSource_fromOfx } from '../positions/Inv401KSource'
+import { BaseOtherInvestmentTransaction } from './BaseOtherInvestmentTransaction'
+import { OriginalCurrency } from './OriginalCurrency'
+import { InvestmentTransactionType } from './TransactionType'
 
 /**
  * Transaction for an investment expense
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction {
-
-  private securityId: SecurityId;
-  private total: number;
-  private subAccountSecurity: string;
-  private subAccountFund: string;
-  private currencyCode: string;
-  private originalCurrencyInfo: OriginalCurrency;
-  private inv401kSource: string;
+  private securityId: SecurityId
+  private total: number
+  private subAccountSecurity: string
+  private subAccountFund: string
+  private currencyCode: string
+  private originalCurrencyInfo: OriginalCurrency
+  private inv401kSource: string
 
   constructor() {
-    super(InvestmentTransactionType.INVESTMENT_EXPENSE);
+    super(InvestmentTransactionType.INVESTMENT_EXPENSE)
   }
 
   /**
@@ -33,8 +32,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the security id of the security for the expsense
    */
-  public getSecurityId(): SecurityId {
-    return this.securityId;
+  getSecurityId(): SecurityId {
+    return this.securityId
   }
 
   /**
@@ -44,8 +43,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @param securityId the security id of the security for the expsense
    */
-  public setSecurityId(securityId: SecurityId): void {
-    this.securityId = securityId;
+  setSecurityId(securityId: SecurityId): void {
+    this.securityId = securityId
   }
 
   /**
@@ -54,8 +53,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the total
    */
-  public getTotal(): number {
-    return this.total;
+  getTotal(): number {
+    return this.total
   }
 
   /**
@@ -64,8 +63,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @param total the total
    */
-  public setTotal(total: number): void {
-    this.total = total;
+  setTotal(total: number): void {
+    this.total = total
   }
 
   /**
@@ -74,8 +73,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the sub account type
    */
-  public getSubAccountSecurity(): string {
-    return this.subAccountSecurity;
+  getSubAccountSecurity(): string {
+    return this.subAccountSecurity
   }
 
   /**
@@ -84,8 +83,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @param subAccountSecurity the sub account type
    */
-  public setSubAccountSecurity(subAccountSecurity: string): void {
-    this.subAccountSecurity = subAccountSecurity;
+  setSubAccountSecurity(subAccountSecurity: string): void {
+    this.subAccountSecurity = subAccountSecurity
   }
 
   /**
@@ -93,8 +92,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the type of null if it wasn't one of the well known types.
    */
-  public getSubAccountSecurityEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getSubAccountSecurity());
+  getSubAccountSecurityEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getSubAccountSecurity())
   }
 
   /**
@@ -103,8 +102,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the sub account fund
    */
-  public getSubAccountFund(): string {
-    return this.subAccountFund;
+  getSubAccountFund(): string {
+    return this.subAccountFund
   }
 
   /**
@@ -113,8 +112,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @param subAccountFund the sub account fund
    */
-  public setSubAccountFund(subAccountFund: string): void {
-    this.subAccountFund = subAccountFund;
+  setSubAccountFund(subAccountFund: string): void {
+    this.subAccountFund = subAccountFund
   }
 
   /**
@@ -122,8 +121,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the type of null if it wasn't one of the well known types
    */
-  public getSubAccountFundEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getSubAccountFund());
+  getSubAccountFundEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getSubAccountFund())
   }
 
   /**
@@ -133,8 +132,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the currency code for the transaction
    */
-  public getCurrencyCode(): string {
-    return this.currencyCode;
+  getCurrencyCode(): string {
+    return this.currencyCode
   }
 
   /**
@@ -144,9 +143,9 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @param currencyCode the currency code for the transaction
    */
-  public setCurrencyCode(currencyCode: string): void {
-    this.currencyCode = currencyCode;
-    this.originalCurrencyInfo = null;
+  setCurrencyCode(currencyCode: string): void {
+    this.currencyCode = currencyCode
+    this.originalCurrencyInfo = null
   }
 
   /**
@@ -155,8 +154,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the original currency info for the transaction
    */
-  public getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo;
+  getOriginalCurrencyInfo(): OriginalCurrency {
+    return this.originalCurrencyInfo
   }
 
   /**
@@ -165,9 +164,9 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @param originalCurrencyInfo the original currency info for the transaction
    */
-  public setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
-    this.originalCurrencyInfo = originalCurrencyInfo;
-    this.currencyCode = null;
+  setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
+    this.originalCurrencyInfo = originalCurrencyInfo
+    this.currencyCode = null
   }
 
   /**
@@ -178,8 +177,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the 401k source
    */
-  public get401kSource(): string {
-    return this.inv401kSource;
+  get401kSource(): string {
+    return this.inv401kSource
   }
 
   /**
@@ -190,8 +189,8 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @param inv401kSource the 401k source
    */
-  public set401kSource(inv401kSource: string): void {
-    this.inv401kSource = inv401kSource;
+  set401kSource(inv401kSource: string): void {
+    this.inv401kSource = inv401kSource
   }
 
   /**
@@ -199,16 +198,59 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the 401k source or null if its not one of the well-known types
    */
-  public get401kSourceEnum(): Inv401KSource {
-    return Inv401KSource_fromOfx(this.get401kSource());
+  get401kSourceEnum(): Inv401KSource {
+    return Inv401KSource_fromOfx(this.get401kSource())
   }
 }
 
-Aggregate_add( InvestmentExpenseTransaction, "INVEXPENSE" );
-ChildAggregate_add(InvestmentExpenseTransaction, { required: true, order: 20, type: SecurityId, read: InvestmentExpenseTransaction.prototype.getSecurityId, write: InvestmentExpenseTransaction.prototype.setSecurityId });
-Element_add(InvestmentExpenseTransaction, { name: "TOTAL", required: true, order: 30, type: Number, read: InvestmentExpenseTransaction.prototype.getTotal, write: InvestmentExpenseTransaction.prototype.setTotal });
-Element_add(InvestmentExpenseTransaction, { name: "SUBACCTSEC", order: 40, type: String, read: InvestmentExpenseTransaction.prototype.getSubAccountSecurity, write: InvestmentExpenseTransaction.prototype.setSubAccountSecurity });
-Element_add(InvestmentExpenseTransaction, { name: "SUBACCTFUND", order: 50, type: String, read: InvestmentExpenseTransaction.prototype.getSubAccountFund, write: InvestmentExpenseTransaction.prototype.setSubAccountFund });
-Element_add(InvestmentExpenseTransaction, { name: "CURRENCY", order: 60, type: String, read: InvestmentExpenseTransaction.prototype.getCurrencyCode, write: InvestmentExpenseTransaction.prototype.setCurrencyCode });
-Element_add(InvestmentExpenseTransaction, { name: "ORIGCURRENCY", order: 70, type: OriginalCurrency, read: InvestmentExpenseTransaction.prototype.getOriginalCurrencyInfo, write: InvestmentExpenseTransaction.prototype.setOriginalCurrencyInfo });
-Element_add(InvestmentExpenseTransaction, { name: "INV401KSOURCE", order: 180, type: String, read: InvestmentExpenseTransaction.prototype.get401kSource, write: InvestmentExpenseTransaction.prototype.set401kSource });
+Aggregate_add(InvestmentExpenseTransaction, 'INVEXPENSE')
+ChildAggregate_add(InvestmentExpenseTransaction, {
+  required: true,
+  order: 20,
+  type: SecurityId,
+  read: InvestmentExpenseTransaction.prototype.getSecurityId,
+  write: InvestmentExpenseTransaction.prototype.setSecurityId,
+})
+Element_add(InvestmentExpenseTransaction, {
+  name: 'TOTAL',
+  required: true,
+  order: 30,
+  type: Number,
+  read: InvestmentExpenseTransaction.prototype.getTotal,
+  write: InvestmentExpenseTransaction.prototype.setTotal,
+})
+Element_add(InvestmentExpenseTransaction, {
+  name: 'SUBACCTSEC',
+  order: 40,
+  type: String,
+  read: InvestmentExpenseTransaction.prototype.getSubAccountSecurity,
+  write: InvestmentExpenseTransaction.prototype.setSubAccountSecurity,
+})
+Element_add(InvestmentExpenseTransaction, {
+  name: 'SUBACCTFUND',
+  order: 50,
+  type: String,
+  read: InvestmentExpenseTransaction.prototype.getSubAccountFund,
+  write: InvestmentExpenseTransaction.prototype.setSubAccountFund,
+})
+Element_add(InvestmentExpenseTransaction, {
+  name: 'CURRENCY',
+  order: 60,
+  type: String,
+  read: InvestmentExpenseTransaction.prototype.getCurrencyCode,
+  write: InvestmentExpenseTransaction.prototype.setCurrencyCode,
+})
+Element_add(InvestmentExpenseTransaction, {
+  name: 'ORIGCURRENCY',
+  order: 70,
+  type: OriginalCurrency,
+  read: InvestmentExpenseTransaction.prototype.getOriginalCurrencyInfo,
+  write: InvestmentExpenseTransaction.prototype.setOriginalCurrencyInfo,
+})
+Element_add(InvestmentExpenseTransaction, {
+  name: 'INV401KSOURCE',
+  order: 180,
+  type: String,
+  read: InvestmentExpenseTransaction.prototype.get401kSource,
+  write: InvestmentExpenseTransaction.prototype.set401kSource,
+})

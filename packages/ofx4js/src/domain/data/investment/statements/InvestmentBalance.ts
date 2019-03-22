@@ -1,20 +1,18 @@
-import { BalanceList } from "./BalanceList";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { BalanceList } from './BalanceList'
 
 /**
  * Aggregate for the investment balance.
  * @see "Section 13.9.2.7, OFX Spec"
  */
 export class InvestmentBalance {
-
-  private availableCash: number;
-  private marginBalance: number;
-  private shortBalance: number;
-  private buyingPower: number;
-  private balanceList: BalanceList;
+  private availableCash: number
+  private marginBalance: number
+  private shortBalance: number
+  private buyingPower: number
+  private balanceList: BalanceList
 
   /**
    * Gets the available cash balance across all sub-accounts, including sweep funds. This is
@@ -22,8 +20,8 @@ export class InvestmentBalance {
    *
    * @return the available cash balance
    */
-  public getAvailableCash(): number {
-    return this.availableCash;
+  getAvailableCash(): number {
+    return this.availableCash
   }
 
   /**
@@ -32,8 +30,8 @@ export class InvestmentBalance {
    *
    * @param availableCash the available cash balance
    */
-  public setAvailableCash(availableCash: number): void {
-    this.availableCash = availableCash;
+  setAvailableCash(availableCash: number): void {
+    this.availableCash = availableCash
   }
 
   /**
@@ -43,8 +41,8 @@ export class InvestmentBalance {
    *
    * @return the margin account balance
    */
-  public getMarginBalance(): number {
-    return this.marginBalance;
+  getMarginBalance(): number {
+    return this.marginBalance
   }
 
   /**
@@ -54,8 +52,8 @@ export class InvestmentBalance {
    *
    * @param marginBalance the margin account balance
    */
-  public setMarginBalance(marginBalance: number): void {
-    this.marginBalance = marginBalance;
+  setMarginBalance(marginBalance: number): void {
+    this.marginBalance = marginBalance
   }
 
   /**
@@ -64,8 +62,8 @@ export class InvestmentBalance {
    *
    * @return the market value of all short positions
    */
-  public getShortBalance(): number {
-    return this.shortBalance;
+  getShortBalance(): number {
+    return this.shortBalance
   }
 
   /**
@@ -74,8 +72,8 @@ export class InvestmentBalance {
    *
    * @param shortBalance the market value of all short positions
    */
-  public setShortBalance(shortBalance: number): void {
-    this.shortBalance = shortBalance;
+  setShortBalance(shortBalance: number): void {
+    this.shortBalance = shortBalance
   }
 
   /**
@@ -83,8 +81,8 @@ export class InvestmentBalance {
    *
    * @return the buying power
    */
-  public getBuyingPower(): number {
-    return this.buyingPower;
+  getBuyingPower(): number {
+    return this.buyingPower
   }
 
   /**
@@ -92,8 +90,8 @@ export class InvestmentBalance {
    *
    * @param buyingPower the buying power
    */
-  public setBuyingPower(buyingPower: number): void {
-    this.buyingPower = buyingPower;
+  setBuyingPower(buyingPower: number): void {
+    this.buyingPower = buyingPower
   }
 
   /**
@@ -101,8 +99,8 @@ export class InvestmentBalance {
    *
    * @return the investment balance list
    */
-  public getBalanceList(): BalanceList {
-    return this.balanceList;
+  getBalanceList(): BalanceList {
+    return this.balanceList
   }
 
   /**
@@ -110,14 +108,46 @@ export class InvestmentBalance {
    *
    * @param balanceList the investment balance list
    */
-  public setBalanceList(balanceList: BalanceList): void {
-    this.balanceList = balanceList;
+  setBalanceList(balanceList: BalanceList): void {
+    this.balanceList = balanceList
   }
 }
 
-Aggregate_add(InvestmentBalance, "INVBAL");
-Element_add(InvestmentBalance, { name: "AVAILCASH", required: true, order: 10, type: Number, read: InvestmentBalance.prototype.getAvailableCash, write: InvestmentBalance.prototype.setAvailableCash });
-Element_add(InvestmentBalance, { name: "MARGINBALANCE", required: true, order: 20, type: Number, read: InvestmentBalance.prototype.getMarginBalance, write: InvestmentBalance.prototype.setMarginBalance });
-Element_add(InvestmentBalance, { name: "SHORTBALANCE", required: true, order: 30, type: Number, read: InvestmentBalance.prototype.getShortBalance, write: InvestmentBalance.prototype.setShortBalance });
-Element_add(InvestmentBalance, { name: "BUYPOWER", order: 40, type: Number, read: InvestmentBalance.prototype.getBuyingPower, write: InvestmentBalance.prototype.setBuyingPower });
-ChildAggregate_add(InvestmentBalance, { order: 50, type: BalanceList, read: InvestmentBalance.prototype.getBalanceList, write: InvestmentBalance.prototype.setBalanceList });
+Aggregate_add(InvestmentBalance, 'INVBAL')
+Element_add(InvestmentBalance, {
+  name: 'AVAILCASH',
+  required: true,
+  order: 10,
+  type: Number,
+  read: InvestmentBalance.prototype.getAvailableCash,
+  write: InvestmentBalance.prototype.setAvailableCash,
+})
+Element_add(InvestmentBalance, {
+  name: 'MARGINBALANCE',
+  required: true,
+  order: 20,
+  type: Number,
+  read: InvestmentBalance.prototype.getMarginBalance,
+  write: InvestmentBalance.prototype.setMarginBalance,
+})
+Element_add(InvestmentBalance, {
+  name: 'SHORTBALANCE',
+  required: true,
+  order: 30,
+  type: Number,
+  read: InvestmentBalance.prototype.getShortBalance,
+  write: InvestmentBalance.prototype.setShortBalance,
+})
+Element_add(InvestmentBalance, {
+  name: 'BUYPOWER',
+  order: 40,
+  type: Number,
+  read: InvestmentBalance.prototype.getBuyingPower,
+  write: InvestmentBalance.prototype.setBuyingPower,
+})
+ChildAggregate_add(InvestmentBalance, {
+  order: 50,
+  type: BalanceList,
+  read: InvestmentBalance.prototype.getBalanceList,
+  write: InvestmentBalance.prototype.setBalanceList,
+})

@@ -1,11 +1,9 @@
-import { AccountStatement } from "./AccountStatement";
-
+import { AccountStatement } from './AccountStatement'
 
 /**
  * A specific account at a financial institution.
  */
 export interface FinancialInstitutionAccount {
-
   /**
    * Read an account statement.
    *
@@ -13,5 +11,5 @@ export interface FinancialInstitutionAccount {
    * @param end The end date of the statement.
    * @return The account statement.
    */
-  readStatement(start: Date, end: Date) /*throws OFXException*/: Promise<AccountStatement>;
+  readStatement(start: Date, end: Date): /*throws OFXException*/ Promise<AccountStatement>
 }

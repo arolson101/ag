@@ -1,10 +1,9 @@
-import { MessageSetProfile } from "../MessageSetProfile";
-import { CoreMessageSetInfo } from "./CoreMessageSetInfo";
-import { MessageSetType } from "../MessageSetType";
-import { ApplicationSecurity } from "../ApplicationSecurity";
-import { SynchronizationCapability } from "./SynchronizationCapability";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { ApplicationSecurity } from '../ApplicationSecurity'
+import { MessageSetProfile } from '../MessageSetProfile'
+import { MessageSetType } from '../MessageSetType'
+import { CoreMessageSetInfo } from './CoreMessageSetInfo'
+import { SynchronizationCapability } from './SynchronizationCapability'
 
 /**
  * Information specific to a version of a message set.
@@ -12,16 +11,15 @@ import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
  * @see "Section 7.2.1, OFX Spec"
  */
 export abstract class VersionSpecificMessageSetInfo implements MessageSetProfile {
-
-  private core: CoreMessageSetInfo;
+  private core: CoreMessageSetInfo
 
   /**
    * The information core.
    *
    * @return The information core.
    */
-  public getCore(): CoreMessageSetInfo {
-    return this.core;
+  getCore(): CoreMessageSetInfo {
+    return this.core
   }
 
   /**
@@ -29,8 +27,8 @@ export abstract class VersionSpecificMessageSetInfo implements MessageSetProfile
    *
    * @param core The information core.
    */
-  public setCore(core: CoreMessageSetInfo): void {
-    this.core = core;
+  setCore(core: CoreMessageSetInfo): void {
+    this.core = core
   }
 
   /**
@@ -38,43 +36,52 @@ export abstract class VersionSpecificMessageSetInfo implements MessageSetProfile
    *
    * @return The message set type.
    */
-  public abstract getMessageSetType(): MessageSetType;
+  abstract getMessageSetType(): MessageSetType
 
-  public getVersion(): string {
-    return this.core != null ? this.core.getVersion() : null;
+  getVersion(): string {
+    return this.core != null ? this.core.getVersion() : null
   }
 
-  public getServiceProviderName(): string {
-    return this.core != null ? this.core.getServiceProviderName() : null;
+  getServiceProviderName(): string {
+    return this.core != null ? this.core.getServiceProviderName() : null
   }
 
-  public getUrl(): string {
-    return this.core != null ? this.core.getUrl() : null;
+  getUrl(): string {
+    return this.core != null ? this.core.getUrl() : null
   }
 
-  public getSecurity(): ApplicationSecurity {
-    return this.core != null ? this.core.getSecurity() : null;
+  getSecurity(): ApplicationSecurity {
+    return this.core != null ? this.core.getSecurity() : null
   }
 
-  public isSslRequired(): boolean {
-    return this.core != null && this.core.getSslRequired() != null ? this.core.getSslRequired() : true;
+  isSslRequired(): boolean {
+    return this.core != null && this.core.getSslRequired() != null
+      ? this.core.getSslRequired()
+      : true
   }
 
-  public getRealm(): string {
-    return this.core != null ? this.core.getRealm() : null;
+  getRealm(): string {
+    return this.core != null ? this.core.getRealm() : null
   }
 
-  public getLanguage(): string {
-    return this.core != null ? this.core.getLanguage() : null;
+  getLanguage(): string {
+    return this.core != null ? this.core.getLanguage() : null
   }
 
-  public getSyncCapability(): SynchronizationCapability {
-    return this.core != null ? this.core.getSyncCapability() : null;
+  getSyncCapability(): SynchronizationCapability {
+    return this.core != null ? this.core.getSyncCapability() : null
   }
 
-  public hasFileBasedErrorRecoverySupport(): boolean {
-    return this.core != null && this.core.getFileBasedErrorRecoverySupport() != null ? this.core.getFileBasedErrorRecoverySupport() : false;
+  hasFileBasedErrorRecoverySupport(): boolean {
+    return this.core != null && this.core.getFileBasedErrorRecoverySupport() != null
+      ? this.core.getFileBasedErrorRecoverySupport()
+      : false
   }
 }
 
-ChildAggregate_add(VersionSpecificMessageSetInfo, { order: 0, type: CoreMessageSetInfo, read: VersionSpecificMessageSetInfo.prototype.getCore, write: VersionSpecificMessageSetInfo.prototype.setCore });
+ChildAggregate_add(VersionSpecificMessageSetInfo, {
+  order: 0,
+  type: CoreMessageSetInfo,
+  read: VersionSpecificMessageSetInfo.prototype.getCore,
+  write: VersionSpecificMessageSetInfo.prototype.setCore,
+})

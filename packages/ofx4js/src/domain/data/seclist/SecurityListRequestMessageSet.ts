@@ -1,21 +1,19 @@
-import { RequestMessageSet } from "../RequestMessageSet";
-import { SecurityListRequestTransaction } from "./SecurityListRequestTransaction";
-import { MessageSetType } from "../MessageSetType";
-import { RequestMessage } from "../RequestMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { RequestMessage } from '../RequestMessage'
+import { RequestMessageSet } from '../RequestMessageSet'
+import { SecurityListRequestTransaction } from './SecurityListRequestTransaction'
 
 /**
  * Security list request message set.
  * @see "Section 13.7.2.2.1, OFX Spec"
  */
 export class SecurityListRequestMessageSet extends RequestMessageSet {
+  private securityListRequest: SecurityListRequestTransaction
 
-  private securityListRequest: SecurityListRequestTransaction;
-
-  public getType(): MessageSetType {
-    return MessageSetType.investment;
+  getType(): MessageSetType {
+    return MessageSetType.investment
   }
 
   /**
@@ -23,8 +21,8 @@ export class SecurityListRequestMessageSet extends RequestMessageSet {
    *
    * @return the request
    */
-  public getSecurityListRequest(): SecurityListRequestTransaction {
-    return this.securityListRequest;
+  getSecurityListRequest(): SecurityListRequestTransaction {
+    return this.securityListRequest
   }
 
   /**
@@ -32,19 +30,24 @@ export class SecurityListRequestMessageSet extends RequestMessageSet {
    *
    * @param statementRequest the request
    */
-  public setSecurityListRequest(statementRequest: SecurityListRequestTransaction): void {
-    this.securityListRequest = statementRequest;
+  setSecurityListRequest(statementRequest: SecurityListRequestTransaction): void {
+    this.securityListRequest = statementRequest
   }
 
   // Inherited.
-  public getRequestMessages(): Array<RequestMessage> {
-    var requestMessages: Array<RequestMessage> = new Array<RequestMessage>();
+  getRequestMessages(): RequestMessage[] {
+    const requestMessages: RequestMessage[] = new Array<RequestMessage>()
     if (this.getSecurityListRequest() != null) {
-      requestMessages.push(this.getSecurityListRequest());
+      requestMessages.push(this.getSecurityListRequest())
     }
-    return requestMessages;
+    return requestMessages
   }
 }
 
-Aggregate_add( SecurityListRequestMessageSet, "SECLISTMSGSRQV1" );
-ChildAggregate_add(SecurityListRequestMessageSet, { order: 0, type: SecurityListRequestTransaction, read: SecurityListRequestMessageSet.prototype.getSecurityListRequest, write: SecurityListRequestMessageSet.prototype.setSecurityListRequest });
+Aggregate_add(SecurityListRequestMessageSet, 'SECLISTMSGSRQV1')
+ChildAggregate_add(SecurityListRequestMessageSet, {
+  order: 0,
+  type: SecurityListRequestTransaction,
+  read: SecurityListRequestMessageSet.prototype.getSecurityListRequest,
+  write: SecurityListRequestMessageSet.prototype.setSecurityListRequest,
+})

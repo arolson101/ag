@@ -1,8 +1,7 @@
-import { ApplicationSecurity } from "./ApplicationSecurity";
-import { SynchronizationCapability } from "./profile/SynchronizationCapability";
+import { ApplicationSecurity } from './ApplicationSecurity'
+import { SynchronizationCapability } from './profile/SynchronizationCapability'
 
-
-//import java.net.URL;
+// import java.net.URL;
 
 export interface MessageSetProfile {
   /**
@@ -10,42 +9,42 @@ export interface MessageSetProfile {
    *
    * @return The version of the message set.
    */
-  getVersion(): string;
+  getVersion(): string
 
   /**
    * The name of the service provider (sometimes the message set processing is outsourced).
    *
    * @return The name of the service provider (sometimes the message set processing is outsourced).
    */
-  getServiceProviderName(): string;
+  getServiceProviderName(): string
 
   /**
    * The URL at which the message set is processed.
    *
    * @return The URL at which the message set is processed.
    */
-  getUrl(): string;
+  getUrl(): string
 
   /**
    * The application-level security required for this message set.
    *
    * @return The application-level security required for this message set.
    */
-  getSecurity(): ApplicationSecurity;
+  getSecurity(): ApplicationSecurity
 
   /**
    * Whether transport-level security is required for this message set.
    *
    * @return Whether transport-level security is required for this message set.
    */
-  isSslRequired(): boolean;
+  isSslRequired(): boolean
 
   /**
    * The sign-on realm.
    *
    * @return The sign-on realm.
    */
-  getRealm(): string;
+  getRealm(): string
 
   /**
    * The language.
@@ -53,19 +52,19 @@ export interface MessageSetProfile {
    * @return The language.
    * @see java.util.Locale#getISO3Language()
    */
-  getLanguage(): string;
+  getLanguage(): string
 
   /**
    * The synchronization capability for this message set.
    *
    * @return The synchronization capability for this message set.
    */
-  getSyncCapability(): SynchronizationCapability;
+  getSyncCapability(): SynchronizationCapability
 
   /**
    * Whether there exists support for resposne-file based error recovery.
    *
    * @return Whether there exists support for resposne-file based error recovery.
    */
-  hasFileBasedErrorRecoverySupport(): boolean;
+  hasFileBasedErrorRecoverySupport(): boolean
 }

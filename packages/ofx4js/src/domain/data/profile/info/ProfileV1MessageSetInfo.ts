@@ -1,12 +1,11 @@
-import { VersionSpecificMessageSetInfo } from "../VersionSpecificMessageSetInfo";
-import { MessageSetType } from "../../MessageSetType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { MessageSetType } from '../../MessageSetType'
+import { VersionSpecificMessageSetInfo } from '../VersionSpecificMessageSetInfo'
 
 export class ProfileV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  public getMessageSetType(): MessageSetType {
-    return MessageSetType.profile;
+  getMessageSetType(): MessageSetType {
+    return MessageSetType.profile
   }
 }
 
-Aggregate_add( ProfileV1MessageSetInfo, "PROFMSGSETV1" );
+Aggregate_add(ProfileV1MessageSetInfo, 'PROFMSGSETV1')

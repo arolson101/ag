@@ -1,17 +1,15 @@
-import { RequestMessageSet } from "../RequestMessageSet";
-import { BankStatementRequestTransaction } from "./BankStatementRequestTransaction";
-import { MessageSetType } from "../MessageSetType";
-import { RequestMessage } from "../RequestMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { RequestMessage } from '../RequestMessage'
+import { RequestMessageSet } from '../RequestMessageSet'
+import { BankStatementRequestTransaction } from './BankStatementRequestTransaction'
 
 export class BankingRequestMessageSet extends RequestMessageSet {
+  private statementRequest: BankStatementRequestTransaction
 
-  private statementRequest: BankStatementRequestTransaction;
-
-  public getType(): MessageSetType {
-    return MessageSetType.banking;
+  getType(): MessageSetType {
+    return MessageSetType.banking
   }
 
   /**
@@ -19,8 +17,8 @@ export class BankingRequestMessageSet extends RequestMessageSet {
    *
    * @return The statement request.
    */
-  public getStatementRequest(): BankStatementRequestTransaction {
-    return this.statementRequest;
+  getStatementRequest(): BankStatementRequestTransaction {
+    return this.statementRequest
   }
 
   /**
@@ -28,19 +26,24 @@ export class BankingRequestMessageSet extends RequestMessageSet {
    *
    * @param statementRequest The statement request.
    */
-  public setStatementRequest(statementRequest: BankStatementRequestTransaction): void {
-    this.statementRequest = statementRequest;
+  setStatementRequest(statementRequest: BankStatementRequestTransaction): void {
+    this.statementRequest = statementRequest
   }
 
   // Inherited.
-  public getRequestMessages(): Array<RequestMessage> {
-    var requestMessages: Array<RequestMessage> = [];
+  getRequestMessages(): RequestMessage[] {
+    const requestMessages: RequestMessage[] = []
     if (this.getStatementRequest() != null) {
-      requestMessages.push(this.getStatementRequest());
+      requestMessages.push(this.getStatementRequest())
     }
-    return requestMessages;
+    return requestMessages
   }
 }
 
-Aggregate_add( BankingRequestMessageSet, "BANKMSGSRQV1" );
-ChildAggregate_add(BankingRequestMessageSet, { order: 0, type: BankStatementRequestTransaction, read: BankingRequestMessageSet.prototype.getStatementRequest, write: BankingRequestMessageSet.prototype.setStatementRequest });
+Aggregate_add(BankingRequestMessageSet, 'BANKMSGSRQV1')
+ChildAggregate_add(BankingRequestMessageSet, {
+  order: 0,
+  type: BankStatementRequestTransaction,
+  read: BankingRequestMessageSet.prototype.getStatementRequest,
+  write: BankingRequestMessageSet.prototype.setStatementRequest,
+})

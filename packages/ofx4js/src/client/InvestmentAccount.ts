@@ -1,12 +1,11 @@
-import { FinancialInstitutionAccount } from "./FinancialInstitutionAccount";
-import { InvestmentStatementResponse } from "../domain/data/investment/statements/InvestmentStatementResponse";
-import { SecurityRequest } from "../domain/data/seclist/SecurityRequest";
-import { SecurityList } from "../domain/data/seclist/SecurityList";
-import { InvestmentAccountDetails } from "../domain/data/investment/accounts/InvestmentAccountDetails";
-
+// tslint:disable:max-line-length
+import { InvestmentAccountDetails } from '../domain/data/investment/accounts/InvestmentAccountDetails'
+import { InvestmentStatementResponse } from '../domain/data/investment/statements/InvestmentStatementResponse'
+import { SecurityList } from '../domain/data/seclist/SecurityList'
+import { SecurityRequest } from '../domain/data/seclist/SecurityRequest'
+import { FinancialInstitutionAccount } from './FinancialInstitutionAccount'
 
 export interface InvestmentAccount extends FinancialInstitutionAccount {
-
   /**
    * Read an account statement.
    *
@@ -16,7 +15,10 @@ export interface InvestmentAccount extends FinancialInstitutionAccount {
    * @return The account statement.
    */
   // Overriden for type covariance
-  readStatement(start: Date, end: Date) /*throws OFXException*/: Promise<InvestmentStatementResponse>;
+  readStatement(
+    start: Date,
+    end: Date
+  ): /*throws OFXException*/ Promise<InvestmentStatementResponse>
 
   /**
    * Reads a list of securities from the brokerage
@@ -25,12 +27,12 @@ export interface InvestmentAccount extends FinancialInstitutionAccount {
    * @return The security response containing the security infos
    * @throws OFXException if there's an error talking to the brokerage
    */
-  readSecurityList(securities: Array<SecurityRequest>) /*throws OFXException*/: Promise<SecurityList>;
+  readSecurityList(securities: SecurityRequest[]): /*throws OFXException*/ Promise<SecurityList>
 
   /**
    * The details of the account.
    *
    * @return The details of the account.
    */
-  getDetails(): InvestmentAccountDetails;
+  getDetails(): InvestmentAccountDetails
 }

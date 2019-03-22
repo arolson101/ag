@@ -1,23 +1,21 @@
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
 
 /**
  * Identifier for a security.
  * @see "Section 13.8.1, OFX Spec"
  */
 export class SecurityId {
-
-  private uniqueId: string;
-  private uniqueIdType: string;
+  private uniqueId: string
+  private uniqueIdType: string
 
   /**
    * Gets the unique id for the security. This is a required field according to the OFX spec.
    *
    * @return the unique id
    */
-  public getUniqueId(): string {
-    return this.uniqueId;
+  getUniqueId(): string {
+    return this.uniqueId
   }
 
   /**
@@ -25,8 +23,8 @@ export class SecurityId {
    *
    * @param uniqueId the unique id
    */
-  public setUniqueId(uniqueId: string): void {
-    this.uniqueId = uniqueId;
+  setUniqueId(uniqueId: string): void {
+    this.uniqueId = uniqueId
   }
 
   /**
@@ -34,8 +32,8 @@ export class SecurityId {
    *
    * @return the type of unique id
    */
-  public getUniqueIdType(): string {
-    return this.uniqueIdType;
+  getUniqueIdType(): string {
+    return this.uniqueIdType
   }
 
   /**
@@ -43,11 +41,25 @@ export class SecurityId {
    *
    * @param uniqueIdType the type of unique id
    */
-  public setUniqueIdType(uniqueIdType: string): void {
-    this.uniqueIdType = uniqueIdType;
+  setUniqueIdType(uniqueIdType: string): void {
+    this.uniqueIdType = uniqueIdType
   }
 }
 
-Aggregate_add( SecurityId, "SECID" );
-Element_add(SecurityId, { name: "UNIQUEID", required: true, order: 10, type: String, read: SecurityId.prototype.getUniqueId, write: SecurityId.prototype.setUniqueId });
-Element_add(SecurityId, { name: "UNIQUEIDTYPE", required: true, order: 20, type: String, read: SecurityId.prototype.getUniqueIdType, write: SecurityId.prototype.setUniqueIdType });
+Aggregate_add(SecurityId, 'SECID')
+Element_add(SecurityId, {
+  name: 'UNIQUEID',
+  required: true,
+  order: 10,
+  type: String,
+  read: SecurityId.prototype.getUniqueId,
+  write: SecurityId.prototype.setUniqueId,
+})
+Element_add(SecurityId, {
+  name: 'UNIQUEIDTYPE',
+  required: true,
+  order: 20,
+  type: String,
+  read: SecurityId.prototype.getUniqueIdType,
+  write: SecurityId.prototype.setUniqueIdType,
+})

@@ -1,8 +1,7 @@
-import { AccountDetails } from "../common/AccountDetails";
-import { AccountType } from "./AccountType";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { AccountDetails } from '../common/AccountDetails'
+import { AccountType } from './AccountType'
 
 /**
  * Base bank account details.
@@ -10,20 +9,19 @@ import { Element_add } from "../../../meta/Element_add";
  * @see "OFX Spec, Section 11.3.1"
  */
 export class BankAccountDetails implements AccountDetails {
-
-  private bankId: string;
-  private branchId: string;
-  private accountNumber: string;
-  private accountType: AccountType;
-  private accountKey: string;
+  private bankId: string
+  private branchId: string
+  private accountNumber: string
+  private accountType: AccountType
+  private accountKey: string
 
   /**
    * The routing and transit number.
    *
    * @return The routing and transit number.
    */
-  public getBankId(): string {
-    return this.bankId;
+  getBankId(): string {
+    return this.bankId
   }
 
   /**
@@ -31,8 +29,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @param bankId The routing and transit number.
    */
-  public setBankId(bankId: string): void {
-    this.bankId = bankId;
+  setBankId(bankId: string): void {
+    this.bankId = bankId
   }
 
   /**
@@ -40,8 +38,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @return The routing and transit number.
    */
-  public getRoutingNumber(): string {
-    return this.getBankId();
+  getRoutingNumber(): string {
+    return this.getBankId()
   }
 
   /**
@@ -49,8 +47,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @param routingNumber The routing and transit number.
    */
-  public setRoutingNumber(routingNumber: string): void {
-    this.setBankId(routingNumber);
+  setRoutingNumber(routingNumber: string): void {
+    this.setBankId(routingNumber)
   }
 
   /**
@@ -58,8 +56,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @return The branch id.
    */
-  public getBranchId(): string {
-    return this.branchId;
+  getBranchId(): string {
+    return this.branchId
   }
 
   /**
@@ -67,8 +65,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @param branchId The branch id.
    */
-  public setBranchId(branchId: string): void {
-    this.branchId = branchId;
+  setBranchId(branchId: string): void {
+    this.branchId = branchId
   }
 
   /**
@@ -76,8 +74,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @return The account number.
    */
-  public getAccountNumber(): string {
-    return this.accountNumber;
+  getAccountNumber(): string {
+    return this.accountNumber
   }
 
   /**
@@ -85,8 +83,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @param accountNumber The account number.
    */
-  public setAccountNumber(accountNumber: string): void {
-    this.accountNumber = accountNumber;
+  setAccountNumber(accountNumber: string): void {
+    this.accountNumber = accountNumber
   }
 
   /**
@@ -94,8 +92,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @return The account type.
    */
-  public getAccountType(): AccountType {
-    return this.accountType;
+  getAccountType(): AccountType {
+    return this.accountType
   }
 
   /**
@@ -103,8 +101,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @param accountType The account type.
    */
-  public setAccountType(accountType: AccountType): void {
-    this.accountType = accountType;
+  setAccountType(accountType: AccountType): void {
+    this.accountType = accountType
   }
 
   /**
@@ -112,8 +110,8 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @return The account key.
    */
-  public getAccountKey(): string {
-    return this.accountKey;
+  getAccountKey(): string {
+    return this.accountKey
   }
 
   /**
@@ -121,14 +119,47 @@ export class BankAccountDetails implements AccountDetails {
    *
    * @param accountKey The account key.
    */
-  public setAccountKey(accountKey: string): void {
-    this.accountKey = accountKey;
+  setAccountKey(accountKey: string): void {
+    this.accountKey = accountKey
   }
 }
 
-Aggregate_add( BankAccountDetails );
-Element_add(BankAccountDetails, { name: "BANKID", required: true, order: 0, type: String, read: BankAccountDetails.prototype.getBankId, write: BankAccountDetails.prototype.setBankId });
-Element_add(BankAccountDetails, { name: "BRANCHID", order: 10, type: String, read: BankAccountDetails.prototype.getBranchId, write: BankAccountDetails.prototype.setBranchId });
-Element_add(BankAccountDetails, { name: "ACCTID", required: true, order: 20, type: String, read: BankAccountDetails.prototype.getAccountNumber, write: BankAccountDetails.prototype.setAccountNumber });
-Element_add(BankAccountDetails, { name: "ACCTTYPE", required: true, order: 30, type: AccountType, read: BankAccountDetails.prototype.getAccountType, write: BankAccountDetails.prototype.setAccountType });
-Element_add(BankAccountDetails, { name: "ACCTKEY", order: 40, type: String, read: BankAccountDetails.prototype.getAccountKey, write: BankAccountDetails.prototype.setAccountKey });
+Aggregate_add(BankAccountDetails)
+Element_add(BankAccountDetails, {
+  name: 'BANKID',
+  required: true,
+  order: 0,
+  type: String,
+  read: BankAccountDetails.prototype.getBankId,
+  write: BankAccountDetails.prototype.setBankId,
+})
+Element_add(BankAccountDetails, {
+  name: 'BRANCHID',
+  order: 10,
+  type: String,
+  read: BankAccountDetails.prototype.getBranchId,
+  write: BankAccountDetails.prototype.setBranchId,
+})
+Element_add(BankAccountDetails, {
+  name: 'ACCTID',
+  required: true,
+  order: 20,
+  type: String,
+  read: BankAccountDetails.prototype.getAccountNumber,
+  write: BankAccountDetails.prototype.setAccountNumber,
+})
+Element_add(BankAccountDetails, {
+  name: 'ACCTTYPE',
+  required: true,
+  order: 30,
+  type: AccountType,
+  read: BankAccountDetails.prototype.getAccountType,
+  write: BankAccountDetails.prototype.setAccountType,
+})
+Element_add(BankAccountDetails, {
+  name: 'ACCTKEY',
+  order: 40,
+  type: String,
+  read: BankAccountDetails.prototype.getAccountKey,
+  write: BankAccountDetails.prototype.setAccountKey,
+})

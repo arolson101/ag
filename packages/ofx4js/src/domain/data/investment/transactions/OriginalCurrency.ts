@@ -1,6 +1,5 @@
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
 
 /**
  * Original currency aggregate ("ORIGCURRENCY"). For investment transactions in other currencies,
@@ -10,9 +9,8 @@ import { Element_add } from "../../../../meta/Element_add";
  * @see "Section 5.2, OFX Spec"
  */
 export class OriginalCurrency {
-
-  private currencyRate: number;
-  private currencyCode: string;
+  private currencyRate: number
+  private currencyCode: string
 
   /**
    * Gets the rate of currency conversion. This is the ratio of "CURDEF" (the default currency in
@@ -20,8 +18,8 @@ export class OriginalCurrency {
    *
    * @return the currency rate
    */
-  public getCurrencyRate(): number {
-    return this.currencyRate;
+  getCurrencyRate(): number {
+    return this.currencyRate
   }
 
   /**
@@ -30,8 +28,8 @@ export class OriginalCurrency {
    *
    * @param currencyRate the currency rate
    */
-  public setCurrencyRate(currencyRate: number): void {
-    this.currencyRate = currencyRate;
+  setCurrencyRate(currencyRate: number): void {
+    this.currencyRate = currencyRate
   }
 
   /**
@@ -40,8 +38,8 @@ export class OriginalCurrency {
    *
    * @return the currency code
    */
-  public getCurrencyCode(): string {
-    return this.currencyCode;
+  getCurrencyCode(): string {
+    return this.currencyCode
   }
 
   /**
@@ -50,11 +48,25 @@ export class OriginalCurrency {
    *
    * @param currencyCode the currency code
    */
-  public setCurrencyCode(currencyCode: string): void {
-    this.currencyCode = currencyCode;
+  setCurrencyCode(currencyCode: string): void {
+    this.currencyCode = currencyCode
   }
 }
 
-Aggregate_add( OriginalCurrency, "ORIGCURRENCY" );
-Element_add(OriginalCurrency, { name: "CURRATE", required: true, order: 10, type: Number, read: OriginalCurrency.prototype.getCurrencyRate, write: OriginalCurrency.prototype.setCurrencyRate });
-Element_add(OriginalCurrency, { name: "CURSYM", required: true, order: 20, type: String, read: OriginalCurrency.prototype.getCurrencyCode, write: OriginalCurrency.prototype.setCurrencyCode });
+Aggregate_add(OriginalCurrency, 'ORIGCURRENCY')
+Element_add(OriginalCurrency, {
+  name: 'CURRATE',
+  required: true,
+  order: 10,
+  type: Number,
+  read: OriginalCurrency.prototype.getCurrencyRate,
+  write: OriginalCurrency.prototype.setCurrencyRate,
+})
+Element_add(OriginalCurrency, {
+  name: 'CURSYM',
+  required: true,
+  order: 20,
+  type: String,
+  read: OriginalCurrency.prototype.getCurrencyCode,
+  write: OriginalCurrency.prototype.setCurrencyCode,
+})

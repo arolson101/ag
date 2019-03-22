@@ -1,36 +1,33 @@
-import { TransactionList } from "../domain/data/common/TransactionList";
-import { BalanceInfo } from "../domain/data/common/BalanceInfo";
-
+import { BalanceInfo } from '../domain/data/common/BalanceInfo'
+import { TransactionList } from '../domain/data/common/TransactionList'
 
 export interface AccountStatement {
-
   /**
    * The currency code.
    *
    * @return The currency code.
    * @see java.util.Currency#getCurrencyCode()
    */
-  getCurrencyCode(): string;
+  getCurrencyCode(): string
 
   /**
    * The transaction list.
    *
    * @return The transaction list.
    */
-  getTransactionList(): TransactionList;
+  getTransactionList(): TransactionList
 
   /**
    * The ledger balance.
    *
    * @return The ledger balance.
    */
-  getLedgerBalance(): BalanceInfo;
+  getLedgerBalance(): BalanceInfo
 
   /**
    * The available balance.
    *
    * @return The available balance.
    */
-  getAvailableBalance(): BalanceInfo;
-
+  getAvailableBalance(): BalanceInfo
 }

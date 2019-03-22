@@ -1,20 +1,18 @@
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { RequestMessageSet } from "../RequestMessageSet";
-import { ProfileRequestTransaction } from "./ProfileRequestTransaction";
-import { MessageSetType } from "../MessageSetType";
-import { RequestMessage } from "../RequestMessage";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { RequestMessage } from '../RequestMessage'
+import { RequestMessageSet } from '../RequestMessageSet'
+import { ProfileRequestTransaction } from './ProfileRequestTransaction'
 
 /**
  * @see "Section 7 OFX Spec"
  */
 export class ProfileRequestMessageSet extends RequestMessageSet {
+  private profileRequest: ProfileRequestTransaction
 
-  private profileRequest: ProfileRequestTransaction;
-
-  public getType(): MessageSetType {
-    return MessageSetType.profile;
+  getType(): MessageSetType {
+    return MessageSetType.profile
   }
 
   /**
@@ -22,8 +20,8 @@ export class ProfileRequestMessageSet extends RequestMessageSet {
    *
    * @return The profile request.
    */
-  public getProfileRequest(): ProfileRequestTransaction {
-    return this.profileRequest;
+  getProfileRequest(): ProfileRequestTransaction {
+    return this.profileRequest
   }
 
   /**
@@ -31,20 +29,25 @@ export class ProfileRequestMessageSet extends RequestMessageSet {
    *
    * @param profileRequest The profile request.
    */
-  public setProfileRequest(profileRequest: ProfileRequestTransaction): void {
-    this.profileRequest = profileRequest;
+  setProfileRequest(profileRequest: ProfileRequestTransaction): void {
+    this.profileRequest = profileRequest
   }
 
-
   // Inherited.
-  public getRequestMessages(): Array<RequestMessage> {
-    var requestMessages: Array<RequestMessage> = new Array<RequestMessage>();
+  getRequestMessages(): RequestMessage[] {
+    const requestMessages: RequestMessage[] = new Array<RequestMessage>()
     if (this.getProfileRequest() != null) {
-      requestMessages.push(this.getProfileRequest());
+      requestMessages.push(this.getProfileRequest())
     }
-    return requestMessages;
+    return requestMessages
   }
 }
 
-Aggregate_add( ProfileRequestMessageSet, "PROFMSGSRQV1" );
-ChildAggregate_add(ProfileRequestMessageSet, { required: true, order: 0, type: ProfileRequestTransaction, read: ProfileRequestMessageSet.prototype.getProfileRequest, write: ProfileRequestMessageSet.prototype.setProfileRequest });
+Aggregate_add(ProfileRequestMessageSet, 'PROFMSGSRQV1')
+ChildAggregate_add(ProfileRequestMessageSet, {
+  required: true,
+  order: 0,
+  type: ProfileRequestTransaction,
+  read: ProfileRequestMessageSet.prototype.getProfileRequest,
+  write: ProfileRequestMessageSet.prototype.setProfileRequest,
+})

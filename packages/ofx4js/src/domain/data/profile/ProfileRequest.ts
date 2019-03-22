@@ -1,20 +1,18 @@
-import { RequestMessage } from "../RequestMessage";
-import { ClientRoutingCapability } from "./ClientRoutingCapability";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { RequestMessage } from '../RequestMessage'
+import { ClientRoutingCapability } from './ClientRoutingCapability'
 
 /**
  * @see "Section 7.1.5, OFX Spec"
  */
 export class ProfileRequest extends RequestMessage {
-
-  private routingCapability: ClientRoutingCapability;
-  private profileLastUpdated: Date;
+  private routingCapability: ClientRoutingCapability
+  private profileLastUpdated: Date
 
   constructor() {
-    super();
-    this.routingCapability = ClientRoutingCapability.MESSAGE_SET;
+    super()
+    this.routingCapability = ClientRoutingCapability.MESSAGE_SET
   }
 
   /**
@@ -22,8 +20,8 @@ export class ProfileRequest extends RequestMessage {
    *
    * @return The client routing capability.
    */
-  public getRoutingCapability(): ClientRoutingCapability {
-    return this.routingCapability;
+  getRoutingCapability(): ClientRoutingCapability {
+    return this.routingCapability
   }
 
   /**
@@ -31,8 +29,8 @@ export class ProfileRequest extends RequestMessage {
    *
    * @param routingCapability The client routing capability.
    */
-  public setRoutingCapability(routingCapability: ClientRoutingCapability): void {
-    this.routingCapability = routingCapability;
+  setRoutingCapability(routingCapability: ClientRoutingCapability): void {
+    this.routingCapability = routingCapability
   }
 
   /**
@@ -40,8 +38,8 @@ export class ProfileRequest extends RequestMessage {
    *
    * @return The date the profile was last updated.
    */
-  public getProfileLastUpdated(): Date {
-    return this.profileLastUpdated;
+  getProfileLastUpdated(): Date {
+    return this.profileLastUpdated
   }
 
   /**
@@ -49,11 +47,23 @@ export class ProfileRequest extends RequestMessage {
    *
    * @param profileLastUpdated The date the profile was last updated.
    */
-  public setProfileLastUpdated(profileLastUpdated: Date): void {
-    this.profileLastUpdated = profileLastUpdated;
+  setProfileLastUpdated(profileLastUpdated: Date): void {
+    this.profileLastUpdated = profileLastUpdated
   }
 }
 
-Aggregate_add( ProfileRequest, "PROFRQ" );
-Element_add(ProfileRequest, { name: "CLIENTROUTING", order: 0, type: ClientRoutingCapability, read: ProfileRequest.prototype.getRoutingCapability, write: ProfileRequest.prototype.setRoutingCapability });
-Element_add(ProfileRequest, { name: "DTPROFUP", order: 10, type: Date, read: ProfileRequest.prototype.getProfileLastUpdated, write: ProfileRequest.prototype.setProfileLastUpdated });
+Aggregate_add(ProfileRequest, 'PROFRQ')
+Element_add(ProfileRequest, {
+  name: 'CLIENTROUTING',
+  order: 0,
+  type: ClientRoutingCapability,
+  read: ProfileRequest.prototype.getRoutingCapability,
+  write: ProfileRequest.prototype.setRoutingCapability,
+})
+Element_add(ProfileRequest, {
+  name: 'DTPROFUP',
+  order: 10,
+  type: Date,
+  read: ProfileRequest.prototype.getProfileLastUpdated,
+  write: ProfileRequest.prototype.setProfileLastUpdated,
+})

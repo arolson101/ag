@@ -1,6 +1,5 @@
-import { ResponseMessage } from "../ResponseMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ResponseMessage } from '../ResponseMessage'
 
 /**
  * Security list response. This is an empty aggregate. The actual security information is included
@@ -8,9 +7,9 @@ import { Aggregate_add } from "../../../meta/Aggregate_Add";
  * @see "Section 13.8.3, OFX Spec"
  */
 export class SecurityListResponse extends ResponseMessage {
-  public getResponseMessageName(): string {
-    return "security list";
+  getResponseMessageName(): string {
+    return 'security list'
   }
 }
 
-Aggregate_add( SecurityListResponse, "SECLISTRS" );
+Aggregate_add(SecurityListResponse, 'SECLISTRS')

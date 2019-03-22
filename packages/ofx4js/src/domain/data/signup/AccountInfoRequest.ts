@@ -1,15 +1,13 @@
-import { RequestMessage } from "../RequestMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { RequestMessage } from '../RequestMessage'
 
 export class AccountInfoRequest extends RequestMessage {
-
-  private lastUpdated: Date;
+  private lastUpdated: Date
 
   constructor() {
-    super();
-    this.lastUpdated = new Date(0); //default is never updated.
+    super()
+    this.lastUpdated = new Date(0) // default is never updated.
   }
 
   /**
@@ -17,8 +15,8 @@ export class AccountInfoRequest extends RequestMessage {
    *
    * @return When the account info was last updated.
    */
-  public getLastUpdated(): Date {
-    return this.lastUpdated;
+  getLastUpdated(): Date {
+    return this.lastUpdated
   }
 
   /**
@@ -26,10 +24,17 @@ export class AccountInfoRequest extends RequestMessage {
    *
    * @param lastUpdated When the account info was last updated.
    */
-  public setLastUpdated(lastUpdated: Date): void {
-    this.lastUpdated = lastUpdated;
+  setLastUpdated(lastUpdated: Date): void {
+    this.lastUpdated = lastUpdated
   }
 }
 
-Aggregate_add(AccountInfoRequest, "ACCTINFORQ");
-Element_add(AccountInfoRequest, { name: "DTACCTUP", required: true, order: 0, type: Date, read: AccountInfoRequest.prototype.getLastUpdated, write: AccountInfoRequest.prototype.setLastUpdated });
+Aggregate_add(AccountInfoRequest, 'ACCTINFORQ')
+Element_add(AccountInfoRequest, {
+  name: 'DTACCTUP',
+  required: true,
+  order: 0,
+  type: Date,
+  read: AccountInfoRequest.prototype.getLastUpdated,
+  write: AccountInfoRequest.prototype.setLastUpdated,
+})

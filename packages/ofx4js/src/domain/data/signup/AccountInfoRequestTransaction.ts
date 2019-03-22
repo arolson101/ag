@@ -1,20 +1,20 @@
-import { TransactionWrappedRequestMessage } from "../TransactionWrappedRequestMessage";
-import { AccountInfoRequest } from "./AccountInfoRequest";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { TransactionWrappedRequestMessage } from '../TransactionWrappedRequestMessage'
+import { AccountInfoRequest } from './AccountInfoRequest'
 
-
-export class AccountInfoRequestTransaction extends TransactionWrappedRequestMessage<AccountInfoRequest> {
-
-  private message: AccountInfoRequest;
+export class AccountInfoRequestTransaction extends TransactionWrappedRequestMessage<
+  AccountInfoRequest
+> {
+  private message: AccountInfoRequest
 
   /**
    * The wrapped message.
    *
    * @return The wrapped message.
    */
-  public getMessage(): AccountInfoRequest {
-    return this.message;
+  getMessage(): AccountInfoRequest {
+    return this.message
   }
 
   /**
@@ -22,15 +22,21 @@ export class AccountInfoRequestTransaction extends TransactionWrappedRequestMess
    *
    * @param message The wrapped message.
    */
-  public setMessage(message: AccountInfoRequest): void {
-    this.message = message;
+  setMessage(message: AccountInfoRequest): void {
+    this.message = message
   }
 
   // Inherited.
-  public setWrappedMessage(message: AccountInfoRequest): void {
-    this.setMessage(message);
+  setWrappedMessage(message: AccountInfoRequest): void {
+    this.setMessage(message)
   }
 }
 
-Aggregate_add( AccountInfoRequestTransaction, "ACCTINFOTRNRQ" );
-ChildAggregate_add(AccountInfoRequestTransaction, { required: true, order: 30, type: AccountInfoRequest, read: AccountInfoRequestTransaction.prototype.getMessage, write: AccountInfoRequestTransaction.prototype.setMessage });
+Aggregate_add(AccountInfoRequestTransaction, 'ACCTINFOTRNRQ')
+ChildAggregate_add(AccountInfoRequestTransaction, {
+  required: true,
+  order: 30,
+  type: AccountInfoRequest,
+  read: AccountInfoRequestTransaction.prototype.getMessage,
+  write: AccountInfoRequestTransaction.prototype.setMessage,
+})

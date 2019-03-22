@@ -1,12 +1,11 @@
-
 /**
  * Annotation for a method that returns an OFX aggregate.
  */
 export class Aggregate {
-  private _value: string;
+  private _value: string
 
   constructor(value: string) {
-    this._value = value;
+    this._value = value
   }
 
   /**
@@ -14,7 +13,7 @@ export class Aggregate {
    *
    * @return The name of the aggregate.
    */
-  public value(): string {
-    return this._value;
+  value(): string {
+    return this._value
   }
 }

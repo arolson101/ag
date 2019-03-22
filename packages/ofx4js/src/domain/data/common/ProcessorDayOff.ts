@@ -1,4 +1,3 @@
-
 /**
  * Day of week used in "PROCDAYSOFF" lists.
  *
@@ -11,25 +10,25 @@ export enum ProcessorDayOff {
   THURSDAY,
   FRIDAY,
   SATURDAY,
-  SUNDAY
+  SUNDAY,
 }
 
 export function ProcessorDayOff_fromOfx(ofxVal: string): ProcessorDayOff {
-  if ("MONDAY" === ofxVal) {
-    return ProcessorDayOff.MONDAY;
-  } else if ("TUESDAY" === ofxVal) {
-    return ProcessorDayOff.TUESDAY;
-  } else if ("WEDNESDAY" === ofxVal) {
-    return ProcessorDayOff.WEDNESDAY;
-  } else if ("THURSDAY" === ofxVal) {
-    return ProcessorDayOff.THURSDAY;
-  } else if ("FRIDAY" === ofxVal) {
-    return ProcessorDayOff.FRIDAY;
-  } else if ("SATURDAY" === ofxVal) {
-    return ProcessorDayOff.SATURDAY;
-  } else if ("SUNDAY" === ofxVal) {
-    return ProcessorDayOff.SUNDAY;
+  if ('MONDAY' === ofxVal) {
+    return ProcessorDayOff.MONDAY
+  } else if ('TUESDAY' === ofxVal) {
+    return ProcessorDayOff.TUESDAY
+  } else if ('WEDNESDAY' === ofxVal) {
+    return ProcessorDayOff.WEDNESDAY
+  } else if ('THURSDAY' === ofxVal) {
+    return ProcessorDayOff.THURSDAY
+  } else if ('FRIDAY' === ofxVal) {
+    return ProcessorDayOff.FRIDAY
+  } else if ('SATURDAY' === ofxVal) {
+    return ProcessorDayOff.SATURDAY
+  } else if ('SUNDAY' === ofxVal) {
+    return ProcessorDayOff.SUNDAY
   } else {
-    return null;
+    return null
   }
 }

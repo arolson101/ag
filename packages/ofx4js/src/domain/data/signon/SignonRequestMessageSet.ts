@@ -1,11 +1,10 @@
-import { RequestMessageSet } from "../RequestMessageSet";
-import { SignonRequest } from "./SignonRequest";
-import { PasswordChangeRequestTransaction } from "./PasswordChangeRequestTransaction";
-import { MessageSetType } from "../MessageSetType";
-import { RequestMessage } from "../RequestMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { RequestMessage } from '../RequestMessage'
+import { RequestMessageSet } from '../RequestMessageSet'
+import { PasswordChangeRequestTransaction } from './PasswordChangeRequestTransaction'
+import { SignonRequest } from './SignonRequest'
 
 /**
  * The sign-on request message set.
@@ -13,12 +12,11 @@ import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
  * @see "Section 2.5, OFX Spec."
  */
 export class SignonRequestMessageSet extends RequestMessageSet {
+  private signonRequest: SignonRequest
+  private passwordChangeRequest: PasswordChangeRequestTransaction
 
-  private signonRequest: SignonRequest;
-  private passwordChangeRequest: PasswordChangeRequestTransaction;
-
-  public getType(): MessageSetType {
-    return MessageSetType.signon;
+  getType(): MessageSetType {
+    return MessageSetType.signon
   }
 
   /**
@@ -26,8 +24,8 @@ export class SignonRequestMessageSet extends RequestMessageSet {
    *
    * @return The message for this message set.
    */
-  public getSignonRequest(): SignonRequest {
-    return this.signonRequest;
+  getSignonRequest(): SignonRequest {
+    return this.signonRequest
   }
 
   /**
@@ -35,8 +33,8 @@ export class SignonRequestMessageSet extends RequestMessageSet {
    *
    * @param signonRequest The message for this message set.
    */
-  public setSignonRequest(signonRequest: SignonRequest): void {
-    this.signonRequest = signonRequest;
+  setSignonRequest(signonRequest: SignonRequest): void {
+    this.signonRequest = signonRequest
   }
 
   /**
@@ -44,8 +42,8 @@ export class SignonRequestMessageSet extends RequestMessageSet {
    *
    * @return The password change request.
    */
-  public getPasswordChangeRequest(): PasswordChangeRequestTransaction {
-    return this.passwordChangeRequest;
+  getPasswordChangeRequest(): PasswordChangeRequestTransaction {
+    return this.passwordChangeRequest
   }
 
   /**
@@ -53,29 +51,39 @@ export class SignonRequestMessageSet extends RequestMessageSet {
    *
    * @param passwordChangeRequest The password change request.
    */
-  public setPasswordChangeRequest(passwordChangeRequest: PasswordChangeRequestTransaction): void {
-    this.passwordChangeRequest = passwordChangeRequest;
+  setPasswordChangeRequest(passwordChangeRequest: PasswordChangeRequestTransaction): void {
+    this.passwordChangeRequest = passwordChangeRequest
   }
 
-  //todo: challenge request/response
-
+  // todo: challenge request/response
 
   // Inherited.
-  public getRequestMessages(): Array<RequestMessage> {
-    var requestMessages: Array<RequestMessage> = new Array<RequestMessage>();
+  getRequestMessages(): RequestMessage[] {
+    const requestMessages: RequestMessage[] = new Array<RequestMessage>()
 
     if (this.getSignonRequest() != null) {
-      requestMessages.push(this.getSignonRequest());
+      requestMessages.push(this.getSignonRequest())
     }
 
     if (this.getPasswordChangeRequest() != null) {
-      requestMessages.push(this.getPasswordChangeRequest());
+      requestMessages.push(this.getPasswordChangeRequest())
     }
 
-    return requestMessages;
+    return requestMessages
   }
 }
 
-Aggregate_add(SignonRequestMessageSet, "SIGNONMSGSRQV1");
-ChildAggregate_add(SignonRequestMessageSet, { required: true, order: 0, type: SignonRequest, read: SignonRequestMessageSet.prototype.getSignonRequest, write: SignonRequestMessageSet.prototype.setSignonRequest });
-ChildAggregate_add(SignonRequestMessageSet, { order: 10, type: PasswordChangeRequestTransaction, read: SignonRequestMessageSet.prototype.getPasswordChangeRequest, write: SignonRequestMessageSet.prototype.setPasswordChangeRequest });
+Aggregate_add(SignonRequestMessageSet, 'SIGNONMSGSRQV1')
+ChildAggregate_add(SignonRequestMessageSet, {
+  required: true,
+  order: 0,
+  type: SignonRequest,
+  read: SignonRequestMessageSet.prototype.getSignonRequest,
+  write: SignonRequestMessageSet.prototype.setSignonRequest,
+})
+ChildAggregate_add(SignonRequestMessageSet, {
+  order: 10,
+  type: PasswordChangeRequestTransaction,
+  read: SignonRequestMessageSet.prototype.getPasswordChangeRequest,
+  write: SignonRequestMessageSet.prototype.setPasswordChangeRequest,
+})

@@ -1,19 +1,17 @@
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
 
 /**
  * Investment transaction aggregate ("INVTRAN").
  * @see "Section 13.9.2.4.1, OFX Spec"
  */
 export class InvestmentTransaction {
-
-  private transactionId: string;
-  private serverId: string;
-  private tradeDate: Date;
-  private settlementDate: Date;
-  private reversalTransactionId: string;
-  private memo: string;
+  private transactionId: string
+  private serverId: string
+  private tradeDate: Date
+  private settlementDate: Date
+  private reversalTransactionId: string
+  private memo: string
 
   /**
    * Gets the unique financial institution assigned transaction id. This is a
@@ -22,8 +20,8 @@ export class InvestmentTransaction {
    *
    * @return the financial institution asssigned transaction id
    */
-  public getTransactionId(): string {
-    return this.transactionId;
+  getTransactionId(): string {
+    return this.transactionId
   }
 
   /**
@@ -33,8 +31,8 @@ export class InvestmentTransaction {
    *
    * @param transactionId the financial institution asssigned transaction id
    */
-  public setTransactionId(transactionId: string): void {
-    this.transactionId = transactionId;
+  setTransactionId(transactionId: string): void {
+    this.transactionId = transactionId
   }
 
   /**
@@ -44,8 +42,8 @@ export class InvestmentTransaction {
    *
    * @return the server assigned transaction id
    */
-  public getServerId(): string {
-    return this.serverId;
+  getServerId(): string {
+    return this.serverId
   }
 
   /**
@@ -55,8 +53,8 @@ export class InvestmentTransaction {
    *
    * @param serverId the server assigned transaction id
    */
-  public setServerId(serverId: string): void {
-    this.serverId = serverId;
+  setServerId(serverId: string): void {
+    this.serverId = serverId
   }
 
   /**
@@ -66,8 +64,8 @@ export class InvestmentTransaction {
    *
    * @return the trade date
    */
-  public getTradeDate(): Date {
-    return this.tradeDate;
+  getTradeDate(): Date {
+    return this.tradeDate
   }
 
   /**
@@ -77,8 +75,8 @@ export class InvestmentTransaction {
    *
    * @param tradeDate the trade date
    */
-  public setTradeDate(tradeDate: Date): void {
-    this.tradeDate = tradeDate;
+  setTradeDate(tradeDate: Date): void {
+    this.tradeDate = tradeDate
   }
 
   /**
@@ -88,8 +86,8 @@ export class InvestmentTransaction {
    *
    * @return the trade date
    */
-  public getSettlementDate(): Date {
-    return this.settlementDate;
+  getSettlementDate(): Date {
+    return this.settlementDate
   }
 
   /**
@@ -99,8 +97,8 @@ export class InvestmentTransaction {
    *
    * @param settlementDate the trade date
    */
-  public setSettlementDate(settlementDate: Date): void {
-    this.settlementDate = settlementDate;
+  setSettlementDate(settlementDate: Date): void {
+    this.settlementDate = settlementDate
   }
 
   /**
@@ -110,8 +108,8 @@ export class InvestmentTransaction {
    *
    * @return the transaction id of the transaction being reversed
    */
-  public getReversalTransactionId(): string {
-    return this.reversalTransactionId;
+  getReversalTransactionId(): string {
+    return this.reversalTransactionId
   }
 
   /**
@@ -121,8 +119,8 @@ export class InvestmentTransaction {
    *
    * @param reversalTransactionId the transaction id of the transaction being reversed
    */
-  public setReversalTransactionId(reversalTransactionId: string): void {
-    this.reversalTransactionId = reversalTransactionId;
+  setReversalTransactionId(reversalTransactionId: string): void {
+    this.reversalTransactionId = reversalTransactionId
   }
 
   /**
@@ -132,8 +130,8 @@ export class InvestmentTransaction {
    *
    * @return the memo
    */
-  public getMemo(): string {
-    return this.memo;
+  getMemo(): string {
+    return this.memo
   }
 
   /**
@@ -143,15 +141,53 @@ export class InvestmentTransaction {
    *
    * @param memo the memo
    */
-  public setMemo(memo: string): void {
-    this.memo = memo;
+  setMemo(memo: string): void {
+    this.memo = memo
   }
 }
 
-Aggregate_add( InvestmentTransaction, "INVTRAN" );
-Element_add(InvestmentTransaction, { name: "FITID", required: true, order: 0, type: String, read: InvestmentTransaction.prototype.getTransactionId, write: InvestmentTransaction.prototype.setTransactionId });
-Element_add(InvestmentTransaction, { name: "SRVRTID", order: 10, type: String, read: InvestmentTransaction.prototype.getServerId, write: InvestmentTransaction.prototype.setServerId });
-Element_add(InvestmentTransaction, { name: "DTTRADE", required: true, order: 20, type: Date, read: InvestmentTransaction.prototype.getTradeDate, write: InvestmentTransaction.prototype.setTradeDate });
-Element_add(InvestmentTransaction, { name: "DTSETTLE", order: 30, type: Date, read: InvestmentTransaction.prototype.getSettlementDate, write: InvestmentTransaction.prototype.setSettlementDate });
-Element_add(InvestmentTransaction, { name: "REVERSALFITID", order: 40, type: String, read: InvestmentTransaction.prototype.getReversalTransactionId, write: InvestmentTransaction.prototype.setReversalTransactionId });
-Element_add(InvestmentTransaction, { name: "MEMO", order: 50, type: String, read: InvestmentTransaction.prototype.getMemo, write: InvestmentTransaction.prototype.setMemo });
+Aggregate_add(InvestmentTransaction, 'INVTRAN')
+Element_add(InvestmentTransaction, {
+  name: 'FITID',
+  required: true,
+  order: 0,
+  type: String,
+  read: InvestmentTransaction.prototype.getTransactionId,
+  write: InvestmentTransaction.prototype.setTransactionId,
+})
+Element_add(InvestmentTransaction, {
+  name: 'SRVRTID',
+  order: 10,
+  type: String,
+  read: InvestmentTransaction.prototype.getServerId,
+  write: InvestmentTransaction.prototype.setServerId,
+})
+Element_add(InvestmentTransaction, {
+  name: 'DTTRADE',
+  required: true,
+  order: 20,
+  type: Date,
+  read: InvestmentTransaction.prototype.getTradeDate,
+  write: InvestmentTransaction.prototype.setTradeDate,
+})
+Element_add(InvestmentTransaction, {
+  name: 'DTSETTLE',
+  order: 30,
+  type: Date,
+  read: InvestmentTransaction.prototype.getSettlementDate,
+  write: InvestmentTransaction.prototype.setSettlementDate,
+})
+Element_add(InvestmentTransaction, {
+  name: 'REVERSALFITID',
+  order: 40,
+  type: String,
+  read: InvestmentTransaction.prototype.getReversalTransactionId,
+  write: InvestmentTransaction.prototype.setReversalTransactionId,
+})
+Element_add(InvestmentTransaction, {
+  name: 'MEMO',
+  order: 50,
+  type: String,
+  read: InvestmentTransaction.prototype.getMemo,
+  write: InvestmentTransaction.prototype.setMemo,
+})

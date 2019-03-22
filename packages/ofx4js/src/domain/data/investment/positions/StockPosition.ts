@@ -1,24 +1,23 @@
-import { BasePosition } from "./BasePosition";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
+import { BasePosition } from './BasePosition'
 
 /**
  * Represents a stock position.
  * @see "Section 13.9.2.6.1, OFX Spec"
  */
 export class StockPosition extends BasePosition {
-  private unitsStreet: number;
-  private unitsUser: number;
-  private reinvestDividends: boolean;
+  private unitsStreet: number
+  private unitsUser: number
+  private reinvestDividends: boolean
 
   /**
    * Gets the number of units in the financial insititution's street name.
    *
    * @return the number of units in the financial insititution's street name.
    */
-  public getUnitsStreet(): number {
-    return this.unitsStreet;
+  getUnitsStreet(): number {
+    return this.unitsStreet
   }
 
   /**
@@ -26,8 +25,8 @@ export class StockPosition extends BasePosition {
    *
    * @param unitsStreet the number of units in the financial insititution's street name.
    */
-  public setUnitsStreet(unitsStreet: number): void {
-    this.unitsStreet = unitsStreet;
+  setUnitsStreet(unitsStreet: number): void {
+    this.unitsStreet = unitsStreet
   }
 
   /**
@@ -35,8 +34,8 @@ export class StockPosition extends BasePosition {
    *
    * @return the number of units in the user's name.
    */
-  public getUnitsUser(): number {
-    return this.unitsUser;
+  getUnitsUser(): number {
+    return this.unitsUser
   }
 
   /**
@@ -44,8 +43,8 @@ export class StockPosition extends BasePosition {
    *
    * @param unitsUser the number of units in the user's name.
    */
-  public setUnitsUser(unitsUser: number): void {
-    this.unitsUser = unitsUser;
+  setUnitsUser(unitsUser: number): void {
+    this.unitsUser = unitsUser
   }
 
   /**
@@ -53,8 +52,8 @@ export class StockPosition extends BasePosition {
    *
    * @return whether dividends are automatically reinvested
    */
-  public getReinvestDividends(): boolean {
-    return this.reinvestDividends;
+  getReinvestDividends(): boolean {
+    return this.reinvestDividends
   }
 
   /**
@@ -62,12 +61,30 @@ export class StockPosition extends BasePosition {
    *
    * @param reinvestDividends whether dividends are automatically reinvested
    */
-  public setReinvestDividends(reinvestDividends: boolean): void {
-    this.reinvestDividends = reinvestDividends;
+  setReinvestDividends(reinvestDividends: boolean): void {
+    this.reinvestDividends = reinvestDividends
   }
 }
 
-Aggregate_add( StockPosition, "POSSTOCK" );
-Element_add(StockPosition, { name: "UNITSSTREET", order: 20, type: Number, read: StockPosition.prototype.getUnitsStreet, write: StockPosition.prototype.setUnitsStreet });
-Element_add(StockPosition, { name: "UNITSUSER", order: 30, type: Number, read: StockPosition.prototype.getUnitsUser, write: StockPosition.prototype.setUnitsUser });
-Element_add(StockPosition, { name: "REINVDIV", order: 40, type: Boolean, read: StockPosition.prototype.getReinvestDividends, write: StockPosition.prototype.setReinvestDividends });
+Aggregate_add(StockPosition, 'POSSTOCK')
+Element_add(StockPosition, {
+  name: 'UNITSSTREET',
+  order: 20,
+  type: Number,
+  read: StockPosition.prototype.getUnitsStreet,
+  write: StockPosition.prototype.setUnitsStreet,
+})
+Element_add(StockPosition, {
+  name: 'UNITSUSER',
+  order: 30,
+  type: Number,
+  read: StockPosition.prototype.getUnitsUser,
+  write: StockPosition.prototype.setUnitsUser,
+})
+Element_add(StockPosition, {
+  name: 'REINVDIV',
+  order: 40,
+  type: Boolean,
+  read: StockPosition.prototype.getReinvestDividends,
+  write: StockPosition.prototype.setReinvestDividends,
+})

@@ -1,24 +1,22 @@
-import { ResponseMessage } from "../ResponseMessage";
-import { AccountStatement } from "../../../client/AccountStatement";
-import { TransactionList } from "./TransactionList";
-import { BalanceInfo } from "./BalanceInfo";
-import { Element_add } from "../../../meta/Element_add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
+import { AccountStatement } from '../../../client/AccountStatement'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../meta/Element_add'
+import { ResponseMessage } from '../ResponseMessage'
+import { BalanceInfo } from './BalanceInfo'
+import { TransactionList } from './TransactionList'
 
-
-//import java.util.Locale;
+// import java.util.Locale;
 
 export abstract class StatementResponse extends ResponseMessage implements AccountStatement {
-
-  private currencyCode: string;
-  private transactionList: TransactionList;
-  private ledgerBalance: BalanceInfo;
-  private availableBalance: BalanceInfo;
-  private marketingInfo: string;
+  private currencyCode: string
+  private transactionList: TransactionList
+  private ledgerBalance: BalanceInfo
+  private availableBalance: BalanceInfo
+  private marketingInfo: string
 
   constructor() {
-    super();
-    this.currencyCode = "USD"; //java.util.Currency.getInstance(Locale.US).getCurrencyCode().toUpperCase();
+    super()
+    this.currencyCode = 'USD' // java.util.Currency.getInstance(Locale.US).getCurrencyCode().toUpperCase();
   }
 
   /**
@@ -27,8 +25,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    * @return The currency code.
    * @see java.util.Currency#getCurrencyCode()
    */
-  public getCurrencyCode(): string {
-    return this.currencyCode;
+  getCurrencyCode(): string {
+    return this.currencyCode
   }
 
   /**
@@ -36,8 +34,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @param currencyCode The currency code.
    */
-  public setCurrencyCode(currencyCode: string): void {
-    this.currencyCode = currencyCode;
+  setCurrencyCode(currencyCode: string): void {
+    this.currencyCode = currencyCode
   }
 
   /**
@@ -45,8 +43,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @return The transaction list.
    */
-  public getTransactionList(): TransactionList {
-    return this.transactionList;
+  getTransactionList(): TransactionList {
+    return this.transactionList
   }
 
   /**
@@ -54,8 +52,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @param transactionList The transaction list.
    */
-  public setTransactionList(transactionList: TransactionList): void {
-    this.transactionList = transactionList;
+  setTransactionList(transactionList: TransactionList): void {
+    this.transactionList = transactionList
   }
 
   /**
@@ -63,8 +61,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @return The ledger balance.
    */
-  public getLedgerBalance(): BalanceInfo {
-    return this.ledgerBalance;
+  getLedgerBalance(): BalanceInfo {
+    return this.ledgerBalance
   }
 
   /**
@@ -72,8 +70,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @param ledgerBalance The ledger balance.
    */
-  public setLedgerBalance(ledgerBalance: BalanceInfo): void {
-    this.ledgerBalance = ledgerBalance;
+  setLedgerBalance(ledgerBalance: BalanceInfo): void {
+    this.ledgerBalance = ledgerBalance
   }
 
   /**
@@ -81,8 +79,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @return The available balance.
    */
-  public getAvailableBalance(): BalanceInfo {
-    return this.availableBalance;
+  getAvailableBalance(): BalanceInfo {
+    return this.availableBalance
   }
 
   /**
@@ -90,8 +88,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @param availableBalance The available balance.
    */
-  public setAvailableBalance(availableBalance: BalanceInfo): void {
-    this.availableBalance = availableBalance;
+  setAvailableBalance(availableBalance: BalanceInfo): void {
+    this.availableBalance = availableBalance
   }
 
   /**
@@ -99,8 +97,8 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @return Marketing information.
    */
-  public getMarketingInfo(): string {
-    return this.marketingInfo;
+  getMarketingInfo(): string {
+    return this.marketingInfo
   }
 
   /**
@@ -108,13 +106,43 @@ export abstract class StatementResponse extends ResponseMessage implements Accou
    *
    * @param marketingInfo Marketing information.
    */
-  public setMarketingInfo(marketingInfo: string): void {
-    this.marketingInfo = marketingInfo;
+  setMarketingInfo(marketingInfo: string): void {
+    this.marketingInfo = marketingInfo
   }
 }
 
-Element_add(StatementResponse, { name: "CURDEF", required: true, order: 0, type: String, read: StatementResponse.prototype.getCurrencyCode, write: StatementResponse.prototype.setCurrencyCode });
-ChildAggregate_add(StatementResponse, { order: 20, type: TransactionList, read: StatementResponse.prototype.getTransactionList, write: StatementResponse.prototype.setTransactionList });
-ChildAggregate_add(StatementResponse, { name: "LEDGERBAL", order: 30, type: BalanceInfo, read: StatementResponse.prototype.getLedgerBalance, write: StatementResponse.prototype.setLedgerBalance });
-ChildAggregate_add(StatementResponse, { name: "AVAILBAL", order: 40, type: BalanceInfo, read: StatementResponse.prototype.getAvailableBalance, write: StatementResponse.prototype.setAvailableBalance });
-Element_add(StatementResponse, { name: "MKTGINFO", order: 50, type: String, read: StatementResponse.prototype.getMarketingInfo, write: StatementResponse.prototype.setMarketingInfo });
+Element_add(StatementResponse, {
+  name: 'CURDEF',
+  required: true,
+  order: 0,
+  type: String,
+  read: StatementResponse.prototype.getCurrencyCode,
+  write: StatementResponse.prototype.setCurrencyCode,
+})
+ChildAggregate_add(StatementResponse, {
+  order: 20,
+  type: TransactionList,
+  read: StatementResponse.prototype.getTransactionList,
+  write: StatementResponse.prototype.setTransactionList,
+})
+ChildAggregate_add(StatementResponse, {
+  name: 'LEDGERBAL',
+  order: 30,
+  type: BalanceInfo,
+  read: StatementResponse.prototype.getLedgerBalance,
+  write: StatementResponse.prototype.setLedgerBalance,
+})
+ChildAggregate_add(StatementResponse, {
+  name: 'AVAILBAL',
+  order: 40,
+  type: BalanceInfo,
+  read: StatementResponse.prototype.getAvailableBalance,
+  write: StatementResponse.prototype.setAvailableBalance,
+})
+Element_add(StatementResponse, {
+  name: 'MKTGINFO',
+  order: 50,
+  type: String,
+  read: StatementResponse.prototype.getMarketingInfo,
+  write: StatementResponse.prototype.setMarketingInfo,
+})

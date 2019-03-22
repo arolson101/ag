@@ -1,24 +1,22 @@
-import { LOG } from "../log/Log";
-import { StringConversion } from "./StringConversion";
-import { DefaultStringConversion } from "./DefaultStringConversion";
-import { OFXWriter } from "./OFXWriter";
-import { AggregateInfo, HeaderValues } from "./AggregateInfo";
-import { AggregateIntrospector } from "./AggregateIntrospector";
-import { OFXException } from "../OFXException";
-import { StringMap } from "../collections/collections";
-import { SortedSet } from "../collections/SortedSet";
-import { AggregateAttribute, AggregateAttributeType } from "./AggregateAttribute";
-
+import { StringMap } from '../collections/collections'
+import { SortedSet } from '../collections/SortedSet'
+import { LOG } from '../log/Log'
+import { OFXException } from '../OFXException'
+import { AggregateAttribute, AggregateAttributeType } from './AggregateAttribute'
+import { AggregateInfo, HeaderValues } from './AggregateInfo'
+import { AggregateIntrospector } from './AggregateIntrospector'
+import { DefaultStringConversion } from './DefaultStringConversion'
+import { OFXWriter } from './OFXWriter'
+import { StringConversion } from './StringConversion'
 
 /**
  * Marshaller for aggregate objects.
  */
 export class AggregateMarshaller {
-
-  private conversion: StringConversion;
+  private conversion: StringConversion
 
   constructor() {
-    this.conversion = new DefaultStringConversion();
+    this.conversion = new DefaultStringConversion()
   }
 
   /**
@@ -27,25 +25,27 @@ export class AggregateMarshaller {
    * @param aggregate The aggregate to marshal.
    * @param writer    The writer.
    */
-  public marshal(aggregate: Object, writer: OFXWriter) /*throws IOException*/: void {
-    var aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(aggregate.constructor);
+  marshal(aggregate: object, writer: OFXWriter): /*throws IOException*/ void {
+    const aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(
+      aggregate.constructor
+    )
     if (aggregateInfo == null) {
-      throw new OFXException("Unable to marshal object (no aggregate metadata found).");
+      throw new OFXException('Unable to marshal object (no aggregate metadata found).')
     }
 
     if (aggregateInfo.hasHeaders()) {
-      var headerValues: HeaderValues = aggregateInfo.getHeaders(aggregate);
-      var convertedValues: StringMap = {};
-      for (var header in headerValues) {
-        convertedValues[header] = this.getConversion().toString(headerValues[header]);
+      const headerValues: HeaderValues = aggregateInfo.getHeaders(aggregate)
+      const convertedValues: StringMap = {}
+      for (const header of Object.keys(headerValues)) {
+        convertedValues[header] = this.getConversion().toString(headerValues[header])!
       }
-      writer.writeHeaders(convertedValues);
+      writer.writeHeaders(convertedValues)
     }
 
-    writer.writeStartAggregate(aggregateInfo.getName());
-    var AggregateAttributes: SortedSet<AggregateAttribute> = aggregateInfo.getAttributes();
-    this.writeAggregateAttributes(aggregate, writer, AggregateAttributes);
-    writer.writeEndAggregate(aggregateInfo.getName());
+    writer.writeStartAggregate(aggregateInfo.getName())
+    const AggregateAttributes: SortedSet<AggregateAttribute> = aggregateInfo.getAttributes()
+    this.writeAggregateAttributes(aggregate, writer, AggregateAttributes)
+    writer.writeEndAggregate(aggregateInfo.getName())
   }
 
   /**
@@ -55,59 +55,66 @@ export class AggregateMarshaller {
    * @param writer              The writer.
    * @param aggregateAttributes The aggregate attributes.
    */
-  protected writeAggregateAttributes(aggregate: Object, writer: OFXWriter, aggregateAttributes: SortedSet<AggregateAttribute>) /*throws IOException*/: void {
-    for (var i in aggregateAttributes.values()) {
-      var aggregateAttribute: AggregateAttribute = aggregateAttributes.values()[i];
-      var childValue: Object = null;
+  protected writeAggregateAttributes(
+    aggregate: object,
+    writer: OFXWriter,
+    aggregateAttributes: SortedSet<AggregateAttribute>
+  ): /*throws IOException*/ void {
+    for (const aggregateAttribute of aggregateAttributes.values()) {
+      let childValue: object | null = null
       try {
-        childValue = aggregateAttribute.get(aggregate);
-      }
-      catch (e) {
-        LOG.error("Unable to get " + aggregateAttribute.toString() + "%o", e);
+        childValue = aggregateAttribute.get(aggregate)
+      } catch (e) {
+        LOG.error('Unable to get ' + aggregateAttribute.toString() + '%o', e)
       }
 
       if (childValue != null) {
         switch (aggregateAttribute.getType()) {
           case AggregateAttributeType.CHILD_AGGREGATE:
-            var childValues: Array<Object>;
+            let childValues: object[]
             if (childValue instanceof Array) {
-              childValues = childValue;
-            }
-            else if(childValue instanceof SortedSet) {
-              childValues = (<SortedSet<Object>>childValue).values();
-            }
-            else {
-              childValues = [childValue];
+              childValues = childValue
+            } else if (childValue instanceof SortedSet) {
+              childValues = (childValue as SortedSet<object>).values()
+            } else {
+              childValues = [childValue]
             }
 
-            for (var objValue of childValues) {
-              var aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(objValue.constructor);
+            for (const objValue of childValues) {
+              const aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(
+                objValue.constructor
+              )
               if (aggregateInfo == null) {
-                throw new OFXException("Unable to marshal object of type " + objValue.constructor.name + " (no aggregate metadata found).");
+                throw new OFXException(
+                  'Unable to marshal object of type ' +
+                    objValue.constructor.name +
+                    ' (no aggregate metadata found).'
+                )
               }
 
-              var attributeName: string = aggregateAttribute.getName();
+              let attributeName: string = aggregateAttribute.getName()
               if (aggregateAttribute.isArray()) {
-                attributeName = aggregateInfo.getName();
+                attributeName = aggregateInfo.getName()
               }
 
-              writer.writeStartAggregate(attributeName);
-              this.writeAggregateAttributes(objValue, writer, aggregateInfo.getAttributes());
-              writer.writeEndAggregate(attributeName);
+              writer.writeStartAggregate(attributeName)
+              this.writeAggregateAttributes(objValue, writer, aggregateInfo.getAttributes())
+              writer.writeEndAggregate(attributeName)
             }
-            break;
+            break
           case AggregateAttributeType.ELEMENT:
-            var strValue: string = this.getConversion().toString(childValue);
-            if ((strValue != null) && ("" !== strValue.trim())) {
-              writer.writeElement(aggregateAttribute.getName(), strValue);
+            const strValue: string | null = this.getConversion().toString(childValue)
+            if (strValue != null && '' !== strValue.trim()) {
+              writer.writeElement(aggregateAttribute.getName(), strValue)
             }
-            break;
+            break
           default:
-            throw new OFXException("Unknown aggregate attribute type: " + aggregateAttribute.getType());
+            throw new OFXException(
+              'Unknown aggregate attribute type: ' + aggregateAttribute.getType()
+            )
         }
-      }
-      else if (aggregateAttribute.isRequired()) {
-        throw new OFXException("Required " + aggregateAttribute.toString() + " is null or empty.");
+      } else if (aggregateAttribute.isRequired()) {
+        throw new OFXException('Required ' + aggregateAttribute.toString() + ' is null or empty.')
       }
     }
   }
@@ -117,8 +124,8 @@ export class AggregateMarshaller {
    *
    * @return The conversion.
    */
-  public getConversion(): StringConversion {
-    return this.conversion;
+  getConversion(): StringConversion {
+    return this.conversion
   }
 
   /**
@@ -126,7 +133,7 @@ export class AggregateMarshaller {
    *
    * @param conversion The conversion.
    */
-  public setConversion(conversion: StringConversion): void {
-    this.conversion = conversion;
+  setConversion(conversion: StringConversion): void {
+    this.conversion = conversion
   }
 }

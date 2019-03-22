@@ -1,24 +1,22 @@
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { BaseSecurityInfo } from "./BaseSecurityInfo";
-import { SecurityId } from "./SecurityId";
-import { OptionType, OptionType_fromOfx } from "./OptionType";
-import { AssetClass, AssetClass_fromOfx } from "./AssetClass";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { AssetClass, AssetClass_fromOfx } from './AssetClass'
+import { BaseSecurityInfo } from './BaseSecurityInfo'
+import { OptionType, OptionType_fromOfx } from './OptionType'
+import { SecurityId } from './SecurityId'
 
 /**
  * Info about an option security.
  * @see "Section 13.8.5.4, OFX Spec"
  */
 export class OptionSecurityInfo extends BaseSecurityInfo {
-
-  private optionType: string;
-  private strikePrice: number;
-  private expirationDate: Date;
-  private sharesPerContact: number;
-  private underlyingSecurity: SecurityId;
-  private assetClass: string;
-  private fiAssetClass: string;
+  private optionType: string
+  private strikePrice: number
+  private expirationDate: Date
+  private sharesPerContact: number
+  private underlyingSecurity: SecurityId
+  private assetClass: string
+  private fiAssetClass: string
 
   /**
    * Gets the type of option. One of "PUT" or "CALL". This is a required field according to the
@@ -26,8 +24,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the option type
    */
-  public getOptionType(): string {
-    return this.optionType;
+  getOptionType(): string {
+    return this.optionType
   }
 
   /**
@@ -36,8 +34,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @param optionType the option type
    */
-  public setOptionType(optionType: string): void {
-    this.optionType = optionType;
+  setOptionType(optionType: string): void {
+    this.optionType = optionType
   }
 
   /**
@@ -45,8 +43,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the option type or null if it's not one of the well-known types
    */
-  public getOptionTypeEnum(): OptionType {
-    return OptionType_fromOfx(this.getOptionType());
+  getOptionTypeEnum(): OptionType {
+    return OptionType_fromOfx(this.getOptionType())
   }
 
   /**
@@ -54,8 +52,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the option strike price
    */
-  public getStrikePrice(): number {
-    return this.strikePrice;
+  getStrikePrice(): number {
+    return this.strikePrice
   }
 
   /**
@@ -63,8 +61,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @param strikePrice the option strike price
    */
-  public setStrikePrice(strikePrice: number): void {
-    this.strikePrice = strikePrice;
+  setStrikePrice(strikePrice: number): void {
+    this.strikePrice = strikePrice
   }
 
   /**
@@ -72,8 +70,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the expiration date of the option
    */
-  public getExpirationDate(): Date {
-    return this.expirationDate;
+  getExpirationDate(): Date {
+    return this.expirationDate
   }
 
   /**
@@ -81,8 +79,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @param expirationDate the expiration date of the option
    */
-  public setExpirationDate(expirationDate: Date): void {
-    this.expirationDate = expirationDate;
+  setExpirationDate(expirationDate: Date): void {
+    this.expirationDate = expirationDate
   }
 
   /**
@@ -91,8 +89,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the number of shares per option contact
    */
-  public getSharesPerContact(): number {
-    return this.sharesPerContact;
+  getSharesPerContact(): number {
+    return this.sharesPerContact
   }
 
   /**
@@ -101,8 +99,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @param sharesPerContact the number of shares per option contact
    */
-  public setSharesPerContact(sharesPerContact: number): void {
-    this.sharesPerContact = sharesPerContact;
+  setSharesPerContact(sharesPerContact: number): void {
+    this.sharesPerContact = sharesPerContact
   }
 
   /**
@@ -111,8 +109,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the security id of the underlying security
    */
-  public getUnderlyingSecurity(): SecurityId {
-    return this.underlyingSecurity;
+  getUnderlyingSecurity(): SecurityId {
+    return this.underlyingSecurity
   }
 
   /**
@@ -121,8 +119,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @param underlyingSecurity the security id of the underlying security
    */
-  public setUnderlyingSecurity(underlyingSecurity: SecurityId): void {
-    this.underlyingSecurity = underlyingSecurity;
+  setUnderlyingSecurity(underlyingSecurity: SecurityId): void {
+    this.underlyingSecurity = underlyingSecurity
   }
 
   /**
@@ -130,8 +128,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the asset class of the option
    */
-  public getAssetClass(): string {
-    return this.assetClass;
+  getAssetClass(): string {
+    return this.assetClass
   }
 
   /**
@@ -139,8 +137,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @param assetClass the asset class of the option
    */
-  public setAssetClass(assetClass: string): void {
-    this.assetClass = assetClass;
+  setAssetClass(assetClass: string): void {
+    this.assetClass = assetClass
   }
 
   /**
@@ -148,8 +146,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the asset class or null if it's not one of the well-known types
    */
-  public getAssetClassEnum(): AssetClass {
-    return AssetClass_fromOfx(this.getAssetClass());
+  getAssetClassEnum(): AssetClass {
+    return AssetClass_fromOfx(this.getAssetClass())
   }
 
   /**
@@ -158,8 +156,8 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @return the FI-defined asset class of the option
    */
-  public getFiAssetClass(): string {
-    return this.fiAssetClass;
+  getFiAssetClass(): string {
+    return this.fiAssetClass
   }
 
   /**
@@ -168,16 +166,58 @@ export class OptionSecurityInfo extends BaseSecurityInfo {
    *
    * @param fiAssetClass the FI-defined asset class of the option
    */
-  public setFiAssetClass(fiAssetClass: string): void {
-    this.fiAssetClass = fiAssetClass;
+  setFiAssetClass(fiAssetClass: string): void {
+    this.fiAssetClass = fiAssetClass
   }
 }
 
-Aggregate_add( OptionSecurityInfo, "OPTINFO" );
-Element_add(OptionSecurityInfo, { name: "OPTTYPE", order: 20, type: String, read: OptionSecurityInfo.prototype.getOptionType, write: OptionSecurityInfo.prototype.setOptionType });
-Element_add(OptionSecurityInfo, { name: "STRIKEPRICE", order: 30, type: Number, read: OptionSecurityInfo.prototype.getStrikePrice, write: OptionSecurityInfo.prototype.setStrikePrice });
-Element_add(OptionSecurityInfo, { name: "DTEXPIRE", order: 40, type: Date, read: OptionSecurityInfo.prototype.getExpirationDate, write: OptionSecurityInfo.prototype.setExpirationDate });
-Element_add(OptionSecurityInfo, { name: "SHPERCTRCT", order: 50, type: Number, read: OptionSecurityInfo.prototype.getSharesPerContact, write: OptionSecurityInfo.prototype.setSharesPerContact });
-Element_add(OptionSecurityInfo, { name: "SECID", order: 60, type: SecurityId, read: OptionSecurityInfo.prototype.getUnderlyingSecurity, write: OptionSecurityInfo.prototype.setUnderlyingSecurity });
-Element_add(OptionSecurityInfo, { name: "ASSETCLASS", order: 70, type: String, read: OptionSecurityInfo.prototype.getAssetClass, write: OptionSecurityInfo.prototype.setAssetClass });
-Element_add(OptionSecurityInfo, { name: "FIASSETCLASS", order: 80, type: String, read: OptionSecurityInfo.prototype.getFiAssetClass, write: OptionSecurityInfo.prototype.setFiAssetClass });
+Aggregate_add(OptionSecurityInfo, 'OPTINFO')
+Element_add(OptionSecurityInfo, {
+  name: 'OPTTYPE',
+  order: 20,
+  type: String,
+  read: OptionSecurityInfo.prototype.getOptionType,
+  write: OptionSecurityInfo.prototype.setOptionType,
+})
+Element_add(OptionSecurityInfo, {
+  name: 'STRIKEPRICE',
+  order: 30,
+  type: Number,
+  read: OptionSecurityInfo.prototype.getStrikePrice,
+  write: OptionSecurityInfo.prototype.setStrikePrice,
+})
+Element_add(OptionSecurityInfo, {
+  name: 'DTEXPIRE',
+  order: 40,
+  type: Date,
+  read: OptionSecurityInfo.prototype.getExpirationDate,
+  write: OptionSecurityInfo.prototype.setExpirationDate,
+})
+Element_add(OptionSecurityInfo, {
+  name: 'SHPERCTRCT',
+  order: 50,
+  type: Number,
+  read: OptionSecurityInfo.prototype.getSharesPerContact,
+  write: OptionSecurityInfo.prototype.setSharesPerContact,
+})
+Element_add(OptionSecurityInfo, {
+  name: 'SECID',
+  order: 60,
+  type: SecurityId,
+  read: OptionSecurityInfo.prototype.getUnderlyingSecurity,
+  write: OptionSecurityInfo.prototype.setUnderlyingSecurity,
+})
+Element_add(OptionSecurityInfo, {
+  name: 'ASSETCLASS',
+  order: 70,
+  type: String,
+  read: OptionSecurityInfo.prototype.getAssetClass,
+  write: OptionSecurityInfo.prototype.setAssetClass,
+})
+Element_add(OptionSecurityInfo, {
+  name: 'FIASSETCLASS',
+  order: 80,
+  type: String,
+  read: OptionSecurityInfo.prototype.getFiAssetClass,
+  write: OptionSecurityInfo.prototype.setFiAssetClass,
+})

@@ -1,21 +1,22 @@
 import * as UUID from 'uuid'
-import { RequestMessage } from './RequestMessage';
-import { Element_add } from '../../meta/Element_add';
+import { Element_add } from '../../meta/Element_add'
+import { RequestMessage } from './RequestMessage'
 
 /**
  * A request message wrapped in a transaction.
  *
  * @see "Section 2.4.6, OFX Spec"
  */
-export abstract class TransactionWrappedRequestMessage<M extends RequestMessage> extends RequestMessage {
-
-  private UID: string;
-  private clientCookie: string;
-  private transactionAuthorizationNumber: string;
+export abstract class TransactionWrappedRequestMessage<
+  M extends RequestMessage
+> extends RequestMessage {
+  private UID: string
+  private clientCookie: string
+  private transactionAuthorizationNumber: string
 
   constructor(UID: string = UUID.v1()) {
-    super();
-    this.UID = UID;
+    super()
+    this.UID = UID
   }
 
   /**
@@ -23,8 +24,8 @@ export abstract class TransactionWrappedRequestMessage<M extends RequestMessage>
    *
    * @return UID of this transaction.
    */
-  public getUID(): string {
-    return this.UID;
+  getUID(): string {
+    return this.UID
   }
 
   /**
@@ -32,8 +33,8 @@ export abstract class TransactionWrappedRequestMessage<M extends RequestMessage>
    *
    * @param UID UID of this transaction.
    */
-  public setUID(UID: string): void {
-    this.UID = UID;
+  setUID(UID: string): void {
+    this.UID = UID
   }
 
   /**
@@ -41,8 +42,8 @@ export abstract class TransactionWrappedRequestMessage<M extends RequestMessage>
    *
    * @return Client cookie (echoed back by the response).
    */
-  public getClientCookie(): string {
-    return this.clientCookie;
+  getClientCookie(): string {
+    return this.clientCookie
   }
 
   /**
@@ -50,8 +51,8 @@ export abstract class TransactionWrappedRequestMessage<M extends RequestMessage>
    *
    * @param clientCookie Client cookie (echoed back by the response).
    */
-  public setClientCookie(clientCookie: string): void {
-    this.clientCookie = clientCookie;
+  setClientCookie(clientCookie: string): void {
+    this.clientCookie = clientCookie
   }
 
   /**
@@ -59,8 +60,8 @@ export abstract class TransactionWrappedRequestMessage<M extends RequestMessage>
    *
    * @return The transaction authorization number.
    */
-  public getTransactionAuthorizationNumber(): string {
-    return this.transactionAuthorizationNumber;
+  getTransactionAuthorizationNumber(): string {
+    return this.transactionAuthorizationNumber
   }
 
   /**
@@ -68,8 +69,8 @@ export abstract class TransactionWrappedRequestMessage<M extends RequestMessage>
    *
    * @param transactionAuthorizationNumber The transaction authorization number.
    */
-  public setTransactionAuthorizationNumber(transactionAuthorizationNumber: string): void {
-    this.transactionAuthorizationNumber = transactionAuthorizationNumber;
+  setTransactionAuthorizationNumber(transactionAuthorizationNumber: string): void {
+    this.transactionAuthorizationNumber = transactionAuthorizationNumber
   }
 
   /**
@@ -77,10 +78,28 @@ export abstract class TransactionWrappedRequestMessage<M extends RequestMessage>
    *
    * @param message The wrapped message.
    */
-  public abstract setWrappedMessage(message: M): void;
-
+  abstract setWrappedMessage(message: M): void
 }
 
-Element_add(TransactionWrappedRequestMessage, { name: "TRNUID", required: true, order: 0, type: String, read: TransactionWrappedRequestMessage.prototype.getUID, write: TransactionWrappedRequestMessage.prototype.setUID });
-Element_add(TransactionWrappedRequestMessage, { name: "CLTCOOKIE", order: 10, type: String, read: TransactionWrappedRequestMessage.prototype.getClientCookie, write: TransactionWrappedRequestMessage.prototype.setClientCookie });
-Element_add(TransactionWrappedRequestMessage, { name: "TAN", order: 20, type: String, read: TransactionWrappedRequestMessage.prototype.getTransactionAuthorizationNumber, write: TransactionWrappedRequestMessage.prototype.setTransactionAuthorizationNumber });
+Element_add(TransactionWrappedRequestMessage, {
+  name: 'TRNUID',
+  required: true,
+  order: 0,
+  type: String,
+  read: TransactionWrappedRequestMessage.prototype.getUID,
+  write: TransactionWrappedRequestMessage.prototype.setUID,
+})
+Element_add(TransactionWrappedRequestMessage, {
+  name: 'CLTCOOKIE',
+  order: 10,
+  type: String,
+  read: TransactionWrappedRequestMessage.prototype.getClientCookie,
+  write: TransactionWrappedRequestMessage.prototype.setClientCookie,
+})
+Element_add(TransactionWrappedRequestMessage, {
+  name: 'TAN',
+  order: 20,
+  type: String,
+  read: TransactionWrappedRequestMessage.prototype.getTransactionAuthorizationNumber,
+  write: TransactionWrappedRequestMessage.prototype.setTransactionAuthorizationNumber,
+})

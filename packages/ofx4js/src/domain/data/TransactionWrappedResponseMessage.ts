@@ -1,28 +1,28 @@
-import { ResponseMessage } from "./ResponseMessage";
-import { StatusHolder } from "./common/StatusHolder";
-import { Status } from "./common/Status";
-import { Element_add } from "../../meta/Element_add";
-import { ChildAggregate_add } from "../../meta/ChildAggregate_add";
-
+import { ChildAggregate_add } from '../../meta/ChildAggregate_add'
+import { Element_add } from '../../meta/Element_add'
+import { Status } from './common/Status'
+import { StatusHolder } from './common/StatusHolder'
+import { ResponseMessage } from './ResponseMessage'
 
 /**
  * A response message wrapped in a transaction.
  *
  * @see "Section 2.4.6, OFX Spec"
  */
-export abstract class TransactionWrappedResponseMessage<M extends ResponseMessage> extends ResponseMessage implements StatusHolder {
-
-  private UID: string;
-  private clientCookie: string;
-  private status: Status;
+export abstract class TransactionWrappedResponseMessage<M extends ResponseMessage>
+  extends ResponseMessage
+  implements StatusHolder {
+  private UID: string
+  private clientCookie: string
+  private status: Status
 
   /**
    * UID of this transaction.
    *
    * @return UID of this transaction.
    */
-  public getUID(): string {
-    return this.UID;
+  getUID(): string {
+    return this.UID
   }
 
   /**
@@ -30,8 +30,8 @@ export abstract class TransactionWrappedResponseMessage<M extends ResponseMessag
    *
    * @param UID UID of this transaction.
    */
-  public setUID(UID: string): void {
-    this.UID = UID;
+  setUID(UID: string): void {
+    this.UID = UID
   }
 
   /**
@@ -39,8 +39,8 @@ export abstract class TransactionWrappedResponseMessage<M extends ResponseMessag
    *
    * @return Client cookie (echoed back by the response).
    */
-  public getClientCookie(): string {
-    return this.clientCookie;
+  getClientCookie(): string {
+    return this.clientCookie
   }
 
   /**
@@ -48,28 +48,28 @@ export abstract class TransactionWrappedResponseMessage<M extends ResponseMessag
    *
    * @param clientCookie Client cookie (echoed back by the response).
    */
-  public setClientCookie(clientCookie: string): void {
-    this.clientCookie = clientCookie;
+  setClientCookie(clientCookie: string): void {
+    this.clientCookie = clientCookie
   }
 
   // Inherited.
-  public getStatusHolderName(): string {
-    return this.getResponseMessageName();
+  getStatusHolderName(): string {
+    return this.getResponseMessageName()
   }
 
   // Inherited.
-  public getResponseMessageName(): string {
-    var name: string = "transaction response";
+  getResponseMessageName(): string {
+    let name: string = 'transaction response'
     if (this.getWrappedMessage() != null) {
-      name = this.getWrappedMessage().getResponseMessageName() + " transaction";
+      name = this.getWrappedMessage().getResponseMessageName() + ' transaction'
     }
-//    else if ((<any>(<Object>this).constructor).Aggregate) {
-//      // TODO- does this work?
-//      var aggregate: AggregateInfo = (<any>(<Object>this).constructor).Aggregate;
-//      name = aggregate.getName() + " transaction";
-//    }
+    //    else if ((<any>(<Object>this).constructor).Aggregate) {
+    //      // TODO- does this work?
+    //      var aggregate: AggregateInfo = (<any>(<Object>this).constructor).Aggregate;
+    //      name = aggregate.getName() + " transaction";
+    //    }
 
-    return name;
+    return name
   }
 
   /**
@@ -77,8 +77,8 @@ export abstract class TransactionWrappedResponseMessage<M extends ResponseMessag
    *
    * @return Status of the transaction.
    */
-  public getStatus(): Status {
-    return this.status;
+  getStatus(): Status {
+    return this.status
   }
 
   /**
@@ -86,8 +86,8 @@ export abstract class TransactionWrappedResponseMessage<M extends ResponseMessag
    *
    * @param status Status of the transaction.
    */
-  public setStatus(status: Status): void {
-    this.status = status;
+  setStatus(status: Status): void {
+    this.status = status
   }
 
   /**
@@ -95,10 +95,28 @@ export abstract class TransactionWrappedResponseMessage<M extends ResponseMessag
    *
    * @return The wrapped message.
    */
-  public abstract getWrappedMessage(): M;
-
+  abstract getWrappedMessage(): M
 }
 
-Element_add(TransactionWrappedResponseMessage, { name: "TRNUID", required: true, order: 0, type: String, read: TransactionWrappedResponseMessage.prototype.getUID, write: TransactionWrappedResponseMessage.prototype.setUID });
-Element_add(TransactionWrappedResponseMessage, { name: "CLTCOOKIE", order: 20, type: String, read: TransactionWrappedResponseMessage.prototype.getClientCookie, write: TransactionWrappedResponseMessage.prototype.setClientCookie });
-ChildAggregate_add(TransactionWrappedResponseMessage, { required: true, order: 10, type: Status, read: TransactionWrappedResponseMessage.prototype.getStatus, write: TransactionWrappedResponseMessage.prototype.setStatus });
+Element_add(TransactionWrappedResponseMessage, {
+  name: 'TRNUID',
+  required: true,
+  order: 0,
+  type: String,
+  read: TransactionWrappedResponseMessage.prototype.getUID,
+  write: TransactionWrappedResponseMessage.prototype.setUID,
+})
+Element_add(TransactionWrappedResponseMessage, {
+  name: 'CLTCOOKIE',
+  order: 20,
+  type: String,
+  read: TransactionWrappedResponseMessage.prototype.getClientCookie,
+  write: TransactionWrappedResponseMessage.prototype.setClientCookie,
+})
+ChildAggregate_add(TransactionWrappedResponseMessage, {
+  required: true,
+  order: 10,
+  type: Status,
+  read: TransactionWrappedResponseMessage.prototype.getStatus,
+  write: TransactionWrappedResponseMessage.prototype.setStatus,
+})

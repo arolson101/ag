@@ -1,17 +1,16 @@
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { BaseSecurityInfo } from "./BaseSecurityInfo";
-import { MutualFundType, MutualFundType_fromOfx } from "./MutualFundType";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { BaseSecurityInfo } from './BaseSecurityInfo'
+import { MutualFundType, MutualFundType_fromOfx } from './MutualFundType'
 
 /**
  * Info about a mutual fund security.
  * @see "Section 13.8.5.3, OFX Spec"
  */
 export class MutualFundSecurityInfo extends BaseSecurityInfo {
-  private mfType: string;
-  private yield: number;
-  private dateYieldAsOf: Date;
+  private mfType: string
+  private yield: number
+  private dateYieldAsOf: Date
 
   /**
    * Gets the mutual fund type. One of "OPENEND", "CLOSEEND", or "OTHER". This is an optional field
@@ -19,8 +18,8 @@ export class MutualFundSecurityInfo extends BaseSecurityInfo {
    *
    * @return the mutual fund type
    */
-  public getType(): string {
-    return this.mfType;
+  getType(): string {
+    return this.mfType
   }
 
   /**
@@ -29,8 +28,8 @@ export class MutualFundSecurityInfo extends BaseSecurityInfo {
    *
    * @param mfType the mutual fund type
    */
-  public setType(mfType: string): void {
-    this.mfType = mfType;
+  setType(mfType: string): void {
+    this.mfType = mfType
   }
 
   /**
@@ -38,8 +37,8 @@ export class MutualFundSecurityInfo extends BaseSecurityInfo {
    *
    * @return the mutual fund type or null if it's not one of the well-known types
    */
-  public getTypeEnum(): MutualFundType {
-    return MutualFundType_fromOfx(this.getType());
+  getTypeEnum(): MutualFundType {
+    return MutualFundType_fromOfx(this.getType())
   }
 
   /**
@@ -47,8 +46,8 @@ export class MutualFundSecurityInfo extends BaseSecurityInfo {
    *
    * @return the yield as a rate
    */
-  public getYield(): number {
-    return this.yield;
+  getYield(): number {
+    return this.yield
   }
 
   /**
@@ -56,8 +55,8 @@ export class MutualFundSecurityInfo extends BaseSecurityInfo {
    *
    * @param yield the yield as a rate
    */
-  public setYield(yield_: number): void {
-    this.yield = yield_;
+  setYield(yield_: number): void {
+    this.yield = yield_
   }
 
   /**
@@ -65,8 +64,8 @@ export class MutualFundSecurityInfo extends BaseSecurityInfo {
    *
    * @return the as-of date for the yield
    */
-  public getDateYieldAsOf(): Date {
-    return this.dateYieldAsOf;
+  getDateYieldAsOf(): Date {
+    return this.dateYieldAsOf
   }
 
   /**
@@ -74,14 +73,32 @@ export class MutualFundSecurityInfo extends BaseSecurityInfo {
    *
    * @param dateYieldAsOf the as-of date for the yield
    */
-  public setDateYieldAsOf(dateYieldAsOf: Date): void {
-    this.dateYieldAsOf = dateYieldAsOf;
+  setDateYieldAsOf(dateYieldAsOf: Date): void {
+    this.dateYieldAsOf = dateYieldAsOf
   }
 
   // TODO(jonp) -- MFASSERTCLASS and FIMFASSERTCLASS child aggregates
 }
 
-Aggregate_add( MutualFundSecurityInfo, "MFINFO" );
-Element_add(MutualFundSecurityInfo, { name: "MFTYPE", order: 20, type: String, read: MutualFundSecurityInfo.prototype.getType, write: MutualFundSecurityInfo.prototype.setType });
-Element_add(MutualFundSecurityInfo, { name: "YIELD", order: 30, type: Number, read: MutualFundSecurityInfo.prototype.getYield, write: MutualFundSecurityInfo.prototype.setYield });
-Element_add(MutualFundSecurityInfo, { name: "DTYIELDASOF", order: 40, type: Date, read: MutualFundSecurityInfo.prototype.getDateYieldAsOf, write: MutualFundSecurityInfo.prototype.setDateYieldAsOf });
+Aggregate_add(MutualFundSecurityInfo, 'MFINFO')
+Element_add(MutualFundSecurityInfo, {
+  name: 'MFTYPE',
+  order: 20,
+  type: String,
+  read: MutualFundSecurityInfo.prototype.getType,
+  write: MutualFundSecurityInfo.prototype.setType,
+})
+Element_add(MutualFundSecurityInfo, {
+  name: 'YIELD',
+  order: 30,
+  type: Number,
+  read: MutualFundSecurityInfo.prototype.getYield,
+  write: MutualFundSecurityInfo.prototype.setYield,
+})
+Element_add(MutualFundSecurityInfo, {
+  name: 'DTYIELDASOF',
+  order: 40,
+  type: Date,
+  read: MutualFundSecurityInfo.prototype.getDateYieldAsOf,
+  write: MutualFundSecurityInfo.prototype.setDateYieldAsOf,
+})

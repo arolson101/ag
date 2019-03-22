@@ -1,40 +1,38 @@
-import { InvestmentTransaction } from "./InvestmentTransaction";
-import { SecurityId } from "../../seclist/SecurityId";
-import { OriginalCurrency } from "./OriginalCurrency";
-import { SubAccountType, SubAccountType_fromOfx } from "../accounts/SubAccountType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { SecurityId } from '../../seclist/SecurityId'
+import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountType'
+import { InvestmentTransaction } from './InvestmentTransaction'
+import { OriginalCurrency } from './OriginalCurrency'
 
 /**
  * Buy investment transaction aggregate ("INVBUY").
  * @see "Section 13.9.2.4.3, OFX Spec"
  */
 export class BuyInvestmentTransaction {
-
-  private investmentTransaction: InvestmentTransaction;
-  private securityId: SecurityId;
-  private units: number;
-  private unitPrice: number;
-  private markup: number;
-  private commission: number;
-  private taxes: number;
-  private fees: number;
-  private load: number;
-  private total: number;
-  private currencyCode: string;
-  private originalCurrencyInfo: OriginalCurrency;
-  private subAccountSecurity: string;
-  private subAccountFund: string;
+  private investmentTransaction: InvestmentTransaction
+  private securityId: SecurityId
+  private units: number
+  private unitPrice: number
+  private markup: number
+  private commission: number
+  private taxes: number
+  private fees: number
+  private load: number
+  private total: number
+  private currencyCode: string
+  private originalCurrencyInfo: OriginalCurrency
+  private subAccountSecurity: string
+  private subAccountFund: string
 
   /**
    * Gets the investment transaction child aggregate.
    *
    * @return the investment transaction child aggregate
    */
-  public getInvestmentTransaction(): InvestmentTransaction {
-    return this.investmentTransaction;
+  getInvestmentTransaction(): InvestmentTransaction {
+    return this.investmentTransaction
   }
 
   /**
@@ -42,8 +40,8 @@ export class BuyInvestmentTransaction {
    *
    * @param investmentTransaction the investment transaction child aggregate
    */
-  public setInvestmentTransaction(investmentTransaction: InvestmentTransaction): void {
-    this.investmentTransaction = investmentTransaction;
+  setInvestmentTransaction(investmentTransaction: InvestmentTransaction): void {
+    this.investmentTransaction = investmentTransaction
   }
 
   /**
@@ -53,8 +51,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the security id of the security that was bought
    */
-  public getSecurityId(): SecurityId {
-    return this.securityId;
+  getSecurityId(): SecurityId {
+    return this.securityId
   }
 
   /**
@@ -64,8 +62,8 @@ export class BuyInvestmentTransaction {
    *
    * @param securityId the security id of the security that was bought
    */
-  public setSecurityId(securityId: SecurityId): void {
-    this.securityId = securityId;
+  setSecurityId(securityId: SecurityId): void {
+    this.securityId = securityId
   }
 
   /**
@@ -77,8 +75,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the number of units purchased.
    */
-  public getUnits(): number {
-    return this.units;
+  getUnits(): number {
+    return this.units
   }
 
   /**
@@ -90,8 +88,8 @@ export class BuyInvestmentTransaction {
    *
    * @param units the number of units purchased.
    */
-  public setUnits(units: number): void {
-    this.units = units;
+  setUnits(units: number): void {
+    this.units = units
   }
 
   /**
@@ -102,8 +100,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the per unit price
    */
-  public getUnitPrice(): number {
-    return this.unitPrice;
+  getUnitPrice(): number {
+    return this.unitPrice
   }
 
   /**
@@ -114,8 +112,8 @@ export class BuyInvestmentTransaction {
    *
    * @param unitPrice the per unit price
    */
-  public setUnitPrice(unitPrice: number): void {
-    this.unitPrice = unitPrice;
+  setUnitPrice(unitPrice: number): void {
+    this.unitPrice = unitPrice
   }
 
   /**
@@ -125,8 +123,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the per unit markeup price
    */
-  public getMarkup(): number {
-    return this.markup;
+  getMarkup(): number {
+    return this.markup
   }
 
   /**
@@ -136,8 +134,8 @@ export class BuyInvestmentTransaction {
    *
    * @param markup the per unit markeup price
    */
-  public setMarkup(markup: number): void {
-    this.markup = markup;
+  setMarkup(markup: number): void {
+    this.markup = markup
   }
 
   /**
@@ -147,8 +145,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the transaction commision
    */
-  public getCommission(): number {
-    return this.commission;
+  getCommission(): number {
+    return this.commission
   }
 
   /**
@@ -158,8 +156,8 @@ export class BuyInvestmentTransaction {
    *
    * @param commission the transaction commision
    */
-  public setCommission(commission: number): void {
-    this.commission = commission;
+  setCommission(commission: number): void {
+    this.commission = commission
   }
 
   /**
@@ -168,8 +166,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the transaction taxes
    */
-  public getTaxes(): number {
-    return this.taxes;
+  getTaxes(): number {
+    return this.taxes
   }
 
   /**
@@ -178,8 +176,8 @@ export class BuyInvestmentTransaction {
    *
    * @param taxes the transaction taxes
    */
-  public setTaxes(taxes: number): void {
-    this.taxes = taxes;
+  setTaxes(taxes: number): void {
+    this.taxes = taxes
   }
 
   /**
@@ -188,8 +186,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the transaction fees
    */
-  public getFees(): number {
-    return this.fees;
+  getFees(): number {
+    return this.fees
   }
 
   /**
@@ -198,8 +196,8 @@ export class BuyInvestmentTransaction {
    *
    * @param fees the transaction fees
    */
-  public setFees(fees: number): void {
-    this.fees = fees;
+  setFees(fees: number): void {
+    this.fees = fees
   }
 
   /**
@@ -208,8 +206,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the load
    */
-  public getLoad(): number {
-    return this.load;
+  getLoad(): number {
+    return this.load
   }
 
   /**
@@ -218,8 +216,8 @@ export class BuyInvestmentTransaction {
    *
    * @param load the load
    */
-  public setLoad(load: number): void {
-    this.load = load;
+  setLoad(load: number): void {
+    this.load = load
   }
 
   /**
@@ -230,8 +228,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the total
    */
-  public getTotal(): number {
-    return this.total;
+  getTotal(): number {
+    return this.total
   }
 
   /**
@@ -242,8 +240,8 @@ export class BuyInvestmentTransaction {
    *
    * @param total the total
    */
-  public setTotal(total: number): void {
-    this.total = total;
+  setTotal(total: number): void {
+    this.total = total
   }
 
   /**
@@ -253,8 +251,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the currency code for the transaction.
    */
-  public getCurrencyCode(): string {
-    return this.currencyCode;
+  getCurrencyCode(): string {
+    return this.currencyCode
   }
 
   /**
@@ -264,9 +262,9 @@ export class BuyInvestmentTransaction {
    *
    * @param currencyCode the currency code for the transaction.
    */
-  public setCurrencyCode(currencyCode: string): void {
-    this.currencyCode = currencyCode;
-    this.originalCurrencyInfo = null;
+  setCurrencyCode(currencyCode: string): void {
+    this.currencyCode = currencyCode
+    this.originalCurrencyInfo = null
   }
 
   /**
@@ -275,8 +273,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the original currency info for the transaction
    */
-  public getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo;
+  getOriginalCurrencyInfo(): OriginalCurrency {
+    return this.originalCurrencyInfo
   }
 
   /**
@@ -285,29 +283,29 @@ export class BuyInvestmentTransaction {
    *
    * @param originalCurrencyInfo the original currency info for the transaction
    */
-  public setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
-    this.originalCurrencyInfo = originalCurrencyInfo;
-    this.currencyCode = null;
+  setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
+    this.originalCurrencyInfo = originalCurrencyInfo
+    this.currencyCode = null
   }
 
- /**
+  /**
    * Gets the sub account type for the security (e.g. CASH, MARGIN, SHORT, OTHER).
    * @see "Section 13.9.2.4.3, OFX Spec"
    *
    * @return the sub account type
    */
-  public getSubAccountSecurity(): string {
-    return this.subAccountSecurity;
+  getSubAccountSecurity(): string {
+    return this.subAccountSecurity
   }
 
   /**
-    * Sets the sub account type for the security (e.g. CASH, MARGIN, SHORT, OTHER).
-    * @see "Section 13.9.2.4.3, OFX Spec"
-    *
-    * @param subAccountSecurity the sub account type
-    */
-  public setSubAccountSecurity(subAccountSecurity: string): void {
-    this.subAccountSecurity = subAccountSecurity;
+   * Sets the sub account type for the security (e.g. CASH, MARGIN, SHORT, OTHER).
+   * @see "Section 13.9.2.4.3, OFX Spec"
+   *
+   * @param subAccountSecurity the sub account type
+   */
+  setSubAccountSecurity(subAccountSecurity: string): void {
+    this.subAccountSecurity = subAccountSecurity
   }
 
   /**
@@ -315,10 +313,9 @@ export class BuyInvestmentTransaction {
    *
    * @return the type of null if it wasn't one of the well known types.
    */
-  public getSubAccountSecurityEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getSubAccountSecurity());
+  getSubAccountSecurityEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getSubAccountSecurity())
   }
-
 
   /**
    * Gets the sub account type that the money came from. (e.g. CASH, MARGIN, SHORT, OTHER).
@@ -326,8 +323,8 @@ export class BuyInvestmentTransaction {
    *
    * @return the sub account fund
    */
-  public getSubAccountFund(): string {
-    return this.subAccountFund;
+  getSubAccountFund(): string {
+    return this.subAccountFund
   }
 
   /**
@@ -336,8 +333,8 @@ export class BuyInvestmentTransaction {
    *
    * @param subAcctFund the sub account fund
    */
-  public setSubAccountFund(subAcctFund: string): void {
-    this.subAccountFund = subAcctFund;
+  setSubAccountFund(subAcctFund: string): void {
+    this.subAccountFund = subAcctFund
   }
 
   /**
@@ -345,23 +342,108 @@ export class BuyInvestmentTransaction {
    *
    * @return the type or null if it wasn't one of the well known types.
    */
-  public getSubAccountFundEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getSubAccountFund());
+  getSubAccountFundEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getSubAccountFund())
   }
 }
 
-Aggregate_add( BuyInvestmentTransaction, "INVBUY" );
-ChildAggregate_add(BuyInvestmentTransaction, { order: 10, type: InvestmentTransaction, read: BuyInvestmentTransaction.prototype.getInvestmentTransaction, write: BuyInvestmentTransaction.prototype.setInvestmentTransaction });
-ChildAggregate_add(BuyInvestmentTransaction, { required: true, order: 20, type: SecurityId, read: BuyInvestmentTransaction.prototype.getSecurityId, write: BuyInvestmentTransaction.prototype.setSecurityId });
-Element_add(BuyInvestmentTransaction, { name: "UNITS", required: true, order: 30, type: Number, read: BuyInvestmentTransaction.prototype.getUnits, write: BuyInvestmentTransaction.prototype.setUnits });
-Element_add(BuyInvestmentTransaction, { name: "UNITPRICE", required: true, order: 40, type: Number, read: BuyInvestmentTransaction.prototype.getUnitPrice, write: BuyInvestmentTransaction.prototype.setUnitPrice });
-Element_add(BuyInvestmentTransaction, { name: "MARKUP", order: 50, type: Number, read: BuyInvestmentTransaction.prototype.getMarkup, write: BuyInvestmentTransaction.prototype.setMarkup });
-Element_add(BuyInvestmentTransaction, { name: "COMMISSION", order: 60, type: Number, read: BuyInvestmentTransaction.prototype.getCommission, write: BuyInvestmentTransaction.prototype.setCommission });
-Element_add(BuyInvestmentTransaction, { name: "TAXES", order: 70, type: Number, read: BuyInvestmentTransaction.prototype.getTaxes, write: BuyInvestmentTransaction.prototype.setTaxes });
-Element_add(BuyInvestmentTransaction, { name: "FEES", order: 80, type: Number, read: BuyInvestmentTransaction.prototype.getFees, write: BuyInvestmentTransaction.prototype.setFees });
-Element_add(BuyInvestmentTransaction, { name: "LOAD", order: 90, type: Number, read: BuyInvestmentTransaction.prototype.getLoad, write: BuyInvestmentTransaction.prototype.setLoad });
-Element_add(BuyInvestmentTransaction, { name: "TOTAL", required: true, order: 100, type: Number, read: BuyInvestmentTransaction.prototype.getTotal, write: BuyInvestmentTransaction.prototype.setTotal });
-Element_add(BuyInvestmentTransaction, { name: "CURRENCY", order: 110, type: String, read: BuyInvestmentTransaction.prototype.getCurrencyCode, write: BuyInvestmentTransaction.prototype.setCurrencyCode });
-ChildAggregate_add(BuyInvestmentTransaction, { order: 120, type: OriginalCurrency, read: BuyInvestmentTransaction.prototype.getOriginalCurrencyInfo, write: BuyInvestmentTransaction.prototype.setOriginalCurrencyInfo });
-Element_add(BuyInvestmentTransaction, { name: "SUBACCTSEC", order: 130, type: String, read: BuyInvestmentTransaction.prototype.getSubAccountSecurity, write: BuyInvestmentTransaction.prototype.setSubAccountSecurity });
-Element_add(BuyInvestmentTransaction, { name: "SUBACCTFUND", order: 140, type: String, read: BuyInvestmentTransaction.prototype.getSubAccountFund, write: BuyInvestmentTransaction.prototype.setSubAccountFund });
+Aggregate_add(BuyInvestmentTransaction, 'INVBUY')
+ChildAggregate_add(BuyInvestmentTransaction, {
+  order: 10,
+  type: InvestmentTransaction,
+  read: BuyInvestmentTransaction.prototype.getInvestmentTransaction,
+  write: BuyInvestmentTransaction.prototype.setInvestmentTransaction,
+})
+ChildAggregate_add(BuyInvestmentTransaction, {
+  required: true,
+  order: 20,
+  type: SecurityId,
+  read: BuyInvestmentTransaction.prototype.getSecurityId,
+  write: BuyInvestmentTransaction.prototype.setSecurityId,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'UNITS',
+  required: true,
+  order: 30,
+  type: Number,
+  read: BuyInvestmentTransaction.prototype.getUnits,
+  write: BuyInvestmentTransaction.prototype.setUnits,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'UNITPRICE',
+  required: true,
+  order: 40,
+  type: Number,
+  read: BuyInvestmentTransaction.prototype.getUnitPrice,
+  write: BuyInvestmentTransaction.prototype.setUnitPrice,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'MARKUP',
+  order: 50,
+  type: Number,
+  read: BuyInvestmentTransaction.prototype.getMarkup,
+  write: BuyInvestmentTransaction.prototype.setMarkup,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'COMMISSION',
+  order: 60,
+  type: Number,
+  read: BuyInvestmentTransaction.prototype.getCommission,
+  write: BuyInvestmentTransaction.prototype.setCommission,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'TAXES',
+  order: 70,
+  type: Number,
+  read: BuyInvestmentTransaction.prototype.getTaxes,
+  write: BuyInvestmentTransaction.prototype.setTaxes,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'FEES',
+  order: 80,
+  type: Number,
+  read: BuyInvestmentTransaction.prototype.getFees,
+  write: BuyInvestmentTransaction.prototype.setFees,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'LOAD',
+  order: 90,
+  type: Number,
+  read: BuyInvestmentTransaction.prototype.getLoad,
+  write: BuyInvestmentTransaction.prototype.setLoad,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'TOTAL',
+  required: true,
+  order: 100,
+  type: Number,
+  read: BuyInvestmentTransaction.prototype.getTotal,
+  write: BuyInvestmentTransaction.prototype.setTotal,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'CURRENCY',
+  order: 110,
+  type: String,
+  read: BuyInvestmentTransaction.prototype.getCurrencyCode,
+  write: BuyInvestmentTransaction.prototype.setCurrencyCode,
+})
+ChildAggregate_add(BuyInvestmentTransaction, {
+  order: 120,
+  type: OriginalCurrency,
+  read: BuyInvestmentTransaction.prototype.getOriginalCurrencyInfo,
+  write: BuyInvestmentTransaction.prototype.setOriginalCurrencyInfo,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'SUBACCTSEC',
+  order: 130,
+  type: String,
+  read: BuyInvestmentTransaction.prototype.getSubAccountSecurity,
+  write: BuyInvestmentTransaction.prototype.setSubAccountSecurity,
+})
+Element_add(BuyInvestmentTransaction, {
+  name: 'SUBACCTFUND',
+  order: 140,
+  type: String,
+  read: BuyInvestmentTransaction.prototype.getSubAccountFund,
+  write: BuyInvestmentTransaction.prototype.setSubAccountFund,
+})

@@ -1,11 +1,9 @@
-
 /**
  * The message set type, used to define message set order in the envelope.
  *
  * @see "Section 2.4.5.2, OFX spec"
  */
 export enum MessageSetType {
-
   signon,
 
   signup,
@@ -28,6 +26,5 @@ export enum MessageSetType {
 
   profile,
 
-  tax1099
-
+  tax1099,
 }

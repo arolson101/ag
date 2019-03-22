@@ -1,10 +1,9 @@
-import { InvestmentPosition } from "./InvestmentPosition";
-import { SecurityId } from "../../seclist/SecurityId";
-import { SubAccountType, SubAccountType_fromOfx } from "../accounts/SubAccountType";
-import { PositionType, PositionType_fromOfx } from "./PositionType";
-import { Inv401KSource, Inv401KSource_fromOfx } from "./Inv401KSource";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { SecurityId } from '../../seclist/SecurityId'
+import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountType'
+import { Inv401KSource, Inv401KSource_fromOfx } from './Inv401KSource'
+import { InvestmentPosition } from './InvestmentPosition'
+import { PositionType, PositionType_fromOfx } from './PositionType'
 
 /**
  * Base class for the various types of positions.
@@ -14,15 +13,15 @@ import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
  * developers who may not find the ofx aggregation model intuitive.
  */
 export class BasePosition {
-  private investmentPosition: InvestmentPosition;
+  private investmentPosition: InvestmentPosition
 
   /**
    * Gets the investment position child aggregate.
    *
    * @return the investment position child aggregate
    */
-  public getInvestmentPosition(): InvestmentPosition {
-    return this.investmentPosition;
+  getInvestmentPosition(): InvestmentPosition {
+    return this.investmentPosition
   }
 
   /**
@@ -30,8 +29,8 @@ export class BasePosition {
    *
    * @param investmentPosition the investment position child aggregate
    */
-  public setInvestmentPosition(investmentPosition: InvestmentPosition): void {
-    this.investmentPosition = investmentPosition;
+  setInvestmentPosition(investmentPosition: InvestmentPosition): void {
+    this.investmentPosition = investmentPosition
   }
 
   /**
@@ -40,8 +39,8 @@ export class BasePosition {
    *
    * @return the security id for the position
    */
-  public getSecurityId(): SecurityId {
-    return this.getInvestmentPosition().getSecurityId();
+  getSecurityId(): SecurityId {
+    return this.getInvestmentPosition().getSecurityId()
   }
 
   /**
@@ -51,8 +50,8 @@ export class BasePosition {
    *
    * @return the sub-account type
    */
-  public getHeldInAccount(): string {
-    return this.getInvestmentPosition().getHeldInAccount();
+  getHeldInAccount(): string {
+    return this.getInvestmentPosition().getHeldInAccount()
   }
 
   /**
@@ -62,7 +61,7 @@ export class BasePosition {
    * @return the sub-account type or null if it's not one of the well-known types
    */
   getHeldInAccountEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getHeldInAccount());
+    return SubAccountType_fromOfx(this.getHeldInAccount())
   }
 
   /**
@@ -72,8 +71,8 @@ export class BasePosition {
    *
    * @return the position type
    */
-  public getPositionType(): string {
-    return this.getInvestmentPosition().getPositionType();
+  getPositionType(): string {
+    return this.getInvestmentPosition().getPositionType()
   }
 
   /**
@@ -82,8 +81,8 @@ export class BasePosition {
    *
    * @return the position type or null if it's not one of the well-known types
    */
-  public getPositionTypeEnum(): PositionType {
-    return PositionType_fromOfx(this.getPositionType());
+  getPositionTypeEnum(): PositionType {
+    return PositionType_fromOfx(this.getPositionType())
   }
 
   /**
@@ -94,8 +93,8 @@ export class BasePosition {
    *
    * @return the number of units in the position
    */
-  public getUnits(): number {
-    return this.getInvestmentPosition().getUnits();
+  getUnits(): number {
+    return this.getInvestmentPosition().getUnits()
   }
 
   /**
@@ -106,8 +105,8 @@ export class BasePosition {
    *
    * @return the per unit price
    */
-  public getUnitPrice(): number {
-    return this.getInvestmentPosition().getUnitPrice();
+  getUnitPrice(): number {
+    return this.getInvestmentPosition().getUnitPrice()
   }
 
   /**
@@ -116,8 +115,8 @@ export class BasePosition {
    *
    * @return the market value of the position
    */
-  public getMarketValue(): number {
-    return this.getInvestmentPosition().getMarketValue();
+  getMarketValue(): number {
+    return this.getInvestmentPosition().getMarketValue()
   }
 
   /**
@@ -127,8 +126,8 @@ export class BasePosition {
    *
    * @return the market value date
    */
-  public getMarketValueDate(): Date {
-    return this.getInvestmentPosition().getMarketValueDate();
+  getMarketValueDate(): Date {
+    return this.getInvestmentPosition().getMarketValueDate()
   }
 
   /**
@@ -138,8 +137,8 @@ export class BasePosition {
    *
    * @return the currency code of the position or null for the default currency
    */
-  public getCurrencyCode(): string {
-    return this.getInvestmentPosition().getCurrencyCode();
+  getCurrencyCode(): string {
+    return this.getInvestmentPosition().getCurrencyCode()
   }
 
   /**
@@ -149,8 +148,8 @@ export class BasePosition {
    *
    * @return the memo
    */
-  public getMemo(): string {
-    return this.getInvestmentPosition().getMemo();
+  getMemo(): string {
+    return this.getInvestmentPosition().getMemo()
   }
 
   /**
@@ -161,8 +160,8 @@ export class BasePosition {
    *
    * @return the 401k source
    */
-  public get401kSource(): string {
-    return this.getInvestmentPosition().get401kSource();
+  get401kSource(): string {
+    return this.getInvestmentPosition().get401kSource()
   }
 
   /**
@@ -170,9 +169,15 @@ export class BasePosition {
    *
    * @return the 401k source or null if it's not one of the well-known types
    */
-  public get401kSourceEnum(): Inv401KSource {
-    return Inv401KSource_fromOfx(this.get401kSource());
+  get401kSourceEnum(): Inv401KSource {
+    return Inv401KSource_fromOfx(this.get401kSource())
   }
 }
 
-ChildAggregate_add(BasePosition, { required: true, order: 10, type: InvestmentPosition, read: BasePosition.prototype.getInvestmentPosition, write: BasePosition.prototype.setInvestmentPosition });
+ChildAggregate_add(BasePosition, {
+  required: true,
+  order: 10,
+  type: InvestmentPosition,
+  read: BasePosition.prototype.getInvestmentPosition,
+  write: BasePosition.prototype.setInvestmentPosition,
+})

@@ -1,23 +1,21 @@
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { BalanceRecord } from "../../common/BalanceRecord";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { BalanceRecord } from '../../common/BalanceRecord'
 
 /**
  * Aggregate for the investment balance list.
  * @see "Section 13.9.2.7, OFX Spec"
  */
 export class BalanceList {
-
-  private balanceRecords: Array<BalanceRecord>;
+  private balanceRecords: BalanceRecord[]
 
   /**
    * Gets the list of balance records.
    *
    * @return the list of balance records.
    */
-  public getBalanceRecords(): Array<BalanceRecord> {
-    return this.balanceRecords;
+  getBalanceRecords(): BalanceRecord[] {
+    return this.balanceRecords
   }
 
   /**
@@ -25,10 +23,16 @@ export class BalanceList {
    *
    * @param balanceRecords the list of balance records.
    */
-  public setBalanceRecords(balanceRecords: Array<BalanceRecord>): void {
-    this.balanceRecords = balanceRecords;
+  setBalanceRecords(balanceRecords: BalanceRecord[]): void {
+    this.balanceRecords = balanceRecords
   }
 }
 
-Aggregate_add( BalanceList, "BALLIST" );
-ChildAggregate_add(BalanceList, { order: 10, type: Array, collectionEntryType: BalanceRecord, read: BalanceList.prototype.getBalanceRecords, write: BalanceList.prototype.setBalanceRecords });
+Aggregate_add(BalanceList, 'BALLIST')
+ChildAggregate_add(BalanceList, {
+  order: 10,
+  type: Array,
+  collectionEntryType: BalanceRecord,
+  read: BalanceList.prototype.getBalanceRecords,
+  write: BalanceList.prototype.setBalanceRecords,
+})

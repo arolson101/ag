@@ -1,19 +1,17 @@
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
 
 export class FinancialInstitutionInfo {
-
-  private id: string;
-  private organization: string;
+  private id: string
+  private organization: string
 
   /**
    * Financial institution id.
    *
    * @return Financial institution id.
    */
-  public getId(): string {
-    return this.id;
+  getId(): string {
+    return this.id
   }
 
   /**
@@ -21,8 +19,8 @@ export class FinancialInstitutionInfo {
    *
    * @param id Financial institution id.
    */
-  public setId(id: string): void {
-    this.id = id;
+  setId(id: string): void {
+    this.id = id
   }
 
   /**
@@ -30,8 +28,8 @@ export class FinancialInstitutionInfo {
    *
    * @return The organization.
    */
-  public getOrganization(): string {
-    return this.organization;
+  getOrganization(): string {
+    return this.organization
   }
 
   /**
@@ -39,11 +37,24 @@ export class FinancialInstitutionInfo {
    *
    * @param organization The organization.
    */
-  public setOrganization(organization: string): void {
-    this.organization = organization;
+  setOrganization(organization: string): void {
+    this.organization = organization
   }
 }
 
-Aggregate_add( FinancialInstitutionInfo, "FI" );
-Element_add(FinancialInstitutionInfo, { name: "FID", order: 10, type: String, read: FinancialInstitutionInfo.prototype.getId, write: FinancialInstitutionInfo.prototype.setId });
-Element_add(FinancialInstitutionInfo, { name: "ORG", required: true, order: 0, type: String, read: FinancialInstitutionInfo.prototype.getOrganization, write: FinancialInstitutionInfo.prototype.setOrganization });
+Aggregate_add(FinancialInstitutionInfo, 'FI')
+Element_add(FinancialInstitutionInfo, {
+  name: 'FID',
+  order: 10,
+  type: String,
+  read: FinancialInstitutionInfo.prototype.getId,
+  write: FinancialInstitutionInfo.prototype.setId,
+})
+Element_add(FinancialInstitutionInfo, {
+  name: 'ORG',
+  required: true,
+  order: 0,
+  type: String,
+  read: FinancialInstitutionInfo.prototype.getOrganization,
+  write: FinancialInstitutionInfo.prototype.setOrganization,
+})

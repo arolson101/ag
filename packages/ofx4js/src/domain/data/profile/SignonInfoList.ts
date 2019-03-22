@@ -1,7 +1,6 @@
-import { SignonInfo } from "./SignonInfo";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { SignonInfo } from './SignonInfo'
 
 /**
  * List of signon information.
@@ -9,16 +8,15 @@ import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
  * @see "Section 7.2.2, OFX Spec"
  */
 export class SignonInfoList {
-
-  private infoList: Array<SignonInfo>;
+  private infoList: SignonInfo[]
 
   /**
    * List of sign-on information.
    *
    * @return List of sign-on information.
    */
-  public getInfoList(): Array<SignonInfo> {
-    return this.infoList;
+  getInfoList(): SignonInfo[] {
+    return this.infoList
   }
 
   /**
@@ -26,10 +24,16 @@ export class SignonInfoList {
    *
    * @param infoList List of sign-on information.
    */
-  public setInfoList(infoList: Array<SignonInfo>): void {
-    this.infoList = infoList;
+  setInfoList(infoList: SignonInfo[]): void {
+    this.infoList = infoList
   }
 }
 
-Aggregate_add( SignonInfoList, "SIGNONINFOLIST" );
-ChildAggregate_add(SignonInfoList, { order: 0, type: Array, collectionEntryType: SignonInfo, read: SignonInfoList.prototype.getInfoList, write: SignonInfoList.prototype.setInfoList });
+Aggregate_add(SignonInfoList, 'SIGNONINFOLIST')
+ChildAggregate_add(SignonInfoList, {
+  order: 0,
+  type: Array,
+  collectionEntryType: SignonInfo,
+  read: SignonInfoList.prototype.getInfoList,
+  write: SignonInfoList.prototype.setInfoList,
+})

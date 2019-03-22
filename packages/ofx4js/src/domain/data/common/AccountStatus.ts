@@ -1,6 +1,4 @@
-
 export enum AccountStatus {
-
   /**
    * Available, but not yet requested.
    */
@@ -14,6 +12,5 @@ export enum AccountStatus {
   /**
    * Active.
    */
-  ACTIVE
-
+  ACTIVE,
 }

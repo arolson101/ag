@@ -1,14 +1,13 @@
-import { AccountInfo } from "../../common/AccountInfo";
-import { InvestmentAccountDetails } from "./InvestmentAccountDetails";
-import { AccountDetails } from "../../common/AccountDetails";
-import { UnitedStatesAccountType, UnitedStatesAccountType_fromOfx } from "./UnitedStatesAccountType";
-import { ActivationStatus, ActivationStatus_fromOfx } from "./ActivationStatus";
-import { InvestmentAccountType } from "./AccountType";
-import { InvestmentAccountType_fromOfx } from "./AccountType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { AccountDetails } from '../../common/AccountDetails'
+import { AccountInfo } from '../../common/AccountInfo'
+import { InvestmentAccountType } from './AccountType'
+import { InvestmentAccountType_fromOfx } from './AccountType'
+import { ActivationStatus, ActivationStatus_fromOfx } from './ActivationStatus'
+import { InvestmentAccountDetails } from './InvestmentAccountDetails'
+import { UnitedStatesAccountType, UnitedStatesAccountType_fromOfx } from './UnitedStatesAccountType'
 
 /**
  * Aggregate for the info about a brokerage account.
@@ -16,21 +15,20 @@ import { Element_add } from "../../../../meta/Element_add";
  * @see "OFX Spec, Section 13.6.2"
  */
 export class InvestmentAccountInfo implements AccountInfo {
-
-  private investmentAccount: InvestmentAccountDetails;
-  private unitedStatesAccountType: string;
-  private supportsChecking: boolean;
-  private activationStatus: string;
-  private investmentAccountType: string;
-  private optionLevel: string;
+  private investmentAccount: InvestmentAccountDetails
+  private unitedStatesAccountType: string
+  private supportsChecking: boolean
+  private activationStatus: string
+  private investmentAccountType: string
+  private optionLevel: string
 
   /**
    * Gets the investment account this information is referencing.
    *
    * @return the investment account this information is referencing
    */
-  public getInvestmentAccount(): InvestmentAccountDetails {
-    return this.investmentAccount;
+  getInvestmentAccount(): InvestmentAccountDetails {
+    return this.investmentAccount
   }
 
   /**
@@ -39,13 +37,13 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @param investmentAccount the investment account this information is referencing
    */
-  public setInvestmentAccount(investmentAccount: InvestmentAccountDetails): void {
-    this.investmentAccount = investmentAccount;
+  setInvestmentAccount(investmentAccount: InvestmentAccountDetails): void {
+    this.investmentAccount = investmentAccount
   }
 
   // Inherited.
-  public getAccountDetails(): AccountDetails {
-    return this.getInvestmentAccount();
+  getAccountDetails(): AccountDetails {
+    return this.getInvestmentAccount()
   }
 
   /**
@@ -54,8 +52,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @return the United States account type
    */
-  public getUnitedStatesAccountType(): string {
-    return this.unitedStatesAccountType;
+  getUnitedStatesAccountType(): string {
+    return this.unitedStatesAccountType
   }
 
   /**
@@ -64,8 +62,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @param unitedStatesAccountType the United States account type
    */
-  public setUnitedStatesAccountType(unitedStatesAccountType: string): void {
-    this.unitedStatesAccountType = unitedStatesAccountType;
+  setUnitedStatesAccountType(unitedStatesAccountType: string): void {
+    this.unitedStatesAccountType = unitedStatesAccountType
   }
 
   /**
@@ -73,8 +71,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @return the account type or null if it's not one of the well-known types
    */
-  public getUnitedStatesAccountTypeEnum(): UnitedStatesAccountType {
-    return UnitedStatesAccountType_fromOfx(this.unitedStatesAccountType);
+  getUnitedStatesAccountTypeEnum(): UnitedStatesAccountType {
+    return UnitedStatesAccountType_fromOfx(this.unitedStatesAccountType)
   }
 
   /**
@@ -83,8 +81,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @return whether the account supports checking
    */
-  public getSupportsChecking(): boolean {
-    return this.supportsChecking;
+  getSupportsChecking(): boolean {
+    return this.supportsChecking
   }
 
   /**
@@ -93,8 +91,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @param supportsChecking whether the account supports checking
    */
-  public setSupportsChecking(supportsChecking: boolean): void {
-    this.supportsChecking = supportsChecking;
+  setSupportsChecking(supportsChecking: boolean): void {
+    this.supportsChecking = supportsChecking
   }
 
   /**
@@ -103,8 +101,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @return the activation status
    */
-  public getActivationStatus(): string {
-    return this.activationStatus;
+  getActivationStatus(): string {
+    return this.activationStatus
   }
 
   /**
@@ -113,8 +111,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @param activationStatus the activation status
    */
-  public setActivationStatus(activationStatus: string): void {
-    this.activationStatus = activationStatus;
+  setActivationStatus(activationStatus: string): void {
+    this.activationStatus = activationStatus
   }
 
   /**
@@ -122,8 +120,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @return the activation status or null if it wasn't one of the well known types
    */
-  public getActivationStatusEnum(): ActivationStatus {
-    return ActivationStatus_fromOfx(this.getActivationStatus());
+  getActivationStatusEnum(): ActivationStatus {
+    return ActivationStatus_fromOfx(this.getActivationStatus())
   }
 
   /**
@@ -132,8 +130,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @return the type of account
    */
-  public getInvestmentAccountType(): string {
-    return this.investmentAccountType;
+  getInvestmentAccountType(): string {
+    return this.investmentAccountType
   }
 
   /**
@@ -142,8 +140,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @param investmentAccountType the type of account
    */
-  public setInvestmentAccountType(investmentAccountType: string): void {
-    this.investmentAccountType = investmentAccountType;
+  setInvestmentAccountType(investmentAccountType: string): void {
+    this.investmentAccountType = investmentAccountType
   }
 
   /**
@@ -151,8 +149,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @return the type of investment account or null if it's not one of the well-known types
    */
-  public getInvestmentAccountTypeEnum(): InvestmentAccountType {
-    return  InvestmentAccountType_fromOfx(this.getInvestmentAccountType());
+  getInvestmentAccountTypeEnum(): InvestmentAccountType {
+    return InvestmentAccountType_fromOfx(this.getInvestmentAccountType())
   }
 
   /**
@@ -161,8 +159,8 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @return the description of option trading privileges.
    */
-  public getOptionLevel(): string {
-    return this.optionLevel;
+  getOptionLevel(): string {
+    return this.optionLevel
   }
 
   /**
@@ -171,15 +169,55 @@ export class InvestmentAccountInfo implements AccountInfo {
    *
    * @param optionLevel the description of option trading privileges.
    */
-  public setOptionLevel(optionLevel: string): void {
-    this.optionLevel = optionLevel;
+  setOptionLevel(optionLevel: string): void {
+    this.optionLevel = optionLevel
   }
 }
 
-Aggregate_add( InvestmentAccountInfo, "INVACCTINFO" );
-ChildAggregate_add(InvestmentAccountInfo, { name: "INVACCTFROM", required: true, order: 0, type: InvestmentAccountDetails, read: InvestmentAccountInfo.prototype.getInvestmentAccount, write: InvestmentAccountInfo.prototype.setInvestmentAccount });
-Element_add(InvestmentAccountInfo, { name: "USPRODUCTTYPE", required: true, order: 10, type: String, read: InvestmentAccountInfo.prototype.getUnitedStatesAccountType, write: InvestmentAccountInfo.prototype.setUnitedStatesAccountType });
-Element_add(InvestmentAccountInfo, { name: "CHECKING", required: true, order: 20, type: Boolean, read: InvestmentAccountInfo.prototype.getSupportsChecking, write: InvestmentAccountInfo.prototype.setSupportsChecking });
-Element_add(InvestmentAccountInfo, { name: "SVCSTATUS", required: true, order: 30, type: String, read: InvestmentAccountInfo.prototype.getActivationStatus, write: InvestmentAccountInfo.prototype.setActivationStatus });
-Element_add(InvestmentAccountInfo, { name: "INVACCTTYPE", order: 40, type: String, read: InvestmentAccountInfo.prototype.getInvestmentAccountType, write: InvestmentAccountInfo.prototype.setInvestmentAccountType });
-Element_add(InvestmentAccountInfo, { name: "OPTIONLEVEL", order: 50, type: String, read: InvestmentAccountInfo.prototype.getOptionLevel, write: InvestmentAccountInfo.prototype.setOptionLevel });
+Aggregate_add(InvestmentAccountInfo, 'INVACCTINFO')
+ChildAggregate_add(InvestmentAccountInfo, {
+  name: 'INVACCTFROM',
+  required: true,
+  order: 0,
+  type: InvestmentAccountDetails,
+  read: InvestmentAccountInfo.prototype.getInvestmentAccount,
+  write: InvestmentAccountInfo.prototype.setInvestmentAccount,
+})
+Element_add(InvestmentAccountInfo, {
+  name: 'USPRODUCTTYPE',
+  required: true,
+  order: 10,
+  type: String,
+  read: InvestmentAccountInfo.prototype.getUnitedStatesAccountType,
+  write: InvestmentAccountInfo.prototype.setUnitedStatesAccountType,
+})
+Element_add(InvestmentAccountInfo, {
+  name: 'CHECKING',
+  required: true,
+  order: 20,
+  type: Boolean,
+  read: InvestmentAccountInfo.prototype.getSupportsChecking,
+  write: InvestmentAccountInfo.prototype.setSupportsChecking,
+})
+Element_add(InvestmentAccountInfo, {
+  name: 'SVCSTATUS',
+  required: true,
+  order: 30,
+  type: String,
+  read: InvestmentAccountInfo.prototype.getActivationStatus,
+  write: InvestmentAccountInfo.prototype.setActivationStatus,
+})
+Element_add(InvestmentAccountInfo, {
+  name: 'INVACCTTYPE',
+  order: 40,
+  type: String,
+  read: InvestmentAccountInfo.prototype.getInvestmentAccountType,
+  write: InvestmentAccountInfo.prototype.setInvestmentAccountType,
+})
+Element_add(InvestmentAccountInfo, {
+  name: 'OPTIONLEVEL',
+  order: 50,
+  type: String,
+  read: InvestmentAccountInfo.prototype.getOptionLevel,
+  write: InvestmentAccountInfo.prototype.setOptionLevel,
+})

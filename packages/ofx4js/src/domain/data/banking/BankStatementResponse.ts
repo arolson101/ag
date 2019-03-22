@@ -1,15 +1,13 @@
-import { StatementResponse } from "../common/StatementResponse";
-import { BankAccountDetails } from "./BankAccountDetails";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { StatementResponse } from '../common/StatementResponse'
+import { BankAccountDetails } from './BankAccountDetails'
 
 export class BankStatementResponse extends StatementResponse {
+  private account: BankAccountDetails
 
-  private account: BankAccountDetails;
-
-  public getResponseMessageName(): string {
-    return "bank statement";
+  getResponseMessageName(): string {
+    return 'bank statement'
   }
 
   /**
@@ -17,8 +15,8 @@ export class BankStatementResponse extends StatementResponse {
    *
    * @return The account for the statement.
    */
-  public getAccount(): BankAccountDetails {
-    return this.account;
+  getAccount(): BankAccountDetails {
+    return this.account
   }
 
   /**
@@ -26,11 +24,16 @@ export class BankStatementResponse extends StatementResponse {
    *
    * @param account The account for the statement.
    */
-  public setAccount(account: BankAccountDetails): void {
-    this.account = account;
+  setAccount(account: BankAccountDetails): void {
+    this.account = account
   }
-
 }
 
-Aggregate_add( BankStatementResponse, "STMTRS" );
-ChildAggregate_add(BankStatementResponse, { name:"BANKACCTFROM", order: 10, type: BankAccountDetails, read: BankStatementResponse.prototype.getAccount, write: BankStatementResponse.prototype.setAccount });
+Aggregate_add(BankStatementResponse, 'STMTRS')
+ChildAggregate_add(BankStatementResponse, {
+  name: 'BANKACCTFROM',
+  order: 10,
+  type: BankAccountDetails,
+  read: BankStatementResponse.prototype.getAccount,
+  write: BankStatementResponse.prototype.setAccount,
+})

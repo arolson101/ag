@@ -1,40 +1,38 @@
-import { InvestmentTransactionType } from "./TransactionType";
-import { BaseOtherInvestmentTransaction } from "./BaseOtherInvestmentTransaction";
-import { TransactionWithSecurity } from "./TransactionWithSecurity";
-import { SecurityId } from "../../seclist/SecurityId";
-import { OriginalCurrency } from "./OriginalCurrency";
-import { IncomeType, IncomeType_fromOfx } from "./IncomeType";
-import { SubAccountType, SubAccountType_fromOfx } from "../accounts/SubAccountType";
-import { Inv401KSource, Inv401KSource_fromOfx } from "../positions/Inv401KSource";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { SecurityId } from '../../seclist/SecurityId'
+import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountType'
+import { Inv401KSource, Inv401KSource_fromOfx } from '../positions/Inv401KSource'
+import { BaseOtherInvestmentTransaction } from './BaseOtherInvestmentTransaction'
+import { IncomeType, IncomeType_fromOfx } from './IncomeType'
+import { OriginalCurrency } from './OriginalCurrency'
+import { InvestmentTransactionType } from './TransactionType'
+import { TransactionWithSecurity } from './TransactionWithSecurity'
 
 /**
  * Transaction for reinvestment transactions.
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
-    implements TransactionWithSecurity {
-
-  private securityId: SecurityId;
-  private incomeType: string;
-  private total: number;
-  private subAccountSecurity: string;
-  private units: number;
-  private unitPrice: number;
-  private commission: number;
-  private taxes: number;
-  private fees: number;
-  private load: number;
-  private taxExempt: boolean;
-  private currencyCode: string;
-  private originalCurrencyInfo: OriginalCurrency;
-  private inv401kSource: string;
+  implements TransactionWithSecurity {
+  private securityId: SecurityId
+  private incomeType: string
+  private total: number
+  private subAccountSecurity: string
+  private units: number
+  private unitPrice: number
+  private commission: number
+  private taxes: number
+  private fees: number
+  private load: number
+  private taxExempt: boolean
+  private currencyCode: string
+  private originalCurrencyInfo: OriginalCurrency
+  private inv401kSource: string
 
   constructor() {
-    super(InvestmentTransactionType.REINVEST_INCOME);
+    super(InvestmentTransactionType.REINVEST_INCOME)
   }
 
   /**
@@ -44,8 +42,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the security id of the security that was reinvested in
    */
-  public getSecurityId(): SecurityId {
-    return this.securityId;
+  getSecurityId(): SecurityId {
+    return this.securityId
   }
 
   /**
@@ -55,8 +53,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param securityId the security id of the security that was reinvested in
    */
-  public setSecurityId(securityId: SecurityId): void {
-    this.securityId = securityId;
+  setSecurityId(securityId: SecurityId): void {
+    this.securityId = securityId
   }
 
   /**
@@ -67,8 +65,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the type of income
    */
-  public getIncomeType(): string {
-    return this.incomeType;
+  getIncomeType(): string {
+    return this.incomeType
   }
 
   /**
@@ -79,8 +77,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param incomeType the type of income
    */
-  public setIncomeType(incomeType: string): void {
-    this.incomeType = incomeType;
+  setIncomeType(incomeType: string): void {
+    this.incomeType = incomeType
   }
 
   /**
@@ -88,8 +86,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the income type or null if it's not one of the well-known types
    */
-  public getIncomeTypeEnum(): IncomeType {
-    return IncomeType_fromOfx(this.getIncomeType());
+  getIncomeTypeEnum(): IncomeType {
+    return IncomeType_fromOfx(this.getIncomeType())
   }
 
   /**
@@ -98,8 +96,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the total
    */
-  public getTotal(): number {
-    return this.total;
+  getTotal(): number {
+    return this.total
   }
 
   /**
@@ -108,8 +106,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param total the total
    */
-  public setTotal(total: number): void {
-    this.total = total;
+  setTotal(total: number): void {
+    this.total = total
   }
 
   /**
@@ -119,8 +117,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the sub account type
    */
-  public getSubAccountSecurity(): string {
-    return this.subAccountSecurity;
+  getSubAccountSecurity(): string {
+    return this.subAccountSecurity
   }
 
   /**
@@ -130,8 +128,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param subAccountSecurity the sub account type
    */
-  public setSubAccountSecurity(subAccountSecurity: string): void {
-    this.subAccountSecurity = subAccountSecurity;
+  setSubAccountSecurity(subAccountSecurity: string): void {
+    this.subAccountSecurity = subAccountSecurity
   }
 
   /**
@@ -139,8 +137,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the type of null if it wasn't one of the well known types
    */
-  public getSubAccountSecurityEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getSubAccountSecurity());
+  getSubAccountSecurityEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getSubAccountSecurity())
   }
 
   /**
@@ -150,8 +148,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the number of units purchased
    */
-  public getUnits(): number {
-    return this.units;
+  getUnits(): number {
+    return this.units
   }
 
   /**
@@ -161,8 +159,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param units the number of units purchased
    */
-  public setUnits(units: number): void {
-    this.units = units;
+  setUnits(units: number): void {
+    this.units = units
   }
 
   /**
@@ -171,8 +169,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the per unit price
    */
-  public getUnitPrice(): number {
-    return this.unitPrice;
+  getUnitPrice(): number {
+    return this.unitPrice
   }
 
   /**
@@ -181,8 +179,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param unitPrice the per unit price
    */
-  public setUnitPrice(unitPrice: number): void {
-    this.unitPrice = unitPrice;
+  setUnitPrice(unitPrice: number): void {
+    this.unitPrice = unitPrice
   }
 
   /**
@@ -192,8 +190,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the transaction commision
    */
-  public getCommission(): number {
-    return this.commission;
+  getCommission(): number {
+    return this.commission
   }
 
   /**
@@ -203,8 +201,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param commission the transaction commision
    */
-  public setCommission(commission: number): void {
-    this.commission = commission;
+  setCommission(commission: number): void {
+    this.commission = commission
   }
 
   /**
@@ -213,8 +211,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the transaction taxes
    */
-  public getTaxes(): number {
-    return this.taxes;
+  getTaxes(): number {
+    return this.taxes
   }
 
   /**
@@ -223,8 +221,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param taxes the transaction taxes
    */
-  public setTaxes(taxes: number): void {
-    this.taxes = taxes;
+  setTaxes(taxes: number): void {
+    this.taxes = taxes
   }
 
   /**
@@ -233,8 +231,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the transaction fees
    */
-  public getFees(): number {
-    return this.fees;
+  getFees(): number {
+    return this.fees
   }
 
   /**
@@ -243,8 +241,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param fees the transaction fees
    */
-  public setFees(fees: number): void {
-    this.fees = fees;
+  setFees(fees: number): void {
+    this.fees = fees
   }
 
   /**
@@ -253,8 +251,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the load
    */
-  public getLoad(): number {
-    return this.load;
+  getLoad(): number {
+    return this.load
   }
 
   /**
@@ -263,8 +261,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param load the load
    */
-  public setLoad(load: number): void {
-    this.load = load;
+  setLoad(load: number): void {
+    this.load = load
   }
 
   /**
@@ -273,8 +271,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return whether the transaction was tax exempt
    */
-  public getTaxExempt(): boolean {
-    return this.taxExempt;
+  getTaxExempt(): boolean {
+    return this.taxExempt
   }
 
   /**
@@ -283,8 +281,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param taxExempt whether the transaction was tax exempt
    */
-  public setTaxExempt(taxExempt: boolean): void {
-    this.taxExempt = taxExempt;
+  setTaxExempt(taxExempt: boolean): void {
+    this.taxExempt = taxExempt
   }
 
   /**
@@ -294,8 +292,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the currency code for the transaction
    */
-  public getCurrencyCode(): string {
-    return this.currencyCode;
+  getCurrencyCode(): string {
+    return this.currencyCode
   }
 
   /**
@@ -305,9 +303,9 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param currencyCode the currency code for the transaction
    */
-  public setCurrencyCode(currencyCode: string): void {
-    this.currencyCode = currencyCode;
-    this.originalCurrencyInfo = null;
+  setCurrencyCode(currencyCode: string): void {
+    this.currencyCode = currencyCode
+    this.originalCurrencyInfo = null
   }
 
   /**
@@ -316,8 +314,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the original currency info for the transaction.
    */
-  public getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo;
+  getOriginalCurrencyInfo(): OriginalCurrency {
+    return this.originalCurrencyInfo
   }
 
   /**
@@ -326,9 +324,9 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param originalCurrencyInfo the original currency info for the transaction.
    */
-  public setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
-    this.originalCurrencyInfo = originalCurrencyInfo;
-    this.currencyCode = null;
+  setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
+    this.originalCurrencyInfo = originalCurrencyInfo
+    this.currencyCode = null
   }
 
   /**
@@ -339,8 +337,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the state withholding
    */
-  public get401kSource(): string {
-    return this.inv401kSource;
+  get401kSource(): string {
+    return this.inv401kSource
   }
 
   /**
@@ -351,8 +349,8 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @param inv401kSource the state withholding
    */
-  public set401kSource(inv401kSource: string): void {
-    this.inv401kSource = inv401kSource;
+  set401kSource(inv401kSource: string): void {
+    this.inv401kSource = inv401kSource
   }
 
   /**
@@ -360,23 +358,111 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    *
    * @return the type of close or null if it's not well known
    */
-  public get401kSourceEnum(): Inv401KSource {
-    return Inv401KSource_fromOfx(this.get401kSource());
+  get401kSourceEnum(): Inv401KSource {
+    return Inv401KSource_fromOfx(this.get401kSource())
   }
 }
 
-Aggregate_add( ReinvestIncomeTransaction, "REINVEST" );
-ChildAggregate_add(ReinvestIncomeTransaction, { required: true, order: 20, type: SecurityId, read: ReinvestIncomeTransaction.prototype.getSecurityId, write: ReinvestIncomeTransaction.prototype.setSecurityId });
-Element_add(ReinvestIncomeTransaction, { name: "INCOMETYPE", required: true, order: 30, type: String, read: ReinvestIncomeTransaction.prototype.getIncomeType, write: ReinvestIncomeTransaction.prototype.setIncomeType });
-Element_add(ReinvestIncomeTransaction, { name: "TOTAL", required: true, order: 40, type: Number, read: ReinvestIncomeTransaction.prototype.getTotal, write: ReinvestIncomeTransaction.prototype.setTotal });
-Element_add(ReinvestIncomeTransaction, { name: "SUBACCTSEC", order: 50, type: String, read: ReinvestIncomeTransaction.prototype.getSubAccountSecurity, write: ReinvestIncomeTransaction.prototype.setSubAccountSecurity });
-Element_add(ReinvestIncomeTransaction, { name: "UNITS", required: true, order: 60, type: Number, read: ReinvestIncomeTransaction.prototype.getUnits, write: ReinvestIncomeTransaction.prototype.setUnits });
-Element_add(ReinvestIncomeTransaction, { name: "UNITPRICE", required: true, order: 70, type: Number, read: ReinvestIncomeTransaction.prototype.getUnitPrice, write: ReinvestIncomeTransaction.prototype.setUnitPrice });
-Element_add(ReinvestIncomeTransaction, { name: "COMMISSION", order: 80, type: Number, read: ReinvestIncomeTransaction.prototype.getCommission, write: ReinvestIncomeTransaction.prototype.setCommission });
-Element_add(ReinvestIncomeTransaction, { name: "TAXES", order: 90, type: Number, read: ReinvestIncomeTransaction.prototype.getTaxes, write: ReinvestIncomeTransaction.prototype.setTaxes });
-Element_add(ReinvestIncomeTransaction, { name: "FEES", order: 100, type: Number, read: ReinvestIncomeTransaction.prototype.getFees, write: ReinvestIncomeTransaction.prototype.setFees });
-Element_add(ReinvestIncomeTransaction, { name: "LOAD", order: 110, type: Number, read: ReinvestIncomeTransaction.prototype.getLoad, write: ReinvestIncomeTransaction.prototype.setLoad });
-Element_add(ReinvestIncomeTransaction, { name: "TAXEXEMPT", order: 120, type: Boolean, read: ReinvestIncomeTransaction.prototype.getTaxExempt, write: ReinvestIncomeTransaction.prototype.setTaxExempt });
-Element_add(ReinvestIncomeTransaction, { name: "CURRENCY", order: 130, type: String, read: ReinvestIncomeTransaction.prototype.getCurrencyCode, write: ReinvestIncomeTransaction.prototype.setCurrencyCode });
-Element_add(ReinvestIncomeTransaction, { name: "ORIGCURRENCY", order: 140, type: OriginalCurrency, read: ReinvestIncomeTransaction.prototype.getOriginalCurrencyInfo, write: ReinvestIncomeTransaction.prototype.setOriginalCurrencyInfo });
-Element_add(ReinvestIncomeTransaction, { name: "INV401KSOURCE", order: 150, type: String, read: ReinvestIncomeTransaction.prototype.get401kSource, write: ReinvestIncomeTransaction.prototype.set401kSource });
+Aggregate_add(ReinvestIncomeTransaction, 'REINVEST')
+ChildAggregate_add(ReinvestIncomeTransaction, {
+  required: true,
+  order: 20,
+  type: SecurityId,
+  read: ReinvestIncomeTransaction.prototype.getSecurityId,
+  write: ReinvestIncomeTransaction.prototype.setSecurityId,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'INCOMETYPE',
+  required: true,
+  order: 30,
+  type: String,
+  read: ReinvestIncomeTransaction.prototype.getIncomeType,
+  write: ReinvestIncomeTransaction.prototype.setIncomeType,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'TOTAL',
+  required: true,
+  order: 40,
+  type: Number,
+  read: ReinvestIncomeTransaction.prototype.getTotal,
+  write: ReinvestIncomeTransaction.prototype.setTotal,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'SUBACCTSEC',
+  order: 50,
+  type: String,
+  read: ReinvestIncomeTransaction.prototype.getSubAccountSecurity,
+  write: ReinvestIncomeTransaction.prototype.setSubAccountSecurity,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'UNITS',
+  required: true,
+  order: 60,
+  type: Number,
+  read: ReinvestIncomeTransaction.prototype.getUnits,
+  write: ReinvestIncomeTransaction.prototype.setUnits,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'UNITPRICE',
+  required: true,
+  order: 70,
+  type: Number,
+  read: ReinvestIncomeTransaction.prototype.getUnitPrice,
+  write: ReinvestIncomeTransaction.prototype.setUnitPrice,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'COMMISSION',
+  order: 80,
+  type: Number,
+  read: ReinvestIncomeTransaction.prototype.getCommission,
+  write: ReinvestIncomeTransaction.prototype.setCommission,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'TAXES',
+  order: 90,
+  type: Number,
+  read: ReinvestIncomeTransaction.prototype.getTaxes,
+  write: ReinvestIncomeTransaction.prototype.setTaxes,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'FEES',
+  order: 100,
+  type: Number,
+  read: ReinvestIncomeTransaction.prototype.getFees,
+  write: ReinvestIncomeTransaction.prototype.setFees,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'LOAD',
+  order: 110,
+  type: Number,
+  read: ReinvestIncomeTransaction.prototype.getLoad,
+  write: ReinvestIncomeTransaction.prototype.setLoad,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'TAXEXEMPT',
+  order: 120,
+  type: Boolean,
+  read: ReinvestIncomeTransaction.prototype.getTaxExempt,
+  write: ReinvestIncomeTransaction.prototype.setTaxExempt,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'CURRENCY',
+  order: 130,
+  type: String,
+  read: ReinvestIncomeTransaction.prototype.getCurrencyCode,
+  write: ReinvestIncomeTransaction.prototype.setCurrencyCode,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'ORIGCURRENCY',
+  order: 140,
+  type: OriginalCurrency,
+  read: ReinvestIncomeTransaction.prototype.getOriginalCurrencyInfo,
+  write: ReinvestIncomeTransaction.prototype.setOriginalCurrencyInfo,
+})
+Element_add(ReinvestIncomeTransaction, {
+  name: 'INV401KSOURCE',
+  order: 150,
+  type: String,
+  read: ReinvestIncomeTransaction.prototype.get401kSource,
+  write: ReinvestIncomeTransaction.prototype.set401kSource,
+})

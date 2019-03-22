@@ -1,13 +1,12 @@
-import { InvestmentTransactionType } from "./TransactionType";
-import { BaseInvestmentTransaction } from "./BaseInvestmentTransaction";
-import { TransactionWithSecurity } from "./TransactionWithSecurity";
-import { BuyInvestmentTransaction } from "./BuyInvestmentTransaction";
-import { InvestmentTransaction } from "./InvestmentTransaction";
-import { SecurityId } from "../../seclist/SecurityId";
-import { OriginalCurrency } from "./OriginalCurrency";
-import { SubAccountType, SubAccountType_fromOfx } from "../accounts/SubAccountType";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { SecurityId } from '../../seclist/SecurityId'
+import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountType'
+import { BaseInvestmentTransaction } from './BaseInvestmentTransaction'
+import { BuyInvestmentTransaction } from './BuyInvestmentTransaction'
+import { InvestmentTransaction } from './InvestmentTransaction'
+import { OriginalCurrency } from './OriginalCurrency'
+import { InvestmentTransactionType } from './TransactionType'
+import { TransactionWithSecurity } from './TransactionWithSecurity'
 
 /**
  * Base class for all investment transactions for buying securities.
@@ -17,12 +16,11 @@ import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
  * developers who may not find the ofx aggregation model intuitive.
  */
 export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransaction
-    implements TransactionWithSecurity {
-
-  private buyInvestment: BuyInvestmentTransaction;
+  implements TransactionWithSecurity {
+  private buyInvestment: BuyInvestmentTransaction
 
   constructor(transactionType: InvestmentTransactionType) {
-    super(transactionType);
+    super(transactionType)
   }
 
   /**
@@ -30,8 +28,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the buy investment transaction child aggregate
    */
-  public getBuyInvestment(): BuyInvestmentTransaction {
-    return this.buyInvestment;
+  getBuyInvestment(): BuyInvestmentTransaction {
+    return this.buyInvestment
   }
 
   /**
@@ -39,8 +37,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @param buyInvestment the buy investment transaction child aggregate
    */
-  public setBuyInvestment(buyInvestment: BuyInvestmentTransaction): void {
-    this.buyInvestment = buyInvestment;
+  setBuyInvestment(buyInvestment: BuyInvestmentTransaction): void {
+    this.buyInvestment = buyInvestment
   }
 
   /**
@@ -49,8 +47,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    * @return the investment transaction aggregate
    */
   // @Overridden
-  public getInvestmentTransaction(): InvestmentTransaction {
-    return this.getBuyInvestment().getInvestmentTransaction();
+  getInvestmentTransaction(): InvestmentTransaction {
+    return this.getBuyInvestment().getInvestmentTransaction()
   }
 
   /**
@@ -60,8 +58,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the security id of the security that was bought
    */
-  public getSecurityId(): SecurityId {
-    return this.getBuyInvestment().getSecurityId();
+  getSecurityId(): SecurityId {
+    return this.getBuyInvestment().getSecurityId()
   }
 
   /**
@@ -73,8 +71,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the number of units purchased.
    */
-  public getUnits(): number {
-    return this.getBuyInvestment().getUnits();
+  getUnits(): number {
+    return this.getBuyInvestment().getUnits()
   }
 
   /**
@@ -85,8 +83,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the per unit price
    */
-  public getUnitPrice(): number {
-    return this.getBuyInvestment().getUnitPrice();
+  getUnitPrice(): number {
+    return this.getBuyInvestment().getUnitPrice()
   }
 
   /**
@@ -96,8 +94,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the per unit markeup price
    */
-  public getMarkup(): number {
-    return this.getBuyInvestment().getMarkup();
+  getMarkup(): number {
+    return this.getBuyInvestment().getMarkup()
   }
 
   /**
@@ -107,8 +105,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the transaction commision
    */
-  public getCommission(): number {
-    return this.getBuyInvestment().getCommission();
+  getCommission(): number {
+    return this.getBuyInvestment().getCommission()
   }
 
   /**
@@ -117,8 +115,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the transaction taxes
    */
-  public getTaxes(): number {
-    return this.getBuyInvestment().getTaxes();
+  getTaxes(): number {
+    return this.getBuyInvestment().getTaxes()
   }
 
   /**
@@ -127,8 +125,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the transaction fees
    */
-  public getFees(): number {
-    return this.getBuyInvestment().getFees();
+  getFees(): number {
+    return this.getBuyInvestment().getFees()
   }
 
   /**
@@ -137,8 +135,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the load
    */
-  public getLoad(): number {
-    return this.getBuyInvestment().getLoad();
+  getLoad(): number {
+    return this.getBuyInvestment().getLoad()
   }
 
   /**
@@ -149,8 +147,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the total
    */
-  public getTotal(): number {
-    return this.getBuyInvestment().getTotal();
+  getTotal(): number {
+    return this.getBuyInvestment().getTotal()
   }
 
   /**
@@ -160,8 +158,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the currency code for the transaction
    */
-  public getCurrencyCode(): string {
-    return this.getBuyInvestment().getCurrencyCode();
+  getCurrencyCode(): string {
+    return this.getBuyInvestment().getCurrencyCode()
   }
 
   /**
@@ -170,8 +168,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the original currency info for the transaction
    */
-  public getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.getBuyInvestment().getOriginalCurrencyInfo();
+  getOriginalCurrencyInfo(): OriginalCurrency {
+    return this.getBuyInvestment().getOriginalCurrencyInfo()
   }
 
   /**
@@ -180,8 +178,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the sub account type
    */
-  public getSubAccountSecurity(): string {
-    return this.getBuyInvestment().getSubAccountSecurity();
+  getSubAccountSecurity(): string {
+    return this.getBuyInvestment().getSubAccountSecurity()
   }
 
   /**
@@ -189,8 +187,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the type of null if it wasn't one of the well known types
    */
-  public getSubAccountSecurityEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getSubAccountSecurity());
+  getSubAccountSecurityEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getSubAccountSecurity())
   }
 
   /**
@@ -199,8 +197,8 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the sub account fund
    */
-  public getSubAccountFund(): string {
-    return this.getBuyInvestment().getSubAccountFund();
+  getSubAccountFund(): string {
+    return this.getBuyInvestment().getSubAccountFund()
   }
 
   /**
@@ -208,9 +206,14 @@ export abstract class BaseBuyInvestmentTransaction extends BaseInvestmentTransac
    *
    * @return the type or null if it wasn't one of the well known types.
    */
-  public getSubAccountFundEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getSubAccountFund());
+  getSubAccountFundEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getSubAccountFund())
   }
 }
 
-ChildAggregate_add(BaseBuyInvestmentTransaction, { order: 10, type: BuyInvestmentTransaction, read: BaseBuyInvestmentTransaction.prototype.getBuyInvestment, write: BaseBuyInvestmentTransaction.prototype.setBuyInvestment });
+ChildAggregate_add(BaseBuyInvestmentTransaction, {
+  order: 10,
+  type: BuyInvestmentTransaction,
+  read: BaseBuyInvestmentTransaction.prototype.getBuyInvestment,
+  write: BaseBuyInvestmentTransaction.prototype.setBuyInvestment,
+})

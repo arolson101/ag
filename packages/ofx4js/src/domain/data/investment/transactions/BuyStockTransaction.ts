@@ -1,20 +1,18 @@
-import { InvestmentTransactionType } from "./TransactionType";
-import { BaseBuyInvestmentTransaction } from "./BaseBuyInvestmentTransaction";
-import { BuyType, BuyType_fromOfx } from "./BuyType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
+import { BaseBuyInvestmentTransaction } from './BaseBuyInvestmentTransaction'
+import { BuyType, BuyType_fromOfx } from './BuyType'
+import { InvestmentTransactionType } from './TransactionType'
 
 /**
  * Transaction for buying stock.
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class BuyStockTransaction extends BaseBuyInvestmentTransaction {
-
-  private buyType: string;
+  private buyType: string
 
   constructor() {
-    super(InvestmentTransactionType.BUY_STOCK);
+    super(InvestmentTransactionType.BUY_STOCK)
   }
 
   /**
@@ -24,8 +22,8 @@ export class BuyStockTransaction extends BaseBuyInvestmentTransaction {
    *
    * @return the buy type
    */
-  public getBuyType(): string {
-    return this.buyType;
+  getBuyType(): string {
+    return this.buyType
   }
 
   /**
@@ -35,8 +33,8 @@ export class BuyStockTransaction extends BaseBuyInvestmentTransaction {
    *
    * @param buyType the buy type
    */
-  public setBuyType(buyType: string): void {
-    this.buyType = buyType;
+  setBuyType(buyType: string): void {
+    this.buyType = buyType
   }
 
   /**
@@ -44,10 +42,17 @@ export class BuyStockTransaction extends BaseBuyInvestmentTransaction {
    *
    * @return the type of purchase or null if it's not well known
    */
-  public getBuyTypeEnum(): BuyType {
-    return BuyType_fromOfx(this.buyType);
+  getBuyTypeEnum(): BuyType {
+    return BuyType_fromOfx(this.buyType)
   }
 }
 
-Aggregate_add( BuyStockTransaction, "BUYSTOCK" );
-Element_add(BuyStockTransaction, { name: "BUYTYPE", required: true, order: 20, type: String, read: BuyStockTransaction.prototype.getBuyType, write: BuyStockTransaction.prototype.setBuyType });
+Aggregate_add(BuyStockTransaction, 'BUYSTOCK')
+Element_add(BuyStockTransaction, {
+  name: 'BUYTYPE',
+  required: true,
+  order: 20,
+  type: String,
+  read: BuyStockTransaction.prototype.getBuyType,
+  write: BuyStockTransaction.prototype.setBuyType,
+})

@@ -1,21 +1,19 @@
-import { RequestMessageSet } from "../../RequestMessageSet";
-import { InvestmentStatementRequestTransaction } from "./InvestmentStatementRequestTransaction";
-import { MessageSetType } from "../../MessageSetType";
-import { RequestMessage } from "../../RequestMessage";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../../MessageSetType'
+import { RequestMessage } from '../../RequestMessage'
+import { RequestMessageSet } from '../../RequestMessageSet'
+import { InvestmentStatementRequestTransaction } from './InvestmentStatementRequestTransaction'
 
 /**
  * Investment statement request message set.
  * @see "Section 13.7.1.2.1, OFX Spec"
  */
 export class InvestmentStatementRequestMessageSet extends RequestMessageSet {
+  private statementRequest: InvestmentStatementRequestTransaction
 
-  private statementRequest: InvestmentStatementRequestTransaction;
-
-  public getType(): MessageSetType {
-    return MessageSetType.investment;
+  getType(): MessageSetType {
+    return MessageSetType.investment
   }
 
   /**
@@ -23,8 +21,8 @@ export class InvestmentStatementRequestMessageSet extends RequestMessageSet {
    *
    * @return the request
    */
-  public getStatementRequest(): InvestmentStatementRequestTransaction {
-    return this.statementRequest;
+  getStatementRequest(): InvestmentStatementRequestTransaction {
+    return this.statementRequest
   }
 
   /**
@@ -32,19 +30,24 @@ export class InvestmentStatementRequestMessageSet extends RequestMessageSet {
    *
    * @param statementRequest the request
    */
-  public setStatementRequest(statementRequest: InvestmentStatementRequestTransaction): void {
-    this.statementRequest = statementRequest;
+  setStatementRequest(statementRequest: InvestmentStatementRequestTransaction): void {
+    this.statementRequest = statementRequest
   }
 
   // Inherited.
-  public getRequestMessages(): Array<RequestMessage> {
-    var requestMessages: Array<RequestMessage> = new Array<RequestMessage>();
+  getRequestMessages(): RequestMessage[] {
+    const requestMessages: RequestMessage[] = new Array<RequestMessage>()
     if (this.getStatementRequest() != null) {
-      requestMessages.push(this.getStatementRequest());
+      requestMessages.push(this.getStatementRequest())
     }
-    return requestMessages;
+    return requestMessages
   }
 }
 
-Aggregate_add( InvestmentStatementRequestMessageSet, "INVSTMTMSGSRQV1" );
-ChildAggregate_add(InvestmentStatementRequestMessageSet, { order: 0, type: InvestmentStatementRequestTransaction, read: InvestmentStatementRequestMessageSet.prototype.getStatementRequest, write: InvestmentStatementRequestMessageSet.prototype.setStatementRequest });
+Aggregate_add(InvestmentStatementRequestMessageSet, 'INVSTMTMSGSRQV1')
+ChildAggregate_add(InvestmentStatementRequestMessageSet, {
+  order: 0,
+  type: InvestmentStatementRequestTransaction,
+  read: InvestmentStatementRequestMessageSet.prototype.getStatementRequest,
+  write: InvestmentStatementRequestMessageSet.prototype.setStatementRequest,
+})

@@ -1,29 +1,27 @@
-import { PropertyDescriptorParams, PropertyDescriptor, _default } from "./PropertyDescriptor";
-
+import { _default, PropertyDescriptor, PropertyDescriptorParams } from './PropertyDescriptor'
 
 export interface ChildAggregateParams<T> extends PropertyDescriptorParams<T> {
-  order: number;
-  name?: string;
-  required?: boolean;
-  collectionEntryType?: any;
+  order: number
+  name?: string
+  required?: boolean
+  collectionEntryType?: any
 }
-
 
 /**
  * Marks a method as providing a child aggregate (or set of them to a top-level aggregate).
  */
 export class ChildAggregate extends PropertyDescriptor {
-  private _name: string;
-  private _required: boolean;
-  private _order: number;
-  private _collectionEntryType: any;
+  private _name: string
+  private _required: boolean
+  private _order: number
+  private _collectionEntryType: any
 
   constructor(params: ChildAggregateParams<any>) {
-    super(params);
-    this._order = params.order;
-    this._name = _default(params.name, "##not_specified##");
-    this._required = _default(params.required, false);
-    this._collectionEntryType = _default(params.collectionEntryType, null);
+    super(params)
+    this._order = params.order
+    this._name = _default(params.name, '##not_specified##')
+    this._required = _default(params.required, false)
+    this._collectionEntryType = _default(params.collectionEntryType, null)
   }
 
   /**
@@ -31,8 +29,8 @@ export class ChildAggregate extends PropertyDescriptor {
    *
    * @return Used to specify the name of the aggregate in its context as a child aggregate.
    */
-  public name(): string {
-    return this._name;
+  name(): string {
+    return this._name
   }
 
   /**
@@ -40,8 +38,8 @@ export class ChildAggregate extends PropertyDescriptor {
    *
    * @return Whether this aggregate is required.
    */
-  public required(): boolean {
-    return this._required;
+  required(): boolean {
+    return this._required
   }
 
   /**
@@ -49,14 +47,14 @@ export class ChildAggregate extends PropertyDescriptor {
    *
    * @return The order this child aggregate comes in its parent aggregate.
    */
-  public order(): number {
-    return this._order;
+  order(): number {
+    return this._order
   }
 
   /**
    * If the type is a collection, return the type of the elements of the collection (otherwise null)
    */
-  public collectionEntryType(): any {
-    return this._collectionEntryType;
+  collectionEntryType(): any {
+    return this._collectionEntryType
   }
 }

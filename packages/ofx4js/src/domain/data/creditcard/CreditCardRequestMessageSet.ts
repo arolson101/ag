@@ -1,20 +1,18 @@
-import { RequestMessageSet } from "../RequestMessageSet";
-import { CreditCardStatementRequestTransaction } from "./CreditCardStatementRequestTransaction";
-import { MessageSetType } from "../MessageSetType";
-import { RequestMessage } from "../RequestMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { RequestMessage } from '../RequestMessage'
+import { RequestMessageSet } from '../RequestMessageSet'
+import { CreditCardStatementRequestTransaction } from './CreditCardStatementRequestTransaction'
 
-
-//import java.util.List;
-//import java.util.ArrayList;
+// import java.util.List;
+// import java.util.ArrayList;
 
 export class CreditCardRequestMessageSet extends RequestMessageSet {
+  private statementRequest: CreditCardStatementRequestTransaction
 
-  private statementRequest: CreditCardStatementRequestTransaction;
-
-  public getType(): MessageSetType {
-    return MessageSetType.creditcard;
+  getType(): MessageSetType {
+    return MessageSetType.creditcard
   }
 
   /**
@@ -22,8 +20,8 @@ export class CreditCardRequestMessageSet extends RequestMessageSet {
    *
    * @return The request.
    */
-  public getStatementRequest(): CreditCardStatementRequestTransaction {
-    return this.statementRequest;
+  getStatementRequest(): CreditCardStatementRequestTransaction {
+    return this.statementRequest
   }
 
   /**
@@ -31,19 +29,24 @@ export class CreditCardRequestMessageSet extends RequestMessageSet {
    *
    * @param statementRequest The request.
    */
-  public setStatementRequest(statementRequest: CreditCardStatementRequestTransaction): void {
-    this.statementRequest = statementRequest;
+  setStatementRequest(statementRequest: CreditCardStatementRequestTransaction): void {
+    this.statementRequest = statementRequest
   }
 
   // Inherited.
-  public getRequestMessages(): Array<RequestMessage> {
-    var requestMessages: Array<RequestMessage> = [];
+  getRequestMessages(): RequestMessage[] {
+    const requestMessages: RequestMessage[] = []
     if (this.getStatementRequest() != null) {
-      requestMessages.push(this.getStatementRequest());
+      requestMessages.push(this.getStatementRequest())
     }
-    return requestMessages;
+    return requestMessages
   }
 }
 
-Aggregate_add( CreditCardRequestMessageSet, "CREDITCARDMSGSRQV1" );
-ChildAggregate_add(CreditCardRequestMessageSet, { order: 0, type: CreditCardStatementRequestTransaction, read: CreditCardRequestMessageSet.prototype.getStatementRequest, write: CreditCardRequestMessageSet.prototype.setStatementRequest });
+Aggregate_add(CreditCardRequestMessageSet, 'CREDITCARDMSGSRQV1')
+ChildAggregate_add(CreditCardRequestMessageSet, {
+  order: 0,
+  type: CreditCardStatementRequestTransaction,
+  read: CreditCardRequestMessageSet.prototype.getStatementRequest,
+  write: CreditCardRequestMessageSet.prototype.setStatementRequest,
+})

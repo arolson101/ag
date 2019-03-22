@@ -1,40 +1,38 @@
-import { StatementResponse } from "../../common/StatementResponse";
-import { InvestmentAccountDetails } from "../accounts/InvestmentAccountDetails";
-import { InvestmentTransactionList } from "../transactions/InvestmentTransactionList";
-import { InvestmentPositionList } from "../positions/InvestmentPositionList";
-import { InvestmentBalance } from "./InvestmentBalance";
-import { SecurityList } from "../../seclist/SecurityList";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { StatementResponse } from '../../common/StatementResponse'
+import { SecurityList } from '../../seclist/SecurityList'
+import { InvestmentAccountDetails } from '../accounts/InvestmentAccountDetails'
+import { InvestmentPositionList } from '../positions/InvestmentPositionList'
+import { InvestmentTransactionList } from '../transactions/InvestmentTransactionList'
+import { InvestmentBalance } from './InvestmentBalance'
 
 /**
  * Aggregate for the investment statement download response.
  * @see "Section 13.9.2.2, OFX Spec"
  */
 export class InvestmentStatementResponse extends StatementResponse {
-
-  private dateOfStatement: Date;
-  private account: InvestmentAccountDetails;
-  private investmentTransactionList: InvestmentTransactionList;
-  private positionList: InvestmentPositionList;
-  private accountBalance: InvestmentBalance;
+  private dateOfStatement: Date
+  private account: InvestmentAccountDetails
+  private investmentTransactionList: InvestmentTransactionList
+  private positionList: InvestmentPositionList
+  private accountBalance: InvestmentBalance
 
   // This is not actually technically part of the INVSTMTRS, but according to Section 13.8.4,
   // OFX spec, this aggregate can appear in a statement response as part of the SECLISTMSGSRQV1
   // message set even when it wasn't requested. We include it here to make it accessible as part of
   // the AccountStatement
-  private securityList: SecurityList;
+  private securityList: SecurityList
 
   /**
    * Gets the name of the response message.
    *
    * @return the name of the response message
    */
-  //@Override
-  public getResponseMessageName(): string {
-    return "investment statement";
+  // @Override
+  getResponseMessageName(): string {
+    return 'investment statement'
   }
 
   /**
@@ -43,8 +41,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @return the date and time for the statement download
    */
-  public getDateOfStatement(): Date {
-    return this.dateOfStatement;
+  getDateOfStatement(): Date {
+    return this.dateOfStatement
   }
 
   /**
@@ -53,8 +51,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @param dateOfStatement the date and time for the statement download
    */
-  public setDateOfStatement(dateOfStatement: Date): void {
-    this.dateOfStatement = dateOfStatement;
+  setDateOfStatement(dateOfStatement: Date): void {
+    this.dateOfStatement = dateOfStatement
   }
 
   /**
@@ -62,8 +60,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @return the account for the statement
    */
-  public getAccount(): InvestmentAccountDetails {
-    return this.account;
+  getAccount(): InvestmentAccountDetails {
+    return this.account
   }
 
   /**
@@ -71,8 +69,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @param account the account for the statement
    */
-  public setAccount(account: InvestmentAccountDetails): void {
-    this.account = account;
+  setAccount(account: InvestmentAccountDetails): void {
+    this.account = account
   }
 
   /**
@@ -80,8 +78,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @return the transaction list aggregate
    */
-  public getInvestmentTransactionList(): InvestmentTransactionList {
-    return this.investmentTransactionList;
+  getInvestmentTransactionList(): InvestmentTransactionList {
+    return this.investmentTransactionList
   }
 
   /**
@@ -89,8 +87,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @param transactionList the transaction list aggregate
    */
-  public setInvestmentTransactionList(transactionList: InvestmentTransactionList): void {
-    this.investmentTransactionList = transactionList;
+  setInvestmentTransactionList(transactionList: InvestmentTransactionList): void {
+    this.investmentTransactionList = transactionList
   }
 
   /**
@@ -98,8 +96,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @return the position list aggregate
    */
-  public getPositionList(): InvestmentPositionList {
-    return this.positionList;
+  getPositionList(): InvestmentPositionList {
+    return this.positionList
   }
 
   /**
@@ -107,8 +105,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @param positionList the position list aggregate
    */
-  public setPositionList(positionList: InvestmentPositionList): void {
-    this.positionList = positionList;
+  setPositionList(positionList: InvestmentPositionList): void {
+    this.positionList = positionList
   }
 
   /**
@@ -116,8 +114,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @return the account balance
    */
-  public getAccountBalance(): InvestmentBalance {
-    return this.accountBalance;
+  getAccountBalance(): InvestmentBalance {
+    return this.accountBalance
   }
 
   /**
@@ -125,8 +123,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @param accountBalance the account balance
    */
-  public setAccountBalance(accountBalance: InvestmentBalance): void {
-    this.accountBalance = accountBalance;
+  setAccountBalance(accountBalance: InvestmentBalance): void {
+    this.accountBalance = accountBalance
   }
 
   /**
@@ -138,8 +136,8 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @return the security list aggregate
    */
-  public getSecurityList(): SecurityList {
-    return this.securityList;
+  getSecurityList(): SecurityList {
+    return this.securityList
   }
 
   /**
@@ -151,14 +149,43 @@ export class InvestmentStatementResponse extends StatementResponse {
    *
    * @param securityList the security list aggregate
    */
-  public setSecurityList(securityList: SecurityList): void {
-    this.securityList = securityList;
+  setSecurityList(securityList: SecurityList): void {
+    this.securityList = securityList
   }
 }
 
-Aggregate_add(InvestmentStatementResponse, "INVSTMTRS");
-Element_add(InvestmentStatementResponse, { name: "DTASOF", required: true, order: 60, type: Date, read: InvestmentStatementResponse.prototype.getDateOfStatement, write: InvestmentStatementResponse.prototype.setDateOfStatement });
-ChildAggregate_add(InvestmentStatementResponse, { name:"INVACCTFROM", required: true, order: 10, type: InvestmentAccountDetails, read: InvestmentStatementResponse.prototype.getAccount, write: InvestmentStatementResponse.prototype.setAccount });
-ChildAggregate_add(InvestmentStatementResponse, { order: 70, type: InvestmentTransactionList, read: InvestmentStatementResponse.prototype.getInvestmentTransactionList, write: InvestmentStatementResponse.prototype.setInvestmentTransactionList });
-ChildAggregate_add(InvestmentStatementResponse, { order: 80, type: InvestmentPositionList, read: InvestmentStatementResponse.prototype.getPositionList, write: InvestmentStatementResponse.prototype.setPositionList });
-ChildAggregate_add(InvestmentStatementResponse, { order: 90, type: InvestmentBalance, read: InvestmentStatementResponse.prototype.getAccountBalance, write: InvestmentStatementResponse.prototype.setAccountBalance });
+Aggregate_add(InvestmentStatementResponse, 'INVSTMTRS')
+Element_add(InvestmentStatementResponse, {
+  name: 'DTASOF',
+  required: true,
+  order: 60,
+  type: Date,
+  read: InvestmentStatementResponse.prototype.getDateOfStatement,
+  write: InvestmentStatementResponse.prototype.setDateOfStatement,
+})
+ChildAggregate_add(InvestmentStatementResponse, {
+  name: 'INVACCTFROM',
+  required: true,
+  order: 10,
+  type: InvestmentAccountDetails,
+  read: InvestmentStatementResponse.prototype.getAccount,
+  write: InvestmentStatementResponse.prototype.setAccount,
+})
+ChildAggregate_add(InvestmentStatementResponse, {
+  order: 70,
+  type: InvestmentTransactionList,
+  read: InvestmentStatementResponse.prototype.getInvestmentTransactionList,
+  write: InvestmentStatementResponse.prototype.setInvestmentTransactionList,
+})
+ChildAggregate_add(InvestmentStatementResponse, {
+  order: 80,
+  type: InvestmentPositionList,
+  read: InvestmentStatementResponse.prototype.getPositionList,
+  write: InvestmentStatementResponse.prototype.setPositionList,
+})
+ChildAggregate_add(InvestmentStatementResponse, {
+  order: 90,
+  type: InvestmentBalance,
+  read: InvestmentStatementResponse.prototype.getAccountBalance,
+  write: InvestmentStatementResponse.prototype.setAccountBalance,
+})

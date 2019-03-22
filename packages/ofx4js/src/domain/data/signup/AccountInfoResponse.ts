@@ -1,21 +1,20 @@
-import { ResponseMessage } from "../ResponseMessage";
-import { AccountProfile } from "./AccountProfile";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../meta/Element_add'
+import { ResponseMessage } from '../ResponseMessage'
+import { AccountProfile } from './AccountProfile'
 
 export class AccountInfoResponse extends ResponseMessage {
-
-  private lastUpdated: Date;
-  private accounts: Array<AccountProfile>;
+  private lastUpdated: Date
+  private accounts: AccountProfile[]
 
   constructor() {
-    super();
-    this.lastUpdated = new Date(0); //default is never updated.
+    super()
+    this.lastUpdated = new Date(0) // default is never updated.
   }
 
-  public getResponseMessageName(): string {
-    return "account info";
+  getResponseMessageName(): string {
+    return 'account info'
   }
 
   /**
@@ -23,8 +22,8 @@ export class AccountInfoResponse extends ResponseMessage {
    *
    * @return When the account info was last updated.
    */
-  public getLastUpdated(): Date {
-    return this.lastUpdated;
+  getLastUpdated(): Date {
+    return this.lastUpdated
   }
 
   /**
@@ -32,8 +31,8 @@ export class AccountInfoResponse extends ResponseMessage {
    *
    * @param lastUpdated When the account info was last updated.
    */
-  public setLastUpdated(lastUpdated: Date): void {
-    this.lastUpdated = lastUpdated;
+  setLastUpdated(lastUpdated: Date): void {
+    this.lastUpdated = lastUpdated
   }
 
   /**
@@ -41,8 +40,8 @@ export class AccountInfoResponse extends ResponseMessage {
    *
    * @return The accounts.
    */
-  public getAccounts(): Array<AccountProfile> {
-    return this.accounts;
+  getAccounts(): AccountProfile[] {
+    return this.accounts
   }
 
   /**
@@ -50,11 +49,24 @@ export class AccountInfoResponse extends ResponseMessage {
    *
    * @param accounts The accounts.
    */
-  public setAccounts(accounts: Array<AccountProfile>): void {
-    this.accounts = accounts;
+  setAccounts(accounts: AccountProfile[]): void {
+    this.accounts = accounts
   }
 }
 
-Aggregate_add(AccountInfoResponse, "ACCTINFORS");
-Element_add(AccountInfoResponse, { name: "DTACCTUP", required: true, order: 0, type: Date, read: AccountInfoResponse.prototype.getLastUpdated, write: AccountInfoResponse.prototype.setLastUpdated });
-ChildAggregate_add(AccountInfoResponse, { order: 10, type: Array, collectionEntryType: AccountProfile, read: AccountInfoResponse.prototype.getAccounts, write: AccountInfoResponse.prototype.setAccounts });
+Aggregate_add(AccountInfoResponse, 'ACCTINFORS')
+Element_add(AccountInfoResponse, {
+  name: 'DTACCTUP',
+  required: true,
+  order: 0,
+  type: Date,
+  read: AccountInfoResponse.prototype.getLastUpdated,
+  write: AccountInfoResponse.prototype.setLastUpdated,
+})
+ChildAggregate_add(AccountInfoResponse, {
+  order: 10,
+  type: Array,
+  collectionEntryType: AccountProfile,
+  read: AccountInfoResponse.prototype.getAccounts,
+  write: AccountInfoResponse.prototype.setAccounts,
+})

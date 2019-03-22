@@ -1,28 +1,26 @@
-import { SecurityId } from "../../seclist/SecurityId";
-import { SubAccountType, SubAccountType_fromOfx } from "../accounts/SubAccountType";
-import { PositionType, PositionType_fromOfx } from "./PositionType";
-import { Inv401KSource, Inv401KSource_fromOfx } from "./Inv401KSource";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { SecurityId } from '../../seclist/SecurityId'
+import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountType'
+import { Inv401KSource, Inv401KSource_fromOfx } from './Inv401KSource'
+import { PositionType, PositionType_fromOfx } from './PositionType'
 
 /**
  * Class for the investment position aggregate.
  * @see "Section 13.9.2.6.1, OFX Spec"
  */
 export class InvestmentPosition {
-
-  private securityId: SecurityId;
-  private heldInAccount: string;
-  private positionType: string;
-  private units: number;
-  private unitPrice: number;
-  private marketValue: number;
-  private marketValueDate: Date;
-  private currencyCode: string;
-  private memo: string;
-  private inv401kSource: string;
+  private securityId: SecurityId
+  private heldInAccount: string
+  private positionType: string
+  private units: number
+  private unitPrice: number
+  private marketValue: number
+  private marketValueDate: Date
+  private currencyCode: string
+  private memo: string
+  private inv401kSource: string
 
   /**
    * Gets the security id for the position. This is a required field according to the OFX spec.
@@ -30,8 +28,8 @@ export class InvestmentPosition {
    *
    * @return the security id for the position
    */
-  public getSecurityId(): SecurityId {
-    return this.securityId;
+  getSecurityId(): SecurityId {
+    return this.securityId
   }
 
   /**
@@ -40,8 +38,8 @@ export class InvestmentPosition {
    *
    * @param securityId the security id for the position
    */
-  public setSecurityId(securityId: SecurityId): void {
-    this.securityId = securityId;
+  setSecurityId(securityId: SecurityId): void {
+    this.securityId = securityId
   }
 
   /**
@@ -51,8 +49,8 @@ export class InvestmentPosition {
    *
    * @return the sub-account type
    */
-  public getHeldInAccount(): string {
-    return this.heldInAccount;
+  getHeldInAccount(): string {
+    return this.heldInAccount
   }
 
   /**
@@ -62,8 +60,8 @@ export class InvestmentPosition {
    *
    * @param heldInAccount the sub-account type
    */
-  public setHeldInAccount(heldInAccount: string): void {
-    this.heldInAccount = heldInAccount;
+  setHeldInAccount(heldInAccount: string): void {
+    this.heldInAccount = heldInAccount
   }
 
   /**
@@ -73,7 +71,7 @@ export class InvestmentPosition {
    * @return the sub-account type or null if it's not one of the well-known types
    */
   getHeldInAccountEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getHeldInAccount());
+    return SubAccountType_fromOfx(this.getHeldInAccount())
   }
 
   /**
@@ -83,8 +81,8 @@ export class InvestmentPosition {
    *
    * @return the position type
    */
-  public getPositionType(): string {
-    return this.positionType;
+  getPositionType(): string {
+    return this.positionType
   }
 
   /**
@@ -94,8 +92,8 @@ export class InvestmentPosition {
    *
    * @param positionType the position type
    */
-  public setPositionType(positionType: string): void {
-    this.positionType = positionType;
+  setPositionType(positionType: string): void {
+    this.positionType = positionType
   }
 
   /**
@@ -104,8 +102,8 @@ export class InvestmentPosition {
    *
    * @return the position type or null if it's not one of the well-known types
    */
-  public getPositionTypeEnum(): PositionType {
-    return PositionType_fromOfx(this.getPositionType());
+  getPositionTypeEnum(): PositionType {
+    return PositionType_fromOfx(this.getPositionType())
   }
 
   /**
@@ -116,8 +114,8 @@ export class InvestmentPosition {
    *
    * @return the number of units in the position
    */
-  public getUnits(): number {
-    return this.units;
+  getUnits(): number {
+    return this.units
   }
 
   /**
@@ -128,8 +126,8 @@ export class InvestmentPosition {
    *
    * @param units the number of units in the position
    */
-  public setUnits(units: number): void {
-    this.units = units;
+  setUnits(units: number): void {
+    this.units = units
   }
 
   /**
@@ -140,8 +138,8 @@ export class InvestmentPosition {
    *
    * @return the per unit price
    */
-  public getUnitPrice(): number {
-    return this.unitPrice;
+  getUnitPrice(): number {
+    return this.unitPrice
   }
 
   /**
@@ -152,8 +150,8 @@ export class InvestmentPosition {
    *
    * @param unitPrice the per unit price
    */
-  public setUnitPrice(unitPrice: number): void {
-    this.unitPrice = unitPrice;
+  setUnitPrice(unitPrice: number): void {
+    this.unitPrice = unitPrice
   }
 
   /**
@@ -162,8 +160,8 @@ export class InvestmentPosition {
    *
    * @return the market value of the position
    */
-  public getMarketValue(): number {
-    return this.marketValue;
+  getMarketValue(): number {
+    return this.marketValue
   }
 
   /**
@@ -172,8 +170,8 @@ export class InvestmentPosition {
    *
    * @param marketValue the market value of the position
    */
-  public setMarketValue(marketValue: number): void {
-    this.marketValue = marketValue;
+  setMarketValue(marketValue: number): void {
+    this.marketValue = marketValue
   }
 
   /**
@@ -183,8 +181,8 @@ export class InvestmentPosition {
    *
    * @return the market value date
    */
-  public getMarketValueDate(): Date {
-    return this.marketValueDate;
+  getMarketValueDate(): Date {
+    return this.marketValueDate
   }
 
   /**
@@ -194,8 +192,8 @@ export class InvestmentPosition {
    *
    * @param marketValueDate the market value date
    */
-  public setMarketValueDate(marketValueDate: Date): void {
-    this.marketValueDate = marketValueDate;
+  setMarketValueDate(marketValueDate: Date): void {
+    this.marketValueDate = marketValueDate
   }
 
   /**
@@ -205,8 +203,8 @@ export class InvestmentPosition {
    *
    * @return the currency code of the position or null for the default currency
    */
-  public getCurrencyCode(): string {
-    return this.currencyCode;
+  getCurrencyCode(): string {
+    return this.currencyCode
   }
 
   /**
@@ -216,8 +214,8 @@ export class InvestmentPosition {
    *
    * @param currencyCode the currency code of the position or null for the default currency
    */
-  public setCurrencyCode(currencyCode: string): void {
-    this.currencyCode = currencyCode;
+  setCurrencyCode(currencyCode: string): void {
+    this.currencyCode = currencyCode
   }
 
   /**
@@ -227,8 +225,8 @@ export class InvestmentPosition {
    *
    * @return the memo
    */
-  public getMemo(): string {
-    return this.memo;
+  getMemo(): string {
+    return this.memo
   }
 
   /**
@@ -238,8 +236,8 @@ export class InvestmentPosition {
    *
    * @param memo the memo
    */
-  public setMemo(memo: string): void {
-    this.memo = memo;
+  setMemo(memo: string): void {
+    this.memo = memo
   }
 
   /**
@@ -250,8 +248,8 @@ export class InvestmentPosition {
    *
    * @return the 401k source
    */
-  public get401kSource(): string {
-    return this.inv401kSource;
+  get401kSource(): string {
+    return this.inv401kSource
   }
 
   /**
@@ -262,8 +260,8 @@ export class InvestmentPosition {
    *
    * @param inv401kSource the 401k source
    */
-  public set401kSource(inv401kSource: string): void {
-    this.inv401kSource = inv401kSource;
+  set401kSource(inv401kSource: string): void {
+    this.inv401kSource = inv401kSource
   }
 
   /**
@@ -271,19 +269,85 @@ export class InvestmentPosition {
    *
    * @return the 401k source or null if it's not one of the well-known types
    */
-  public get401kSourceEnum(): Inv401KSource {
-    return Inv401KSource_fromOfx(this.get401kSource());
+  get401kSourceEnum(): Inv401KSource {
+    return Inv401KSource_fromOfx(this.get401kSource())
   }
 }
 
-Aggregate_add( InvestmentPosition, "INVPOS" );
-ChildAggregate_add(InvestmentPosition, { required: true, order: 10, type: SecurityId, read: InvestmentPosition.prototype.getSecurityId, write: InvestmentPosition.prototype.setSecurityId });
-Element_add(InvestmentPosition, { name: "HELDINACCT", required: true, order: 20, type: String, read: InvestmentPosition.prototype.getHeldInAccount, write: InvestmentPosition.prototype.setHeldInAccount });
-Element_add(InvestmentPosition, { name: "POSTYPE", required: true, order: 30, type: String, read: InvestmentPosition.prototype.getPositionType, write: InvestmentPosition.prototype.setPositionType });
-Element_add(InvestmentPosition, { name: "UNITS", required: true, order: 40, type: Number, read: InvestmentPosition.prototype.getUnits, write: InvestmentPosition.prototype.setUnits });
-Element_add(InvestmentPosition, { name: "UNITPRICE", required: true, order: 50, type: Number, read: InvestmentPosition.prototype.getUnitPrice, write: InvestmentPosition.prototype.setUnitPrice });
-Element_add(InvestmentPosition, { name: "MKTVAL", required: true, order: 60, type: Number, read: InvestmentPosition.prototype.getMarketValue, write: InvestmentPosition.prototype.setMarketValue });
-Element_add(InvestmentPosition, { name: "DTPRICEASOF", required: true, order: 70, type: Date, read: InvestmentPosition.prototype.getMarketValueDate, write: InvestmentPosition.prototype.setMarketValueDate });
-Element_add(InvestmentPosition, { name: "CURRENCY", order: 80, type: String, read: InvestmentPosition.prototype.getCurrencyCode, write: InvestmentPosition.prototype.setCurrencyCode });
-Element_add(InvestmentPosition, { name: "MEMO", order: 90, type: String, read: InvestmentPosition.prototype.getMemo, write: InvestmentPosition.prototype.setMemo });
-Element_add(InvestmentPosition, { name: "INV401KSOURCE", order: 100, type: String, read: InvestmentPosition.prototype.get401kSource, write: InvestmentPosition.prototype.set401kSource });
+Aggregate_add(InvestmentPosition, 'INVPOS')
+ChildAggregate_add(InvestmentPosition, {
+  required: true,
+  order: 10,
+  type: SecurityId,
+  read: InvestmentPosition.prototype.getSecurityId,
+  write: InvestmentPosition.prototype.setSecurityId,
+})
+Element_add(InvestmentPosition, {
+  name: 'HELDINACCT',
+  required: true,
+  order: 20,
+  type: String,
+  read: InvestmentPosition.prototype.getHeldInAccount,
+  write: InvestmentPosition.prototype.setHeldInAccount,
+})
+Element_add(InvestmentPosition, {
+  name: 'POSTYPE',
+  required: true,
+  order: 30,
+  type: String,
+  read: InvestmentPosition.prototype.getPositionType,
+  write: InvestmentPosition.prototype.setPositionType,
+})
+Element_add(InvestmentPosition, {
+  name: 'UNITS',
+  required: true,
+  order: 40,
+  type: Number,
+  read: InvestmentPosition.prototype.getUnits,
+  write: InvestmentPosition.prototype.setUnits,
+})
+Element_add(InvestmentPosition, {
+  name: 'UNITPRICE',
+  required: true,
+  order: 50,
+  type: Number,
+  read: InvestmentPosition.prototype.getUnitPrice,
+  write: InvestmentPosition.prototype.setUnitPrice,
+})
+Element_add(InvestmentPosition, {
+  name: 'MKTVAL',
+  required: true,
+  order: 60,
+  type: Number,
+  read: InvestmentPosition.prototype.getMarketValue,
+  write: InvestmentPosition.prototype.setMarketValue,
+})
+Element_add(InvestmentPosition, {
+  name: 'DTPRICEASOF',
+  required: true,
+  order: 70,
+  type: Date,
+  read: InvestmentPosition.prototype.getMarketValueDate,
+  write: InvestmentPosition.prototype.setMarketValueDate,
+})
+Element_add(InvestmentPosition, {
+  name: 'CURRENCY',
+  order: 80,
+  type: String,
+  read: InvestmentPosition.prototype.getCurrencyCode,
+  write: InvestmentPosition.prototype.setCurrencyCode,
+})
+Element_add(InvestmentPosition, {
+  name: 'MEMO',
+  order: 90,
+  type: String,
+  read: InvestmentPosition.prototype.getMemo,
+  write: InvestmentPosition.prototype.setMemo,
+})
+Element_add(InvestmentPosition, {
+  name: 'INV401KSOURCE',
+  order: 100,
+  type: String,
+  read: InvestmentPosition.prototype.get401kSource,
+  write: InvestmentPosition.prototype.set401kSource,
+})

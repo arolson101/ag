@@ -1,20 +1,20 @@
-import { TransactionWrappedResponseMessage } from "../TransactionWrappedResponseMessage";
-import { PasswordChangeResponse } from "./PasswordChangeResponse";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { TransactionWrappedResponseMessage } from '../TransactionWrappedResponseMessage'
+import { PasswordChangeResponse } from './PasswordChangeResponse'
 
-
-export class PasswordChangeResponseTransaction extends TransactionWrappedResponseMessage<PasswordChangeResponse> {
-
-  private message: PasswordChangeResponse;
+export class PasswordChangeResponseTransaction extends TransactionWrappedResponseMessage<
+  PasswordChangeResponse
+> {
+  private message: PasswordChangeResponse
 
   /**
    * The message.
    *
    * @return The message.
    */
-  public getMessage(): PasswordChangeResponse {
-    return this.message;
+  getMessage(): PasswordChangeResponse {
+    return this.message
   }
 
   /**
@@ -22,15 +22,21 @@ export class PasswordChangeResponseTransaction extends TransactionWrappedRespons
    *
    * @param message The message.
    */
-  public setMessage(message: PasswordChangeResponse): void {
-    this.message = message;
+  setMessage(message: PasswordChangeResponse): void {
+    this.message = message
   }
 
   // Inherited.
-  public getWrappedMessage(): PasswordChangeResponse {
-    return this.getMessage();
+  getWrappedMessage(): PasswordChangeResponse {
+    return this.getMessage()
   }
 }
 
-Aggregate_add(PasswordChangeResponseTransaction, "PINCHTRNRS");
-ChildAggregate_add(PasswordChangeResponseTransaction, { required: true, order: 30, type: PasswordChangeResponse, read: PasswordChangeResponseTransaction.prototype.getMessage, write: PasswordChangeResponseTransaction.prototype.setMessage });
+Aggregate_add(PasswordChangeResponseTransaction, 'PINCHTRNRS')
+ChildAggregate_add(PasswordChangeResponseTransaction, {
+  required: true,
+  order: 30,
+  type: PasswordChangeResponse,
+  read: PasswordChangeResponseTransaction.prototype.getMessage,
+  write: PasswordChangeResponseTransaction.prototype.setMessage,
+})

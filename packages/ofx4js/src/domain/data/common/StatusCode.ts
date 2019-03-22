@@ -1,6 +1,4 @@
-
-
-import { OFXException } from "../../../OFXException";
+import { OFXException } from '../../../OFXException'
 
 /**
  * Severity of the status.
@@ -8,14 +6,19 @@ import { OFXException } from "../../../OFXException";
 export enum Severity {
   INFO,
   WARN,
-  ERROR
+  ERROR,
 }
 
 export abstract class StatusCode {
+  getCode(): number {
+    throw new OFXException('abstract')
+  }
 
-  getCode(): number { throw new OFXException("abstract"); }
+  getMessage(): string {
+    throw new OFXException('abstract')
+  }
 
-  getMessage(): string { throw new OFXException("abstract"); }
-
-  getDefaultSeverity(): /*Status.*/Severity { throw new OFXException("abstract"); }
+  getDefaultSeverity(): /*Status.*/ Severity {
+    throw new OFXException('abstract')
+  }
 }

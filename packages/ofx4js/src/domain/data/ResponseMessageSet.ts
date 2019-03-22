@@ -1,22 +1,20 @@
-import { ResponseMessage } from "./ResponseMessage";
-import { MessageSetType } from "./MessageSetType";
-
+import { MessageSetType } from './MessageSetType'
+import { ResponseMessage } from './ResponseMessage'
 
 /**
  * A message set enclosed in a response envelope.
  */
 export abstract class ResponseMessageSet /*implements Comparable<ResponseMessageSet>*/ {
+  private version: string
 
-  private version: string;
-
-  public abstract getType(): MessageSetType
+  abstract getType(): MessageSetType
 
   constructor() {
-    this.version = "1";
+    this.version = '1'
   }
 
-  public cast<T extends this>(): T {
-    return this as T;
+  cast<T extends this>(): T {
+    return this as T
   }
 
   /**
@@ -24,8 +22,8 @@ export abstract class ResponseMessageSet /*implements Comparable<ResponseMessage
    *
    * @return The version of this message set.
    */
-  public getVersion(): string {
-    return this.version;
+  getVersion(): string {
+    return this.version
   }
 
   /**
@@ -33,8 +31,8 @@ export abstract class ResponseMessageSet /*implements Comparable<ResponseMessage
    *
    * @param version The version of this message set.
    */
-  public setVersion(version: string): void {
-    this.version = version;
+  setVersion(version: string): void {
+    this.version = version
   }
 
   /**
@@ -42,15 +40,15 @@ export abstract class ResponseMessageSet /*implements Comparable<ResponseMessage
    *
    * @return The list of response messages.
    */
-  public abstract getResponseMessages(): Array<ResponseMessage>;
-/*
+  abstract getResponseMessages(): ResponseMessage[]
+  /*
   // Inherited.
   public compareTo(o: ResponseMessageSet): number {
     return getType().compareTo(o.getType());
   }
 */
 
-  public static contentCompare(left: ResponseMessageSet, right: ResponseMessageSet): number {
-    return left.getType() - right.getType();
+  static contentCompare(left: ResponseMessageSet, right: ResponseMessageSet): number {
+    return left.getType() - right.getType()
   }
 }

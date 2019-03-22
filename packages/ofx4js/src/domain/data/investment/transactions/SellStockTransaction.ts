@@ -1,20 +1,18 @@
-import { BaseSellInvestmentTransaction } from "./BaseSellInvestmentTransaction";
-import { InvestmentTransactionType } from "./TransactionType";
-import { SellType, SellType_fromOfx } from "./SellType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
+import { BaseSellInvestmentTransaction } from './BaseSellInvestmentTransaction'
+import { SellType, SellType_fromOfx } from './SellType'
+import { InvestmentTransactionType } from './TransactionType'
 
 /**
  * Transaction for selling stock.
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class SellStockTransaction extends BaseSellInvestmentTransaction {
-
-  private sellType: string;
+  private sellType: string
 
   constructor() {
-    super(InvestmentTransactionType.SELL_STOCK);
+    super(InvestmentTransactionType.SELL_STOCK)
   }
 
   /**
@@ -24,8 +22,8 @@ export class SellStockTransaction extends BaseSellInvestmentTransaction {
    *
    * @return the sell type
    */
-  public getSellType(): string {
-    return this.sellType;
+  getSellType(): string {
+    return this.sellType
   }
 
   /**
@@ -35,8 +33,8 @@ export class SellStockTransaction extends BaseSellInvestmentTransaction {
    *
    * @param sellType the sell type
    */
-  public setSellType(sellType: string): void {
-    this.sellType = sellType;
+  setSellType(sellType: string): void {
+    this.sellType = sellType
   }
 
   /**
@@ -44,10 +42,17 @@ export class SellStockTransaction extends BaseSellInvestmentTransaction {
    *
    * @return the type of sale or null if it's not known
    */
-  public getSellTypeEnum(): SellType {
-    return SellType_fromOfx(this.sellType);
+  getSellTypeEnum(): SellType {
+    return SellType_fromOfx(this.sellType)
   }
 }
 
-Aggregate_add( SellStockTransaction, "SELLSTOCK" );
-Element_add(SellStockTransaction, { name: "SELLTYPE", required: true, order: 20, type: String, read: SellStockTransaction.prototype.getSellType, write: SellStockTransaction.prototype.setSellType });
+Aggregate_add(SellStockTransaction, 'SELLSTOCK')
+Element_add(SellStockTransaction, {
+  name: 'SELLTYPE',
+  required: true,
+  order: 20,
+  type: String,
+  read: SellStockTransaction.prototype.getSellType,
+  write: SellStockTransaction.prototype.setSellType,
+})

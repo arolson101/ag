@@ -1,18 +1,16 @@
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
 
 /**
  * Aggreate to indicate whether position information is requested as part of the statement
  * @see "Section 13.9.1.2, OFX Spec"
  */
 export class IncludePosition {
-
-  private sentDownDate: Date;
-  private includePositions: boolean;
+  private sentDownDate: Date
+  private includePositions: boolean
 
   constructor() {
-    this.includePositions = true;
+    this.includePositions = true
   }
 
   /**
@@ -21,8 +19,8 @@ export class IncludePosition {
    *
    * @return the date for the position
    */
-  public getDateSentDown(): Date {
-    return this.sentDownDate;
+  getDateSentDown(): Date {
+    return this.sentDownDate
   }
 
   /**
@@ -31,8 +29,8 @@ export class IncludePosition {
    *
    * @param sentDownDate the date for the position
    */
-  public setDateSentDown(sentDownDate: Date): void {
-    this.sentDownDate = sentDownDate;
+  setDateSentDown(sentDownDate: Date): void {
+    this.sentDownDate = sentDownDate
   }
 
   /**
@@ -40,8 +38,8 @@ export class IncludePosition {
    *
    * @return whether to include positions in the statement download
    */
-  public getIncludePositions(): boolean {
-    return this.includePositions;
+  getIncludePositions(): boolean {
+    return this.includePositions
   }
 
   /**
@@ -49,11 +47,23 @@ export class IncludePosition {
    *
    * @param includePositions whether to include positions in the statement download
    */
-  public setIncludePositions(includePositions: boolean): void {
-    this.includePositions = includePositions;
+  setIncludePositions(includePositions: boolean): void {
+    this.includePositions = includePositions
   }
 }
 
-Aggregate_add( IncludePosition, "INCPOS" );
-Element_add(IncludePosition, { name: "DTASOF", order: 0, type: Date, read: IncludePosition.prototype.getDateSentDown, write: IncludePosition.prototype.setDateSentDown });
-Element_add(IncludePosition, { name: "INCLUDE", order: 10, type: Boolean, read: IncludePosition.prototype.getIncludePositions, write: IncludePosition.prototype.setIncludePositions });
+Aggregate_add(IncludePosition, 'INCPOS')
+Element_add(IncludePosition, {
+  name: 'DTASOF',
+  order: 0,
+  type: Date,
+  read: IncludePosition.prototype.getDateSentDown,
+  write: IncludePosition.prototype.setDateSentDown,
+})
+Element_add(IncludePosition, {
+  name: 'INCLUDE',
+  order: 10,
+  type: Boolean,
+  read: IncludePosition.prototype.getIncludePositions,
+  write: IncludePosition.prototype.setIncludePositions,
+})

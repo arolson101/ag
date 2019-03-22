@@ -1,23 +1,22 @@
-import { BasePosition } from "./BasePosition";
-import { ShortOptionSecurity, ShortOptionSecurity_fromOfx } from "./ShortOptionSecurity";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
+import { BasePosition } from './BasePosition'
+import { ShortOptionSecurity, ShortOptionSecurity_fromOfx } from './ShortOptionSecurity'
 
 /**
  * Represents an options position.
  * @see "Section 13.9.2.6.1, OFX Spec"
  */
 export class OptionsPosition extends BasePosition {
-  private secured: string;
+  private secured: string
 
   /**
    * Gets how the options position is secured (for short positions).
    *
    * @return how the options position is secured
    */
-  public getSecured(): string {
-    return this.secured;
+  getSecured(): string {
+    return this.secured
   }
 
   /**
@@ -25,8 +24,8 @@ export class OptionsPosition extends BasePosition {
    *
    * @param secured how the options position is secured
    */
-  public setSecured(secured: string): void {
-    this.secured = secured;
+  setSecured(secured: string): void {
+    this.secured = secured
   }
 
   /**
@@ -35,9 +34,15 @@ export class OptionsPosition extends BasePosition {
    * @return how the option position is secured or null if it's not a well-known type
    */
   getSecuredEnum(): ShortOptionSecurity {
-    return ShortOptionSecurity_fromOfx(this.getSecured());
+    return ShortOptionSecurity_fromOfx(this.getSecured())
   }
 }
 
-Aggregate_add( OptionsPosition, "POSOPT" );
-Element_add(OptionsPosition, { name: "SECURED", order: 20, type: String, read: OptionsPosition.prototype.getSecured, write: OptionsPosition.prototype.setSecured });
+Aggregate_add(OptionsPosition, 'POSOPT')
+Element_add(OptionsPosition, {
+  name: 'SECURED',
+  order: 20,
+  type: String,
+  read: OptionsPosition.prototype.getSecured,
+  write: OptionsPosition.prototype.setSecured,
+})

@@ -1,17 +1,15 @@
-import { ResponseMessageSet } from "../ResponseMessageSet";
-import { CreditCardStatementResponseTransaction } from "./CreditCardStatementResponseTransaction";
-import { MessageSetType } from "../MessageSetType";
-import { ResponseMessage } from "../ResponseMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { ResponseMessage } from '../ResponseMessage'
+import { ResponseMessageSet } from '../ResponseMessageSet'
+import { CreditCardStatementResponseTransaction } from './CreditCardStatementResponseTransaction'
 
 export class CreditCardResponseMessageSet extends ResponseMessageSet {
+  private statementResponses: CreditCardStatementResponseTransaction[]
 
-  private statementResponses: Array<CreditCardStatementResponseTransaction>;
-
-  public getType(): MessageSetType {
-    return MessageSetType.creditcard;
+  getType(): MessageSetType {
+    return MessageSetType.creditcard
   }
 
   /**
@@ -23,20 +21,18 @@ export class CreditCardResponseMessageSet extends ResponseMessageSet {
    *
    * @return The statement response list.
    */
-  public getStatementResponses(): Array<CreditCardStatementResponseTransaction> {
-    return this.statementResponses;
+  getStatementResponses(): CreditCardStatementResponseTransaction[] {
+    return this.statementResponses
   }
-
 
   /**
    * The statement reponse list.
    *
    * @param statementResponses The statement response list.
    */
-  public setStatementResponses(statementResponses: Array<CreditCardStatementResponseTransaction>): void {
-    this.statementResponses = statementResponses;
+  setStatementResponses(statementResponses: CreditCardStatementResponseTransaction[]): void {
+    this.statementResponses = statementResponses
   }
-
 
   /**
    * The first statement response.
@@ -44,8 +40,10 @@ export class CreditCardResponseMessageSet extends ResponseMessageSet {
    * @return the first bank statement response.
    * @deprecated Use getStatementResponses() because sometimes there are multiple responses
    */
-  public getStatementResponse(): CreditCardStatementResponseTransaction {
-    return this.statementResponses == null || this.statementResponses.length == 0 ? null : this.statementResponses[0];
+  getStatementResponse(): CreditCardStatementResponseTransaction {
+    return this.statementResponses == null || this.statementResponses.length == 0
+      ? null
+      : this.statementResponses[0]
   }
 
   /**
@@ -53,16 +51,21 @@ export class CreditCardResponseMessageSet extends ResponseMessageSet {
    *
    * @param statementResponse The statement response.
    */
-  public setStatementResponse(statementResponse: CreditCardStatementResponseTransaction): void {
-    this.statementResponses = [statementResponse];
+  setStatementResponse(statementResponse: CreditCardStatementResponseTransaction): void {
+    this.statementResponses = [statementResponse]
   }
 
-
   // Inherited.
-  public getResponseMessages(): Array<ResponseMessage> {
-    return this.statementResponses;
+  getResponseMessages(): ResponseMessage[] {
+    return this.statementResponses
   }
 }
 
-Aggregate_add( CreditCardResponseMessageSet, "CREDITCARDMSGSRSV1" );
-ChildAggregate_add(CreditCardResponseMessageSet, { order: 0, type: Array, collectionEntryType: CreditCardStatementResponseTransaction, read: CreditCardResponseMessageSet.prototype.getStatementResponses, write: CreditCardResponseMessageSet.prototype.setStatementResponses });
+Aggregate_add(CreditCardResponseMessageSet, 'CREDITCARDMSGSRSV1')
+ChildAggregate_add(CreditCardResponseMessageSet, {
+  order: 0,
+  type: Array,
+  collectionEntryType: CreditCardStatementResponseTransaction,
+  read: CreditCardResponseMessageSet.prototype.getStatementResponses,
+  write: CreditCardResponseMessageSet.prototype.setStatementResponses,
+})

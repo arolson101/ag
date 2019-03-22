@@ -1,22 +1,21 @@
-import { FinancialInstitutionData } from "./FinancialInstitutionData";
-import { FinancialInstitutionProfile } from "./FinancialInstitutionProfile";
-import { AccountProfile } from "../domain/data/signup/AccountProfile";
-import { BankAccountDetails } from "../domain/data/banking/BankAccountDetails";
-import { BankAccount } from "./BankAccount";
-import { CreditCardAccountDetails } from "../domain/data/creditcard/CreditCardAccountDetails";
-import { CreditCardAccount } from "./CreditCardAccount";
-import { InvestmentAccountDetails } from "../domain/data/investment/accounts/InvestmentAccountDetails";
-import { InvestmentAccount } from "./InvestmentAccount";
-
+// tslint:disable: max-line-length
+import { BankAccountDetails } from '../domain/data/banking/BankAccountDetails'
+import { CreditCardAccountDetails } from '../domain/data/creditcard/CreditCardAccountDetails'
+import { InvestmentAccountDetails } from '../domain/data/investment/accounts/InvestmentAccountDetails'
+import { AccountProfile } from '../domain/data/signup/AccountProfile'
+import { BankAccount } from './BankAccount'
+import { CreditCardAccount } from './CreditCardAccount'
+import { FinancialInstitutionData } from './FinancialInstitutionData'
+import { FinancialInstitutionProfile } from './FinancialInstitutionProfile'
+import { InvestmentAccount } from './InvestmentAccount'
 
 export interface FinancialInstitution {
-
   /**
    * The financial institution data defining this FI.
    *
    * @return The financial institution data.
    */
-  getData(): FinancialInstitutionData;
+  getData(): FinancialInstitutionData
 
   /**
    * Read the specified financial institution profile. Implies a network call.
@@ -24,7 +23,7 @@ export interface FinancialInstitution {
    * @return The profile.
    * @throws OFXException if something goes awry.
    */
-  readProfile() /*throws OFXException*/ : Promise<FinancialInstitutionProfile>;
+  readProfile(): /*throws OFXException*/ Promise<FinancialInstitutionProfile>
 
   /**
    * Read the account profiles of the specified user.
@@ -33,7 +32,10 @@ export interface FinancialInstitution {
    * @param password The password.
    * @return The profiles.
    */
-  readAccountProfiles(username: string, password: string) /*throws OFXException*/: Promise<Array<AccountProfile>>;
+  readAccountProfiles(
+    username: string,
+    password: string
+  ): /*throws OFXException*/ Promise<AccountProfile[]>
 
   /**
    * Load a bank account.
@@ -43,7 +45,7 @@ export interface FinancialInstitution {
    * @param password The password.
    * @return The bank account.
    */
-  loadBankAccount(details: BankAccountDetails, username: string, password: string): BankAccount;
+  loadBankAccount(details: BankAccountDetails, username: string, password: string): BankAccount
 
   /**
    * Load a credit card account.
@@ -53,8 +55,11 @@ export interface FinancialInstitution {
    * @param password The password.
    * @return The credit card account.
    */
-  loadCreditCardAccount(details: CreditCardAccountDetails, username: string, password: string): CreditCardAccount;
-
+  loadCreditCardAccount(
+    details: CreditCardAccountDetails,
+    username: string,
+    password: string
+  ): CreditCardAccount
 
   /**
    * Load an investment account.
@@ -64,5 +69,9 @@ export interface FinancialInstitution {
    * @param password The password.
    * @return The investment account.
    */
-  loadInvestmentAccount(details: InvestmentAccountDetails, username: string, password: string): InvestmentAccount;
+  loadInvestmentAccount(
+    details: InvestmentAccountDetails,
+    username: string,
+    password: string
+  ): InvestmentAccount
 }

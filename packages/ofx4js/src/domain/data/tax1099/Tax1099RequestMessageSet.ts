@@ -1,16 +1,15 @@
-import { RequestMessageSet } from "../RequestMessageSet";
-import { Tax1099RequestTransaction } from "./Tax1099RequestTransaction";
-import { MessageSetType } from "../MessageSetType";
-import { RequestMessage } from "../RequestMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { MessageSetType } from '../MessageSetType'
+import { RequestMessage } from '../RequestMessage'
+import { RequestMessageSet } from '../RequestMessageSet'
+import { Tax1099RequestTransaction } from './Tax1099RequestTransaction'
 
 export class Tax1099RequestMessageSet extends RequestMessageSet {
+  private taxRequestTransaction: Tax1099RequestTransaction
 
-  private taxRequestTransaction: Tax1099RequestTransaction;
-
-  public getType(): MessageSetType {
-    return MessageSetType.tax1099;
+  getType(): MessageSetType {
+    return MessageSetType.tax1099
   }
 
   /**
@@ -18,8 +17,8 @@ export class Tax1099RequestMessageSet extends RequestMessageSet {
    *
    * @return The statement request.
    */
-  public getTaxRequestTransaction(): Tax1099RequestTransaction {
-    return this.taxRequestTransaction;
+  getTaxRequestTransaction(): Tax1099RequestTransaction {
+    return this.taxRequestTransaction
   }
 
   /**
@@ -27,19 +26,24 @@ export class Tax1099RequestMessageSet extends RequestMessageSet {
    *
    * @param taxRequestTransaction The statement request.
    */
-  public setTaxRequestTransaction(taxRequestTransaction: Tax1099RequestTransaction) {
-    this.taxRequestTransaction = taxRequestTransaction;
+  setTaxRequestTransaction(taxRequestTransaction: Tax1099RequestTransaction) {
+    this.taxRequestTransaction = taxRequestTransaction
   }
 
   // Inherited.
-  public getRequestMessages(): Array<RequestMessage> {
-    var requestMessages: Array<RequestMessage> = new Array<RequestMessage>();
+  getRequestMessages(): RequestMessage[] {
+    const requestMessages: RequestMessage[] = new Array<RequestMessage>()
     if (this.getTaxRequestTransaction() != null) {
-      requestMessages.push(this.getTaxRequestTransaction());
+      requestMessages.push(this.getTaxRequestTransaction())
     }
-    return requestMessages;
+    return requestMessages
   }
 }
 
-Aggregate_add(Tax1099RequestMessageSet, "TAX1099MSGSRQV1" );
-ChildAggregate_add(Tax1099RequestMessageSet, { order: 0, type: Tax1099RequestTransaction, read: Tax1099RequestMessageSet.prototype.getTaxRequestTransaction, write: Tax1099RequestMessageSet.prototype.setTaxRequestTransaction });
+Aggregate_add(Tax1099RequestMessageSet, 'TAX1099MSGSRQV1')
+ChildAggregate_add(Tax1099RequestMessageSet, {
+  order: 0,
+  type: Tax1099RequestTransaction,
+  read: Tax1099RequestMessageSet.prototype.getTaxRequestTransaction,
+  write: Tax1099RequestMessageSet.prototype.setTaxRequestTransaction,
+})

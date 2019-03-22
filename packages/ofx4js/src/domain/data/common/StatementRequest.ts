@@ -1,20 +1,18 @@
-import { RequestMessage } from "../RequestMessage";
-import { StatementRange } from "./StatementRange";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { RequestMessage } from '../RequestMessage'
+import { StatementRange } from './StatementRange'
 
 export class StatementRequest extends RequestMessage {
-
-  private statementRange: StatementRange;
+  private statementRange: StatementRange
 
   /**
    * The statement range.
    *
    * @return The statement range.
    */
-  public getStatementRange(): StatementRange {
-    return this.statementRange;
+  getStatementRange(): StatementRange {
+    return this.statementRange
   }
 
   /**
@@ -22,10 +20,17 @@ export class StatementRequest extends RequestMessage {
    *
    * @param statementRange The statement range.
    */
-  public setStatementRange(statementRange: StatementRange): void {
-    this.statementRange = statementRange;
+  setStatementRange(statementRange: StatementRange): void {
+    this.statementRange = statementRange
   }
 }
 
-Aggregate_add( StatementRequest, "STMTRQ" );
-ChildAggregate_add(StatementRequest, { name: "INCTRAN", required: false, order: 10, type: StatementRange, read: StatementRequest.prototype.getStatementRange, write: StatementRequest.prototype.setStatementRange });
+Aggregate_add(StatementRequest, 'STMTRQ')
+ChildAggregate_add(StatementRequest, {
+  name: 'INCTRAN',
+  required: false,
+  order: 10,
+  type: StatementRange,
+  read: StatementRequest.prototype.getStatementRange,
+  write: StatementRequest.prototype.setStatementRange,
+})

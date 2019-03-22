@@ -1,7 +1,6 @@
-import { RequestMessage } from "../RequestMessage";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { RequestMessage } from '../RequestMessage'
 
 /**
  * Request to change a user password.
@@ -9,17 +8,16 @@ import { Element_add } from "../../../meta/Element_add";
  * @see "Section 2.5.2.1, OFX Spec."
  */
 export class PasswordChangeRequest extends RequestMessage {
-
-  private userId: string;
-  private newPassword: string;
+  private userId: string
+  private newPassword: string
 
   /**
    * The id of the user changing password.
    *
    * @return The id of the user changing password.
    */
-  public getUserId(): string {
-    return this.userId;
+  getUserId(): string {
+    return this.userId
   }
 
   /**
@@ -27,8 +25,8 @@ export class PasswordChangeRequest extends RequestMessage {
    *
    * @param userId The id of the user changing password.
    */
-  public setUserId(userId: string): void {
-    this.userId = userId;
+  setUserId(userId: string): void {
+    this.userId = userId
   }
 
   /**
@@ -36,8 +34,8 @@ export class PasswordChangeRequest extends RequestMessage {
    *
    * @return The new password.
    */
-  public getNewPassword(): string {
-    return this.newPassword;
+  getNewPassword(): string {
+    return this.newPassword
   }
 
   /**
@@ -45,11 +43,25 @@ export class PasswordChangeRequest extends RequestMessage {
    *
    * @param newPassword The new password.
    */
-  public setNewPassword(newPassword: string): void {
-    this.newPassword = newPassword;
+  setNewPassword(newPassword: string): void {
+    this.newPassword = newPassword
   }
 }
 
-Aggregate_add( PasswordChangeRequest, "PINCHRQ" );
-Element_add(PasswordChangeRequest, { name: "USERID", required: true, order: 0, type: String, read: PasswordChangeRequest.prototype.getUserId, write: PasswordChangeRequest.prototype.setUserId });
-Element_add(PasswordChangeRequest, { name: "NEWUSERPASS", required: true, order: 10, type: String, read: PasswordChangeRequest.prototype.getNewPassword, write: PasswordChangeRequest.prototype.setNewPassword });
+Aggregate_add(PasswordChangeRequest, 'PINCHRQ')
+Element_add(PasswordChangeRequest, {
+  name: 'USERID',
+  required: true,
+  order: 0,
+  type: String,
+  read: PasswordChangeRequest.prototype.getUserId,
+  write: PasswordChangeRequest.prototype.setUserId,
+})
+Element_add(PasswordChangeRequest, {
+  name: 'NEWUSERPASS',
+  required: true,
+  order: 10,
+  type: String,
+  read: PasswordChangeRequest.prototype.getNewPassword,
+  write: PasswordChangeRequest.prototype.setNewPassword,
+})

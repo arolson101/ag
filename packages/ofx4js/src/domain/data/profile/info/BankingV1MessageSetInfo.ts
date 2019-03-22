@@ -1,31 +1,28 @@
-import { VersionSpecificMessageSetInfo } from "../VersionSpecificMessageSetInfo";
-import { AccountType } from "../../banking/AccountType";
-import { TransferProfile } from "./common/TransferProfile";
-import { StopCheckProfile } from "./banking/StopCheckProfile";
-import { EmailProfile } from "./banking/EmailProfile";
-import { ImageProfile } from "./common/ImageProfile";
-import { MessageSetType } from "../../MessageSetType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { AccountType } from '../../banking/AccountType'
+import { MessageSetType } from '../../MessageSetType'
+import { VersionSpecificMessageSetInfo } from '../VersionSpecificMessageSetInfo'
+import { EmailProfile } from './banking/EmailProfile'
+import { StopCheckProfile } from './banking/StopCheckProfile'
+import { ImageProfile } from './common/ImageProfile'
+import { TransferProfile } from './common/TransferProfile'
 
 /**
  * Banking Message Set Profile
  * @see "Section 11.13.2.1 OFX Spec"
  */
 export class BankingV1MessageSetInfo extends VersionSpecificMessageSetInfo {
+  private invalidAccountTypes: AccountType[]
+  private closingAvail: boolean
+  private transferProfile: TransferProfile
+  private stopCheckProfile: StopCheckProfile
+  private emailProfile: EmailProfile
+  private imageProfile: ImageProfile
 
-  private invalidAccountTypes: Array<AccountType>;
-  private closingAvail: boolean;
-  private transferProfile: TransferProfile;
-  private stopCheckProfile: StopCheckProfile;
-  private emailProfile: EmailProfile;
-  private imageProfile: ImageProfile;
-
-
-  public getMessageSetType(): MessageSetType {
-    return MessageSetType.banking;
+  getMessageSetType(): MessageSetType {
+    return MessageSetType.banking
   }
 
   /**
@@ -33,8 +30,8 @@ export class BankingV1MessageSetInfo extends VersionSpecificMessageSetInfo {
    *
    * @return The invalidAccountTypes list.
    */
-  public getInvalidAccountTypes(): Array<AccountType> {
-    return this.invalidAccountTypes;
+  getInvalidAccountTypes(): AccountType[] {
+    return this.invalidAccountTypes
   }
 
   /**
@@ -42,8 +39,8 @@ export class BankingV1MessageSetInfo extends VersionSpecificMessageSetInfo {
    *
    * @param invalidAccountTypes The invalidAccountTypes list.
    */
-  public setInvalidAccountTypes(invalidAccountTypes: Array<AccountType>): void {
-    this.invalidAccountTypes = invalidAccountTypes;
+  setInvalidAccountTypes(invalidAccountTypes: AccountType[]): void {
+    this.invalidAccountTypes = invalidAccountTypes
   }
 
   /**
@@ -51,8 +48,8 @@ export class BankingV1MessageSetInfo extends VersionSpecificMessageSetInfo {
    *
    * @return whether closing statement information is available
    */
-  public getClosingAvail(): boolean {
-    return this.closingAvail;
+  getClosingAvail(): boolean {
+    return this.closingAvail
   }
 
   /**
@@ -60,47 +57,85 @@ export class BankingV1MessageSetInfo extends VersionSpecificMessageSetInfo {
    *
    * @param closingAvail whether closing statement information is available
    */
-  public setClosingAvail(closingAvail: boolean): void {
-    this.closingAvail = closingAvail;
+  setClosingAvail(closingAvail: boolean): void {
+    this.closingAvail = closingAvail
   }
 
-  public getTransferProfile(): TransferProfile {
-    return this.transferProfile;
+  getTransferProfile(): TransferProfile {
+    return this.transferProfile
   }
 
-  public setTransferProfile(transferProfile: TransferProfile): void {
-    this.transferProfile = transferProfile;
+  setTransferProfile(transferProfile: TransferProfile): void {
+    this.transferProfile = transferProfile
   }
 
-  public getStopCheckProfile(): StopCheckProfile {
-    return this.stopCheckProfile;
+  getStopCheckProfile(): StopCheckProfile {
+    return this.stopCheckProfile
   }
 
-  public setStopCheckProfile(stopCheckProfile: StopCheckProfile): void {
-    this.stopCheckProfile = stopCheckProfile;
+  setStopCheckProfile(stopCheckProfile: StopCheckProfile): void {
+    this.stopCheckProfile = stopCheckProfile
   }
 
-  public getEmailProfile(): EmailProfile {
-    return this.emailProfile;
+  getEmailProfile(): EmailProfile {
+    return this.emailProfile
   }
 
-  public setEmailProfile(emailProfile: EmailProfile): void {
-    this.emailProfile = emailProfile;
+  setEmailProfile(emailProfile: EmailProfile): void {
+    this.emailProfile = emailProfile
   }
 
-  public getImageProfile(): ImageProfile {
-    return this.imageProfile;
+  getImageProfile(): ImageProfile {
+    return this.imageProfile
   }
 
-  public setImageProfile(imageProfile: ImageProfile): void {
-    this.imageProfile = imageProfile;
+  setImageProfile(imageProfile: ImageProfile): void {
+    this.imageProfile = imageProfile
   }
 }
 
-Aggregate_add( BankingV1MessageSetInfo, "BANKMSGSETV1" );
-ChildAggregate_add(BankingV1MessageSetInfo, { order: 10, type: Array, collectionEntryType: AccountType, read: BankingV1MessageSetInfo.prototype.getInvalidAccountTypes, write: BankingV1MessageSetInfo.prototype.setInvalidAccountTypes });
-Element_add(BankingV1MessageSetInfo, { name: "CLOSINGAVAIL", required: true, order: 20, type: Boolean, read: BankingV1MessageSetInfo.prototype.getClosingAvail, write: BankingV1MessageSetInfo.prototype.setClosingAvail });
-ChildAggregate_add(BankingV1MessageSetInfo, { name: "XFERPROF", order: 30, type: TransferProfile, read: BankingV1MessageSetInfo.prototype.getTransferProfile, write: BankingV1MessageSetInfo.prototype.setTransferProfile });
-ChildAggregate_add(BankingV1MessageSetInfo, { name: "STPCKPROF", order: 40, type: StopCheckProfile, read: BankingV1MessageSetInfo.prototype.getStopCheckProfile, write: BankingV1MessageSetInfo.prototype.setStopCheckProfile });
-ChildAggregate_add(BankingV1MessageSetInfo, { name: "EMAILPROF", required: true, order: 50, type: EmailProfile, read: BankingV1MessageSetInfo.prototype.getEmailProfile, write: BankingV1MessageSetInfo.prototype.setEmailProfile });
-ChildAggregate_add(BankingV1MessageSetInfo, { name: "IMAGEPROF", order: 60, type: ImageProfile, read: BankingV1MessageSetInfo.prototype.getImageProfile, write: BankingV1MessageSetInfo.prototype.setImageProfile });
+Aggregate_add(BankingV1MessageSetInfo, 'BANKMSGSETV1')
+ChildAggregate_add(BankingV1MessageSetInfo, {
+  order: 10,
+  type: Array,
+  collectionEntryType: AccountType,
+  read: BankingV1MessageSetInfo.prototype.getInvalidAccountTypes,
+  write: BankingV1MessageSetInfo.prototype.setInvalidAccountTypes,
+})
+Element_add(BankingV1MessageSetInfo, {
+  name: 'CLOSINGAVAIL',
+  required: true,
+  order: 20,
+  type: Boolean,
+  read: BankingV1MessageSetInfo.prototype.getClosingAvail,
+  write: BankingV1MessageSetInfo.prototype.setClosingAvail,
+})
+ChildAggregate_add(BankingV1MessageSetInfo, {
+  name: 'XFERPROF',
+  order: 30,
+  type: TransferProfile,
+  read: BankingV1MessageSetInfo.prototype.getTransferProfile,
+  write: BankingV1MessageSetInfo.prototype.setTransferProfile,
+})
+ChildAggregate_add(BankingV1MessageSetInfo, {
+  name: 'STPCKPROF',
+  order: 40,
+  type: StopCheckProfile,
+  read: BankingV1MessageSetInfo.prototype.getStopCheckProfile,
+  write: BankingV1MessageSetInfo.prototype.setStopCheckProfile,
+})
+ChildAggregate_add(BankingV1MessageSetInfo, {
+  name: 'EMAILPROF',
+  required: true,
+  order: 50,
+  type: EmailProfile,
+  read: BankingV1MessageSetInfo.prototype.getEmailProfile,
+  write: BankingV1MessageSetInfo.prototype.setEmailProfile,
+})
+ChildAggregate_add(BankingV1MessageSetInfo, {
+  name: 'IMAGEPROF',
+  order: 60,
+  type: ImageProfile,
+  read: BankingV1MessageSetInfo.prototype.getImageProfile,
+  write: BankingV1MessageSetInfo.prototype.setImageProfile,
+})

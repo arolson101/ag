@@ -1,10 +1,8 @@
-
 /**
  * Type of investment transaction.
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export enum InvestmentTransactionType {
-
   BUY_DEBT,
   BUY_MUTUAL_FUND,
   BUY_OPTION,
@@ -24,5 +22,5 @@ export enum InvestmentTransactionType {
   SELL_OTHER,
   SELL_STOCK,
   SPLIT,
-  TRANSFER
+  TRANSFER,
 }

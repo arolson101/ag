@@ -1,27 +1,26 @@
-import { BaseInvestmentTransaction } from "./BaseInvestmentTransaction";
-import { InvestmentBankTransaction } from "./InvestmentBankTransaction";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-import { ChildAggregate_add } from "../../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../../meta/Element_add'
+import { BaseInvestmentTransaction } from './BaseInvestmentTransaction'
+import { InvestmentBankTransaction } from './InvestmentBankTransaction'
 
 /**
  * The transaction list aggregate.
  * @see "Section 13.9.1.2, OFX Spec"
  */
 export class InvestmentTransactionList {
-  private start: Date;
-  private end: Date;
-  private transactions: Array<BaseInvestmentTransaction>;
-  private bankTransactions: Array<InvestmentBankTransaction>;
+  private start: Date
+  private end: Date
+  private transactions: BaseInvestmentTransaction[]
+  private bankTransactions: InvestmentBankTransaction[]
 
   /**
    * Gets the start date. This is a required field according to the OFX spec.
    *
    * @return The start date
    */
-  public getStart(): Date {
-    return this.start;
+  getStart(): Date {
+    return this.start
   }
 
   /**
@@ -29,8 +28,8 @@ export class InvestmentTransactionList {
    *
    * @param start The start date
    */
-  public setStart(start: Date): void {
-    this.start = start;
+  setStart(start: Date): void {
+    this.start = start
   }
 
   /**
@@ -38,8 +37,8 @@ export class InvestmentTransactionList {
    *
    * @return he end date
    */
-  public getEnd(): Date {
-    return this.end;
+  getEnd(): Date {
+    return this.end
   }
 
   /**
@@ -47,8 +46,8 @@ export class InvestmentTransactionList {
    *
    * @param end the end date
    */
-  public setEnd(end: Date): void {
-    this.end = end;
+  setEnd(end: Date): void {
+    this.end = end
   }
 
   /**
@@ -57,8 +56,8 @@ export class InvestmentTransactionList {
    *
    * @return the investment transaction list
    */
-  public getInvestmentTransactions(): Array<BaseInvestmentTransaction> {
-    return this.transactions;
+  getInvestmentTransactions(): BaseInvestmentTransaction[] {
+    return this.transactions
   }
 
   /**
@@ -67,8 +66,8 @@ export class InvestmentTransactionList {
    *
    * @param transactions the investment transaction list
    */
-  public setInvestmentTransactions(transactions: Array<BaseInvestmentTransaction>): void {
-    this.transactions = transactions;
+  setInvestmentTransactions(transactions: BaseInvestmentTransaction[]): void {
+    this.transactions = transactions
   }
 
   /**
@@ -76,8 +75,8 @@ export class InvestmentTransactionList {
    *
    * @return the bank transaction list
    */
-  public getBankTransactions(): Array<InvestmentBankTransaction> {
-    return this.bankTransactions;
+  getBankTransactions(): InvestmentBankTransaction[] {
+    return this.bankTransactions
   }
 
   /**
@@ -85,13 +84,39 @@ export class InvestmentTransactionList {
    *
    * @param bankTransactions the bank transaction list
    */
-  public setBankTransactions(bankTransactions: Array<InvestmentBankTransaction>): void {
-    this.bankTransactions = bankTransactions;
+  setBankTransactions(bankTransactions: InvestmentBankTransaction[]): void {
+    this.bankTransactions = bankTransactions
   }
 }
 
-Aggregate_add( InvestmentTransactionList, "INVTRANLIST" );
-Element_add(InvestmentTransactionList, { name: "DTSTART", required: true, order: 0, type: Date, read: InvestmentTransactionList.prototype.getStart, write: InvestmentTransactionList.prototype.setStart });
-Element_add(InvestmentTransactionList, { name: "DTEND", required: true, order: 10, type: Date, read: InvestmentTransactionList.prototype.getEnd, write: InvestmentTransactionList.prototype.setEnd });
-ChildAggregate_add(InvestmentTransactionList, { order: 20, type: Array, collectionEntryType: BaseInvestmentTransaction, read: InvestmentTransactionList.prototype.getInvestmentTransactions, write: InvestmentTransactionList.prototype.setInvestmentTransactions });
-ChildAggregate_add(InvestmentTransactionList, { order: 30, type: Array, collectionEntryType: InvestmentBankTransaction, read: InvestmentTransactionList.prototype.getBankTransactions, write: InvestmentTransactionList.prototype.setBankTransactions });
+Aggregate_add(InvestmentTransactionList, 'INVTRANLIST')
+Element_add(InvestmentTransactionList, {
+  name: 'DTSTART',
+  required: true,
+  order: 0,
+  type: Date,
+  read: InvestmentTransactionList.prototype.getStart,
+  write: InvestmentTransactionList.prototype.setStart,
+})
+Element_add(InvestmentTransactionList, {
+  name: 'DTEND',
+  required: true,
+  order: 10,
+  type: Date,
+  read: InvestmentTransactionList.prototype.getEnd,
+  write: InvestmentTransactionList.prototype.setEnd,
+})
+ChildAggregate_add(InvestmentTransactionList, {
+  order: 20,
+  type: Array,
+  collectionEntryType: BaseInvestmentTransaction,
+  read: InvestmentTransactionList.prototype.getInvestmentTransactions,
+  write: InvestmentTransactionList.prototype.setInvestmentTransactions,
+})
+ChildAggregate_add(InvestmentTransactionList, {
+  order: 30,
+  type: Array,
+  collectionEntryType: InvestmentBankTransaction,
+  read: InvestmentTransactionList.prototype.getBankTransactions,
+  write: InvestmentTransactionList.prototype.setBankTransactions,
+})

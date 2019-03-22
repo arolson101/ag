@@ -1,8 +1,7 @@
-import { SignonProfile } from "../SignonProfile";
-import { CharacterType } from "./CharacterType";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { SignonProfile } from '../SignonProfile'
+import { CharacterType } from './CharacterType'
 
 /**
  * Sign-on information
@@ -10,29 +9,28 @@ import { Element_add } from "../../../meta/Element_add";
  * @see "Section 7.2.2, OFX Spec"
  */
 export class SignonInfo implements SignonProfile {
-
-  private realm: string;
-  private minPasswordCharacters: number;
-  private maxPasswordCharacters: number;
-  private passwordCharacterType: CharacterType;
-  private passwordCaseSensitive: boolean;
-  private passwordSpecialCharsAllowed: boolean;
-  private passwordSpacesAllowed: boolean;
-  private changePasswordSupported: boolean;
-  private changePasswordFirstRequired: boolean;
-  private additionalCredientialsLabel1: string;
-  private additionalCredientialsLabel2: string;
-  private clientUIDRequired: boolean;
-  private authTokenRequiredForFirstSignon: boolean;
-  private authTokenLabel: string;
-  private authTokenInfoURL: string;
-  private mfaSupported: boolean;
-  private mfaChallengeRequiredForFirstSignon: boolean;
+  private realm: string
+  private minPasswordCharacters: number
+  private maxPasswordCharacters: number
+  private passwordCharacterType: CharacterType
+  private passwordCaseSensitive: boolean
+  private passwordSpecialCharsAllowed: boolean
+  private passwordSpacesAllowed: boolean
+  private changePasswordSupported: boolean
+  private changePasswordFirstRequired: boolean
+  private additionalCredientialsLabel1: string
+  private additionalCredientialsLabel2: string
+  private clientUIDRequired: boolean
+  private authTokenRequiredForFirstSignon: boolean
+  private authTokenLabel: string
+  private authTokenInfoURL: string
+  private mfaSupported: boolean
+  private mfaChallengeRequiredForFirstSignon: boolean
 
   constructor() {
-    this.passwordCaseSensitive = true;
-    this.passwordSpecialCharsAllowed = true;
-    this.passwordSpacesAllowed = true;
+    this.passwordCaseSensitive = true
+    this.passwordSpecialCharsAllowed = true
+    this.passwordSpacesAllowed = true
   }
 
   /**
@@ -40,8 +38,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return The name of the sign-on realm.
    */
-  public getRealm(): string {
-    return this.realm;
+  getRealm(): string {
+    return this.realm
   }
 
   /**
@@ -49,8 +47,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param realm The name of the sign-on realm.
    */
-  public setRealm(realm: string): void {
-    this.realm = realm;
+  setRealm(realm: string): void {
+    this.realm = realm
   }
 
   /**
@@ -58,8 +56,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return The minimum number of password characters.
    */
-  public getMinPasswordCharacters(): number {
-    return this.minPasswordCharacters;
+  getMinPasswordCharacters(): number {
+    return this.minPasswordCharacters
   }
 
   /**
@@ -67,8 +65,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param minPasswordCharacters The minimum number of password characters.
    */
-  public setMinPasswordCharacters(minPasswordCharacters: number): void {
-    this.minPasswordCharacters = minPasswordCharacters;
+  setMinPasswordCharacters(minPasswordCharacters: number): void {
+    this.minPasswordCharacters = minPasswordCharacters
   }
 
   /**
@@ -76,8 +74,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return The maximum number of password characters.
    */
-  public getMaxPasswordCharacters(): number {
-    return this.maxPasswordCharacters;
+  getMaxPasswordCharacters(): number {
+    return this.maxPasswordCharacters
   }
 
   /**
@@ -85,8 +83,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param maxPasswordCharacters The maximum number of password characters.
    */
-  public setMaxPasswordCharacters(maxPasswordCharacters: number): void {
-    this.maxPasswordCharacters = maxPasswordCharacters;
+  setMaxPasswordCharacters(maxPasswordCharacters: number): void {
+    this.maxPasswordCharacters = maxPasswordCharacters
   }
 
   /**
@@ -94,8 +92,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return The type of password characters supported.
    */
-  public getPasswordCharacterType(): CharacterType {
-    return this.passwordCharacterType;
+  getPasswordCharacterType(): CharacterType {
+    return this.passwordCharacterType
   }
 
   /**
@@ -103,8 +101,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param passwordCharacterType The type of password characters supported.
    */
-  public setPasswordCharacterType(passwordCharacterType: CharacterType): void {
-    this.passwordCharacterType = passwordCharacterType;
+  setPasswordCharacterType(passwordCharacterType: CharacterType): void {
+    this.passwordCharacterType = passwordCharacterType
   }
 
   /**
@@ -112,8 +110,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether the password is case-sensitive.
    */
-  public getPasswordCaseSensitive(): boolean {
-    return this.passwordCaseSensitive;
+  getPasswordCaseSensitive(): boolean {
+    return this.passwordCaseSensitive
   }
 
   /**
@@ -121,8 +119,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param passwordCaseSensitive Whether the password is case-sensitive.
    */
-  public setPasswordCaseSensitive(passwordCaseSensitive: boolean): void {
-    this.passwordCaseSensitive = passwordCaseSensitive;
+  setPasswordCaseSensitive(passwordCaseSensitive: boolean): void {
+    this.passwordCaseSensitive = passwordCaseSensitive
   }
 
   /**
@@ -130,8 +128,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether special characters are allowed in the password.
    */
-  public getPasswordSpecialCharsAllowed(): boolean {
-    return this.passwordSpecialCharsAllowed;
+  getPasswordSpecialCharsAllowed(): boolean {
+    return this.passwordSpecialCharsAllowed
   }
 
   /**
@@ -139,8 +137,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param passwordSpecialCharsAllowed Whether special characters are allowed in the password.
    */
-  public setPasswordSpecialCharsAllowed(passwordSpecialCharsAllowed: boolean): void {
-    this.passwordSpecialCharsAllowed = passwordSpecialCharsAllowed;
+  setPasswordSpecialCharsAllowed(passwordSpecialCharsAllowed: boolean): void {
+    this.passwordSpecialCharsAllowed = passwordSpecialCharsAllowed
   }
 
   /**
@@ -148,8 +146,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether spaces are allowed in the password.
    */
-  public getPasswordSpacesAllowed(): boolean {
-    return this.passwordSpacesAllowed;
+  getPasswordSpacesAllowed(): boolean {
+    return this.passwordSpacesAllowed
   }
 
   /**
@@ -157,8 +155,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param passwordSpacesAllowed Whether spaces are allowed in the password.
    */
-  public setPasswordSpacesAllowed(passwordSpacesAllowed: boolean): void {
-    this.passwordSpacesAllowed = passwordSpacesAllowed;
+  setPasswordSpacesAllowed(passwordSpacesAllowed: boolean): void {
+    this.passwordSpacesAllowed = passwordSpacesAllowed
   }
 
   /**
@@ -166,8 +164,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether the server can process a password change request for this realm.
    */
-  public getChangePasswordSupported(): boolean {
-    return this.changePasswordSupported;
+  getChangePasswordSupported(): boolean {
+    return this.changePasswordSupported
   }
 
   /**
@@ -175,8 +173,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param changePasswordSupported Whether the server can process a password change request for this realm.
    */
-  public setChangePasswordSupported(changePasswordSupported: boolean): void {
-    this.changePasswordSupported = changePasswordSupported;
+  setChangePasswordSupported(changePasswordSupported: boolean): void {
+    this.changePasswordSupported = changePasswordSupported
   }
 
   /**
@@ -184,8 +182,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether the server requires the user to change their password as part of their first signon.
    */
-  public getChangePasswordFirstRequired(): boolean {
-    return this.changePasswordFirstRequired;
+  getChangePasswordFirstRequired(): boolean {
+    return this.changePasswordFirstRequired
   }
 
   /**
@@ -193,8 +191,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param changePasswordFirstRequired Whether the server requires the user to change their password as part of their first signon.
    */
-  public setChangePasswordFirstRequired(changePasswordFirstRequired: boolean): void {
-    this.changePasswordFirstRequired = changePasswordFirstRequired;
+  setChangePasswordFirstRequired(changePasswordFirstRequired: boolean): void {
+    this.changePasswordFirstRequired = changePasswordFirstRequired
   }
 
   /**
@@ -202,8 +200,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Label for a set of additional credentials that the user must supply.
    */
-  public getAdditionalCredientialsLabel1(): string {
-    return this.additionalCredientialsLabel1;
+  getAdditionalCredientialsLabel1(): string {
+    return this.additionalCredientialsLabel1
   }
 
   /**
@@ -211,8 +209,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param additionalCredientialsLabel1 Label for a set of additional credentials that the user must supply.
    */
-  public setAdditionalCredientialsLabel1(additionalCredientialsLabel1: string): void {
-    this.additionalCredientialsLabel1 = additionalCredientialsLabel1;
+  setAdditionalCredientialsLabel1(additionalCredientialsLabel1: string): void {
+    this.additionalCredientialsLabel1 = additionalCredientialsLabel1
   }
 
   /**
@@ -220,8 +218,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Label for a set of additional credentials that the user must supply.
    */
-  public getAdditionalCredientialsLabel2(): string {
-    return this.additionalCredientialsLabel2;
+  getAdditionalCredientialsLabel2(): string {
+    return this.additionalCredientialsLabel2
   }
 
   /**
@@ -229,8 +227,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param additionalCredientialsLabel2 Label for a set of additional credentials that the user must supply.
    */
-  public setAdditionalCredientialsLabel2(additionalCredientialsLabel2: string): void {
-    this.additionalCredientialsLabel2 = additionalCredientialsLabel2;
+  setAdditionalCredientialsLabel2(additionalCredientialsLabel2: string): void {
+    this.additionalCredientialsLabel2 = additionalCredientialsLabel2
   }
 
   /**
@@ -238,8 +236,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether a client UID is required for teh sign-on.
    */
-  public getClientUIDRequired(): boolean {
-    return this.clientUIDRequired;
+  getClientUIDRequired(): boolean {
+    return this.clientUIDRequired
   }
 
   /**
@@ -247,8 +245,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param clientUIDRequired Whether a client UID is required for teh sign-on.
    */
-  public setClientUIDRequired(clientUIDRequired: boolean): void {
-    this.clientUIDRequired = clientUIDRequired;
+  setClientUIDRequired(clientUIDRequired: boolean): void {
+    this.clientUIDRequired = clientUIDRequired
   }
 
   /**
@@ -256,8 +254,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether an auth token is required for the sign-on.
    */
-  public getAuthTokenRequiredForFirstSignon(): boolean {
-    return this.authTokenRequiredForFirstSignon;
+  getAuthTokenRequiredForFirstSignon(): boolean {
+    return this.authTokenRequiredForFirstSignon
   }
 
   /**
@@ -266,8 +264,8 @@ export class SignonInfo implements SignonProfile {
    * @param authTokenRequiredForFirstSignon
    *         Whether an auth token is required for the sign-on.
    */
-  public setAuthTokenRequiredForFirstSignon(authTokenRequiredForFirstSignon: boolean): void {
-    this.authTokenRequiredForFirstSignon = authTokenRequiredForFirstSignon;
+  setAuthTokenRequiredForFirstSignon(authTokenRequiredForFirstSignon: boolean): void {
+    this.authTokenRequiredForFirstSignon = authTokenRequiredForFirstSignon
   }
 
   /**
@@ -275,8 +273,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return The label of the auth token.
    */
-  public getAuthTokenLabel(): string {
-    return this.authTokenLabel;
+  getAuthTokenLabel(): string {
+    return this.authTokenLabel
   }
 
   /**
@@ -284,8 +282,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param authTokenLabel The label of the auth token.
    */
-  public setAuthTokenLabel(authTokenLabel: string): void {
-    this.authTokenLabel = authTokenLabel;
+  setAuthTokenLabel(authTokenLabel: string): void {
+    this.authTokenLabel = authTokenLabel
   }
 
   /**
@@ -293,8 +291,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return The URL for the auth token information.
    */
-  public getAuthTokenInfoURL(): string {
-    return this.authTokenInfoURL;
+  getAuthTokenInfoURL(): string {
+    return this.authTokenInfoURL
   }
 
   /**
@@ -302,8 +300,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param authTokenInfoURL The URL for the auth token information.
    */
-  public setAuthTokenInfoURL(authTokenInfoURL: string): void {
-    this.authTokenInfoURL = authTokenInfoURL;
+  setAuthTokenInfoURL(authTokenInfoURL: string): void {
+    this.authTokenInfoURL = authTokenInfoURL
   }
 
   /**
@@ -311,8 +309,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether MFA is supported.
    */
-  public getMfaSupported(): boolean {
-    return this.mfaSupported;
+  getMfaSupported(): boolean {
+    return this.mfaSupported
   }
 
   /**
@@ -320,8 +318,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @param mfaSupported Whether MFA is supported.
    */
-  public setMfaSupported(mfaSupported: boolean): void {
-    this.mfaSupported = mfaSupported;
+  setMfaSupported(mfaSupported: boolean): void {
+    this.mfaSupported = mfaSupported
   }
 
   /**
@@ -329,8 +327,8 @@ export class SignonInfo implements SignonProfile {
    *
    * @return Whether an MFA challenge request is required for the first sign-on into this realm.
    */
-  public getMfaChallengeRequiredForFirstSignon(): boolean {
-    return this.mfaChallengeRequiredForFirstSignon;
+  getMfaChallengeRequiredForFirstSignon(): boolean {
+    return this.mfaChallengeRequiredForFirstSignon
   }
 
   /**
@@ -339,26 +337,137 @@ export class SignonInfo implements SignonProfile {
    * @param mfaChallengeRequiredForFirstSignon
    *         Whether an MFA challenge request is required for the first sign-on into this realm.
    */
-  public setMfaChallengeRequiredForFirstSignon(mfaChallengeRequiredForFirstSignon: boolean): void {
-    this.mfaChallengeRequiredForFirstSignon = mfaChallengeRequiredForFirstSignon;
+  setMfaChallengeRequiredForFirstSignon(mfaChallengeRequiredForFirstSignon: boolean): void {
+    this.mfaChallengeRequiredForFirstSignon = mfaChallengeRequiredForFirstSignon
   }
 }
 
-Aggregate_add( SignonInfo, "SIGNONINFO" );
-Element_add(SignonInfo, { name: "SIGNONREALM", required: true, order: 0, type: String, read: SignonInfo.prototype.getRealm, write: SignonInfo.prototype.setRealm });
-Element_add(SignonInfo, { name: "MIN", required: true, order: 10, type: Number, read: SignonInfo.prototype.getMinPasswordCharacters, write: SignonInfo.prototype.setMinPasswordCharacters });
-Element_add(SignonInfo, { name: "MAX", required: true, order: 20, type: Number, read: SignonInfo.prototype.getMaxPasswordCharacters, write: SignonInfo.prototype.setMaxPasswordCharacters });
-Element_add(SignonInfo, { name: "CHARTYPE", required: true, order: 30, type: CharacterType, read: SignonInfo.prototype.getPasswordCharacterType, write: SignonInfo.prototype.setPasswordCharacterType });
-Element_add(SignonInfo, { name: "CASESEN", required: true, order: 40, type: Boolean, read: SignonInfo.prototype.getPasswordCaseSensitive, write: SignonInfo.prototype.setPasswordCaseSensitive });
-Element_add(SignonInfo, { name: "SPECIAL", required: true, order: 50, type: Boolean, read: SignonInfo.prototype.getPasswordSpecialCharsAllowed, write: SignonInfo.prototype.setPasswordSpecialCharsAllowed });
-Element_add(SignonInfo, { name: "SPACES", required: true, order: 60, type: Boolean, read: SignonInfo.prototype.getPasswordSpacesAllowed, write: SignonInfo.prototype.setPasswordSpacesAllowed });
-Element_add(SignonInfo, { name: "PINCH", required: true, order: 70, type: Boolean, read: SignonInfo.prototype.getChangePasswordSupported, write: SignonInfo.prototype.setChangePasswordSupported });
-Element_add(SignonInfo, { name: "CHGPINFIRST", required: true, order: 80, type: Boolean, read: SignonInfo.prototype.getChangePasswordFirstRequired, write: SignonInfo.prototype.setChangePasswordFirstRequired });
-Element_add(SignonInfo, { name: "USERCRED1LABEL", order: 90, type: String, read: SignonInfo.prototype.getAdditionalCredientialsLabel1, write: SignonInfo.prototype.setAdditionalCredientialsLabel1 });
-Element_add(SignonInfo, { name: "USERCRED2LABEL", order: 100, type: String, read: SignonInfo.prototype.getAdditionalCredientialsLabel2, write: SignonInfo.prototype.setAdditionalCredientialsLabel2 });
-Element_add(SignonInfo, { name: "CLIENTUIDREQ", order: 110, type: Boolean, read: SignonInfo.prototype.getClientUIDRequired, write: SignonInfo.prototype.setClientUIDRequired });
-Element_add(SignonInfo, { name: "AUTHTOKENFIRST", order: 120, type: Boolean, read: SignonInfo.prototype.getAuthTokenRequiredForFirstSignon, write: SignonInfo.prototype.setAuthTokenRequiredForFirstSignon });
-Element_add(SignonInfo, { name: "AUTHTOKENLABEL", order: 130, type: String, read: SignonInfo.prototype.getAuthTokenLabel, write: SignonInfo.prototype.setAuthTokenLabel });
-Element_add(SignonInfo, { name: "AUTHTOKENINFOURL", order: 140, type: String, read: SignonInfo.prototype.getAuthTokenInfoURL, write: SignonInfo.prototype.setAuthTokenInfoURL });
-Element_add(SignonInfo, { name: "MFACHALLENGESUPT", order: 150, type: Boolean, read: SignonInfo.prototype.getMfaSupported, write: SignonInfo.prototype.setMfaSupported });
-Element_add(SignonInfo, { name: "MFACHALLENGEFIRST", order: 160, type: Boolean, read: SignonInfo.prototype.getMfaChallengeRequiredForFirstSignon, write: SignonInfo.prototype.setMfaChallengeRequiredForFirstSignon });
+Aggregate_add(SignonInfo, 'SIGNONINFO')
+Element_add(SignonInfo, {
+  name: 'SIGNONREALM',
+  required: true,
+  order: 0,
+  type: String,
+  read: SignonInfo.prototype.getRealm,
+  write: SignonInfo.prototype.setRealm,
+})
+Element_add(SignonInfo, {
+  name: 'MIN',
+  required: true,
+  order: 10,
+  type: Number,
+  read: SignonInfo.prototype.getMinPasswordCharacters,
+  write: SignonInfo.prototype.setMinPasswordCharacters,
+})
+Element_add(SignonInfo, {
+  name: 'MAX',
+  required: true,
+  order: 20,
+  type: Number,
+  read: SignonInfo.prototype.getMaxPasswordCharacters,
+  write: SignonInfo.prototype.setMaxPasswordCharacters,
+})
+Element_add(SignonInfo, {
+  name: 'CHARTYPE',
+  required: true,
+  order: 30,
+  type: CharacterType,
+  read: SignonInfo.prototype.getPasswordCharacterType,
+  write: SignonInfo.prototype.setPasswordCharacterType,
+})
+Element_add(SignonInfo, {
+  name: 'CASESEN',
+  required: true,
+  order: 40,
+  type: Boolean,
+  read: SignonInfo.prototype.getPasswordCaseSensitive,
+  write: SignonInfo.prototype.setPasswordCaseSensitive,
+})
+Element_add(SignonInfo, {
+  name: 'SPECIAL',
+  required: true,
+  order: 50,
+  type: Boolean,
+  read: SignonInfo.prototype.getPasswordSpecialCharsAllowed,
+  write: SignonInfo.prototype.setPasswordSpecialCharsAllowed,
+})
+Element_add(SignonInfo, {
+  name: 'SPACES',
+  required: true,
+  order: 60,
+  type: Boolean,
+  read: SignonInfo.prototype.getPasswordSpacesAllowed,
+  write: SignonInfo.prototype.setPasswordSpacesAllowed,
+})
+Element_add(SignonInfo, {
+  name: 'PINCH',
+  required: true,
+  order: 70,
+  type: Boolean,
+  read: SignonInfo.prototype.getChangePasswordSupported,
+  write: SignonInfo.prototype.setChangePasswordSupported,
+})
+Element_add(SignonInfo, {
+  name: 'CHGPINFIRST',
+  required: true,
+  order: 80,
+  type: Boolean,
+  read: SignonInfo.prototype.getChangePasswordFirstRequired,
+  write: SignonInfo.prototype.setChangePasswordFirstRequired,
+})
+Element_add(SignonInfo, {
+  name: 'USERCRED1LABEL',
+  order: 90,
+  type: String,
+  read: SignonInfo.prototype.getAdditionalCredientialsLabel1,
+  write: SignonInfo.prototype.setAdditionalCredientialsLabel1,
+})
+Element_add(SignonInfo, {
+  name: 'USERCRED2LABEL',
+  order: 100,
+  type: String,
+  read: SignonInfo.prototype.getAdditionalCredientialsLabel2,
+  write: SignonInfo.prototype.setAdditionalCredientialsLabel2,
+})
+Element_add(SignonInfo, {
+  name: 'CLIENTUIDREQ',
+  order: 110,
+  type: Boolean,
+  read: SignonInfo.prototype.getClientUIDRequired,
+  write: SignonInfo.prototype.setClientUIDRequired,
+})
+Element_add(SignonInfo, {
+  name: 'AUTHTOKENFIRST',
+  order: 120,
+  type: Boolean,
+  read: SignonInfo.prototype.getAuthTokenRequiredForFirstSignon,
+  write: SignonInfo.prototype.setAuthTokenRequiredForFirstSignon,
+})
+Element_add(SignonInfo, {
+  name: 'AUTHTOKENLABEL',
+  order: 130,
+  type: String,
+  read: SignonInfo.prototype.getAuthTokenLabel,
+  write: SignonInfo.prototype.setAuthTokenLabel,
+})
+Element_add(SignonInfo, {
+  name: 'AUTHTOKENINFOURL',
+  order: 140,
+  type: String,
+  read: SignonInfo.prototype.getAuthTokenInfoURL,
+  write: SignonInfo.prototype.setAuthTokenInfoURL,
+})
+Element_add(SignonInfo, {
+  name: 'MFACHALLENGESUPT',
+  order: 150,
+  type: Boolean,
+  read: SignonInfo.prototype.getMfaSupported,
+  write: SignonInfo.prototype.setMfaSupported,
+})
+Element_add(SignonInfo, {
+  name: 'MFACHALLENGEFIRST',
+  order: 160,
+  type: Boolean,
+  read: SignonInfo.prototype.getMfaChallengeRequiredForFirstSignon,
+  write: SignonInfo.prototype.setMfaChallengeRequiredForFirstSignon,
+})

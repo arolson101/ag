@@ -1,21 +1,19 @@
-import { InvestmentTransactionType } from "./TransactionType";
-import { BaseBuyInvestmentTransaction } from "./BaseBuyInvestmentTransaction";
-import { OptionBuyType, OptionBuyType_fromOfx } from "./OptionBuyType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
+import { BaseBuyInvestmentTransaction } from './BaseBuyInvestmentTransaction'
+import { OptionBuyType, OptionBuyType_fromOfx } from './OptionBuyType'
+import { InvestmentTransactionType } from './TransactionType'
 
 /**
  * Transaction for buying options.
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class BuyOptionTransaction extends BaseBuyInvestmentTransaction {
-
-  private optionBuyType: string;
-  private sharesPerContact: number;
+  private optionBuyType: string
+  private sharesPerContact: number
 
   constructor() {
-    super(InvestmentTransactionType.BUY_OPTION);
+    super(InvestmentTransactionType.BUY_OPTION)
   }
 
   /**
@@ -25,8 +23,8 @@ export class BuyOptionTransaction extends BaseBuyInvestmentTransaction {
    *
    * @return the option buy type
    */
-  public getOptionBuyType(): string {
-    return this.optionBuyType;
+  getOptionBuyType(): string {
+    return this.optionBuyType
   }
 
   /**
@@ -36,8 +34,8 @@ export class BuyOptionTransaction extends BaseBuyInvestmentTransaction {
    *
    * @param optionBuyType the option buy type
    */
-  public setOptionBuyType(optionBuyType: string): void {
-    this.optionBuyType = optionBuyType;
+  setOptionBuyType(optionBuyType: string): void {
+    this.optionBuyType = optionBuyType
   }
 
   /**
@@ -45,8 +43,8 @@ export class BuyOptionTransaction extends BaseBuyInvestmentTransaction {
    *
    * @return the type of purchase or null if it's not known
    */
-  public getOptionBuyTypeEnum(): OptionBuyType {
-    return OptionBuyType_fromOfx(this.optionBuyType);
+  getOptionBuyTypeEnum(): OptionBuyType {
+    return OptionBuyType_fromOfx(this.optionBuyType)
   }
 
   /**
@@ -55,8 +53,8 @@ export class BuyOptionTransaction extends BaseBuyInvestmentTransaction {
    *
    * @return the number of shares per contact
    */
-  public getSharesPerContract(): number {
-    return this.sharesPerContact;
+  getSharesPerContract(): number {
+    return this.sharesPerContact
   }
 
   /**
@@ -65,11 +63,25 @@ export class BuyOptionTransaction extends BaseBuyInvestmentTransaction {
    *
    * @param sharesPerContact the number of shares per contact
    */
-  public setSharesPerContract(sharesPerContact: number): void {
-    this.sharesPerContact = sharesPerContact;
+  setSharesPerContract(sharesPerContact: number): void {
+    this.sharesPerContact = sharesPerContact
   }
 }
 
-Aggregate_add( BuyOptionTransaction, "BUYOPT" );
-Element_add(BuyOptionTransaction, { name: "OPTBUYTYPE", required: true, order: 20, type: String, read: BuyOptionTransaction.prototype.getOptionBuyType, write: BuyOptionTransaction.prototype.setOptionBuyType });
-Element_add(BuyOptionTransaction, { name: "SHPERCTRCT", required: true, order: 30, type: Number, read: BuyOptionTransaction.prototype.getSharesPerContract, write: BuyOptionTransaction.prototype.setSharesPerContract });
+Aggregate_add(BuyOptionTransaction, 'BUYOPT')
+Element_add(BuyOptionTransaction, {
+  name: 'OPTBUYTYPE',
+  required: true,
+  order: 20,
+  type: String,
+  read: BuyOptionTransaction.prototype.getOptionBuyType,
+  write: BuyOptionTransaction.prototype.setOptionBuyType,
+})
+Element_add(BuyOptionTransaction, {
+  name: 'SHPERCTRCT',
+  required: true,
+  order: 30,
+  type: Number,
+  read: BuyOptionTransaction.prototype.getSharesPerContract,
+  write: BuyOptionTransaction.prototype.setSharesPerContract,
+})

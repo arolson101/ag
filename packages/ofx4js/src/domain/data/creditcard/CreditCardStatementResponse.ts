@@ -1,15 +1,13 @@
-import { StatementResponse } from "../common/StatementResponse";
-import { CreditCardAccountDetails } from "./CreditCardAccountDetails";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { StatementResponse } from '../common/StatementResponse'
+import { CreditCardAccountDetails } from './CreditCardAccountDetails'
 
 export class CreditCardStatementResponse extends StatementResponse {
+  private account: CreditCardAccountDetails
 
-  private account: CreditCardAccountDetails;
-
-  public getResponseMessageName(): string {
-    return "credit card statement";
+  getResponseMessageName(): string {
+    return 'credit card statement'
   }
 
   /**
@@ -17,8 +15,8 @@ export class CreditCardStatementResponse extends StatementResponse {
    *
    * @return The account for the statement.
    */
-  public getAccount(): CreditCardAccountDetails {
-    return this.account;
+  getAccount(): CreditCardAccountDetails {
+    return this.account
   }
 
   /**
@@ -26,10 +24,16 @@ export class CreditCardStatementResponse extends StatementResponse {
    *
    * @param account The account for the statement.
    */
-  public setAccount(account: CreditCardAccountDetails): void {
-    this.account = account;
+  setAccount(account: CreditCardAccountDetails): void {
+    this.account = account
   }
 }
 
-Aggregate_add( CreditCardStatementResponse, "CCSTMTRS");
-ChildAggregate_add(CreditCardStatementResponse, { name:"CCACCTFROM", order: 10, type: CreditCardAccountDetails, read: CreditCardStatementResponse.prototype.getAccount, write: CreditCardStatementResponse.prototype.setAccount });
+Aggregate_add(CreditCardStatementResponse, 'CCSTMTRS')
+ChildAggregate_add(CreditCardStatementResponse, {
+  name: 'CCACCTFROM',
+  order: 10,
+  type: CreditCardAccountDetails,
+  read: CreditCardStatementResponse.prototype.getAccount,
+  write: CreditCardStatementResponse.prototype.setAccount,
+})

@@ -1,20 +1,18 @@
-import { TransactionWrappedResponseMessage } from "../TransactionWrappedResponseMessage";
-import { ProfileResponse } from "./ProfileResponse";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { TransactionWrappedResponseMessage } from '../TransactionWrappedResponseMessage'
+import { ProfileResponse } from './ProfileResponse'
 
 export class ProfileResponseTransaction extends TransactionWrappedResponseMessage<ProfileResponse> {
-
-  private message: ProfileResponse;
+  private message: ProfileResponse
 
   /**
    * The message.
    *
    * @return The message.
    */
-  public getMessage(): ProfileResponse {
-    return this.message;
+  getMessage(): ProfileResponse {
+    return this.message
   }
 
   /**
@@ -22,15 +20,21 @@ export class ProfileResponseTransaction extends TransactionWrappedResponseMessag
    *
    * @param message The message.
    */
-  public setMessage(message: ProfileResponse): void {
-    this.message = message;
+  setMessage(message: ProfileResponse): void {
+    this.message = message
   }
 
   // Inherited.
-  public getWrappedMessage(): ProfileResponse {
-    return this.getMessage();
+  getWrappedMessage(): ProfileResponse {
+    return this.getMessage()
   }
 }
 
-Aggregate_add(ProfileResponseTransaction, "PROFTRNRS");
-ChildAggregate_add(ProfileResponseTransaction, { required: true, order: 30, type: ProfileResponse, read: ProfileResponseTransaction.prototype.getMessage, write: ProfileResponseTransaction.prototype.setMessage });
+Aggregate_add(ProfileResponseTransaction, 'PROFTRNRS')
+ChildAggregate_add(ProfileResponseTransaction, {
+  required: true,
+  order: 30,
+  type: ProfileResponse,
+  read: ProfileResponseTransaction.prototype.getMessage,
+  write: ProfileResponseTransaction.prototype.setMessage,
+})

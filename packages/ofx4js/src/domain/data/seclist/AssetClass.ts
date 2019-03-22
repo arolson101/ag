@@ -1,5 +1,4 @@
-
- /**
+/**
  * Asset class for debt.
  * @see "Section 13.8.5.7, OFX Spec"
  */
@@ -38,25 +37,25 @@ export enum AssetClass {
   /**
    * Investments which do not fit into any of the other types.
    */
-  OTHER
+  OTHER,
 }
 
 export function AssetClass_fromOfx(ofxVal: string): AssetClass {
-  if ("DOMESTICBOND" === ofxVal) {
-    return AssetClass.DOMESTIC_BOND;
-  } else if ("INTLBOND" === ofxVal) {
-    return AssetClass.INTL_BOND;
-  } else if ("LARGESTOCK" === ofxVal) {
-    return AssetClass.LARGE_STOCK;
-  } else if ("SMALLSTOCK" === ofxVal) {
-    return AssetClass.SMALL_STOCK;
-  } else if ("INTLSTOCK" === ofxVal) {
-    return AssetClass.INTL_STOCK;
-  } else if ("MONEYMARKET" === ofxVal) {
-    return AssetClass.MONEY_MARKET;
-  } else if ("OTHER" === ofxVal) {
-    return AssetClass.OTHER;
+  if ('DOMESTICBOND' === ofxVal) {
+    return AssetClass.DOMESTIC_BOND
+  } else if ('INTLBOND' === ofxVal) {
+    return AssetClass.INTL_BOND
+  } else if ('LARGESTOCK' === ofxVal) {
+    return AssetClass.LARGE_STOCK
+  } else if ('SMALLSTOCK' === ofxVal) {
+    return AssetClass.SMALL_STOCK
+  } else if ('INTLSTOCK' === ofxVal) {
+    return AssetClass.INTL_STOCK
+  } else if ('MONEYMARKET' === ofxVal) {
+    return AssetClass.MONEY_MARKET
+  } else if ('OTHER' === ofxVal) {
+    return AssetClass.OTHER
   } else {
-    return null;
+    return null
   }
 }

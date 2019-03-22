@@ -1,7 +1,5 @@
-
 export enum CorrectionAction {
-
   REPLACE,
 
-  DELETE
+  DELETE,
 }

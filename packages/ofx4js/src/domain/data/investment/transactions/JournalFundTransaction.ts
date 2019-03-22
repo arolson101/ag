@@ -1,9 +1,8 @@
-import { InvestmentTransactionType } from "./TransactionType";
-import { BaseOtherInvestmentTransaction } from "./BaseOtherInvestmentTransaction";
-import { SubAccountType, SubAccountType_fromOfx } from "../accounts/SubAccountType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
+import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountType'
+import { BaseOtherInvestmentTransaction } from './BaseOtherInvestmentTransaction'
+import { InvestmentTransactionType } from './TransactionType'
 
 /**
  * Transaction for journal fund transactions between sub-accounts within the same investment
@@ -11,13 +10,12 @@ import { Element_add } from "../../../../meta/Element_add";
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
-
-  private subAccountFrom: string;
-  private subAccountTo: string;
-  private total: number;
+  private subAccountFrom: string
+  private subAccountTo: string
+  private total: number
 
   constructor() {
-    super(InvestmentTransactionType.JOURNAL_FUND);
+    super(InvestmentTransactionType.JOURNAL_FUND)
   }
 
   /**
@@ -26,8 +24,8 @@ export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
    *
    * @return the sub account type
    */
-  public getFromSubAccountFund(): string {
-    return this.subAccountFrom;
+  getFromSubAccountFund(): string {
+    return this.subAccountFrom
   }
 
   /**
@@ -36,8 +34,8 @@ export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
    *
    * @param subAccountFrom the sub account type
    */
-  public setFromSubAccountFund(subAccountFrom: string): void {
-    this.subAccountFrom = subAccountFrom;
+  setFromSubAccountFund(subAccountFrom: string): void {
+    this.subAccountFrom = subAccountFrom
   }
 
   /**
@@ -45,8 +43,8 @@ export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
    *
    * @return the type of null if it wasn't one of the well known types.
    */
-  public getFromSubAccountFundEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getFromSubAccountFund());
+  getFromSubAccountFundEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getFromSubAccountFund())
   }
 
   /**
@@ -55,8 +53,8 @@ export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
    *
    * @return the sub account fund
    */
-  public getToSubAccountFund(): string {
-    return this.subAccountTo;
+  getToSubAccountFund(): string {
+    return this.subAccountTo
   }
 
   /**
@@ -65,8 +63,8 @@ export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
    *
    * @param subAccountTo the sub account fund
    */
-  public setToSubAccountFund(subAccountTo: string): void {
-    this.subAccountTo = subAccountTo;
+  setToSubAccountFund(subAccountTo: string): void {
+    this.subAccountTo = subAccountTo
   }
 
   /**
@@ -74,8 +72,8 @@ export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
    *
    * @return the type of null if it wasn't one of the well known types.
    */
-  public getToSubAccountFundEnum(): SubAccountType {
-    return SubAccountType_fromOfx(this.getToSubAccountFund());
+  getToSubAccountFundEnum(): SubAccountType {
+    return SubAccountType_fromOfx(this.getToSubAccountFund())
   }
 
   /**
@@ -84,8 +82,8 @@ export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
    *
    * @return the total
    */
-  public getTotal(): number {
-    return this.total;
+  getTotal(): number {
+    return this.total
   }
 
   /**
@@ -94,12 +92,30 @@ export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
    *
    * @param total the total
    */
-  public setTotal(total: number): void {
-    this.total = total;
+  setTotal(total: number): void {
+    this.total = total
   }
 }
 
-Aggregate_add( JournalFundTransaction, "JRNLFUND" );
-Element_add(JournalFundTransaction, { name: "SUBACCTFROM", order: 20, type: String, read: JournalFundTransaction.prototype.getFromSubAccountFund, write: JournalFundTransaction.prototype.setFromSubAccountFund });
-Element_add(JournalFundTransaction, { name: "SUBACCTTO", order: 30, type: String, read: JournalFundTransaction.prototype.getToSubAccountFund, write: JournalFundTransaction.prototype.setToSubAccountFund });
-Element_add(JournalFundTransaction, { name: "TOTAL", order: 40, type: Number, read: JournalFundTransaction.prototype.getTotal, write: JournalFundTransaction.prototype.setTotal });
+Aggregate_add(JournalFundTransaction, 'JRNLFUND')
+Element_add(JournalFundTransaction, {
+  name: 'SUBACCTFROM',
+  order: 20,
+  type: String,
+  read: JournalFundTransaction.prototype.getFromSubAccountFund,
+  write: JournalFundTransaction.prototype.setFromSubAccountFund,
+})
+Element_add(JournalFundTransaction, {
+  name: 'SUBACCTTO',
+  order: 30,
+  type: String,
+  read: JournalFundTransaction.prototype.getToSubAccountFund,
+  write: JournalFundTransaction.prototype.setToSubAccountFund,
+})
+Element_add(JournalFundTransaction, {
+  name: 'TOTAL',
+  order: 40,
+  type: Number,
+  read: JournalFundTransaction.prototype.getTotal,
+  write: JournalFundTransaction.prototype.setTotal,
+})

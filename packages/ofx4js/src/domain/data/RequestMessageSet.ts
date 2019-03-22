@@ -1,22 +1,20 @@
-import { RequestMessage } from "./RequestMessage";
-import { MessageSetType } from "./MessageSetType";
+import { MessageSetType } from './MessageSetType'
+import { RequestMessage } from './RequestMessage'
 
-
- /**
+/**
  * A message set enclosed in an OFX request envelope.
  */
 export abstract class RequestMessageSet /*implements Comparable<RequestMessageSet>*/ {
+  private version: string
 
-  private version: string;
-
-  public abstract getType(): MessageSetType;
+  abstract getType(): MessageSetType
 
   constructor() {
-    this.version = "1";
+    this.version = '1'
   }
 
-  public cast<T extends this>(): T {
-    return this as T;
+  cast<T extends this>(): T {
+    return this as T
   }
 
   /**
@@ -24,8 +22,8 @@ export abstract class RequestMessageSet /*implements Comparable<RequestMessageSe
    *
    * @return The version of this request message.
    */
-  public getVersion(): string {
-    return this.version;
+  getVersion(): string {
+    return this.version
   }
 
   /**
@@ -33,8 +31,8 @@ export abstract class RequestMessageSet /*implements Comparable<RequestMessageSe
    *
    * @param version The version of this request message.
    */
-  public setVersion(version: string): void {
-    this.version = version;
+  setVersion(version: string): void {
+    this.version = version
   }
 
   /**
@@ -42,15 +40,14 @@ export abstract class RequestMessageSet /*implements Comparable<RequestMessageSe
    *
    * @return The request messages for this request message set.
    */
-  public abstract getRequestMessages(): Array<RequestMessage>;
+  abstract getRequestMessages(): RequestMessage[]
 
   // Inherited.
   /*public compareTo(o: RequestMessageSet): number {
     return getType().compareTo(o.getType());
   }*/
 
-  public static contentCompare(left: RequestMessageSet, right: RequestMessageSet): number {
-    return left.getType() - right.getType();
+  static contentCompare(left: RequestMessageSet, right: RequestMessageSet): number {
+    return left.getType() - right.getType()
   }
-
 }

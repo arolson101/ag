@@ -1,6 +1,5 @@
-import { VersionSpecificMessageSetInfo } from "./VersionSpecificMessageSetInfo";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
-
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { VersionSpecificMessageSetInfo } from './VersionSpecificMessageSetInfo'
 
 /**
  * Information about a message set.
@@ -8,16 +7,15 @@ import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
  * @see "Section 7.2.1, OFX Spec"
  */
 export abstract class AbstractMessageSetInfo {
-
-  private versionSpecificInformationList: Array<VersionSpecificMessageSetInfo>;
+  private versionSpecificInformationList: VersionSpecificMessageSetInfo[]
 
   /**
    * List of information about a message set for each version supported.
    *
    * @return List of information about a message set for each version supported.
    */
-  public getVersionSpecificInformationList(): Array<VersionSpecificMessageSetInfo> {
-    return this.versionSpecificInformationList;
+  getVersionSpecificInformationList(): VersionSpecificMessageSetInfo[] {
+    return this.versionSpecificInformationList
   }
 
   /**
@@ -25,9 +23,17 @@ export abstract class AbstractMessageSetInfo {
    *
    * @param versionSpecificInformationList List of information about a message set for each version supported.
    */
-  public setVersionSpecificInformationList(versionSpecificInformationList: Array<VersionSpecificMessageSetInfo>): void {
-    this.versionSpecificInformationList = versionSpecificInformationList;
+  setVersionSpecificInformationList(
+    versionSpecificInformationList: VersionSpecificMessageSetInfo[]
+  ): void {
+    this.versionSpecificInformationList = versionSpecificInformationList
   }
 }
 
-ChildAggregate_add(AbstractMessageSetInfo, { order: 0, type: Array, collectionEntryType: VersionSpecificMessageSetInfo, read: AbstractMessageSetInfo.prototype.getVersionSpecificInformationList, write: AbstractMessageSetInfo.prototype.setVersionSpecificInformationList });
+ChildAggregate_add(AbstractMessageSetInfo, {
+  order: 0,
+  type: Array,
+  collectionEntryType: VersionSpecificMessageSetInfo,
+  read: AbstractMessageSetInfo.prototype.getVersionSpecificInformationList,
+  write: AbstractMessageSetInfo.prototype.setVersionSpecificInformationList,
+})

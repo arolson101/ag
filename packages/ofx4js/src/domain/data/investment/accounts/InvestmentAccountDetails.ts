@@ -1,7 +1,6 @@
-import { AccountDetails } from "../../common/AccountDetails";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-import { Element_add } from "../../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { Element_add } from '../../../../meta/Element_add'
+import { AccountDetails } from '../../common/AccountDetails'
 
 /**
  * Aggregate for the details that identifity a brokerage account.
@@ -9,19 +8,17 @@ import { Element_add } from "../../../../meta/Element_add";
  * @see "OFX Spec, Section 13.6.1"
  */
 export class InvestmentAccountDetails implements AccountDetails {
-
-  private brokerId: string;
-  private accountNumber: string;
-  private accountKey: string;
-
+  private brokerId: string
+  private accountNumber: string
+  private accountKey: string
 
   /**
    * Gets the broker id.
    *
    * @return the id of the broker
    */
-  public getBrokerId(): string {
-    return this.brokerId;
+  getBrokerId(): string {
+    return this.brokerId
   }
 
   /**
@@ -29,8 +26,8 @@ export class InvestmentAccountDetails implements AccountDetails {
    *
    * @param brokerId the id of the broker
    */
-  public setBrokerId(brokerId: string): void {
-    this.brokerId = brokerId;
+  setBrokerId(brokerId: string): void {
+    this.brokerId = brokerId
   }
 
   /**
@@ -38,8 +35,8 @@ export class InvestmentAccountDetails implements AccountDetails {
    *
    * @return the account number
    */
-  public getAccountNumber(): string {
-    return this.accountNumber;
+  getAccountNumber(): string {
+    return this.accountNumber
   }
 
   /**
@@ -47,8 +44,8 @@ export class InvestmentAccountDetails implements AccountDetails {
    *
    * @param accountNumber the account number
    */
-  public setAccountNumber(accountNumber: string): void {
-    this.accountNumber = accountNumber;
+  setAccountNumber(accountNumber: string): void {
+    this.accountNumber = accountNumber
   }
 
   /**
@@ -56,8 +53,8 @@ export class InvestmentAccountDetails implements AccountDetails {
    *
    * @return the account key
    */
-  public getAccountKey(): string {
-    return this.accountKey;
+  getAccountKey(): string {
+    return this.accountKey
   }
 
   /**
@@ -65,12 +62,32 @@ export class InvestmentAccountDetails implements AccountDetails {
    *
    * @param accountKey the account key
    */
-  public setAccountKey(accountKey: string): void {
-    this.accountKey = accountKey;
+  setAccountKey(accountKey: string): void {
+    this.accountKey = accountKey
   }
 }
 
-Aggregate_add( InvestmentAccountDetails );
-Element_add(InvestmentAccountDetails, { name: "BROKERID", required: true, order: 0, type: String, read: InvestmentAccountDetails.prototype.getBrokerId, write: InvestmentAccountDetails.prototype.setBrokerId });
-Element_add(InvestmentAccountDetails, { name: "ACCTID", required: true, order: 20, type: String, read: InvestmentAccountDetails.prototype.getAccountNumber, write: InvestmentAccountDetails.prototype.setAccountNumber });
-Element_add(InvestmentAccountDetails, { name: "ACCTKEY", order: 40, type: String, read: InvestmentAccountDetails.prototype.getAccountKey, write: InvestmentAccountDetails.prototype.setAccountKey });
+Aggregate_add(InvestmentAccountDetails)
+Element_add(InvestmentAccountDetails, {
+  name: 'BROKERID',
+  required: true,
+  order: 0,
+  type: String,
+  read: InvestmentAccountDetails.prototype.getBrokerId,
+  write: InvestmentAccountDetails.prototype.setBrokerId,
+})
+Element_add(InvestmentAccountDetails, {
+  name: 'ACCTID',
+  required: true,
+  order: 20,
+  type: String,
+  read: InvestmentAccountDetails.prototype.getAccountNumber,
+  write: InvestmentAccountDetails.prototype.setAccountNumber,
+})
+Element_add(InvestmentAccountDetails, {
+  name: 'ACCTKEY',
+  order: 40,
+  type: String,
+  read: InvestmentAccountDetails.prototype.getAccountKey,
+  write: InvestmentAccountDetails.prototype.setAccountKey,
+})

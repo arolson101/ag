@@ -1,13 +1,11 @@
-import { VersionSpecificMessageSetInfo } from "../VersionSpecificMessageSetInfo";
-import { MessageSetType } from "../../MessageSetType";
-import { Aggregate_add } from "../../../../meta/Aggregate_Add";
-
+import { Aggregate_add } from '../../../../meta/Aggregate_Add'
+import { MessageSetType } from '../../MessageSetType'
+import { VersionSpecificMessageSetInfo } from '../VersionSpecificMessageSetInfo'
 
 export class SignOnV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-
-  public getMessageSetType(): MessageSetType {
-    return MessageSetType.signon;
+  getMessageSetType(): MessageSetType {
+    return MessageSetType.signon
   }
 }
 
-Aggregate_add( SignOnV1MessageSetInfo, "SIGNONMSGSETV1" );
+Aggregate_add(SignOnV1MessageSetInfo, 'SIGNONMSGSETV1')

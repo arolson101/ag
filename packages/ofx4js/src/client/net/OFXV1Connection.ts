@@ -1,90 +1,106 @@
-import { LOG } from "../../log/Log";
-import { OFXException } from "../../OFXException";
-import { OFXConnection } from "./OFXConnection";
-import { AggregateMarshaller } from "../../io/AggregateMarshaller";
-import { AggregateUnmarshaller } from "../../io/AggregateUnmarshaller";
-import { ResponseEnvelope } from "../../domain/data/ResponseEnvelope";
-import { RequestEnvelope } from "../../domain/data/RequestEnvelope";
-import { OutputBuffer } from "../../io/StreamWriter";
-import { OFXWriter } from "../../io/OFXWriter";
-import { StringReader } from "../../io/StringReader";
-import { OFXConnectionException } from "./OFXConnectionException";
-import { OFXV1Writer } from "../../io/v1/OFXV1Writer";
-
+// tslint:disable:max-line-length
+import { RequestEnvelope } from '../../domain/data/RequestEnvelope'
+import { ResponseEnvelope } from '../../domain/data/ResponseEnvelope'
+import { AggregateMarshaller } from '../../io/AggregateMarshaller'
+import { AggregateUnmarshaller } from '../../io/AggregateUnmarshaller'
+import { OFXWriter } from '../../io/OFXWriter'
+import { OutputBuffer } from '../../io/StreamWriter'
+import { StringReader } from '../../io/StringReader'
+import { OFXV1Writer } from '../../io/v1/OFXV1Writer'
+import { LOG } from '../../log/Log'
+import { OFXException } from '../../OFXException'
+import { OFXConnection } from './OFXConnection'
+import { OFXConnectionException } from './OFXConnectionException'
 
 // import java.io.*;
 // import java.net.HttpURLConnection;
 // import java.net.URL;
 
-export type HeadersObject = { [header: string]: string };
-export type AjaxHandler = (url: string, verb: string, headers: HeadersObject, data: string, async: boolean) => Promise<string>;
+export interface HeadersObject {
+  [header: string]: string
+}
+export type AjaxHandler = (
+  url: string,
+  verb: string,
+  headers: HeadersObject,
+  data: string,
+  async: boolean
+) => Promise<string>
 
-
-function DefaultAjaxHandler(url: string, verb: string, headers: HeadersObject, data: string, async: boolean): Promise<string> {
-  return new Promise(function(resolve, reject) {
-    var request = new XMLHttpRequest();
-    var onloadCalled: boolean = false;
-    request.open("POST", url, async);
-    for (var header in headers) {
-      request.setRequestHeader(header, headers[header]);
+function DefaultAjaxHandler(
+  url: string,
+  verb: string,
+  headers: HeadersObject,
+  data: string,
+  async: boolean
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest()
+    let onloadCalled: boolean = false
+    request.open('POST', url, async)
+    for (const header of Object.keys(headers)) {
+      request.setRequestHeader(header, headers[header])
     }
-    request.onload = function() {
-      onloadCalled = true;
+    request.onload = () => {
+      onloadCalled = true
       if (request.status >= 200 && request.status < 300) {
-        resolve(request.responseText);
+        resolve(request.responseText)
       } else if (request.status >= 400 && request.status < 500) {
-        reject(new OFXException("Error " + request.status + " with client request: " + request.responseText));
+        reject(
+          new OFXException(
+            'Error ' + request.status + ' with client request: ' + request.responseText
+          )
+        )
       } else {
-        reject(new OFXException("Invalid response code from OFX server: " + request.status));
+        reject(new OFXException('Invalid response code from OFX server: ' + request.status))
       }
-    };
-    request.onerror = function() {
-      reject(new OFXException("Network error"));
-    };
+    }
+    request.onerror = () => {
+      reject(new OFXException('Network error'))
+    }
 
-    request.send(data);
+    request.send(data)
 
     if (!async && !onloadCalled) {
-      (<any>request).onload();
+      ;(request as any).onload()
     }
-  });
+  })
 }
-
 
 /**
  * Base implementation for an OFX connection.
  */
 export class OFXV1Connection implements OFXConnection {
-
-  private async: boolean;
-  private marshaller: AggregateMarshaller;
-  private unmarshaller: AggregateUnmarshaller<ResponseEnvelope>;
-  private ajax: AjaxHandler;
+  private async: boolean
+  private marshaller: AggregateMarshaller
+  private unmarshaller: AggregateUnmarshaller<ResponseEnvelope>
+  private ajax: AjaxHandler
 
   constructor() {
-    this.async = true;
-    this.marshaller = new AggregateMarshaller();
-    this.unmarshaller = new AggregateUnmarshaller<ResponseEnvelope>(ResponseEnvelope);
-    this.ajax = DefaultAjaxHandler;
+    this.async = true
+    this.marshaller = new AggregateMarshaller()
+    this.unmarshaller = new AggregateUnmarshaller<ResponseEnvelope>(ResponseEnvelope)
+    this.ajax = DefaultAjaxHandler
   }
 
   // Inherited.
-  public sendRequest(request: RequestEnvelope, url: string): Promise<ResponseEnvelope> {
-//    if (!url.protocol().toLowerCase().startsWith("http")) {
-//      throw new OFXException("Invalid URL: " + url + " only http(s) is supported.");
-//    }
+  sendRequest(request: RequestEnvelope, url: string): Promise<ResponseEnvelope> {
+    //    if (!url.protocol().toLowerCase().startsWith("http")) {
+    //      throw new OFXException("Invalid URL: " + url + " only http(s) is supported.");
+    //    }
 
-    //marshal to memory so we can determine the size...
-    var outBuffer = new OutputBuffer();
-    var ofxWriter: OFXWriter = this.newOFXWriter(outBuffer);
-    this.getMarshaller().marshal(request, ofxWriter);
-    ofxWriter.close();
-    this.logRequest(outBuffer);
-    return this.sendBuffer(url, outBuffer)
-    .then((in_: string): ResponseEnvelope => {
-      this.logResponse(in_);
-      return this.unmarshal(in_);
-    });
+    // marshal to memory so we can determine the size...
+    const outBuffer = new OutputBuffer()
+    const ofxWriter: OFXWriter = this.newOFXWriter(outBuffer)
+    this.getMarshaller().marshal(request, ofxWriter)
+    ofxWriter.close()
+    this.logRequest(outBuffer)
+    return this.sendBuffer(url, outBuffer).then(
+      (in_: string): ResponseEnvelope => {
+        this.logResponse(in_)
+        return this.unmarshal(in_)
+      }
+    )
   }
 
   /**
@@ -92,13 +108,13 @@ export class OFXV1Connection implements OFXConnection {
    *
    * @param outBuffer The buffer to log.
    */
-  protected logRequest(outBuffer: OutputBuffer) /*throws UnsupportedEncodingException*/: void {
-    LOG.info("Marshalling " + outBuffer.size() + " bytes of the OFX request.");
-    LOG.debug(outBuffer.toString("utf-8"));
+  protected logRequest(outBuffer: OutputBuffer): /*throws UnsupportedEncodingException*/ void {
+    LOG.info('Marshalling ' + outBuffer.size() + ' bytes of the OFX request.')
+    LOG.debug(outBuffer.toString('utf-8'))
   }
 
   protected logResponse(inBuffer: string) {
-    LOG.debug("Received OFX response:", inBuffer);
+    LOG.debug('Received OFX response:', inBuffer)
   }
 
   /**
@@ -108,15 +124,18 @@ export class OFXV1Connection implements OFXConnection {
    * @param outBuffer The buffer.
    * @return a promise that resolves with the response.
    */
-  protected sendBuffer(url: string, outBuffer: OutputBuffer) /*throws IOException, OFXConnectionException*/: Promise<string> {
-    var outText = outBuffer.toString();
-    var async: boolean = this.getAsync();
-    var headers: HeadersObject = {
-      "Content-Type": "application/x-ofx",
-      "Accept": "*/*, application/x-ofx"
-    };
+  protected sendBuffer(
+    url: string,
+    outBuffer: OutputBuffer
+  ): /*throws IOException, OFXConnectionException*/ Promise<string> {
+    const outText = outBuffer.toString()
+    const async: boolean = this.getAsync()
+    const headers: HeadersObject = {
+      'Content-Type': 'application/x-ofx',
+      Accept: '*/*, application/x-ofx',
+    }
 
-    return this.ajax(url, "POST", headers, outText, async);
+    return this.ajax(url, 'POST', headers, outText, async)
   }
 
   /**
@@ -125,13 +144,14 @@ export class OFXV1Connection implements OFXConnection {
    * @param in The input stream.
    * @return The response envelope.
    */
-  protected unmarshal(in_: string) /*throws IOException, OFXConnectionException*/: ResponseEnvelope {
+  protected unmarshal(
+    in_: string
+  ): /*throws IOException, OFXConnectionException*/ ResponseEnvelope {
     try {
-      var reader = new StringReader(in_);
-      return this.getUnmarshaller().unmarshal(reader);
-    }
-    catch (e) {
-      throw new OFXConnectionException("Unable to parse the OFX response.", e);
+      const reader = new StringReader(in_)
+      return this.getUnmarshaller().unmarshal(reader)
+    } catch (e) {
+      throw new OFXConnectionException('Unable to parse the OFX response.', e)
     }
   }
 
@@ -142,7 +162,7 @@ export class OFXV1Connection implements OFXConnection {
    * @return The OFX writer.
    */
   protected newOFXWriter(out: OutputBuffer): OFXWriter {
-    return new OFXV1Writer(out);
+    return new OFXV1Writer(out)
   }
 
   /**
@@ -150,8 +170,8 @@ export class OFXV1Connection implements OFXConnection {
    *
    * @return The marshaller.
    */
-  public getMarshaller(): AggregateMarshaller {
-    return this.marshaller;
+  getMarshaller(): AggregateMarshaller {
+    return this.marshaller
   }
 
   /**
@@ -159,8 +179,8 @@ export class OFXV1Connection implements OFXConnection {
    *
    * @param marshaller The marshaller.
    */
-  public setMarshaller(marshaller: AggregateMarshaller): void {
-    this.marshaller = marshaller;
+  setMarshaller(marshaller: AggregateMarshaller): void {
+    this.marshaller = marshaller
   }
 
   /**
@@ -168,8 +188,8 @@ export class OFXV1Connection implements OFXConnection {
    *
    * @return The unmarshaller.
    */
-  public getUnmarshaller(): AggregateUnmarshaller<ResponseEnvelope> {
-    return this.unmarshaller;
+  getUnmarshaller(): AggregateUnmarshaller<ResponseEnvelope> {
+    return this.unmarshaller
   }
 
   /**
@@ -177,8 +197,8 @@ export class OFXV1Connection implements OFXConnection {
    *
    * @param unmarshaller The unmarshaller.
    */
-  public setUnmarshaller(unmarshaller: AggregateUnmarshaller<ResponseEnvelope>): void {
-    this.unmarshaller = unmarshaller;
+  setUnmarshaller(unmarshaller: AggregateUnmarshaller<ResponseEnvelope>): void {
+    this.unmarshaller = unmarshaller
   }
 
   /**
@@ -186,18 +206,17 @@ export class OFXV1Connection implements OFXConnection {
    *
    * @return {bool} Whether in async mode.
    */
-  public getAsync() {
-    return this.async;
+  getAsync() {
+    return this.async
   }
-
 
   /**
    * Async mode
    *
    * @param {bool} async async mode.
    */
-  public setAsync(async: boolean) {
-    this.async = async;
+  setAsync(async: boolean) {
+    this.async = async
   }
 
   /**
@@ -205,18 +224,16 @@ export class OFXV1Connection implements OFXConnection {
    *
    * @return {bool} Whether in async mode.
    */
-  public getAjax() {
-    return this.ajax;
+  getAjax() {
+    return this.ajax
   }
-
 
   /**
    * Async mode
    *
    * @param {bool} async async mode.
    */
-  public setAjax(ajax: AjaxHandler) {
-    this.ajax = ajax;
+  setAjax(ajax: AjaxHandler) {
+    this.ajax = ajax
   }
-
 }

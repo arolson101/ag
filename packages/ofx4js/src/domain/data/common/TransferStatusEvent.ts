@@ -1,6 +1,4 @@
-
 export enum TransferStatusEvent {
-
   WILLPROCESSON,
 
   POSTEDON,
@@ -9,5 +7,5 @@ export enum TransferStatusEvent {
 
   CANCELEDON,
 
-  FAILEDON
+  FAILEDON,
 }

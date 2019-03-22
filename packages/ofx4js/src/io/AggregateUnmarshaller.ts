@@ -1,31 +1,30 @@
-import { StringConversion } from "./StringConversion";
-import { DefaultStringConversion } from "./DefaultStringConversion";
-import { StringReader } from "./StringReader";
-import { OFXReader } from "./OFXReader";
-import { BaseOFXReader } from "./BaseOFXReader";
-import { AggregateStackContentHandler } from "./AggregateStackContentHandler";
-
+import { AggregateStackContentHandler } from './AggregateStackContentHandler'
+import { BaseOFXReader } from './BaseOFXReader'
+import { DefaultStringConversion } from './DefaultStringConversion'
+import { OFXReader } from './OFXReader'
+import { StringConversion } from './StringConversion'
+import { StringReader } from './StringReader'
 
 /**
  * Unmarshaller for aggregate objects.
  */
 export class AggregateUnmarshaller<A> {
+  private clazz: any
+  private conversion: StringConversion
 
-  private clazz: any;
-  private conversion: StringConversion;
-
-  constructor(clazz: { new (): A }) {
-    this.clazz = clazz;
-    this.conversion = new DefaultStringConversion();
+  constructor(clazz: new () => A) {
+    this.clazz = clazz
+    this.conversion = new DefaultStringConversion()
   }
 
-  public unmarshal(arg: StringReader | string): A {
-    var stream: StringReader = (<any>arg instanceof StringReader) ? <StringReader>arg : new StringReader(<string>arg);
-    var aggregate: A = new this.clazz();
-    var reader: OFXReader = this.newReader();
-    reader.setContentHandler(new AggregateStackContentHandler<A>(aggregate, this.getConversion()));
-    reader.parse(stream);
-    return aggregate;
+  unmarshal(arg: StringReader | string): A {
+    const stream: StringReader =
+      (arg as any) instanceof StringReader ? (arg as StringReader) : new StringReader(arg as string)
+    const aggregate: A = new this.clazz()
+    const reader: OFXReader = this.newReader()
+    reader.setContentHandler(new AggregateStackContentHandler<A>(aggregate, this.getConversion()))
+    reader.parse(stream)
+    return aggregate
   }
 
   /**
@@ -34,7 +33,7 @@ export class AggregateUnmarshaller<A> {
    * @return new OFX reader.
    */
   protected newReader(): OFXReader {
-    return new BaseOFXReader();
+    return new BaseOFXReader()
   }
 
   /**
@@ -42,8 +41,8 @@ export class AggregateUnmarshaller<A> {
    *
    * @return The conversion.
    */
-  public getConversion(): StringConversion {
-    return this.conversion;
+  getConversion(): StringConversion {
+    return this.conversion
   }
 
   /**
@@ -51,7 +50,7 @@ export class AggregateUnmarshaller<A> {
    *
    * @param conversion The conversion.
    */
-  public setConversion(conversion: StringConversion): void {
-    this.conversion = conversion;
+  setConversion(conversion: StringConversion): void {
+    this.conversion = conversion
   }
 }

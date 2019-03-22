@@ -1,38 +1,34 @@
+import sax, { SAXParser } from 'sax'
+import { LOG } from '../log/Log'
+import { DefaultHandler } from './DefaultHandler'
+import { OFXHandler } from './OFXHandler'
+import { OFXParseException } from './OFXParseException'
+import { OFXReader } from './OFXReader'
+import { OFXV2ContentHandler } from './OFXV2ContentHandler'
+import { StringReader } from './StringReader'
 
-import { SAXParser } from "sax";
-import * as sax from "sax";
-import { LOG } from "../log/Log";
-import { OFXReader } from "./OFXReader";
-import { OFXHandler } from "./OFXHandler";
-import { DefaultHandler } from "./DefaultHandler";
-import { StringReader } from "./StringReader";
-import { OFXParseException } from "./OFXParseException";
-import { OFXV2ContentHandler } from "./OFXV2ContentHandler";
-
-
-function arraysEqual(a1: Array<string>, a2: Array<string>) {
-  if(a1.length !== a2.length) {
-    return false;
+function arraysEqual(a1: string[], a2: string[]) {
+  if (a1.length !== a2.length) {
+    return false
   }
-  for(var i=0; i<a1.length; i++) {
-    if(a1[i] !== a2[i]) {
-      return false;
+  for (let i = 0; i < a1.length; i++) {
+    if (a1[i] !== a2[i]) {
+      return false
     }
   }
-  return true;
+  return true
 }
-
 
 /**
  * Base class for an OFX reader.  Parses the headers and determines whether we're parsing an
  * OFX v2 or OFX v1 element.  For OFX v2, uses a standard SAX library.
  */
 export /*abstract*/ class BaseOFXReader implements OFXReader {
-  public static OFX_2_PROCESSING_INSTRUCTION_PATTERN: RegExp = /<\\?OFX ([^\\?]+)\\?>/;
-  private contentHandler: OFXHandler;
+  static OFX_2_PROCESSING_INSTRUCTION_PATTERN: RegExp = /<\\?OFX ([^\\?]+)\\?>/
+  private contentHandler: OFXHandler
 
   constructor() {
-    this.contentHandler = new DefaultHandler();
+    this.contentHandler = new DefaultHandler()
   }
 
   /**
@@ -40,8 +36,8 @@ export /*abstract*/ class BaseOFXReader implements OFXReader {
    *
    * @return The content handler.
    */
-  public getContentHandler(): OFXHandler {
-    return this.contentHandler;
+  getContentHandler(): OFXHandler {
+    return this.contentHandler
   }
 
   /**
@@ -49,8 +45,8 @@ export /*abstract*/ class BaseOFXReader implements OFXReader {
    *
    * @param handler The content handler.
    */
-  public setContentHandler(handler: OFXHandler): void {
-    this.contentHandler = handler;
+  setContentHandler(handler: OFXHandler): void {
+    this.contentHandler = handler
   }
 
   /**
@@ -58,39 +54,37 @@ export /*abstract*/ class BaseOFXReader implements OFXReader {
    *
    * @param reader The reader.
    */
-  public parse(reader: StringReader): void  {
-    var header: string = "";
-    var firstElementStart = this.getFirstElementStart();
-    var buffer: Array<string> = new Array(firstElementStart.length);
-    reader.mark(/*firstElementStart.length*/);
-    var ch: any = reader.read(buffer);
-    while ((ch != -1) && (!arraysEqual(buffer, firstElementStart))) {
+  parse(reader: StringReader): void {
+    let header: string = ''
+    const firstElementStart = this.getFirstElementStart()
+    const buffer: string[] = new Array(firstElementStart.length)
+    reader.mark(/*firstElementStart.length*/)
+    let ch: any = reader.read(buffer)
+    while (ch !== -1 && !arraysEqual(buffer, firstElementStart)) {
       if (!this.contains(buffer, '<')) {
-        //if the buffer contains a '<', then we might already have marked the beginning.
-        reader.mark(/*firstElementStart.length*/);
+        // if the buffer contains a '<', then we might already have marked the beginning.
+        reader.mark(/*firstElementStart.length*/)
       }
-      ch = reader.read();
-      var shifted: string = this.shiftAndAppend(buffer, ch);
-      header += shifted;
+      ch = reader.read()
+      const shifted: string = this.shiftAndAppend(buffer, ch)
+      header += shifted
     }
 
-    if (ch == -1) {
-      throw new OFXParseException("Invalid OFX: no root <OFX> element!");
-    }
-    else {
-      var matches = BaseOFXReader.OFX_2_PROCESSING_INSTRUCTION_PATTERN.exec(header);
+    if (ch === -1) {
+      throw new OFXParseException('Invalid OFX: no root <OFX> element!')
+    } else {
+      const matches = BaseOFXReader.OFX_2_PROCESSING_INSTRUCTION_PATTERN.exec(header)
       if (matches) {
-        LOG.info("Processing OFX 2 header...");
+        LOG.info('Processing OFX 2 header...')
 
-        this.processOFXv2Headers(matches[1]);
-        reader.reset();
-        this.parseV2FromFirstElement(reader.remainder());
-      }
-      else {
-        LOG.info("Processing OFX 1 headers...");
-        this.processOFXv1Headers(header);
-        reader.reset();
-        this.parseV1FromFirstElement(reader.remainder());
+        this.processOFXv2Headers(matches[1])
+        reader.reset()
+        this.parseV2FromFirstElement(reader.remainder())
+      } else {
+        LOG.info('Processing OFX 1 headers...')
+        this.processOFXv1Headers(header)
+        reader.reset()
+        this.parseV1FromFirstElement(reader.remainder())
       }
     }
   }
@@ -100,8 +94,8 @@ export /*abstract*/ class BaseOFXReader implements OFXReader {
    *
    * @return The first characters of the OFX element.
    */
-  protected getFirstElementStart(): Array<string> {
-    return [ '<', 'O', 'F', 'X' ];
+  protected getFirstElementStart(): string[] {
+    return ['<', 'O', 'F', 'X']
   }
 
   /**
@@ -111,49 +105,50 @@ export /*abstract*/ class BaseOFXReader implements OFXReader {
    * @param c The character to search for.
    * @return Whether the specified buffer contains the specified character.
    */
-  private contains(buffer: Array<string>, c: string): boolean {
-    for (var i=0; i<buffer.length; i++) {
-      var ch = buffer[i];
+  private contains(buffer: string[], c: string): boolean {
+    for (const ch of buffer) {
       if (ch === c) {
-        return true;
+        return true
       }
     }
-    return false;
+    return false
   }
 
-  private shiftAndAppend(buffer: Array<string>, c: string): string {
-    var shifted = buffer[0];
-    for (var i = 0; i + 1 < buffer.length; i++) {
-      buffer[i] = buffer[i + 1];
+  private shiftAndAppend(buffer: string[], c: string): string {
+    const shifted = buffer[0]
+    for (let i = 0; i + 1 < buffer.length; i++) {
+      buffer[i] = buffer[i + 1]
     }
-    buffer[buffer.length - 1] = c;
-    return shifted;
+    buffer[buffer.length - 1] = c
+    return shifted
   }
 
   /**
-   * Parse an OFX version 1 stream from the first OFX element (defined by the {@link #getFirstElementStart() first element characters}).
+   * Parse an OFX version 1 stream from the first OFX element (defined by the
+   * {@link #getFirstElementStart()} first element characters).
    *
    * @param text The text.
    */
   protected parseV1FromFirstElement(text: string): void {
-    var strict = false;
-    var parser: SAXParser = sax.parser(strict, {});
-    var handler = new OFXV2ContentHandler(this.getContentHandler());
-    handler.install(parser);
-    parser.write(text);
+    const strict = false
+    const parser: SAXParser = sax.parser(strict, {})
+    const handler = new OFXV2ContentHandler(this.getContentHandler())
+    handler.install(parser)
+    parser.write(text)
   }
 
   /**
-   * Parse an OFX version 2 stream from the first OFX element (defined by the {@link #getFirstElementStart() first element characters}).
+   * Parse an OFX version 2 stream from the first OFX element (defined by the
+   * {@link #getFirstElementStart()} first element characters).
    *
    * @param text The text.
    */
   protected parseV2FromFirstElement(text: string): void {
-    var strict = true;
-    var parser: SAXParser = sax.parser(strict, {});
-    var handler = new OFXV2ContentHandler(this.getContentHandler());
-    handler.install(parser);
-    parser.write(text);
+    const strict = true
+    const parser: SAXParser = sax.parser(strict, {})
+    const handler = new OFXV2ContentHandler(this.getContentHandler())
+    handler.install(parser)
+    parser.write(text)
   }
 
   /**
@@ -162,14 +157,13 @@ export /*abstract*/ class BaseOFXReader implements OFXReader {
    * @param chars The characters to process.
    */
   protected processOFXv1Headers(chars: string): void {
-    var lines: Array<string> = chars.split(/(\n|\r\n)/);
-    for(var i=0; i<lines.length; i++) {
-      var line: string = lines[i];
-      var colonIndex: number = line.indexOf(':');
+    const lines: string[] = chars.split(/(\n|\r\n)/)
+    for (const line of lines) {
+      const colonIndex: number = line.indexOf(':')
       if (colonIndex >= 0) {
-        var name: string = line.substring(0, colonIndex);
-        var value: string = line.length > colonIndex ? line.substring(colonIndex + 1) : "";
-        this.contentHandler.onHeader(name, value);
+        const name: string = line.substring(0, colonIndex)
+        const value: string = line.length > colonIndex ? line.substring(colonIndex + 1) : ''
+        this.contentHandler.onHeader(name, value)
       }
     }
   }
@@ -179,17 +173,18 @@ export /*abstract*/ class BaseOFXReader implements OFXReader {
    *
    * @param chars The characters to process.
    */
-  protected processOFXv2Headers(chars: string) /*throws OFXParseException*/: void {
-    var nameValuePairs: string[] = chars.split("\\s+");
-    for (var nameValuePair of nameValuePairs) {
-      var equalsIndex: number = nameValuePair.indexOf('=');
+  protected processOFXv2Headers(chars: string): /*throws OFXParseException*/ void {
+    const nameValuePairs: string[] = chars.split('\\s+')
+    for (const nameValuePair of nameValuePairs) {
+      const equalsIndex: number = nameValuePair.indexOf('=')
       if (equalsIndex >= 0) {
-        var name: string = nameValuePair.substring(0, equalsIndex);
-        var value: string = nameValuePair.length > equalsIndex ? nameValuePair.substring(equalsIndex + 1) : "";
-        value = value.replace('"', ' ');
-        value = value.replace('\'', ' ');
-        value = value.trim();
-        this.contentHandler.onHeader(name, value);
+        const name: string = nameValuePair.substring(0, equalsIndex)
+        let value: string =
+          nameValuePair.length > equalsIndex ? nameValuePair.substring(equalsIndex + 1) : ''
+        value = value.replace('"', ' ')
+        value = value.replace("'", ' ')
+        value = value.trim()
+        this.contentHandler.onHeader(name, value)
       }
     }
   }

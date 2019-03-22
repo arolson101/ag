@@ -1,8 +1,7 @@
-import { ApplicationSecurity } from "../ApplicationSecurity";
-import { SynchronizationCapability } from "./SynchronizationCapability";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { Element_add } from '../../../meta/Element_add'
+import { ApplicationSecurity } from '../ApplicationSecurity'
+import { SynchronizationCapability } from './SynchronizationCapability'
 
 /**
  * Core information about a specific version of a specific message set.
@@ -10,21 +9,20 @@ import { Element_add } from "../../../meta/Element_add";
  * @see "Section 7.2.1, OFX Spec"
  */
 export class CoreMessageSetInfo {
-
-  private version: string;
-  private serviceProviderName: string;
-  private url: string;
-  private security: ApplicationSecurity;
-  private sslRequired: boolean;
-  private realm: string;
-  private language: string;
-  private syncCapability: SynchronizationCapability;
-  private fileBasedErrorRecoverySupport: boolean;
-  private timeout: number;
+  private version: string
+  private serviceProviderName: string
+  private url: string
+  private security: ApplicationSecurity
+  private sslRequired: boolean
+  private realm: string
+  private language: string
+  private syncCapability: SynchronizationCapability
+  private fileBasedErrorRecoverySupport: boolean
+  private timeout: number
 
   constructor() {
-    this.version = "1";
-    this.language = "ENG"; //Locale.US.getISO3Language();
+    this.version = '1'
+    this.language = 'ENG' // Locale.US.getISO3Language();
   }
 
   /**
@@ -32,8 +30,8 @@ export class CoreMessageSetInfo {
    *
    * @return The version of the message set.
    */
-  public getVersion(): string {
-    return this.version;
+  getVersion(): string {
+    return this.version
   }
 
   /**
@@ -41,8 +39,8 @@ export class CoreMessageSetInfo {
    *
    * @param version The version of the message set.
    */
-  public setVersion(version: string): void {
-    this.version = version;
+  setVersion(version: string): void {
+    this.version = version
   }
 
   /**
@@ -50,8 +48,8 @@ export class CoreMessageSetInfo {
    *
    * @return The name of the service provider (sometimes the message set processing is outsourced).
    */
-  public getServiceProviderName(): string {
-    return this.serviceProviderName;
+  getServiceProviderName(): string {
+    return this.serviceProviderName
   }
 
   /**
@@ -59,8 +57,8 @@ export class CoreMessageSetInfo {
    *
    * @param serviceProviderName The name of the service provider (sometimes the message set processing is outsourced).
    */
-  public setServiceProviderName(serviceProviderName: string): void {
-    this.serviceProviderName = serviceProviderName;
+  setServiceProviderName(serviceProviderName: string): void {
+    this.serviceProviderName = serviceProviderName
   }
 
   /**
@@ -68,8 +66,8 @@ export class CoreMessageSetInfo {
    *
    * @return The URL at which the message set is processed.
    */
-  public getUrl(): string {
-    return this.url;
+  getUrl(): string {
+    return this.url
   }
 
   /**
@@ -77,8 +75,8 @@ export class CoreMessageSetInfo {
    *
    * @param url The URL at which the message set is processed.
    */
-  public setUrl(url: string): void {
-    this.url = url;
+  setUrl(url: string): void {
+    this.url = url
   }
 
   /**
@@ -86,8 +84,8 @@ export class CoreMessageSetInfo {
    *
    * @return The application-level security required for this message set.
    */
-  public getSecurity(): ApplicationSecurity {
-    return this.security;
+  getSecurity(): ApplicationSecurity {
+    return this.security
   }
 
   /**
@@ -95,8 +93,8 @@ export class CoreMessageSetInfo {
    *
    * @param security The application-level security required for this message set.
    */
-  public setSecurity(security: ApplicationSecurity): void {
-    this.security = security;
+  setSecurity(security: ApplicationSecurity): void {
+    this.security = security
   }
 
   /**
@@ -104,8 +102,8 @@ export class CoreMessageSetInfo {
    *
    * @return Whether transport-level security is required for this message set.
    */
-  public getSslRequired(): boolean {
-    return this.sslRequired;
+  getSslRequired(): boolean {
+    return this.sslRequired
   }
 
   /**
@@ -113,8 +111,8 @@ export class CoreMessageSetInfo {
    *
    * @param sslRequired Whether transport-level security is required for this message set.
    */
-  public setSslRequired(sslRequired: boolean): void {
-    this.sslRequired = sslRequired;
+  setSslRequired(sslRequired: boolean): void {
+    this.sslRequired = sslRequired
   }
 
   /**
@@ -122,8 +120,8 @@ export class CoreMessageSetInfo {
    *
    * @return The sign-on realm.
    */
-  public getRealm(): string {
-    return this.realm;
+  getRealm(): string {
+    return this.realm
   }
 
   /**
@@ -131,8 +129,8 @@ export class CoreMessageSetInfo {
    *
    * @param realm The sign-on realm.
    */
-  public setRealm(realm: string): void {
-    this.realm = realm;
+  setRealm(realm: string): void {
+    this.realm = realm
   }
 
   /**
@@ -141,8 +139,8 @@ export class CoreMessageSetInfo {
    * @return The language.
    * @see java.util.Locale#getISO3Language()
    */
-  public getLanguage(): string {
-    return this.language;
+  getLanguage(): string {
+    return this.language
   }
 
   /**
@@ -150,8 +148,8 @@ export class CoreMessageSetInfo {
    *
    * @param language The language.
    */
-  public setLanguage(language: string): void {
-    this.language = language;
+  setLanguage(language: string): void {
+    this.language = language
   }
 
   /**
@@ -159,8 +157,8 @@ export class CoreMessageSetInfo {
    *
    * @return The synchronization capability for this message set.
    */
-  public getSyncCapability(): SynchronizationCapability {
-    return this.syncCapability;
+  getSyncCapability(): SynchronizationCapability {
+    return this.syncCapability
   }
 
   /**
@@ -168,8 +166,8 @@ export class CoreMessageSetInfo {
    *
    * @param syncCapability The synchronization capability for this message set.
    */
-  public setSyncCapability(syncCapability: SynchronizationCapability): void {
-    this.syncCapability = syncCapability;
+  setSyncCapability(syncCapability: SynchronizationCapability): void {
+    this.syncCapability = syncCapability
   }
 
   /**
@@ -177,8 +175,8 @@ export class CoreMessageSetInfo {
    *
    * @return Whether there exists support for resposne-file based error recovery.
    */
-  public getFileBasedErrorRecoverySupport(): boolean {
-    return this.fileBasedErrorRecoverySupport;
+  getFileBasedErrorRecoverySupport(): boolean {
+    return this.fileBasedErrorRecoverySupport
   }
 
   /**
@@ -186,8 +184,8 @@ export class CoreMessageSetInfo {
    *
    * @param fileBasedErrorRecoverySupport Whether there exists support for resposne-file based error recovery.
    */
-  public setFileBasedErrorRecoverySupport(fileBasedErrorRecoverySupport: boolean): void {
-    this.fileBasedErrorRecoverySupport = fileBasedErrorRecoverySupport;
+  setFileBasedErrorRecoverySupport(fileBasedErrorRecoverySupport: boolean): void {
+    this.fileBasedErrorRecoverySupport = fileBasedErrorRecoverySupport
   }
 
   /**
@@ -196,8 +194,8 @@ export class CoreMessageSetInfo {
    *
    * @return the "INTU.TIMEOUT" property
    */
-  public getIntuTimeout(): number {
-    return this.timeout;
+  getIntuTimeout(): number {
+    return this.timeout
   }
 
   /**
@@ -206,19 +204,87 @@ export class CoreMessageSetInfo {
    *
    * @param timeout the "INTU.TIMEOUT" property
    */
-  public setIntuTimeout(timeout: number): void {
-    this.timeout = timeout;
+  setIntuTimeout(timeout: number): void {
+    this.timeout = timeout
   }
 }
 
-Aggregate_add( CoreMessageSetInfo, "MSGSETCORE" );
-Element_add(CoreMessageSetInfo, { name: "VER", required: true, order: 0, type: String, read: CoreMessageSetInfo.prototype.getVersion, write: CoreMessageSetInfo.prototype.setVersion });
-Element_add(CoreMessageSetInfo, { name: "SPNAME", order: 10, type: String, read: CoreMessageSetInfo.prototype.getServiceProviderName, write: CoreMessageSetInfo.prototype.setServiceProviderName });
-Element_add(CoreMessageSetInfo, { name: "URL", required: true, order: 20, type: String, read: CoreMessageSetInfo.prototype.getUrl, write: CoreMessageSetInfo.prototype.setUrl });
-Element_add(CoreMessageSetInfo, { name: "OFXSEC", required: true, order: 30, type: ApplicationSecurity, read: CoreMessageSetInfo.prototype.getSecurity, write: CoreMessageSetInfo.prototype.setSecurity });
-Element_add(CoreMessageSetInfo, { name: "TRANSPSEC", required: true, order: 40, type: Boolean, read: CoreMessageSetInfo.prototype.getSslRequired, write: CoreMessageSetInfo.prototype.setSslRequired });
-Element_add(CoreMessageSetInfo, { name: "SIGNONREALM", required: true, order: 50, type: String, read: CoreMessageSetInfo.prototype.getRealm, write: CoreMessageSetInfo.prototype.setRealm });
-Element_add(CoreMessageSetInfo, { name: "LANGUAGE", required: true, order: 60, type: String, read: CoreMessageSetInfo.prototype.getLanguage, write: CoreMessageSetInfo.prototype.setLanguage });
-Element_add(CoreMessageSetInfo, { name: "SYNCMODE", required: true, order: 70, type: SynchronizationCapability, read: CoreMessageSetInfo.prototype.getSyncCapability, write: CoreMessageSetInfo.prototype.setSyncCapability });
-Element_add(CoreMessageSetInfo, { name: "RESPFILEER", required: true, order: 80, type: Boolean, read: CoreMessageSetInfo.prototype.getFileBasedErrorRecoverySupport, write: CoreMessageSetInfo.prototype.setFileBasedErrorRecoverySupport });
-Element_add(CoreMessageSetInfo, { name: "INTU.TIMEOUT", order: 90, type: Number, read: CoreMessageSetInfo.prototype.getIntuTimeout, write: CoreMessageSetInfo.prototype.setIntuTimeout });
+Aggregate_add(CoreMessageSetInfo, 'MSGSETCORE')
+Element_add(CoreMessageSetInfo, {
+  name: 'VER',
+  required: true,
+  order: 0,
+  type: String,
+  read: CoreMessageSetInfo.prototype.getVersion,
+  write: CoreMessageSetInfo.prototype.setVersion,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'SPNAME',
+  order: 10,
+  type: String,
+  read: CoreMessageSetInfo.prototype.getServiceProviderName,
+  write: CoreMessageSetInfo.prototype.setServiceProviderName,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'URL',
+  required: true,
+  order: 20,
+  type: String,
+  read: CoreMessageSetInfo.prototype.getUrl,
+  write: CoreMessageSetInfo.prototype.setUrl,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'OFXSEC',
+  required: true,
+  order: 30,
+  type: ApplicationSecurity,
+  read: CoreMessageSetInfo.prototype.getSecurity,
+  write: CoreMessageSetInfo.prototype.setSecurity,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'TRANSPSEC',
+  required: true,
+  order: 40,
+  type: Boolean,
+  read: CoreMessageSetInfo.prototype.getSslRequired,
+  write: CoreMessageSetInfo.prototype.setSslRequired,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'SIGNONREALM',
+  required: true,
+  order: 50,
+  type: String,
+  read: CoreMessageSetInfo.prototype.getRealm,
+  write: CoreMessageSetInfo.prototype.setRealm,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'LANGUAGE',
+  required: true,
+  order: 60,
+  type: String,
+  read: CoreMessageSetInfo.prototype.getLanguage,
+  write: CoreMessageSetInfo.prototype.setLanguage,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'SYNCMODE',
+  required: true,
+  order: 70,
+  type: SynchronizationCapability,
+  read: CoreMessageSetInfo.prototype.getSyncCapability,
+  write: CoreMessageSetInfo.prototype.setSyncCapability,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'RESPFILEER',
+  required: true,
+  order: 80,
+  type: Boolean,
+  read: CoreMessageSetInfo.prototype.getFileBasedErrorRecoverySupport,
+  write: CoreMessageSetInfo.prototype.setFileBasedErrorRecoverySupport,
+})
+Element_add(CoreMessageSetInfo, {
+  name: 'INTU.TIMEOUT',
+  order: 90,
+  type: Number,
+  read: CoreMessageSetInfo.prototype.getIntuTimeout,
+  write: CoreMessageSetInfo.prototype.setIntuTimeout,
+})

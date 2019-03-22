@@ -1,25 +1,23 @@
-import { Transaction } from "./Transaction";
-import { Aggregate_add } from "../../../meta/Aggregate_Add";
-import { Element_add } from "../../../meta/Element_add";
-import { ChildAggregate_add } from "../../../meta/ChildAggregate_add";
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { Element_add } from '../../../meta/Element_add'
+import { Transaction } from './Transaction'
 
-
-//import java.util.Date;
-//import java.util.List;
+// import java.util.Date;
+// import java.util.List;
 
 export class TransactionList {
-
-  private start: Date;
-  private end: Date;
-  private transactions: Array<Transaction>;
+  private start: Date
+  private end: Date
+  private transactions: Transaction[]
 
   /**
    * The start date.
    *
    * @return The start date.
    */
-  public getStart(): Date {
-    return this.start;
+  getStart(): Date {
+    return this.start
   }
 
   /**
@@ -27,8 +25,8 @@ export class TransactionList {
    *
    * @param start The start date.
    */
-  public setStart(start: Date): void {
-    this.start = start;
+  setStart(start: Date): void {
+    this.start = start
   }
 
   /**
@@ -36,8 +34,8 @@ export class TransactionList {
    *
    * @return The end date.
    */
-  public getEnd(): Date {
-    return this.end;
+  getEnd(): Date {
+    return this.end
   }
 
   /**
@@ -45,8 +43,8 @@ export class TransactionList {
    *
    * @param end The end date.
    */
-  public setEnd(end: Date): void {
-    this.end = end;
+  setEnd(end: Date): void {
+    this.end = end
   }
 
   /**
@@ -54,8 +52,8 @@ export class TransactionList {
    *
    * @return The transaction list.
    */
-  public getTransactions(): Array<Transaction> {
-    return this.transactions;
+  getTransactions(): Transaction[] {
+    return this.transactions
   }
 
   /**
@@ -63,12 +61,32 @@ export class TransactionList {
    *
    * @param transactions The transaction list.
    */
-  public setTransactions(transactions: Array<Transaction>): void {
-    this.transactions = transactions;
+  setTransactions(transactions: Transaction[]): void {
+    this.transactions = transactions
   }
 }
 
-Aggregate_add( TransactionList, "BANKTRANLIST" );
-Element_add(TransactionList, { name: "DTSTART", required: true, order: 0, type: Date, read: TransactionList.prototype.getStart, write: TransactionList.prototype.setStart });
-Element_add(TransactionList, { name: "DTEND", required: true, order: 10, type: Date, read: TransactionList.prototype.getEnd, write: TransactionList.prototype.setEnd });
-ChildAggregate_add(TransactionList, { order: 20, type: Array, collectionEntryType: Transaction, read: TransactionList.prototype.getTransactions, write: TransactionList.prototype.setTransactions });
+Aggregate_add(TransactionList, 'BANKTRANLIST')
+Element_add(TransactionList, {
+  name: 'DTSTART',
+  required: true,
+  order: 0,
+  type: Date,
+  read: TransactionList.prototype.getStart,
+  write: TransactionList.prototype.setStart,
+})
+Element_add(TransactionList, {
+  name: 'DTEND',
+  required: true,
+  order: 10,
+  type: Date,
+  read: TransactionList.prototype.getEnd,
+  write: TransactionList.prototype.setEnd,
+})
+ChildAggregate_add(TransactionList, {
+  order: 20,
+  type: Array,
+  collectionEntryType: Transaction,
+  read: TransactionList.prototype.getTransactions,
+  write: TransactionList.prototype.setTransactions,
+})
