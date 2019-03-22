@@ -1,6 +1,6 @@
-import React from 'react'
+import { useApolloClient, useQuery } from '@ag/util'
+import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
-import { AppQuery } from '../components'
 import { CoreContext } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
@@ -9,59 +9,57 @@ interface Props {
   isOpen: boolean
 }
 
-export class LoginDialog extends React.PureComponent<Props> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
-
-  static readonly id = `LoginDialog`
-
-  loginForm = React.createRef<LoginForm>()
-
-  render() {
-    const { isOpen } = this.props
+export const LoginDialog = Object.assign(
+  React.memo<Props>(props => {
+    const { isOpen } = props
+    const context = useContext(CoreContext)
     const {
       intl,
-      ui: { Dialog },
-    } = this.context
+      ui: { LoadingOverlay, Dialog },
+    } = context
+    const { data, loading } = useQuery(LoginForm.queries.LoginForm)
+    const client = useApolloClient()
+    const loginForm = useRef<LoginForm>(null)
+
+    const open = useCallback(() => {
+      if (loginForm.current) {
+        loginForm.current.submit()
+      }
+    }, [loginForm.current])
+
+    const dbId = data && data.dbs && data.dbs.length ? data.dbs[0].dbId : undefined
 
     return (
-      <AppQuery query={LoginForm.queries.LoginForm}>
-        {(query, client) => {
-          const { dbs } = query
-          const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
-
-          return (
-            <Dialog
-              isOpen={isOpen}
-              title={intl.formatMessage(messages.title)}
-              primary={{
-                title: intl.formatMessage(dbId ? messages.open : messages.create),
-                onClick: this.open,
-              }}
-              secondary={
-                dbId
-                  ? {
-                      title: intl.formatMessage(messages.delete),
-                      onClick: () => deleteDb({ context: this.context, dbId, client }),
-                      isDanger: true,
-                    }
-                  : undefined
-              }
-            >
-              <LoginForm ref={this.loginForm} query={query} />
-            </Dialog>
-          )
-        }}
-      </AppQuery>
+      <>
+        <LoadingOverlay show={loading} title='LoginDialog' />
+        {!loading && (
+          <Dialog
+            isOpen={isOpen}
+            title={intl.formatMessage(messages.title)}
+            primary={{
+              title: intl.formatMessage(dbId ? messages.open : messages.create),
+              onClick: open,
+            }}
+            secondary={
+              dbId
+                ? {
+                    title: intl.formatMessage(messages.delete),
+                    onClick: () => deleteDb({ context, dbId, client }),
+                    isDanger: true,
+                  }
+                : undefined
+            }
+          >
+            <LoginForm ref={loginForm} query={data!} />
+          </Dialog>
+        )}
+      </>
     )
+  }),
+  {
+    id: 'LoginDialog',
   }
-
-  open = () => {
-    if (this.loginForm.current) {
-      this.loginForm.current.submit()
-    }
-  }
-}
+)
 
 const messages = defineMessages({
   title: {
