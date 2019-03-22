@@ -1,4 +1,12 @@
-import { Gql, QueryHookResult, useApolloClient, useMutation, useQuery } from '@ag/util'
+import {
+  Gql,
+  monthsAgo,
+  QueryHookResult,
+  standardizeDate,
+  useApolloClient,
+  useMutation,
+  useQuery,
+} from '@ag/util'
 import debug from 'debug'
 import gql from 'graphql-tag'
 import React, { useCallback, useContext, useRef, useState } from 'react'
@@ -103,6 +111,10 @@ const BankTable = React.memo<T.AccountsPage.Banks>(bank => {
     refetchQueries: [{ query: queries.AccountsPage }],
   })
 
+  const downloadTransactions = useMutation(mutations.DownloadTransactions, {
+    refetchQueries: [{ query: queries.AccountsPage }],
+  })
+
   const client = useApolloClient()
   const titleActions = useRef<ActionItem[]>([
     {
@@ -156,6 +168,30 @@ const BankTable = React.memo<T.AccountsPage.Banks>(bank => {
             icon: 'trash',
             text: intl.formatMessage(messages.deleteAccount),
             onClick: () => deleteAccount({ context, account, client }),
+          },
+          {
+            icon: 'refresh',
+            text: intl.formatMessage(messages.getTransactions),
+            onClick: async () => {
+              try {
+                const start = monthsAgo(1)
+                const end = standardizeDate(new Date())
+                await downloadTransactions({
+                  variables: {
+                    accountId: account.id,
+                    cancelToken: 'asdf',
+                    bankId: bank.id,
+                    start,
+                    end,
+                  },
+                })
+                showToast(
+                  intl.formatMessage(messages.getTransactionsComplete, { name: account.name })
+                )
+              } catch (error) {
+                ErrorDisplay.show(context, error)
+              }
+            },
           },
         ],
       }
@@ -279,6 +315,14 @@ const messages = defineMessages({
   titleText: {
     id: 'AccountsPage.titleText',
     defaultMessage: 'Accounts',
+  },
+  getTransactions: {
+    id: 'AccountsPage.getTransactions',
+    defaultMessage: 'Download transactions',
+  },
+  getTransactionsComplete: {
+    id: 'AccountsPage.getTransactionsComplete',
+    defaultMessage: 'Downloaded transactions for account {name}',
   },
 })
 

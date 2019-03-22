@@ -33,3 +33,11 @@ export const standardizeDate = (date: Date): Date => {
   })
   return value
 }
+
+export const monthsAgo = (n: number) => {
+  return standardizeDate(
+    DateTime.fromJSDate(new Date())
+      .minus({ months: 1 })
+      .toJSDate()
+  )
+}
