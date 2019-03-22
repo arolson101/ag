@@ -8,9 +8,9 @@ import { CoreStore } from './reducers'
 
 const log = debug('core:app')
 
-interface Props extends React.Props<any> {
+type Props = React.PropsWithChildren<{
   context: CoreContext
-}
+}>
 
 const uniqueId = () => {
   return crypto.randomBytes(16).toString('base64')
