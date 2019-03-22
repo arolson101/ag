@@ -102,6 +102,11 @@ export interface NavMenuProps {
   items: NavMenuItem[]
 }
 
+export interface PageProps {
+  title: string
+  button?: ButtonConfig
+}
+
 export interface TableColumn<T extends {}> {
   dataIndex: keyof T & string
   title: string
@@ -180,7 +185,7 @@ export interface UiContext {
   Row: ComponentType<{ left?: boolean; right?: boolean; center?: boolean; flex?: number }>
   Column: ComponentType<{ top?: boolean; bottom?: boolean; center?: boolean; flex?: number }>
   Grid: ComponentType<GridProps>
-  Page: ComponentType<{}>
+  Page: ComponentType<PageProps>
   Tile: ComponentType<{
     size?: number
     margin?: number

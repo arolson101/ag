@@ -30,11 +30,12 @@ const Component: React.FC<
   QueryHookResult<T.HomePage.Query, T.HomePage.Variables>
 > = function HomePageComponent({ data, loading }) {
   const {
+    intl,
     ui: { Page, Row, Text },
   } = useContext(CoreContext)
 
   return (
-    <Page>
+    <Page title={intl.formatMessage(messages.titleText)}>
       <Text header>Home</Text>
     </Page>
   )

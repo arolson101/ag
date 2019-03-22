@@ -31,11 +31,12 @@ const Component: React.FC<
   QueryHookResult<T.CalendarPage.Query, T.CalendarPage.Variables>
 > = function CalendarPageComponent({ data, loading }) {
   const {
+    intl,
     ui: { Page, Row, Text },
   } = useContext(CoreContext)
 
   return (
-    <Page>
+    <Page title={intl.formatMessage(messages.titleText)}>
       <Text header>Calendar</Text>
       {data &&
         data.appDb &&

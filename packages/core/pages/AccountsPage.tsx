@@ -88,7 +88,13 @@ const Component: React.FC<
   ]
 
   return (
-    <Page>
+    <Page
+      title={intl.formatMessage(messages.titleText)}
+      button={{
+        title: intl.formatMessage(messages.bankAdd),
+        onClick: () => dispatch(actions.openDlg.bankCreate()),
+      }}
+    >
       {data &&
         data.appDb &&
         data.appDb.banks.map(bank => (
@@ -155,10 +161,6 @@ const Component: React.FC<
             columns={columns}
           />
         ))}
-
-      <Row>
-        <Link dispatch={actions.openDlg.bankCreate()}>add bank</Link>
-      </Row>
     </Page>
   )
 }
@@ -167,6 +169,10 @@ const messages = defineMessages({
   contextMenuHeader: {
     id: 'AccountsPage.contextMenuHeader',
     defaultMessage: '{bankName} - {accountName}',
+  },
+  bankAdd: {
+    id: 'AccountsPage.bankAdd',
+    defaultMessage: 'Add Bank',
   },
   bankEdit: {
     id: 'AccountsPage.bankEdit',

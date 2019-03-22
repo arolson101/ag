@@ -41,7 +41,7 @@ export class MenuBar extends React.PureComponent<MenuBar.Props> {
     const { Page, Row, Text, NavMenu } = ui
 
     return (
-      <Page>
+      <>
         <AppQuery
           query={MenuBar.queries.MenuBar}
           onCompleted={({ appDb }) => {
@@ -85,7 +85,7 @@ export class MenuBar extends React.PureComponent<MenuBar.Props> {
             />
           )}
         </AppQuery>
-      </Page>
+      </>
     )
   }
 }

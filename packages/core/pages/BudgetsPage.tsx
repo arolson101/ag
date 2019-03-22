@@ -31,11 +31,12 @@ const Component: React.FC<
   QueryHookResult<T.BudgetsPage.Query, T.BudgetsPage.Variables>
 > = function BudgetsPageComponent({ data, loading }) {
   const {
+    intl,
     ui: { Page, Row, Text },
   } = useContext(CoreContext)
 
   return (
-    <Page>
+    <Page title={intl.formatMessage(messages.titleText)}>
       <Text header>Budgets</Text>
       {data &&
         data.appDb &&

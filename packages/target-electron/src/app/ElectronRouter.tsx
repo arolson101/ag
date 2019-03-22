@@ -177,20 +177,14 @@ export const ElectronRouter: React.FC<Props> = props => {
             <MenuBar />
           </div>
 
-          <Content style={{ overflow: 'auto', height: '100vh' }}>
+          <Content>
             <Switch>
               {routes.map(Component => (
                 <Route
                   key={Component.id}
                   path={`/${Component.id}`}
                   exact
-                  render={({ location }) => (
-                    <Layout>
-                      <PageHeader title={intl.formatMessage(Component.messages.titleText)}>
-                        <Component {...parse(location.search)} />
-                      </PageHeader>
-                    </Layout>
-                  )}
+                  render={({ location }) => <Component {...parse(location.search)} />}
                 />
               ))}
               <Route

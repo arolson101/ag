@@ -21,6 +21,7 @@ import {
   Menu,
   message,
   Modal,
+  PageHeader,
   Spin,
   Table,
   Tabs,
@@ -171,7 +172,25 @@ export const ui: UiContext = {
     </div>
   ),
 
-  Page: ({ children }) => <div>{children}</div>,
+  Page: ({ button, title, children }) => (
+    <Layout style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <PageHeader title={title} />
+      <Layout.Content style={{ background: '#fff', padding: 5, overflow: 'auto', flex: 1 }}>
+        {children}
+      </Layout.Content>
+      {button && (
+        <Layout.Footer>
+          <Button
+            disabled={button.disabled}
+            type={button.isDanger ? 'danger' : undefined}
+            onClick={button.onClick}
+          >
+            {button.title}
+          </Button>
+        </Layout.Footer>
+      )}
+    </Layout>
+  ),
   Tile: ({ size, margin, children }) => (
     <div
       style={{
@@ -259,14 +278,16 @@ export const ui: UiContext = {
             titleText
               ? () => (
                   <ContextMenu header={titleContextMenuHeader} actions={titleActions}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                      {titleImage && (
-                        <Icon
-                          style={{ margin: 5 }}
-                          component={() => <ImageSourceIcon src={titleImage} />}
-                        />
-                      )}
-                      <Title>{titleText}</Title>
+                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
+                      <Title>
+                        {titleImage && (
+                          <Icon
+                            style={{ margin: 5 }}
+                            component={() => <ImageSourceIcon src={titleImage} />}
+                          />
+                        )}
+                        {titleText}
+                      </Title>
                     </div>
                   </ContextMenu>
                 )
