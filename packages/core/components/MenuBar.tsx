@@ -1,8 +1,7 @@
-import { Gql } from '@ag/util'
+import { Gql, useQuery } from '@ag/util'
 import debug from 'debug'
 import gql from 'graphql-tag'
-import React from 'react'
-import { AppQuery, Link } from '.'
+import React, { useContext } from 'react'
 import { actions } from '../actions'
 import { CoreContext, NavMenuItem } from '../context'
 import * as T from '../graphql-types'
@@ -11,80 +10,70 @@ const log = debug('core:MenuBar')
 
 interface Props {}
 
-export class MenuBar extends React.PureComponent<Props> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
-
-  static readonly id = 'MenuBar'
-
-  static readonly queries = {
-    MenuBar: gql`
-      query MenuBar {
-        appDb {
-          banks {
+const queries = {
+  MenuBar: gql`
+    query MenuBar {
+      appDb {
+        banks {
+          id
+          name
+          favicon
+          accounts {
             id
             name
-            favicon
-            accounts {
-              id
-              name
-            }
           }
         }
       }
-    ` as Gql<T.MenuBar.Query, T.MenuBar.Variables>,
-  }
+    }
+  ` as Gql<T.MenuBar.Query, T.MenuBar.Variables>,
+}
 
-  render() {
-    const { ui, dispatch } = this.context
-    const { Page, Row, Text, NavMenu } = ui
+export const MenuBar = Object.assign(
+  React.memo<Props>(props => {
+    const { ui, dispatch } = useContext(CoreContext)
+    const { NavMenu } = ui
+    const { data } = useQuery(queries.MenuBar)
+
+    const appDb = data && data.appDb
 
     return (
-      <>
-        <AppQuery
-          query={MenuBar.queries.MenuBar}
-          onCompleted={({ appDb }) => {
-            if (!appDb) {
-              dispatch(actions.openDlg.login())
-            }
-          }}
-        >
-          {({ appDb }) => (
-            <NavMenu
-              items={[
-                {
-                  key: 'accounts',
-                  title: 'accounts',
-                  subitems: [
-                    ...(appDb
-                      ? appDb.banks.map(
-                          (bank): NavMenuItem => ({
-                            key: bank.id,
-                            title: bank.name,
-                            image: bank.favicon,
-                            subitems: bank.accounts.map(
-                              (account): NavMenuItem => ({
-                                image: bank.favicon,
-                                key: account.id,
-                                title: account.name,
-                                active: false,
-                              })
-                            ),
-                          })
-                        )
-                      : []),
-                    {
-                      key: 'addbank',
-                      title: 'add bank',
-                      onClick: () => dispatch(actions.openDlg.bankCreate()),
-                    } as NavMenuItem,
-                  ],
-                } as NavMenuItem,
-              ]}
-            />
-          )}
-        </AppQuery>
-      </>
+      <NavMenu
+        items={[
+          {
+            key: 'accounts',
+            title: 'accounts',
+            subitems: [
+              ...(appDb
+                ? appDb.banks.map(
+                    (bank): NavMenuItem => ({
+                      key: bank.id,
+                      title: bank.name,
+                      image: bank.favicon,
+                      subitems: bank.accounts.map(
+                        (account): NavMenuItem => ({
+                          image: bank.favicon,
+                          key: account.id,
+                          title: account.name,
+                          active: false,
+                        })
+                      ),
+                    })
+                  )
+                : []),
+              {
+                key: 'addbank',
+                title: 'add bank',
+                onClick: () => dispatch(actions.openDlg.bankCreate()),
+              } as NavMenuItem,
+            ],
+          } as NavMenuItem,
+        ]}
+      />
     )
+  }),
+  {
+    id: 'MenuBar',
+    displayName: 'MenuBar',
+    queries,
   }
-}
+)

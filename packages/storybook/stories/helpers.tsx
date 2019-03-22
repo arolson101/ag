@@ -2,9 +2,11 @@
 import { App, cancelOperation, ClientDependencies, CoreContext } from '@ag/core'
 import { ApolloHooksProvider } from '@ag/util'
 import { action } from '@storybook/addon-actions'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient } from 'apollo-client'
+import { MockedResponse, MockLink } from 'apollo-link-mock'
 import React from 'react'
-import { ApolloConsumer } from 'react-apollo'
-import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
+import { ApolloProvider } from 'react-apollo'
 import { IntlProvider } from 'react-intl'
 import { storiesOf, ui } from './platform-specific'
 
@@ -33,19 +35,23 @@ const store = {
 
 const context = App.createContext({ store, deps })
 
+const createClient = (mocks: ReadonlyArray<MockedResponse>) => {
+  return new ApolloClient({
+    cache: new InMemoryCache(),
+    link: new MockLink(mocks),
+  })
+}
+
 export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, children }) => {
+  const client = createClient(mocks || [])
   return (
-    <MockedProvider mocks={mocks}>
-      <ApolloConsumer>
-        {client => (
-          <ApolloHooksProvider client={client}>
-            <IntlProvider locale='en'>
-              <CoreContext.Provider value={context}>{children}</CoreContext.Provider>
-            </IntlProvider>
-          </ApolloHooksProvider>
-        )}
-      </ApolloConsumer>
-    </MockedProvider>
+    <ApolloProvider client={client}>
+      <ApolloHooksProvider client={client}>
+        <IntlProvider locale='en'>
+          <CoreContext.Provider value={context}>{children}</CoreContext.Provider>
+        </IntlProvider>
+      </ApolloHooksProvider>
+    </ApolloProvider>
   )
 }
 
