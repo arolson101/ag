@@ -10,7 +10,7 @@ const externals = [
   ...Object.keys(require('./webpack.main').externals), //
 ]
 
-const isInternalProject = (name: string) => name.startsWith('@ag/')
+const isInternalProject = (name: string) => name.startsWith('@ag/') || name === 'ofx4js'
 
 const packages = Object.keys(electronpkg.dependencies)
   .flatMap(dep =>

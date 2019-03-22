@@ -7,7 +7,7 @@
       "path": "packages/db"
     },
     {
-      "path": "packages/util"
+      "path": "packages/ofx4js"
     },
     {
       "path": "packages/react-native-svg-image"
@@ -26,6 +26,9 @@
     },
     {
       "path": "packages/ui-nativebase"
+    },
+    {
+      "path": "packages/util"
     },
     {
       "path": "."
