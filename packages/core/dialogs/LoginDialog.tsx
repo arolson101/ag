@@ -5,13 +5,11 @@ import { CoreContext } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
 
-export namespace LoginDialog {
-  export interface Props {
-    isOpen: boolean
-  }
+interface Props {
+  isOpen: boolean
 }
 
-export class LoginDialog extends React.PureComponent<LoginDialog.Props> {
+export class LoginDialog extends React.PureComponent<Props> {
   static contextType = CoreContext
   context!: React.ContextType<typeof CoreContext>
 

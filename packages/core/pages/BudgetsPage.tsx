@@ -10,9 +10,8 @@ import * as T from '../graphql-types'
 
 const log = debug('core:BudgetsPage')
 
-export namespace BudgetsPage {
-  export interface Props {}
-}
+interface Props {}
+type ComponentProps = QueryHookResult<T.BudgetsPage.Query, T.BudgetsPage.Variables>
 
 const queries = {
   BudgetsPage: gql`
@@ -27,9 +26,7 @@ const queries = {
   ` as Gql<T.BudgetsPage.Query, T.BudgetsPage.Variables>,
 }
 
-const Component: React.FC<
-  QueryHookResult<T.BudgetsPage.Query, T.BudgetsPage.Variables>
-> = function BudgetsPageComponent({ data, loading }) {
+const Component = React.memo<ComponentProps>(({ data, loading }) => {
   const {
     intl,
     ui: { Page, Row, Text },
@@ -43,7 +40,8 @@ const Component: React.FC<
         data.appDb.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
     </Page>
   )
-}
+})
+Component.displayName = 'BudgetsPage.Component'
 
 const messages = defineMessages({
   tabText: {
@@ -57,7 +55,7 @@ const messages = defineMessages({
 })
 
 export const BudgetsPage = Object.assign(
-  (props: BudgetsPage.Props) => {
+  React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
     const q = useQuery(BudgetsPage.queries.BudgetsPage)
@@ -68,7 +66,7 @@ export const BudgetsPage = Object.assign(
     }
 
     return <Component {...q} />
-  },
+  }),
   {
     id: 'BudgetsPage',
     queries,

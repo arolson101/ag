@@ -10,9 +10,8 @@ import * as T from '../graphql-types'
 
 const log = debug('core:HomePage')
 
-export namespace HomePage {
-  export interface Props {}
-}
+interface Props {}
+type ComponentProps = QueryHookResult<T.HomePage.Query, T.HomePage.Variables>
 
 const queries = {
   HomePage: gql`
@@ -26,9 +25,7 @@ const queries = {
   ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
 }
 
-const Component: React.FC<
-  QueryHookResult<T.HomePage.Query, T.HomePage.Variables>
-> = function HomePageComponent({ data, loading }) {
+const Component = React.memo<ComponentProps>(({ data, loading }) => {
   const {
     intl,
     ui: { Page, Row, Text },
@@ -39,7 +36,8 @@ const Component: React.FC<
       <Text header>Home</Text>
     </Page>
   )
-}
+})
+Component.displayName = 'HomePage.Component'
 
 const messages = defineMessages({
   tabText: {
@@ -53,7 +51,7 @@ const messages = defineMessages({
 })
 
 export const HomePage = Object.assign(
-  (props: HomePage.Props) => {
+  React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
     const q = useQuery(HomePage.queries.HomePage)
@@ -64,7 +62,7 @@ export const HomePage = Object.assign(
     }
 
     return <Component {...q} />
-  },
+  }),
   {
     id: 'HomePage',
     queries,

@@ -9,16 +9,14 @@ import { AppMutation, AppQuery, Gql } from '../components'
 import { typedFields } from '../context'
 import * as T from '../graphql-types'
 
-export namespace TransactionForm {
-  export interface Props {
-    accountId: string
-    transactionId?: string
-  }
+interface Props {
+  accountId: string
+  transactionId?: string
 }
 
 type FormValues = ReturnType<typeof Transaction.defaultValues>
 
-export class TransactionForm extends React.Component<TransactionForm.Props> {
+export class TransactionForm extends React.Component<Props> {
   static readonly fragments = {
     transactionFields: gql`
       fragment transactionFields on Transaction {
@@ -95,58 +93,45 @@ export class TransactionForm extends React.Component<TransactionForm.Props> {
               ]}
             >
               {saveTransaction => (
-                <>
-                  <Formik<FormValues>
-                    enableReinitialize
-                    initialValues={initialValues}
-                    validate={values => {
-                      const errors: FormikErrors<FormValues> = {}
-                      if (!values.name.trim()) {
-                        errors.name = intl.formatMessage(messages.valueEmpty)
-                      }
-                      return errors
-                    }}
-                    onSubmit={input => {
-                      const { amount } = input
-                      const variables = {
-                        accountId,
-                        transactionId,
-                        input: {
-                          ...input,
-                          amount: accounting.unformat(amount.toString()),
-                        },
-                      }
-                      saveTransaction({ variables })
-                    }}
-                  >
-                    {formApi => {
-                      this.formApi = formApi
-                      return (
-                        <Form onSubmit={formApi.handleSubmit}>
-                          <DateField field='time' label={intl.formatMessage(messages.date)} />
-                          <TextField
-                            field='name'
-                            autoFocus
-                            label={intl.formatMessage(messages.name)}
-                          />
-                          <CurrencyField
-                            field='amount'
-                            label={intl.formatMessage(messages.amount)}
-                          />
-                          <TextField field='memo' label={intl.formatMessage(messages.memo)} />
-                        </Form>
-                      )
-                    }}
-
-                    {/* {edit && (
-          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
-            <Button transparent danger onPress={this.confirmDeleteTransaction}>
-              <Text>{intl.formatMessage(messages.deleteTransaction)}</Text>
-            </Button>
-          </View>
-        )} */}
-                  </Formik>
-                </>
+                <Formik<FormValues>
+                  enableReinitialize
+                  initialValues={initialValues}
+                  validate={values => {
+                    const errors: FormikErrors<FormValues> = {}
+                    if (!values.name.trim()) {
+                      errors.name = intl.formatMessage(messages.valueEmpty)
+                    }
+                    return errors
+                  }}
+                  onSubmit={input => {
+                    const { amount } = input
+                    const variables = {
+                      accountId,
+                      transactionId,
+                      input: {
+                        ...input,
+                        amount: accounting.unformat(amount.toString()),
+                      },
+                    }
+                    saveTransaction({ variables })
+                  }}
+                >
+                  {formApi => {
+                    this.formApi = formApi
+                    return (
+                      <Form onSubmit={formApi.handleSubmit}>
+                        <DateField field='time' label={intl.formatMessage(messages.date)} />
+                        <TextField
+                          field='name'
+                          autoFocus
+                          label={intl.formatMessage(messages.name)}
+                        />
+                        <CurrencyField field='amount' label={intl.formatMessage(messages.amount)} />
+                        <TextField field='memo' label={intl.formatMessage(messages.memo)} />
+                      </Form>
+                    )
+                  }}
+                </Formik>
               )}
             </AppMutation>
           )
@@ -164,27 +149,6 @@ export class TransactionForm extends React.Component<TransactionForm.Props> {
       this.formApi.submitForm()
     }
   }
-
-  // confirmDeleteTransaction = () => {
-  //   confirm({
-  //     title: messages.deleteTransactionTitle,
-  //     action: messages.deleteTransaction,
-  //     onConfirm: this.deleteTransaction,
-  //   })
-  // }
-
-  // deleteTransaction = () => {
-  //   const { deleteTransaction, transactionId } = this.props
-  //   if (transactionId) {
-  //     deleteTransaction({ transactionId }, { complete: this.onTransactionDeleted })
-  //   }
-  // }
-
-  // onTransactionDeleted = () => {
-  //   const { navBack, navPopToTop } = this.props
-  //   navBack()
-  //   navPopToTop()
-  // }
 }
 
 const messages = defineMessages({

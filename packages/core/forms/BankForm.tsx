@@ -19,12 +19,10 @@ type FormValues = typeof Bank.defaultValues & {
   fi: string
 }
 
-export namespace BankForm {
-  export interface Props {
-    bankId?: string
-    onClosed: () => any
-    cancelToken?: string
-  }
+interface Props {
+  bankId?: string
+  onClosed: () => any
+  cancelToken?: string
 }
 
 const bankAvatarSize = 100
@@ -79,14 +77,16 @@ export interface BankForm {
   save: () => any
 }
 
-const Component = React.forwardRef<
-  BankForm,
-  BankForm.Props & {
-    loading: boolean
-    data: T.BankForm.Query | undefined
-    saveBank: MutationFn<T.SaveBank.Mutation, T.SaveBank.Variables>
-  }
->(function BankFormComponent(props, ref) {
+interface ComponentProps extends Props {
+  loading: boolean
+  data: T.BankForm.Query | undefined
+  saveBank: MutationFn<T.SaveBank.Mutation, T.SaveBank.Variables>
+}
+
+const Component = React.forwardRef<BankForm, ComponentProps>(function BankFormComponent(
+  props,
+  ref
+) {
   const { ui, intl } = useContext(CoreContext)
   const { LoadingOverlay, Tabs, Tab, Text, showToast } = ui
   const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
@@ -266,7 +266,7 @@ const Component = React.forwardRef<
 })
 
 export const BankForm = Object.assign(
-  React.forwardRef((props: BankForm.Props, ref: React.Ref<BankForm>) => {
+  React.forwardRef<BankForm, Props>((props, ref) => {
     const { bankId } = props
 
     const component = useRef<BankForm>(null)

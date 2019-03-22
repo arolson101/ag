@@ -10,9 +10,8 @@ import * as T from '../graphql-types'
 
 const log = debug('core:BillsPage')
 
-export namespace BillsPage {
-  export interface Props {}
-}
+interface Props {}
+type ComponentProps = QueryHookResult<T.BillsPage.Query, T.BillsPage.Variables>
 
 const queries = {
   BillsPage: gql`
@@ -27,9 +26,7 @@ const queries = {
   ` as Gql<T.BillsPage.Query, T.BillsPage.Variables>,
 }
 
-const Component: React.FC<
-  QueryHookResult<T.BillsPage.Query, T.BillsPage.Variables>
-> = function BillsPageComponent({ data, loading }) {
+const Component = React.memo<ComponentProps>(({ data, loading }) => {
   const {
     intl,
     ui: { Page, Row, Text },
@@ -43,7 +40,8 @@ const Component: React.FC<
         data.appDb.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
     </Page>
   )
-}
+})
+Component.displayName = 'BillsPage.Component'
 
 const messages = defineMessages({
   tabText: {
@@ -57,7 +55,7 @@ const messages = defineMessages({
 })
 
 export const BillsPage = Object.assign(
-  (props: BillsPage.Props) => {
+  (props: Props) => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
     const q = useQuery(BillsPage.queries.BillsPage)

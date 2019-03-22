@@ -10,9 +10,8 @@ import * as T from '../graphql-types'
 
 const log = debug('core:CalendarPage')
 
-export namespace CalendarPage {
-  export interface Props {}
-}
+interface Props {}
+type ComponentProps = QueryHookResult<T.CalendarPage.Query, T.CalendarPage.Variables>
 
 const queries = {
   CalendarPage: gql`
@@ -27,9 +26,7 @@ const queries = {
   ` as Gql<T.CalendarPage.Query, T.CalendarPage.Variables>,
 }
 
-const Component: React.FC<
-  QueryHookResult<T.CalendarPage.Query, T.CalendarPage.Variables>
-> = function CalendarPageComponent({ data, loading }) {
+const Component = React.memo<ComponentProps>(({ data, loading }) => {
   const {
     intl,
     ui: { Page, Row, Text },
@@ -43,7 +40,8 @@ const Component: React.FC<
         data.appDb.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
     </Page>
   )
-}
+})
+Component.displayName = 'CalendarPage.Component'
 
 const messages = defineMessages({
   tabText: {
@@ -57,7 +55,7 @@ const messages = defineMessages({
 })
 
 export const CalendarPage = Object.assign(
-  (props: CalendarPage.Props) => {
+  React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
     const q = useQuery(CalendarPage.queries.CalendarPage)
@@ -68,7 +66,7 @@ export const CalendarPage = Object.assign(
     }
 
     return <Component {...q} />
-  },
+  }),
   {
     id: 'CalendarPage',
     queries,

@@ -9,12 +9,10 @@ import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 import { HomePage } from '../pages'
 
-export namespace AccountForm {
-  export interface Props {
-    accountId?: string
-    bankId?: string
-    onClosed: () => any
-  }
+interface Props {
+  accountId?: string
+  bankId?: string
+  onClosed: () => any
 }
 
 type FormValues = ReturnType<typeof Account.defaultValues>
@@ -66,7 +64,7 @@ const mutations = {
   ` as Gql<T.SaveAccount.Mutation, T.SaveAccount.Variables>,
 }
 
-export class AccountForm extends React.PureComponent<AccountForm.Props> {
+export class AccountForm extends React.PureComponent<Props> {
   static contextType = CoreContext
   context!: React.ContextType<typeof CoreContext>
 

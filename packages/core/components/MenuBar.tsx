@@ -8,11 +8,9 @@ import * as T from '../graphql-types'
 
 const log = debug('core:MenuBar')
 
-export namespace MenuBar {
-  export interface Props {}
-}
+interface Props {}
 
-export class MenuBar extends React.PureComponent<MenuBar.Props> {
+export class MenuBar extends React.PureComponent<Props> {
   static contextType = CoreContext
   context!: React.ContextType<typeof CoreContext>
 

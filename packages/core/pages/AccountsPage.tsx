@@ -11,9 +11,7 @@ import { deleteAccount, deleteBank } from '../mutations'
 
 const log = debug('core:AccountsPage')
 
-export namespace AccountsPage {
-  export interface Props {}
-}
+interface Props {}
 
 const fragments = {
   bankFields: gql`
@@ -265,7 +263,7 @@ const messages = defineMessages({
 })
 
 export const AccountsPage = Object.assign(
-  (props: AccountsPage.Props) => {
+  (props: Props) => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
     const q = useQuery(AccountsPage.queries.AccountsPage)

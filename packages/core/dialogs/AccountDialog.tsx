@@ -4,15 +4,13 @@ import { actions } from '../actions'
 import { CoreContext } from '../context'
 import { AccountForm } from '../forms'
 
-export namespace AccountDialog {
-  export interface Props {
-    bankId?: string
-    accountId?: string
-    isOpen: boolean
-  }
+interface Props {
+  bankId?: string
+  accountId?: string
+  isOpen: boolean
 }
 
-export class AccountDialog extends React.PureComponent<AccountDialog.Props> {
+export class AccountDialog extends React.PureComponent<Props> {
   static contextType = CoreContext
   context!: React.ContextType<typeof CoreContext>
 
