@@ -221,7 +221,7 @@ export namespace AccountForm {
     __typename?: 'Account'
 
     id: string
-  } & AccountFields.Fragment
+  } & AccountFieldsAccountForm.Fragment
 
   export type Bank = {
     __typename?: 'Bank'
@@ -247,7 +247,7 @@ export namespace SaveAccount {
     __typename?: 'Account'
 
     id: string
-  } & AccountFields.Fragment
+  } & AccountFieldsAccountForm.Fragment
 }
 
 export namespace BankForm {
@@ -438,7 +438,7 @@ export namespace AccountsPage {
     banks: Banks[]
   }
 
-  export type Banks = AccountsPageBankFields.Fragment
+  export type Banks = BankFieldsAccountsPage.Fragment
 }
 
 export namespace SyncAccounts {
@@ -452,7 +452,7 @@ export namespace SyncAccounts {
     syncAccounts: SyncAccounts
   }
 
-  export type SyncAccounts = AccountsPageBankFields.Fragment
+  export type SyncAccounts = BankFieldsAccountsPage.Fragment
 }
 
 export namespace DownloadTransactions {
@@ -470,7 +470,7 @@ export namespace DownloadTransactions {
     downloadTransactions: DownloadTransactions
   }
 
-  export type DownloadTransactions = AccountsPageAccountFields.Fragment
+  export type DownloadTransactions = AccountFieldsAccountsPage.Fragment
 }
 
 export namespace BillsPage {
@@ -567,7 +567,7 @@ export namespace HomePage {
   }
 }
 
-export namespace AccountFields {
+export namespace AccountFieldsAccountForm {
   export type Fragment = {
     __typename?: 'Account'
 
@@ -645,7 +645,7 @@ export namespace TransactionFields {
   }
 }
 
-export namespace AccountsPageBankFields {
+export namespace BankFieldsAccountsPage {
   export type Fragment = {
     __typename?: 'Bank'
 
@@ -673,7 +673,7 @@ export namespace AccountsPageBankFields {
   }
 }
 
-export namespace AccountsPageAccountFields {
+export namespace AccountFieldsAccountsPage {
   export type Fragment = {
     __typename?: 'Account'
 

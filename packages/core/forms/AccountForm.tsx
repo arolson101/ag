@@ -21,7 +21,7 @@ type FormValues = ReturnType<typeof Account.defaultValues>
 
 const fragments = {
   accountFields: gql`
-    fragment accountFields on Account {
+    fragment accountFields_AccountForm on Account {
       bankId
       name
       type
@@ -43,7 +43,7 @@ const queries = {
       appDb {
         account(accountId: $accountId) {
           id
-          ...accountFields
+          ...accountFields_AccountForm
         }
         bank(bankId: $bankId) {
           name
@@ -59,7 +59,7 @@ const mutations = {
     mutation SaveAccount($input: AccountInput!, $accountId: String, $bankId: String) {
       saveAccount(input: $input, accountId: $accountId, bankId: $bankId) {
         id
-        ...accountFields
+        ...accountFields_AccountForm
       }
     }
     ${fragments.accountFields}

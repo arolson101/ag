@@ -16,8 +16,8 @@ export namespace AccountsPage {
 }
 
 const fragments = {
-  accountsPageBankFields: gql`
-    fragment accountsPageBankFields on Bank {
+  bankFields: gql`
+    fragment bankFields_AccountsPage on Bank {
       id
       name
       favicon
@@ -31,8 +31,8 @@ const fragments = {
     }
   `,
 
-  accountsPageAccountFields: gql`
-    fragment accountsPageAccountFields on Account {
+  accountFields: gql`
+    fragment accountFields_AccountsPage on Account {
       id
       bankId
 
@@ -52,11 +52,11 @@ const queries = {
     query AccountsPage {
       appDb {
         banks {
-          ...accountsPageBankFields
+          ...bankFields_AccountsPage
         }
       }
     }
-    ${fragments.accountsPageBankFields}
+    ${fragments.bankFields}
   ` as Gql<T.AccountsPage.Query, T.AccountsPage.Variables>,
 }
 
@@ -64,10 +64,10 @@ const mutations = {
   SyncAccounts: gql`
     mutation SyncAccounts($bankId: String!) {
       syncAccounts(bankId: $bankId) {
-        ...accountsPageBankFields
+        ...bankFields_AccountsPage
       }
     }
-    ${fragments.accountsPageBankFields}
+    ${fragments.bankFields}
   ` as Gql<T.SyncAccounts.Mutation, T.SyncAccounts.Variables>,
 
   DownloadTransactions: gql`
@@ -85,10 +85,10 @@ const mutations = {
         end: $end
         cancelToken: $cancelToken
       ) {
-        ...accountsPageAccountFields
+        ...accountFields_AccountsPage
       }
     }
-    ${fragments.accountsPageAccountFields}
+    ${fragments.accountFields}
   ` as Gql<T.DownloadTransactions.Mutation, T.DownloadTransactions.Variables>,
 }
 
@@ -107,7 +107,7 @@ const Component: React.FC<
     ui: { Column, Page, Row, Table, showToast },
   } = context
 
-  type Row = T.AccountsPageBankFields.Accounts
+  type Row = NonNullable<NonNullable<typeof data>['appDb']>['banks'][number]['accounts'][number]
   const columns: Array<TableColumn<Row>> = [
     {
       dataIndex: 'name',

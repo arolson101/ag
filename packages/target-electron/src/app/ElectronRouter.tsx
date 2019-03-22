@@ -124,7 +124,9 @@ export const ElectronRouter: React.FC<Props> = props => {
             borderRight: '5px solid rgba(255, 255, 255, 0)',
           }}
         >
-          <div style={{ overflow: 'auto', height: '100vh' }}>
+          <div
+            style={{ overflow: 'auto', height: '100%', display: 'flex', flexDirection: 'column' }}
+          >
             <Route>
               {({ location }) => {
                 log('location: %o', location)
