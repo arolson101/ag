@@ -27,7 +27,6 @@
     "node-libs-react-native": "^1.0.3",
     "react": "^16.8.4",
     "react-apollo": "^2.5.2",
-    "react-apollo-hooks": "^0.4.3",
     "react-intl": "^2.8.0",
     "react-native": "^0.58.6",
     "react-native-fs": "^2.13.3",

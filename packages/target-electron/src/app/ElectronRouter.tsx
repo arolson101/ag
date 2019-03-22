@@ -5,19 +5,18 @@ import {
   BudgetsPage,
   CalendarPage,
   CoreContext,
-  Gql,
   HomePage,
   MenuBar,
-  useMutation,
-  useQuery,
 } from '@ag/core'
-import { Content, Header, Icon, Layout, Menu, PageHeader, Sider } from '@ag/ui-antd'
+import { Content, Icon, Layout, Menu } from '@ag/ui-antd'
+import { Gql, useMutation, useQuery } from '@ag/util'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import debug from 'debug'
 import gql from 'graphql-tag'
 import { parse } from 'query-string'
 import React, { useCallback, useContext } from 'react'
+import { FormattedMessage } from 'react-intl'
 import { Redirect, Route, Router as ReactRouter, Switch } from 'react-router-dom'
 import SplitPane from 'react-split-pane'
 import * as T from '../electron-graphql-types'
@@ -31,7 +30,6 @@ import {
   faPiggyBank as iconBudgets,
   faUniversity as iconAccounts,
 } from '@fortawesome/free-solid-svg-icons'
-import { FormattedMessage } from 'react-intl'
 
 const log = debug('electron:router')
 
@@ -83,12 +81,12 @@ const FontIcon: React.FC<{ icon: IconDefinition }> = ({ icon }) => (
 const url = (page: ComponentWithId) => `/${page.id}`
 
 export const ElectronRouter: React.FC<Props> = props => {
-  const { dispatch, intl } = useContext(CoreContext)
+  const { dispatch } = useContext(CoreContext)
   const { loading, data, error } = useQuery(queries.SidebarWidth)
   const setSidebarWidthMutation = useMutation(mutations.SetSidebarWidth, {
     refetchQueries: [{ query: queries.SidebarWidth }],
   })
-  const setSidebarWidth = React.useCallback(
+  const setSidebarWidth = useCallback(
     (width: number) => {
       log('setSidebarWidth %d', width)
       setSidebarWidthMutation({ variables: { value: width.toString() } })

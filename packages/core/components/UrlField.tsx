@@ -1,4 +1,4 @@
-import { fixUrl, generateAvatar, ImageSource, isUrl } from '@ag/util'
+import { fixUrl, generateAvatar, Gql, ImageSource, isUrl } from '@ag/util'
 import ApolloClient from 'apollo-client'
 import assert from 'assert'
 import debug from 'debug'
@@ -11,7 +11,6 @@ import { actions } from '../actions'
 import { CommonFieldProps, CommonTextFieldProps, CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 import { cancelOperation, isCancel } from './cancelOperation'
-import { Gql } from './Gql'
 
 const log = debug('core:UrlField')
 

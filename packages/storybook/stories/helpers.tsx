@@ -1,9 +1,9 @@
 // tslint:disable:no-implicit-dependencies
 import { App, cancelOperation, ClientDependencies, CoreContext } from '@ag/core'
+import { ApolloHooksProvider } from '@ag/util'
 import { action } from '@storybook/addon-actions'
 import React from 'react'
 import { ApolloConsumer } from 'react-apollo'
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks'
 import { MockedProvider, MockedResponse } from 'react-apollo/test-utils'
 import { IntlProvider } from 'react-intl'
 import { storiesOf, ui } from './platform-specific'

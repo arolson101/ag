@@ -1,8 +1,8 @@
+import { Gql } from '@ag/util'
 import ApolloClient from 'apollo-client'
 import assert from 'assert'
 import gql from 'graphql-tag'
 import { defineMessages } from 'react-intl'
-import { Gql } from '../components'
 import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 

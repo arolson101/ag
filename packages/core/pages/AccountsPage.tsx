@@ -1,11 +1,11 @@
+import { Gql, QueryHookResult, useApolloClient, useMutation, useQuery } from '@ag/util'
 import debug from 'debug'
 import gql from 'graphql-tag'
-import React, { useContext, useState } from 'react'
-import { QueryHookResult, useApolloClient } from 'react-apollo-hooks'
+import React, { useCallback, useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { ErrorDisplay, Gql, Link, useMutation, useQuery } from '../components'
-import { ActionItem, CoreContext, TableColumn } from '../context'
+import { ErrorDisplay } from '../components'
+import { ActionItem, ContextMenuProps, CoreContext, TableColumn } from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
 
@@ -90,23 +90,80 @@ const mutations = {
   ` as Gql<T.DownloadTransactions.Mutation, T.DownloadTransactions.Variables>,
 }
 
-const Component: React.FC<
-  QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
-> = function AccountsPageComponent({ data, loading }) {
+const BankTable = React.memo<T.AccountsPage.Banks>(bank => {
+  type Row = typeof bank.accounts[number]
   const context = useContext(CoreContext)
-  const client = useApolloClient()
+  const {
+    intl,
+    dispatch,
+    ui: { Row, Table, showToast },
+  } = context
+
   const syncAccounts = useMutation(mutations.SyncAccounts, {
     refetchQueries: [{ query: queries.AccountsPage }],
   })
 
-  const {
-    intl,
-    dispatch,
-    ui: { Column, Page, Row, Table, showToast },
-  } = context
+  const client = useApolloClient()
+  const titleActions = useRef<ActionItem[]>([
+    {
+      icon: 'edit',
+      text: intl.formatMessage(messages.bankEdit),
+      onClick: () => dispatch(actions.openDlg.bankEdit({ bankId: bank.id })),
+    },
+    {
+      icon: 'trash',
+      text: intl.formatMessage(messages.deleteBank),
+      onClick: () => deleteBank({ context, bank, client }),
+    },
+    {
+      icon: 'add',
+      text: intl.formatMessage(messages.accountCreate),
+      onClick: () => dispatch(actions.openDlg.accountCreate({ bankId: bank.id })),
+    },
+    ...(bank.online
+      ? [
+          {
+            icon: 'sync',
+            text: intl.formatMessage(messages.syncAccounts),
+            onClick: async () => {
+              try {
+                await syncAccounts({ variables: { bankId: bank.id } })
+                showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
+              } catch (error) {
+                ErrorDisplay.show(context, error)
+              }
+            },
+            disabled: !bank.online,
+          } as ActionItem,
+        ]
+      : []),
+  ])
 
-  type Row = NonNullable<NonNullable<typeof data>['appDb']>['banks'][number]['accounts'][number]
-  const columns: Array<TableColumn<Row>> = [
+  const rowContextMenu = useCallback(
+    function RowContextMenu(account: Row): ContextMenuProps {
+      return {
+        header: intl.formatMessage(messages.contextMenuHeader, {
+          bankName: bank.name,
+          accountName: account.name,
+        }),
+        actions: [
+          {
+            icon: 'edit',
+            text: intl.formatMessage(messages.editAccount),
+            onClick: () => dispatch(actions.openDlg.accountEdit({ accountId: account.id })),
+          },
+          {
+            icon: 'trash',
+            text: intl.formatMessage(messages.deleteAccount),
+            onClick: () => deleteAccount({ context, account, client }),
+          },
+        ],
+      }
+    },
+    [bank, intl, context, client]
+  )
+
+  const columns = useRef<Array<TableColumn<Row>>>([
     {
       dataIndex: 'name',
       title: intl.formatMessage(messages.colName),
@@ -119,7 +176,32 @@ const Component: React.FC<
       dataIndex: 'visible',
       title: intl.formatMessage(messages.colVisible),
     },
-  ]
+  ])
+
+  return (
+    <Table
+      key={bank.id}
+      titleText={bank.name}
+      titleImage={bank.favicon}
+      titleContextMenuHeader={bank.name}
+      titleActions={titleActions.current}
+      rowKey={'id'}
+      rowContextMenu={rowContextMenu}
+      emptyText={intl.formatMessage(messages.noAccounts)}
+      data={bank.accounts}
+      columns={columns.current}
+    />
+  )
+})
+BankTable.displayName = 'AccountsPage.BankTable'
+
+type ComponentProps = QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
+const Component = React.memo<ComponentProps>(({ data, loading }) => {
+  const {
+    intl,
+    dispatch,
+    ui: { Page },
+  } = useContext(CoreContext)
 
   return (
     <Page
@@ -129,75 +211,13 @@ const Component: React.FC<
         onClick: () => dispatch(actions.openDlg.bankCreate()),
       }}
     >
-      {data &&
+      {data && //
         data.appDb &&
-        data.appDb.banks.map(bank => (
-          <Table
-            key={bank.id}
-            titleText={bank.name}
-            titleImage={bank.favicon}
-            titleContextMenuHeader={bank.name}
-            titleActions={[
-              {
-                icon: 'edit',
-                text: intl.formatMessage(messages.bankEdit),
-                onClick: () => dispatch(actions.openDlg.bankEdit({ bankId: bank.id })),
-              },
-              {
-                icon: 'trash',
-                text: intl.formatMessage(messages.deleteBank),
-                onClick: () => deleteBank({ context, bank, client }),
-              },
-              {
-                icon: 'add',
-                text: intl.formatMessage(messages.accountCreate),
-                onClick: () => dispatch(actions.openDlg.accountCreate({ bankId: bank.id })),
-              },
-              ...(bank.online
-                ? [
-                    {
-                      icon: 'sync',
-                      text: intl.formatMessage(messages.syncAccounts),
-                      onClick: async () => {
-                        try {
-                          await syncAccounts({ variables: { bankId: bank.id } })
-                          showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
-                        } catch (error) {
-                          ErrorDisplay.show(context, error)
-                        }
-                      },
-                      disabled: !bank.online,
-                    } as ActionItem,
-                  ]
-                : []),
-            ]}
-            rowKey={'id'}
-            rowContextMenu={(account: Row) => ({
-              header: intl.formatMessage(messages.contextMenuHeader, {
-                bankName: bank.name,
-                accountName: account.name,
-              }),
-              actions: [
-                {
-                  icon: 'edit',
-                  text: intl.formatMessage(messages.editAccount),
-                  onClick: () => dispatch(actions.openDlg.accountEdit({ accountId: account.id })),
-                },
-                {
-                  icon: 'trash',
-                  text: intl.formatMessage(messages.deleteAccount),
-                  onClick: () => deleteAccount({ context, account, client }),
-                },
-              ],
-            })}
-            emptyText={intl.formatMessage(messages.noAccounts)}
-            data={bank.accounts}
-            columns={columns}
-          />
-        ))}
+        data.appDb.banks.map(bank => <BankTable {...bank} key={bank.id} />)}
     </Page>
   )
-}
+})
+Component.displayName = 'AccountsPage.Component'
 
 const messages = defineMessages({
   contextMenuHeader: {
@@ -263,7 +283,7 @@ const messages = defineMessages({
 })
 
 export const AccountsPage = Object.assign(
-  (props: Props) => {
+  React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
     const q = useQuery(AccountsPage.queries.AccountsPage)
@@ -274,7 +294,7 @@ export const AccountsPage = Object.assign(
     }
 
     return <Component {...q} />
-  },
+  }),
   {
     id: 'AccountsPage',
     queries,

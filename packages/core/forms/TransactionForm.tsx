@@ -1,11 +1,11 @@
 import { Transaction } from '@ag/db'
-import { pick } from '@ag/util'
+import { Gql, pick } from '@ag/util'
 import accounting from 'accounting'
 import { Formik, FormikErrors, FormikProps } from 'formik'
 import gql from 'graphql-tag'
 import * as React from 'react'
 import { defineMessages } from 'react-intl'
-import { AppMutation, AppQuery, Gql } from '../components'
+import { AppMutation, AppQuery } from '../components'
 import { typedFields } from '../context'
 import * as T from '../graphql-types'
 

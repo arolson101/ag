@@ -1,10 +1,9 @@
+import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
 import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
-import { QueryHookResult } from 'react-apollo-hooks'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { Gql, Link, useQuery } from '../components'
 import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 
@@ -55,7 +54,7 @@ const messages = defineMessages({
 })
 
 export const BillsPage = Object.assign(
-  (props: Props) => {
+  React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
     const q = useQuery(BillsPage.queries.BillsPage)
@@ -66,7 +65,7 @@ export const BillsPage = Object.assign(
     }
 
     return <Component {...q} />
-  },
+  }),
   {
     id: 'BillsPage',
     queries,

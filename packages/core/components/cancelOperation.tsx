@@ -1,8 +1,8 @@
+import { Gql } from '@ag/util'
 import ApolloClient from 'apollo-client'
 import debug from 'debug'
 import gql from 'graphql-tag'
 import * as T from '../graphql-types'
-import { Gql } from './Gql'
 
 const log = debug('core:cancelOperation')
 

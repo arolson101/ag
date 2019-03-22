@@ -1,6 +1,12 @@
 import { OperationVariables } from 'apollo-client'
-import { QueryHookOptions, useQuery as useHookQuery } from 'react-apollo-hooks'
+import {
+  ApolloProvider as ApolloHooksProvider,
+  QueryHookOptions,
+  QueryHookResult,
+  useQuery as useHookQuery,
+} from 'react-apollo-hooks'
 import { Gql } from './Gql'
+export { QueryHookResult, ApolloHooksProvider }
 
 export function useQuery<TData, TVariables = OperationVariables, TCache = object>(
   query: Gql<TData, TVariables>,

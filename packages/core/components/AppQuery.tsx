@@ -1,3 +1,4 @@
+import { Gql } from '@ag/util'
 import ApolloClient from 'apollo-client'
 import debug from 'debug'
 import React from 'react'
@@ -5,7 +6,6 @@ import { Query, QueryProps } from 'react-apollo'
 import { Omit } from 'utility-types'
 import { CoreContext } from '../context'
 import { ErrorDisplay } from './ErrorDisplay'
-import { Gql } from './Gql'
 
 const log = debug('core:AppQuery')
 

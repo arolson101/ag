@@ -4,7 +4,9 @@
   "license": "MIT",
   "main": "index.ts",
   "dependencies": {
+    "apollo-client": "^2.5.1",
     "debug": "^4.1.1",
+    "graphql": "^14.1.1",
     "image-size": "^0.7.2",
     "immutability-helper": "^3.0.0",
     "is-url": "^1.2.4",
@@ -12,12 +14,14 @@
     "lodash.pick": "^4.4.0",
     "luxon": "^1.11.4",
     "memoize-one": "^5.0.0",
+    "react-apollo-hooks": "^0.4.3",
     "rxjs": "^6.4.0",
     "typeorm": "^0.2.14",
     "url-regex": "^4.1.1"
   },
   "devDependencies": {
     "@types/debug": "^4.1.2",
+    "@types/graphql": "^14.0.7",
     "@types/image-size": "^0.7.0",
     "@types/is-url": "^1.2.28",
     "@types/lodash.omit": "^4.5.6",

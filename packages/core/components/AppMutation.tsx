@@ -1,10 +1,10 @@
+import { Gql } from '@ag/util'
 import debug from 'debug'
 import React from 'react'
 import { Mutation, MutationFn, MutationProps, MutationResult } from 'react-apollo'
 import { Omit } from 'utility-types'
 import { CoreContext } from '../context'
 import { ErrorDisplay } from './ErrorDisplay'
-import { Gql } from './Gql'
 
 const log = debug('core:AppMutation')
 
