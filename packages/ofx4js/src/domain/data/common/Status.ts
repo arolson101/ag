@@ -1,4 +1,4 @@
-import { Aggregate_add } from '../../../meta/Aggregate_add'
+import { Aggregate_add } from '../../../meta/Aggregate_Add'
 import { Element_add } from '../../../meta/Element_add'
 import { Severity, StatusCode } from './StatusCode'
 

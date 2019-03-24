@@ -1,5 +1,5 @@
 import { Aggregate_add } from '../../../meta/Aggregate_Add'
-import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_Add'
 import { T1099Response } from '../common/T1099Response'
 import { Tax1099B } from './Tax1099B'
 import { Tax1099DIV } from './Tax1099DIV'

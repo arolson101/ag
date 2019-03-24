@@ -1,5 +1,5 @@
 import { Aggregate_add } from '../../../meta/Aggregate_Add'
-import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_Add'
 import { MessageSetType } from '../MessageSetType'
 import { ResponseMessage } from '../ResponseMessage'
 import { ResponseMessageSet } from '../ResponseMessageSet'

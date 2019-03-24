@@ -1,4 +1,4 @@
-import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_Add'
 import { BaseInvestmentTransaction } from './BaseInvestmentTransaction'
 import { InvestmentTransaction } from './InvestmentTransaction'
 import { InvestmentTransactionType } from './TransactionType'

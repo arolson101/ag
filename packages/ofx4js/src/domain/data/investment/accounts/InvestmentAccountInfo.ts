@@ -1,5 +1,5 @@
 import { Aggregate_add } from '../../../../meta/Aggregate_Add'
-import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_Add'
 import { Element_add } from '../../../../meta/Element_add'
 import { AccountDetails } from '../../common/AccountDetails'
 import { AccountInfo } from '../../common/AccountInfo'

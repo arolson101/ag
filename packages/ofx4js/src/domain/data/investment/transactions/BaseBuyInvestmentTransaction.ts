@@ -1,4 +1,4 @@
-import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../../../meta/ChildAggregate_Add'
 import { SecurityId } from '../../seclist/SecurityId'
 import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountType'
 import { BaseInvestmentTransaction } from './BaseInvestmentTransaction'

@@ -1,6 +1,6 @@
 import { SortedSet } from '../../collections/SortedSet'
 import { Aggregate_add } from '../../meta/Aggregate_Add'
-import { ChildAggregate_add } from '../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../meta/ChildAggregate_Add'
 import { Header_add } from '../../meta/Header_add'
 import { ApplicationSecurity } from './ApplicationSecurity'
 import { MessageSetType } from './MessageSetType'

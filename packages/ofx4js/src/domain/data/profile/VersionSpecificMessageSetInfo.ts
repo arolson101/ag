@@ -1,4 +1,4 @@
-import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_Add'
 import { ApplicationSecurity } from '../ApplicationSecurity'
 import { MessageSetProfile } from '../MessageSetProfile'
 import { MessageSetType } from '../MessageSetType'

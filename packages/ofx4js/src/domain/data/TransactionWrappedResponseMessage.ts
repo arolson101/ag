@@ -1,4 +1,4 @@
-import { ChildAggregate_add } from '../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../meta/ChildAggregate_Add'
 import { Element_add } from '../../meta/Element_add'
 import { Status } from './common/Status'
 import { StatusHolder } from './common/StatusHolder'

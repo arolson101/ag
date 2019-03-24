@@ -1,4 +1,4 @@
-import { ChildAggregate_add } from '../../../meta/ChildAggregate_add'
+import { ChildAggregate_add } from '../../../meta/ChildAggregate_Add'
 import { SecurityId } from './SecurityId'
 import { SecurityInfo } from './SecurityInfo'
 
