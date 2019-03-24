@@ -17,7 +17,6 @@ import { UrlField } from '../components/UrlField'
 import { CoreContext, tabConfig, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
-import { HomePage } from '../pages'
 
 const log = debug('core:BankForm')
 

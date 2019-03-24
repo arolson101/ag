@@ -22,14 +22,6 @@ const initialState = {
   history,
 }
 
-const href = (id: string, props?: object) =>
-  history.createHref({
-    pathname: `${id}`,
-    hash: '',
-    search: props ? stringify(props) : '',
-    state: {},
-  })
-
 export const router = (state: RouterState = initialState, action: CoreAction): RouterState => {
   switch (action.type) {
     // case getType(actions.nav.login):
@@ -37,27 +29,27 @@ export const router = (state: RouterState = initialState, action: CoreAction): R
     //   break
 
     case getType(actions.nav.home):
-      state.history.push(href(HomePage.id))
+      state.history.push(HomePage.route())
       break
 
     case getType(actions.nav.accounts):
-      state.history.push(href(AccountsPage.id))
+      state.history.push(AccountsPage.route())
       break
 
     case getType(actions.nav.account):
-      state.history.push(href(AccountPage.id, action.payload))
+      state.history.push(AccountPage.route(action.payload))
       break
 
     case getType(actions.nav.bills):
-      state.history.push(href(BillsPage.id))
+      state.history.push(BillsPage.route())
       break
 
     case getType(actions.nav.budgets):
-      state.history.push(href(BudgetsPage.id))
+      state.history.push(BudgetsPage.route())
       break
 
     case getType(actions.nav.calendar):
-      state.history.push(href(CalendarPage.id))
+      state.history.push(CalendarPage.route())
       break
 
     // case getType(actions.nav.bank):

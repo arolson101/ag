@@ -1,25 +1,18 @@
-import {
-  Gql,
-  monthsAgo,
-  QueryHookResult,
-  standardizeDate,
-  useApolloClient,
-  useMutation,
-  useQuery,
-} from '@ag/util'
+import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
+import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { ErrorDisplay } from '../components'
-import { ActionItem, ContextMenuProps, CoreContext, TableColumn } from '../context'
+import { CoreContext } from '../context'
 import * as T from '../graphql-types'
-import { deleteAccount, deleteBank } from '../mutations'
 
 const log = debug('core:AccountPage')
 
-interface Props {}
+interface Props {
+  accountId: string
+}
 
 const fragments = {}
 
@@ -37,9 +30,9 @@ const queries = {
 
 const mutations = {}
 
-type ComponentProps = QueryHookResult<T.AccountPage.Query, T.AccountPage.Variables>
+type ComponentProps = Props & QueryHookResult<T.AccountPage.Query, T.AccountPage.Variables>
 const Component = Object.assign(
-  React.memo<ComponentProps>(({ data, loading }) => {
+  React.memo<ComponentProps>(({ accountId, data, loading }) => {
     const {
       intl,
       dispatch,
@@ -54,7 +47,7 @@ const Component = Object.assign(
           onClick: () => dispatch(actions.openDlg.bankCreate()),
         }}
       >
-        account
+        account {accountId}
       </Page>
     )
   }),
@@ -134,6 +127,9 @@ const messages = defineMessages({
   },
 })
 
+const path = '/accounts/:accountId'
+const route = docuri.route<Props, string>(path)
+
 export const AccountPage = Object.assign(
   React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
@@ -145,12 +141,14 @@ export const AccountPage = Object.assign(
       setDispatched(true)
     }
 
-    return <Component {...q} />
+    return <Component {...props} {...q} />
   }),
   {
     id: 'AccountPage',
     queries,
     Component,
     messages,
+    path,
+    route,
   }
 )

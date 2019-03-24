@@ -14,8 +14,6 @@ export class AccountDialog extends React.PureComponent<Props> {
   static contextType = CoreContext
   context!: React.ContextType<typeof CoreContext>
 
-  static readonly id = 'AccountDialog'
-
   AccountForm = React.createRef<AccountForm>()
 
   render() {

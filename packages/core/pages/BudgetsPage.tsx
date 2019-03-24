@@ -1,5 +1,6 @@
 import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
+import docuri from 'docuri'
 import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import { defineMessages } from 'react-intl'
@@ -53,6 +54,9 @@ const messages = defineMessages({
   },
 })
 
+const path = '/budgets'
+const route = docuri.route<void, string>(path)
+
 export const BudgetsPage = Object.assign(
   React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
@@ -71,5 +75,7 @@ export const BudgetsPage = Object.assign(
     queries,
     Component,
     messages,
+    path,
+    route,
   }
 )

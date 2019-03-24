@@ -8,6 +8,7 @@ import {
   useQuery,
 } from '@ag/util'
 import debug from 'debug'
+import docuri from 'docuri'
 import gql from 'graphql-tag'
 import React, { useCallback, useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
@@ -242,28 +243,32 @@ const BankTable = Object.assign(
 )
 
 type ComponentProps = QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
-const Component = React.memo<ComponentProps>(({ data, loading }) => {
-  const {
-    intl,
-    dispatch,
-    ui: { Page },
-  } = useContext(CoreContext)
+const Component = Object.assign(
+  React.memo<ComponentProps>(({ data, loading }) => {
+    const {
+      intl,
+      dispatch,
+      ui: { Page },
+    } = useContext(CoreContext)
 
-  return (
-    <Page
-      title={intl.formatMessage(messages.titleText)}
-      button={{
-        title: intl.formatMessage(messages.bankAdd),
-        onClick: () => dispatch(actions.openDlg.bankCreate()),
-      }}
-    >
-      {data && //
-        data.appDb &&
-        data.appDb.banks.map(bank => <BankTable {...bank} key={bank.id} />)}
-    </Page>
-  )
-})
-Component.displayName = 'AccountsPage.Component'
+    return (
+      <Page
+        title={intl.formatMessage(messages.titleText)}
+        button={{
+          title: intl.formatMessage(messages.bankAdd),
+          onClick: () => dispatch(actions.openDlg.bankCreate()),
+        }}
+      >
+        {data && //
+          data.appDb &&
+          data.appDb.banks.map(bank => <BankTable {...bank} key={bank.id} />)}
+      </Page>
+    )
+  }),
+  {
+    displayName: 'AccountsPage.Component',
+  }
+)
 
 const messages = defineMessages({
   contextMenuHeader: {
@@ -336,6 +341,9 @@ const messages = defineMessages({
   },
 })
 
+const path = '/accounts'
+const route = docuri.route<void, string>(path)
+
 export const AccountsPage = Object.assign(
   React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
@@ -354,5 +362,7 @@ export const AccountsPage = Object.assign(
     queries,
     Component,
     messages,
+    path,
+    route,
   }
 )

@@ -35,8 +35,6 @@ export class PictureDialog extends React.PureComponent<Props, State> {
   static contextType = CoreContext
   context!: React.ContextType<typeof CoreContext>
 
-  static readonly id = 'PictureDialog'
-
   static readonly queries = {
     getImageList: gql`
       query GetImageList($url: String!, $cancelToken: String!) {

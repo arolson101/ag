@@ -18,6 +18,7 @@
     "accounting": "^0.4.1",
     "apollo-client": "^2.5.1",
     "debug": "^4.1.1",
+    "docuri": "^4.2.2",
     "filist": "^1.0.3",
     "formik": "^1.5.1",
     "graphql": "^14.1.1",

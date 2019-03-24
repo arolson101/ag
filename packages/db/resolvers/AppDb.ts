@@ -62,7 +62,7 @@ export class AppDb {
   async get(
     @Arg('key') key: string //
   ): Promise<Setting | undefined> {
-    log('get %s', key)
+    // log('get %s', key)
     if (this.settingsRepository) {
       const setting = await this.settingsRepository.get(key)
       return setting

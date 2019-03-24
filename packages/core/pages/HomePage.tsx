@@ -1,5 +1,6 @@
 import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
+import docuri from 'docuri'
 import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import { defineMessages } from 'react-intl'
@@ -49,11 +50,14 @@ const messages = defineMessages({
   },
 })
 
+const path = '/home'
+const route = docuri.route<void, string>(path)
+
 export const HomePage = Object.assign(
   React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
-    const q = useQuery(HomePage.queries.HomePage)
+    const q = useQuery(queries.HomePage)
 
     if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
       dispatch(actions.openDlg.login())
@@ -67,5 +71,7 @@ export const HomePage = Object.assign(
     queries,
     Component,
     messages,
+    path,
+    route,
   }
 )
