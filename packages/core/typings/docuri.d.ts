@@ -1,5 +1,5 @@
 declare module 'docuri' {
-  interface Route<T, S> {
+  interface DocRoute<T, S> {
     // parse DocURI string to object
     (str: S): T | false
 
@@ -10,5 +10,5 @@ declare module 'docuri' {
     (str: S, obj: T): S
   }
 
-  export function route<T, S>(route: S): Route<T, S>
+  export function route<T, S>(route: S): DocRoute<T, S>
 }

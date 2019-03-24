@@ -27,9 +27,11 @@ import {
 } from 'antd'
 import 'antd/dist/antd.css'
 import debug from 'debug'
+import { MemoryHistory } from 'history'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import React from 'react'
+import useReactRouter from 'use-react-router'
 import { CheckboxField } from './CheckboxField.antd'
 import { CurrencyField } from './CurrencyField.antd'
 import { DateField } from './DateField.antd'
@@ -171,25 +173,39 @@ export const ui: UiContext = {
     </div>
   ),
 
-  Page: ({ button, title, children }) => (
-    <Layout style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <PageHeader title={title} />
-      <Layout.Content style={{ background: '#fff', padding: 5, overflow: 'auto', flex: 1 }}>
-        {children}
-      </Layout.Content>
-      {button && (
-        <Layout.Footer>
-          <Button
-            disabled={button.disabled}
-            type={button.isDanger ? 'danger' : undefined}
-            onClick={button.onClick}
-          >
-            {button.title}
-          </Button>
-        </Layout.Footer>
-      )}
-    </Layout>
-  ),
+  Page: ({ button, title, image, subtitle, children }) => {
+    const { history } = useReactRouter()
+    const h = history as MemoryHistory
+
+    return (
+      <Layout style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <PageHeader
+          onBack={h.canGo(-1) ? h.goBack : undefined} //
+          title={
+            <Title>
+              <Icon style={{ margin: 5 }} component={() => <ImageSourceIcon src={image} />} />
+              {title}
+            </Title>
+          }
+          subTitle={subtitle}
+        />
+        <Layout.Content style={{ background: '#fff', padding: 5, overflow: 'auto', flex: 1 }}>
+          {children}
+        </Layout.Content>
+        {button && (
+          <Layout.Footer>
+            <Button
+              disabled={button.disabled}
+              type={button.isDanger ? 'danger' : undefined}
+              onClick={button.onClick}
+            >
+              {button.title}
+            </Button>
+          </Layout.Footer>
+        )}
+      </Layout>
+    )
+  },
   Tile: ({ size, margin, children }) => (
     <div
       style={{

@@ -104,6 +104,8 @@ export interface NavMenuProps {
 
 export interface PageProps {
   title: string
+  image?: ImageSource
+  subtitle?: string
   button?: ButtonConfig
 }
 

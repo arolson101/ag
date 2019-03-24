@@ -8,15 +8,14 @@ import {
   CoreAction,
   HomePage,
 } from '@ag/core'
-import { createBrowserHistory, History } from 'history'
-import { stringify } from 'query-string'
+import { createMemoryHistory, History } from 'history'
 import { getType } from 'typesafe-actions'
 
 export interface RouterState {
   history: History
 }
 
-export const history = createBrowserHistory()
+export const history = createMemoryHistory()
 
 const initialState = {
   history,

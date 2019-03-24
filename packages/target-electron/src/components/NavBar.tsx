@@ -4,6 +4,7 @@ import {
   BillsPage,
   BudgetsPage,
   CalendarPage,
+  CoreAction,
   CoreContext,
   HomePage,
   MenuBar,
@@ -20,8 +21,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import debug from 'debug'
+import { DocRoute } from 'docuri'
 import React, { useContext } from 'react'
-import { Route } from 'react-router-dom'
+import { FormattedMessage } from 'react-intl'
 import useReactRouter from 'use-react-router'
 
 const log = debug('electron:NavBar')
@@ -32,52 +34,71 @@ const FontIcon: React.FC<{ icon: IconDefinition }> = ({ icon }) => (
   <Icon component={() => <FontAwesomeIcon icon={icon} />} />
 )
 
+type NavComponent = React.ComponentType & {
+  path: string
+  route: DocRoute<any, string>
+  messages: {
+    tabText: FormattedMessage.MessageDescriptor
+  }
+}
+
+interface NavItem {
+  Component: NavComponent
+  nav: () => CoreAction
+  icon: IconDefinition
+}
+
+const navItems: NavItem[] = [
+  {
+    Component: HomePage,
+    nav: actions.nav.home,
+    icon: iconHome,
+  },
+  {
+    Component: AccountsPage,
+    nav: actions.nav.accounts,
+    icon: iconAccounts,
+  },
+  {
+    Component: BillsPage,
+    nav: actions.nav.bills,
+    icon: iconBills,
+  },
+  {
+    Component: BudgetsPage,
+    nav: actions.nav.budgets,
+    icon: iconBudgets,
+  },
+  {
+    Component: CalendarPage,
+    nav: actions.nav.calendar,
+    icon: iconCalendar,
+  },
+]
+
 export const NavBar = React.memo<Props>(props => {
   const { dispatch, intl } = useContext(CoreContext)
   const { location } = useReactRouter()
 
+  const selectedKeys = navItems
+    .filter(item => location.pathname.startsWith(item.Component.path))
+    .map(item => item.Component.path)
+
   return (
     <div style={{ overflow: 'auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Menu selectable selectedKeys={[location.pathname]} mode='inline'>
-        <Menu.Item
-          key={HomePage.path} //
-          onClick={() => dispatch(actions.nav.home())}
-        >
-          <FontIcon icon={iconHome} />
-          <span>{intl.formatMessage(HomePage.messages.tabText)}</span>
-        </Menu.Item>
-
-        <Menu.Item key={AccountsPage.path} onClick={() => dispatch(actions.nav.accounts())}>
-          <FontIcon icon={iconAccounts} />
-          <span>{intl.formatMessage(AccountsPage.messages.tabText)}</span>
-        </Menu.Item>
-
-        <Menu.Item
-          key={BillsPage.path} //
-          onClick={() => dispatch(actions.nav.bills())}
-        >
-          <FontIcon icon={iconBills} />
-          <span>{intl.formatMessage(BillsPage.messages.tabText)}</span>
-        </Menu.Item>
-
-        <Menu.Item
-          key={BudgetsPage.path} //
-          onClick={() => dispatch(actions.nav.budgets())}
-        >
-          <FontIcon icon={iconBudgets} />
-          <span>{intl.formatMessage(BudgetsPage.messages.tabText)}</span>
-        </Menu.Item>
-
-        <Menu.Item
-          key={CalendarPage.path} //
-          onClick={() => dispatch(actions.nav.calendar())}
-        >
-          <FontIcon icon={iconCalendar} />
-          <span>{intl.formatMessage(CalendarPage.messages.tabText)}</span>
-        </Menu.Item>
+      <Menu selectable selectedKeys={selectedKeys} mode='inline'>
+        {navItems.map(item => (
+          <Menu.Item
+            key={item.Component.path} //
+            onClick={() => dispatch(item.nav())}
+          >
+            <FontIcon icon={item.icon} />
+            <span>{intl.formatMessage(item.Component.messages.tabText)}</span>
+          </Menu.Item>
+        ))}
       </Menu>
 
-      <MenuBar />
+      {/* <MenuBar /> */}
     </div>
   )
 })

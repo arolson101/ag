@@ -39,7 +39,7 @@ export const ElectronRouter = React.memo<Props>(props => {
           <Content>
             <Route
               render={params => {
-                log('route %s %o', params.location.pathname, params)
+                log('route %s %O %O', params.location.pathname, params, history.entries)
                 return null
               }}
             />

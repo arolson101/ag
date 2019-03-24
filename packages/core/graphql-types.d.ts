@@ -424,7 +424,9 @@ export namespace DeleteDb {
 }
 
 export namespace AccountPage {
-  export type Variables = {}
+  export type Variables = {
+    accountId: string
+  }
 
   export type Query = {
     __typename?: 'Query'
@@ -442,6 +444,18 @@ export namespace AccountPage {
     __typename?: 'Account'
 
     id: string
+
+    name: string
+
+    bank: Bank
+  }
+
+  export type Bank = {
+    __typename?: 'Bank'
+
+    name: string
+
+    favicon: ImageSource
   }
 }
 

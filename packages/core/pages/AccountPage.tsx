@@ -18,10 +18,15 @@ const fragments = {}
 
 const queries = {
   AccountPage: gql`
-    query AccountPage {
+    query AccountPage($accountId: String!) {
       appDb {
-        account {
+        account(accountId: $accountId) {
           id
+          name
+          bank {
+            name
+            favicon
+          }
         }
       }
     }
@@ -39,9 +44,15 @@ const Component = Object.assign(
       ui: { Page },
     } = useContext(CoreContext)
 
+    const account = data && data.appDb && data.appDb.account
+    const title = (account && account.name) || 'no account'
+    const subtitle = (account && account.bank.name) || 'no bank'
+
     return (
       <Page
-        title={intl.formatMessage(messages.titleText)}
+        image={account ? account.bank.favicon : undefined}
+        title={title}
+        subtitle={subtitle}
         button={{
           title: intl.formatMessage(messages.transactionAdd),
           onClick: () => dispatch(actions.openDlg.bankCreate()),
@@ -57,65 +68,13 @@ const Component = Object.assign(
 )
 
 const messages = defineMessages({
-  contextMenuHeader: {
-    id: 'AccountPage.contextMenuHeader',
-    defaultMessage: '{bankName} - {accountName}',
+  titleText: {
+    id: 'AccountPage.titleText',
+    defaultMessage: 'Accounts',
   },
   transactionAdd: {
     id: 'AccountPage.transactionAdd',
     defaultMessage: 'Add Transaction',
-  },
-  bankEdit: {
-    id: 'AccountPage.bankEdit',
-    defaultMessage: 'Edit Bank',
-  },
-  deleteBank: {
-    id: 'AccountPage.deleteBank',
-    defaultMessage: 'Delete Bank',
-  },
-  syncAccounts: {
-    id: 'AccountPage.syncAccounts',
-    defaultMessage: 'Sync Accounts',
-  },
-  syncComplete: {
-    id: 'AccountPage.syncComplete',
-    defaultMessage: "Synced Accounts for '{name}'",
-  },
-  accountCreate: {
-    id: 'AccountPage.accountCreate',
-    defaultMessage: 'Add Account',
-  },
-  editAccount: {
-    id: 'AccountPage.editAccount',
-    defaultMessage: 'Edit Account',
-  },
-  deleteAccount: {
-    id: 'AccountPage.deleteAccount',
-    defaultMessage: 'Delete Account',
-  },
-  colName: {
-    id: 'AccountPage.colName',
-    defaultMessage: 'Account',
-  },
-  colNumber: {
-    id: 'AccountPage.colNumber',
-    defaultMessage: 'Number',
-  },
-  colVisible: {
-    id: 'AccountPage.colVisible',
-    defaultMessage: 'Visible',
-  },
-  noAccounts: {
-    id: 'AccountPage.noAccounts',
-    defaultMessage: 'No Accounts',
-  },
-  tabText: {
-    id: 'AccountPage.tabText',
-    defaultMessage: 'Accounts',
-  },
-  titleText: {
-    id: 'AccountPage.titleText',
-    defaultMessage: 'Accounts',
   },
   getTransactions: {
     id: 'AccountPage.getTransactions',
@@ -134,7 +93,8 @@ export const AccountPage = Object.assign(
   React.memo<Props>(props => {
     const { dispatch } = useContext(CoreContext)
     const [dispatched, setDispatched] = useState(false)
-    const q = useQuery(AccountPage.queries.AccountPage)
+    const { accountId } = props
+    const q = useQuery(AccountPage.queries.AccountPage, { variables: { accountId } })
 
     if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
       dispatch(actions.openDlg.login())
