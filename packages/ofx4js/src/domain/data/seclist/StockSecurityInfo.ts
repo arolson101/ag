@@ -9,11 +9,11 @@ import { StockType, StockType_fromOfx } from './StockType'
  * @see "Section 13.8.5.6, OFX Spec"
  */
 export class StockSecurityInfo extends BaseSecurityInfo {
-  private stockType: string
-  private yield: number
-  private dateYieldAsOf: Date
-  private assetClass: string
-  private fiAssetClass: string
+  private stockType!: string
+  private yield!: number
+  private dateYieldAsOf!: Date
+  private assetClass!: string
+  private fiAssetClass!: string
 
   /**
    * Gets the type of stock. One of "COMMON", "PREFERRED", "CONVERTIBLE", or "OTHER". This is an

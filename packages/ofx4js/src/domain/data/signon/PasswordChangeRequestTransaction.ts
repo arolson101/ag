@@ -6,7 +6,7 @@ import { PasswordChangeRequest } from './PasswordChangeRequest'
 export class PasswordChangeRequestTransaction extends TransactionWrappedRequestMessage<
   PasswordChangeRequest
 > {
-  private message: PasswordChangeRequest
+  private message!: PasswordChangeRequest
 
   /**
    * The wrapped message.

@@ -2,15 +2,15 @@ import { Aggregate_add } from '../../../meta/Aggregate_Add'
 import { Element_add } from '../../../meta/Element_add'
 
 export class ProcDet {
-  private dtAqd: string
-  private dtSale: string
-  private secName: string
-  private costBasis: string
-  private saleSpr: string
-  private longShort: string
-  private wasDisAllowed: string
-  private noncoveredSec: string
-  private basisNotshown: string
+  private dtAqd!: string
+  private dtSale!: string
+  private secName!: string
+  private costBasis!: string
+  private saleSpr!: string
+  private longShort!: string
+  private wasDisAllowed!: string
+  private noncoveredSec!: string
+  private basisNotshown!: string
   /**
    * @return the dtAqd
    */

@@ -2,8 +2,8 @@ import { Aggregate_add } from '../../../meta/Aggregate_Add'
 import { Element_add } from '../../../meta/Element_add'
 
 export class FinancialInstitutionInfo {
-  private id: string
-  private organization: string
+  private id!: string
+  private organization!: string
 
   /**
    * Financial institution id.

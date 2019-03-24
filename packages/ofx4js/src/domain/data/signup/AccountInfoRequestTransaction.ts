@@ -6,7 +6,7 @@ import { AccountInfoRequest } from './AccountInfoRequest'
 export class AccountInfoRequestTransaction extends TransactionWrappedRequestMessage<
   AccountInfoRequest
 > {
-  private message: AccountInfoRequest
+  private message!: AccountInfoRequest
 
   /**
    * The wrapped message.

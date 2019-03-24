@@ -4,7 +4,7 @@ import { TransactionWrappedResponseMessage } from '../TransactionWrappedResponse
 import { Tax1099Response } from './Tax1099Response'
 
 export class Tax1099ResponseTransaction extends TransactionWrappedResponseMessage<Tax1099Response> {
-  private tax1099Response: Tax1099Response
+  private tax1099Response!: Tax1099Response
 
   /**
    * The tax1099Response.

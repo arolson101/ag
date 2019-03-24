@@ -10,17 +10,17 @@ import { Tax1099R } from './Tax1099R'
 
 export class Tax1099Response extends T1099Response {
   // private tax1099div: Tax1099DIV;
-  private lstTax1099DIV: Tax1099DIV[]
+  private lstTax1099DIV!: Tax1099DIV[]
 
-  private lstTax1099INT: Tax1099INT[]
+  private lstTax1099INT!: Tax1099INT[]
 
-  private lstTax1099R: Tax1099R[]
+  private lstTax1099R!: Tax1099R[]
 
-  private lstTax1099B: Tax1099B[]
+  private lstTax1099B!: Tax1099B[]
 
-  private lstTax1099MISC: Tax1099MISC[]
+  private lstTax1099MISC!: Tax1099MISC[]
 
-  private lstTax1099OID: Tax1099OID[]
+  private lstTax1099OID!: Tax1099OID[]
 
   /**
    * @return the lstTax1099DIV

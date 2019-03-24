@@ -4,11 +4,11 @@ import { Element_add } from '../../../meta/Element_add'
 import { ProcDet } from './ProcDet'
 
 export class ExtDBInfo {
-  private procDet: ProcDet[]
-  private teInterest: string
-  private pabInterest: string
-  private teIntDividend: string
-  private pabDividend: string
+  private procDet!: ProcDet[]
+  private teInterest!: string
+  private pabInterest!: string
+  private teIntDividend!: string
+  private pabDividend!: string
 
   /**
    * @return the procDet

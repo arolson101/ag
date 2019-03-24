@@ -6,7 +6,7 @@ import { ResponseMessageSet } from '../ResponseMessageSet'
 import { AccountInfoResponseTransaction } from './AccountInfoResponseTransaction'
 
 export class SignupResponseMessageSet extends ResponseMessageSet {
-  private accountInfoResponse: AccountInfoResponseTransaction
+  private accountInfoResponse!: AccountInfoResponseTransaction
 
   getType(): MessageSetType {
     return MessageSetType.signup

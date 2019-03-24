@@ -6,14 +6,14 @@ import { PayerAddress } from './PayerAddress'
 import { RecAddress } from './RecAddress'
 
 export class Tax1099B {
-  private srvrtId: string
-  private taxYear: string
-  private extDBInfo: ExtDBInfo
-  private payerAddress: PayerAddress
-  private payerId: string
-  private recAddress: RecAddress
-  private recId: string
-  private recAcct: string
+  private srvrtId!: string
+  private taxYear!: string
+  private extDBInfo!: ExtDBInfo
+  private payerAddress!: PayerAddress
+  private payerId!: string
+  private recAddress!: RecAddress
+  private recId!: string
+  private recAcct!: string
 
   getSrvrtId(): string {
     return this.srvrtId

@@ -6,7 +6,7 @@ import { PasswordChangeResponse } from './PasswordChangeResponse'
 export class PasswordChangeResponseTransaction extends TransactionWrappedResponseMessage<
   PasswordChangeResponse
 > {
-  private message: PasswordChangeResponse
+  private message!: PasswordChangeResponse
 
   /**
    * The message.

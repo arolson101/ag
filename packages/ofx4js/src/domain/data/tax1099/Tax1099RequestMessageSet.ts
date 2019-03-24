@@ -6,7 +6,7 @@ import { RequestMessageSet } from '../RequestMessageSet'
 import { Tax1099RequestTransaction } from './Tax1099RequestTransaction'
 
 export class Tax1099RequestMessageSet extends RequestMessageSet {
-  private taxRequestTransaction: Tax1099RequestTransaction
+  private taxRequestTransaction!: Tax1099RequestTransaction
 
   getType(): MessageSetType {
     return MessageSetType.tax1099

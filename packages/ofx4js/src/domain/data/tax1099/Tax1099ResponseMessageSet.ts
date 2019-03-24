@@ -7,7 +7,7 @@ import { ResponseMessageSet } from '../ResponseMessageSet'
 import { Tax1099ResponseTransaction } from './Tax1099ResponseTransaction'
 
 export class Tax1099ResponseMessageSet extends ResponseMessageSet {
-  private taxResponseTransaction: Tax1099ResponseTransaction[]
+  private taxResponseTransaction!: Tax1099ResponseTransaction[]
 
   getType(): MessageSetType {
     return MessageSetType.tax1099
@@ -55,9 +55,10 @@ export class Tax1099ResponseMessageSet extends ResponseMessageSet {
    * @deprecated Use getStatementResponses() because sometimes there are multiple responses
    */
   getStatementResponse(): Tax1099ResponseTransaction {
-    return this.taxResponseTransaction == null || this.taxResponseTransaction.length == 0
-      ? null
-      : this.taxResponseTransaction[0]
+    if (!this.taxResponseTransaction || this.taxResponseTransaction.length === 0) {
+      throw new Error('no taxresponseTransaction')
+    }
+    return this.taxResponseTransaction[0]
   }
 }
 

@@ -4,7 +4,7 @@ import { TransactionWrappedRequestMessage } from '../TransactionWrappedRequestMe
 import { Tax1099Request } from './Tax1099Request'
 
 export class Tax1099RequestTransaction extends TransactionWrappedRequestMessage<Tax1099Request> {
-  private tax1099Request: Tax1099Request
+  private tax1099Request!: Tax1099Request
 
   /**
    * The tax1099Request.

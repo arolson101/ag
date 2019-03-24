@@ -6,7 +6,7 @@ import { AccountInfoResponse } from './AccountInfoResponse'
 export class AccountInfoResponseTransaction extends TransactionWrappedResponseMessage<
   AccountInfoResponse
 > {
-  private message: AccountInfoResponse
+  private message!: AccountInfoResponse
 
   /**
    * The wrapped message.

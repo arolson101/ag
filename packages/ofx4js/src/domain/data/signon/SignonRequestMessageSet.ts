@@ -12,8 +12,8 @@ import { SignonRequest } from './SignonRequest'
  * @see "Section 2.5, OFX Spec."
  */
 export class SignonRequestMessageSet extends RequestMessageSet {
-  private signonRequest: SignonRequest
-  private passwordChangeRequest: PasswordChangeRequestTransaction
+  private signonRequest!: SignonRequest
+  private passwordChangeRequest!: PasswordChangeRequestTransaction
 
   getType(): MessageSetType {
     return MessageSetType.signon

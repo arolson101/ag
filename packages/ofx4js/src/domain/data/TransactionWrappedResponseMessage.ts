@@ -12,9 +12,9 @@ import { ResponseMessage } from './ResponseMessage'
 export abstract class TransactionWrappedResponseMessage<M extends ResponseMessage>
   extends ResponseMessage
   implements StatusHolder {
-  private UID: string
-  private clientCookie: string
-  private status: Status
+  private UID!: string
+  private clientCookie!: string
+  private status!: Status
 
   /**
    * UID of this transaction.

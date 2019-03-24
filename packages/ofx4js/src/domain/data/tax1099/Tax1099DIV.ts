@@ -5,26 +5,26 @@ import { PayerAddress } from './PayerAddress'
 import { RecAddress } from './RecAddress'
 
 export class Tax1099DIV {
-  private srvrtId: string
-  private taxYear: string
-  private ordDiv: string
-  private qualifiedDiv: string
-  private totCapGain: string
-  private p28Gain: string
-  private unrecSec1250: string
-  private sec1202: string
-  private nonTaxDist: string
-  private fedTaxWh: string
-  private investExp: string
-  private forTaxPd: string
-  private cashLiq: string
-  private nonCashLiq: string
+  private srvrtId!: string
+  private taxYear!: string
+  private ordDiv!: string
+  private qualifiedDiv!: string
+  private totCapGain!: string
+  private p28Gain!: string
+  private unrecSec1250!: string
+  private sec1202!: string
+  private nonTaxDist!: string
+  private fedTaxWh!: string
+  private investExp!: string
+  private forTaxPd!: string
+  private cashLiq!: string
+  private nonCashLiq!: string
 
-  private payerAddress: PayerAddress
-  private payerId: string
-  private recAddress: RecAddress
-  private recId: string
-  private recAcct: string
+  private payerAddress!: PayerAddress
+  private payerId!: string
+  private recAddress!: RecAddress
+  private recId!: string
+  private recAcct!: string
 
   getSrvrtId(): string {
     return this.srvrtId

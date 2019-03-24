@@ -11,8 +11,8 @@ export abstract class TransactionWrappedRequestMessage<
   M extends RequestMessage
 > extends RequestMessage {
   private UID: string
-  private clientCookie: string
-  private transactionAuthorizationNumber: string
+  private clientCookie!: string
+  private transactionAuthorizationNumber!: string
 
   constructor(UID: string = UUID.v1()) {
     super()

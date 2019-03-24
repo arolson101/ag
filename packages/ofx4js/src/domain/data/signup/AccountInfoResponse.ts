@@ -6,7 +6,7 @@ import { AccountProfile } from './AccountProfile'
 
 export class AccountInfoResponse extends ResponseMessage {
   private lastUpdated: Date
-  private accounts: AccountProfile[]
+  private accounts!: AccountProfile[]
 
   constructor() {
     super()

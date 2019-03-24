@@ -8,8 +8,8 @@ import { ResponseMessage } from '../ResponseMessage'
  * @see "Section 2.5.2.2, OFX Spec."
  */
 export class PasswordChangeResponse extends ResponseMessage {
-  private userId: string
-  private changeTimestamp: Date
+  private userId!: string
+  private changeTimestamp!: Date
 
   /**
    * The id of the user changing password.

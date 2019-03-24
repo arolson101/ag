@@ -8,8 +8,8 @@ import { RequestMessage } from '../RequestMessage'
  * @see "Section 2.5.2.1, OFX Spec."
  */
 export class PasswordChangeRequest extends RequestMessage {
-  private userId: string
-  private newPassword: string
+  private userId!: string
+  private newPassword!: string
 
   /**
    * The id of the user changing password.

@@ -12,8 +12,8 @@ import { SignonResponse } from './SignonResponse'
  * @see "Section 2.5, OFX Spec."
  */
 export class SignonResponseMessageSet extends ResponseMessageSet {
-  private signonResponse: SignonResponse
-  private passwordChangeResponse: PasswordChangeResponseTransaction
+  private signonResponse!: SignonResponse
+  private passwordChangeResponse!: PasswordChangeResponseTransaction
 
   getType(): MessageSetType {
     return MessageSetType.signon

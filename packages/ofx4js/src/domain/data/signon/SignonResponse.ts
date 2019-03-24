@@ -12,16 +12,16 @@ import { FinancialInstitutionInfo } from './FinancialInstitution'
  * @see "Section 2.5.1.2, OFX Spec."
  */
 export class SignonResponse extends ResponseMessage implements StatusHolder {
-  private status: Status
-  private timestamp: Date
-  private userKey: string
-  private userKeyExpiration: Date
+  private status!: Status
+  private timestamp!: Date
+  private userKey!: string
+  private userKeyExpiration!: Date
   private language: string
-  private profileLastUpdated: Date
-  private accountLastUpdated: Date
-  private financialInstitution: FinancialInstitutionInfo
-  private sessionId: string
-  private accessKey: string
+  private profileLastUpdated!: Date
+  private accountLastUpdated!: Date
+  private financialInstitution!: FinancialInstitutionInfo
+  private sessionId!: string
+  private accessKey!: string
 
   constructor() {
     super()

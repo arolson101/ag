@@ -6,7 +6,7 @@ import { RequestMessageSet } from '../RequestMessageSet'
 import { AccountInfoRequestTransaction } from './AccountInfoRequestTransaction'
 
 export class SignupRequestMessageSet extends RequestMessageSet {
-  private accountInfoRequest: AccountInfoRequestTransaction
+  private accountInfoRequest!: AccountInfoRequestTransaction
 
   getType(): MessageSetType {
     return MessageSetType.signup

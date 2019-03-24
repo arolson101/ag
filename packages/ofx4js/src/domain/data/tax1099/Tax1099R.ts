@@ -5,26 +5,26 @@ import { PayerAddress } from './PayerAddress'
 import { RecAddress } from './RecAddress'
 
 export class Tax1099R {
-  private srvrtId: string
-  private taxYear: string
-  private grossDist: string
+  private srvrtId!: string
+  private taxYear!: string
+  private grossDist!: string
 
-  private taxAmt: string
-  private taxAmtNd: string
-  private capGain: string
-  private fedTaxWh: string
-  private empContins: string
-  private netUnapEmp: string
-  private distCode: string
-  private iraSepSimp: string
-  private annCtrctDist: string
-  private totEmpCount: string
+  private taxAmt!: string
+  private taxAmtNd!: string
+  private capGain!: string
+  private fedTaxWh!: string
+  private empContins!: string
+  private netUnapEmp!: string
+  private distCode!: string
+  private iraSepSimp!: string
+  private annCtrctDist!: string
+  private totEmpCount!: string
 
-  private payerAddress: PayerAddress
-  private payerId: string
-  private recAddress: RecAddress
-  private recId: string
-  private recAcct: string
+  private payerAddress!: PayerAddress
+  private payerId!: string
+  private recAddress!: RecAddress
+  private recId!: string
+  private recAcct!: string
 
   getSrvrtId(): string {
     return this.srvrtId

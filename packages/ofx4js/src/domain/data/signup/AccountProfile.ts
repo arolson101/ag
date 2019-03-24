@@ -8,11 +8,11 @@ import { CreditCardAccountInfo } from '../creditcard/CreditCardAccountInfo'
 import { InvestmentAccountInfo } from '../investment/accounts/InvestmentAccountInfo'
 
 export class AccountProfile {
-  private description: string
-  private phone: string
-  private bankSpecifics: BankAccountInfo
-  private creditCardSpecifics: CreditCardAccountInfo
-  private investSpecifics: InvestmentAccountInfo
+  private description!: string
+  private phone!: string
+  private bankSpecifics!: BankAccountInfo
+  private creditCardSpecifics!: CreditCardAccountInfo
+  private investSpecifics!: InvestmentAccountInfo
 
   /**
    * Description of the account.
@@ -99,8 +99,8 @@ export class AccountProfile {
    * @param bankSpecifics Bank-specific info.
    */
   setBankSpecifics(bankSpecifics: BankAccountInfo): void {
-    this.creditCardSpecifics = null
-    this.investSpecifics = null
+    this.creditCardSpecifics = undefined as any
+    this.investSpecifics = undefined as any
     this.bankSpecifics = bankSpecifics
   }
 
@@ -119,8 +119,8 @@ export class AccountProfile {
    * @param creditCardSpecifics Credit-card account info.
    */
   setCreditCardSpecifics(creditCardSpecifics: CreditCardAccountInfo): void {
-    this.bankSpecifics = null
-    this.investSpecifics = null
+    this.bankSpecifics = undefined as any
+    this.investSpecifics = undefined as any
     this.creditCardSpecifics = creditCardSpecifics
   }
 
@@ -139,8 +139,8 @@ export class AccountProfile {
    * @param investSpecifics Investment account info.
    */
   setInvestmentSpecifics(investSpecifics: InvestmentAccountInfo): void {
-    this.bankSpecifics = null
-    this.creditCardSpecifics = null
+    this.bankSpecifics = undefined as any
+    this.creditCardSpecifics = undefined as any
     this.investSpecifics = investSpecifics
   }
 }

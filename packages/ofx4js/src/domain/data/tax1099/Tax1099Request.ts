@@ -4,14 +4,14 @@ import { T1099Request } from '../common/T1099Request'
 
 export class Tax1099Request extends T1099Request {
   getTaxYear(): string {
-    return this.taxYear!
+    return this.taxYear
   }
 
   setTaxYear(taxYear: string): void {
     this.taxYear = taxYear
   }
 
-  private taxYear?: string
+  private taxYear!: string
 }
 
 Aggregate_add(Tax1099Request, 'TAX1099RQ')

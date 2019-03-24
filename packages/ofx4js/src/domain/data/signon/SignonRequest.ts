@@ -15,27 +15,28 @@ export class SignonRequest extends RequestMessage {
    */
   static ANONYMOUS_USER: string = 'anonymous00000000000000000000000'
 
-  private timestamp: Date
-  private userId: string
-  private password: string
-  private userKey: string
-  private generateUserKey: boolean
+  private timestamp!: Date
+  private userId!: string
+  private password!: string
+  private userKey!: string
+  private generateUserKey!: boolean
   private language: string
-  private financialInstitution: FinancialInstitutionInfo
-  private sessionId: string
+  private financialInstitution!: FinancialInstitutionInfo
+  private sessionId!: string
   private applicationId: string
   private applicationVersion: string
-  private clientUID: string
-  private additionalCredentials1: string
-  private additionalCredentials2: string
-  private authToken: string
-  private accessKey: string
+  private clientUID!: string
+  private additionalCredentials1!: string
+  private additionalCredentials2!: string
+  private authToken!: string
+  private accessKey!: string
 
   constructor() {
     super()
     this.language = 'ENG' // Locale.US.getISO3Language().toUpperCase();
-    this.applicationId = 'Money' // many institutions just won't work with an unrecognized app id...
-    this.applicationVersion = '1600' // many institutions just won't work with an unrecognized app id...
+    // many institutions just won't work with an unrecognized app id...
+    this.applicationId = 'Money'
+    this.applicationVersion = '1600'
   }
 
   /**
@@ -93,18 +94,22 @@ export class SignonRequest extends RequestMessage {
   }
 
   /**
-   * The user key provided by the server so as not to require further username/password authentication.
+   * The user key provided by the server so as not to require further
+   * username/password authentication.
    *
-   * @return The user key provided by the server so as not to require further username/password authentication.
+   * @return The user key provided by the server so as not to require
+   * further username/password authentication.
    */
   getUserKey(): string {
     return this.userKey
   }
 
   /**
-   * The user key provided by the server so as not to require further username/password authentication.
+   * The user key provided by the server so as not to require further
+   * username/password authentication.
    *
-   * @param userKey The user key provided by the server so as not to require further username/password authentication.
+   * @param userKey The user key provided by the server so as not to
+   * require further username/password authentication.
    */
   setUserKey(userKey: string): void {
     this.userKey = userKey

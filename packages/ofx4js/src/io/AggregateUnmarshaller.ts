@@ -8,7 +8,7 @@ import { StringReader } from './StringReader'
 /**
  * Unmarshaller for aggregate objects.
  */
-export class AggregateUnmarshaller<A> {
+export class AggregateUnmarshaller<A extends object> {
   private clazz: any
   private conversion: StringConversion
 

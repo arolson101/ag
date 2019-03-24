@@ -7,38 +7,38 @@ import { SecurityId } from './SecurityId'
  * @see "Section 13.8.2.2, OFX Spec"
  */
 export class SecurityRequest {
-  private securityId: SecurityId
-  private tickerSymbol: string
-  private fiId: string
+  private securityId?: SecurityId
+  private tickerSymbol?: string
+  private fiId?: string
 
   getSecurityId(): SecurityId {
-    return this.securityId
+    return this.securityId!
   }
 
   setSecurityId(securityId: SecurityId): void {
     this.securityId = securityId
-    this.tickerSymbol = null
-    this.fiId = null
+    this.tickerSymbol = undefined
+    this.fiId = undefined
   }
 
   getTickerSymbol(): string {
-    return this.tickerSymbol
+    return this.tickerSymbol!
   }
 
   setTickerSymbol(tickerSymbol: string): void {
     this.tickerSymbol = tickerSymbol
-    this.securityId = null
-    this.fiId = null
+    this.securityId = undefined
+    this.fiId = undefined
   }
 
   getFiId(): string {
-    return this.fiId
+    return this.fiId!
   }
 
   setFiId(fiId: string): void {
     this.fiId = fiId
-    this.securityId = null
-    this.tickerSymbol = null
+    this.securityId = undefined
+    this.tickerSymbol = undefined
   }
 }
 
