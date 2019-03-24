@@ -3,13 +3,13 @@ import { ChildAggregate_add } from '../../../meta/ChildAggregate_Add'
 import { Element_add } from '../../../meta/Element_add'
 import { BankAccountDetails } from '../banking/BankAccountDetails'
 import { CreditCardAccountDetails } from '../creditcard/CreditCardAccountDetails'
-import { InvestmentTransactionType } from '../investment/transactions/TransactionType'
 import { CorrectionAction } from './CorrectionAction'
 import { Currency } from './Currency'
 import { Payee } from './Payee'
+import { TransactionType } from './TransactionType'
 
 export class Transaction {
-  private transactionType!: InvestmentTransactionType
+  private transactionType!: TransactionType
   private datePosted!: Date
   private dateInitiated!: Date
   private dateAvailable!: Date
@@ -35,8 +35,8 @@ export class Transaction {
    *
    * @return The transaction type.
    */
-  getTransactionType(): InvestmentTransactionType {
-    return this.transactionType
+  getTransactionType(): TransactionType {
+    return this.transactionType!
   }
 
   /**
@@ -44,7 +44,7 @@ export class Transaction {
    *
    * @param transactionType The transaction type.
    */
-  setTransactionType(transactionType: InvestmentTransactionType): void {
+  setTransactionType(transactionType: TransactionType): void {
     this.transactionType = transactionType
   }
 
@@ -415,7 +415,7 @@ Element_add(Transaction, {
   name: 'TRNTYPE',
   required: true,
   order: 0,
-  type: InvestmentTransactionType,
+  type: TransactionType,
   read: Transaction.prototype.getTransactionType,
   write: Transaction.prototype.setTransactionType,
 })

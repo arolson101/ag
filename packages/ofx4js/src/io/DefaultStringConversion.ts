@@ -11,7 +11,7 @@ import { StringConversion } from './StringConversion'
 export class DefaultStringConversion implements StringConversion {
   toString(value: object): string {
     if (!value) {
-      throw new Error('null value')
+      return null as any
     } else if (typeof value === 'boolean') {
       return value ? 'Y' : 'N'
     } else if (value instanceof Date) {
@@ -27,7 +27,7 @@ export class DefaultStringConversion implements StringConversion {
     if (!value) {
       throw new Error('null value')
     } else if (clazz === StatusCode) {
-      const code: number = (value as any) as number
+      const code: number = parseInt(value, 10)
       let statusCode: StatusCode = KnownCode.fromCode(code)
       if (!statusCode) {
         statusCode = new UnknownStatusCode(code, 'Unknown status code.', Severity.ERROR)
