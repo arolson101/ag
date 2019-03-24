@@ -2,15 +2,23 @@
   "name": "ofx4js",
   "version": "2.1.0",
   "description": "A javascript OFX library, ported from OFX4J",
-  "keywords": [
-    "ofx",
-    "banking",
-    "finance"
-  ],
+  "license": "MIT",
+  "author": "Andrew Olson <andrew@olsononline.org>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arolson101/ofx4js.git"
+  },
   "main": "src/index.ts",
   "files": [
     "lib"
   ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "start": "npm run test && npm run build && npm run typedoc",
+    "test": "jest",
+    "typedoc": "typedoc --name Ofx4js --readme Readme.md --excludeExternals --includeDeclarations --target ES5 --module commonjs --theme minimal --out doc/ src/"
+  },
   "dependencies": {
     "assert": "^1.4.1",
     "debug": "^4.1.1",
@@ -19,32 +27,23 @@
   },
   "devDependencies": {
     "@types/assert": "^1.4.1",
-    "@types/debug": "0.0.31",
-    "@types/jest": "^23.3.10",
+    "@types/debug": "^4.1.2",
+    "@types/jest": "^24.0.11",
     "@types/sax": "^1.0.1",
     "@types/uuid": "^3.4.4",
-    "jest": "^23.6.0",
+    "jest": "^24.3.1",
     "rollup": "^1.0.0",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^4.0.0",
     "rollup-plugin-terser": "^3.0.0",
     "rollup-plugin-typescript2": "^0.18.1",
-    "ts-jest": "^23.10.5",
-    "ts-node": "^7.0.1",
-    "typedoc": "^0.13.0",
-    "typescript": "^3.2.2"
+    "ts-jest": "^24.0.0",
+    "ts-node": "^8.0.3",
+    "typedoc": "^0.13.0"
   },
-  "scripts": {
-    "start": "npm run test && npm run build && npm run typedoc",
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "test": "jest",
-    "typedoc": "typedoc --name Ofx4js --readme Readme.md --excludeExternals --includeDeclarations --target ES5 --module commonjs --theme minimal --out doc/ src/"
-  },
-  "author": "Andrew Olson <andrew@olsononline.org>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/arolson101/ofx4js.git"
-  },
-  "license": "MIT"
+  "keywords": [
+    "banking",
+    "finance",
+    "ofx"
+  ]
 }
