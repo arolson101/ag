@@ -18,16 +18,16 @@ export class AggregateIntrospector {
    * @param clazz the aggregate class.
    * @return The aggregate meta information, or null if the class isn't an aggregate.
    */
-  static getAggregateInfo(clazz: any): AggregateInfo {
+  static getAggregateInfo(clazz: any): AggregateInfo | null {
     const aggregate: AggregateInfo = clazz.Aggregate
     if (aggregate != null && aggregate.getOwner() === clazz) {
       return aggregate
     } else {
-      throw new Error('null aggregate')
+      return null
     }
   }
 
-  private static getAncestorAggregateInfo(clazz: () => any): AggregateInfo {
+  private static getAncestorAggregateInfo(clazz: () => any): AggregateInfo | null {
     // traverse inheritence hierarchy.  This is janky because of typescript's __extends
     // function, and may break in the future
     for (let proto = clazz.prototype; proto; proto = Object.getPrototypeOf(proto)) {
@@ -35,7 +35,7 @@ export class AggregateIntrospector {
         return proto.constructor.Aggregate
       }
     }
-    throw new Error("didn't find class")
+    return null
   }
 
   /**
@@ -51,24 +51,24 @@ export class AggregateIntrospector {
   static addAggregate(clazz: any, name: string) {
     AggregateIntrospector.AGGREGATE_CLASSES_BY_NAME[name] = clazz
 
-    const aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(clazz)
+    const aggregateInfo = AggregateIntrospector.getAggregateInfo(clazz)
     if (aggregateInfo) {
       assert(aggregateInfo.getName() === AggregateIntrospector.placeholderName)
       aggregateInfo.setName(name)
     } else {
-      const parentInfo: AggregateInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
-      clazz.Aggregate = new AggregateInfo(name, clazz, parentInfo!)
+      const parentInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
+      clazz.Aggregate = new AggregateInfo(name, clazz, parentInfo)
     }
   }
 
   static addChildAggregate(clazz: any, childAggregate: ChildAggregate) {
-    let aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(clazz)
+    let aggregateInfo = AggregateIntrospector.getAggregateInfo(clazz)
     if (!aggregateInfo) {
-      const parentInfo: AggregateInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
+      const parentInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
       aggregateInfo = clazz.Aggregate = new AggregateInfo(
         AggregateIntrospector.placeholderName,
         clazz,
-        parentInfo!
+        parentInfo
       )
     }
     assert(aggregateInfo != null)
@@ -78,13 +78,13 @@ export class AggregateIntrospector {
   }
 
   static addElement(clazz: any, element: Element) {
-    let aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(clazz)
+    let aggregateInfo: AggregateInfo | null = AggregateIntrospector.getAggregateInfo(clazz)
     if (!aggregateInfo) {
-      const parentInfo: AggregateInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
+      const parentInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
       aggregateInfo = clazz.Aggregate = new AggregateInfo(
         AggregateIntrospector.placeholderName,
         clazz,
-        parentInfo!
+        parentInfo
       )
     }
     assert(aggregateInfo != null)
@@ -96,11 +96,11 @@ export class AggregateIntrospector {
   static addHeader(clazz: any, header: Header) {
     let aggregateInfo = AggregateIntrospector.getAggregateInfo(clazz)
     if (!aggregateInfo) {
-      const parentInfo: AggregateInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
+      const parentInfo = AggregateIntrospector.getAncestorAggregateInfo(clazz)
       aggregateInfo = clazz.Aggregate = new AggregateInfo(
         AggregateIntrospector.placeholderName,
         clazz,
-        parentInfo!
+        parentInfo
       )
     }
     assert(aggregateInfo != null)

@@ -63,7 +63,7 @@ export class AggregateStackContentHandler<A extends object> implements OFXHandle
     this.stack = new Stack<AggregateInfoHolder>()
     this.parsingRoot = false
 
-    const aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(root.constructor)
+    const aggregateInfo = AggregateIntrospector.getAggregateInfo(root.constructor)
     if (aggregateInfo == null) {
       throw new OFXException(
         "Unable to marshal object of type '" +
@@ -143,7 +143,7 @@ export class AggregateStackContentHandler<A extends object> implements OFXHandle
           }
 
           if (aggregateType != null) {
-            const aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(
+            const aggregateInfo: AggregateInfo | null = AggregateIntrospector.getAggregateInfo(
               aggregateType
             )
             if (aggregateInfo == null) {

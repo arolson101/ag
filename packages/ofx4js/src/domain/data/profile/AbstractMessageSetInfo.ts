@@ -21,7 +21,8 @@ export abstract class AbstractMessageSetInfo {
   /**
    * List of information about a message set for each version supported.
    *
-   * @param versionSpecificInformationList List of information about a message set for each version supported.
+   * @param versionSpecificInformationList List of information about a message
+   * set for each version supported.
    */
   setVersionSpecificInformationList(
     versionSpecificInformationList: VersionSpecificMessageSetInfo[]

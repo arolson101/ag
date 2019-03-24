@@ -23,7 +23,7 @@ export class AggregateInfo {
   private headers: HeaderMap
   private owner: any
 
-  constructor(name: string, owner: any, parentInfo?: AggregateInfo) {
+  constructor(name: string, owner: any, parentInfo?: AggregateInfo | null) {
     this.name = name
     this.owner = owner
     this.headers = {}

@@ -74,9 +74,7 @@ export class AggregateAttribute {
       this.name = undefined
       this.collectionEntryType = childAggregate.collectionEntryType()
     } else if ('##not_specified##' === childAggregate.name()) {
-      const aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(
-        this.attributeType
-      )
+      const aggregateInfo = AggregateIntrospector.getAggregateInfo(this.attributeType)
       if (aggregateInfo == null) {
         throw new OFXException(
           "Illegal child aggregate type '" +

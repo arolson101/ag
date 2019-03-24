@@ -26,9 +26,7 @@ export class AggregateMarshaller {
    * @param writer    The writer.
    */
   marshal(aggregate: object, writer: OFXWriter): /*throws IOException*/ void {
-    const aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(
-      aggregate.constructor
-    )
+    const aggregateInfo = AggregateIntrospector.getAggregateInfo(aggregate.constructor)
     if (aggregateInfo == null) {
       throw new OFXException('Unable to marshal object (no aggregate metadata found).')
     }
@@ -81,9 +79,7 @@ export class AggregateMarshaller {
             }
 
             for (const objValue of childValues) {
-              const aggregateInfo: AggregateInfo = AggregateIntrospector.getAggregateInfo(
-                objValue.constructor
-              )
+              const aggregateInfo = AggregateIntrospector.getAggregateInfo(objValue.constructor)
               if (aggregateInfo == null) {
                 throw new OFXException(
                   'Unable to marshal object of type ' +

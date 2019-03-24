@@ -10,7 +10,8 @@ import { WebEnrollment } from './signup/WebEnrollment'
 /**
  * Servers use the Signup Message Set Profile Information to define how enrollment should proceed.
  *
- * This aggregate should contain 1 Enrollment option among <CLIENTENROLL>, <WEBENROLL>, or <OTHERENROLL>.
+ * This aggregate should contain 1 Enrollment option among
+ * <CLIENTENROLL>, <WEBENROLL>, or <OTHERENROLL>.
  * todo: review how best to enforce this constraint
  *
  * @see "Section 8.8 OFX Spec"

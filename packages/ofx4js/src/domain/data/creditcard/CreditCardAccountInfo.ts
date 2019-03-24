@@ -48,7 +48,8 @@ export class CreditCardAccountInfo implements AccountInfo {
   /**
    * Whether this account supports download of transaction details.
    *
-   * @param supportsTransactionDetailOperations Whether this account supports download of transaction details.
+   * @param supportsTransactionDetailOperations Whether this account supports
+   * download of transaction details.
    */
   setSupportsTransactionDetailOperations(supportsTransactionDetailOperations: boolean): void {
     this.supportsTransactionDetailOperations = supportsTransactionDetailOperations
@@ -66,7 +67,8 @@ export class CreditCardAccountInfo implements AccountInfo {
   /**
    * Whether this account supports transfer operations to other accounts.
    *
-   * @param supportsTransferToOtherAccountOperations Whether this account supports transfer operations to other accounts.
+   * @param supportsTransferToOtherAccountOperations Whether this account supports
+   * transfer operations to other accounts.
    */
   setSupportsTransferToOtherAccountOperations(
     supportsTransferToOtherAccountOperations: boolean
@@ -86,7 +88,8 @@ export class CreditCardAccountInfo implements AccountInfo {
   /**
    * Whether this account supports transfer operations from other accounts.
    *
-   * @param supportsTransferFromOtherAccountOperations Whether this account supports transfer operations from other accounts.
+   * @param supportsTransferFromOtherAccountOperations Whether this account supports
+   * transfer operations from other accounts.
    */
   setSupportsTransferFromOtherAccountOperations(
     supportsTransferFromOtherAccountOperations: boolean
