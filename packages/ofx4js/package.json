@@ -8,7 +8,6 @@
     "finance"
   ],
   "main": "src/index.ts",
-  "types": "lib/index.d.ts",
   "files": [
     "lib"
   ],
