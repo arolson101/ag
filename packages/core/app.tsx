@@ -13,7 +13,13 @@ type Props = React.PropsWithChildren<{
 }>
 
 const uniqueId = () => {
-  return crypto.randomBytes(16).toString('base64')
+  return (
+    'a' +
+    crypto
+      .randomBytes(16)
+      .toString('base64')
+      .replace('==', '')
+  )
 }
 
 interface CreateContextParams {

@@ -1,4 +1,5 @@
 import {
+  AccountPage,
   AccountsPage,
   actions,
   BillsPage,
@@ -67,6 +68,7 @@ type ComponentWithId = React.ComponentType<any> & {
 const routes: ComponentWithId[] = [
   HomePage, //
   AccountsPage,
+  AccountPage,
   BillsPage,
   BudgetsPage,
   CalendarPage,

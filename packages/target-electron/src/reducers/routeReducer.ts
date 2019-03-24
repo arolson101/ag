@@ -1,4 +1,5 @@
 import {
+  AccountPage,
   AccountsPage,
   actions,
   BillsPage,
@@ -41,6 +42,10 @@ export const router = (state: RouterState = initialState, action: CoreAction): R
 
     case getType(actions.nav.accounts):
       state.history.push(href(AccountsPage.id))
+      break
+
+    case getType(actions.nav.account):
+      state.history.push(href(AccountPage.id, action.payload))
       break
 
     case getType(actions.nav.bills):

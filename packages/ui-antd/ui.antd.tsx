@@ -1,5 +1,4 @@
 import {
-  AlertParams,
   ContextMenuProps,
   IconName,
   ListItem,
@@ -258,10 +257,16 @@ export const ui: UiContext = {
     rowContextMenu,
     data,
   }) => {
-    const render = (text: string, row: any, index: number) => {
+    const render = (userRender?: (text: string, row: any, index: number) => React.ReactNode) => (
+      text: string,
+      row: any,
+      index: number
+    ) => {
       return (
         <ContextMenu {...(rowContextMenu ? rowContextMenu(row) : {})}>
-          <div style={{ margin: -16, padding: 16 }}>{text}</div>
+          <div style={{ margin: -16, padding: 16 }}>
+            {userRender ? userRender(text, row, index) : text}
+          </div>
         </ContextMenu>
       )
     }
@@ -294,7 +299,7 @@ export const ui: UiContext = {
               : undefined
           }
           pagination={false}
-          columns={columns.map(col => ({ ...col, render }))}
+          columns={columns.map(col => ({ ...col, render: render(col.render) }))}
           rowKey={rowKey}
           dataSource={data}
         />

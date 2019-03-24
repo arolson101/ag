@@ -423,6 +423,28 @@ export namespace DeleteDb {
   }
 }
 
+export namespace AccountPage {
+  export type Variables = {}
+
+  export type Query = {
+    __typename?: 'Query'
+
+    appDb: Maybe<AppDb>
+  }
+
+  export type AppDb = {
+    __typename?: 'AppDb'
+
+    account: Maybe<Account>
+  }
+
+  export type Account = {
+    __typename?: 'Account'
+
+    id: string
+  }
+}
+
 export namespace AccountsPage {
   export type Variables = {}
 
