@@ -8,8 +8,8 @@ import { VersionSpecificMessageSetInfo } from '../VersionSpecificMessageSetInfo'
  * @see "Section 9.4.2 OFX Spec"
  */
 export class EmailV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private supportsMail: boolean
-  private supportsMimeType: boolean
+  private supportsMail!: boolean
+  private supportsMimeType!: boolean
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.email

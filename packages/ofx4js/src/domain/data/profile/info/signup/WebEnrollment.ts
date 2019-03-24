@@ -6,7 +6,7 @@ import { Element_add } from '../../../../../meta/Element_add'
  * @see "Section 8.8 OFX Spec"
  */
 export class WebEnrollment {
-  private url: string
+  private url!: string
 
   /**
    * URL to start enrollment process

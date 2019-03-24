@@ -6,7 +6,7 @@ import { ResponseMessageSet } from '../ResponseMessageSet'
 import { CreditCardStatementResponseTransaction } from './CreditCardStatementResponseTransaction'
 
 export class CreditCardResponseMessageSet extends ResponseMessageSet {
-  private statementResponses: CreditCardStatementResponseTransaction[]
+  private statementResponses!: CreditCardStatementResponseTransaction[]
 
   getType(): MessageSetType {
     return MessageSetType.creditcard
@@ -40,8 +40,8 @@ export class CreditCardResponseMessageSet extends ResponseMessageSet {
    * @return the first bank statement response.
    * @deprecated Use getStatementResponses() because sometimes there are multiple responses
    */
-  getStatementResponse(): CreditCardStatementResponseTransaction {
-    return this.statementResponses == null || this.statementResponses.length == 0
+  getStatementResponse(): CreditCardStatementResponseTransaction | null {
+    return this.statementResponses == null || this.statementResponses.length === 0
       ? null
       : this.statementResponses[0]
   }

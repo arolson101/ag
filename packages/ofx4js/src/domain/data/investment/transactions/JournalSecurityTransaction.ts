@@ -14,10 +14,10 @@ import { TransactionWithSecurity } from './TransactionWithSecurity'
  */
 export class JournalSecurityTransaction extends BaseOtherInvestmentTransaction
   implements TransactionWithSecurity {
-  private securityId: SecurityId
-  private subAccountFrom: string
-  private subAccountTo: string
-  private total: number
+  private securityId!: SecurityId
+  private subAccountFrom!: string
+  private subAccountTo!: string
+  private total!: number
 
   constructor() {
     super(InvestmentTransactionType.JOURNAL_SECURITY)

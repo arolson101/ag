@@ -11,16 +11,16 @@ import { PositionType, PositionType_fromOfx } from './PositionType'
  * @see "Section 13.9.2.6.1, OFX Spec"
  */
 export class InvestmentPosition {
-  private securityId: SecurityId
-  private heldInAccount: string
-  private positionType: string
-  private units: number
-  private unitPrice: number
-  private marketValue: number
-  private marketValueDate: Date
-  private currencyCode: string
-  private memo: string
-  private inv401kSource: string
+  private securityId!: SecurityId
+  private heldInAccount!: string
+  private positionType!: string
+  private units!: number
+  private unitPrice!: number
+  private marketValue!: number
+  private marketValueDate!: Date
+  private currencyCode!: string
+  private memo!: string
+  private inv401kSource!: string
 
   /**
    * Gets the security id for the position. This is a required field according to the OFX spec.

@@ -10,9 +10,9 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class JournalFundTransaction extends BaseOtherInvestmentTransaction {
-  private subAccountFrom: string
-  private subAccountTo: string
-  private total: number
+  private subAccountFrom!: string
+  private subAccountTo!: string
+  private total!: number
 
   constructor() {
     super(InvestmentTransactionType.JOURNAL_FUND)

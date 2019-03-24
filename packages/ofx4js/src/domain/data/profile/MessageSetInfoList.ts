@@ -6,7 +6,7 @@ import { AbstractMessageSetInfo } from './AbstractMessageSetInfo'
  * @see "Section 7.2, OFX Spec"
  */
 export class MessageSetInfoList {
-  private informationList: AbstractMessageSetInfo[]
+  private informationList!: AbstractMessageSetInfo[]
 
   /**
    * The list of information for each message set.

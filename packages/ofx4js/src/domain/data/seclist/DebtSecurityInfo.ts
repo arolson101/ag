@@ -12,20 +12,20 @@ import { DebtType, DebtType_fromOfx } from './DebtType'
  * @see "Section 13.8.5.2, OFX Spec"
  */
 export class DebtSecurityInfo extends BaseSecurityInfo {
-  private parValue: number
-  private debtType: string
-  private debtClass: string
-  private couponRate: number
-  private nextMaturityDate: Date
-  private couponFrequency: string
-  private callPrice: number
-  private yieldToCall: number
-  private nextCallDate: Date
-  private callType: string
-  private yieldToMaturity: number
-  private debtMaturityDate: Date
-  private assetClass: string
-  private fiAssetClass: string
+  private parValue!: number
+  private debtType!: string
+  private debtClass!: string
+  private couponRate!: number
+  private nextMaturityDate!: Date
+  private couponFrequency!: string
+  private callPrice!: number
+  private yieldToCall!: number
+  private nextCallDate!: Date
+  private callType!: string
+  private yieldToMaturity!: number
+  private debtMaturityDate!: Date
+  private assetClass!: string
+  private fiAssetClass!: string
 
   /**
    * Gets the par value of the debt. This is a required field according to the OFX spec.

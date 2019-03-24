@@ -3,8 +3,8 @@ import { Element_add } from '../../../meta/Element_add'
 import { TransferStatusEvent } from './TransferStatusEvent'
 
 export class TransferStatus {
-  private event: TransferStatusEvent
-  private date: Date
+  private event!: TransferStatusEvent
+  private date!: Date
 
   /**
    * The event.

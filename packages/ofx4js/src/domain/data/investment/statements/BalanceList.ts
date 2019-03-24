@@ -7,7 +7,7 @@ import { BalanceRecord } from '../../common/BalanceRecord'
  * @see "Section 13.9.2.7, OFX Spec"
  */
 export class BalanceList {
-  private balanceRecords: BalanceRecord[]
+  private balanceRecords!: BalanceRecord[]
 
   /**
    * Gets the list of balance records.

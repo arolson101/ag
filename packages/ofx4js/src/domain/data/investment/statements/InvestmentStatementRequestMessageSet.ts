@@ -10,7 +10,7 @@ import { InvestmentStatementRequestTransaction } from './InvestmentStatementRequ
  * @see "Section 13.7.1.2.1, OFX Spec"
  */
 export class InvestmentStatementRequestMessageSet extends RequestMessageSet {
-  private statementRequest: InvestmentStatementRequestTransaction
+  private statementRequest!: InvestmentStatementRequestTransaction
 
   getType(): MessageSetType {
     return MessageSetType.investment

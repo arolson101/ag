@@ -7,8 +7,8 @@ import { AccountDetails } from '../common/AccountDetails'
  * @see "OFX Spec, Section 11.3.2"
  */
 export class CreditCardAccountDetails implements AccountDetails {
-  private accountNumber: string
-  private accountKey: string
+  private accountNumber!: string
+  private accountKey!: string
 
   /**
    * The account number.

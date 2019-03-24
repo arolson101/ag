@@ -7,7 +7,7 @@ import { VersionSpecificMessageSetInfo } from '../VersionSpecificMessageSetInfo'
  * @see "Section 13.7.2.1, OFX Spec"
  */
 export class SecurityListV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private supportsSecurityListDownload: boolean
+  private supportsSecurityListDownload!: boolean
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.investment_security

@@ -4,7 +4,7 @@ import { StatementRequest } from '../common/StatementRequest'
 import { CreditCardAccountDetails } from './CreditCardAccountDetails'
 
 export class CreditCardStatementRequest extends StatementRequest {
-  private account: CreditCardAccountDetails
+  private account!: CreditCardAccountDetails
 
   /**
    * The account details.

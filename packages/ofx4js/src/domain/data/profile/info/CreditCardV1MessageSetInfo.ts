@@ -10,8 +10,8 @@ import { ImageProfile } from './common/ImageProfile'
  * @see "Section 11.13.3 OFX Spec"
  */
 export class CreditCardV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private closingAvail: boolean
-  private imageProfile: ImageProfile
+  private closingAvail!: boolean
+  private imageProfile!: ImageProfile
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.creditcard

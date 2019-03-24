@@ -6,7 +6,7 @@ import { CreditCardStatementRequest } from './CreditCardStatementRequest'
 export class CreditCardStatementRequestTransaction extends TransactionWrappedRequestMessage<
   CreditCardStatementRequest
 > {
-  private message: CreditCardStatementRequest
+  private message!: CreditCardStatementRequest
 
   /**
    * The message.

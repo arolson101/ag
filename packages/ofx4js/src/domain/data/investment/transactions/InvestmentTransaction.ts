@@ -6,12 +6,12 @@ import { Element_add } from '../../../../meta/Element_add'
  * @see "Section 13.9.2.4.1, OFX Spec"
  */
 export class InvestmentTransaction {
-  private transactionId: string
-  private serverId: string
-  private tradeDate: Date
-  private settlementDate: Date
-  private reversalTransactionId: string
-  private memo: string
+  private transactionId!: string
+  private serverId!: string
+  private tradeDate!: Date
+  private settlementDate!: Date
+  private reversalTransactionId!: string
+  private memo!: string
 
   /**
    * Gets the unique financial institution assigned transaction id. This is a

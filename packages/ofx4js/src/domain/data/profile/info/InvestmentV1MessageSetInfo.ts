@@ -7,13 +7,13 @@ import { VersionSpecificMessageSetInfo } from '../VersionSpecificMessageSetInfo'
  * @see "Section 13.7.1.1, OFX Spec"
  */
 export class InvestmentV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private supportsStatementsDownload: boolean
-  private supportsOpenOrdersDownload: boolean
-  private supportsPositionsDownload: boolean
-  private supportsBalanceDownload: boolean
-  private supportsEmail: boolean
-  private supports401kInformation: boolean
-  private supportsClosingStatements: boolean
+  private supportsStatementsDownload!: boolean
+  private supportsOpenOrdersDownload!: boolean
+  private supportsPositionsDownload!: boolean
+  private supportsBalanceDownload!: boolean
+  private supportsEmail!: boolean
+  private supports401kInformation!: boolean
+  private supportsClosingStatements!: boolean
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.investment

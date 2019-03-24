@@ -6,7 +6,7 @@ import { Element_add } from '../../../meta/Element_add'
  */
 export class Currency {
   private code: string
-  private exchangeRate: number
+  private exchangeRate!: number
 
   constructor() {
     this.code = 'USD' // java.util.Currency.getInstance(Locale.US).getCurrencyCode().toUpperCase();

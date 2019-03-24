@@ -11,10 +11,10 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class MarginInterestTransaction extends BaseOtherInvestmentTransaction {
-  private total: number
-  private subAccountFund: string
-  private currencyCode: string
-  private originalCurrencyInfo: OriginalCurrency
+  private total!: number
+  private subAccountFund!: string
+  private currencyCode?: string
+  private originalCurrencyInfo?: OriginalCurrency
 
   constructor() {
     super(InvestmentTransactionType.MARGIN_INTEREST)
@@ -27,7 +27,7 @@ export class MarginInterestTransaction extends BaseOtherInvestmentTransaction {
    * @return the sub account type
    */
   getSubAccountFund(): string {
-    return this.subAccountFund
+    return this.subAccountFund!
   }
 
   /**
@@ -46,8 +46,8 @@ export class MarginInterestTransaction extends BaseOtherInvestmentTransaction {
    * @return the type of null if it wasn't one of the well known types.
    */
   getSubAccountFundEnum(): SubAccountType {
-    const type: string = this.getSubAccountFund()
-    return type != null ? SubAccountType[type] : null
+    const type: string | undefined = this.getSubAccountFund()
+    return type ? SubAccountType[type as any] : (null as any)
   }
 
   /**
@@ -78,7 +78,7 @@ export class MarginInterestTransaction extends BaseOtherInvestmentTransaction {
    * @return the currency code for the transaction.
    */
   getCurrencyCode(): string {
-    return this.currencyCode
+    return this.currencyCode!
   }
 
   /**
@@ -90,7 +90,7 @@ export class MarginInterestTransaction extends BaseOtherInvestmentTransaction {
    */
   setCurrencyCode(currencyCode: string): void {
     this.currencyCode = currencyCode
-    this.originalCurrencyInfo = null
+    this.originalCurrencyInfo = undefined
   }
 
   /**
@@ -100,7 +100,7 @@ export class MarginInterestTransaction extends BaseOtherInvestmentTransaction {
    * @return the original currency info for the transaction.
    */
   getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo
+    return this.originalCurrencyInfo!
   }
 
   /**
@@ -111,7 +111,7 @@ export class MarginInterestTransaction extends BaseOtherInvestmentTransaction {
    */
   setOriginalCurrencyInfo(originalCurrency: OriginalCurrency): void {
     this.originalCurrencyInfo = originalCurrency
-    this.currencyCode = null
+    this.currencyCode = undefined
   }
 }
 

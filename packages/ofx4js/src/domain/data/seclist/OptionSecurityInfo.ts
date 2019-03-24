@@ -10,13 +10,13 @@ import { SecurityId } from './SecurityId'
  * @see "Section 13.8.5.4, OFX Spec"
  */
 export class OptionSecurityInfo extends BaseSecurityInfo {
-  private optionType: string
-  private strikePrice: number
-  private expirationDate: Date
-  private sharesPerContact: number
-  private underlyingSecurity: SecurityId
-  private assetClass: string
-  private fiAssetClass: string
+  private optionType!: string
+  private strikePrice!: number
+  private expirationDate!: Date
+  private sharesPerContact!: number
+  private underlyingSecurity!: SecurityId
+  private assetClass!: string
+  private fiAssetClass!: string
 
   /**
    * Gets the type of option. One of "PUT" or "CALL". This is a required field according to the

@@ -4,7 +4,7 @@ import { AbstractMessageSetInfo } from '../AbstractMessageSetInfo'
 import { ProfileV1MessageSetInfo } from './ProfileV1MessageSetInfo'
 
 export class ProfileMessageSetInfo extends AbstractMessageSetInfo {
-  private version1Info: ProfileV1MessageSetInfo
+  private version1Info!: ProfileV1MessageSetInfo
 
   getVersion1Info(): ProfileV1MessageSetInfo {
     return this.version1Info

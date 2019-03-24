@@ -11,7 +11,7 @@ import { SecurityInfo } from './SecurityInfo'
  * developers who may not find the ofx aggregation model intuitive.
  */
 export class BaseSecurityInfo {
-  private securityInfo: SecurityInfo
+  private securityInfo!: SecurityInfo
 
   /**
    * Gets the security info aggregate.

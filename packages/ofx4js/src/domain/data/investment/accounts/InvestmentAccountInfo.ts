@@ -3,8 +3,7 @@ import { ChildAggregate_add } from '../../../../meta/ChildAggregate_add'
 import { Element_add } from '../../../../meta/Element_add'
 import { AccountDetails } from '../../common/AccountDetails'
 import { AccountInfo } from '../../common/AccountInfo'
-import { InvestmentAccountType } from './AccountType'
-import { InvestmentAccountType_fromOfx } from './AccountType'
+import { InvestmentAccountType, InvestmentAccountType_fromOfx } from './AccountType'
 import { ActivationStatus, ActivationStatus_fromOfx } from './ActivationStatus'
 import { InvestmentAccountDetails } from './InvestmentAccountDetails'
 import { UnitedStatesAccountType, UnitedStatesAccountType_fromOfx } from './UnitedStatesAccountType'
@@ -15,12 +14,12 @@ import { UnitedStatesAccountType, UnitedStatesAccountType_fromOfx } from './Unit
  * @see "OFX Spec, Section 13.6.2"
  */
 export class InvestmentAccountInfo implements AccountInfo {
-  private investmentAccount: InvestmentAccountDetails
-  private unitedStatesAccountType: string
-  private supportsChecking: boolean
-  private activationStatus: string
-  private investmentAccountType: string
-  private optionLevel: string
+  private investmentAccount!: InvestmentAccountDetails
+  private unitedStatesAccountType!: string
+  private supportsChecking!: boolean
+  private activationStatus!: string
+  private investmentAccountType!: string
+  private optionLevel!: string
 
   /**
    * Gets the investment account this information is referencing.

@@ -8,7 +8,7 @@ import { ShortOptionSecurity, ShortOptionSecurity_fromOfx } from './ShortOptionS
  * @see "Section 13.9.2.6.1, OFX Spec"
  */
 export class OptionsPosition extends BasePosition {
-  private secured: string
+  private secured!: string
 
   /**
    * Gets how the options position is secured (for short positions).

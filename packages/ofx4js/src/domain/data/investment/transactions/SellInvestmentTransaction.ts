@@ -12,27 +12,27 @@ import { OriginalCurrency } from './OriginalCurrency'
  * @see "Section 13.9.2.4.3, OFX Spec"
  */
 export class SellInvestmentTransaction {
-  private investmentTransaction: InvestmentTransaction
-  private securityId: SecurityId
-  private units: number
-  private unitPrice: number
-  private markdown: number
-  private commission: number
-  private taxes: number
-  private fees: number
-  private load: number
-  private withholding: number
-  private taxExempt: boolean
-  private total: number
-  private gain: number
-  private currencyCode: string
-  private originalCurrencyInfo: OriginalCurrency
-  private subAccountSecurity: string
-  private subAccountFund: string
-  private loanId: string
-  private stateWithholding: number
-  private penalty: number
-  private inv401kSource: string
+  private investmentTransaction!: InvestmentTransaction
+  private securityId!: SecurityId
+  private units!: number
+  private unitPrice!: number
+  private markdown!: number
+  private commission!: number
+  private taxes!: number
+  private fees!: number
+  private load!: number
+  private withholding!: number
+  private taxExempt!: boolean
+  private total!: number
+  private gain!: number
+  private currencyCode?: string
+  private originalCurrencyInfo?: OriginalCurrency
+  private subAccountSecurity!: string
+  private subAccountFund!: string
+  private loanId!: string
+  private stateWithholding!: number
+  private penalty!: number
+  private inv401kSource!: string
 
   /**
    * Gets the investment transaction child aggregate.
@@ -322,7 +322,7 @@ export class SellInvestmentTransaction {
    * @return the currency code for the transaction
    */
   getCurrencyCode(): string {
-    return this.currencyCode
+    return this.currencyCode!
   }
 
   /**
@@ -334,7 +334,7 @@ export class SellInvestmentTransaction {
    */
   setCurrencyCode(currencyCode: string): void {
     this.currencyCode = currencyCode
-    this.originalCurrencyInfo = null
+    this.originalCurrencyInfo = undefined
   }
 
   /**
@@ -344,7 +344,7 @@ export class SellInvestmentTransaction {
    * @return the original currency info for the transaction
    */
   getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo
+    return this.originalCurrencyInfo!
   }
 
   /**
@@ -355,7 +355,7 @@ export class SellInvestmentTransaction {
    */
   setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
     this.originalCurrencyInfo = originalCurrencyInfo
-    this.currencyCode = null
+    this.currencyCode = undefined
   }
 
   /**

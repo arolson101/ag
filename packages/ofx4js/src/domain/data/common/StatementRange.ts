@@ -2,8 +2,8 @@ import { Aggregate_add } from '../../../meta/Aggregate_Add'
 import { Element_add } from '../../../meta/Element_add'
 
 export class StatementRange {
-  private start: Date
-  private end: Date
+  private start!: Date
+  private end!: Date
   private includeTransactions: boolean
 
   constructor() {

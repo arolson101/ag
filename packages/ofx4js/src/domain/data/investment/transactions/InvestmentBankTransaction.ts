@@ -9,8 +9,8 @@ import { SubAccountType, SubAccountType_fromOfx } from '../accounts/SubAccountTy
  * @see "Section 13.9.2.3, OFX Spec"
  */
 export class InvestmentBankTransaction {
-  private transaction: Transaction
-  private subAccountFund: string
+  private transaction!: Transaction
+  private subAccountFund!: string
 
   /**
    * Gets the wrapped transaction aggregate.

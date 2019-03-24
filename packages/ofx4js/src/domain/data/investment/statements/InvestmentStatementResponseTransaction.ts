@@ -10,7 +10,7 @@ import { InvestmentStatementResponse } from './InvestmentStatementResponse'
 export class InvestmentStatementResponseTransaction extends TransactionWrappedResponseMessage<
   InvestmentStatementResponse
 > {
-  private message: InvestmentStatementResponse
+  private message!: InvestmentStatementResponse
 
   /**
    * Gets the the statement response message.

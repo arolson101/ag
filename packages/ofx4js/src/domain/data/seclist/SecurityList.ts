@@ -7,7 +7,7 @@ import { BaseSecurityInfo } from './BaseSecurityInfo'
  * @see "Section 13.8.4, OFX Spec"
  */
 export class SecurityList {
-  private securityInfos: BaseSecurityInfo[]
+  private securityInfos!: BaseSecurityInfo[]
 
   getSecurityInfos(): BaseSecurityInfo[] {
     return this.securityInfos

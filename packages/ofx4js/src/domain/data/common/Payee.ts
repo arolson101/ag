@@ -2,15 +2,15 @@ import { Aggregate_add } from '../../../meta/Aggregate_Add'
 import { Element_add } from '../../../meta/Element_add'
 
 export class Payee {
-  private name: string
-  private address1: string
-  private address2: string
-  private address3: string
-  private city: string
-  private state: string
-  private zip: string
-  private country: string
-  private phone: string
+  private name!: string
+  private address1!: string
+  private address2!: string
+  private address3!: string
+  private city!: string
+  private state!: string
+  private zip!: string
+  private country!: string
+  private phone!: string
 
   /**
    * The name of the payee.

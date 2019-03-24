@@ -9,23 +9,23 @@ import { CharacterType } from './CharacterType'
  * @see "Section 7.2.2, OFX Spec"
  */
 export class SignonInfo implements SignonProfile {
-  private realm: string
-  private minPasswordCharacters: number
-  private maxPasswordCharacters: number
-  private passwordCharacterType: CharacterType
+  private realm!: string
+  private minPasswordCharacters!: number
+  private maxPasswordCharacters!: number
+  private passwordCharacterType!: CharacterType
   private passwordCaseSensitive: boolean
   private passwordSpecialCharsAllowed: boolean
   private passwordSpacesAllowed: boolean
-  private changePasswordSupported: boolean
-  private changePasswordFirstRequired: boolean
-  private additionalCredientialsLabel1: string
-  private additionalCredientialsLabel2: string
-  private clientUIDRequired: boolean
-  private authTokenRequiredForFirstSignon: boolean
-  private authTokenLabel: string
-  private authTokenInfoURL: string
-  private mfaSupported: boolean
-  private mfaChallengeRequiredForFirstSignon: boolean
+  private changePasswordSupported!: boolean
+  private changePasswordFirstRequired!: boolean
+  private additionalCredientialsLabel1!: string
+  private additionalCredientialsLabel2!: string
+  private clientUIDRequired!: boolean
+  private authTokenRequiredForFirstSignon!: boolean
+  private authTokenLabel!: string
+  private authTokenInfoURL!: string
+  private mfaSupported!: boolean
+  private mfaChallengeRequiredForFirstSignon!: boolean
 
   constructor() {
     this.passwordCaseSensitive = true

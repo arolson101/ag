@@ -9,8 +9,8 @@ import { Element_add } from '../../../../meta/Element_add'
  * @see "Section 5.2, OFX Spec"
  */
 export class OriginalCurrency {
-  private currencyRate: number
-  private currencyCode: string
+  private currencyRate!: number
+  private currencyCode!: string
 
   /**
    * Gets the rate of currency conversion. This is the ratio of "CURDEF" (the default currency in

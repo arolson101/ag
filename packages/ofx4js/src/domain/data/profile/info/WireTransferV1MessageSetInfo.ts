@@ -9,11 +9,11 @@ import { VersionSpecificMessageSetInfo } from '../VersionSpecificMessageSetInfo'
  * @see "Section 11.13.5 OFX Spec"
  */
 export class WireTransferV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private processorDaysOff: ProcessorDayOff[]
-  private processEndTime: string
-  private supportsScheduledTransfers: boolean
-  private domesticWireTransferFee: number
-  private internationalWireTransferFee: number
+  private processorDaysOff!: ProcessorDayOff[]
+  private processEndTime!: string
+  private supportsScheduledTransfers!: boolean
+  private domesticWireTransferFee!: number
+  private internationalWireTransferFee!: number
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.wire_transfer

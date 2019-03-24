@@ -4,7 +4,7 @@ import { StatementRequest } from '../common/StatementRequest'
 import { BankAccountDetails } from './BankAccountDetails'
 
 export class BankStatementRequest extends StatementRequest {
-  private account: BankAccountDetails
+  private account!: BankAccountDetails
 
   /**
    * The account details.

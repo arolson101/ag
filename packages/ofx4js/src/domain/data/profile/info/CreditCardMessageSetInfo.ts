@@ -4,7 +4,7 @@ import { AbstractMessageSetInfo } from '../AbstractMessageSetInfo'
 import { CreditCardV1MessageSetInfo } from './CreditCardV1MessageSetInfo'
 
 export class CreditCardMessageSetInfo extends AbstractMessageSetInfo {
-  private version1Info: CreditCardV1MessageSetInfo
+  private version1Info!: CreditCardV1MessageSetInfo
 
   getVersion1Info(): CreditCardV1MessageSetInfo {
     return this.version1Info

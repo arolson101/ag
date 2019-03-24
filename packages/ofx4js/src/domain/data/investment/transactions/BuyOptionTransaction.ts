@@ -9,8 +9,8 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class BuyOptionTransaction extends BaseBuyInvestmentTransaction {
-  private optionBuyType: string
-  private sharesPerContact: number
+  private optionBuyType!: string
+  private sharesPerContact!: number
 
   constructor() {
     super(InvestmentTransactionType.BUY_OPTION)

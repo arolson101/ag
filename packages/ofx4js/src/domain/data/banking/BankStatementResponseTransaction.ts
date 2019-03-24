@@ -6,7 +6,7 @@ import { BankStatementResponse } from './BankStatementResponse'
 export class BankStatementResponseTransaction extends TransactionWrappedResponseMessage<
   BankStatementResponse
 > {
-  private message: BankStatementResponse
+  private message!: BankStatementResponse
 
   /**
    * The message.

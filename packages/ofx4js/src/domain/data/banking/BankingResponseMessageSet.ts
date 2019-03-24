@@ -6,7 +6,7 @@ import { ResponseMessageSet } from '../ResponseMessageSet'
 import { BankStatementResponseTransaction } from './BankStatementResponseTransaction'
 
 export class BankingResponseMessageSet extends ResponseMessageSet {
-  private statementResponses: BankStatementResponseTransaction[]
+  private statementResponses?: BankStatementResponseTransaction[]
 
   getType(): MessageSetType {
     return MessageSetType.banking
@@ -22,7 +22,7 @@ export class BankingResponseMessageSet extends ResponseMessageSet {
    * @return The statement response list.
    */
   getStatementResponses(): BankStatementResponseTransaction[] {
-    return this.statementResponses
+    return this.statementResponses!
   }
 
   /**
@@ -36,7 +36,7 @@ export class BankingResponseMessageSet extends ResponseMessageSet {
 
   // Inherited.
   getResponseMessages(): ResponseMessage[] {
-    return this.statementResponses
+    return this.statementResponses!
   }
 
   /**
@@ -45,8 +45,8 @@ export class BankingResponseMessageSet extends ResponseMessageSet {
    * @return the first bank statement response.
    * @deprecated Use getStatementResponses() because sometimes there are multiple responses
    */
-  getStatementResponse(): BankStatementResponseTransaction {
-    return this.statementResponses == null || this.statementResponses.length == 0
+  getStatementResponse(): BankStatementResponseTransaction | null {
+    return !this.statementResponses || this.statementResponses.length === 0
       ? null
       : this.statementResponses[0]
   }

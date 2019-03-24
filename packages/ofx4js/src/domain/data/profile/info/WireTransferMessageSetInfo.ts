@@ -4,7 +4,7 @@ import { AbstractMessageSetInfo } from '../AbstractMessageSetInfo'
 import { WireTransferV1MessageSetInfo } from './WireTransferV1MessageSetInfo'
 
 export class WireTransferMessageSetInfo extends AbstractMessageSetInfo {
-  private version1Info: WireTransferV1MessageSetInfo
+  private version1Info!: WireTransferV1MessageSetInfo
 
   getVersion1Info(): WireTransferV1MessageSetInfo {
     return this.version1Info

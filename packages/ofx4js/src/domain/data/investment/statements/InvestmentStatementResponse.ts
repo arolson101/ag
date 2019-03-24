@@ -13,17 +13,17 @@ import { InvestmentBalance } from './InvestmentBalance'
  * @see "Section 13.9.2.2, OFX Spec"
  */
 export class InvestmentStatementResponse extends StatementResponse {
-  private dateOfStatement: Date
-  private account: InvestmentAccountDetails
-  private investmentTransactionList: InvestmentTransactionList
-  private positionList: InvestmentPositionList
-  private accountBalance: InvestmentBalance
+  private dateOfStatement!: Date
+  private account!: InvestmentAccountDetails
+  private investmentTransactionList!: InvestmentTransactionList
+  private positionList!: InvestmentPositionList
+  private accountBalance!: InvestmentBalance
 
   // This is not actually technically part of the INVSTMTRS, but according to Section 13.8.4,
   // OFX spec, this aggregate can appear in a statement response as part of the SECLISTMSGSRQV1
   // message set even when it wasn't requested. We include it here to make it accessible as part of
   // the AccountStatement
-  private securityList: SecurityList
+  private securityList!: SecurityList
 
   /**
    * Gets the name of the response message.

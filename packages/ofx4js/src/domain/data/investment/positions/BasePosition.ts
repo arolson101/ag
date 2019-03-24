@@ -13,7 +13,7 @@ import { PositionType, PositionType_fromOfx } from './PositionType'
  * developers who may not find the ofx aggregation model intuitive.
  */
 export class BasePosition {
-  private investmentPosition: InvestmentPosition
+  private investmentPosition!: InvestmentPosition
 
   /**
    * Gets the investment position child aggregate.

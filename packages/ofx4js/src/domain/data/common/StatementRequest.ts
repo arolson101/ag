@@ -4,7 +4,7 @@ import { RequestMessage } from '../RequestMessage'
 import { StatementRange } from './StatementRange'
 
 export class StatementRequest extends RequestMessage {
-  private statementRange: StatementRange
+  private statementRange!: StatementRange
 
   /**
    * The statement range.

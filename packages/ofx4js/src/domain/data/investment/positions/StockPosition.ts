@@ -7,9 +7,9 @@ import { BasePosition } from './BasePosition'
  * @see "Section 13.9.2.6.1, OFX Spec"
  */
 export class StockPosition extends BasePosition {
-  private unitsStreet: number
-  private unitsUser: number
-  private reinvestDividends: boolean
+  private unitsStreet!: number
+  private unitsUser!: number
+  private reinvestDividends!: boolean
 
   /**
    * Gets the number of units in the financial insititution's street name.

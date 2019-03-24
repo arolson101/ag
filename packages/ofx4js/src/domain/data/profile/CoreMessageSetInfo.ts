@@ -10,15 +10,15 @@ import { SynchronizationCapability } from './SynchronizationCapability'
  */
 export class CoreMessageSetInfo {
   private version: string
-  private serviceProviderName: string
-  private url: string
-  private security: ApplicationSecurity
-  private sslRequired: boolean
-  private realm: string
-  private language: string
-  private syncCapability: SynchronizationCapability
-  private fileBasedErrorRecoverySupport: boolean
-  private timeout: number
+  private serviceProviderName!: string
+  private url!: string
+  private security!: ApplicationSecurity
+  private sslRequired!: boolean
+  private realm!: string
+  private language!: string
+  private syncCapability!: SynchronizationCapability
+  private fileBasedErrorRecoverySupport!: boolean
+  private timeout!: number
 
   constructor() {
     this.version = '1'

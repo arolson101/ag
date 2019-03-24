@@ -9,7 +9,7 @@ import { CreditCardStatementRequestTransaction } from './CreditCardStatementRequ
 // import java.util.ArrayList;
 
 export class CreditCardRequestMessageSet extends RequestMessageSet {
-  private statementRequest: CreditCardStatementRequestTransaction
+  private statementRequest!: CreditCardStatementRequestTransaction
 
   getType(): MessageSetType {
     return MessageSetType.creditcard

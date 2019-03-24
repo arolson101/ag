@@ -7,9 +7,9 @@ import { Transaction } from './Transaction'
 // import java.util.List;
 
 export class TransactionList {
-  private start: Date
-  private end: Date
-  private transactions: Transaction[]
+  private start!: Date
+  private end!: Date
+  private transactions!: Transaction[]
 
   /**
    * The start date.

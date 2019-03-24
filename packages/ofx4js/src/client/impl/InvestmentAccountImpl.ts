@@ -102,7 +102,7 @@ export class InvestmentAccountImpl implements InvestmentAccount {
       throw new OFXException('No investment response message set.')
     }
 
-    const statementTransactionResponse: InvestmentStatementResponseTransaction = investmentStatementSet.getStatementResponse()
+    const statementTransactionResponse: InvestmentStatementResponseTransaction | null = investmentStatementSet.getStatementResponse()
     if (statementTransactionResponse == null) {
       throw new OFXException('No investment statement response transaction.')
     }

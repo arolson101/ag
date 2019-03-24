@@ -9,10 +9,10 @@ import { InvestmentBankTransaction } from './InvestmentBankTransaction'
  * @see "Section 13.9.1.2, OFX Spec"
  */
 export class InvestmentTransactionList {
-  private start: Date
-  private end: Date
-  private transactions: BaseInvestmentTransaction[]
-  private bankTransactions: InvestmentBankTransaction[]
+  private start!: Date
+  private end!: Date
+  private transactions!: BaseInvestmentTransaction[]
+  private bankTransactions!: InvestmentBankTransaction[]
 
   /**
    * Gets the start date. This is a required field according to the OFX spec.

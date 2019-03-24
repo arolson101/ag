@@ -9,8 +9,8 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class BuyMutualFundTransaction extends BaseBuyInvestmentTransaction {
-  private buyType: string
-  private relatedTransactionId: string
+  private buyType!: string
+  private relatedTransactionId!: string
 
   constructor() {
     super(InvestmentTransactionType.BUY_MUTUAL_FUND)

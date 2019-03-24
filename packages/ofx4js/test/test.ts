@@ -208,9 +208,9 @@ describe('ofx parsing', () => {
     expect(messageSets[1].cast<BankingResponseMessageSet>().getStatementResponses()).toHaveLength(1)
     const bankingResponse = messageSets[1].cast<BankingResponseMessageSet>().getStatementResponse()
     expect(bankingResponse).toBeInstanceOf(BankStatementResponseTransaction)
-    expect(bankingResponse.getStatus().getCode()).toBe(KnownCode.SUCCESS)
+    expect(bankingResponse!.getStatus().getCode()).toBe(KnownCode.SUCCESS)
 
-    const message = bankingResponse.getMessage()
+    const message = bankingResponse!.getMessage()
     const account = message.getAccount()
     expect(account.getAccountNumber()).toBe('098-121')
     expect(account.getAccountType()).toBe(AccountType.SAVINGS)

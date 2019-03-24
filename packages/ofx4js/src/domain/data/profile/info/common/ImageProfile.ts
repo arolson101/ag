@@ -6,8 +6,8 @@ import { Element_add } from '../../../../../meta/Element_add'
  * @see "Section 3.1.6.2 OFX Spec"
  */
 export class ImageProfile {
-  private closingImageAvailable: boolean
-  private transactionImageAvailable: boolean
+  private closingImageAvailable!: boolean
+  private transactionImageAvailable!: boolean
 
   getClosingImageAvailable(): boolean {
     return this.closingImageAvailable

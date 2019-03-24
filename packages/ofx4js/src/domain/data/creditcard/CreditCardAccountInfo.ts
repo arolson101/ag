@@ -7,11 +7,11 @@ import { AccountStatus } from '../common/AccountStatus'
 import { CreditCardAccountDetails } from './CreditCardAccountDetails'
 
 export class CreditCardAccountInfo implements AccountInfo {
-  private creditCardAccount: CreditCardAccountDetails
-  private supportsTransactionDetailOperations: boolean
-  private supportsTransferToOtherAccountOperations: boolean
-  private supportsTransferFromOtherAccountOperations: boolean
-  private status: AccountStatus
+  private creditCardAccount!: CreditCardAccountDetails
+  private supportsTransactionDetailOperations!: boolean
+  private supportsTransferToOtherAccountOperations!: boolean
+  private supportsTransferFromOtherAccountOperations!: boolean
+  private status!: AccountStatus
 
   /**
    * The credit card account this information is referencing.

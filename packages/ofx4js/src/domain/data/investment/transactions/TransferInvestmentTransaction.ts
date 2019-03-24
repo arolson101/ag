@@ -14,15 +14,15 @@ import { TransferAction, TransferAction_fromOfx } from './TransferAction'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class TransferInvestmentTransaction extends BaseOtherInvestmentTransaction {
-  private securityId: SecurityId
-  private subAccountSecurity: string
-  private units: number
-  private transferAction: string
-  private positionType: string
-  private averageCostBasis: number
-  private unitPrice: number
-  private purchaseDate: Date
-  private inv401kSource: string
+  private securityId!: SecurityId
+  private subAccountSecurity!: string
+  private units!: number
+  private transferAction!: string
+  private positionType!: string
+  private averageCostBasis!: number
+  private unitPrice!: number
+  private purchaseDate!: Date
+  private inv401kSource!: string
 
   // TODO (jonp) -- INVACCTFROM
 

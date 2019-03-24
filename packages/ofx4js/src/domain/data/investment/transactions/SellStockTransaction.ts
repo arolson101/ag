@@ -9,7 +9,7 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class SellStockTransaction extends BaseSellInvestmentTransaction {
-  private sellType: string
+  private sellType!: string
 
   constructor() {
     super(InvestmentTransactionType.SELL_STOCK)

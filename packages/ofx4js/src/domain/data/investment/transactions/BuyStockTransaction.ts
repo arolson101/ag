@@ -9,7 +9,7 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class BuyStockTransaction extends BaseBuyInvestmentTransaction {
-  private buyType: string
+  private buyType!: string
 
   constructor() {
     super(InvestmentTransactionType.BUY_STOCK)
@@ -23,7 +23,7 @@ export class BuyStockTransaction extends BaseBuyInvestmentTransaction {
    * @return the buy type
    */
   getBuyType(): string {
-    return this.buyType
+    return this.buyType!
   }
 
   /**
@@ -33,7 +33,7 @@ export class BuyStockTransaction extends BaseBuyInvestmentTransaction {
    *
    * @param buyType the buy type
    */
-  setBuyType(buyType: string): void {
+  setBuyType(buyType: string) {
     this.buyType = buyType
   }
 

@@ -18,7 +18,7 @@ import { TransactionWithSecurity } from './TransactionWithSecurity'
  */
 export abstract class BaseSellInvestmentTransaction extends BaseInvestmentTransaction
   implements TransactionWithSecurity {
-  private sellInvestment: SellInvestmentTransaction
+  private sellInvestment!: SellInvestmentTransaction
 
   constructor(transactionType: InvestmentTransactionType) {
     super(transactionType)

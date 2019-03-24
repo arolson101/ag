@@ -4,7 +4,7 @@ import { TransactionWrappedResponseMessage } from '../TransactionWrappedResponse
 import { ProfileResponse } from './ProfileResponse'
 
 export class ProfileResponseTransaction extends TransactionWrappedResponseMessage<ProfileResponse> {
-  private message: ProfileResponse
+  private message!: ProfileResponse
 
   /**
    * The message.

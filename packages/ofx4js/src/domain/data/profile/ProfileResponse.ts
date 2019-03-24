@@ -16,22 +16,22 @@ import { SignonInfoList } from './SignonInfoList'
  * @see "Section 7.2 OFX Spec"
  */
 export class ProfileResponse extends ResponseMessage implements FinancialInstitutionProfile {
-  private messageSetList: MessageSetInfoList
-  private signonInfoList: SignonInfoList
-  private timestamp: Date
-  private financialInstitutionName: string
-  private address1: string
-  private address2: string
-  private address3: string
-  private city: string
-  private state: string
-  private zip: string
-  private country: string
-  private customerServicePhone: string
-  private technicalSupportPhone: string
-  private fax: string
-  private siteURL: string
-  private email: string
+  private messageSetList!: MessageSetInfoList
+  private signonInfoList!: SignonInfoList
+  private timestamp!: Date
+  private financialInstitutionName!: string
+  private address1!: string
+  private address2!: string
+  private address3!: string
+  private city!: string
+  private state!: string
+  private zip!: string
+  private country!: string
+  private customerServicePhone!: string
+  private technicalSupportPhone!: string
+  private fax!: string
+  private siteURL!: string
+  private email!: string
 
   /**
    * List of message set information.
@@ -331,17 +331,17 @@ export class ProfileResponse extends ResponseMessage implements FinancialInstitu
     this.email = email
   }
 
-  getMessageSetProfile(type: MessageSetType, version: string = null): MessageSetProfile {
-    return version === null
+  getMessageSetProfile(type: MessageSetType, version?: string): MessageSetProfile | null {
+    return !version
       ? this.getMessageSetProfile_noversion(type)
       : this.getMessageSetProfile_version(type, version)
   }
 
-  getMessageSetProfile_noversion(type: MessageSetType): MessageSetProfile {
+  getMessageSetProfile_noversion(type: MessageSetType): MessageSetProfile | null {
     const profiles: MessageSetProfile[] = this.getProfiles(type)
     if (profiles.length > 1) {
       throw new OFXException('More than one profile of type ' + type)
-    } else if (profiles.length == 0) {
+    } else if (profiles.length === 0) {
       return null
     } else {
       return profiles[0]
@@ -360,7 +360,7 @@ export class ProfileResponse extends ResponseMessage implements FinancialInstitu
       for (const info of this.getMessageSetList().getInformationList()) {
         if (info.getVersionSpecificInformationList() != null) {
           for (const versionSpecificInfo of info.getVersionSpecificInformationList()) {
-            if (versionSpecificInfo.getMessageSetType() == type) {
+            if (versionSpecificInfo.getMessageSetType() === type) {
               profiles.push(versionSpecificInfo)
             }
           }
@@ -370,7 +370,7 @@ export class ProfileResponse extends ResponseMessage implements FinancialInstitu
     return profiles
   }
 
-  getMessageSetProfile_version(type: MessageSetType, version: string): MessageSetProfile {
+  getMessageSetProfile_version(type: MessageSetType, version: string): MessageSetProfile | null {
     for (const profile of this.getProfiles(type)) {
       if (version == null) {
         if (profile.getVersion() == null) {
@@ -384,7 +384,7 @@ export class ProfileResponse extends ResponseMessage implements FinancialInstitu
     return null
   }
 
-  getSignonProfile(messageSet: MessageSetProfile): SignonProfile {
+  getSignonProfile(messageSet: MessageSetProfile): SignonProfile | null {
     if (this.getSignonInfoList() != null && this.getSignonInfoList().getInfoList() != null) {
       for (const signonInfo of this.getSignonInfoList().getInfoList()) {
         if (messageSet.getRealm() == null) {

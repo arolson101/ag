@@ -6,7 +6,7 @@ import { Element_add } from '../../../../../meta/Element_add'
  * @see "Section 8.8 OFX Spec"
  */
 export class ClientEnrollment {
-  private accountRequired: boolean
+  private accountRequired!: boolean
 
   /**
    * Y if account number is required as part of enrollment

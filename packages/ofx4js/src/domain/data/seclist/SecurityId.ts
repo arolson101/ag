@@ -6,8 +6,8 @@ import { Element_add } from '../../../meta/Element_add'
  * @see "Section 13.8.1, OFX Spec"
  */
 export class SecurityId {
-  private uniqueId: string
-  private uniqueIdType: string
+  private uniqueId!: string
+  private uniqueIdType!: string
 
   /**
    * Gets the unique id for the security. This is a required field according to the OFX spec.

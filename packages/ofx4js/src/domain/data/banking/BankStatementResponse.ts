@@ -4,7 +4,7 @@ import { StatementResponse } from '../common/StatementResponse'
 import { BankAccountDetails } from './BankAccountDetails'
 
 export class BankStatementResponse extends StatementResponse {
-  private account: BankAccountDetails
+  private account!: BankAccountDetails
 
   getResponseMessageName(): string {
     return 'bank statement'

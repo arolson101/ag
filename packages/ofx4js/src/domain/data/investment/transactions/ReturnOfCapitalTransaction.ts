@@ -15,13 +15,13 @@ import { TransactionWithSecurity } from './TransactionWithSecurity'
  */
 export class ReturnOfCapitalTransaction extends BaseOtherInvestmentTransaction
   implements TransactionWithSecurity {
-  private securityId: SecurityId
-  private total: number
-  private subAccountSecurity: string
-  private subAccountFund: string
-  private currencyCode: string
-  private originalCurrencyInfo: OriginalCurrency
-  private inv401kSource: string
+  private securityId!: SecurityId
+  private total!: number
+  private subAccountSecurity!: string
+  private subAccountFund!: string
+  private currencyCode?: string
+  private originalCurrencyInfo?: OriginalCurrency
+  private inv401kSource!: string
 
   constructor() {
     super(InvestmentTransactionType.RETURN_OF_CAPITAL)
@@ -139,7 +139,7 @@ export class ReturnOfCapitalTransaction extends BaseOtherInvestmentTransaction
    * @return the currency code for the transaction
    */
   getCurrencyCode(): string {
-    return this.currencyCode
+    return this.currencyCode!
   }
 
   /**
@@ -151,7 +151,7 @@ export class ReturnOfCapitalTransaction extends BaseOtherInvestmentTransaction
    */
   setCurrencyCode(currencyCode: string): void {
     this.currencyCode = currencyCode
-    this.originalCurrencyInfo = null
+    this.originalCurrencyInfo = undefined
   }
 
   /**
@@ -161,7 +161,7 @@ export class ReturnOfCapitalTransaction extends BaseOtherInvestmentTransaction
    * @return the currency code for the transaction.
    */
   getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo
+    return this.originalCurrencyInfo!
   }
 
   /**
@@ -172,7 +172,7 @@ export class ReturnOfCapitalTransaction extends BaseOtherInvestmentTransaction
    */
   setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
     this.originalCurrencyInfo = originalCurrencyInfo
-    this.currencyCode = null
+    this.currencyCode = undefined
   }
 
   /**

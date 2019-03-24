@@ -8,11 +8,11 @@ import { BalanceList } from './BalanceList'
  * @see "Section 13.9.2.7, OFX Spec"
  */
 export class InvestmentBalance {
-  private availableCash: number
-  private marginBalance: number
-  private shortBalance: number
-  private buyingPower: number
-  private balanceList: BalanceList
+  private availableCash!: number
+  private marginBalance!: number
+  private shortBalance!: number
+  private buyingPower!: number
+  private balanceList!: BalanceList
 
   /**
    * Gets the available cash balance across all sub-accounts, including sweep funds. This is

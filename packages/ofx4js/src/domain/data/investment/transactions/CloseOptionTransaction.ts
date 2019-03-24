@@ -14,13 +14,13 @@ import { TransactionWithSecurity } from './TransactionWithSecurity'
  */
 export class CloseOptionTransaction extends BaseOtherInvestmentTransaction
   implements TransactionWithSecurity {
-  private securityId: SecurityId
-  private optionAction: string
-  private units: number
-  private sharesPerContact: number
-  private subAccountSecurity: string
-  private relatedTransactionId: string
-  private gain: number
+  private securityId!: SecurityId
+  private optionAction!: string
+  private units!: number
+  private sharesPerContact!: number
+  private subAccountSecurity!: string
+  private relatedTransactionId!: string
+  private gain!: number
 
   constructor() {
     super(InvestmentTransactionType.CLOSE_OPTION)

@@ -8,7 +8,7 @@ import { ClientRoutingCapability } from './ClientRoutingCapability'
  */
 export class ProfileRequest extends RequestMessage {
   private routingCapability: ClientRoutingCapability
-  private profileLastUpdated: Date
+  private profileLastUpdated!: Date
 
   constructor() {
     super()

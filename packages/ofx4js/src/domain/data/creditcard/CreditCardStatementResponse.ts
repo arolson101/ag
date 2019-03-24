@@ -4,7 +4,7 @@ import { StatementResponse } from '../common/StatementResponse'
 import { CreditCardAccountDetails } from './CreditCardAccountDetails'
 
 export class CreditCardStatementResponse extends StatementResponse {
-  private account: CreditCardAccountDetails
+  private account!: CreditCardAccountDetails
 
   getResponseMessageName(): string {
     return 'credit card statement'

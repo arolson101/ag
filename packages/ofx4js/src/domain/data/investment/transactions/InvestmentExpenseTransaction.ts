@@ -13,13 +13,13 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction {
-  private securityId: SecurityId
-  private total: number
-  private subAccountSecurity: string
-  private subAccountFund: string
-  private currencyCode: string
-  private originalCurrencyInfo: OriginalCurrency
-  private inv401kSource: string
+  private securityId!: SecurityId
+  private total!: number
+  private subAccountSecurity!: string
+  private subAccountFund!: string
+  private currencyCode?: string
+  private originalCurrencyInfo?: OriginalCurrency
+  private inv401kSource!: string
 
   constructor() {
     super(InvestmentTransactionType.INVESTMENT_EXPENSE)
@@ -133,7 +133,7 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    * @return the currency code for the transaction
    */
   getCurrencyCode(): string {
-    return this.currencyCode
+    return this.currencyCode!
   }
 
   /**
@@ -145,7 +145,7 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    */
   setCurrencyCode(currencyCode: string): void {
     this.currencyCode = currencyCode
-    this.originalCurrencyInfo = null
+    this.originalCurrencyInfo = undefined
   }
 
   /**
@@ -155,7 +155,7 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    * @return the original currency info for the transaction
    */
   getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo
+    return this.originalCurrencyInfo!
   }
 
   /**
@@ -166,7 +166,7 @@ export class InvestmentExpenseTransaction extends BaseOtherInvestmentTransaction
    */
   setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
     this.originalCurrencyInfo = originalCurrencyInfo
-    this.currencyCode = null
+    this.currencyCode = undefined
   }
 
   /**

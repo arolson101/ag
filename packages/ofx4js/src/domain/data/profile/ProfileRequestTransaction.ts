@@ -4,7 +4,7 @@ import { TransactionWrappedRequestMessage } from '../TransactionWrappedRequestMe
 import { ProfileRequest } from './ProfileRequest'
 
 export class ProfileRequestTransaction extends TransactionWrappedRequestMessage<ProfileRequest> {
-  private message: ProfileRequest
+  private message!: ProfileRequest
 
   /**
    * The wrapped message.

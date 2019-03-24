@@ -8,7 +8,7 @@ import { SignonInfo } from './SignonInfo'
  * @see "Section 7.2.2, OFX Spec"
  */
 export class SignonInfoList {
-  private infoList: SignonInfo[]
+  private infoList!: SignonInfo[]
 
   /**
    * List of sign-on information.

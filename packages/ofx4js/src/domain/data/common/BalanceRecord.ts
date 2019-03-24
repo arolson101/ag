@@ -15,12 +15,12 @@ export enum BalanceRecordType {
  * @see "Section 3.1.3, OFX Spec"
  */
 export class BalanceRecord {
-  private name: string
-  private description: string
-  private type: BalanceRecordType
-  private value: string
-  private timestamp: Date
-  private currency: Currency
+  private name!: string
+  private description!: string
+  private type!: BalanceRecordType
+  private value!: string
+  private timestamp!: Date
+  private currency!: Currency
 
   /**
    * Name of the balance.

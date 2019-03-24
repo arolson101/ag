@@ -6,8 +6,8 @@ import { Element_add } from '../../../../meta/Element_add'
  * @see "Section 13.9.1.2, OFX Spec"
  */
 export class IncludePosition {
-  private sentDownDate: Date
-  private includePositions: boolean
+  private sentDownDate!: Date
+  private includePositions!: boolean
 
   constructor() {
     this.includePositions = true

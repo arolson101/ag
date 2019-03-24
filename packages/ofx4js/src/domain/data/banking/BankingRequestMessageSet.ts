@@ -6,7 +6,7 @@ import { RequestMessageSet } from '../RequestMessageSet'
 import { BankStatementRequestTransaction } from './BankStatementRequestTransaction'
 
 export class BankingRequestMessageSet extends RequestMessageSet {
-  private statementRequest: BankStatementRequestTransaction
+  private statementRequest!: BankStatementRequestTransaction
 
   getType(): MessageSetType {
     return MessageSetType.banking
@@ -18,7 +18,7 @@ export class BankingRequestMessageSet extends RequestMessageSet {
    * @return The statement request.
    */
   getStatementRequest(): BankStatementRequestTransaction {
-    return this.statementRequest
+    return this.statementRequest!
   }
 
   /**

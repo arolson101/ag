@@ -39,7 +39,7 @@ export class BankingAccountImpl extends BaseAccountImpl<BankAccountDetails> impl
       throw new OFXException('No banking response message set.')
     }
 
-    const statementTransactionResponse: BankStatementResponseTransaction = bankingSet.getStatementResponse()
+    const statementTransactionResponse: BankStatementResponseTransaction | null = bankingSet.getStatementResponse()
     if (statementTransactionResponse == null) {
       throw new OFXException('No banking statement response transaction.')
     }

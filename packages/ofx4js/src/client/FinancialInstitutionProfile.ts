@@ -110,7 +110,7 @@ export interface FinancialInstitutionProfile {
    * @return The message set profile information, or null if the FI doesn't support the
    * specified message set of the specified version.
    */
-  getMessageSetProfile(type: MessageSetType, version?: string): MessageSetProfile
+  getMessageSetProfile(type: MessageSetType, version?: string): MessageSetProfile | null
 
   /**
    * Get the signon profile for the specified message set.
@@ -118,5 +118,5 @@ export interface FinancialInstitutionProfile {
    * @param messageSet The message set.
    * @return The signon profile, or null if none was found.
    */
-  getSignonProfile(messageSet: MessageSetProfile): SignonProfile
+  getSignonProfile(messageSet: MessageSetProfile): SignonProfile | null
 }

@@ -40,7 +40,7 @@ export class CreditCardAccountImpl extends BaseAccountImpl<CreditCardAccountDeta
       throw new OFXException('No credit card response message set.')
     }
 
-    const statementTransactionResponse: CreditCardStatementResponseTransaction = creditCardSet.getStatementResponse()
+    const statementTransactionResponse: CreditCardStatementResponseTransaction | null = creditCardSet.getStatementResponse()
     if (statementTransactionResponse == null) {
       throw new OFXException('No credit card statement response transaction.')
     }

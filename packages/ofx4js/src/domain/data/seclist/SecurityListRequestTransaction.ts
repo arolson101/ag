@@ -10,7 +10,7 @@ import { SecurityListRequest } from './SecurityListRequest'
 export class SecurityListRequestTransaction extends TransactionWrappedRequestMessage<
   SecurityListRequest
 > {
-  private message: SecurityListRequest
+  private message!: SecurityListRequest
 
   /**
    * The message.

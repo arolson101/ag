@@ -11,11 +11,11 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class SellOptionTransaction extends BaseSellInvestmentTransaction {
-  private optionSellType: string
-  private sharesPerContact: number
-  private relatedTransactionId: string
-  private relatedType: string
-  private secured: string
+  private optionSellType!: string
+  private sharesPerContact!: number
+  private relatedTransactionId!: string
+  private relatedType!: string
+  private secured!: string
 
   constructor() {
     super(InvestmentTransactionType.SELL_OPTION)

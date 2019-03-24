@@ -11,7 +11,7 @@ import { InvestmentTransactionType } from './TransactionType'
  * developers who may not find the ofx aggregation model intuitive.
  */
 export class BaseOtherInvestmentTransaction extends BaseInvestmentTransaction {
-  private investmentTransaction: InvestmentTransaction
+  private investmentTransaction!: InvestmentTransaction
 
   constructor(transactionType: InvestmentTransactionType) {
     super(transactionType)

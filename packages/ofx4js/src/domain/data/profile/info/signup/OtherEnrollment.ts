@@ -6,7 +6,7 @@ import { Element_add } from '../../../../../meta/Element_add'
  * @see "Section 8.8 OFX Spec"
  */
 export class OtherEnrollment {
-  private message: string
+  private message!: string
 
   /**
    * Message to consumer about what to do next (for example, a phone number),

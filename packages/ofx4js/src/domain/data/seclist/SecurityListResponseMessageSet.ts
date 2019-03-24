@@ -7,8 +7,8 @@ import { SecurityList } from './SecurityList'
 import { SecurityListResponseTransaction } from './SecurityListResponseTransaction'
 
 export class SecurityListResponseMessageSet extends ResponseMessageSet {
-  private securityListResponse: SecurityListResponseTransaction
-  private securityList: SecurityList
+  private securityListResponse!: SecurityListResponseTransaction
+  private securityList!: SecurityList
 
   getType(): MessageSetType {
     return MessageSetType.investment_security

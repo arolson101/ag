@@ -7,11 +7,11 @@ import { ProcessorDayOff } from '../../../common/ProcessorDayOff'
  * @see "Section 11.13.2.3 OFX Spec"
  */
 export class StopCheckProfile {
-  private processorDaysOff: ProcessorDayOff[]
-  private processEndTime: string
-  private canUseRange: boolean
-  private canUseDescription: boolean
-  private stopCheckFee: number
+  private processorDaysOff!: ProcessorDayOff[]
+  private processEndTime!: string
+  private canUseRange!: boolean
+  private canUseDescription!: boolean
+  private stopCheckFee!: number
 
   /**
    * Days of week that no processing occurs: MONDAY, TUESDAY, WEDNESDAY, THURSDAY,

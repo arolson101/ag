@@ -10,7 +10,7 @@ import { SecurityListRequestTransaction } from './SecurityListRequestTransaction
  * @see "Section 13.7.2.2.1, OFX Spec"
  */
 export class SecurityListRequestMessageSet extends RequestMessageSet {
-  private securityListRequest: SecurityListRequestTransaction
+  private securityListRequest!: SecurityListRequestTransaction
 
   getType(): MessageSetType {
     return MessageSetType.investment

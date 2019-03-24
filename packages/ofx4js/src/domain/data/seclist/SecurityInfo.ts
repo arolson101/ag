@@ -8,15 +8,15 @@ import { SecurityId } from './SecurityId'
  * @see "Section 13.8.5.1, OFX Spec"
  */
 export class SecurityInfo {
-  private securityId: SecurityId
-  private securityName: string
-  private tickerSymbol: string
-  private fiId: string
-  private rating: string
-  private unitPrice: number
-  private marketValueDate: Date
-  private currencyCode: string
-  private memo: string
+  private securityId!: SecurityId
+  private securityName!: string
+  private tickerSymbol!: string
+  private fiId!: string
+  private rating!: string
+  private unitPrice!: number
+  private marketValueDate!: Date
+  private currencyCode!: string
+  private memo!: string
 
   /**
    * Gets the unique security id for the security. This is a required field according to the OFX

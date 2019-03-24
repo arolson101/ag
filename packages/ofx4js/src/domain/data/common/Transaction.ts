@@ -9,26 +9,26 @@ import { Currency } from './Currency'
 import { Payee } from './Payee'
 
 export class Transaction {
-  private transactionType: InvestmentTransactionType
-  private datePosted: Date
-  private dateInitiated: Date
-  private dateAvailable: Date
-  private amount: number
-  private id: string
-  private correctionId: string
-  private correctionAction: CorrectionAction
-  private tempId: string
-  private checkNumber: string
-  private referenceNumber: string
-  private standardIndustrialCode: string
-  private payeeId: string
-  private name: string
-  private payee: Payee
-  private bankAccountTo: BankAccountDetails
-  private creditCardAccountTo: CreditCardAccountDetails
-  private memo: string
-  private currency: Currency
-  private originalCurrency: Currency
+  private transactionType!: InvestmentTransactionType
+  private datePosted!: Date
+  private dateInitiated!: Date
+  private dateAvailable!: Date
+  private amount!: number
+  private id!: string
+  private correctionId!: string
+  private correctionAction!: CorrectionAction
+  private tempId!: string
+  private checkNumber!: string
+  private referenceNumber!: string
+  private standardIndustrialCode!: string
+  private payeeId!: string
+  private name!: string
+  private payee!: Payee
+  private bankAccountTo!: BankAccountDetails
+  private creditCardAccountTo!: CreditCardAccountDetails
+  private memo!: string
+  private currency!: Currency
+  private originalCurrency!: Currency
 
   /**
    * The transaction type.
@@ -186,7 +186,8 @@ export class Transaction {
   /**
    * The action to take on the {@link #getCorrectionId() corrected transaction}.
    *
-   * @param correctionAction The action to take on the {@link #getCorrectionId() corrected transaction}.
+   * @param correctionAction The action to take on the {@link #getCorrectionId()}
+   * corrected transaction.
    */
   setCorrectionAction(correctionAction: CorrectionAction): void {
     this.correctionAction = correctionAction

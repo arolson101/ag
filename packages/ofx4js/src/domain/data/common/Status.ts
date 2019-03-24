@@ -118,13 +118,12 @@ export class KnownCode extends StatusCode {
   }
 
   static fromCode(code: number): KnownCode {
-    for (const i in KnownCode.KnownCodes) {
-      const value: KnownCode = KnownCode.KnownCodes[i]
-      if (value.getCode() == code) {
+    for (const value of KnownCode.KnownCodes) {
+      if (value.getCode() === code) {
         return value
       }
     }
-    return null
+    throw new Error('invalid KnownCode ' + code)
   }
 
   // @Override
@@ -139,9 +138,9 @@ export class KnownCode extends StatusCode {
  * @see "Section 3.1.4, OFX Spec"
  */
 export class Status {
-  private code: StatusCode
-  private severity: Severity
-  private message: string
+  private code!: StatusCode
+  private severity?: Severity
+  private message!: string
 
   constructor() {
     this.code = KnownCode.SUCCESS
@@ -175,7 +174,7 @@ export class Status {
    * @return The severity.
    */
   getSeverity(): Severity {
-    return this.severity
+    return this.severity!
   }
 
   /**

@@ -8,9 +8,9 @@ import { AccountDetails } from '../../common/AccountDetails'
  * @see "OFX Spec, Section 13.6.1"
  */
 export class InvestmentAccountDetails implements AccountDetails {
-  private brokerId: string
-  private accountNumber: string
-  private accountKey: string
+  private brokerId!: string
+  private accountNumber!: string
+  private accountKey!: string
 
   /**
    * Gets the broker id.

@@ -9,7 +9,7 @@ import { ProfileResponseTransaction } from './ProfileResponseTransaction'
  * @see "Section 7 OFX Spec"
  */
 export class ProfileResponseMessageSet extends ResponseMessageSet {
-  private profileResponse: ProfileResponseTransaction
+  private profileResponse!: ProfileResponseTransaction
 
   getType(): MessageSetType {
     return MessageSetType.profile

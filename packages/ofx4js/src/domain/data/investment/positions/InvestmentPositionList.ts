@@ -7,7 +7,7 @@ import { BasePosition } from './BasePosition'
  * @see "Section 13.9.2.2, OFX Spec"
  */
 export class InvestmentPositionList {
-  private positions: BasePosition[]
+  private positions!: BasePosition[]
 
   /**
    * Gets the list of positions

@@ -5,8 +5,8 @@ import { Element_add } from '../../../../../meta/Element_add'
  * @see "Section 11.13.2.3 OFX Spec"
  */
 export class EmailProfile {
-  private canEmail: boolean
-  private canNotify: boolean
+  private canEmail!: boolean
+  private canNotify!: boolean
 
   getCanEmail(): boolean {
     return this.canEmail

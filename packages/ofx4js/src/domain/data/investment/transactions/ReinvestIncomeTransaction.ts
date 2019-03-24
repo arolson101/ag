@@ -16,20 +16,20 @@ import { TransactionWithSecurity } from './TransactionWithSecurity'
  */
 export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
   implements TransactionWithSecurity {
-  private securityId: SecurityId
-  private incomeType: string
-  private total: number
-  private subAccountSecurity: string
-  private units: number
-  private unitPrice: number
-  private commission: number
-  private taxes: number
-  private fees: number
-  private load: number
-  private taxExempt: boolean
-  private currencyCode: string
-  private originalCurrencyInfo: OriginalCurrency
-  private inv401kSource: string
+  private securityId!: SecurityId
+  private incomeType!: string
+  private total!: number
+  private subAccountSecurity!: string
+  private units!: number
+  private unitPrice!: number
+  private commission!: number
+  private taxes!: number
+  private fees!: number
+  private load!: number
+  private taxExempt!: boolean
+  private currencyCode?: string
+  private originalCurrencyInfo?: OriginalCurrency
+  private inv401kSource!: string
 
   constructor() {
     super(InvestmentTransactionType.REINVEST_INCOME)
@@ -293,7 +293,7 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    * @return the currency code for the transaction
    */
   getCurrencyCode(): string {
-    return this.currencyCode
+    return this.currencyCode!
   }
 
   /**
@@ -305,7 +305,7 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    */
   setCurrencyCode(currencyCode: string): void {
     this.currencyCode = currencyCode
-    this.originalCurrencyInfo = null
+    this.originalCurrencyInfo = undefined
   }
 
   /**
@@ -315,7 +315,7 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    * @return the original currency info for the transaction.
    */
   getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo
+    return this.originalCurrencyInfo!
   }
 
   /**
@@ -326,7 +326,7 @@ export class ReinvestIncomeTransaction extends BaseOtherInvestmentTransaction
    */
   setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
     this.originalCurrencyInfo = originalCurrencyInfo
-    this.currencyCode = null
+    this.currencyCode = undefined
   }
 
   /**

@@ -9,9 +9,9 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class SellMutualFundTransaction extends BaseSellInvestmentTransaction {
-  private sellType: string
-  private averageCostBasis: number
-  private relatedTransactionId: string
+  private sellType!: string
+  private averageCostBasis!: number
+  private relatedTransactionId!: string
 
   constructor() {
     super(InvestmentTransactionType.SELL_MUTUAL_FUND)

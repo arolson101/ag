@@ -4,7 +4,7 @@ import { AbstractMessageSetInfo } from '../AbstractMessageSetInfo'
 import { InterbankTransferV1MessageSetInfo } from './InterbankTransferV1MessageSetInfo'
 
 export class InterbankTransferMessageSetInfo extends AbstractMessageSetInfo {
-  private version1Info: InterbankTransferV1MessageSetInfo
+  private version1Info!: InterbankTransferV1MessageSetInfo
 
   getVersion1Info(): InterbankTransferV1MessageSetInfo {
     return this.version1Info

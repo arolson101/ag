@@ -9,11 +9,11 @@ import { AccountType } from './AccountType'
  * @see "OFX Spec, Section 11.3.1"
  */
 export class BankAccountDetails implements AccountDetails {
-  private bankId: string
-  private branchId: string
-  private accountNumber: string
-  private accountType: AccountType
-  private accountKey: string
+  private bankId!: string
+  private branchId!: string
+  private accountNumber!: string
+  private accountType!: AccountType
+  private accountKey!: string
 
   /**
    * The routing and transit number.

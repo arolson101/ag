@@ -9,28 +9,28 @@ export interface MessageSetProfile {
    *
    * @return The version of the message set.
    */
-  getVersion(): string
+  getVersion(): string | null
 
   /**
    * The name of the service provider (sometimes the message set processing is outsourced).
    *
    * @return The name of the service provider (sometimes the message set processing is outsourced).
    */
-  getServiceProviderName(): string
+  getServiceProviderName(): string | null
 
   /**
    * The URL at which the message set is processed.
    *
    * @return The URL at which the message set is processed.
    */
-  getUrl(): string
+  getUrl(): string | null
 
   /**
    * The application-level security required for this message set.
    *
    * @return The application-level security required for this message set.
    */
-  getSecurity(): ApplicationSecurity
+  getSecurity(): ApplicationSecurity | null
 
   /**
    * Whether transport-level security is required for this message set.
@@ -44,7 +44,7 @@ export interface MessageSetProfile {
    *
    * @return The sign-on realm.
    */
-  getRealm(): string
+  getRealm(): string | null
 
   /**
    * The language.
@@ -52,14 +52,14 @@ export interface MessageSetProfile {
    * @return The language.
    * @see java.util.Locale#getISO3Language()
    */
-  getLanguage(): string
+  getLanguage(): string | null
 
   /**
    * The synchronization capability for this message set.
    *
    * @return The synchronization capability for this message set.
    */
-  getSyncCapability(): SynchronizationCapability
+  getSyncCapability(): SynchronizationCapability | null
 
   /**
    * Whether there exists support for resposne-file based error recovery.

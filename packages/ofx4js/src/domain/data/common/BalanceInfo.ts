@@ -2,8 +2,8 @@ import { Aggregate_add } from '../../../meta/Aggregate_Add'
 import { Element_add } from '../../../meta/Element_add'
 
 export class BalanceInfo {
-  private amount: number
-  private asOfDate: Date
+  private amount!: number
+  private asOfDate!: Date
 
   /**
    * The amount.

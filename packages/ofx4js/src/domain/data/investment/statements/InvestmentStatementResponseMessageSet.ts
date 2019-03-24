@@ -10,7 +10,7 @@ import { InvestmentStatementResponseTransaction } from './InvestmentStatementRes
  * @see "Section 13.7.1.2.2, OFX Spec"
  */
 export class InvestmentStatementResponseMessageSet extends ResponseMessageSet {
-  private statementResponses: InvestmentStatementResponseTransaction[]
+  private statementResponses!: InvestmentStatementResponseTransaction[]
 
   getType(): MessageSetType {
     return MessageSetType.investment
@@ -40,8 +40,8 @@ export class InvestmentStatementResponseMessageSet extends ResponseMessageSet {
    *
    * @return the first investment statement response.
    */
-  getStatementResponse(): InvestmentStatementResponseTransaction {
-    return this.statementResponses == null || this.statementResponses.length == 0
+  getStatementResponse(): InvestmentStatementResponseTransaction | null {
+    return !this.statementResponses || this.statementResponses.length === 0
       ? null
       : this.statementResponses[0]
   }

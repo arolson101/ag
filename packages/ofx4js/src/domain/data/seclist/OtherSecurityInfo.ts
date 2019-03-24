@@ -8,9 +8,9 @@ import { BaseSecurityInfo } from './BaseSecurityInfo'
  * @see "Section 13.8.5.5, OFX Spec"
  */
 export class OtherSecurityInfo extends BaseSecurityInfo {
-  private typeDesc: string
-  private assetClass: string
-  private fiAssetClass: string
+  private typeDesc!: string
+  private assetClass!: string
+  private fiAssetClass!: string
 
   /**
    * Gets a description of the type of security. This is an optional field according to the OFX

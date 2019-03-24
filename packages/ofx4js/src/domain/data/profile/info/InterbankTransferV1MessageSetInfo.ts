@@ -10,11 +10,11 @@ import { TransferProfile } from './common/TransferProfile'
  * @see "Section 11.13.4 OFX Spec"
  */
 export class InterbankTransferV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private transferProfile: TransferProfile
-  private supportsBillPay: boolean
-  private cancelWindow: number
-  private domesticInterbankTransferFee: number
-  private internationalInterbankTransferFee: number
+  private transferProfile!: TransferProfile
+  private supportsBillPay!: boolean
+  private cancelWindow!: number
+  private domesticInterbankTransferFee!: number
+  private internationalInterbankTransferFee!: number
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.interbank_transfer

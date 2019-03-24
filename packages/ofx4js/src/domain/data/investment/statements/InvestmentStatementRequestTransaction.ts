@@ -10,7 +10,7 @@ import { InvestmentStatementRequest } from './InvestmentStatementRequest'
 export class InvestmentStatementRequestTransaction extends TransactionWrappedRequestMessage<
   InvestmentStatementRequest
 > {
-  private message: InvestmentStatementRequest
+  private message!: InvestmentStatementRequest
 
   /**
    * Gets the the statement request message.

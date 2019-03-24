@@ -8,9 +8,9 @@ import { MutualFundType, MutualFundType_fromOfx } from './MutualFundType'
  * @see "Section 13.8.5.3, OFX Spec"
  */
 export class MutualFundSecurityInfo extends BaseSecurityInfo {
-  private mfType: string
-  private yield: number
-  private dateYieldAsOf: Date
+  private mfType!: string
+  private yield!: number
+  private dateYieldAsOf!: Date
 
   /**
    * Gets the mutual fund type. One of "OPENEND", "CLOSEEND", or "OTHER". This is an optional field

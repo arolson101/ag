@@ -10,10 +10,10 @@ import { IncludePosition } from './IncludePosition'
  * @see "Section 13.9.1.1, OFX Spec"
  */
 export class InvestmentStatementRequest extends StatementRequest {
-  private account: InvestmentAccountDetails
-  private includeOpenOrders: boolean
-  private includePosition: IncludePosition
-  private includeBalance: boolean
+  private account!: InvestmentAccountDetails
+  private includeOpenOrders!: boolean
+  private includePosition!: IncludePosition
+  private includeBalance!: boolean
 
   constructor() {
     super()

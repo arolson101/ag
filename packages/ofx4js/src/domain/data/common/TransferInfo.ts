@@ -6,13 +6,13 @@ import { BankAccountDetails } from '../banking/BankAccountDetails'
 import { CreditCardAccountDetails } from '../creditcard/CreditCardAccountDetails'
 
 export class TransferInfo {
-  private bankAccountFrom: BankAccountDetails
-  private creditCardAccountFrom: CreditCardAccountDetails
-  private bankAccountTo: BankAccountDetails
-  private creditCardAccountTo: CreditCardAccountDetails
+  private bankAccountFrom?: BankAccountDetails
+  private creditCardAccountFrom?: CreditCardAccountDetails
+  private bankAccountTo?: BankAccountDetails
+  private creditCardAccountTo?: CreditCardAccountDetails
 
-  private amount: number
-  private due: Date
+  private amount!: number
+  private due!: Date
 
   /**
    * The bank account to transfer from.
@@ -20,7 +20,7 @@ export class TransferInfo {
    * @return The bank account to transfer from.
    */
   getBankAccountFrom(): BankAccountDetails {
-    return this.bankAccountFrom
+    return this.bankAccountFrom!
   }
 
   /**
@@ -29,7 +29,7 @@ export class TransferInfo {
    * @param bankAccountFrom The bank account to transfer from.
    */
   setBankAccountFrom(bankAccountFrom: BankAccountDetails): void {
-    this.creditCardAccountFrom = null
+    this.creditCardAccountFrom = undefined
     this.bankAccountFrom = bankAccountFrom
   }
 
@@ -52,7 +52,7 @@ export class TransferInfo {
    * @return The credit card to transfer from.
    */
   getCreditCardAccountFrom(): CreditCardAccountDetails {
-    return this.creditCardAccountFrom
+    return this.creditCardAccountFrom!
   }
 
   /**
@@ -61,7 +61,7 @@ export class TransferInfo {
    * @param creditCardAccountFrom The credit card to transfer from.
    */
   setCreditCardAccountFrom(creditCardAccountFrom: CreditCardAccountDetails): void {
-    this.bankAccountFrom = null
+    this.bankAccountFrom = undefined
     this.creditCardAccountFrom = creditCardAccountFrom
   }
 
@@ -71,7 +71,7 @@ export class TransferInfo {
    * @return The bank account to transfer to.
    */
   getBankAccountTo(): BankAccountDetails {
-    return this.bankAccountTo
+    return this.bankAccountTo!
   }
 
   /**
@@ -80,7 +80,7 @@ export class TransferInfo {
    * @param bankAccountTo The bank account to transfer to.
    */
   setBankAccountTo(bankAccountTo: BankAccountDetails): void {
-    this.creditCardAccountTo = null
+    this.creditCardAccountTo = undefined
     this.bankAccountTo = bankAccountTo
   }
 
@@ -105,7 +105,7 @@ export class TransferInfo {
    * @return The credit card account to transfer to.
    */
   getCreditCardAccountTo(): CreditCardAccountDetails {
-    return this.creditCardAccountTo
+    return this.creditCardAccountTo!
   }
 
   /**
@@ -114,7 +114,7 @@ export class TransferInfo {
    * @param creditCardAccountTo The credit card account to transfer to.
    */
   setCreditCardAccountTo(creditCardAccountTo: CreditCardAccountDetails): void {
-    this.bankAccountTo = null
+    this.bankAccountTo = undefined
     this.creditCardAccountTo = creditCardAccountTo
   }
 

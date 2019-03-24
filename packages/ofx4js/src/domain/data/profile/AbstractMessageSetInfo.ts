@@ -7,7 +7,7 @@ import { VersionSpecificMessageSetInfo } from './VersionSpecificMessageSetInfo'
  * @see "Section 7.2.1, OFX Spec"
  */
 export abstract class AbstractMessageSetInfo {
-  private versionSpecificInformationList: VersionSpecificMessageSetInfo[]
+  private versionSpecificInformationList!: VersionSpecificMessageSetInfo[]
 
   /**
    * List of information about a message set for each version supported.

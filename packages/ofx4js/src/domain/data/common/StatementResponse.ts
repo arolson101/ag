@@ -8,15 +8,16 @@ import { TransactionList } from './TransactionList'
 // import java.util.Locale;
 
 export abstract class StatementResponse extends ResponseMessage implements AccountStatement {
-  private currencyCode: string
-  private transactionList: TransactionList
-  private ledgerBalance: BalanceInfo
-  private availableBalance: BalanceInfo
-  private marketingInfo: string
+  private currencyCode!: string
+  private transactionList!: TransactionList
+  private ledgerBalance!: BalanceInfo
+  private availableBalance!: BalanceInfo
+  private marketingInfo!: string
 
   constructor() {
     super()
-    this.currencyCode = 'USD' // java.util.Currency.getInstance(Locale.US).getCurrencyCode().toUpperCase();
+    // java.util.Currency.getInstance(Locale.US).getCurrencyCode().toUpperCase();
+    this.currencyCode = 'USD'
   }
 
   /**

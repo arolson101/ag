@@ -20,7 +20,8 @@
     "test": "jest",
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
     "prettier-package-json": "prettier-package-json --write --key-order ./package.json packages/*/package.json --key-order name,private,version,description,license,author,maintainers,contributors,homepage,repository,bugs,workspaces,main,build,module,browser,man,preferGlobal,bin,files,directories,scripts,config,jest,optionalDependencies,dependencies,bundleDependencies,bundledDependencies,peerDependencies,devDependencies,keywords,engines,engine-strict,engineStrict,os,cpu,publishConfig",
-    "update-packages": "lerna exec --concurrency 1 -- ncu -u"
+    "update-packages": "lerna exec --concurrency 1 -- ncu -u",
+    "watch": "tsc --noemit --skipLibCheck --watch"
   },
   "dependencies": {},
   "devDependencies": {

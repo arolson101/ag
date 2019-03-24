@@ -9,8 +9,8 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class SellDebtTransaction extends BaseSellInvestmentTransaction {
-  private sellReason: string
-  private accruedInterest: number
+  private sellReason!: string
+  private accruedInterest!: number
 
   constructor() {
     super(InvestmentTransactionType.SELL_DEBT)

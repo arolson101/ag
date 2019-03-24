@@ -11,7 +11,7 @@ import { SynchronizationCapability } from './SynchronizationCapability'
  * @see "Section 7.2.1, OFX Spec"
  */
 export abstract class VersionSpecificMessageSetInfo implements MessageSetProfile {
-  private core: CoreMessageSetInfo
+  private core!: CoreMessageSetInfo | null
 
   /**
    * The information core.
@@ -19,7 +19,7 @@ export abstract class VersionSpecificMessageSetInfo implements MessageSetProfile
    * @return The information core.
    */
   getCore(): CoreMessageSetInfo {
-    return this.core
+    return this.core!
   }
 
   /**
@@ -38,19 +38,19 @@ export abstract class VersionSpecificMessageSetInfo implements MessageSetProfile
    */
   abstract getMessageSetType(): MessageSetType
 
-  getVersion(): string {
+  getVersion(): string | null {
     return this.core != null ? this.core.getVersion() : null
   }
 
-  getServiceProviderName(): string {
+  getServiceProviderName(): string | null {
     return this.core != null ? this.core.getServiceProviderName() : null
   }
 
-  getUrl(): string {
+  getUrl(): string | null {
     return this.core != null ? this.core.getUrl() : null
   }
 
-  getSecurity(): ApplicationSecurity {
+  getSecurity(): ApplicationSecurity | null {
     return this.core != null ? this.core.getSecurity() : null
   }
 
@@ -60,15 +60,15 @@ export abstract class VersionSpecificMessageSetInfo implements MessageSetProfile
       : true
   }
 
-  getRealm(): string {
+  getRealm(): string | null {
     return this.core != null ? this.core.getRealm() : null
   }
 
-  getLanguage(): string {
+  getLanguage(): string | null {
     return this.core != null ? this.core.getLanguage() : null
   }
 
-  getSyncCapability(): SynchronizationCapability {
+  getSyncCapability(): SynchronizationCapability | null {
     return this.core != null ? this.core.getSyncCapability() : null
   }
 

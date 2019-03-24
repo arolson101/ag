@@ -7,18 +7,18 @@ import { ProcessorDayOff } from '../../../common/ProcessorDayOff'
  * @see "Section 11.13.2.2 OFX Spec"
  */
 export class TransferProfile {
-  private processorDaysOff: ProcessorDayOff[]
-  private processEndTime: string
-  private supportsScheduledTransfers: boolean
-  private supportsRecurringTransfers: boolean
-  private supportsLoanTransfers: boolean
-  private supportsScheduledLoanTransfers: boolean
-  private supportsRecurringLoanTransfers: boolean
-  private supportsTransferModification: boolean
-  private supportsModelModification: boolean
-  private modelWindow: number
-  private withdrawnDays: number
-  private defaultDaysToPay: number
+  private processorDaysOff!: ProcessorDayOff[]
+  private processEndTime!: string
+  private supportsScheduledTransfers!: boolean
+  private supportsRecurringTransfers!: boolean
+  private supportsLoanTransfers!: boolean
+  private supportsScheduledLoanTransfers!: boolean
+  private supportsRecurringLoanTransfers!: boolean
+  private supportsTransferModification!: boolean
+  private supportsModelModification!: boolean
+  private modelWindow!: number
+  private withdrawnDays!: number
+  private defaultDaysToPay!: number
 
   /**
    * Days of week that no processing occurs: MONDAY, TUESDAY, WEDNESDAY, THURSDAY,

@@ -6,7 +6,7 @@ import { BankStatementRequest } from './BankStatementRequest'
 export class BankStatementRequestTransaction extends TransactionWrappedRequestMessage<
   BankStatementRequest
 > {
-  private message: BankStatementRequest
+  private message!: BankStatementRequest
 
   /**
    * The message.

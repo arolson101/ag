@@ -8,7 +8,7 @@ import { SecurityRequest } from './SecurityRequest'
  * @see "Section 13.8.2.2, OFX Spec"
  */
 export class SecurityListRequest extends RequestMessage {
-  private securityRequests: SecurityRequest[]
+  private securityRequests!: SecurityRequest[]
 
   getSecurityRequests(): SecurityRequest[] {
     return this.securityRequests

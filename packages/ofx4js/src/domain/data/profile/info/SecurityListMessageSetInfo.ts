@@ -4,7 +4,7 @@ import { AbstractMessageSetInfo } from '../AbstractMessageSetInfo'
 import { SecurityListV1MessageSetInfo } from './SecurityListV1MessageSetInfo'
 
 export class SecurityListMessageSetInfo extends AbstractMessageSetInfo {
-  private version1Info: SecurityListV1MessageSetInfo
+  private version1Info!: SecurityListV1MessageSetInfo
 
   getVersion1Info(): SecurityListV1MessageSetInfo {
     return this.version1Info

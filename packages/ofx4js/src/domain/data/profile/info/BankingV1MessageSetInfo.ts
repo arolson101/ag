@@ -14,12 +14,12 @@ import { TransferProfile } from './common/TransferProfile'
  * @see "Section 11.13.2.1 OFX Spec"
  */
 export class BankingV1MessageSetInfo extends VersionSpecificMessageSetInfo {
-  private invalidAccountTypes: AccountType[]
-  private closingAvail: boolean
-  private transferProfile: TransferProfile
-  private stopCheckProfile: StopCheckProfile
-  private emailProfile: EmailProfile
-  private imageProfile: ImageProfile
+  private invalidAccountTypes!: AccountType[]
+  private closingAvail!: boolean
+  private transferProfile!: TransferProfile
+  private stopCheckProfile!: StopCheckProfile
+  private emailProfile!: EmailProfile
+  private imageProfile!: ImageProfile
 
   getMessageSetType(): MessageSetType {
     return MessageSetType.banking

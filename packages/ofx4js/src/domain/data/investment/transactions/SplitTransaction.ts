@@ -13,17 +13,17 @@ import { InvestmentTransactionType } from './TransactionType'
  * @see "Section 13.9.2.4.4, OFX Spec"
  */
 export class SplitTransaction extends BaseOtherInvestmentTransaction {
-  private securityId: SecurityId
-  private subAccountSecurity: string
-  private oldUnits: number
-  private newUnits: number
-  private numerator: number
-  private denominator: number
-  private currencyCode: string
-  private originalCurrencyInfo: OriginalCurrency
-  private cashForFractionalUnits: number
-  private subAccountFund: string
-  private inv401kSource: string
+  private securityId!: SecurityId
+  private subAccountSecurity!: string
+  private oldUnits!: number
+  private newUnits!: number
+  private numerator!: number
+  private denominator!: number
+  private currencyCode?: string
+  private originalCurrencyInfo?: OriginalCurrency
+  private cashForFractionalUnits!: number
+  private subAccountFund!: string
+  private inv401kSource!: string
 
   constructor() {
     super(InvestmentTransactionType.SPLIT)
@@ -166,7 +166,7 @@ export class SplitTransaction extends BaseOtherInvestmentTransaction {
    * @return the currency code for the transaction
    */
   getCurrencyCode(): string {
-    return this.currencyCode
+    return this.currencyCode!
   }
 
   /**
@@ -178,7 +178,7 @@ export class SplitTransaction extends BaseOtherInvestmentTransaction {
    */
   setCurrencyCode(currencyCode: string): void {
     this.currencyCode = currencyCode
-    this.originalCurrencyInfo = null
+    this.originalCurrencyInfo = undefined
   }
 
   /**
@@ -188,7 +188,7 @@ export class SplitTransaction extends BaseOtherInvestmentTransaction {
    * @return the original currency info for the transaction
    */
   getOriginalCurrencyInfo(): OriginalCurrency {
-    return this.originalCurrencyInfo
+    return this.originalCurrencyInfo!
   }
 
   /**
@@ -199,7 +199,7 @@ export class SplitTransaction extends BaseOtherInvestmentTransaction {
    */
   setOriginalCurrencyInfo(originalCurrencyInfo: OriginalCurrency): void {
     this.originalCurrencyInfo = originalCurrencyInfo
-    this.currencyCode = null
+    this.currencyCode = undefined
   }
 
   /**
