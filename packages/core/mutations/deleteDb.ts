@@ -2,6 +2,7 @@ import { Gql } from '@ag/util'
 import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
 import { defineMessages } from 'react-intl'
+import { ErrorDisplay } from '../components'
 import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 
@@ -37,10 +38,11 @@ export const deleteDb = ({ client, context, dbId }: DeleteDbParams) => {
         mutation: mutations.deleteDb,
         variables,
         update: () => {
-          client.clearStore()
+          client.reFetchObservableQueries()
         },
       })
 
+      ErrorDisplay.show(context, result.errors)
       showToast(intl.formatMessage(messages.deleted), true)
     },
 

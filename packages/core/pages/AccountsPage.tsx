@@ -109,13 +109,8 @@ const BankTable = Object.assign(
       ui: { Link, Text, Row, Table, showToast },
     } = context
 
-    const syncAccounts = useMutation(mutations.SyncAccounts, {
-      refetchQueries: [{ query: queries.AccountsPage }],
-    })
-
-    const downloadTransactions = useMutation(mutations.DownloadTransactions, {
-      refetchQueries: [{ query: queries.AccountsPage }],
-    })
+    const syncAccounts = useMutation(mutations.SyncAccounts)
+    const downloadTransactions = useMutation(mutations.DownloadTransactions)
 
     const client = useApolloClient()
     const titleActions = useRef<ActionItem[]>([
@@ -142,6 +137,7 @@ const BankTable = Object.assign(
               onClick: async () => {
                 try {
                   await syncAccounts({ variables: { bankId: bank.id } })
+                  client.reFetchObservableQueries()
                   showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
                 } catch (error) {
                   ErrorDisplay.show(context, error)
@@ -187,6 +183,7 @@ const BankTable = Object.assign(
                       end,
                     },
                   })
+                  client.reFetchObservableQueries()
                   showToast(
                     intl.formatMessage(messages.getTransactionsComplete, { name: account.name })
                   )

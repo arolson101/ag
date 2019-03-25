@@ -3,6 +3,7 @@ import ApolloClient from 'apollo-client'
 import assert from 'assert'
 import gql from 'graphql-tag'
 import { defineMessages } from 'react-intl'
+import { ErrorDisplay } from '../components'
 import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 
@@ -47,6 +48,7 @@ export const deleteBank = ({ client, context, bank }: DeleteBankParams) => {
       })
       assert(result.data && result.data.deleteBank)
 
+      ErrorDisplay.show(context, result.errors)
       showToast(intl.formatMessage(messages.deleted, intlCtx), true)
     },
 
