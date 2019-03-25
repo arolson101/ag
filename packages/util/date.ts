@@ -1,10 +1,20 @@
+import debug from 'debug'
 import { DateTime } from 'luxon'
+import { FormattedDate } from 'react-intl'
+
+const log = debug('util:date')
 
 interface MakeDateParams {
   year?: number
   month?: number // 0-11
   day?: number
 }
+
+// export const ShortDate: FormattedDate.PropsBase = ({
+//   day: 'numeric',
+//   month: 'numeric',
+//   year: 'numeric'
+// })
 
 export const makeDate = ({ year, month, day }: MakeDateParams): Date => {
   if (year === undefined) {
@@ -22,6 +32,7 @@ export const makeDate = ({ year, month, day }: MakeDateParams): Date => {
 }
 
 export const formatDate = (date: Date): string => {
+  // log('formatDate %o', { date })
   return DateTime.fromJSDate(date).toLocaleString()
 }
 

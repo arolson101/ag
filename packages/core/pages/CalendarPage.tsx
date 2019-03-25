@@ -71,7 +71,7 @@ export const CalendarPage = Object.assign(
     return <Component {...q} />
   }),
   {
-    id: 'CalendarPage',
+    displayName: 'CalendarPage',
     queries,
     Component,
     messages,

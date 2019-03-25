@@ -224,7 +224,6 @@ const BankTable = Object.assign(
 
     return (
       <Table
-        key={bank.id}
         titleText={bank.name}
         titleImage={bank.favicon}
         titleContextMenuHeader={bank.name}
@@ -358,7 +357,7 @@ export const AccountsPage = Object.assign(
     return <Component {...q} />
   }),
   {
-    id: 'AccountsPage',
+    displayName: 'AccountsPage',
     queries,
     Component,
     messages,

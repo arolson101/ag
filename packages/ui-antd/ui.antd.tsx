@@ -4,6 +4,7 @@ import {
   ListItem,
   LoadingOverlayProps,
   NavMenuItem,
+  TableColumn,
   UiContext,
 } from '@ag/core'
 import { ImageSource } from '@ag/util'
@@ -189,7 +190,7 @@ export const ui: UiContext = {
           }
           subTitle={subtitle}
         />
-        <Layout.Content style={{ background: '#fff', padding: 5, overflow: 'auto', flex: 1 }}>
+        <Layout.Content style={{ background: '#fff', overflow: 'auto', flex: 1 }}>
           {children}
         </Layout.Content>
         {button && (
@@ -273,11 +274,14 @@ export const ui: UiContext = {
     rowContextMenu,
     data,
   }) => {
-    const render = (userRender?: (text: string, row: any, index: number) => React.ReactNode) => (
+    const render = ({ render: userRender, format }: TableColumn<any>) => (
       text: string,
       row: any,
       index: number
     ) => {
+      if (format) {
+        text = format(text)
+      }
       return (
         <ContextMenu {...(rowContextMenu ? rowContextMenu(row) : {})}>
           <div style={{ margin: -16, padding: 16 }}>
@@ -315,7 +319,7 @@ export const ui: UiContext = {
               : undefined
           }
           pagination={false}
-          columns={columns.map(col => ({ ...col, render: render(col.render) }))}
+          columns={columns.map(col => ({ ...col, render: render(col) }))}
           rowKey={rowKey}
           dataSource={data}
         />

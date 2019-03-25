@@ -71,7 +71,7 @@ export const BillsPage = Object.assign(
     return <Component {...q} />
   }),
   {
-    id: 'BillsPage',
+    displayName: 'BillsPage',
     queries,
     Component,
     messages,

@@ -71,7 +71,7 @@ export const BudgetsPage = Object.assign(
     return <Component {...q} />
   }),
   {
-    id: 'BudgetsPage',
+    displayName: 'BudgetsPage',
     queries,
     Component,
     messages,

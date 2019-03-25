@@ -112,13 +112,14 @@ export interface PageProps {
 export interface TableColumn<T extends {}> {
   dataIndex: keyof T & string
   title: string
+  format?: (text: string) => string
   render?: (text: string, record: T, index: number) => React.ReactNode
   width?: string | number
   align?: 'left' | 'right' | 'center'
 }
 
 export interface TableProps<T extends {} = any> {
-  titleText: string
+  titleText?: string
   titleImage?: ImageSource
   titleContextMenuHeader?: string
   titleActions?: ActionItem[]

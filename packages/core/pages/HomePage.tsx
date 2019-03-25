@@ -67,7 +67,7 @@ export const HomePage = Object.assign(
     return <Component {...q} />
   }),
   {
-    id: 'HomePage',
+    displayName: 'HomePage',
     queries,
     Component,
     messages,

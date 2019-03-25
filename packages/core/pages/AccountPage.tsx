@@ -1,11 +1,11 @@
-import { Gql, QueryHookResult, useQuery } from '@ag/util'
+import { formatDate, Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { CoreContext } from '../context'
+import { CoreContext, TableColumn } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:AccountPage')
@@ -27,6 +27,17 @@ const queries = {
             name
             favicon
           }
+          transactions {
+            id
+            time
+            account
+            serverid
+            type
+            name
+            memo
+            amount
+            balance
+          }
         }
       }
     }
@@ -41,12 +52,52 @@ const Component = Object.assign(
     const {
       intl,
       dispatch,
-      ui: { Page },
+      ui: { Page, Table, Text },
     } = useContext(CoreContext)
 
     const account = data && data.appDb && data.appDb.account
     const title = (account && account.name) || 'no account'
     const subtitle = (account && account.bank.name) || 'no bank'
+
+    type Row = NonNullable<typeof account>['transactions'][number]
+    const columns = useRef<Array<TableColumn<Row>>>([
+      {
+        dataIndex: 'time',
+        title: intl.formatMessage(messages.colTime),
+        format: (text: string) => intl.formatDate(new Date(text)),
+      },
+      {
+        dataIndex: 'name',
+        title: intl.formatMessage(messages.colName),
+      },
+      {
+        dataIndex: 'memo',
+        title: 'memo',
+      },
+      {
+        dataIndex: 'type',
+        title: 'type',
+      },
+      {
+        dataIndex: 'account',
+        title: 'account',
+      },
+      {
+        dataIndex: 'serverid',
+        title: 'serverid',
+      },
+      {
+        dataIndex: 'amount',
+        align: 'right',
+        title: intl.formatMessage(messages.colAmount),
+        format: (text: string) =>
+          intl.formatNumber(parseFloat(text), {
+            style: 'currency',
+            currency: 'USD',
+            // currencyDisplay: 'symbol',
+          }),
+      },
+    ])
 
     return (
       <Page
@@ -58,7 +109,12 @@ const Component = Object.assign(
           onClick: () => dispatch(actions.openDlg.bankCreate()),
         }}
       >
-        account {accountId}
+        <Table
+          rowKey={'id'}
+          columns={columns.current}
+          emptyText={intl.formatMessage(messages.noTransactions)}
+          data={account ? account.transactions : []}
+        />
       </Page>
     )
   }),
@@ -68,10 +124,6 @@ const Component = Object.assign(
 )
 
 const messages = defineMessages({
-  titleText: {
-    id: 'AccountPage.titleText',
-    defaultMessage: 'Accounts',
-  },
   transactionAdd: {
     id: 'AccountPage.transactionAdd',
     defaultMessage: 'Add Transaction',
@@ -83,6 +135,22 @@ const messages = defineMessages({
   getTransactionsComplete: {
     id: 'AccountPage.getTransactionsComplete',
     defaultMessage: 'Downloaded transactions for account {name}',
+  },
+  noTransactions: {
+    id: 'AccountPage.noTransactions',
+    defaultMessage: 'No transactions',
+  },
+  colName: {
+    id: 'AccountPage.colName',
+    defaultMessage: 'Name',
+  },
+  colAmount: {
+    id: 'AccountPage.colAmount',
+    defaultMessage: 'Amount',
+  },
+  colTime: {
+    id: 'AccountPage.colTime',
+    defaultMessage: 'Date',
   },
 })
 
@@ -104,7 +172,7 @@ export const AccountPage = Object.assign(
     return <Component {...props} {...q} />
   }),
   {
-    id: 'AccountPage',
+    displayName: 'AccountPage',
     queries,
     Component,
     messages,

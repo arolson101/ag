@@ -448,6 +448,8 @@ export namespace AccountPage {
     name: string
 
     bank: Bank
+
+    transactions: Transactions[]
   }
 
   export type Bank = {
@@ -456,6 +458,28 @@ export namespace AccountPage {
     name: string
 
     favicon: ImageSource
+  }
+
+  export type Transactions = {
+    __typename?: 'Transaction'
+
+    id: string
+
+    time: DateTime
+
+    account: string
+
+    serverid: string
+
+    type: string
+
+    name: string
+
+    memo: string
+
+    amount: number
+
+    balance: number
   }
 }
 

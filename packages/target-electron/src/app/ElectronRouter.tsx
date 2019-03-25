@@ -2,7 +2,6 @@ import { AccountPage, AccountsPage, BillsPage, BudgetsPage, CalendarPage, HomePa
 import { Content, Layout } from '@ag/ui-antd'
 import debug from 'debug'
 import React from 'react'
-import { FormattedMessage } from 'react-intl'
 import { Redirect, Route, Router as ReactRouter, Switch } from 'react-router-dom'
 import { NavBar, SplitPane } from '../components'
 import { history } from '../reducers'
@@ -11,9 +10,6 @@ const log = debug('electron:router')
 
 type RouteComponent = React.ComponentType<any> & {
   path: string
-  messages: {
-    titleText: FormattedMessage.MessageDescriptor
-  }
 }
 
 const routes: RouteComponent[] = [
