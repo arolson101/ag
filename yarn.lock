@@ -17269,6 +17269,24 @@ rx@^4.1.0:
   resolved "https://registry.yarnpkg.com/rx/-/rx-4.1.0.tgz#a5f13ff79ef3b740fe30aa803fb09f98805d4782"
   integrity sha1-pfE/957zt0D+MKqAP7CfmIBdR4I=
 
+rxjs-hooks@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/rxjs-hooks/-/rxjs-hooks-0.4.0.tgz#f0b0dbf051482ab6501753224aded5a3ff41e348"
+  integrity sha512-LtW38/K73F+eQPqRWeL7eoKn1eFuCEjsSaGm5/L7GAoW5zdMCERvk06iKwbaeZesFFxKo+NRcPw6eiUVqFq1Gg==
+  dependencies:
+    tslib "^1.9.3"
+
+rxjs-tslint@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.yarnpkg.com/rxjs-tslint/-/rxjs-tslint-0.1.7.tgz#5ed841d1837cc0dc2187e5b57a2d45aa2af337e4"
+  integrity sha512-NnOfqutNfdT7VQnQm32JLYh2gDZjc0gdWZFtrxf/czNGkLKJ1nOO6jbKAFI09W0f9lCtv6P2ozxjbQH8TSPPFQ==
+  dependencies:
+    chalk "^2.4.0"
+    optimist "^0.6.1"
+    tslint "^5.9.1"
+    tsutils "^2.25.0"
+    typescript ">=2.8.3"
+
 rxjs@^6.1.0, rxjs@^6.3.1, rxjs@^6.3.3, rxjs@^6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.4.0.tgz#f3bb0fe7bda7fb69deac0c16f17b50b0b8790504"
@@ -18907,7 +18925,7 @@ tslint@^5.13.1, tslint@^5.9.1:
     tslib "^1.8.0"
     tsutils "^2.27.2"
 
-tsutils@^2.27.2:
+tsutils@^2.25.0, tsutils@^2.27.2:
   version "2.29.0"
   resolved "https://registry.yarnpkg.com/tsutils/-/tsutils-2.29.0.tgz#32b488501467acbedd4b85498673a0812aca0b99"
   integrity sha512-g5JVHCIJwzfISaXpXE1qvNalca5Jwob6FjI4AoPlqMusJ6ftFE7IkkFoMhVLRgK+4Kx3gkzb8UZK5t5yTTvEmA==
@@ -19038,6 +19056,11 @@ typescript@3.1.x:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.1.6.tgz#b6543a83cfc8c2befb3f4c8fba6896f5b0c9be68"
   integrity sha512-tDMYfVtvpb96msS1lDX9MEdHrW4yOuZ4Kdc4Him9oU796XldPYF/t2+uKoX0BBa0hXXwDlqYQbXY5Rzjzc5hBA==
+
+typescript@>=2.8.3:
+  version "3.3.4000"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.4000.tgz#76b0f89cfdbf97827e1112d64f283f1151d6adf0"
+  integrity sha512-jjOcCZvpkl2+z7JFn0yBOoLQyLoIkNZAs/fYJkUG6VKy6zLPHJGfQJYFHzibB6GJaF/8QrcECtlQ5cpvRHSMEA==
 
 typescript@^3.2.2, typescript@^3.3.3333:
   version "3.3.3333"

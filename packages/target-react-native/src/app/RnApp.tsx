@@ -8,7 +8,7 @@ import { ApolloProvider } from 'react-apollo'
 import { YellowBox } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { iconInit } from '../icons'
-import { store } from '../store'
+import { createStore } from '../store'
 import { ui } from '../ui'
 import { getImageFromLibrary, openCropper, scaleImage } from './image.native'
 import { registerComponents, root, setDefaultOptions } from './navigation'
@@ -20,6 +20,7 @@ YellowBox.ignoreWarnings(['Require cycle:'])
 const log = debug('rn:init')
 
 export const deps: ClientDependencies = {
+  axios,
   ui,
 
   getImageFromLibrary,
@@ -27,6 +28,7 @@ export const deps: ClientDependencies = {
   scaleImage,
 }
 
+const store = createStore(deps)
 const context = App.createContext({ store, deps })
 const client = createClient({ openDb, deleteDb, axios, ...context })
 

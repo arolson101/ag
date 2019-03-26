@@ -1,23 +1,31 @@
-import { CoreAction, CoreState, Dependencies } from '@ag/core'
-import { applyMiddleware, createStore } from 'redux'
+import { ClientDependencies, CoreAction, CoreContext, CoreState } from '@ag/core'
+import { applyMiddleware, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { epics } from '../epics/epics'
 import { RnState, rootReducer } from '../reducers'
-import { syncNavState } from './syncNavState'
 
-const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, Dependencies>()
+export const createStore = (dependencies: ClientDependencies) => {
+  const epicMiddleware = createEpicMiddleware<
+    CoreAction,
+    CoreAction,
+    CoreState,
+    ClientDependencies
+  >({
+    dependencies,
+  })
 
-const middleware = [
-  epicMiddleware, //
-]
+  const middleware = [
+    epicMiddleware, //
+  ]
 
-export const store = createStore<RnState, CoreAction, {}, {}>(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(...middleware))
-)
+  const store = reduxCreateStore<RnState, CoreAction, {}, {}>(
+    rootReducer,
+    composeWithDevTools(applyMiddleware(...middleware))
+  )
 
-syncNavState(store)
+  const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, ClientDependencies>(...epics)
+  epicMiddleware.run(rootEpic)
 
-const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, Dependencies>(...epics)
-epicMiddleware.run(rootEpic)
+  return store
+}

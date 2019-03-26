@@ -5,9 +5,14 @@
     "tslint-config-prettier"
   ],
   "rulesDirectory": [
-    "tslint-plugin-prettier"
+    "tslint-plugin-prettier",
+    "node_modules/rxjs-tslint"
   ],
   "rules": {
+    "rxjs-collapse-imports": true,
+    "rxjs-pipeable-operators-only": true,
+    "rxjs-no-static-observable-methods": true,
+    "rxjs-proper-imports": true,
     "max-line-length": {
       "options": [
         100

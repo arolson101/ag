@@ -17,6 +17,7 @@
     "@ag/util": "^0.0.0",
     "accounting": "^0.4.1",
     "apollo-client": "^2.5.1",
+    "axios": "^0.18.0",
     "debug": "^4.1.1",
     "docuri": "^4.2.2",
     "filist": "^1.0.3",
@@ -32,6 +33,8 @@
     "redux": "^4.0.1",
     "redux-observable": "^1.0.0",
     "rxjs": "^6.4.0",
+    "rxjs-hooks": "^0.4.0",
+    "rxjs-tslint": "^0.1.7",
     "typesafe-actions": "^3.2.1",
     "utility-types": "^3.4.1"
   },

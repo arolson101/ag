@@ -1,23 +1,31 @@
-import { CoreAction, CoreState, Dependencies } from '@ag/core'
-import { applyMiddleware, createStore } from 'redux'
+import { ClientDependencies, CoreAction, CoreContext, CoreState } from '@ag/core'
+import { applyMiddleware, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { epics } from '../epics/epics'
 import { electronReducer, ElectronState } from '../reducers'
 
-const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, Dependencies>({
-  // dependencies,
-})
+export const createStore = (dependencies: ClientDependencies) => {
+  const epicMiddleware = createEpicMiddleware<
+    CoreAction,
+    CoreAction,
+    CoreState,
+    ClientDependencies
+  >({
+    dependencies,
+  })
 
-const middleware = [
-  epicMiddleware, //
-  // routerMiddleware(history),
-]
+  const middleware = [
+    epicMiddleware, //
+  ]
 
-export const store = createStore<ElectronState, CoreAction, {}, {}>(
-  electronReducer,
-  composeWithDevTools(applyMiddleware(...middleware))
-)
+  const store = reduxCreateStore<ElectronState, CoreAction, {}, {}>(
+    electronReducer,
+    composeWithDevTools(applyMiddleware(...middleware))
+  )
 
-const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, Dependencies>(...epics)
-epicMiddleware.run(rootEpic)
+  const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, ClientDependencies>(...epics)
+  epicMiddleware.run(rootEpic)
+
+  return store
+}
