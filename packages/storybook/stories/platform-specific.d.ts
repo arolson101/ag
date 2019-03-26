@@ -1,3 +1,4 @@
+// tslint:disable:no-duplicate-variable
 import * as electron from './platform-specific.electron'
 import * as native from './platform-specific.native'
 

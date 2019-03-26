@@ -96,7 +96,7 @@ const Component = Object.assign(
     const { data, saveBank, loading, bankId, onClosed, cancelToken } = props
 
     const formik = useRef<Formik<FormValues>>(null)
-    const favicoField = useRef<UrlField<FormValues>>(null)
+    // const favicoField = useRef<UrlField<FormValues>>(null)
 
     useImperativeHandle(ref, () => ({
       save: () => {
@@ -176,9 +176,9 @@ const Component = Object.assign(
                             formApi.setFieldValue('fid', fi.fid || '')
                             formApi.setFieldValue('org', fi.org || '')
                             formApi.setFieldValue('ofx', fi.ofx || '')
-                            if (favicoField.current) {
-                              favicoField.current.onValueChanged(web)
-                            }
+                            // if (favicoField.current) {
+                            //   favicoField.current.onValueChanged(web)
+                            // }
                           }}
                           searchable
                           disabled={loading}
@@ -206,7 +206,7 @@ const Component = Object.assign(
                       favicoHeight={bankAvatarSize}
                       label={intl.formatMessage(messages.web)}
                       cancelToken={cancelToken}
-                      ref={favicoField}
+                      // ref={favicoField}
                       disabled={loading}
                     />
                     <TextField
