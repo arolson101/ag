@@ -1,9 +1,9 @@
 import { ImageProps } from '@ag/core'
 import React from 'react'
 
-export class Image extends React.PureComponent<ImageProps> {
-  render() {
-    const { src, size, margin, title } = this.props
+export const Image = Object.assign(
+  React.memo<ImageProps>(props => {
+    const { src, size, margin, title } = props
     if (!src.uri) {
       return null
     }
@@ -15,5 +15,8 @@ export class Image extends React.PureComponent<ImageProps> {
         style={{ margin, maxWidth: size, maxHeight: size, minWidth: size }}
       />
     )
+  }),
+  {
+    displayName: 'Form',
   }
-}
+)

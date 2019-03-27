@@ -1,7 +1,7 @@
 import { IconName, UiContext } from './uiContext'
 
 export interface FormProps<Values = any> {
-  onSubmit: () => void
+  onSubmit: (e?: undefined) => void
   lastFieldSubmit?: boolean
 }
 

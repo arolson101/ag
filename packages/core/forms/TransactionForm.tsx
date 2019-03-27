@@ -1,7 +1,7 @@
 import { Transaction } from '@ag/db'
 import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
 import accounting from 'accounting'
-import { Formik, FormikErrors } from 'formik'
+import { Formik, FormikErrors, useFormik } from 'formik'
 import gql from 'graphql-tag'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
@@ -82,18 +82,6 @@ const Component = Object.assign(
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
     const { data, saveTransaction, loading, accountId, transactionId } = props
 
-    const formik = useRef<Formik<FormValues>>(null)
-
-    useImperativeHandle(ref, () => ({
-      save: () => {
-        formik.current!.submitForm()
-      },
-    }))
-
-    if (!loading && (!data || !data.appDb)) {
-      throw new Error('db not open')
-    }
-
     const transaction = data && data.appDb && data.appDb.transaction
     const initialValues = transaction
       ? pick(transaction, Object.keys(Transaction.defaultValues()) as Array<
@@ -101,42 +89,47 @@ const Component = Object.assign(
         >)
       : Transaction.defaultValues()
 
+    const formik = useFormik<FormValues>({
+      enableReinitialize: true,
+      initialValues,
+      validate: values => {
+        const errors: FormikErrors<FormValues> = {}
+        if (!values.name.trim()) {
+          errors.name = intl.formatMessage(messages.valueEmpty)
+        }
+        return errors
+      },
+      onSubmit: input => {
+        const { amount } = input
+        const variables = {
+          accountId,
+          transactionId,
+          input: {
+            ...input,
+            amount: accounting.unformat(amount.toString()),
+          },
+        }
+        saveTransaction({ variables })
+      },
+    })
+
+    useImperativeHandle(ref, () => ({
+      save: () => {
+        formik.submitForm()
+      },
+    }))
+
+    if (!loading && (!data || !data.appDb)) {
+      throw new Error('db not open')
+    }
+
     return (
-      <Formik<FormValues>
-        ref={formik}
-        enableReinitialize
-        initialValues={initialValues}
-        validate={values => {
-          const errors: FormikErrors<FormValues> = {}
-          if (!values.name.trim()) {
-            errors.name = intl.formatMessage(messages.valueEmpty)
-          }
-          return errors
-        }}
-        onSubmit={input => {
-          const { amount } = input
-          const variables = {
-            accountId,
-            transactionId,
-            input: {
-              ...input,
-              amount: accounting.unformat(amount.toString()),
-            },
-          }
-          saveTransaction({ variables })
-        }}
-      >
-        {formApi => {
-          return (
-            <Form onSubmit={formApi.handleSubmit}>
-              <DateField field='time' label={intl.formatMessage(messages.date)} />
-              <TextField field='name' autoFocus label={intl.formatMessage(messages.name)} />
-              <CurrencyField field='amount' label={intl.formatMessage(messages.amount)} />
-              <TextField field='memo' label={intl.formatMessage(messages.memo)} />
-            </Form>
-          )
-        }}
-      </Formik>
+      <Form onSubmit={formik.handleSubmit}>
+        <DateField field='time' label={intl.formatMessage(messages.date)} />
+        <TextField field='name' autoFocus label={intl.formatMessage(messages.name)} />
+        <CurrencyField field='amount' label={intl.formatMessage(messages.amount)} />
+        <TextField field='memo' label={intl.formatMessage(messages.memo)} />
+      </Form>
     )
   }),
   {

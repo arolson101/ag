@@ -21,7 +21,7 @@
     "debug": "^4.1.1",
     "docuri": "^4.2.2",
     "filist": "^1.0.3",
-    "formik": "^1.5.1",
+    "formik": "^2.0.1-alpha.0",
     "graphql": "^14.1.1",
     "graphql-tag": "^2.10.1",
     "prop-types": "^15.7.2",

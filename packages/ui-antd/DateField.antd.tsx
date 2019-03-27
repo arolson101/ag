@@ -1,32 +1,40 @@
 import { DateFieldProps } from '@ag/core'
 import { DatePicker, Form, Icon } from 'antd'
-import { Field, FieldProps } from 'formik'
-import React from 'react'
+import { useField, useFormikContext } from 'formik'
+import React, { useCallback } from 'react'
 
-export class DateField extends React.PureComponent<DateFieldProps> {
-  render() {
-    const { field: name, label, flex, disabled } = this.props
-    return (
-      <Field name={name}>
-        {({ field, form }: FieldProps) => {
-          const error = form.errors[name]
-          const validateStatus = error ? 'error' : undefined
-          return (
-            <Form.Item
-              validateStatus={validateStatus} //
-              help={error}
-              label={label}
-              style={{ flex }}
-            >
-              <DatePicker
-                disabled={disabled} //
-                style={{ flex: 1 }}
-                {...field}
-              />
-            </Form.Item>
-          )
-        }}
-      </Field>
+import { DatePickerProps } from 'antd/lib/date-picker/interface'
+
+export const DateField = Object.assign(
+  React.memo<DateFieldProps>(props => {
+    const { field: name, label, flex, disabled } = props
+    const [field, { error }] = useField(name)
+    const formik = useFormikContext<any>()
+
+    const onChange = useCallback<NonNullable<DatePickerProps['onChange']>>(
+      (date, dateString) => {
+        formik.setFieldValue(name, date.toDate())
+      },
+      [formik, name]
     )
+
+    return (
+      <Form.Item
+        validateStatus={error ? 'error' : undefined}
+        help={error}
+        label={label}
+        style={{ flex }}
+      >
+        <DatePicker //
+          {...field}
+          disabled={disabled}
+          style={{ flex: 1 }}
+          onChange={onChange}
+        />
+      </Form.Item>
+    )
+  }),
+  {
+    displayName: 'DateField',
   }
-}
+)

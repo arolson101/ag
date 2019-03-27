@@ -1,32 +1,29 @@
 import { CheckboxFieldProps } from '@ag/core'
 import { Form, Switch } from 'antd'
-import { Field, FieldProps } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import React from 'react'
 
-export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
-  render() {
-    const { field: name, label, disabled, flex } = this.props
+export const CheckboxField = Object.assign(
+  React.memo<CheckboxFieldProps>(props => {
+    const { field: name, label, disabled, flex } = props
+    const [field, { error }] = useField(name)
+    const form = useFormikContext<any>()
     return (
-      <Field name={name}>
-        {({ field, form }: FieldProps) => {
-          const error = form.errors[name]
-          const validateStatus = error ? 'error' : undefined
-          return (
-            <Form.Item
-              validateStatus={validateStatus} //
-              help={error}
-              label={label}
-              style={{ flex }}
-            >
-              <Switch
-                checked={field.value} //
-                onChange={value => form.setFieldValue(name, value)}
-                disabled={disabled}
-              />
-            </Form.Item>
-          )
-        }}
-      </Field>
+      <Form.Item
+        validateStatus={error ? 'error' : undefined} //
+        help={error}
+        label={label}
+        style={{ flex }}
+      >
+        <Switch
+          checked={field.value}
+          onChange={value => form.setFieldValue(name, value)}
+          disabled={disabled}
+        />
+      </Form.Item>
     )
+  }),
+  {
+    displayName: 'CheckboxField',
   }
-}
+)

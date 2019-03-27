@@ -2,7 +2,7 @@ import { fixUrl, generateAvatar, Gql, ImageSource, isUrl, useApolloClient } from
 import ApolloClient from 'apollo-client'
 import assert from 'assert'
 import debug from 'debug'
-import { Field, FieldProps, FormikProps } from 'formik'
+import { Field, FieldProps, FormikProps, useField } from 'formik'
 import gql from 'graphql-tag'
 import React, { useCallback, useContext, useRef, useState } from 'react'
 import { ApolloConsumer } from 'react-apollo'

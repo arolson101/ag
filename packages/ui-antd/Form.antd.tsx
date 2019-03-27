@@ -1,20 +1,26 @@
 import { FormProps } from '@ag/core'
 import { Form as AntdForm } from 'antd'
-import React from 'react'
+import React, { useCallback } from 'react'
 
-export class Form extends React.PureComponent<FormProps> {
-  render() {
-    const { children } = this.props
+export const Form = Object.assign(
+  React.memo<FormProps>(props => {
+    const { onSubmit: onSubmitProp, children } = props
+
+    const onSubmit = useCallback(
+      (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        onSubmitProp()
+      },
+      [onSubmitProp]
+    )
+
     return (
-      <AntdForm style={{ flex: 1 }} layout='vertical' onSubmit={this.onSubmit}>
+      <AntdForm style={{ flex: 1 }} layout='vertical' onSubmit={onSubmit}>
         {children}
       </AntdForm>
     )
+  }),
+  {
+    displayName: 'Form',
   }
-
-  onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const { onSubmit } = this.props
-    onSubmit()
-  }
-}
+)

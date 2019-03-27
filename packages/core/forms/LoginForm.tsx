@@ -1,7 +1,7 @@
 // tslint:disable:max-line-length
 import { Gql, MutationFn, useApolloClient, useMutation } from '@ag/util'
 import debug from 'debug'
-import { Formik, FormikErrors } from 'formik'
+import { FormikErrors, FormikProvider, useFormik, useFormikContext } from 'formik'
 import gql from 'graphql-tag'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
@@ -61,89 +61,97 @@ interface ComponentProps extends Props {
   openDb: MutationFn<T.OpenDb.Mutation, T.OpenDb.Variables>
 }
 
-const Component = Object.assign(
-  React.forwardRef<LoginForm, ComponentProps>((props, ref) => {
-    const { ui, intl, dispatch } = useContext(CoreContext)
+const FormComponent = Object.assign(
+  React.memo<ComponentProps>(props => {
+    const { ui, intl } = useContext(CoreContext)
     const { Text } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
+    const { query } = props
+    const dbId = query.dbs && query.dbs.length ? query.dbs[0].dbId : undefined
+    const create = !dbId
+
+    const formik = useFormikContext()
+
+    return (
+      <Form onSubmit={formik.handleSubmit} lastFieldSubmit>
+        <Text>
+          {intl.formatMessage(create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen)}
+        </Text>
+        <TextField
+          autoFocus
+          secure
+          field='password'
+          label={intl.formatMessage(messages.passwordLabel)}
+          placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+        />
+        {create && (
+          <TextField
+            secure
+            field='passwordConfirm'
+            label={intl.formatMessage(messages.passwordConfirmLabel)}
+            placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
+            onSubmitEditing={formik.submitForm}
+          />
+        )}
+      </Form>
+    )
+  }),
+  {
+    displayName: 'LoginForm.FormComponent',
+  }
+)
+
+const Component = Object.assign(
+  React.forwardRef<LoginForm, ComponentProps>(function LoginFormComponent(props, ref) {
+    const { intl, dispatch } = useContext(CoreContext)
     const { createDb, openDb, query } = props
     const dbId = query.dbs && query.dbs.length ? query.dbs[0].dbId : undefined
     const create = !dbId
 
-    const formik = useRef<Formik<FormValues>>(null)
+    const formik = useFormik({
+      validateOnBlur: false,
+      initialValues,
+      validate: values => {
+        const errors: FormikErrors<FormValues> = {}
+        if (create) {
+          if (!values.password.trim()) {
+            errors.password = intl.formatMessage(messages.valueEmpty)
+          }
+          if (values.password !== values.passwordConfirm) {
+            errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
+          }
+        } else {
+          if (!values.password.trim()) {
+            errors.password = intl.formatMessage(messages.valueEmpty)
+          }
+        }
+        return errors
+      },
+      onSubmit: async (values, factions) => {
+        try {
+          if (dbId) {
+            await openDb({ variables: { ...values, dbId } })
+          } else {
+            await createDb({ variables: values })
+          }
+          log('logged in')
+          dispatch(actions.closeDlg('login'))
+        } finally {
+          factions.setSubmitting(false)
+        }
+      },
+    })
 
     useImperativeHandle(ref, () => ({
       submit: () => {
-        formik.current!.submitForm()
+        formik.submitForm()
       },
     }))
 
     return (
-      <Formik
-        ref={formik}
-        validateOnBlur={false}
-        initialValues={initialValues}
-        validate={values => {
-          const errors: FormikErrors<FormValues> = {}
-          if (create) {
-            if (!values.password.trim()) {
-              errors.password = intl.formatMessage(messages.valueEmpty)
-            }
-            if (values.password !== values.passwordConfirm) {
-              errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
-            }
-          } else {
-            if (!values.password.trim()) {
-              errors.password = intl.formatMessage(messages.valueEmpty)
-            }
-          }
-          return errors
-        }}
-        onSubmit={async (values, factions) => {
-          try {
-            if (dbId) {
-              await openDb({ variables: { ...values, dbId } })
-            } else {
-              await createDb({ variables: values })
-            }
-            log('logged in')
-            dispatch(actions.closeDlg('login'))
-          } finally {
-            factions.setSubmitting(false)
-          }
-        }}
-      >
-        {formApi => (
-          <Form onSubmit={formApi.handleSubmit} lastFieldSubmit>
-            <Text>
-              {intl.formatMessage(
-                create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
-              )}
-            </Text>
-            <TextField
-              autoFocus
-              secure
-              field='password'
-              label={intl.formatMessage(messages.passwordLabel)}
-              placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-              // returnKeyType={create ? 'next' : 'go'}
-              // onSubmitEditing={create ? this.focusConfirmInput :
-              // formApi.submitForm}
-            />
-            {create && (
-              <TextField
-                secure
-                field='passwordConfirm'
-                label={intl.formatMessage(messages.passwordConfirmLabel)}
-                placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
-                // returnKeyType={'go'}
-                onSubmitEditing={formApi.submitForm}
-                // inputRef={this.inputRef}
-              />
-            )}
-          </Form>
-        )}
-      </Formik>
+      <FormikProvider value={formik}>
+        <FormComponent {...props} />
+      </FormikProvider>
     )
   }),
   {

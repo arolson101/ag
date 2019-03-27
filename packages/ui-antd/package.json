@@ -8,11 +8,12 @@
     "@ag/util": "^0.0.0",
     "antd": "^3.15.0",
     "debug": "^4.1.1",
-    "formik": "^1.5.1",
+    "formik": "^2.0.1-alpha.0",
     "history": "^4.7.2",
     "nprogress": "^0.2.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-router": "^5.0.0",
     "use-react-router": "^1.0.5"
   },
   "devDependencies": {
