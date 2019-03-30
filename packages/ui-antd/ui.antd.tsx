@@ -175,13 +175,21 @@ export const ui: UiContext = {
   ),
 
   Page: ({ button, title, image, subtitle, children }) => {
-    const { history } = useReactRouter()
-    const h = history as MemoryHistory
+    let onBack: undefined | (() => any)
+    try {
+      const { history } = useReactRouter()
+      const h = history as MemoryHistory
+      if (h.canGo(-1)) {
+        onBack = h.goBack
+      }
+    } catch (error) {
+      log(error.message)
+    }
 
     return (
       <Layout style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
         <PageHeader
-          onBack={h.canGo(-1) ? h.goBack : undefined} //
+          onBack={onBack}
           title={
             <Title>
               <Icon style={{ margin: 5 }} component={() => <ImageSourceIcon src={image} />} />
