@@ -1,19 +1,13 @@
-import { fixUrl, generateAvatar, Gql, ImageSource, isUrl, useApolloClient } from '@ag/util'
-import ApolloClient from 'apollo-client'
-import assert from 'assert'
+import { fixUrl, generateAvatar, ImageSource, isUrl } from '@ag/util'
 import debug from 'debug'
-import { Field, FieldProps, FormikProps, useField, useFormikContext } from 'formik'
-import gql from 'graphql-tag'
-import React, { useCallback, useContext, useRef, useState } from 'react'
-import { ApolloConsumer } from 'react-apollo'
+import { Field, useField, useFormikContext } from 'formik'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
-import { Observable, timer } from 'rxjs'
-import { useEventCallback, useObservable } from 'rxjs-hooks'
-import { debounce, delay, distinctUntilChanged, map, mergeMap } from 'rxjs/operators'
+import { timer } from 'rxjs'
+import { useEventCallback } from 'rxjs-hooks'
+import { debounce, distinctUntilChanged, filter, ignoreElements, map, tap } from 'rxjs/operators'
 import { actions } from '../actions'
 import { CommonFieldProps, CommonTextFieldProps, CoreContext, typedFields } from '../context'
-import * as T from '../graphql-types'
-import { cancelOperation, isCancel } from './cancelOperation'
 
 const log = debug('core:UrlField')
 
@@ -43,133 +37,87 @@ interface FavicoButtonProps {
   disabled?: boolean
 }
 
-const FavicoButton = Object.assign(
-  React.memo<FavicoButtonProps>(props => {
-    const { intl, ui, dispatch, getImageFromLibrary } = useContext(CoreContext)
-    const { PopoverButton, Image, Text } = ui
-    const { name, url, favico, favicoField, favicoSize, disabled } = props
-    const [loading, setLoading] = useState(false)
-    const formik = useFormikContext<any>()
-    const [forceDownload, setForceDownload] = useState(0)
-
-    const generateDefaultIcon = useCallback(() => {
-      if (name) {
-        return generateAvatar(name)
-      }
-    }, [name])
-
-    // tslint:disable-next-line:interface-over-type-literal
-    type Input = { name: string; url: string; forceDownload: number }
-    log('FavicoButton render %o', props)
-    const value = useObservable<ImageSource | '', Input[]>(
-      input$ =>
-        input$.pipe(
-          //
-          debounce(() => timer(5000)),
-          distinctUntilChanged(),
-          mergeMap(async ([{ name, url, forceDownload }]) => {
-            log('getting favicon %s', url)
-            if (!isUrl(url)) {
-              log('not an url: %s', url)
-              const icon = name ? generateAvatar(name) : ''
-              formik.setFieldValue(favicoField, icon)
-              return icon
-            }
-
-            try {
-              setLoading(true)
-
-              // download image
-            } finally {
-              setLoading(false)
-            }
-            return favico
-          }),
-          distinctUntilChanged()
-        ),
-      favico,
-      [{ name, url: fixUrl(url), forceDownload }]
-    )
-
-    const onClickRedownload = useCallback(async () => {
-      formik.setFieldValue(favicoField, '')
-      setForceDownload(forceDownload + 1)
-    }, [formik, favicoField, url, setForceDownload, forceDownload])
-
-    const onPictureChosen = useCallback(
-      (source: ImageSource) => {
-        formik.setFieldValue(favicoField, source)
-      },
-      [formik, favicoField]
-    )
-
-    const onClickSelect = useCallback(() => {
-      if (isUrl(url)) {
-        dispatch(actions.openDlg.picture({ url, onSelected: onPictureChosen }))
-      }
-    }, [url, dispatch, onPictureChosen])
-
-    const onClickLibrary = useCallback(async () => {
-      const source = await getImageFromLibrary(favicoSize, favicoSize)
-      // log('getImageFromLibrary from %o', source)
-      if (source) {
-        formik.setFieldValue(favicoField, ImageSource.fromImageBuf(source))
-      }
-    }, [getImageFromLibrary, favicoSize, favicoField, formik])
-
-    const onClickReset = useCallback(() => {
-      formik.setFieldValue(favicoField, generateDefaultIcon())
-    }, [favicoField, formik, generateDefaultIcon])
-
-    return (
-      <PopoverButton
-        disabled={props.disabled}
-        content={[
-          {
-            text: intl.formatMessage(messages.redownload),
-            icon: 'refresh',
-            onClick: onClickRedownload,
-          },
-          {
-            text: intl.formatMessage(messages.selectImage),
-            icon: 'image',
-            onClick: onClickSelect,
-          },
-          {
-            text: intl.formatMessage(messages.library),
-            icon: 'library',
-            onClick: onClickLibrary,
-          },
-          {
-            divider: true,
-          },
-          {
-            text: intl.formatMessage(messages.reset),
-            icon: 'trash',
-            onClick: onClickReset,
-          },
-        ]}
-        minimal
-        loading={loading}
-        icon={value && value.width ? <Image size={20} src={value} /> : undefined}
-      >
-        {!loading && (!value || !value.width) && <Text>...</Text>}
-      </PopoverButton>
-    )
-  }),
-  {
-    displayName: 'FavicoButton',
-  }
-)
+type Field<T> = [{ value: T }, {}]
 
 export const UrlField = <Values extends Record<string, any>>(props: Props<Values>) => {
-  const { ui } = useContext(CoreContext)
+  const { intl, ui, dispatch, getImageFromLibrary, axios } = useContext(CoreContext)
+  const { PopoverButton, Image, Text } = ui
   const { TextField } = typedFields<Values>(ui)
-  const { favicoField, nameField } = props
-  const { disabled, favicoWidth } = props
-  const [favico] = useField(favicoField)
-  const [name] = useField(props.nameField)
-  const [url] = useField(props.field)
+  const { disabled } = props
+  const { field, nameField } = props
+  const { favicoWidth, favicoHeight, favicoField } = props
+
+  const formik = useFormikContext<any>()
+  const [{ value: name }] = useField(nameField) as Field<string>
+  const [{ value: url }] = useField(field) as Field<string>
+  const [{ value }] = useField(favicoField) as Field<ImageSource>
+
+  const [source, setSource] = useState(url)
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    log('getting from %s', source)
+    const cancelSource = axios.CancelToken.source()
+
+    try {
+      setLoading(true)
+
+      // download image
+    } finally {
+      setLoading(false)
+    }
+
+    return cancelSource.cancel
+  }, [source, axios])
+
+  const [onValueChanged] = useEventCallback<string>(event$ =>
+    event$.pipe(
+      map(fixUrl),
+      filter(isUrl),
+      distinctUntilChanged(),
+      debounce(() => timer(5000)),
+      tap(x => {
+        log('onValueChanged: %s', x)
+        setSource(x)
+      }),
+      ignoreElements()
+    )
+  )
+
+  const generateDefaultIcon = useCallback(() => {
+    if (name) {
+      return generateAvatar(name)
+    }
+  }, [name])
+
+  const onClickRedownload = useCallback(async () => {
+    setSource(url)
+  }, [url])
+
+  const onPictureChosen = useCallback(
+    (val: ImageSource) => {
+      formik.setFieldValue(favicoField, val)
+    },
+    [formik, favicoField]
+  )
+
+  const onClickSelect = useCallback(() => {
+    log('openDlg.picture %s', url)
+    dispatch(actions.openDlg.picture({ url, onSelected: onPictureChosen }))
+  }, [url, dispatch, onPictureChosen])
+
+  const onClickLibrary = useCallback(async () => {
+    const val = await getImageFromLibrary(favicoWidth, favicoHeight)
+    log('getImageFromLibrary from %o', val)
+    if (val) {
+      formik.setFieldValue(favicoField, ImageSource.fromImageBuf(val))
+    }
+  }, [getImageFromLibrary, favicoWidth, favicoHeight, favicoField, formik])
+
+  const onClickReset = useCallback(() => {
+    log('reset favico')
+    formik.setFieldValue(favicoField, generateDefaultIcon())
+  }, [favicoField, formik, generateDefaultIcon])
 
   return (
     <TextField
@@ -177,15 +125,42 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
       label={props.label}
       leftIcon='url'
       disabled={disabled}
+      onValueChanged={onValueChanged}
       rightElement={
-        <FavicoButton
-          name={name.value}
-          url={url.value}
+        <PopoverButton
           disabled={disabled}
-          favico={favico.value}
-          favicoField={favicoField}
-          favicoSize={favicoWidth}
-        />
+          content={[
+            {
+              text: intl.formatMessage(messages.redownload),
+              icon: 'refresh',
+              onClick: onClickRedownload,
+            },
+            {
+              text: intl.formatMessage(messages.selectImage),
+              icon: 'image',
+              onClick: onClickSelect,
+              disabled: !isUrl(url),
+            },
+            {
+              text: intl.formatMessage(messages.library),
+              icon: 'library',
+              onClick: onClickLibrary,
+            },
+            {
+              divider: true,
+            },
+            {
+              text: intl.formatMessage(messages.reset),
+              icon: 'trash',
+              onClick: onClickReset,
+            },
+          ]}
+          minimal
+          loading={loading}
+          icon={value && value.width ? <Image size={20} src={value} /> : undefined}
+        >
+          {!loading && (!value || !value.width) && <Text>...</Text>}
+        </PopoverButton>
       }
     />
   )
