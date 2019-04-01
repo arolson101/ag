@@ -1,45 +1,22 @@
-import {
-  ContextMenuProps,
-  IconName,
-  ListItem,
-  LoadingOverlayProps,
-  NavMenuItem,
-  TableColumn,
-  UiContext,
-} from '@ag/core'
-import { ImageSource } from '@ag/util'
-import {
-  Avatar,
-  Button,
-  Card,
-  ConfigProvider,
-  Divider,
-  Dropdown,
-  Icon,
-  Layout,
-  List,
-  Menu,
-  message,
-  Modal,
-  PageHeader,
-  Spin,
-  Table,
-  Tabs,
-} from 'antd'
+import { ListItem, LoadingOverlayProps, NavMenuItem, UiContext } from '@ag/core'
+import { Button, Card, Divider, Dropdown, Icon, List, Menu, message, Modal, Spin, Tabs } from 'antd'
 import 'antd/dist/antd.css'
 import debug from 'debug'
-import { MemoryHistory } from 'history'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import React from 'react'
-import useReactRouter from 'use-react-router'
 import { CheckboxField } from './CheckboxField.antd'
+import { ContextMenu } from './ContextMenu'
 import { CurrencyField } from './CurrencyField.antd'
 import { DateField } from './DateField.antd'
 import { Form } from './Form.antd'
 import { Image } from './Image.antd'
+import { ImageSourceIcon, mapIconName } from './ImageSourceIcon'
+import { Page } from './Page.antd'
 import { SelectField } from './SelectField.antd'
+import { Table } from './Table.antd'
 import { TextField } from './TextField.antd'
+
 // const { Text, Title, Paragraph } = Typography
 const Text: React.FC = ({ children }) => <span>{children}</span>
 const Title: React.FC = ({ children }) => <h3>{children}</h3>
@@ -174,47 +151,7 @@ export const ui: UiContext = {
     </div>
   ),
 
-  Page: ({ button, title, image, subtitle, children }) => {
-    let onBack: undefined | (() => any)
-    try {
-      const { history } = useReactRouter()
-      const h = history as MemoryHistory
-      if (h.canGo(-1)) {
-        onBack = h.goBack
-      }
-    } catch (error) {
-      log(error.message)
-    }
-
-    return (
-      <Layout style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <PageHeader
-          onBack={onBack}
-          title={
-            <Title>
-              <Icon style={{ margin: 5 }} component={() => <ImageSourceIcon src={image} />} />
-              {title}
-            </Title>
-          }
-          subTitle={subtitle}
-        />
-        <Layout.Content style={{ background: '#fff', overflow: 'auto', flex: 1 }}>
-          {children}
-        </Layout.Content>
-        {button && (
-          <Layout.Footer>
-            <Button
-              disabled={button.disabled}
-              type={button.isDanger ? 'danger' : undefined}
-              onClick={button.onClick}
-            >
-              {button.title}
-            </Button>
-          </Layout.Footer>
-        )}
-      </Layout>
-    )
-  },
+  Page,
   Tile: ({ size, margin, children }) => (
     <div
       style={{
@@ -271,69 +208,7 @@ export const ui: UiContext = {
   ),
 
   // table
-  Table: ({
-    titleText,
-    titleImage,
-    titleContextMenuHeader,
-    titleActions,
-    emptyText,
-    columns,
-    rowKey,
-    rowContextMenu,
-    data,
-  }) => {
-    const render = ({ render: userRender, format }: TableColumn<any>) => (
-      text: string,
-      row: any,
-      index: number
-    ) => {
-      if (format) {
-        text = format(text)
-      }
-      return (
-        <ContextMenu {...(rowContextMenu ? rowContextMenu(row) : {})}>
-          <div style={{ margin: -16, padding: 16 }}>
-            {userRender ? userRender(text, row, index) : text}
-          </div>
-        </ContextMenu>
-      )
-    }
-    return (
-      <ConfigProvider
-        renderEmpty={() => (
-          <div style={{ textAlign: 'center' }}>
-            <Text>{emptyText}</Text>
-          </div>
-        )}
-      >
-        <Table
-          title={
-            titleText
-              ? () => (
-                  <ContextMenu header={titleContextMenuHeader} actions={titleActions}>
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                      <Title>
-                        {titleImage && (
-                          <Icon
-                            style={{ margin: 5 }}
-                            component={() => <ImageSourceIcon src={titleImage} />}
-                          />
-                        )}
-                        {titleText}
-                      </Title>
-                    </div>
-                  </ContextMenu>
-                )
-              : undefined
-          }
-          pagination={false}
-          columns={columns.map(col => ({ ...col, render: render(col) }))}
-          rowKey={rowKey}
-          dataSource={data}
-        />
-      </ConfigProvider>
-    )
-  },
+  Table,
 
   // controls
   Spinner: Spin,
@@ -417,7 +292,7 @@ const buildNavMenu = (item: NavMenuItem) =>
       key={item.key}
       title={
         <span>
-          {item.image && <Icon component={() => <ImageSourceIcon src={item.image} />} />}
+          {item.image && <ImageSourceIcon src={item.image} />}
           <span>{item.title}</span>
         </span>
       }
@@ -426,7 +301,7 @@ const buildNavMenu = (item: NavMenuItem) =>
     </Menu.SubMenu>
   ) : (
     <Menu.Item key={item.key} onClick={item.onClick} title={item.title}>
-      {item.image && <Icon component={() => <ImageSourceIcon src={item.image} />} />}
+      {item.image && <ImageSourceIcon src={item.image} />}
       <span>{item.title}</span>
     </Menu.Item>
   )
@@ -440,79 +315,3 @@ const getNavMenuSelectedKeys = (item: NavMenuItem): string[] => [
   ...(item.active ? [item.key] : []),
   ...(item.subitems ? item.subitems.flatMap(getNavMenuSelectedKeys) : []),
 ]
-
-export const mapIconName = (icon?: IconName): string | undefined => {
-  // https://beta.ant.design/components/icon/
-  switch (icon) {
-    case 'url':
-      return 'global'
-
-    case 'image':
-      return 'picture'
-
-    case 'library':
-      return 'folder-open'
-
-    case 'add':
-      return 'file-add'
-
-    case 'refresh':
-      return 'reload'
-
-    case 'trash':
-      return 'delete'
-
-    case 'edit':
-    case 'sync':
-    default:
-      return icon
-  }
-}
-
-const ImageSourceIcon: React.FC<{ src: ImageSource | undefined }> = ({ src }) => (
-  <Icon
-    component={
-      src
-        ? () => <Avatar size='small' shape='square' style={{ borderRadius: 0 }} src={src.uri} />
-        : undefined
-    }
-  />
-)
-
-const ContextMenu: React.FC<ContextMenuProps> = ({ header, actions, children }) => {
-  if (actions) {
-    return (
-      <Dropdown
-        trigger={['contextMenu']}
-        overlay={
-          actions && (
-            <Menu
-              onClick={item => {
-                const action = actions[+item.key]
-                if (action.onClick) {
-                  action.onClick()
-                }
-              }}
-            >
-              {header && <Menu.ItemGroup title={header} />}
-              {actions.map((item, i) =>
-                item.divider ? (
-                  <Menu.Divider key={i} />
-                ) : (
-                  <Menu.Item disabled={!item.onClick || item.disabled} key={i}>
-                    <Icon type={mapIconName(item.icon)} />
-                    {item.text}
-                  </Menu.Item>
-                )
-              )}
-            </Menu>
-          )
-        }
-      >
-        {children}
-      </Dropdown>
-    )
-  } else {
-    return <>{children}</>
-  }
-}

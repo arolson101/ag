@@ -3,7 +3,7 @@ import { Form, Icon, Input } from 'antd'
 import debug from 'debug'
 import { useField } from 'formik'
 import React, { useCallback, useState } from 'react'
-import { mapIconName } from './ui.antd'
+import { mapIconName } from './ImageSourceIcon'
 
 const log = debug('TextField.antd')
 
