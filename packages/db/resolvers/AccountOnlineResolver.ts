@@ -92,7 +92,7 @@ export class AccountOnlineResolver {
         }
       }
     } catch (ex) {
-      if (!source.token.reason) {
+      if (!online.isCancel(ex)) {
         throw ex
       }
     }
@@ -180,7 +180,7 @@ export class AccountOnlineResolver {
         }
       }
     } catch (ex) {
-      if (!source.token.reason) {
+      if (!online.isCancel(ex)) {
         throw ex
       }
     }

@@ -52,30 +52,50 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const [{ value: url }] = useField(field) as Field<string>
   const [{ value }] = useField(favicoField) as Field<ImageSource>
 
-  const [source, setSource] = useState(url)
+  const [source, setSource] = useState<string | undefined>(undefined)
   const [loading, setLoading] = useState(false)
 
+  const generateDefaultIcon = useCallback(() => {
+    if (name) {
+      return generateAvatar(name)
+    }
+  }, [name])
+
   useEffect(() => {
-    log('getting from %s', source)
-    const cancelSource = online.CancelToken.source()
-
-    try {
-      setLoading(true)
-
-      // download image
-    } finally {
-      setLoading(false)
+    if (source === undefined) {
+      log('doing nothing')
+      return
     }
 
+    const newUrl = fixUrl(source)
+    if (!isUrl(newUrl)) {
+      log('not an url; setting default (%s)', newUrl)
+      formik.setFieldValue(favicoField, generateDefaultIcon())
+      return
+    }
+
+    log('getting from %s', newUrl)
+    const cancelSource = online.CancelToken.source()
+
+    // download image
+    Promise.resolve()
+      .then(() => setLoading(true))
+      .then(() => online.getFavico(newUrl, cancelSource.token))
+      .then(favico => {
+        // log('got favico %O', favico)
+        formik.setFieldValue(favicoField, ImageSource.fromImageBuf(favico))
+      })
+      .finally(() => setLoading(false))
+
     return cancelSource.cancel
-  }, [source, online])
+  }, [source, online, generateDefaultIcon])
 
   const [onValueChanged] = useEventCallback<string>(event$ =>
     event$.pipe(
       map(fixUrl),
-      filter(isUrl),
+      // filter(isUrl),
       distinctUntilChanged(),
-      debounce(() => timer(5000)),
+      debounce(() => timer(250)),
       tap(x => {
         log('onValueChanged: %s', x)
         setSource(x)
@@ -84,15 +104,10 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
     )
   )
 
-  const generateDefaultIcon = useCallback(() => {
-    if (name) {
-      return generateAvatar(name)
-    }
-  }, [name])
-
   const onClickRedownload = useCallback(async () => {
-    setSource(url)
-  }, [url])
+    log('onClickRedownload (source %s) %s', source, url)
+    setSource(url === source ? ' ' + url : url)
+  }, [url, source])
 
   const onPictureChosen = useCallback(
     (val: ImageSource) => {

@@ -6,6 +6,7 @@ import { getTransactions } from './getTransactions'
 
 export const online = {
   CancelToken: Axios.CancelToken,
+  isCancel: Axios.isCancel,
 
   getFavico,
   getImage,

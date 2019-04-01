@@ -19,7 +19,7 @@ export const getFavico = async (
   }
 
   const result = await Axios.get(from, { cancelToken, responseType: 'text' })
-  log('axios %s %o', from, result)
+  // log('axios %s %o', from, result)
 
   const finalUrl = getFinalUrl(from, result)
 
@@ -68,7 +68,7 @@ export const getFavico = async (
         return index === array.indexOf(value)
       }
     )
-  log('links: %o', links)
+  // log('links: %o', links)
 
   const images: ImageBuf[] = []
 

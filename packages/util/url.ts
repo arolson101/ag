@@ -8,6 +8,8 @@ export const fixUrl = (from: string): string => {
     return from
   }
 
+  from = from.trim()
+
   const urlMatches = from.match(urlRegex())
   if (urlMatches) {
     from = urlMatches[0]

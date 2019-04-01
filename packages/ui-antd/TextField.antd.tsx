@@ -1,8 +1,11 @@
 import { TextFieldProps } from '@ag/core'
 import { Form, Icon, Input } from 'antd'
+import debug from 'debug'
 import { useField } from 'formik'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { mapIconName } from './ui.antd'
+
+const log = debug('TextField.antd')
 
 type Password = import('antd/lib/input/Password').default
 type TextArea = import('antd/lib/input/TextArea').default
@@ -25,7 +28,7 @@ export const TextField = Object.assign(
       onValueChanged,
     } = props
 
-    const [field, { error }] = useField(props.field)
+    const [field, { error }] = useField(name)
     const onChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         field.onChange(e)
@@ -36,6 +39,15 @@ export const TextField = Object.assign(
       },
       [field, onValueChanged]
     )
+
+    const [lastValue, setLastValue] = useState('')
+    if (lastValue !== field.value) {
+      // log('value changed %s %s', lastValue, field.value)
+      setLastValue(field.value)
+      if (onValueChanged) {
+        onValueChanged(field.value)
+      }
+    }
 
     const Component = secure ? Input.Password : Input
     const validateStatus = error ? 'error' : undefined
