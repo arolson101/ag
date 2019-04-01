@@ -1,12 +1,12 @@
+import { Account } from '@ag/db'
 import assert from 'assert'
 import Axios, { CancelToken } from 'axios'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
-import { defineMessages } from 'react-intl'
-import { DbContext } from '../DbContext'
-import { Account, Bank } from '../entities'
+import { defineMessages, InjectedIntl } from 'react-intl'
+import { Login, OfxServerInfo } from './ofxTypes'
 
-const log = debug('db:ofx')
+const log = debug('online:ofxService')
 
 const ajaxHandler = (cancelToken: CancelToken): ofx4js.AjaxHandler => async (
   url,
@@ -26,22 +26,21 @@ const ajaxHandler = (cancelToken: CancelToken): ofx4js.AjaxHandler => async (
 }
 
 interface OfxServiceParams {
-  bank: Bank
+  serverInfo: OfxServerInfo
   cancelToken: CancelToken
-  context: DbContext
+  intl: InjectedIntl
 }
 
 export const ofxService = ({
-  bank,
+  serverInfo,
   cancelToken,
-  context,
+  intl,
 }: OfxServiceParams): ofx4js.FinancialInstitutionImpl => {
   const DefaultApplicationContext = ofx4js.DefaultApplicationContext
   const OFXApplicationContextHolder = ofx4js.OFXApplicationContextHolder
   OFXApplicationContextHolder.setCurrentContext(new DefaultApplicationContext('QWIN', '2300'))
 
-  const { intl } = context
-  const { fid, org, ofx, name } = bank
+  const { fid, org, ofx, name } = serverInfo
   if (!fid) {
     throw new Error(intl.formatMessage(messages.noFid))
   }
@@ -71,18 +70,13 @@ export const ofxService = ({
   return service
 }
 
-interface Login {
-  username: string
-  password: string
-}
-
 interface CheckLoginParams {
-  bank: Bank
-  context: DbContext
+  login: Login
+  intl: InjectedIntl
 }
 
-export const checkLogin = ({ bank, context: { intl } }: CheckLoginParams): Login => {
-  const { username, password } = bank
+export const checkLogin = ({ login, intl }: CheckLoginParams): Login => {
+  const { username, password } = login
   if (!username) {
     throw new Error(intl.formatMessage(messages.noUsername))
   }
@@ -111,19 +105,18 @@ export const fromAccountType = (str: Account.Type): ofx4js.AccountType => {
 
 interface GetFinancialAccountParams {
   service: ofx4js.FinancialInstitutionImpl
-  bank: Bank
+  login: Login
   account: Account
-  context: DbContext
+  intl: InjectedIntl
 }
 
 export const getFinancialAccount = ({
   service,
-  bank,
+  login,
   account,
-  context,
+  intl,
 }: GetFinancialAccountParams): ofx4js.FinancialInstitutionAccount => {
-  const { intl } = context
-  const { username, password } = checkLogin({ bank, context })
+  const { username, password } = checkLogin({ login, intl })
   const accountNumber = account.number
   if (!accountNumber) {
     throw new Error(intl.formatMessage(messages.noAccountNumber))

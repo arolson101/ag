@@ -1,7 +1,7 @@
 import { App, ClientDependencies } from '@ag/core'
 import { createClient } from '@ag/db'
+import { online } from '@ag/online'
 import { ApolloHooksProvider } from '@ag/util'
-import axios from 'axios'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
@@ -20,7 +20,7 @@ YellowBox.ignoreWarnings(['Require cycle:'])
 const log = debug('rn:init')
 
 export const deps: ClientDependencies = {
-  axios,
+  online,
   ui,
 
   getImageFromLibrary,
@@ -30,7 +30,7 @@ export const deps: ClientDependencies = {
 
 const store = createStore(deps)
 const context = App.createContext({ store, deps })
-const client = createClient({ openDb, deleteDb, axios, ...context })
+const client = createClient({ openDb, deleteDb, online, ...context })
 
 const RnApp: React.FC = ({ children }) => (
   <ApolloProvider client={client}>

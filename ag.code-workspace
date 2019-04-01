@@ -10,6 +10,9 @@
       "path": "packages/ofx4js"
     },
     {
+      "path": "packages/online"
+    },
+    {
       "path": "packages/react-native-svg-image"
     },
     {

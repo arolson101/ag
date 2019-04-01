@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@ag/db": "^0.0.0",
+    "@ag/online": "^0.0.0",
     "@ag/util": "^0.0.0",
     "accounting": "^0.4.1",
     "apollo-client": "^2.5.1",

@@ -11,8 +11,6 @@ import {
   BudgetResolver,
   CategoryResolver,
   DbResolver,
-  ImageResolver,
-  OnlineResolver,
   TransactionResolver,
 } from './resolvers'
 
@@ -28,8 +26,6 @@ export const schema = buildSchemaSync({
     TransactionResolver,
     BudgetResolver,
     CategoryResolver,
-    ImageResolver,
-    OnlineResolver,
   ],
   container: Container,
   scalarsMap: [{ type: ImageSource, scalar: ImageSourceScalar }],

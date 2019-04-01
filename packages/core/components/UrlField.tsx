@@ -40,7 +40,7 @@ interface FavicoButtonProps {
 type Field<T> = [{ value: T }, {}]
 
 export const UrlField = <Values extends Record<string, any>>(props: Props<Values>) => {
-  const { intl, ui, dispatch, getImageFromLibrary, axios } = useContext(CoreContext)
+  const { intl, ui, dispatch, getImageFromLibrary, online } = useContext(CoreContext)
   const { PopoverButton, Image, Text } = ui
   const { TextField } = typedFields<Values>(ui)
   const { disabled } = props
@@ -57,7 +57,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
 
   useEffect(() => {
     log('getting from %s', source)
-    const cancelSource = axios.CancelToken.source()
+    const cancelSource = online.CancelToken.source()
 
     try {
       setLoading(true)
@@ -68,7 +68,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
     }
 
     return cancelSource.cancel
-  }, [source, axios])
+  }, [source, online])
 
   const [onValueChanged] = useEventCallback<string>(event$ =>
     event$.pipe(

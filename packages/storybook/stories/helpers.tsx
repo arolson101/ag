@@ -1,11 +1,11 @@
 // tslint:disable:no-implicit-dependencies
 import { App, cancelOperation, ClientDependencies, CoreContext } from '@ag/core'
+import { online } from '@ag/online'
 import { ApolloHooksProvider } from '@ag/util'
 import { action } from '@storybook/addon-actions'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { MockedResponse, MockLink } from 'apollo-link-mock'
-import axios from 'axios'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { IntlProvider } from 'react-intl'
@@ -21,7 +21,7 @@ export const addDelay = (responses: MockedResponse[], delay: number) => {
 }
 
 const deps: ClientDependencies = {
-  axios,
+  online,
   ui,
   scaleImage: action('scaleImage') as any,
   openCropper: action('openCropper') as any,

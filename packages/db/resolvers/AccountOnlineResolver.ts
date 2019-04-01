@@ -1,3 +1,4 @@
+import { toAccountType } from '@ag/online'
 import { diff } from '@ag/util'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
@@ -12,17 +13,14 @@ import {
   Transaction,
   TransactionInput,
 } from '../entities'
-import { checkLogin, getFinancialAccount, ofxService, toAccountType } from '../online'
 import { AppDb } from './AppDb'
-import { OnlineResolver } from './OnlineResolver'
 
 const log = debug('db:AccountOnlineResolver')
 
 @Resolver()
 export class AccountOnlineResolver {
   constructor(
-    private appDb: AppDb, //
-    private online: OnlineResolver
+    private appDb: AppDb //
   ) {}
 
   @Mutation(returns => Bank)
@@ -50,12 +48,11 @@ export class AccountOnlineResolver {
 
     // TODO: make bank query get this for us
     const existingAccounts = await app.accountsRepository!.getForBank(bank.id)
-    const source = this.online.register(context, cancelToken)
+    const { intl, online } = context
+    const source = online.CancelToken.source()
 
     try {
-      const service = ofxService({ bank, cancelToken: source.token, context })
-      const { username, password } = checkLogin({ bank, context })
-      const accountProfiles = await service.readAccountProfiles(username, password)
+      const accountProfiles = await online.getAccountList(bank, bank, source.token, intl)
       if (accountProfiles.length === 0) {
         log('server reports no accounts')
       } else {
@@ -98,8 +95,6 @@ export class AccountOnlineResolver {
       if (!source.token.reason) {
         throw ex
       }
-    } finally {
-      this.online.delete(cancelToken)
     }
 
     return bank
@@ -122,14 +117,19 @@ export class AccountOnlineResolver {
     }
 
     const account = await app.account(accountId)
-    const source = this.online.register(context, cancelToken)
+    const { online, intl } = context
+    const source = online.CancelToken.source()
 
     try {
-      const service = ofxService({ bank, cancelToken: source.token, context })
-      const bankAccount = getFinancialAccount({ service, bank, account, context })
-      const bankStatement = await bankAccount.readStatement(start, end)
-      const transactionList = bankStatement.getTransactionList()
-      const transactions = transactionList.getTransactions()
+      const transactions = await online.getTransactions({
+        intl,
+        login: bank,
+        account,
+        cancelToken: source.token,
+        start,
+        end,
+        serverInfo: bank,
+      })
 
       if (!transactions) {
         log('empty transaction list')
@@ -183,8 +183,6 @@ export class AccountOnlineResolver {
       if (!source.token.reason) {
         throw ex
       }
-    } finally {
-      this.online.delete(cancelToken)
     }
 
     return account

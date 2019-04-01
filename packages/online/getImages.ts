@@ -1,14 +1,13 @@
 import { decodeDataURI, fixUrl, ImageBuf, imageSize, isDataURI } from '@ag/util'
-import { AxiosResponse, CancelToken } from 'axios'
+import Axios, { AxiosResponse, CancelToken } from 'axios'
 import debug from 'debug'
 import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
 import isUrl from 'is-url'
 import minidom from 'minidom'
 import { extname } from 'path'
 import url from 'url'
-import { DbContext } from '../DbContext'
 
-const log = debug('db:getImages')
+const log = debug('online:getImages')
 
 export const getFinalUrl = (requestedUrl: string, response: AxiosResponse<any>): string => {
   if (response.request instanceof XMLHttpRequest) {
@@ -19,7 +18,7 @@ export const getFinalUrl = (requestedUrl: string, response: AxiosResponse<any>):
   }
 }
 
-export const getImageList = async (from: string, cancelToken: CancelToken, context: DbContext) => {
+export const getImageList = async (from: string, cancelToken: CancelToken) => {
   from = fixUrl(from)
 
   if (!isUrl(from)) {
@@ -27,8 +26,7 @@ export const getImageList = async (from: string, cancelToken: CancelToken, conte
     throw new Error(`${from} is not an URL`)
   }
 
-  const { axios } = context
-  const result = await axios.get<string>(from, { cancelToken, responseType: 'text' })
+  const result = await Axios.get<string>(from, { cancelToken, responseType: 'text' })
   // const result = await fetch(from, { method: 'get', signal })
   // log('axios %s %o', from, result)
 
@@ -90,7 +88,7 @@ export const getImageList = async (from: string, cancelToken: CancelToken, conte
   return links
 }
 
-export const getImage = async (link: string, cancelToken: CancelToken, context: DbContext) => {
+export const getImage = async (link: string, cancelToken: CancelToken) => {
   try {
     let buf: Buffer
     let mime: string
@@ -100,8 +98,7 @@ export const getImage = async (link: string, cancelToken: CancelToken, context: 
       buf = data.buf
       mime = data.mime
     } else {
-      const { axios } = context
-      const response = await axios.get<ArrayBuffer>(link, {
+      const response = await Axios.get<ArrayBuffer>(link, {
         cancelToken,
         responseType: 'arraybuffer',
       })

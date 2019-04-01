@@ -1,9 +1,9 @@
-import Axios from 'axios'
+import { Online } from '@ag/online'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
 
 export interface DbContext {
-  axios: typeof Axios
+  online: Online
   intl: IntlContext
   openDb: (
     name: string,

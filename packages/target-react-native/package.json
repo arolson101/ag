@@ -18,11 +18,11 @@
   "dependencies": {
     "@ag/core": "^0.0.0",
     "@ag/db": "^0.0.0",
+    "@ag/online": "^0.0.0",
     "@ag/ui-nativebase": "^0.0.0",
     "@ag/util": "^0.0.0",
     "abortcontroller-polyfill": "^1.2.6",
     "array.prototype.flatmap": "^1.2.1",
-    "axios": "^0.18.0",
     "debug": "^4.1.1",
     "node-libs-react-native": "^1.0.3",
     "react": "^16.8.4",

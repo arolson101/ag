@@ -3,15 +3,13 @@ import Axios, { CancelToken } from 'axios'
 import debug from 'debug'
 import minidom from 'minidom'
 import url from 'url'
-import { DbContext } from '../DbContext'
 import { getFinalUrl, getImage } from './getImages'
 
-const log = debug('db:getFavico')
+const log = debug('online:getFavico')
 
 export const getFavico = async (
   from: string,
-  cancelToken: CancelToken,
-  context: DbContext
+  cancelToken: CancelToken
 ): Promise<ImageBuf | undefined> => {
   from = fixUrl(from)
 
@@ -20,8 +18,7 @@ export const getFavico = async (
     throw new Error(`${from} is not an URL`)
   }
 
-  const { axios } = context
-  const result = await axios.get(from, { cancelToken, responseType: 'text' })
+  const result = await Axios.get(from, { cancelToken, responseType: 'text' })
   log('axios %s %o', from, result)
 
   const finalUrl = getFinalUrl(from, result)
@@ -77,7 +74,7 @@ export const getFavico = async (
 
   await Promise.all(
     links.map(async link => {
-      const dl = await getImage(link, cancelToken, context)
+      const dl = await getImage(link, cancelToken)
       if (!dl) {
         log('failed getting: %s', link)
       } else {

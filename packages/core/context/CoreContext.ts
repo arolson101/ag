@@ -1,5 +1,5 @@
+import { Online } from '@ag/online'
 import { ImageBuf } from '@ag/util'
-import Axios from 'axios'
 import React, { Dispatch } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { CoreAction } from '../actions'
@@ -9,7 +9,7 @@ import { UiContext } from './uiContext'
 export const maxImageSize = 512
 
 export interface ClientDependencies {
-  axios: typeof Axios
+  online: Online
   ui: UiContext
 
   getImageFromLibrary: (width: number, height: number) => Promise<ImageBuf | undefined>
