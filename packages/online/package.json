@@ -1,8 +1,8 @@
 {
   "name": "@ag/online",
   "version": "0.0.0",
-  "main": "index.ts",
   "license": "MIT",
+  "main": "index.ts",
   "dependencies": {
     "@ag/db": "^0.0.0",
     "@ag/util": "^0.0.0",

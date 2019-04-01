@@ -35,7 +35,6 @@
     "redux-observable": "^1.0.0",
     "rxjs": "^6.4.0",
     "rxjs-hooks": "^0.4.1",
-    "rxjs-tslint": "^0.1.7",
     "typesafe-actions": "^3.2.1",
     "utility-types": "^3.4.1"
   },
@@ -50,6 +49,7 @@
     "graphql-code-generator": "^0.18.0",
     "graphql-codegen-add": "^0.18.0",
     "graphql-codegen-typescript-client": "^0.18.0",
-    "graphql-codegen-typescript-common": "^0.18.0"
+    "graphql-codegen-typescript-common": "^0.18.0",
+    "rxjs-tslint": "^0.1.7"
   }
 }
