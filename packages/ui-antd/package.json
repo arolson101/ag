@@ -12,6 +12,8 @@
     "history": "^4.7.2",
     "nprogress": "^0.2.0",
     "react": "^16.8.4",
+    "react-dnd": "^7.4.3",
+    "react-dnd-html5-backend": "^7.4.0",
     "react-dom": "^16.8.4",
     "react-router": "^5.0.0",
     "use-react-router": "^1.0.5"
