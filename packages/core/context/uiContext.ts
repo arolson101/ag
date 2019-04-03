@@ -128,6 +128,7 @@ export interface TableProps<T extends {} = any> {
   emptyText?: string
   data: T[]
   columns: Array<TableColumn<T>>
+  moveRow?: (srcIndex: number, dstIndex: number) => any
 }
 
 export interface TabsProps {
