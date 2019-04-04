@@ -110,18 +110,6 @@ export type DateTime = any
 // Documents
 // ====================================================
 
-export namespace Cancel {
-  export type Variables = {
-    cancelToken: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    cancel: boolean
-  }
-}
-
 export namespace MenuBar {
   export type Variables = {}
 
@@ -155,45 +143,6 @@ export namespace MenuBar {
     id: string
 
     name: string
-  }
-}
-
-export namespace GetFavico {
-  export type Variables = {
-    url: string
-    cancelToken: string
-  }
-
-  export type Query = {
-    __typename?: 'Query'
-
-    getFavico: ImageSource
-  }
-}
-
-export namespace GetImageList {
-  export type Variables = {
-    url: string
-    cancelToken: string
-  }
-
-  export type Query = {
-    __typename?: 'Query'
-
-    getImageList: string[]
-  }
-}
-
-export namespace GetImage {
-  export type Variables = {
-    url: string
-    cancelToken: string
-  }
-
-  export type Query = {
-    __typename?: 'Query'
-
-    getImage: ImageSource
   }
 }
 
@@ -716,6 +665,8 @@ export namespace BankFieldsAccountsPage {
     favicon: ImageSource
 
     online: boolean
+
+    accountOrder: string[]
 
     accounts: Accounts[]
   }
