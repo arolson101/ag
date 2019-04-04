@@ -24,8 +24,8 @@ let dragingIndex = -1
 
 interface BodyRowProps {
   isOver: boolean
-  connectDragSource: ConnectDragSource
-  connectDropTarget: ConnectDropTarget
+  connectDragSource?: ConnectDragSource
+  connectDropTarget?: ConnectDropTarget
   moveRow: (a: number, b: number) => any
   style?: React.CSSProperties
   index: number
@@ -38,7 +38,8 @@ interface ObjectProps {
 class BodyRow extends React.Component<BodyRowProps> {
   render() {
     const { isOver, connectDragSource, connectDropTarget, moveRow, ...restProps } = this.props
-    const style: React.CSSProperties = { ...restProps.style, cursor: 'move' }
+    const cursor = connectDragSource && connectDropTarget ? 'move' : undefined
+    const style: React.CSSProperties = { ...restProps.style, cursor }
 
     if (isOver) {
       if (restProps.index > dragingIndex) {
@@ -49,7 +50,13 @@ class BodyRow extends React.Component<BodyRowProps> {
       }
     }
 
-    return connectDragSource(connectDropTarget(<tr {...restProps} style={style} />))
+    const row = <tr {...restProps} style={style} />
+
+    if (connectDragSource && connectDropTarget) {
+      return connectDragSource(connectDropTarget(row))
+    } else {
+      return row
+    }
   }
 }
 
@@ -127,7 +134,7 @@ const DragSortingTable: React.FC<TableProps> = ({
 
   const components = {
     body: {
-      row: moveRow ? DragableBodyRow : undefined,
+      row: moveRow ? DragableBodyRow : BodyRow,
     },
   }
 

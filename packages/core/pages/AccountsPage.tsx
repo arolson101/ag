@@ -29,6 +29,7 @@ const fragments = {
       name
       favicon
       online
+      accountOrder
       accounts {
         id
         name

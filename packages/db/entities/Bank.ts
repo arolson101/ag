@@ -28,9 +28,14 @@ export class Bank extends Record<Bank.Props> {
   @Column() @Field() username!: string
   @Column() @Field() password!: string
 
+  @Column('simple-array')
+  @Field(type => [String])
+  accountOrder!: string[]
+
   constructor(id?: string, props?: BankInput) {
     super(id, { ...Bank.defaultValues, ...props })
     this.favicon = new ImageSource(this.favicon)
+    this.accountOrder = []
     // log('Bank constructor %o', this)
   }
 }
