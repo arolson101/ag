@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { App, cancelOperation, ClientDependencies, CoreContext } from '@ag/core'
+import { App, ClientDependencies, CoreContext } from '@ag/core'
 import { online } from '@ag/online'
 import { ApolloHooksProvider } from '@ag/util'
 import { action } from '@storybook/addon-actions'
@@ -56,15 +56,3 @@ export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, childre
     </ApolloProvider>
   )
 }
-
-export const createCancelMutation = (cancelToken: string) => ({
-  request: {
-    query: cancelOperation.mutations.cancel,
-    variables: { cancelToken },
-  },
-  result: {
-    data: {
-      cancel: true,
-    },
-  },
-})

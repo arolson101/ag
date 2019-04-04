@@ -2,22 +2,11 @@
 import { BankDialog, BankForm, UrlField } from '@ag/core'
 import { ImageSource } from '@ag/util'
 import React from 'react'
-import {
-  action,
-  addDelay,
-  createCancelMutation,
-  forever,
-  MockApp,
-  MockedResponse,
-  storiesOf,
-} from './helpers'
+import { action, addDelay, forever, MockApp, MockedResponse, storiesOf } from './helpers'
 
-const cancelToken = 'cjso7o0ca00014a5uezsiw3dy'
-const cancelMutation = createCancelMutation(cancelToken)
 const bankId = 'cjr9drbdp0001415uh38a4g9j'
 
 const formProps = {
-  cancelToken,
   onClosed: action('onClosed'),
   loading: false,
   saveBank: action('saveBank') as any,
@@ -66,7 +55,6 @@ const emptyMocks: MockedResponse[] = [
     },
   },
   ...downloadRequests,
-  cancelMutation,
 ]
 
 const editMocks: MockedResponse[] = [
@@ -103,7 +91,6 @@ const editMocks: MockedResponse[] = [
     },
   },
   ...downloadRequests,
-  cancelMutation,
 ]
 
 storiesOf('Dialogs/BankDialog', module)
