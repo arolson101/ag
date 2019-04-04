@@ -1,13 +1,13 @@
 import { Gql, ImageSource } from '@ag/util'
 import ApolloClient from 'apollo-client'
 import debug from 'debug'
-import { Formik } from 'formik'
+import { Formik, FormikProvider, useFormik } from 'formik'
 import gql from 'graphql-tag'
-import React from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { cancelOperation, ErrorDisplay } from '../components'
+import { ErrorDisplay } from '../components'
 import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
@@ -31,25 +31,165 @@ interface Values {
 
 const thumbnailSize = 100
 
+const ImageTile = React.memo<{ link: string }>(({ link }) => {
+  return (
+    <Tile key={link} size={thumbnailSize}>
+      <Query<T.GetImage.Query, T.GetImage.Variables>
+        query={PictureDialog.queries.getImage}
+        variables={{ url: link, cancelToken }}
+      >
+        {({ loading: imageLoading, error: imageError, data: imageData }) => {
+          const image = imageData && imageData.getImage
+          return imageLoading ? (
+            <Spinner />
+          ) : imageError ? (
+            <Text>error</Text>
+          ) : !image ? (
+            <Text>no data</Text>
+          ) : (
+            <Button fill minimal onPress={e => selectItem(e, image)}>
+              <Image title={link} size={thumbnailSize - 30} src={image} />
+            </Button>
+          )
+        }}
+      </Query>
+    </Tile>
+  )
+})
+
+export const PictureDialog1 = Object.assign(
+  React.memo<Props>(props => {
+    const context = useContext(CoreContext)
+    const { intl, ui, uniqueId, dispatch, scaleImage, online } = context
+    const [url, setUrl] = useState(props.url)
+    const [listLoading, setListLoading] = useState(false)
+    const [listData, setListData] = useState<string[]>([])
+
+    useEffect(() => {
+      setUrl(props.url)
+    }, [setUrl, props.url])
+
+    const { onSelected, isOpen } = props
+    const { Dialog, Button, Spinner, Row, Grid, Tile, Text, Image } = ui
+    const { Form, TextField } = typedFields<Values>(ui)
+
+    const initialValues: Values = {
+      url,
+    }
+    // log('render')
+
+    const close = useCallback(() => {
+      // log('close')
+      dispatch(actions.closeDlg('picture'))
+    }, [dispatch])
+
+    const selectItem = useCallback(
+      async (e: React.SyntheticEvent, source: ImageSource) => {
+        let image = source.toImageBuf()
+        // image = await openCropper(source.toImageBuf())
+        // if (!image) {
+        //   return
+        // }
+
+        const scale = Math.min(thumbnailSize / image.width, thumbnailSize / image.height)
+        if (scale < 1.0) {
+          image = await scaleImage(image, scale)
+        }
+
+        onSelected(ImageSource.fromImageBuf(image))
+        close()
+      },
+      [onSelected, close, thumbnailSize, scaleImage]
+    )
+
+    const formik = useFormik<Values>({
+      enableReinitialize: true,
+      initialValues,
+      onSubmit: async (values, factions) => {
+        try {
+          log('onSubmit %o', values)
+          setUrl(values.url)
+        } finally {
+          factions.setSubmitting(false)
+        }
+      },
+    })
+
+    useEffect(() => {
+      const cancelToken = online.CancelToken.source()
+      setListLoading(true)
+      online
+        .getImageList(url, cancelToken.token)
+        .then(imageList => {
+          setListData(imageList)
+        })
+        .catch(error => ErrorDisplay.show(context, error))
+        .finally(() => setListLoading(false))
+      return cancelToken.cancel()
+    }, [setListLoading, online.getImageList, setListData, url])
+
+    return (
+      <Dialog
+        isOpen={isOpen}
+        title={intl.formatMessage(messages.title)}
+        secondary={{
+          title: intl.formatMessage(messages.cancel),
+          onClick: close,
+        }}
+      >
+        <Row>
+          <FormikProvider value={formik}>
+            <Form onSubmit={formik.handleSubmit} lastFieldSubmit>
+              <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
+            </Form>
+          </FormikProvider>
+        </Row>
+        {listLoading && <Spinner />}
+
+        <Grid
+          flex={1}
+          scrollable
+          size={thumbnailSize}
+          data={listData}
+          keyExtractor={(link: string) => link}
+          renderItem={(link: string) => {
+            // log('renderItem %s', link)
+            return (
+              <Tile key={link} size={thumbnailSize}>
+                <Query<T.GetImage.Query, T.GetImage.Variables>
+                  query={PictureDialog.queries.getImage}
+                  variables={{ url: link, cancelToken }}
+                >
+                  {({ loading: imageLoading, error: imageError, data: imageData }) => {
+                    const image = imageData && imageData.getImage
+                    return imageLoading ? (
+                      <Spinner />
+                    ) : imageError ? (
+                      <Text>error</Text>
+                    ) : !image ? (
+                      <Text>no data</Text>
+                    ) : (
+                      <Button fill minimal onPress={e => selectItem(e, image)}>
+                        <Image title={link} size={thumbnailSize - 30} src={image} />
+                      </Button>
+                    )
+                  }}
+                </Query>
+              </Tile>
+            )
+          }}
+        />
+      </Dialog>
+    )
+  }),
+  {
+    displayName: 'PictureDialog',
+  }
+)
+
 export class PictureDialog extends React.PureComponent<Props, State> {
   static contextType = CoreContext
   context!: React.ContextType<typeof CoreContext>
-
-  static readonly queries = {
-    getImageList: gql`
-      query GetImageList($url: String!, $cancelToken: String!) {
-        getImageList(url: $url, cancelToken: $cancelToken)
-      }
-    ` as Gql<T.GetImageList.Query, T.GetImageList.Variables>,
-
-    getImage: gql`
-      query GetImage($url: String!, $cancelToken: String!) {
-        getImage(url: $url, cancelToken: $cancelToken)
-      }
-    ` as Gql<T.GetImage.Query, T.GetImage.Variables>,
-  }
-
-  client!: ApolloClient<any>
 
   constructor(props: Props) {
     super(props)
@@ -83,7 +223,7 @@ export class PictureDialog extends React.PureComponent<Props, State> {
   cancel = async () => {
     const { cancelToken } = this.state
     if (this.client && cancelToken) {
-      cancelOperation(this.client, cancelToken)
+      // cancelOperation(this.client, cancelToken)
     }
   }
 
