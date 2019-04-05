@@ -21,6 +21,7 @@ export class Account extends Record<Account.Props> {
   @Column() @Field() visible!: boolean
   @Column() @Field() routing!: string
   @Column() @Field() key!: string
+  @Column() @Field() sortOrder!: number
 
   constructor(bankId?: string, id?: string, props?: AccountInput) {
     super(id, { ...Account.defaultValues(), ...props })

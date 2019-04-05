@@ -1,5 +1,6 @@
 import { TableColumn, TableProps } from '@ag/core'
 import * as Antd from 'antd'
+import { TableComponents } from 'antd/lib/table'
 import debug from 'debug'
 import React from 'react'
 import {
@@ -132,7 +133,7 @@ const DragSortingTable: React.FC<TableProps> = ({
     )
   }
 
-  const components = {
+  const components: TableComponents = {
     body: {
       row: moveRow ? DragableBodyRow : BodyRow,
     },

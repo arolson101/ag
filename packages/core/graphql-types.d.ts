@@ -666,8 +666,6 @@ export namespace BankFieldsAccountsPage {
 
     online: boolean
 
-    accountOrder: string[]
-
     accounts: Accounts[]
   }
 
@@ -681,6 +679,8 @@ export namespace BankFieldsAccountsPage {
     number: string
 
     visible: boolean
+
+    sortOrder: number
   }
 }
 
@@ -705,5 +705,7 @@ export namespace AccountFieldsAccountsPage {
     routing: string
 
     key: string
+
+    sortOrder: number
   }
 }

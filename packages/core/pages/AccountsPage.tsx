@@ -7,10 +7,11 @@ import {
   useMutation,
   useQuery,
 } from '@ag/util'
+import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
@@ -29,12 +30,12 @@ const fragments = {
       name
       favicon
       online
-      accountOrder
       accounts {
         id
         name
         number
         visible
+        sortOrder
       }
     }
   `,
@@ -51,6 +52,7 @@ const fragments = {
       visible
       routing
       key
+      sortOrder
     }
   `,
 }
@@ -109,6 +111,19 @@ const BankTable = Object.assign(
       dispatch,
       ui: { Link, Text, Row, Table, showToast },
     } = context
+
+    const orderAccounts = useCallback(
+      (accounts: Row[]) => [...accounts].sort((a, b) => a.sortOrder - b.sortOrder),
+      []
+    )
+
+    const [data, setData] = useState<Row[]>(orderAccounts(bank.accounts))
+
+    const moveRow = useCallback((srcIndex: number, dstIndex: number) => {
+      log('moveRow %d %d', srcIndex, dstIndex)
+      const newData = arrayMove(data, srcIndex, dstIndex)
+      setData(newData)
+    }, [])
 
     const syncAccounts = useMutation(mutations.SyncAccounts)
     const downloadTransactions = useMutation(mutations.DownloadTransactions)
@@ -229,8 +244,9 @@ const BankTable = Object.assign(
         rowKey={'id'}
         rowContextMenu={rowContextMenu}
         emptyText={intl.formatMessage(messages.noAccounts)}
-        data={bank.accounts}
+        data={data}
         columns={columns.current}
+        moveRow={moveRow}
       />
     )
   }),
