@@ -15,10 +15,9 @@ type Props = React.PropsWithChildren<{
 const uniqueId = () => {
   return (
     'a' +
-    crypto
+    crypto //
       .randomBytes(16)
-      .toString('base64')
-      .replace('==', '')
+      .toString('hex')
   )
 }
 
