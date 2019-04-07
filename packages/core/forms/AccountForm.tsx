@@ -26,6 +26,7 @@ const fragments = {
       visible
       routing
       key
+      sortOrder
       bank {
         name
       }

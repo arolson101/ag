@@ -100,6 +100,12 @@ const mutations = {
     }
     ${fragments.accountFields}
   ` as Gql<T.DownloadTransactions.Mutation, T.DownloadTransactions.Variables>,
+
+  SetAccountsOrder: gql`
+    mutation SetAccountsOrder($accountIds: [String!]!) {
+      setAccountsOrder(accountIds: $accountIds)
+    }
+  ` as Gql<T.SetAccountsOrder.Mutation, T.SetAccountsOrder.Variables>,
 }
 
 const BankTable = Object.assign(
@@ -112,18 +118,19 @@ const BankTable = Object.assign(
       ui: { Link, Text, Row, Table, showToast },
     } = context
 
-    const orderAccounts = useCallback(
-      (accounts: Row[]) => [...accounts].sort((a, b) => a.sortOrder - b.sortOrder),
-      []
+    const setAccountsOrder = useMutation(mutations.SetAccountsOrder, {
+      refetchQueries: [{ query: queries.AccountsPage }],
+    })
+
+    const moveRow = useCallback(
+      (srcIndex: number, dstIndex: number) => {
+        log('moveRow %d %d', srcIndex, dstIndex)
+        const accountIds = arrayMove(bank.accounts, srcIndex, dstIndex) //
+          .map(account => account.id)
+        setAccountsOrder({ variables: { accountIds } })
+      },
+      [bank.accounts, setAccountsOrder]
     )
-
-    const [data, setData] = useState<Row[]>(orderAccounts(bank.accounts))
-
-    const moveRow = useCallback((srcIndex: number, dstIndex: number) => {
-      log('moveRow %d %d', srcIndex, dstIndex)
-      const newData = arrayMove(data, srcIndex, dstIndex)
-      setData(newData)
-    }, [])
 
     const syncAccounts = useMutation(mutations.SyncAccounts)
     const downloadTransactions = useMutation(mutations.DownloadTransactions)
@@ -226,6 +233,14 @@ const BankTable = Object.assign(
         ),
       },
       {
+        dataIndex: 'sortOrder',
+        title: 'sortOrder',
+      },
+      {
+        dataIndex: 'id',
+        title: 'id',
+      },
+      {
         dataIndex: 'number',
         title: intl.formatMessage(messages.colNumber),
       },
@@ -244,7 +259,7 @@ const BankTable = Object.assign(
         rowKey={'id'}
         rowContextMenu={rowContextMenu}
         emptyText={intl.formatMessage(messages.noAccounts)}
-        data={data}
+        data={bank.accounts}
         columns={columns.current}
         moveRow={moveRow}
       />

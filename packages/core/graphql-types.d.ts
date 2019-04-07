@@ -15,6 +15,8 @@ export interface AccountInput {
   routing?: Maybe<string>
 
   key?: Maybe<string>
+
+  sortOrder?: Maybe<number>
 }
 
 export interface BankInput {
@@ -482,6 +484,18 @@ export namespace DownloadTransactions {
   export type DownloadTransactions = AccountFieldsAccountsPage.Fragment
 }
 
+export namespace SetAccountsOrder {
+  export type Variables = {
+    accountIds: string[]
+  }
+
+  export type Mutation = {
+    __typename?: 'Mutation'
+
+    setAccountsOrder: boolean
+  }
+}
+
 export namespace BillsPage {
   export type Variables = {}
 
@@ -595,6 +609,8 @@ export namespace AccountFieldsAccountForm {
     routing: string
 
     key: string
+
+    sortOrder: number
 
     bank: Bank
   }

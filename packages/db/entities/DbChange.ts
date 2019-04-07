@@ -2,9 +2,9 @@ import { ISpec } from '@ag/util'
 import { ObjectType } from 'typeorm'
 import { Record } from './Record'
 
-export interface DbRecordEdit {
+export interface DbRecordEdit<Q extends ISpec<{}> = ISpec<{}>> {
   id: string
-  q: ISpec<{}>
+  q: Q
 }
 
 type Table = ObjectType<Record<any>>

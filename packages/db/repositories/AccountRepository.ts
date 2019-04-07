@@ -7,6 +7,7 @@ export class AccountRepository extends RecordRepository<Account> {
   async getForBank(bankId: string) {
     return this.createQueryBuilder('account')
       .where({ _deleted: 0, bankId })
+      .orderBy({ sortOrder: 'ASC', name: 'ASC' })
       .getMany()
   }
 }

@@ -106,5 +106,6 @@ export namespace Account {
     visible: true,
     routing: '',
     key: '',
+    sortOrder: -1,
   })
 }

@@ -91,7 +91,7 @@ export class AppDb {
     if (!banks) {
       throw new Error('app db is not open')
     }
-    return bankId ? banks.get(bankId) : undefined
+    return bankId ? banks.getById(bankId) : undefined
   }
 
   @Field(returns => [Bank])
@@ -113,7 +113,7 @@ export class AppDb {
     if (!accounts) {
       throw new Error('app db is not open')
     }
-    return accountId ? accounts.get(accountId) : undefined
+    return accountId ? accounts.getById(accountId) : undefined
   }
 
   @Field(returns => [Account])
@@ -135,7 +135,7 @@ export class AppDb {
     if (!transactions) {
       throw new Error('app db is not open')
     }
-    return transactionId ? transactions.get(transactionId) : undefined
+    return transactionId ? transactions.getById(transactionId) : undefined
   }
 
   async dbWrite(changes: DbChange[]) {
@@ -162,11 +162,11 @@ export class AppDb {
 
           if (change.edits) {
             const edits = change.edits
-            const items = await manager.findByIds<Record<any>>(
-              change.table,
-              change.edits.map(edit => edit.id)
-            )
+            const ids = change.edits.map(edit => edit.id)
+            const items = await manager.findByIds<Record<any>>(change.table, ids)
+            items.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
             items.forEach((record, i) => {
+              // log('before %o %o', record, edits[i].q)
               record.update(change.t, edits[i].q)
             })
             await manager.save(change.table, items)

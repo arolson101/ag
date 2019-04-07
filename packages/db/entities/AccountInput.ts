@@ -10,4 +10,5 @@ export class AccountInput {
   @Field({ nullable: true }) visible?: boolean
   @Field({ nullable: true }) routing?: string
   @Field({ nullable: true }) key?: string
+  @Field({ nullable: true }) sortOrder?: number
 }
