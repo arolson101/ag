@@ -71,7 +71,7 @@ export const CalendarPage = Object.assign(
 
     return (
       <>
-        <ErrorDisplay error={error} />
+        <ErrorDisplay error={q.error} />
         <Component {...q} />
       </>
     )
