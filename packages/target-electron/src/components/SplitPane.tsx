@@ -1,3 +1,4 @@
+import { ErrorDisplay } from '@ag/core'
 import { Gql, useMutation, useQuery } from '@ag/util'
 import debug from 'debug'
 import gql from 'graphql-tag'
@@ -51,26 +52,29 @@ export const SplitPane: React.FC<Props> = ({ children }) => {
   // log('render %o', data)
 
   return (
-    <ReactSplitPane
-      split='vertical'
-      minSize={50}
-      maxSize={500}
-      size={sidebarWidth}
-      onDragFinished={setSidebarWidth}
-      resizerStyle={{
-        background: '#000',
-        opacity: 0.1,
-        zIndex: 1,
-        boxSizing: 'border-box',
-        backgroundClip: 'padding-box',
-        cursor: 'col-resize',
-        width: 11,
-        margin: '0 -5px',
-        borderLeft: '5px solid rgba(255, 255, 255, 0)',
-        borderRight: '5px solid rgba(255, 255, 255, 0)',
-      }}
-    >
-      {children}
-    </ReactSplitPane>
+    <>
+      <ErrorDisplay error={error} />
+      <ReactSplitPane
+        split='vertical'
+        minSize={50}
+        maxSize={500}
+        size={sidebarWidth}
+        onDragFinished={setSidebarWidth}
+        resizerStyle={{
+          background: '#000',
+          opacity: 0.1,
+          zIndex: 1,
+          boxSizing: 'border-box',
+          backgroundClip: 'padding-box',
+          cursor: 'col-resize',
+          width: 11,
+          margin: '0 -5px',
+          borderLeft: '5px solid rgba(255, 255, 255, 0)',
+          borderRight: '5px solid rgba(255, 255, 255, 0)',
+        }}
+      >
+        {children}
+      </ReactSplitPane>
+    </>
   )
 }

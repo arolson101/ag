@@ -13,6 +13,7 @@ import { Formik, FormikErrors, FormikProvider, useField, useFormik, useFormikCon
 import gql from 'graphql-tag'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
+import { ErrorDisplay } from '../components'
 import { UrlField } from '../components/UrlField'
 import { CoreContext, tabConfig, typedFields } from '../context'
 import { filist, formatAddress } from '../data'
@@ -305,7 +306,7 @@ export const BankForm = Object.assign(
     const { bankId } = props
 
     const component = useRef<BankForm>(null)
-    const { data, loading } = useQuery(queries.BankForm, { variables: { bankId } })
+    const { data, loading, error } = useQuery(queries.BankForm, { variables: { bankId } })
     const client = useApolloClient()
     const saveBank = useMutation(mutations.SaveBank, {
       update: () => {
@@ -320,7 +321,12 @@ export const BankForm = Object.assign(
     }))
 
     // log('initial values: %o', initialValues)
-    return <Component ref={component} {...{ ...props, saveBank, data, loading }} />
+    return (
+      <>
+        <ErrorDisplay error={error} />
+        <Component ref={component} {...{ ...props, saveBank, data, loading }} />
+      </>
+    )
   }),
   {
     id: 'BankForm',

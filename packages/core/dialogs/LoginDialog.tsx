@@ -1,6 +1,7 @@
 import { useApolloClient, useQuery } from '@ag/util'
 import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
+import { ErrorDisplay } from '../components'
 import { CoreContext } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
@@ -16,7 +17,7 @@ export const LoginDialog = React.memo<Props>(props => {
     intl,
     ui: { LoadingOverlay, Dialog },
   } = context
-  const { data, loading } = useQuery(LoginForm.queries.LoginForm)
+  const { data, loading, error } = useQuery(LoginForm.queries.LoginForm)
   const client = useApolloClient()
   const loginForm = useRef<LoginForm>(null)
 
@@ -30,6 +31,8 @@ export const LoginDialog = React.memo<Props>(props => {
 
   return (
     <>
+      <ErrorDisplay error={error} />
+
       <LoadingOverlay show={loading} title='LoginDialog' />
       {!loading && (
         <Dialog

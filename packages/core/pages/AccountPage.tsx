@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import React, { useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
+import { ErrorDisplay } from '../components'
 import { CoreContext, TableColumn } from '../context'
 import * as T from '../graphql-types'
 
@@ -169,7 +170,12 @@ export const AccountPage = Object.assign(
       setDispatched(true)
     }
 
-    return <Component {...props} {...q} />
+    return (
+      <>
+        <ErrorDisplay error={q.error} />
+        <Component {...props} {...q} />
+      </>
+    )
   }),
   {
     displayName: 'AccountPage',

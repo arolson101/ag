@@ -5,6 +5,7 @@ import { Formik, FormikErrors, useFormik } from 'formik'
 import gql from 'graphql-tag'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
+import { ErrorDisplay } from '../components'
 import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
@@ -142,7 +143,7 @@ export const TransactionForm = Object.assign(
     const { transactionId, accountId } = props
 
     const component = useRef<TransactionForm>(null)
-    const { data, loading } = useQuery(queries.Transaction, { variables: { transactionId } })
+    const { data, loading, error } = useQuery(queries.Transaction, { variables: { transactionId } })
     const client = useApolloClient()
     const saveTransaction = useMutation(mutations.SaveTransaction, {
       update: () => {
@@ -155,7 +156,12 @@ export const TransactionForm = Object.assign(
       },
     }))
 
-    return <Component ref={component} {...{ ...props, saveTransaction, data, loading }} />
+    return (
+      <>
+        <ErrorDisplay error={error} />
+        <Component ref={component} {...{ ...props, saveTransaction, data, loading }} />
+      </>
+    )
   }),
   {
     id: 'TransactionForm',

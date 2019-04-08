@@ -6,6 +6,7 @@ import gql from 'graphql-tag'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
+import { ErrorDisplay } from '../components'
 import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
@@ -103,7 +104,8 @@ const FormComponent = Object.assign(
 
 const Component = Object.assign(
   React.forwardRef<LoginForm, ComponentProps>(function LoginFormComponent(props, ref) {
-    const { intl, dispatch } = useContext(CoreContext)
+    const context = useContext(CoreContext)
+    const { intl, dispatch } = context
     const { createDb, openDb, query } = props
     const dbId = query.dbs && query.dbs.length ? query.dbs[0].dbId : undefined
     const create = !dbId
@@ -136,6 +138,8 @@ const Component = Object.assign(
           }
           log('logged in')
           dispatch(actions.closeDlg('login'))
+        } catch (error) {
+          ErrorDisplay.show(context, error)
         } finally {
           factions.setSubmitting(false)
         }

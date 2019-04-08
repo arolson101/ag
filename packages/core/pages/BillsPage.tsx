@@ -5,6 +5,7 @@ import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
+import { ErrorDisplay } from '../components'
 import { CoreContext } from '../context'
 import * as T from '../graphql-types'
 
@@ -68,7 +69,12 @@ export const BillsPage = Object.assign(
       setDispatched(true)
     }
 
-    return <Component {...q} />
+    return (
+      <>
+        <ErrorDisplay error={q.error} />
+        <Component {...q} />
+      </>
+    )
   }),
   {
     displayName: 'BillsPage',

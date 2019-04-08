@@ -383,7 +383,12 @@ export const AccountsPage = Object.assign(
       setDispatched(true)
     }
 
-    return <Component {...q} />
+    return (
+      <>
+        <ErrorDisplay error={q.error} />
+        <Component {...q} />
+      </>
+    )
   }),
   {
     displayName: 'AccountsPage',
