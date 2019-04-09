@@ -12,7 +12,6 @@ interface Update<T> {
   readonly q: Change<T>
 }
 
-export type BaseType<T> = CompressedJson<T>
 export type HistoryType<T> = CompressedJson<Array<Update<T>>>
 
 @Entity()
@@ -20,17 +19,15 @@ export type HistoryType<T> = CompressedJson<Array<Update<T>>>
 export abstract class Record<Props extends {}> {
   @PrimaryColumn() id!: string
   @Column() _deleted: number
-  @Column('text', { nullable: true }) _base?: BaseType<Props>
   @Column('text', { nullable: true }) _history?: HistoryType<Props>
 
   constructor(id?: string, props?: Props) {
     this._deleted = 0
-    this._base = undefined
     this._history = undefined
 
     if (props) {
-      assert(!['id', '_deleted', '_base', '_history'].some(key => key in props))
-      Object.assign(this, props)
+      assert(!['id', '_deleted', '_history'].some(key => key in props))
+      this.update(0, { $set: props })
       // log('props %o this %o', props, this)
     }
 
@@ -40,7 +37,7 @@ export abstract class Record<Props extends {}> {
   }
 
   update(t: number, q: Change<Props>) {
-    const { id, _deleted, _base, _history, ...p } = this
+    const { id, _deleted, _history, ...p } = this
     const props = (p as unknown) as Props
     const prevHistory = _history ? hydrate(_history) : []
     const change = { t, q }
@@ -48,13 +45,12 @@ export abstract class Record<Props extends {}> {
     const isLatest = changes[changes.length - 1] === change
     const nextProps = isLatest
       ? iupdate(props, change.q) //
-      : rebuildObject(props, _base, changes)
+      : rebuildObject(props, changes)
 
     Object.assign(this, {
       ...nextProps,
       id,
       _deleted,
-      _base: _base || dehydrate(props),
       _history: dehydrate(changes),
     })
   }
@@ -69,11 +65,6 @@ export abstract class Record<Props extends {}> {
   }
 }
 
-const rebuildObject = <Props>(
-  props: Props,
-  _base: CompressedJson<Props> | undefined,
-  changes: Array<Update<Props>>
-): Props => {
-  const base: Props = _base ? hydrate(_base) : props
-  return changes.reduce((current, change) => iupdate(current, change.q), base)
+const rebuildObject = <Props>(props: Props, changes: Array<Update<Props>>): Props => {
+  return changes.reduce((current, change) => iupdate(current, change.q), {} as Props)
 }

@@ -16,8 +16,8 @@ class TestRecord extends Record<TestRecordProps> implements TestRecordProps {
 
 it('accumulates changes', () => {
   const test = new TestRecord({ foo: 'test1', bar: 123 })
-  expect(test).not.toHaveProperty('id')
-  expect(test).toHaveProperty('_base')
+  expect(test).toHaveProperty('id', undefined)
+  expect(test).not.toHaveProperty('_base')
   expect(test).toHaveProperty('_history')
   expect(test.foo).toBe('test1')
   expect(test.bar).toBe(123)
