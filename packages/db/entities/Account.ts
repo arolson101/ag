@@ -35,7 +35,7 @@ export namespace Account {
   export interface Props extends Pick<Required<AccountInput>, keyof AccountInput> {}
   export const Type = AccountType
   export type Type = AccountType
-  export type Spec = ISpec<AccountInput>
+  export type Spec = ISpec<Props>
 
   export const messages = defineMessages({
     CHECKING: {

@@ -3,7 +3,7 @@ import assert from 'assert'
 import debug from 'debug'
 import { Arg, Ctx, Field, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
 import { DbContext } from '../DbContext'
-import { Account, AccountInput, Bank, Transaction } from '../entities'
+import { Account, AccountInput, Bank, DbChange, Transaction } from '../entities'
 import { AppDb } from './AppDb'
 
 const log = debug('db:AccountResolver')
@@ -29,11 +29,11 @@ export class AccountResolver {
   ): Promise<Account> {
     const app = this.appDb
     let account: Account
-    let changes: any[]
+    let changes: DbChange[]
     const t = Date.now()
     if (accountId) {
       account = await app.account(accountId)
-      const q = diff<AccountInput>(account, input)
+      const q = diff<Account.Props>(account, input)
       changes = [Account.change.edit(t, accountId, q)]
       account.update(t, q)
     } else {

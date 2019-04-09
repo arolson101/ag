@@ -22,7 +22,7 @@ export class TransactionResolver {
     let changes: DbChange[]
     if (transactionId) {
       transaction = await app.transaction(transactionId)
-      const q = diff(transaction, input)
+      const q = diff<Transaction.Props>(transaction, input)
       changes = [{ table, t, edits: [{ id: transactionId, q }] }]
       transaction.update(t, q)
     } else {

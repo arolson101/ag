@@ -34,10 +34,10 @@ export class BankResolver {
     const app = this.appDb
     const t = Date.now()
     let bank: Bank
-    let changes: any[]
+    let changes: DbChange[]
     if (bankId) {
       bank = await app.bank(bankId)
-      const q = diff<BankInput>(bank, input)
+      const q = diff<Bank.Props>(bank, input)
       changes = [Bank.change.edit(t, bankId, q)]
       bank.update(t, q)
     } else {

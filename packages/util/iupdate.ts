@@ -1,19 +1,27 @@
-import { Context, Spec } from 'immutability-helper'
+import { Context, CustomCommands, Spec } from 'immutability-helper'
 
-export { Spec as ISpec }
+type AddedCommands =
+  | {
+      $plus: number
+    }
+  | {
+      $exclude: any[]
+    }
+
+export type ISpec<T> = Spec<T, CustomCommands<AddedCommands>>
 
 const ctx = new Context()
 
-ctx.extend(
-  '$exclude',
-  (param: string[], old: string[]): any => {
+ctx.extend<string[]>(
+  '$exclude', //
+  (param, old) => {
     return old.filter(x => !param.includes(x))
   }
 )
 
-ctx.extend(
-  '$plus',
-  (param: number, old: number): any => {
+ctx.extend<number>(
+  '$plus', //
+  (param, old) => {
     if (typeof param !== 'number') {
       throw new Error('parameter to $plus must be a number')
     }
@@ -24,4 +32,4 @@ ctx.extend(
   }
 )
 
-export const iupdate = ctx.update
+export const iupdate = ctx.update as <T>(object: T, $spec: ISpec<T>) => T

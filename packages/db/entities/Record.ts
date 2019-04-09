@@ -5,7 +5,7 @@ import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
 
 const log = debug('db:Record')
 
-type Change<T> = Partial<ISpec<T>>
+type Change<T> = ISpec<T>
 
 interface Update<T> {
   readonly t: number
@@ -47,7 +47,7 @@ export abstract class Record<Props extends {}> {
     const changes = [...prevHistory, change].sort((a, b) => a.t - b.t)
     const isLatest = changes[changes.length - 1] === change
     const nextProps = isLatest
-      ? iupdate(props, change.q as ISpec<Props>)
+      ? iupdate(props, change.q) //
       : rebuildObject(props, _base, changes)
 
     Object.assign(this, {
@@ -75,5 +75,5 @@ const rebuildObject = <Props>(
   changes: Array<Update<Props>>
 ): Props => {
   const base: Props = _base ? hydrate(_base) : props
-  return changes.reduce((current, change) => iupdate(current, change.q as ISpec<Props>), base)
+  return changes.reduce((current, change) => iupdate(current, change.q), base)
 }
