@@ -47,6 +47,7 @@ const editMocks = [
               name: 'Citi Cards',
               __typename: 'Bank',
             },
+            sortOrder: -1,
             __typename: 'Account',
           },
           bank: null,
