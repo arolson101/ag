@@ -51,7 +51,8 @@
     "typeorm": "^0.2.14",
     "typesafe-actions": "^3.2.1",
     "use-react-router": "^1.0.5",
-    "utility-types": "^3.4.1"
+    "utility-types": "^3.4.1",
+    "xlsx": "^0.14.2"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "^4.4.3",
@@ -70,6 +71,7 @@
     "@types/storybook__react": "^4.0.1",
     "@types/webpack": "^4.4.25",
     "@types/webpack-dev-server": "^3.1.4",
+    "@types/xlsx": "^0.0.36",
     "chalk": "^2.4.2",
     "copy-webpack-plugin": "^5.0.0",
     "css-loader": "^2.1.1",
