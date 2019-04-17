@@ -1,18 +1,29 @@
+import { AppDb } from '@ag/db/resolvers/AppDb'
 import debug from 'debug'
-import { remote } from 'electron'
+import { MenuItemConstructorOptions, remote } from 'electron'
+import Container from 'typedi'
 import { Connection } from 'typeorm'
 import XLSX from 'xlsx'
 
-const { app, Menu, dialog } = remote
+const { app, Menu, MenuItem, dialog } = remote
 
 const log = debug('export')
 
+const exportMenuItem = () => {
+  log('exportMenuItem')
+  const appDb = Container.get(AppDb)
+
+  if (appDb.connection) {
+    exportDb(appDb.connection)
+  }
+}
+
 export const exportDb = async (connection: Connection) => {
-  log('export')
+  log('exportDb')
 
   const o = dialog.showSaveDialog({
     title: 'export',
-    filters: [{ name: 'Excel', extensions: ['.xlsx'] }],
+    filters: [{ name: 'Excel', extensions: ['xlsx'] }],
   })
 
   if (o) {
@@ -29,4 +40,99 @@ export const exportDb = async (connection: Connection) => {
 
     XLSX.writeFile(wb, o)
   }
+}
+
+const template: Electron.MenuItemConstructorOptions[] = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Export',
+        click: exportMenuItem,
+      },
+    ],
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'pasteandmatchstyle' },
+      { role: 'delete' },
+      { role: 'selectall' },
+    ],
+  },
+  {
+    label: 'View',
+    submenu: [
+      { role: 'reload' },
+      { role: 'forcereload' },
+      { role: 'toggledevtools' },
+      { type: 'separator' },
+      { role: 'resetzoom' },
+      { role: 'zoomin' },
+      { role: 'zoomout' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' },
+    ],
+  },
+  {
+    role: 'window',
+    submenu: [{ role: 'minimize' }, { role: 'close' }],
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
+        click() {
+          require('electron').shell.openExternal('https://electronjs.org')
+        },
+      },
+    ],
+  },
+]
+
+if (process.platform === 'darwin') {
+  template.unshift({
+    label: app.getName(),
+    submenu: [
+      { role: 'about' },
+      { type: 'separator' },
+      { role: 'services' },
+      { type: 'separator' },
+      { role: 'hide' },
+      { role: 'hideothers' },
+      { role: 'unhide' },
+      { type: 'separator' },
+      { role: 'quit' },
+    ],
+  })
+
+  // Edit menu
+  ;(template[1].submenu! as MenuItemConstructorOptions[]).push(
+    { type: 'separator' },
+    {
+      label: 'Speech',
+      submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
+    }
+  )
+
+  // Window menu
+  template[3].submenu = [
+    { role: 'close' },
+    { role: 'minimize' },
+    { role: 'zoom' },
+    { type: 'separator' },
+    { role: 'front' },
+  ]
+}
+
+export const init = () => {
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 }

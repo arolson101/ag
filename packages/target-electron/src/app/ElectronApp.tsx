@@ -9,6 +9,7 @@ import { hot } from 'react-hot-loader/root'
 import { createStore } from '../store'
 import { ElectronDialogs } from './ElectronDialogs'
 import { ElectronRouter } from './ElectronRouter'
+import { init } from './export'
 import { getImageFromLibrary, openCropper, scaleImage } from './image.electron'
 import { deleteDb, openDb } from './openDb.electron'
 
@@ -39,5 +40,7 @@ class ElectronApp extends React.PureComponent {
     )
   }
 }
+
+init()
 
 export default hot(ElectronApp)

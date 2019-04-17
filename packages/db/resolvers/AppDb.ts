@@ -19,7 +19,7 @@ export interface Change {
 
 @ObjectType()
 export class AppDb {
-  private connection?: Connection
+  connection?: Connection
   settingsRepository?: SettingsRepository
   banksRepository?: BankRepository
   accountsRepository?: AccountRepository
