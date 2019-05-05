@@ -1,13 +1,9 @@
-import { ButtonConfig, CoreContext, DialogProps, UiContext } from '@ag/core'
-import { Container, Content, platform } from '@ag/ui-nativebase'
+import { ButtonConfig, CoreContext, DialogProps } from '@ag/core'
+import { platform } from '@ag/ui-nativebase'
 import debug from 'debug'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Platform } from 'react-native'
-import {
-  Navigation,
-  NavigationButtonPressedEvent,
-  OptionsTopBarButton,
-} from 'react-native-navigation'
+import { Navigation, OptionsTopBarButton } from 'react-native-navigation'
 
 const log = debug('rn:dialog')
 
@@ -17,63 +13,55 @@ export interface DialogContext extends CoreContext {
 export const DialogContext = React.createContext<DialogContext>({ componentId: 'NONE' } as any)
 DialogContext.displayName = `DialogContext`
 
-export class Dialog extends React.PureComponent<DialogProps> {
-  static contextType = DialogContext
-  context!: React.ContextType<typeof DialogContext>
-
-  componentDidMount() {
-    const { title } = this.props
-    const { componentId } = this.context
-    Navigation.mergeOptions(componentId, {
-      topBar: {
-        title: {
-          text: title,
+export const Dialog = Object.assign(
+  React.memo<DialogProps>(function _Dialog(props) {
+    const { title, primary, secondary, children } = props
+    const { componentId } = useContext(DialogContext)
+    useEffect(() => {
+      Navigation.mergeOptions(componentId, {
+        topBar: {
+          title: {
+            text: title,
+          },
+          largeTitle: {
+            visible: false,
+          },
         },
-        largeTitle: {
-          visible: false,
-        },
-      },
-    })
-    this.setButtons()
+      })
+    }, [componentId])
+
+    useEffect(() => {
+      // log('setting buttons')
+      Navigation.mergeOptions(componentId, {
+        topBar:
+          Platform.OS === 'ios'
+            ? {
+                rightButtons: primary && [makeButton('primary', primary)],
+                leftButtons: secondary && [makeButton('secondary', secondary)],
+              }
+            : {
+                rightButtons: [
+                  ...(primary ? [makeButton('primary', primary)] : []),
+                  ...(secondary ? [makeButton('secondary', secondary)] : []),
+                ],
+              },
+      })
+
+      const listener = Navigation.events().registerNavigationButtonPressedListener(e => {
+        if (e.componentId === componentId) {
+          props[e.buttonId as TopButtonId]!.onClick()
+        }
+      })
+
+      return listener.remove
+    }, [componentId])
+
+    return <>{children}</>
+  }),
+  {
+    displayName: 'Dialog',
   }
-
-  componentDidUpdate() {
-    // log('componentDidUpdate %o %o', this.props, prevProps)
-    this.setButtons()
-  }
-
-  setButtons() {
-    const { primary, secondary } = this.props
-    const { componentId } = this.context
-
-    // log('setting buttons')
-    Navigation.mergeOptions(componentId, {
-      topBar:
-        Platform.OS === 'ios'
-          ? {
-              rightButtons: primary && [makeButton('primary', primary)],
-              leftButtons: secondary && [makeButton('secondary', secondary)],
-            }
-          : {
-              rightButtons: [
-                ...(primary ? [makeButton('primary', primary)] : []),
-                ...(secondary ? [makeButton('secondary', secondary)] : []),
-              ],
-            },
-    })
-
-    Navigation.events().bindComponent(this, componentId)
-  }
-
-  navigationButtonPressed(e: NavigationButtonPressedEvent) {
-    // log('navigationButtonPressed: %o', e)
-    this.props[e.buttonId as TopButtonId]!.onClick()
-  }
-
-  render() {
-    return <>{this.props.children}</>
-  }
-}
+)
 
 type TopButtonId = 'primary' | 'secondary'
 

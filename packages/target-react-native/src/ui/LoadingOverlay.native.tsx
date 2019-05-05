@@ -1,7 +1,7 @@
-import { CoreContext, LoadingOverlayProps } from '@ag/core'
+import { LoadingOverlayProps } from '@ag/core'
 import { platform, Spinner } from '@ag/ui-nativebase'
 import debug from 'debug'
-import React from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Dimensions, StyleSheet, View } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 
@@ -30,64 +30,46 @@ let idServer = 1
 
 Navigation.registerComponent(overlayName, () => Overlay)
 
-export class LoadingOverlay extends React.PureComponent<LoadingOverlayProps> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
+export const LoadingOverlay = Object.assign(
+  React.memo<LoadingOverlayProps>(function _LoadingOverlay({ show, title }) {
+    const id = useRef(`overlay${idServer++}`)
 
-  shown: boolean
-  id: string
-
-  constructor(props: LoadingOverlayProps) {
-    super(props)
-    const { show } = this.props
-    this.shown = false
-    this.id = `overlay${idServer++}`
-    if (show) {
-      this.showOverlay()
-    }
-  }
-
-  componentDidUpdate() {
-    const { show } = this.props
-    if (show !== this.shown) {
-      if (show) {
-        this.showOverlay()
-      } else {
-        this.hideOverlay()
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.shown) {
-      this.hideOverlay()
-    }
-  }
-
-  render() {
-    return null
-  }
-
-  showOverlay() {
-    // log('showOverlay %s', this.id)
-    const { title } = this.props
-    const passProps: OverlayProps = { title }
-    Navigation.showOverlay({
-      component: {
-        id: this.id,
-        name: overlayName,
-        passProps,
+    const showOverlay = useCallback(
+      function _showOverlay() {
+        // log('showOverlay %s', this.id)
+        const passProps: OverlayProps = { title }
+        Navigation.showOverlay({
+          component: {
+            id: id.current,
+            name: overlayName,
+            passProps,
+          },
+        })
       },
-    })
-    this.shown = true
-  }
+      [title]
+    )
 
-  hideOverlay() {
-    // log('hideOverlay %s', this.id)
-    Navigation.dismissOverlay(this.id)
-    this.shown = false
+    const hideOverlay = useCallback(
+      function _hideOverlay() {
+        // log('hideOverlay %s', this.id)
+        Navigation.dismissOverlay(id.current)
+      },
+      [id.current]
+    )
+
+    useEffect(() => {
+      if (show) {
+        showOverlay()
+        return hideOverlay
+      }
+    }, [show])
+
+    return null
+  }),
+  {
+    displayName: 'LoadingOverlay',
   }
-}
+)
 
 const styles = StyleSheet.create({
   modalBackground: {

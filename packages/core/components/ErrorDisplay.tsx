@@ -1,5 +1,5 @@
 import { ApolloError } from 'apollo-client'
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { defineMessages } from 'react-intl'
 import { CoreContext } from '../context'
 
@@ -7,52 +7,42 @@ interface Props {
   error: undefined | Error | Error[] | ReadonlyArray<Error>
 }
 
-export class ErrorDisplay extends React.PureComponent<Props> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
-
-  componentDidMount() {
-    this.showError()
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    if (this.props.error !== prevProps.error) {
-      this.showError()
-    }
-  }
-
-  showError() {
-    const { error } = this.props
-    ErrorDisplay.show(this.context, error)
-  }
-
-  static show(context: CoreContext, errors: Props['error']) {
-    if (!errors) {
-      return null
-    }
-
-    if (errors instanceof ApolloError) {
-      errors = errors.graphQLErrors.length ? errors.graphQLErrors : [errors]
-    } else if (errors instanceof Error) {
-      errors = [errors]
-    }
-
-    const { intl, ui } = context
-    const { alert } = ui
-
-    alert({
-      title: intl.formatMessage(messages.error),
-      body: (errors as Error[]).map(e => e.message).join('\n'),
-      confirmText: intl.formatMessage(messages.ok),
-      onConfirm: () => undefined,
-      error: true,
-    })
-  }
-
-  render() {
+const show = (context: CoreContext, errors: Props['error']) => {
+  if (!errors) {
     return null
   }
+
+  if (errors instanceof ApolloError) {
+    errors = errors.graphQLErrors.length ? errors.graphQLErrors : [errors]
+  } else if (errors instanceof Error) {
+    errors = [errors]
+  }
+
+  const { intl, ui } = context
+  const { alert } = ui
+
+  alert({
+    title: intl.formatMessage(messages.error),
+    body: (errors as Error[]).map(e => e.message).join('\n'),
+    confirmText: intl.formatMessage(messages.ok),
+    onConfirm: () => undefined,
+    error: true,
+  })
 }
+
+export const ErrorDisplay = Object.assign(
+  React.memo<Props>(function _ErrorDisplay({ error }) {
+    const context = useContext(CoreContext)
+    useEffect(() => {
+      show(context, error)
+    }, [error])
+    return null
+  }),
+  {
+    displayName: 'ErrorDisplay',
+    show,
+  }
+)
 
 const messages = defineMessages({
   empty: {

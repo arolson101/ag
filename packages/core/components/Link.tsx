@@ -1,24 +1,21 @@
-import React from 'react'
+import React, { useCallback, useContext } from 'react'
 import { CoreAction } from '../actions'
 import { CoreContext } from '../context'
 
 interface Props {
-  dispatch: CoreAction
+  action: CoreAction
 }
 
-export class Link extends React.PureComponent<Props> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
-
-  render() {
-    const { ui } = this.context
+export const Link = Object.assign(
+  React.memo<Props>(function _Link({ action, children }) {
+    const { ui, dispatch } = useContext(CoreContext)
     const { Link: LinkUI } = ui
-    return <LinkUI onClick={this.onClick}>{this.props.children}</LinkUI>
+    const onClick = useCallback(() => {
+      dispatch(action)
+    }, [dispatch, action])
+    return <LinkUI onClick={onClick}>{children}</LinkUI>
+  }),
+  {
+    displayName: 'Link',
   }
-
-  onClick = () => {
-    const { dispatch } = this.context
-    const { dispatch: to } = this.props
-    dispatch(to)
-  }
-}
+)

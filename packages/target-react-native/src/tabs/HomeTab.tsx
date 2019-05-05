@@ -11,30 +11,29 @@ interface Props {
   componentId: string
 }
 
-export class HomeTab extends React.PureComponent<Props> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
-
-  static readonly id = 'HomeTab'
-  static readonly stackId = 'HomeTabStack'
-
-  static options = ({ intl }: CoreContext): Options => ({
-    bottomTab: {
-      text: intl.formatMessage(HomePage.messages.tabText),
-      icon: icons.home,
-    },
-    topBar: {
-      title: {
-        text: intl.formatMessage(HomePage.messages.titleText),
-      },
-    },
-  })
-
-  render() {
+export const HomeTab = Object.assign(
+  React.memo<Props>(function _HomeTab({ componentId }) {
     return (
-      <VisibleRoot componentId={this.props.componentId}>
+      <VisibleRoot componentId={componentId}>
         <HomePage />
       </VisibleRoot>
     )
+  }),
+  {
+    displayName: 'HomeTab',
+    id: 'HomeTab',
+    stackId: 'HomeTabStack',
+
+    options: ({ intl }: CoreContext): Options => ({
+      bottomTab: {
+        text: intl.formatMessage(HomePage.messages.tabText),
+        icon: icons.home,
+      },
+      topBar: {
+        title: {
+          text: intl.formatMessage(HomePage.messages.titleText),
+        },
+      },
+    }),
   }
-}
+)

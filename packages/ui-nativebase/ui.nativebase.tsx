@@ -17,7 +17,7 @@ import {
   Toast,
   View,
 } from 'native-base'
-import React from 'react'
+import React, { useCallback, useContext } from 'react'
 import { defineMessages } from 'react-intl'
 import { Alert as RnAlert, Dimensions, FlatList } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -130,58 +130,56 @@ export const ui: Omit<UiContext, RNNTypes> = {
       </Component>
     )
   },
-  PopoverButton: class Popover extends React.PureComponent<PopoverButtonProps> {
-    static contextType = CoreContext
-    context!: React.ContextType<typeof CoreContext>
+  PopoverButton: React.memo<PopoverButtonProps>(props => {
+    const { loading, icon, children, minimal, content } = props
+    const { intl } = useContext(CoreContext)
 
-    render() {
-      const { loading, icon, children, minimal } = this.props
-      return (
-        <Button
-          onPress={this.onPress}
-          transparent={minimal}
-          bordered={minimal}
-          style={{
-            minWidth: 40,
-            justifyContent: 'space-around',
-          }}
-        >
-          {loading ? (
-            <Spinner />
-          ) : typeof icon === 'string' ? (
-            <FontAwesome name={icon} />
-          ) : icon && React.isValidElement(icon) ? (
-            icon
-          ) : (
-            children
-          )}
-        </Button>
-      )
-    }
+    const onPress = useCallback(
+      function _onPress() {
+        const realOptions = content.filter(opt => !opt.divider)
+        const options: string[] = realOptions
+          .map(opt => opt.text!)
+          .concat(intl.formatMessage(messages.cancel))
+        const cancelButtonIndex = realOptions.length
 
-    onPress = () => {
-      const { intl } = this.context
-      const { content } = this.props
-      const realOptions = content.filter(opt => !opt.divider)
-      const options: string[] = realOptions
-        .map(opt => opt.text!)
-        .concat(intl.formatMessage(messages.cancel))
-      const cancelButtonIndex = realOptions.length
-
-      ActionSheet.show(
-        {
-          options,
-          cancelButtonIndex,
-          // title: intl.formatMessage(messages.title),
-        },
-        async buttonIndex => {
-          if (buttonIndex !== cancelButtonIndex) {
-            realOptions[buttonIndex].onClick!()
+        ActionSheet.show(
+          {
+            options,
+            cancelButtonIndex,
+            // title: intl.formatMessage(messages.title),
+          },
+          async buttonIndex => {
+            if (buttonIndex !== cancelButtonIndex) {
+              realOptions[buttonIndex].onClick!()
+            }
           }
-        }
-      )
-    }
-  },
+        )
+      },
+      [content]
+    )
+
+    return (
+      <Button
+        onPress={onPress}
+        transparent={minimal}
+        bordered={minimal}
+        style={{
+          minWidth: 40,
+          justifyContent: 'space-around',
+        }}
+      >
+        {loading ? (
+          <Spinner />
+        ) : typeof icon === 'string' ? (
+          <FontAwesome name={icon} />
+        ) : icon && React.isValidElement(icon) ? (
+          icon
+        ) : (
+          children
+        )}
+      </Button>
+    )
+  }),
   Button: ({ onPress, disabled, children }) => (
     <Button onPress={onPress as any} disabled={disabled}>
       {children}

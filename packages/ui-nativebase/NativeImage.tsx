@@ -6,12 +6,8 @@ import { Image as RNImage, ImageStyle, StyleProp } from 'react-native'
 
 const log = debug('ui-nativebase:NativeImage')
 
-export class Image extends React.PureComponent<ImageProps> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
-
-  render() {
-    const { src, size, margin } = this.props
+export const Image = Object.assign(
+  React.memo<ImageProps>(function _Image({ src, size, margin }) {
     if (!src.uri) {
       return null
     }
@@ -29,5 +25,8 @@ export class Image extends React.PureComponent<ImageProps> {
       // log('not svg, src %o style %o', src, style)
       return <RNImage source={src} style={style} />
     }
+  }),
+  {
+    displayName: 'Image',
   }
-}
+)

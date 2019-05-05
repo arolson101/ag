@@ -13,49 +13,54 @@ export interface BankDialogProps {
   cancelToken?: string
 }
 
-export const BankDialog = React.memo<BankDialogProps>(({ bankId, isOpen, cancelToken }) => {
-  const {
-    intl,
-    ui: { Dialog },
-    dispatch,
-  } = useContext(CoreContext)
+export const BankDialog = Object.assign(
+  React.memo<BankDialogProps>(function _BankDialog({ bankId, isOpen, cancelToken }) {
+    const {
+      intl,
+      ui: { Dialog },
+      dispatch,
+    } = useContext(CoreContext)
 
-  const bankForm = useRef<BankForm>(null)
+    const bankForm = useRef<BankForm>(null)
 
-  const save = useCallback(
-    function Save() {
-      if (bankForm.current) {
-        bankForm.current.save()
-      }
-    },
-    [bankForm.current]
-  )
+    const save = useCallback(
+      function _save() {
+        if (bankForm.current) {
+          bankForm.current.save()
+        }
+      },
+      [bankForm.current]
+    )
 
-  const close = useCallback(
-    function Close() {
-      dispatch(actions.closeDlg('bank'))
-    },
-    [dispatch]
-  )
+    const close = useCallback(
+      function _close() {
+        dispatch(actions.closeDlg('bank'))
+      },
+      [dispatch]
+    )
 
-  return (
-    <Dialog
-      isOpen={isOpen}
-      onClose={close}
-      title={intl.formatMessage(bankId ? messages.titleEdit : messages.titleCreate)}
-      primary={{
-        title: intl.formatMessage(bankId ? messages.save : messages.create),
-        onClick: save,
-      }}
-      secondary={{
-        title: intl.formatMessage(messages.cancel),
-        onClick: close,
-      }}
-    >
-      <BankForm onClosed={close} ref={bankForm} bankId={bankId} cancelToken={cancelToken} />
-    </Dialog>
-  )
-})
+    return (
+      <Dialog
+        isOpen={isOpen}
+        onClose={close}
+        title={intl.formatMessage(bankId ? messages.titleEdit : messages.titleCreate)}
+        primary={{
+          title: intl.formatMessage(bankId ? messages.save : messages.create),
+          onClick: save,
+        }}
+        secondary={{
+          title: intl.formatMessage(messages.cancel),
+          onClick: close,
+        }}
+      >
+        <BankForm onClosed={close} ref={bankForm} bankId={bankId} cancelToken={cancelToken} />
+      </Dialog>
+    )
+  }),
+  {
+    displayName: 'BankDialog',
+  }
+)
 
 const messages = defineMessages({
   titleEdit: {

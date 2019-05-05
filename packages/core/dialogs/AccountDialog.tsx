@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { CoreContext } from '../context'
@@ -10,54 +10,59 @@ interface Props {
   isOpen: boolean
 }
 
-export class AccountDialog extends React.PureComponent<Props> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
-
-  AccountForm = React.createRef<AccountForm>()
-
-  render() {
-    const { bankId, accountId, isOpen } = this.props
+export const AccountDialog = Object.assign(
+  React.memo<Props>(function _AccountDialog({ bankId, accountId, isOpen }) {
     const {
       intl,
+      dispatch,
       ui: { Dialog },
-    } = this.context
+    } = useContext(CoreContext)
+
+    const accountForm = useRef<AccountForm>(null)
+
+    const save = useCallback(
+      function _save() {
+        if (accountForm.current) {
+          accountForm.current.save()
+        }
+      },
+      [accountForm.current]
+    )
+
+    const close = useCallback(
+      function _close() {
+        dispatch(actions.closeDlg('account'))
+      },
+      [dispatch]
+    )
 
     return (
       <Dialog
         isOpen={isOpen}
-        onClose={this.close}
+        onClose={close}
         title={intl.formatMessage(accountId ? messages.titleEdit : messages.titleCreate)}
         primary={{
           title: intl.formatMessage(accountId ? messages.save : messages.create),
-          onClick: this.save,
+          onClick: save,
         }}
         secondary={{
           title: intl.formatMessage(messages.cancel), //
-          onClick: this.close,
+          onClick: close,
         }}
       >
         <AccountForm
-          onClosed={this.close}
-          ref={this.AccountForm}
+          onClosed={close} //
+          ref={accountForm}
           bankId={bankId}
           accountId={accountId}
         />
       </Dialog>
     )
+  }),
+  {
+    displayName: 'AccountDialog',
   }
-
-  save = () => {
-    if (this.AccountForm.current) {
-      this.AccountForm.current.save()
-    }
-  }
-
-  close = () => {
-    const { dispatch } = this.context
-    dispatch(actions.closeDlg('account'))
-  }
-}
+)
 
 const messages = defineMessages({
   titleEdit: {

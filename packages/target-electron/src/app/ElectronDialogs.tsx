@@ -7,7 +7,7 @@ import {
   PictureDialog,
 } from '@ag/core'
 import debug from 'debug'
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import shallowequal from 'shallowequal'
 
 const log = debug('electron:ElectronDialogs')
@@ -22,30 +22,21 @@ const subState = (state: CoreState): State => ({
   dialog: state.dialog,
 })
 
-export class ElectronDialogs extends React.PureComponent<Props> {
-  static contextType = CoreContext
-  context!: React.ContextType<typeof CoreContext>
+export const ElectronDialogs = Object.assign(
+  React.memo<Props>(function _ElectronDialogs(props) {
+    const { store } = useContext(CoreContext)
+    const [state, setState] = useState(subState(store.getState() as any))
 
-  state: State
-  unsubscribe!: () => void
+    useEffect(() => {
+      return store.subscribe(() => {
+        const nextState = subState(store.getState() as any)
+        if (!shallowequal(state, nextState)) {
+          setState(nextState)
+        }
+      })
+    }, [store])
 
-  constructor(props: Props, context: React.ContextType<typeof CoreContext>) {
-    super(props)
-    this.state = subState(context.store.getState() as any)
-    this.unsubscribe = context.store.subscribe(() => {
-      const state = subState(context.store.getState() as any)
-      if (!shallowequal(state, this.state)) {
-        this.setState(state)
-      }
-    })
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe()
-  }
-
-  render() {
-    const { dialog } = this.state
+    const { dialog } = state
 
     return (
       <>
@@ -55,5 +46,8 @@ export class ElectronDialogs extends React.PureComponent<Props> {
         {dialog.accountDialog && <AccountDialog {...dialog.accountDialog} />}
       </>
     )
+  }),
+  {
+    displayName: 'ElectronDialogs',
   }
-}
+)
