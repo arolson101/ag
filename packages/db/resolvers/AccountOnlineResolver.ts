@@ -1,5 +1,5 @@
 import { toAccountType } from '@ag/online'
-import { diff } from '@ag/util'
+import { diff, uniqueId } from '@ag/util'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
@@ -28,7 +28,6 @@ export class AccountOnlineResolver {
     @Ctx() context: DbContext, //
     @Arg('bankId') bankId: string
   ): Promise<Bank> {
-    const { uniqueId } = context
     const bank = await this.downloadAccountList(context, bankId, uniqueId())
     return bank
   }
@@ -39,7 +38,6 @@ export class AccountOnlineResolver {
     @Arg('bankId') bankId: string,
     @Arg('cancelToken') cancelToken: string
   ): Promise<Bank> {
-    const { uniqueId } = context
     const app = this.appDb
     const bank = await app.bank(bankId)
     if (!bank.online) {
@@ -109,7 +107,6 @@ export class AccountOnlineResolver {
     @Arg('end') end: Date,
     @Arg('cancelToken') cancelToken: string
   ): Promise<Account> {
-    const { uniqueId } = context
     const app = this.appDb
     const bank = await app.bank(bankId)
     if (!bank.online) {

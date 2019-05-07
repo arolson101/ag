@@ -1,7 +1,6 @@
 import { Online } from '@ag/online'
 import { ApolloHooksProvider } from '@ag/util'
 import ApolloClient from 'apollo-client'
-import crypto from 'crypto'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
@@ -26,22 +25,12 @@ type Props = React.PropsWithChildren<{
   ui: UiContext
 }>
 
-const uniqueId = () => {
-  return (
-    'a' +
-    crypto //
-      .randomBytes(16)
-      .toString('hex')
-  )
-}
-
 interface CreateContextParams {
   store: CoreStore
   deps: ClientDependencies
 }
 export const createContext = ({ deps }: CreateContextParams): CoreContext => {
   const context: CoreContext = {
-    uniqueId,
     ...deps,
   }
 

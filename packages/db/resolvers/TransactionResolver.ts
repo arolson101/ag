@@ -1,4 +1,4 @@
-import { diff } from '@ag/util'
+import { diff, uniqueId } from '@ag/util'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 import { DbContext } from '../DbContext'
 import { DbChange, Transaction, TransactionInput } from '../entities'
@@ -29,7 +29,6 @@ export class TransactionResolver {
       if (!accountId) {
         throw new Error('when creating an transaction, accountId must be specified')
       }
-      const { uniqueId } = context
       transaction = new Transaction(uniqueId(), accountId, input)
       transactionId = transaction.id
       changes = [{ table, t, adds: [transaction] }]

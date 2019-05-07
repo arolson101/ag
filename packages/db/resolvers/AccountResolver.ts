@@ -1,4 +1,4 @@
-import { diff } from '@ag/util'
+import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
 import { Arg, Ctx, Field, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
@@ -40,7 +40,6 @@ export class AccountResolver {
       if (!bankId) {
         throw new Error('when creating an account, bankId must be specified')
       }
-      const { uniqueId } = context
       account = new Account(bankId, uniqueId(), input)
       accountId = account.id
       changes = [Account.change.add(t, account)]

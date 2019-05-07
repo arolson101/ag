@@ -1,4 +1,4 @@
-import { diff } from '@ag/util'
+import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
 import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
@@ -41,7 +41,6 @@ export class BankResolver {
       changes = [Bank.change.edit(t, bankId, q)]
       bank.update(t, q)
     } else {
-      const { uniqueId } = context
       bank = new Bank(uniqueId(), input)
       bankId = bank.id
       changes = [Bank.change.add(t, bank)]

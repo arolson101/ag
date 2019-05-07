@@ -11,5 +11,4 @@ export interface DbContext {
     entities: ConnectionOptions['entities']
   ) => Promise<Connection>
   deleteDb: (name: string) => Promise<void>
-  uniqueId: () => string
 }

@@ -14,9 +14,7 @@ export interface ClientDependencies {
   scaleImage: (image: ImageBuf, scale: number) => Promise<ImageBuf>
 }
 
-export interface CoreContext extends ClientDependencies {
-  uniqueId: () => string
-}
+export interface CoreContext extends ClientDependencies {}
 
 export const CoreContext = React.createContext<CoreContext>(null as any)
 CoreContext.displayName = 'AppContext'
