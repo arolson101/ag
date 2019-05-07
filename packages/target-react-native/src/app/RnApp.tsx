@@ -19,7 +19,6 @@ YellowBox.ignoreWarnings(['Require cycle:'])
 const log = debug('rn:init')
 
 export const deps: ClientDependencies = {
-  online,
   ui,
 
   getImageFromLibrary,
@@ -33,9 +32,7 @@ const context = App.createContext({ store, deps })
 const client = createClient({ openDb, deleteDb, online, intl, ...context })
 
 const RnApp: React.FC = ({ children }) => (
-  <App context={context} client={client} intl={intl} store={store}>
-    {children}
-  </App>
+  <App {...{ context, client, intl, store, online }}>{children}</App>
 )
 
 registerComponents(RnApp)

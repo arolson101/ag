@@ -5,7 +5,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields, useAction, useIntl } from '../context'
+import { CoreContext, typedFields, useAction, useIntl, useOnline } from '../context'
 
 const log = debug('core:PictureDialog')
 
@@ -33,7 +33,8 @@ interface ImageTileProps {
 }
 
 const ImageTile = React.memo<ImageTileProps>(({ link, selectItem }) => {
-  const { ui, online } = useContext(CoreContext)
+  const online = useOnline()
+  const { ui } = useContext(CoreContext)
   const { Button, Spinner, Tile, Text, Image } = ui
   const [loading, setLoading] = useState(false)
   const [image, setImage] = useState<ImageSource | undefined>(undefined)
@@ -67,8 +68,9 @@ export const PictureDialog = Object.assign(
   React.memo<Props>(props => {
     const intl = useIntl()
     const context = useContext(CoreContext)
+    const online = useOnline()
     const closeDlg = useAction(actions.closeDlg)
-    const { ui, scaleImage, online } = context
+    const { ui, scaleImage } = context
     const [url, setUrl] = useState(props.url)
     const [listLoading, setListLoading] = useState(false)
     const [listData, setListData] = useState<string[]>([])

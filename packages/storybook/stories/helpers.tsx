@@ -19,7 +19,6 @@ export const addDelay = (responses: MockedResponse[], delay: number) => {
 }
 
 const deps: ClientDependencies = {
-  online,
   ui,
   scaleImage: action('scaleImage') as any,
   openCropper: action('openCropper') as any,
@@ -45,9 +44,5 @@ const createClient = (mocks: ReadonlyArray<MockedResponse>) => {
 
 export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, children }) => {
   const client = createClient(mocks || [])
-  return (
-    <App context={context} client={client} intl={intl} store={store}>
-      {children}
-    </App>
-  )
+  return <App {...{ context, client, intl, store, online }}>{children}</App>
 }

@@ -15,6 +15,7 @@ import {
   useAction,
   useCoreStore,
   useIntl,
+  useOnline,
 } from '../context'
 
 const log = debug('core:UrlField')
@@ -50,7 +51,8 @@ type Field<T> = [{ value: T }, {}]
 export const UrlField = <Values extends Record<string, any>>(props: Props<Values>) => {
   const intl = useIntl()
   const openPictureDlg = useAction(actions.openDlg.picture)
-  const { ui, getImageFromLibrary, online } = useContext(CoreContext)
+  const online = useOnline()
+  const { ui, getImageFromLibrary } = useContext(CoreContext)
   const { PopoverButton, Image, Text } = ui
   const { TextField } = typedFields<Values>(ui)
   const { disabled } = props
