@@ -11,11 +11,11 @@ import {
 import debug from 'debug'
 import { FormikErrors, FormikProvider, useField, useFormik, useFormikContext } from 'formik'
 import gql from 'graphql-tag'
-import React, { useContext, useImperativeHandle, useRef } from 'react'
+import React, { useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { UrlField } from '../components/UrlField'
-import { CoreContext, tabConfig, typedFields, useIntl, useUi } from '../context'
+import { tabConfig, typedFields, useIntl, useUi } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
 

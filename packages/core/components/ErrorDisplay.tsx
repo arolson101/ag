@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-client'
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { defineMessages } from 'react-intl'
-import { CoreContext, IntlContext, UiContext, useIntl, useUi } from '../context'
+import { IntlContext, UiContext, useIntl, useUi } from '../context'
 
 interface Props {
   error: undefined | Error | Error[] | ReadonlyArray<Error>

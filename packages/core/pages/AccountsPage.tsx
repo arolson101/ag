@@ -15,15 +15,7 @@ import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import {
-  ActionItem,
-  ContextMenuProps,
-  CoreContext,
-  TableColumn,
-  useAction,
-  useIntl,
-  useUi,
-} from '../context'
+import { ActionItem, ContextMenuProps, TableColumn, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
 
@@ -120,7 +112,6 @@ const BankTable = Object.assign(
   React.memo<T.AccountsPage.Banks>(bank => {
     type Row = typeof bank.accounts[number]
     const intl = useIntl()
-    const context = useContext(CoreContext)
     const openBankEditDlg = useAction(actions.openDlg.bankEdit)
     const openAccountCreateDlg = useAction(actions.openDlg.accountCreate)
     const openAccountEditDlg = useAction(actions.openDlg.accountEdit)
@@ -229,7 +220,7 @@ const BankTable = Object.assign(
           ],
         }
       },
-      [bank, intl, context, client]
+      [bank, intl, client]
     )
 
     const columns = useRef<Array<TableColumn<Row>>>([

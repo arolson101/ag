@@ -3,10 +3,10 @@ import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@
 import debug from 'debug'
 import { FormikErrors, FormikProvider, useField, useFormik, useFormikContext } from 'formik'
 import gql from 'graphql-tag'
-import React, { useCallback, useContext, useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields, useIntl, useUi } from '../context'
+import { typedFields, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('AccountForm')

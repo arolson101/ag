@@ -1,7 +1,7 @@
-import { CoreContext, IntlContext } from '@ag/core'
+import { IntlContext } from '@ag/core'
 import { Options } from 'react-native-navigation'
 
-export interface RnnContext extends CoreContext {
+export interface RnnContext {
   intl: IntlContext
 }
 

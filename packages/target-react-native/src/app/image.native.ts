@@ -1,4 +1,4 @@
-import { ClientDependencies } from '@ag/core'
+import { SystemCallbacks } from '@ag/core'
 import { imageSize, ImageSource } from '@ag/util'
 import crypto from 'crypto'
 import debug from 'debug'
@@ -15,7 +15,7 @@ export interface FavicoProps {
   source: ImageSourcePropType
 }
 
-export const getImageFromLibrary: ClientDependencies['getImageFromLibrary'] = async (
+export const getImageFromLibrary: SystemCallbacks['getImageFromLibrary'] = async (
   width,
   height
 ) => {
@@ -46,7 +46,7 @@ const tempName = (ext: string) => {
   return crypto.randomBytes(8).toString('base64') + '.' + ext
 }
 
-export const openCropper: ClientDependencies['openCropper'] = async image => {
+export const openCropper: SystemCallbacks['openCropper'] = async image => {
   const ext = image.mime.replace('image/', '')
   const path = Path.join(RNFS.TemporaryDirectoryPath, tempName(ext))
   log('openCropper path: %s', path)
@@ -76,7 +76,7 @@ export const openCropper: ClientDependencies['openCropper'] = async image => {
   }
 }
 
-export const scaleImage: ClientDependencies['scaleImage'] = async (image, scale) => {
+export const scaleImage: SystemCallbacks['scaleImage'] = async (image, scale) => {
   const source = ImageSource.fromImageBuf(image)
   const width = scale * source.width
   const height = scale * source.height

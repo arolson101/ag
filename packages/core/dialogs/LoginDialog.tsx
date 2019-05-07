@@ -2,7 +2,7 @@ import { useApolloClient, useQuery } from '@ag/util'
 import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, useIntl, useUi } from '../context'
+import { useIntl, useUi } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
 

@@ -1,4 +1,4 @@
-import { CommonTextFieldProps, CoreContext, FormProps } from '@ag/core'
+import { CommonTextFieldProps, FormProps } from '@ag/core'
 import debug from 'debug'
 import * as NB from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
@@ -15,7 +15,7 @@ export interface FormContextChild {
   setCommonTextFieldProps: (props: CommonTextFieldProps) => any
 }
 
-export interface FormContext extends CoreContext {
+export interface FormContext {
   addField: (field: FormContextChild) => any
   rmvField: (field: FormContextChild) => any
 }
@@ -25,7 +25,6 @@ export const Form = Object.assign(
   React.memo<FormProps>(function _Form({ onSubmit, lastFieldSubmit, children }) {
     const fieldNames = useRef<string[]>([])
     const fields = useRef<Record<string, FormContextChild>>({})
-    const context = useContext(CoreContext)
 
     const updateFields = useCallback(
       function _updateFields() {
@@ -71,7 +70,7 @@ export const Form = Object.assign(
     )
 
     return (
-      <FormContext.Provider value={{ ...context, addField, rmvField }}>
+      <FormContext.Provider value={{ addField, rmvField }}>
         <NB.Form style={styles.form}>{children}</NB.Form>
       </FormContext.Provider>
     )

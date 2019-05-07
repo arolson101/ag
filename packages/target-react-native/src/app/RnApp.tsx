@@ -1,4 +1,4 @@
-import { App, ClientDependencies } from '@ag/core'
+import { App, SystemCallbacks } from '@ag/core'
 import { createClient } from '@ag/db'
 import { online } from '@ag/online'
 import debug from 'debug'
@@ -18,19 +18,18 @@ YellowBox.ignoreWarnings(['Require cycle:'])
 
 const log = debug('rn:init')
 
-export const deps: ClientDependencies = {
+export const sys: SystemCallbacks = {
   getImageFromLibrary,
   openCropper,
   scaleImage,
 }
 
 const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
-const store = createStore(deps)
-const context = App.createContext({ store, deps })
-const client = createClient({ openDb, deleteDb, online, intl, ...context })
+const store = createStore(sys)
+const client = createClient({ openDb, deleteDb, online, intl })
 
 const RnApp: React.FC = ({ children }) => (
-  <App {...{ context, ui, client, intl, store, online }}>{children}</App>
+  <App {...{ sys, ui, client, intl, store, online }}>{children}</App>
 )
 
 registerComponents(RnApp)
@@ -40,5 +39,5 @@ Navigation.events().registerAppLaunchedListener(async () => {
   setDefaultOptions()
   await iconInit
   log('setting root')
-  Navigation.setRoot(root(context))
+  Navigation.setRoot(root({ intl }))
 })

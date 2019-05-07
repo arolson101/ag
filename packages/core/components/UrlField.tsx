@@ -1,7 +1,7 @@
 import { fixUrl, generateAvatar, ImageSource, isUrl } from '@ag/util'
 import debug from 'debug'
 import { Field, useField, useFormikContext } from 'formik'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { timer } from 'rxjs'
 import { useEventCallback } from 'rxjs-hooks'
@@ -10,12 +10,11 @@ import { actions } from '../actions'
 import {
   CommonFieldProps,
   CommonTextFieldProps,
-  CoreContext,
   typedFields,
   useAction,
-  useCoreStore,
   useIntl,
   useOnline,
+  useSystem,
   useUi,
 } from '../context'
 
@@ -53,7 +52,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const intl = useIntl()
   const openPictureDlg = useAction(actions.openDlg.picture)
   const online = useOnline()
-  const { getImageFromLibrary } = useContext(CoreContext)
+  const { getImageFromLibrary } = useSystem()
   const { PopoverButton, Image, Text } = useUi()
   const { TextField } = typedFields<Values>(useUi())
   const { disabled } = props

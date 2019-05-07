@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { App, ClientDependencies, CoreStore } from '@ag/core'
+import { App, CoreStore, SystemCallbacks } from '@ag/core'
 import { online } from '@ag/online'
 import { action } from '@storybook/addon-actions'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -18,7 +18,7 @@ export const addDelay = (responses: MockedResponse[], delay: number) => {
   return responses.map(r => ({ ...r, delay }))
 }
 
-const deps: ClientDependencies = {
+const sys: SystemCallbacks = {
   scaleImage: action('scaleImage') as any,
   openCropper: action('openCropper') as any,
   getImageFromLibrary: action('getImageFromLibrary') as any,
@@ -31,7 +31,6 @@ const store = ({
   dispatch: action('dispatch'),
 } as unknown) as CoreStore
 
-const context = App.createContext({ store, deps })
 const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
 
 const createClient = (mocks: ReadonlyArray<MockedResponse>) => {
@@ -43,5 +42,5 @@ const createClient = (mocks: ReadonlyArray<MockedResponse>) => {
 
 export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, children }) => {
   const client = createClient(mocks || [])
-  return <App {...{ context, ui, client, intl, store, online }}>{children}</App>
+  return <App {...{ sys, ui, client, intl, store, online }}>{children}</App>
 }

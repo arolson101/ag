@@ -1,9 +1,9 @@
-import { ClientDependencies } from '@ag/core'
+import { SystemCallbacks } from '@ag/core'
 import electron, { nativeImage } from 'electron'
 
 const dialog = (electron.remote || electron).dialog
 
-export const getImageFromLibrary: ClientDependencies['getImageFromLibrary'] = async (
+export const getImageFromLibrary: SystemCallbacks['getImageFromLibrary'] = async (
   width,
   height
 ) => {
@@ -24,11 +24,11 @@ export const getImageFromLibrary: ClientDependencies['getImageFromLibrary'] = as
   }
 }
 
-export const openCropper: ClientDependencies['openCropper'] = async image => {
+export const openCropper: SystemCallbacks['openCropper'] = async image => {
   return undefined
 }
 
-export const scaleImage: ClientDependencies['scaleImage'] = async (image, scale) => {
+export const scaleImage: SystemCallbacks['scaleImage'] = async (image, scale) => {
   const width = image.width * scale
   const height = image.height * scale
   const img = nativeImage.createFromBuffer(image.buf, { height: image.height, width: image.width })

@@ -8,16 +8,11 @@ import { UiContext } from './uiContext'
 
 export const maxImageSize = 512
 
-export interface ClientDependencies {
+export interface SystemCallbacks {
   getImageFromLibrary: (width: number, height: number) => Promise<ImageBuf | undefined>
   openCropper: (image: ImageBuf) => Promise<ImageBuf | undefined>
   scaleImage: (image: ImageBuf, scale: number) => Promise<ImageBuf>
 }
-
-export interface CoreContext extends ClientDependencies {}
-
-export const CoreContext = React.createContext<CoreContext>(null as any)
-CoreContext.displayName = 'AppContext'
 
 export type IntlContext = IntlContext1
 export const IntlContext = React.createContext<IntlContext1>(null as any)
@@ -28,6 +23,9 @@ CoreStoreContext.displayName = 'CoreStoreContext'
 
 export const OnlineContext = React.createContext<Online>(null as any)
 OnlineContext.displayName = 'OnlineContext'
+
+export const SystemContext = React.createContext<SystemCallbacks>(null as any)
+SystemContext.displayName = 'SystemContext'
 
 export const useIntl = () => {
   return useContext(IntlContext)
@@ -43,3 +41,5 @@ export const useAction = <A, C extends ActionCreator<A>>(actionCreator: C) => {
 export const useOnline = () => useContext(OnlineContext)
 
 export const useUi = () => useContext(UiContext)
+
+export const useSystem = () => useContext(SystemContext)

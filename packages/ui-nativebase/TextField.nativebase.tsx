@@ -45,8 +45,8 @@ export const TextField = Object.assign(
 
     const onChangeText = (text: string) => {
       // log('onChangeText %s', text)
-      const { field, onValueChanged } = props
-      form.current!.setFieldValue(field, text)
+      const { onValueChanged } = props
+      form.current!.setFieldValue(name, text)
       if (onValueChanged) {
         onValueChanged(text)
       }

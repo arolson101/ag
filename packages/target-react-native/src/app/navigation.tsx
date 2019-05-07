@@ -1,4 +1,4 @@
-import { appDialogs, CoreContext } from '@ag/core'
+import { appDialogs } from '@ag/core'
 import { platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React from 'react'
@@ -11,6 +11,7 @@ import {
 } from 'react-native-navigation'
 import * as Tabs from '../tabs'
 import { DialogContext } from '../ui/Dialog.native'
+import { RnnContext } from './RnnContext'
 
 const log = debug('rn:navigation')
 
@@ -55,15 +56,13 @@ export const registerComponents = (RnApp: React.ComponentType) => {
   }
 
   for (const Dialog of appDialogs) {
-    const component: React.FC<DialogContext> = ({ componentId, ...props }) => (
-      <CoreContext.Consumer>
-        {appContext => (
-          <DialogContext.Provider value={{ ...appContext, componentId }}>
-            <Dialog {...props} />
-          </DialogContext.Provider>
-        )}
-      </CoreContext.Consumer>
-    )
+    const component: React.FC<DialogContext> = ({ componentId, ...props }) => {
+      return (
+        <DialogContext.Provider value={{ componentId }}>
+          <Dialog {...props} />
+        </DialogContext.Provider>
+      )
+    }
     component.displayName = `rnnDlg(${component.name})`
 
     log('registered dialog %s', Dialog.name)
@@ -76,7 +75,7 @@ interface TabComponent {
   stackId: string
 }
 
-const makeTab = (tab: TabComponent, passProps: CoreContext): LayoutBottomTabsChildren => ({
+const makeTab = (tab: TabComponent, passProps: RnnContext): LayoutBottomTabsChildren => ({
   stack: {
     id: tab.stackId,
     children: [
@@ -90,7 +89,7 @@ const makeTab = (tab: TabComponent, passProps: CoreContext): LayoutBottomTabsChi
   },
 })
 
-const bottomTabs = (passProps: CoreContext): LayoutBottomTabs => ({
+const bottomTabs = (passProps: RnnContext): LayoutBottomTabs => ({
   children: [
     makeTab(Tabs.HomeTab, passProps),
     makeTab(Tabs.AccountsTab, passProps),
@@ -100,7 +99,7 @@ const bottomTabs = (passProps: CoreContext): LayoutBottomTabs => ({
   ],
 })
 
-export const root = (passProps: CoreContext): LayoutRoot => ({
+export const root = (passProps: RnnContext): LayoutRoot => ({
   root: {
     bottomTabs: bottomTabs(passProps),
   },

@@ -1,4 +1,4 @@
-import { ButtonConfig, CoreContext, DialogProps } from '@ag/core'
+import { ButtonConfig, DialogProps } from '@ag/core'
 import { platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React, { useContext, useEffect } from 'react'
@@ -7,7 +7,7 @@ import { Navigation, OptionsTopBarButton } from 'react-native-navigation'
 
 const log = debug('rn:dialog')
 
-export interface DialogContext extends CoreContext {
+export interface DialogContext {
   componentId: string
 }
 export const DialogContext = React.createContext<DialogContext>({ componentId: 'NONE' } as any)

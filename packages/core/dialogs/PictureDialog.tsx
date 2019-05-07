@@ -1,11 +1,11 @@
 import { ImageSource } from '@ag/util'
 import debug from 'debug'
 import { FormikProvider, useFormik } from 'formik'
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields, useAction, useIntl, useOnline, useUi } from '../context'
+import { typedFields, useAction, useIntl, useOnline, useSystem, useUi } from '../context'
 
 const log = debug('core:PictureDialog')
 
@@ -67,11 +67,10 @@ const ImageTile = React.memo<ImageTileProps>(({ link, selectItem }) => {
 export const PictureDialog = Object.assign(
   React.memo<Props>(props => {
     const intl = useIntl()
-    const context = useContext(CoreContext)
     const online = useOnline()
     const ui = useUi()
     const closeDlg = useAction(actions.closeDlg)
-    const { scaleImage } = context
+    const { scaleImage, openCropper } = useSystem()
     const [url, setUrl] = useState(props.url)
     const [listLoading, setListLoading] = useState(false)
     const [listData, setListData] = useState<string[]>([])

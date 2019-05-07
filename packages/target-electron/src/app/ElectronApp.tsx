@@ -1,4 +1,4 @@
-import { App, ClientDependencies } from '@ag/core'
+import { App, SystemCallbacks } from '@ag/core'
 import { createClient } from '@ag/db'
 import { online } from '@ag/online'
 import { ui } from '@ag/ui-antd'
@@ -12,21 +12,20 @@ import { init } from './export'
 import { getImageFromLibrary, openCropper, scaleImage } from './image.electron'
 import { deleteDb, openDb } from './openDb.electron'
 
-export const deps: ClientDependencies = {
+export const sys: SystemCallbacks = {
   getImageFromLibrary,
   openCropper,
   scaleImage,
 }
 
 const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
-const store = createStore(deps)
-const context = App.createContext({ store, deps })
-const client = createClient({ openDb, deleteDb, online, intl, ...context })
+const store = createStore(sys)
+const client = createClient({ openDb, deleteDb, online, intl })
 
 class ElectronApp extends React.PureComponent {
   render() {
     return (
-      <App {...{ context, ui, client, intl, store, online }}>
+      <App {...{ sys, ui, client, intl, store, online }}>
         <ElectronRouter />
         <ElectronDialogs />
       </App>

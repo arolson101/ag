@@ -2,11 +2,11 @@ import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, TableColumn, useAction, useIntl, useUi } from '../context'
+import { TableColumn, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:AccountPage')
