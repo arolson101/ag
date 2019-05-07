@@ -8,7 +8,7 @@
     "@ag/util": "^0.0.0",
     "antd": "^3.17.0",
     "debug": "^4.1.1",
-    "formik": "^2.0.1-alpha.0",
+    "formik": "^2.0.1-alpha.2",
     "history": "^4.9.0",
     "nprogress": "^0.2.0",
     "react": "^16.8.6",

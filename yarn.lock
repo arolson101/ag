@@ -9183,7 +9183,7 @@ format@^0.2.2:
   resolved "https://registry.yarnpkg.com/format/-/format-0.2.2.tgz#d6170107e9efdc4ed30c9dc39016df942b5cb58b"
   integrity sha1-1hcBB+nv3E7TDJ3DkBbflCtctYs=
 
-formik@^2.0.1-alpha.0:
+formik@^2.0.1-alpha.2:
   version "2.0.1-alpha.2"
   resolved "https://registry.yarnpkg.com/formik/-/formik-2.0.1-alpha.2.tgz#6751741d7ae2532b2a8ab683d074b52d9e4e3173"
   integrity sha512-B6gDeIpAb1lQ6ytsCsK/UkvhCN7NGU4DW4aP/W280m2Fx2urk5FwotX3+xAsg9YpKLEHRBoesdpgyHJLDKhHKg==

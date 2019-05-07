@@ -1,12 +1,22 @@
 import { Account } from '@ag/db'
 import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
-import { FormikErrors, FormikProvider, useField, useFormik, useFormikContext } from 'formik'
+import debug from 'debug'
+import {
+  FormikConfig,
+  FormikErrors,
+  FormikProvider,
+  useField,
+  useFormik,
+  useFormikContext,
+} from 'formik'
 import gql from 'graphql-tag'
-import React, { useContext, useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { CoreContext, typedFields } from '../context'
 import * as T from '../graphql-types'
+
+const log = debug('AccountForm')
 
 interface Props {
   accountId?: string
@@ -147,6 +157,7 @@ const FormComponent = Object.assign(
 
 const Component = Object.assign(
   React.forwardRef<AccountForm, ComponentProps>((props, ref) => {
+    log('AccountForm.Component render %o', props)
     const { ui, intl } = useContext(CoreContext)
     const { showToast } = ui
     const { data, saveAccount, loading, accountId, bankId, onClosed } = props
@@ -160,33 +171,39 @@ const Component = Object.assign(
 
     const formik = useFormik<FormValues>({
       validateOnBlur: false,
-      enableReinitialize: true,
+      // enableReinitialize: true,
       initialValues,
-      validate: values => {
-        const errors: FormikErrors<FormValues> = {}
-        if (!values.name || !values.name.trim()) {
-          errors.name = intl.formatMessage(messages.valueEmpty)
-        }
-        return errors
-      },
-      onSubmit: async ({ ...input }, factions) => {
-        try {
-          const variables = {
-            bankId,
-            accountId,
-            input,
+      validate: useCallback(
+        (values: FormValues) => {
+          const errors: FormikErrors<FormValues> = {}
+          if (!values.name || !values.name.trim()) {
+            errors.name = intl.formatMessage(messages.valueEmpty)
           }
-          await saveAccount({ variables } as any)
-          showToast(
-            intl.formatMessage(accountId ? messages.saved : messages.created, {
-              name: input.name,
-            })
-          )
-          onClosed()
-        } finally {
-          factions.setSubmitting(false)
-        }
-      },
+          return errors
+        },
+        [intl]
+      ),
+      onSubmit: useCallback(
+        async ({ ...input }, factions) => {
+          try {
+            const variables = {
+              bankId,
+              accountId,
+              input,
+            }
+            await saveAccount({ variables } as any)
+            showToast(
+              intl.formatMessage(accountId ? messages.saved : messages.created, {
+                name: input.name,
+              })
+            )
+            onClosed()
+          } finally {
+            factions.setSubmitting(false)
+          }
+        },
+        [bankId, accountId, saveAccount, showToast, onClosed]
+      ),
     })
 
     useImperativeHandle(ref, () => ({
@@ -200,7 +217,7 @@ const Component = Object.assign(
     }
 
     return (
-      <FormikProvider value={formik}>
+      <FormikProvider value={formik as any}>
         <FormComponent {...props} />
       </FormikProvider>
     )
@@ -212,6 +229,7 @@ const Component = Object.assign(
 
 export const AccountForm = Object.assign(
   React.forwardRef<AccountForm, Props>((props, ref) => {
+    log('AccountForm render %o', props)
     const { accountId, onClosed, bankId } = props
 
     const component = useRef<AccountForm>(null)
