@@ -1,9 +1,9 @@
 import { Gql, useQuery } from '@ag/util'
 import debug from 'debug'
 import gql from 'graphql-tag'
-import React, { useContext } from 'react'
+import React from 'react'
 import { actions } from '../actions'
-import { CoreContext, NavMenuItem, useAction } from '../context'
+import { NavMenuItem, useAction, useUi } from '../context'
 import * as T from '../graphql-types'
 import { ErrorDisplay } from './ErrorDisplay'
 
@@ -32,8 +32,7 @@ const queries = {
 export const MenuBar = Object.assign(
   React.memo<Props>(props => {
     const bankCreate = useAction(actions.openDlg.bankCreate)
-    const { ui } = useContext(CoreContext)
-    const { NavMenu } = ui
+    const { NavMenu } = useUi()
     const { data, error } = useQuery(queries.MenuBar)
 
     const appDb = data && data.appDb

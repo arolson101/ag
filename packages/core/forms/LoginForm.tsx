@@ -3,11 +3,11 @@ import { Gql, MutationFn, useApolloClient, useMutation } from '@ag/util'
 import debug from 'debug'
 import { FormikErrors, FormikProvider, useFormik, useFormikContext } from 'formik'
 import gql from 'graphql-tag'
-import React, { useContext, useImperativeHandle, useRef } from 'react'
+import React, { useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields, useAction, useIntl } from '../context'
+import { typedFields, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:LoginForm')
@@ -65,7 +65,7 @@ interface ComponentProps extends Props {
 const FormComponent = Object.assign(
   React.memo<ComponentProps>(props => {
     const intl = useIntl()
-    const { ui } = useContext(CoreContext)
+    const ui = useUi()
     const { Text } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
     const { query } = props
@@ -106,8 +106,8 @@ const FormComponent = Object.assign(
 const Component = Object.assign(
   React.forwardRef<LoginForm, ComponentProps>(function LoginFormComponent(props, ref) {
     const intl = useIntl()
+    const ui = useUi()
     const closeDlg = useAction(actions.closeDlg)
-    const context = useContext(CoreContext)
     const { createDb, openDb, query } = props
     const dbId = query.dbs && query.dbs.length ? query.dbs[0].dbId : undefined
     const create = !dbId
@@ -141,7 +141,7 @@ const Component = Object.assign(
           log('logged in')
           closeDlg('login')
         } catch (error) {
-          ErrorDisplay.show(context, intl, error)
+          ErrorDisplay.show(ui, intl, error)
         } finally {
           factions.setSubmitting(false)
         }

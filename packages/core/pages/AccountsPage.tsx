@@ -11,7 +11,7 @@ import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
@@ -22,6 +22,7 @@ import {
   TableColumn,
   useAction,
   useIntl,
+  useUi,
 } from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
@@ -124,9 +125,8 @@ const BankTable = Object.assign(
     const openAccountCreateDlg = useAction(actions.openDlg.accountCreate)
     const openAccountEditDlg = useAction(actions.openDlg.accountEdit)
     const navAccount = useAction(actions.nav.account)
-    const {
-      ui: { Link, Text, Row, Table, showToast },
-    } = context
+    const ui = useUi()
+    const { Link, Text, Row, Table, showToast } = ui
 
     const setAccountsOrder = useMutation(mutations.SetAccountsOrder, {
       refetchQueries: [{ query: queries.AccountsPage }],
@@ -155,7 +155,7 @@ const BankTable = Object.assign(
       {
         icon: 'trash',
         text: intl.formatMessage(messages.deleteBank),
-        onClick: () => deleteBank({ context, intl, bank, client }),
+        onClick: () => deleteBank({ ui, intl, bank, client }),
       },
       {
         icon: 'add',
@@ -173,7 +173,7 @@ const BankTable = Object.assign(
                   client.reFetchObservableQueries()
                   showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
                 } catch (error) {
-                  ErrorDisplay.show(context, intl, error)
+                  ErrorDisplay.show(ui, intl, error)
                 }
               },
               disabled: !bank.online,
@@ -198,7 +198,7 @@ const BankTable = Object.assign(
             {
               icon: 'trash',
               text: intl.formatMessage(messages.deleteAccount),
-              onClick: () => deleteAccount({ context, intl, account, client }),
+              onClick: () => deleteAccount({ ui, intl, account, client }),
             },
             {
               icon: 'refresh',
@@ -222,7 +222,7 @@ const BankTable = Object.assign(
                   )
                 } catch (error) {
                   log('error downloading transactions: %o', error)
-                  ErrorDisplay.show(context, intl, error)
+                  ErrorDisplay.show(ui, intl, error)
                 }
               },
             },
@@ -285,9 +285,7 @@ const Component = Object.assign(
   React.memo<ComponentProps>(({ data, loading }) => {
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
-    const {
-      ui: { Page },
-    } = useContext(CoreContext)
+    const { Page } = useUi()
 
     return (
       <Page

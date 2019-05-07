@@ -9,8 +9,6 @@ import { UiContext } from './uiContext'
 export const maxImageSize = 512
 
 export interface ClientDependencies {
-  ui: UiContext
-
   getImageFromLibrary: (width: number, height: number) => Promise<ImageBuf | undefined>
   openCropper: (image: ImageBuf) => Promise<ImageBuf | undefined>
   scaleImage: (image: ImageBuf, scale: number) => Promise<ImageBuf>
@@ -45,3 +43,5 @@ export const useAction = <A, C extends ActionCreator<A>>(actionCreator: C) => {
 }
 
 export const useOnline = () => useContext(OnlineContext)
+
+export const useUi = () => useContext(UiContext)

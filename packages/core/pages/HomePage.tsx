@@ -2,10 +2,10 @@ import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { CoreContext, useAction, useIntl } from '../context'
+import { useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:HomePage')
@@ -27,9 +27,7 @@ const queries = {
 
 const Component = React.memo<ComponentProps>(({ data, loading }) => {
   const intl = useIntl()
-  const {
-    ui: { Page, Row, Text },
-  } = useContext(CoreContext)
+  const { Page, Row, Text } = useUi()
 
   return (
     <Page title={intl.formatMessage(messages.titleText)}>

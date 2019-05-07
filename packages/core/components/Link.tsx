@@ -1,6 +1,6 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import { CoreAction } from '../actions'
-import { CoreContext, useCoreStore } from '../context'
+import { useCoreStore, useUi } from '../context'
 
 interface Props {
   action: CoreAction
@@ -9,8 +9,7 @@ interface Props {
 export const Link = Object.assign(
   React.memo<Props>(function _Link({ action, children }) {
     const { dispatch } = useCoreStore()
-    const { ui } = useContext(CoreContext)
-    const { Link: LinkUI } = ui
+    const { Link: LinkUI } = useUi()
     const onClick = useCallback(() => {
       dispatch(action)
     }, [dispatch, action])

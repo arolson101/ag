@@ -3,7 +3,8 @@ import ApolloClient from 'apollo-client'
 import gql from 'graphql-tag'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, IntlContext } from '../context'
+import { IntlContext } from '../context'
+import { UiContext } from '../context/uiContext'
 import * as T from '../graphql-types'
 
 const mutations = {
@@ -16,15 +17,13 @@ const mutations = {
 
 interface DeleteDbParams {
   client: ApolloClient<any>
-  context: CoreContext
   intl: IntlContext
   dbId: string
+  ui: UiContext
 }
 
-export const deleteDb = ({ client, context, intl, dbId }: DeleteDbParams) => {
-  const {
-    ui: { alert, showToast },
-  } = context
+export const deleteDb = ({ client, ui, intl, dbId }: DeleteDbParams) => {
+  const { alert, showToast } = ui
 
   alert({
     title: intl.formatMessage(messages.title),
@@ -42,7 +41,7 @@ export const deleteDb = ({ client, context, intl, dbId }: DeleteDbParams) => {
         },
       })
 
-      ErrorDisplay.show(context, intl, result.errors)
+      ErrorDisplay.show(ui, intl, result.errors)
       showToast(intl.formatMessage(messages.deleted), true)
     },
 

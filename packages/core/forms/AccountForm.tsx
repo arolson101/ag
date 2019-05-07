@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import React, { useCallback, useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields, useIntl } from '../context'
+import { CoreContext, typedFields, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('AccountForm')
@@ -80,9 +80,8 @@ interface ComponentProps extends Props {
 const FormComponent = Object.assign(
   React.memo<ComponentProps>(props => {
     const intl = useIntl()
-    const { ui } = useContext(CoreContext)
-    const { Text } = ui
-    const { Form, SelectField, TextField } = typedFields<FormValues>(ui)
+    const { Text } = useUi()
+    const { Form, SelectField, TextField } = typedFields<FormValues>(useUi())
     const { data, loading } = props
 
     const account = loading ? undefined : data && data.appDb && data.appDb.account
@@ -153,8 +152,7 @@ const Component = Object.assign(
   React.forwardRef<AccountForm, ComponentProps>((props, ref) => {
     // log('AccountForm.Component render %o', props)
     const intl = useIntl()
-    const { ui } = useContext(CoreContext)
-    const { showToast } = ui
+    const { showToast } = useUi()
     const { data, saveAccount, loading, accountId, bankId, onClosed } = props
 
     const account = loading ? undefined : data && data.appDb && data.appDb.account

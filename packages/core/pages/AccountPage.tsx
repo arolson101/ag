@@ -6,7 +6,7 @@ import React, { useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, TableColumn, useAction, useIntl } from '../context'
+import { CoreContext, TableColumn, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:AccountPage')
@@ -52,9 +52,7 @@ const Component = Object.assign(
   React.memo<ComponentProps>(({ accountId, data, loading }) => {
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
-    const {
-      ui: { Page, Table, Text },
-    } = useContext(CoreContext)
+    const { Page, Table, Text } = useUi()
 
     const account = data && data.appDb && data.appDb.account
     const title = (account && account.name) || 'no account'

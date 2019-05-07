@@ -2,7 +2,7 @@ import { useApolloClient, useQuery } from '@ag/util'
 import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, useIntl } from '../context'
+import { CoreContext, useIntl, useUi } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
 
@@ -13,10 +13,8 @@ interface Props {
 export const LoginDialog = React.memo<Props>(props => {
   const { isOpen } = props
   const intl = useIntl()
-  const context = useContext(CoreContext)
-  const {
-    ui: { LoadingOverlay, Dialog },
-  } = context
+  const ui = useUi()
+  const { LoadingOverlay, Dialog } = ui
   const { data, loading, error } = useQuery(LoginForm.queries.LoginForm)
   const client = useApolloClient()
   const loginForm = useRef<LoginForm>(null)
@@ -46,7 +44,7 @@ export const LoginDialog = React.memo<Props>(props => {
             dbId
               ? {
                   title: intl.formatMessage(messages.delete),
-                  onClick: () => deleteDb({ context, intl, dbId, client }),
+                  onClick: () => deleteDb({ ui, intl, dbId, client }),
                   isDanger: true,
                 }
               : undefined

@@ -1,6 +1,6 @@
 import { ImageSource } from '@ag/util'
 import debug from 'debug'
-import { ComponentType } from 'react'
+import React, { ComponentType } from 'react'
 import { Omit } from 'utility-types'
 import {
   CheckboxFieldProps,
@@ -233,3 +233,6 @@ export interface UiContext {
   Tabs: React.ComponentType<TabsProps>
   Tab: React.ComponentType<TabProps>
 }
+
+export const UiContext = React.createContext<UiContext>(null as any)
+UiContext.displayName = 'UiContext'

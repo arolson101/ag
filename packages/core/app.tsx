@@ -11,6 +11,7 @@ import {
   CoreStoreContext,
   IntlContext,
   OnlineContext,
+  UiContext,
 } from './context'
 import { CoreStore } from './reducers'
 
@@ -22,6 +23,7 @@ type Props = React.PropsWithChildren<{
   store: CoreStore
   context: CoreContext
   online: Online
+  ui: UiContext
 }>
 
 const uniqueId = () => {
@@ -47,22 +49,24 @@ export const createContext = ({ deps }: CreateContextParams): CoreContext => {
 }
 
 export const App = Object.assign(
-  React.memo<Props>(({ context, client, store, online, intl, children }) => {
+  React.memo<Props>(({ context, client, store, ui, online, intl, children }) => {
     return (
-      <OnlineContext.Provider value={online}>
-        <ApolloProvider client={client}>
-          <ApolloHooksProvider client={client}>
-            <CoreStoreContext.Provider value={store}>
-              <IntlContext.Provider value={intl}>
-                <CoreContext.Provider value={context}>
-                  {/* tslint:disable-next-line:prettier */}
-                  {children}
-                </CoreContext.Provider>
-              </IntlContext.Provider>
-            </CoreStoreContext.Provider>
-          </ApolloHooksProvider>
-        </ApolloProvider>
-      </OnlineContext.Provider>
+      <UiContext.Provider value={ui}>
+        <OnlineContext.Provider value={online}>
+          <ApolloProvider client={client}>
+            <ApolloHooksProvider client={client}>
+              <CoreStoreContext.Provider value={store}>
+                <IntlContext.Provider value={intl}>
+                  <CoreContext.Provider value={context}>
+                    {/* tslint:disable-next-line:prettier */}
+                    {children}
+                  </CoreContext.Provider>
+                </IntlContext.Provider>
+              </CoreStoreContext.Provider>
+            </ApolloHooksProvider>
+          </ApolloProvider>
+        </OnlineContext.Provider>
+      </UiContext.Provider>
     )
   }),
   {

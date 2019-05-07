@@ -1,8 +1,8 @@
 import debug from 'debug'
-import React, { useCallback, useContext, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { CoreContext, useAction, useIntl } from '../context'
+import { useAction, useIntl, useUi } from '../context'
 import { BankForm } from '../forms'
 
 const log = debug('core:BankDialog')
@@ -17,9 +17,7 @@ export const BankDialog = Object.assign(
   React.memo<BankDialogProps>(function _BankDialog({ bankId, isOpen, cancelToken }) {
     const intl = useIntl()
     const closeDlg = useAction(actions.closeDlg)
-    const {
-      ui: { Dialog },
-    } = useContext(CoreContext)
+    const { Dialog } = useUi()
 
     const bankForm = useRef<BankForm>(null)
 

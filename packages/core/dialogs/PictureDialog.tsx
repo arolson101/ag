@@ -5,7 +5,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields, useAction, useIntl, useOnline } from '../context'
+import { CoreContext, typedFields, useAction, useIntl, useOnline, useUi } from '../context'
 
 const log = debug('core:PictureDialog')
 
@@ -34,7 +34,7 @@ interface ImageTileProps {
 
 const ImageTile = React.memo<ImageTileProps>(({ link, selectItem }) => {
   const online = useOnline()
-  const { ui } = useContext(CoreContext)
+  const ui = useUi()
   const { Button, Spinner, Tile, Text, Image } = ui
   const [loading, setLoading] = useState(false)
   const [image, setImage] = useState<ImageSource | undefined>(undefined)
@@ -69,14 +69,15 @@ export const PictureDialog = Object.assign(
     const intl = useIntl()
     const context = useContext(CoreContext)
     const online = useOnline()
+    const ui = useUi()
     const closeDlg = useAction(actions.closeDlg)
-    const { ui, scaleImage } = context
+    const { scaleImage } = context
     const [url, setUrl] = useState(props.url)
     const [listLoading, setListLoading] = useState(false)
     const [listData, setListData] = useState<string[]>([])
     const { onSelected, isOpen } = props
-    const { Dialog, Spinner, Row, Grid } = ui
-    const { Form, TextField } = typedFields<Values>(ui)
+    const { Dialog, Spinner, Row, Grid } = useUi()
+    const { Form, TextField } = typedFields<Values>(useUi())
 
     const initialValues: Values = {
       url,
@@ -132,7 +133,7 @@ export const PictureDialog = Object.assign(
         .then(imageList => {
           setListData(imageList)
         })
-        .catch(error => ErrorDisplay.show(context, intl, error))
+        .catch(error => ErrorDisplay.show(ui, intl, error))
         .finally(() => setListLoading(false))
       return cancelToken.cancel
     }, [setListLoading, online.getImageList, setListData, url])
