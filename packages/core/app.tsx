@@ -1,14 +1,18 @@
+import { ApolloHooksProvider } from '@ag/util'
+import ApolloClient from 'apollo-client'
 import crypto from 'crypto'
 import debug from 'debug'
 import React from 'react'
-import { Provider } from 'react-redux'
-import { ClientDependencies, CoreContext, IntlContext } from './context'
+import { ApolloProvider } from 'react-apollo'
+import { ClientDependencies, CoreContext, CoreStoreContext, IntlContext } from './context'
 import { CoreStore } from './reducers'
 
 const log = debug('core:app')
 
 type Props = React.PropsWithChildren<{
+  client: ApolloClient<any>
   intl: IntlContext
+  store: CoreStore
   context: CoreContext
 }>
 
@@ -25,10 +29,9 @@ interface CreateContextParams {
   store: CoreStore
   deps: ClientDependencies
 }
-export const createContext = ({ store, deps }: CreateContextParams): CoreContext => {
+export const createContext = ({ deps }: CreateContextParams): CoreContext => {
   const context: CoreContext = {
     uniqueId,
-    store,
     ...deps,
   }
 
@@ -36,16 +39,20 @@ export const createContext = ({ store, deps }: CreateContextParams): CoreContext
 }
 
 export const App = Object.assign(
-  React.memo<Props>(({ context, intl, children }) => {
+  React.memo<Props>(({ context, client, store, intl, children }) => {
     return (
-      <Provider store={context.store}>
-        <IntlContext.Provider value={intl}>
-          <CoreContext.Provider value={context}>
-            {/* tslint:disable-next-line:prettier */}
-            {children}
-          </CoreContext.Provider>
-        </IntlContext.Provider>
-      </Provider>
+      <ApolloProvider client={client}>
+        <ApolloHooksProvider client={client}>
+          <CoreStoreContext.Provider value={store}>
+            <IntlContext.Provider value={intl}>
+              <CoreContext.Provider value={context}>
+                {/* tslint:disable-next-line:prettier */}
+                {children}
+              </CoreContext.Provider>
+            </IntlContext.Provider>
+          </CoreStoreContext.Provider>
+        </ApolloHooksProvider>
+      </ApolloProvider>
     )
   }),
   {

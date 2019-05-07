@@ -1,10 +1,8 @@
 import { App, ClientDependencies } from '@ag/core'
 import { createClient } from '@ag/db'
 import { online } from '@ag/online'
-import { ApolloHooksProvider } from '@ag/util'
 import debug from 'debug'
 import React from 'react'
-import { ApolloProvider } from 'react-apollo'
 import { IntlProvider } from 'react-intl'
 import { YellowBox } from 'react-native'
 import { Navigation } from 'react-native-navigation'
@@ -35,13 +33,9 @@ const context = App.createContext({ store, deps })
 const client = createClient({ openDb, deleteDb, online, intl, ...context })
 
 const RnApp: React.FC = ({ children }) => (
-  <ApolloProvider client={client}>
-    <ApolloHooksProvider client={client}>
-      <App context={context} intl={intl}>
-        {children}
-      </App>
-    </ApolloHooksProvider>
-  </ApolloProvider>
+  <App context={context} client={client} intl={intl} store={store}>
+    {children}
+  </App>
 )
 
 registerComponents(RnApp)

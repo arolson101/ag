@@ -161,7 +161,7 @@ const checkSqlite = async (promises: Array<Promise<any>>) => {
       sqlite3dir,
       'lib',
       'binding',
-      `electron-v4.0-${os.platform()}-${os.arch()}`,
+      `electron-v5.0-${os.platform()}-${os.arch()}`,
       'node_sqlite3.node'
     )
     if (!fs.existsSync(libPath)) {

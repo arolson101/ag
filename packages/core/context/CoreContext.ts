@@ -18,7 +18,6 @@ export interface ClientDependencies {
 }
 
 export interface CoreContext extends ClientDependencies {
-  store: CoreStore
   uniqueId: () => string
 }
 
@@ -29,16 +28,16 @@ export type IntlContext = IntlContext1
 export const IntlContext = React.createContext<IntlContext1>(null as any)
 IntlContext.displayName = 'IntlContext'
 
+export const CoreStoreContext = React.createContext<CoreStore>(null as any)
+CoreStoreContext.displayName = 'CoreStoreContext'
+
 export const useIntl = () => {
   return useContext(IntlContext)
 }
 
-export const useCoreStore = () => {
-  const { store } = useContext(CoreContext)
-  return store
-}
+export const useCoreStore = () => useContext(CoreStoreContext)
 
 export const useAction = <A, C extends ActionCreator<A>>(actionCreator: C) => {
-  const { store } = useContext(CoreContext)
+  const store = useContext(CoreStoreContext)
   return bindActionCreators(actionCreator, store.dispatch)
 }

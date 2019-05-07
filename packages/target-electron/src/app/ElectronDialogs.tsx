@@ -1,13 +1,13 @@
 import {
   AccountDialog,
   BankDialog,
-  CoreContext,
   CoreState,
   LoginDialog,
   PictureDialog,
+  useCoreStore,
 } from '@ag/core'
 import debug from 'debug'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import shallowequal from 'shallowequal'
 
 const log = debug('electron:ElectronDialogs')
@@ -24,7 +24,7 @@ const subState = (state: CoreState): State => ({
 
 export const ElectronDialogs = Object.assign(
   React.memo<Props>(function _ElectronDialogs(props) {
-    const { store } = useContext(CoreContext)
+    const store = useCoreStore()
     const [state, setState] = useState(subState(store.getState() as any))
 
     useEffect(() => {
