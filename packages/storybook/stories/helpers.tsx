@@ -1,5 +1,5 @@
 // tslint:disable:no-implicit-dependencies
-import { App, ClientDependencies, CoreContext } from '@ag/core'
+import { App, ClientDependencies, CoreContext, IntlContext } from '@ag/core'
 import { online } from '@ag/online'
 import { ApolloHooksProvider } from '@ag/util'
 import { action } from '@storybook/addon-actions'
@@ -36,6 +36,7 @@ const store = {
 } as any
 
 const context = App.createContext({ store, deps })
+const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
 
 const createClient = (mocks: ReadonlyArray<MockedResponse>) => {
   return new ApolloClient({
@@ -49,9 +50,11 @@ export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, childre
   return (
     <ApolloProvider client={client}>
       <ApolloHooksProvider client={client}>
-        <IntlProvider locale='en'>
-          <CoreContext.Provider value={context}>{children}</CoreContext.Provider>
-        </IntlProvider>
+        <IntlContext.Provider value={intl}>
+          <IntlProvider locale='en'>
+            <CoreContext.Provider value={context}>{children}</CoreContext.Provider>
+          </IntlProvider>
+        </IntlContext.Provider>
       </ApolloHooksProvider>
     </ApolloProvider>
   )

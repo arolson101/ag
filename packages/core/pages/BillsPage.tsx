@@ -6,7 +6,7 @@ import React, { useContext, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext } from '../context'
+import { CoreContext, IntlContext } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:BillsPage')
@@ -28,8 +28,8 @@ const queries = {
 }
 
 const Component = React.memo<ComponentProps>(({ data, loading }) => {
+  const intl = useContext(IntlContext)
   const {
-    intl,
     ui: { Page, Row, Text },
   } = useContext(CoreContext)
 

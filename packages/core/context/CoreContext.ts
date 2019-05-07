@@ -1,7 +1,7 @@
 import { Online } from '@ag/online'
 import { ImageBuf } from '@ag/util'
 import React, { Dispatch } from 'react'
-import { InjectedIntl as IntlContext } from 'react-intl'
+import { InjectedIntl as IntlContext1 } from 'react-intl'
 import { CoreAction } from '../actions'
 import { CoreState, CoreStore } from '../reducers'
 import { UiContext } from './uiContext'
@@ -18,14 +18,15 @@ export interface ClientDependencies {
 }
 
 export interface CoreContext extends ClientDependencies {
-  intl: IntlContext
   store: CoreStore
   dispatch: Dispatch<CoreAction>
   getState: () => CoreState
   uniqueId: () => string
 }
 
-const defaultContext: CoreContext = null as any
-
-export const CoreContext = React.createContext<CoreContext>(defaultContext)
+export const CoreContext = React.createContext<CoreContext>(null as any)
 CoreContext.displayName = 'AppContext'
+
+export type IntlContext = IntlContext1
+export const IntlContext = React.createContext<IntlContext1>(null as any)
+IntlContext.displayName = 'IntlContext'

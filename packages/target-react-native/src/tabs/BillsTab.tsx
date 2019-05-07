@@ -1,6 +1,6 @@
 import { BillsPage, CoreContext } from '@ag/core'
 import React from 'react'
-import { Options } from 'react-native-navigation'
+import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'
 import { VisibleRoot } from './VisibleRoot'
 
@@ -12,7 +12,7 @@ export class BillsTab extends React.PureComponent<Props> {
   static readonly id = 'BillsTab'
   static readonly stackId = 'BillsTabStack'
 
-  static options = ({ intl }: CoreContext): Options => ({
+  static options: RnnOptionsHandler = ({ intl }) => ({
     bottomTab: {
       text: intl.formatMessage(BillsPage.messages.tabText),
       icon: icons.bills,

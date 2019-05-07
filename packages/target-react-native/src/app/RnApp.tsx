@@ -5,6 +5,7 @@ import { ApolloHooksProvider } from '@ag/util'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
+import { IntlProvider } from 'react-intl'
 import { YellowBox } from 'react-native'
 import { Navigation } from 'react-native-navigation'
 import { iconInit } from '../icons'
@@ -28,14 +29,17 @@ export const deps: ClientDependencies = {
   scaleImage,
 }
 
+const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
 const store = createStore(deps)
 const context = App.createContext({ store, deps })
-const client = createClient({ openDb, deleteDb, online, ...context })
+const client = createClient({ openDb, deleteDb, online, intl, ...context })
 
 const RnApp: React.FC = ({ children }) => (
   <ApolloProvider client={client}>
     <ApolloHooksProvider client={client}>
-      <App context={context}>{children}</App>
+      <App context={context} intl={intl}>
+        {children}
+      </App>
     </ApolloHooksProvider>
   </ApolloProvider>
 )

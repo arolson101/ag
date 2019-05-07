@@ -6,6 +6,7 @@ import { ApolloHooksProvider } from '@ag/util'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { hot } from 'react-hot-loader/root'
+import { IntlProvider } from 'react-intl'
 import { createStore } from '../store'
 import { ElectronDialogs } from './ElectronDialogs'
 import { ElectronRouter } from './ElectronRouter'
@@ -22,16 +23,17 @@ export const deps: ClientDependencies = {
   scaleImage,
 }
 
+const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
 const store = createStore(deps)
 const context = App.createContext({ store, deps })
-const client = createClient({ openDb, deleteDb, online, ...context })
+const client = createClient({ openDb, deleteDb, online, intl, ...context })
 
 class ElectronApp extends React.PureComponent {
   render() {
     return (
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client}>
-          <App context={context}>
+          <App context={context} intl={intl}>
             <ElectronRouter />
             <ElectronDialogs />
           </App>

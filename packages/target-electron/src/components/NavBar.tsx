@@ -7,6 +7,7 @@ import {
   CoreAction,
   CoreContext,
   HomePage,
+  IntlContext,
   MenuBar,
 } from '@ag/core'
 import { Icon, Menu } from '@ag/ui-antd'
@@ -77,7 +78,8 @@ const navItems: NavItem[] = [
 ]
 
 export const NavBar = React.memo<Props>(props => {
-  const { dispatch, intl } = useContext(CoreContext)
+  const intl = useContext(IntlContext)
+  const { dispatch } = useContext(CoreContext)
   const { location } = useReactRouter()
 
   const selectedKeys = navItems

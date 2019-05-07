@@ -13,7 +13,7 @@ import gql from 'graphql-tag'
 import React, { useCallback, useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields } from '../context'
+import { CoreContext, IntlContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('AccountForm')
@@ -86,7 +86,8 @@ interface ComponentProps extends Props {
 
 const FormComponent = Object.assign(
   React.memo<ComponentProps>(props => {
-    const { ui, intl } = useContext(CoreContext)
+    const intl = useContext(IntlContext)
+    const { ui } = useContext(CoreContext)
     const { Text } = ui
     const { Form, SelectField, TextField } = typedFields<FormValues>(ui)
     const { data, loading } = props
@@ -157,8 +158,9 @@ const FormComponent = Object.assign(
 
 const Component = Object.assign(
   React.forwardRef<AccountForm, ComponentProps>((props, ref) => {
-    log('AccountForm.Component render %o', props)
-    const { ui, intl } = useContext(CoreContext)
+    // log('AccountForm.Component render %o', props)
+    const intl = useContext(IntlContext)
+    const { ui } = useContext(CoreContext)
     const { showToast } = ui
     const { data, saveAccount, loading, accountId, bankId, onClosed } = props
 
@@ -229,7 +231,7 @@ const Component = Object.assign(
 
 export const AccountForm = Object.assign(
   React.forwardRef<AccountForm, Props>((props, ref) => {
-    log('AccountForm render %o', props)
+    // log('AccountForm render %o', props)
     const { accountId, onClosed, bankId } = props
 
     const component = useRef<AccountForm>(null)

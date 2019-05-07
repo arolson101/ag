@@ -7,7 +7,13 @@ import { timer } from 'rxjs'
 import { useEventCallback } from 'rxjs-hooks'
 import { debounce, distinctUntilChanged, filter, ignoreElements, map, tap } from 'rxjs/operators'
 import { actions } from '../actions'
-import { CommonFieldProps, CommonTextFieldProps, CoreContext, typedFields } from '../context'
+import {
+  CommonFieldProps,
+  CommonTextFieldProps,
+  CoreContext,
+  IntlContext,
+  typedFields,
+} from '../context'
 
 const log = debug('core:UrlField')
 
@@ -40,7 +46,8 @@ interface FavicoButtonProps {
 type Field<T> = [{ value: T }, {}]
 
 export const UrlField = <Values extends Record<string, any>>(props: Props<Values>) => {
-  const { intl, ui, dispatch, getImageFromLibrary, online } = useContext(CoreContext)
+  const intl = useContext(IntlContext)
+  const { ui, dispatch, getImageFromLibrary, online } = useContext(CoreContext)
   const { PopoverButton, Image, Text } = ui
   const { TextField } = typedFields<Values>(ui)
   const { disabled } = props

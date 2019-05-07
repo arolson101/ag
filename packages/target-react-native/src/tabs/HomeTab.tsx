@@ -1,7 +1,8 @@
-import { CoreContext, HomePage } from '@ag/core'
+import { HomePage } from '@ag/core'
 import debug from 'debug'
 import React from 'react'
 import { Options } from 'react-native-navigation'
+import { RnnContext } from '../app/RnnContext'
 import { icons } from '../icons'
 import { VisibleRoot } from './VisibleRoot'
 
@@ -24,7 +25,7 @@ export const HomeTab = Object.assign(
     id: 'HomeTab',
     stackId: 'HomeTabStack',
 
-    options: ({ intl }: CoreContext): Options => ({
+    options: ({ intl }: RnnContext): Options => ({
       bottomTab: {
         text: intl.formatMessage(HomePage.messages.tabText),
         icon: icons.home,

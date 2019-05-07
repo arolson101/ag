@@ -1,14 +1,14 @@
 import crypto from 'crypto'
 import debug from 'debug'
 import React from 'react'
-import { IntlProvider } from 'react-intl'
 import { Provider } from 'react-redux'
-import { ClientDependencies, CoreContext } from './context'
+import { ClientDependencies, CoreContext, IntlContext } from './context'
 import { CoreStore } from './reducers'
 
 const log = debug('core:app')
 
 type Props = React.PropsWithChildren<{
+  intl: IntlContext
   context: CoreContext
 }>
 
@@ -27,14 +27,12 @@ interface CreateContextParams {
 }
 export const createContext = ({ store, deps }: CreateContextParams): CoreContext => {
   const { dispatch, getState } = store
-  const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
 
   const context: CoreContext = {
     uniqueId,
     store,
     dispatch,
     getState,
-    intl,
     ...deps,
   }
 
@@ -42,13 +40,15 @@ export const createContext = ({ store, deps }: CreateContextParams): CoreContext
 }
 
 export const App = Object.assign(
-  React.memo<Props>(({ context, children }) => {
+  React.memo<Props>(({ context, intl, children }) => {
     return (
       <Provider store={context.store}>
-        <CoreContext.Provider value={context}>
-          {/* tslint:disable-next-line:prettier */}
-          {children}
-        </CoreContext.Provider>
+        <IntlContext.Provider value={intl}>
+          <CoreContext.Provider value={context}>
+            {/* tslint:disable-next-line:prettier */}
+            {children}
+          </CoreContext.Provider>
+        </IntlContext.Provider>
       </Provider>
     )
   }),

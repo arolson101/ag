@@ -1,15 +1,11 @@
-import { Gql, ImageSource } from '@ag/util'
-import ApolloClient from 'apollo-client'
+import { ImageSource } from '@ag/util'
 import debug from 'debug'
-import { Formik, FormikProvider, useFormik } from 'formik'
-import gql from 'graphql-tag'
+import { FormikProvider, useFormik } from 'formik'
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { Query } from 'react-apollo'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields } from '../context'
-import * as T from '../graphql-types'
+import { CoreContext, IntlContext, typedFields } from '../context'
 
 const log = debug('core:PictureDialog')
 
@@ -69,8 +65,9 @@ const ImageTile = React.memo<ImageTileProps>(({ link, selectItem }) => {
 
 export const PictureDialog = Object.assign(
   React.memo<Props>(props => {
+    const intl = useContext(IntlContext)
     const context = useContext(CoreContext)
-    const { intl, ui, dispatch, scaleImage, online } = context
+    const { ui, dispatch, scaleImage, online } = context
     const [url, setUrl] = useState(props.url)
     const [listLoading, setListLoading] = useState(false)
     const [listData, setListData] = useState<string[]>([])
@@ -132,7 +129,7 @@ export const PictureDialog = Object.assign(
         .then(imageList => {
           setListData(imageList)
         })
-        .catch(error => ErrorDisplay.show(context, error))
+        .catch(error => ErrorDisplay.show(context, intl, error))
         .finally(() => setListLoading(false))
       return cancelToken.cancel
     }, [setListLoading, online.getImageList, setListData, url])

@@ -6,7 +6,7 @@ import React, { useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, TableColumn } from '../context'
+import { CoreContext, IntlContext, TableColumn } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:AccountPage')
@@ -50,8 +50,8 @@ const mutations = {}
 type ComponentProps = Props & QueryHookResult<T.AccountPage.Query, T.AccountPage.Variables>
 const Component = Object.assign(
   React.memo<ComponentProps>(({ accountId, data, loading }) => {
+    const intl = useContext(IntlContext)
     const {
-      intl,
       dispatch,
       ui: { Page, Table, Text },
     } = useContext(CoreContext)

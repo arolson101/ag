@@ -4,7 +4,7 @@ import assert from 'assert'
 import gql from 'graphql-tag'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext } from '../context'
+import { CoreContext, IntlContext } from '../context'
 import * as T from '../graphql-types'
 
 const mutations = {
@@ -18,16 +18,16 @@ const mutations = {
 interface DeleteAccountParams {
   client: ApolloClient<any>
   context: CoreContext
+  intl: IntlContext
   account: {
     id: string
     name: string
   }
 }
 
-export const deleteAccount = ({ client, context, account }: DeleteAccountParams) => {
+export const deleteAccount = ({ client, context, intl, account }: DeleteAccountParams) => {
   const {
     ui: { alert, showToast },
-    intl,
   } = context
   const intlCtx = { name: account.name }
 
@@ -48,7 +48,7 @@ export const deleteAccount = ({ client, context, account }: DeleteAccountParams)
       })
       assert(result.data && result.data.deleteAccount)
 
-      ErrorDisplay.show(context, result.errors)
+      ErrorDisplay.show(context, intl, result.errors)
       showToast(intl.formatMessage(messages.deleted, intlCtx), true)
     },
 

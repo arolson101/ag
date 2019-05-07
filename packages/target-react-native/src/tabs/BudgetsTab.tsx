@@ -1,6 +1,6 @@
-import { BudgetsPage, CoreContext } from '@ag/core'
+import { BudgetsPage } from '@ag/core'
 import React from 'react'
-import { Options } from 'react-native-navigation'
+import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'
 import { VisibleRoot } from './VisibleRoot'
 
@@ -12,7 +12,7 @@ export class BudgetsTab extends React.PureComponent<Props> {
   static readonly id = 'BudgetsTab'
   static readonly stackId = 'BudgetsTabStack'
 
-  static options = ({ intl }: CoreContext): Options => ({
+  static options: RnnOptionsHandler = ({ intl }) => ({
     bottomTab: {
       text: intl.formatMessage(BudgetsPage.messages.tabText),
       icon: icons.budgets,

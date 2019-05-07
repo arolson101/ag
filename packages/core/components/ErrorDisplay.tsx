@@ -1,13 +1,13 @@
 import { ApolloError } from 'apollo-client'
 import React, { useContext, useEffect } from 'react'
 import { defineMessages } from 'react-intl'
-import { CoreContext } from '../context'
+import { CoreContext, IntlContext } from '../context'
 
 interface Props {
   error: undefined | Error | Error[] | ReadonlyArray<Error>
 }
 
-const show = (context: CoreContext, errors: Props['error']) => {
+const show = (context: CoreContext, intl: IntlContext, errors: Props['error']) => {
   if (!errors) {
     return null
   }
@@ -18,7 +18,7 @@ const show = (context: CoreContext, errors: Props['error']) => {
     errors = [errors]
   }
 
-  const { intl, ui } = context
+  const { ui } = context
   const { alert } = ui
 
   alert({
@@ -32,9 +32,10 @@ const show = (context: CoreContext, errors: Props['error']) => {
 
 export const ErrorDisplay = Object.assign(
   React.memo<Props>(function _ErrorDisplay({ error }) {
+    const intl = useContext(IntlContext)
     const context = useContext(CoreContext)
     useEffect(() => {
-      show(context, error)
+      show(context, intl, error)
     }, [error])
     return null
   }),

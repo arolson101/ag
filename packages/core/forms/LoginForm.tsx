@@ -7,7 +7,7 @@ import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields } from '../context'
+import { CoreContext, IntlContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:LoginForm')
@@ -64,7 +64,8 @@ interface ComponentProps extends Props {
 
 const FormComponent = Object.assign(
   React.memo<ComponentProps>(props => {
-    const { ui, intl } = useContext(CoreContext)
+    const intl = useContext(IntlContext)
+    const { ui } = useContext(CoreContext)
     const { Text } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
     const { query } = props
@@ -104,8 +105,9 @@ const FormComponent = Object.assign(
 
 const Component = Object.assign(
   React.forwardRef<LoginForm, ComponentProps>(function LoginFormComponent(props, ref) {
+    const intl = useContext(IntlContext)
     const context = useContext(CoreContext)
-    const { intl, dispatch } = context
+    const { dispatch } = context
     const { createDb, openDb, query } = props
     const dbId = query.dbs && query.dbs.length ? query.dbs[0].dbId : undefined
     const create = !dbId
@@ -139,7 +141,7 @@ const Component = Object.assign(
           log('logged in')
           dispatch(actions.closeDlg('login'))
         } catch (error) {
-          ErrorDisplay.show(context, error)
+          ErrorDisplay.show(context, intl, error)
         } finally {
           factions.setSubmitting(false)
         }

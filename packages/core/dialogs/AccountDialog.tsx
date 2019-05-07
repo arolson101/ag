@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { CoreContext } from '../context'
+import { CoreContext, IntlContext } from '../context'
 import { AccountForm } from '../forms'
 
 interface Props {
@@ -12,8 +12,8 @@ interface Props {
 
 export const AccountDialog = Object.assign(
   React.memo<Props>(function _AccountDialog({ bankId, accountId, isOpen }) {
+    const intl = useContext(IntlContext)
     const {
-      intl,
       dispatch,
       ui: { Dialog },
     } = useContext(CoreContext)

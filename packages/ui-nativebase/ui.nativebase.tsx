@@ -1,4 +1,4 @@
-import { CoreContext, PopoverButtonProps, TabProps, TabsProps, UiContext } from '@ag/core'
+import { IntlContext, PopoverButtonProps, TabProps, TabsProps, UiContext } from '@ag/core'
 import debug from 'debug'
 import {
   ActionSheet,
@@ -132,7 +132,7 @@ export const ui: Omit<UiContext, RNNTypes> = {
   },
   PopoverButton: React.memo<PopoverButtonProps>(props => {
     const { loading, icon, children, minimal, content } = props
-    const { intl } = useContext(CoreContext)
+    const intl = useContext(IntlContext)
 
     const onPress = useCallback(
       function _onPress() {

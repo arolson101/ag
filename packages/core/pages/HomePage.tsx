@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { CoreContext } from '../context'
+import { CoreContext, IntlContext } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:HomePage')
@@ -26,8 +26,8 @@ const queries = {
 }
 
 const Component = React.memo<ComponentProps>(({ data, loading }) => {
+  const intl = useContext(IntlContext)
   const {
-    intl,
     ui: { Page, Row, Text },
   } = useContext(CoreContext)
 

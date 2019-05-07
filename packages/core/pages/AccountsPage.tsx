@@ -15,7 +15,7 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { ActionItem, ContextMenuProps, CoreContext, TableColumn } from '../context'
+import { ActionItem, ContextMenuProps, CoreContext, IntlContext, TableColumn } from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
 
@@ -111,9 +111,9 @@ const mutations = {
 const BankTable = Object.assign(
   React.memo<T.AccountsPage.Banks>(bank => {
     type Row = typeof bank.accounts[number]
+    const intl = useContext(IntlContext)
     const context = useContext(CoreContext)
     const {
-      intl,
       dispatch,
       ui: { Link, Text, Row, Table, showToast },
     } = context
@@ -145,7 +145,7 @@ const BankTable = Object.assign(
       {
         icon: 'trash',
         text: intl.formatMessage(messages.deleteBank),
-        onClick: () => deleteBank({ context, bank, client }),
+        onClick: () => deleteBank({ context, intl, bank, client }),
       },
       {
         icon: 'add',
@@ -163,7 +163,7 @@ const BankTable = Object.assign(
                   client.reFetchObservableQueries()
                   showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
                 } catch (error) {
-                  ErrorDisplay.show(context, error)
+                  ErrorDisplay.show(context, intl, error)
                 }
               },
               disabled: !bank.online,
@@ -188,7 +188,7 @@ const BankTable = Object.assign(
             {
               icon: 'trash',
               text: intl.formatMessage(messages.deleteAccount),
-              onClick: () => deleteAccount({ context, account, client }),
+              onClick: () => deleteAccount({ context, intl, account, client }),
             },
             {
               icon: 'refresh',
@@ -212,7 +212,7 @@ const BankTable = Object.assign(
                   )
                 } catch (error) {
                   log('error downloading transactions: %o', error)
-                  ErrorDisplay.show(context, error)
+                  ErrorDisplay.show(context, intl, error)
                 }
               },
             },
@@ -273,8 +273,8 @@ const BankTable = Object.assign(
 type ComponentProps = QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
 const Component = Object.assign(
   React.memo<ComponentProps>(({ data, loading }) => {
+    const intl = useContext(IntlContext)
     const {
-      intl,
       dispatch,
       ui: { Page },
     } = useContext(CoreContext)

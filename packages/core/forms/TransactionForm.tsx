@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields } from '../context'
+import { CoreContext, IntlContext, typedFields } from '../context'
 import * as T from '../graphql-types'
 
 interface Props {
@@ -78,8 +78,8 @@ interface ComponentProps extends Props {
 
 const Component = Object.assign(
   React.forwardRef<TransactionForm, ComponentProps>((props, ref) => {
-    const { ui, intl } = useContext(CoreContext)
-    const { showToast, Text } = ui
+    const intl = useContext(IntlContext)
+    const { ui } = useContext(CoreContext)
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
     const { data, saveTransaction, loading, accountId, transactionId } = props
 
