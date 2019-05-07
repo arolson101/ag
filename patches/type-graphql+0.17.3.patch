@@ -2,7 +2,7 @@ diff --git a/node_modules/type-graphql/.DS_Store b/node_modules/type-graphql/.DS
 new file mode 100644
 index 0000000..e69de29
 diff --git a/node_modules/type-graphql/dist/helpers/loadResolversFromGlob.js b/node_modules/type-graphql/dist/helpers/loadResolversFromGlob.js
-index 4285aba..cd3aabe 100644
+index 4285aba..af49e5c 100644
 --- a/node_modules/type-graphql/dist/helpers/loadResolversFromGlob.js
 +++ b/node_modules/type-graphql/dist/helpers/loadResolversFromGlob.js
 @@ -2,11 +2,11 @@
@@ -19,3 +19,44 @@ index 4285aba..cd3aabe 100644
 +    const modules = [] // filePaths.map(fileName => require(fileName));
  }
  exports.loadResolversFromGlob = loadResolversFromGlob;
+diff --git a/node_modules/type-graphql/dist/utils/emitSchemaDefinitionFile.js b/node_modules/type-graphql/dist/utils/emitSchemaDefinitionFile.js
+index 7dcc029..f2a3979 100644
+--- a/node_modules/type-graphql/dist/utils/emitSchemaDefinitionFile.js
++++ b/node_modules/type-graphql/dist/utils/emitSchemaDefinitionFile.js
+@@ -2,7 +2,7 @@
+ Object.defineProperty(exports, "__esModule", { value: true });
+ const tslib_1 = require("tslib");
+ const graphql_1 = require("graphql");
+-const filesystem_1 = require("../helpers/filesystem");
++// const filesystem_1 = require("../helpers/filesystem");
+ exports.defaultPrintSchemaOptions = { commentDescriptions: false };
+ const generatedSchemaWarning = /* graphql */ `\
+ # -----------------------------------------------
+@@ -11,15 +11,15 @@ const generatedSchemaWarning = /* graphql */ `\
+ # -----------------------------------------------
+ 
+ `;
+-function emitSchemaDefinitionFileSync(schemaFilePath, schema, options = exports.defaultPrintSchemaOptions) {
+-    const schemaFileContent = generatedSchemaWarning + graphql_1.printSchema(schema, options);
+-    filesystem_1.outputFileSync(schemaFilePath, schemaFileContent);
+-}
+-exports.emitSchemaDefinitionFileSync = emitSchemaDefinitionFileSync;
+-function emitSchemaDefinitionFile(schemaFilePath, schema, options = exports.defaultPrintSchemaOptions) {
+-    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+-        const schemaFileContent = generatedSchemaWarning + graphql_1.printSchema(schema, options);
+-        yield filesystem_1.outputFile(schemaFilePath, schemaFileContent);
+-    });
+-}
+-exports.emitSchemaDefinitionFile = emitSchemaDefinitionFile;
++// function emitSchemaDefinitionFileSync(schemaFilePath, schema, options = exports.defaultPrintSchemaOptions) {
++//     const schemaFileContent = generatedSchemaWarning + graphql_1.printSchema(schema, options);
++//     filesystem_1.outputFileSync(schemaFilePath, schemaFileContent);
++// }
++// exports.emitSchemaDefinitionFileSync = emitSchemaDefinitionFileSync;
++// function emitSchemaDefinitionFile(schemaFilePath, schema, options = exports.defaultPrintSchemaOptions) {
++//     return tslib_1.__awaiter(this, void 0, void 0, function* () {
++//         const schemaFileContent = generatedSchemaWarning + graphql_1.printSchema(schema, options);
++//         yield filesystem_1.outputFile(schemaFilePath, schemaFileContent);
++//     });
++// }
++// exports.emitSchemaDefinitionFile = emitSchemaDefinitionFile;
