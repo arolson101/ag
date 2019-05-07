@@ -15,7 +15,7 @@ export class SelectField<Values> extends React.PureComponent<SelectFieldProps<Va
         {({ field, form }: FieldProps<Values>) => {
           this.form = form
           const error = !!(form.touched[name] && form.errors[name])
-          const selectedItem = items.find(item => item.value === field.value)
+          const selectedItem = items.find(item => item.value === (field.value as any))
           if (!selectedItem) {
             throw new Error(`selected item ${field.value} not found in item list`)
           }

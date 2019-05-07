@@ -18,7 +18,7 @@ export const decodeDataURI = (input: string): DataURIProps => {
   const semi = input.indexOf(';')
   const comma = input.indexOf(',')
   const mime = input.substring(colon + 1, semi)
-  const encoding = input.substring(semi + 1, comma)
+  const encoding = input.substring(semi + 1, comma) as BufferEncoding
   const data = input.substring(comma + 1)
   const buf = Buffer.from(data, encoding)
   return { mime, buf }

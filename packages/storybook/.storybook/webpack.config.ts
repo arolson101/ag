@@ -13,7 +13,7 @@ module.exports = async ({ config }: Params): Promise<webpack.Configuration> => {
   config.module!.rules!.push(
     {
       test: /\.tsx?$/,
-      exclude: '/node_modules/',
+      exclude: ['/node_modules/', /test.ts/],
       loader: 'ts-loader',
       options: {
         getCustomTransformers: () => ({ before: [getTransformer()] }),
