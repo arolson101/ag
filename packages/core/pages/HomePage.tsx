@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import React, { useContext, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { CoreContext, useIntl } from '../context'
+import { CoreContext, useAction, useIntl } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:HomePage')
@@ -55,12 +55,12 @@ const route = docuri.route<void, string>(path)
 
 export const HomePage = Object.assign(
   React.memo<Props>(props => {
-    const { dispatch } = useContext(CoreContext)
+    const openLoginDlg = useAction(actions.openDlg.login)
     const [dispatched, setDispatched] = useState(false)
     const q = useQuery(queries.HomePage)
 
     if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
-      dispatch(actions.openDlg.login())
+      openLoginDlg()
       setDispatched(true)
     }
 

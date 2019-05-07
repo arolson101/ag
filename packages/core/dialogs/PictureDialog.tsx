@@ -5,7 +5,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields, useIntl } from '../context'
+import { CoreContext, typedFields, useAction, useIntl } from '../context'
 
 const log = debug('core:PictureDialog')
 
@@ -67,7 +67,8 @@ export const PictureDialog = Object.assign(
   React.memo<Props>(props => {
     const intl = useIntl()
     const context = useContext(CoreContext)
-    const { ui, dispatch, scaleImage, online } = context
+    const closeDlg = useAction(actions.closeDlg)
+    const { ui, scaleImage, online } = context
     const [url, setUrl] = useState(props.url)
     const [listLoading, setListLoading] = useState(false)
     const [listData, setListData] = useState<string[]>([])
@@ -82,8 +83,8 @@ export const PictureDialog = Object.assign(
 
     const close = useCallback(() => {
       // log('close')
-      dispatch(actions.closeDlg('picture'))
-    }, [dispatch])
+      closeDlg('picture')
+    }, [closeDlg])
 
     const selectItem = useCallback(
       async (source: ImageSource) => {

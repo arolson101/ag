@@ -6,7 +6,7 @@ import React, { useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, TableColumn, useIntl } from '../context'
+import { CoreContext, TableColumn, useAction, useIntl } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:AccountPage')
@@ -51,8 +51,8 @@ type ComponentProps = Props & QueryHookResult<T.AccountPage.Query, T.AccountPage
 const Component = Object.assign(
   React.memo<ComponentProps>(({ accountId, data, loading }) => {
     const intl = useIntl()
+    const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const {
-      dispatch,
       ui: { Page, Table, Text },
     } = useContext(CoreContext)
 
@@ -107,7 +107,7 @@ const Component = Object.assign(
         subtitle={subtitle}
         button={{
           title: intl.formatMessage(messages.transactionAdd),
-          onClick: () => dispatch(actions.openDlg.bankCreate()),
+          onClick: openBankCreateDlg,
         }}
       >
         <Table
@@ -160,15 +160,8 @@ const route = docuri.route<Props, string>(path)
 
 export const AccountPage = Object.assign(
   React.memo<Props>(props => {
-    const { dispatch } = useContext(CoreContext)
-    const [dispatched, setDispatched] = useState(false)
     const { accountId } = props
     const q = useQuery(AccountPage.queries.AccountPage, { variables: { accountId } })
-
-    if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
-      dispatch(actions.openDlg.login())
-      setDispatched(true)
-    }
 
     return (
       <>

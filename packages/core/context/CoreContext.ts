@@ -2,7 +2,7 @@ import { Online } from '@ag/online'
 import { ImageBuf } from '@ag/util'
 import React, { Dispatch, useContext } from 'react'
 import { InjectedIntl as IntlContext1 } from 'react-intl'
-import { CoreAction } from '../actions'
+import { ActionCreator, bindActionCreators } from 'redux'
 import { CoreState, CoreStore } from '../reducers'
 import { UiContext } from './uiContext'
 
@@ -19,8 +19,6 @@ export interface ClientDependencies {
 
 export interface CoreContext extends ClientDependencies {
   store: CoreStore
-  dispatch: Dispatch<CoreAction>
-  getState: () => CoreState
   uniqueId: () => string
 }
 
@@ -33,4 +31,14 @@ IntlContext.displayName = 'IntlContext'
 
 export const useIntl = () => {
   return useContext(IntlContext)
+}
+
+export const useCoreStore = () => {
+  const { store } = useContext(CoreContext)
+  return store
+}
+
+export const useAction = <A, C extends ActionCreator<A>>(actionCreator: C) => {
+  const { store } = useContext(CoreContext)
+  return bindActionCreators(actionCreator, store.dispatch)
 }

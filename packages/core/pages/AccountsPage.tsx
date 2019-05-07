@@ -15,7 +15,14 @@ import React, { useCallback, useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { ActionItem, ContextMenuProps, CoreContext, TableColumn, useIntl } from '../context'
+import {
+  ActionItem,
+  ContextMenuProps,
+  CoreContext,
+  TableColumn,
+  useAction,
+  useIntl,
+} from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
 
@@ -113,8 +120,11 @@ const BankTable = Object.assign(
     type Row = typeof bank.accounts[number]
     const intl = useIntl()
     const context = useContext(CoreContext)
+    const openBankEditDlg = useAction(actions.openDlg.bankEdit)
+    const openAccountCreateDlg = useAction(actions.openDlg.accountCreate)
+    const openAccountEditDlg = useAction(actions.openDlg.accountEdit)
+    const navAccount = useAction(actions.nav.account)
     const {
-      dispatch,
       ui: { Link, Text, Row, Table, showToast },
     } = context
 
@@ -140,7 +150,7 @@ const BankTable = Object.assign(
       {
         icon: 'edit',
         text: intl.formatMessage(messages.bankEdit),
-        onClick: () => dispatch(actions.openDlg.bankEdit({ bankId: bank.id })),
+        onClick: () => openBankEditDlg({ bankId: bank.id }),
       },
       {
         icon: 'trash',
@@ -150,7 +160,7 @@ const BankTable = Object.assign(
       {
         icon: 'add',
         text: intl.formatMessage(messages.accountCreate),
-        onClick: () => dispatch(actions.openDlg.accountCreate({ bankId: bank.id })),
+        onClick: () => openAccountCreateDlg({ bankId: bank.id }),
       },
       ...(bank.online
         ? [
@@ -183,7 +193,7 @@ const BankTable = Object.assign(
             {
               icon: 'edit',
               text: intl.formatMessage(messages.editAccount),
-              onClick: () => dispatch(actions.openDlg.accountEdit({ accountId: account.id })),
+              onClick: () => openAccountEditDlg({ accountId: account.id }),
             },
             {
               icon: 'trash',
@@ -227,7 +237,7 @@ const BankTable = Object.assign(
         dataIndex: 'name',
         title: intl.formatMessage(messages.colName),
         render: (text: string, account: Row) => (
-          <Link onClick={() => dispatch(actions.nav.account({ accountId: account.id }))}>
+          <Link onClick={() => navAccount({ accountId: account.id })}>
             <Text>{account.name}</Text>
           </Link>
         ),
@@ -274,8 +284,8 @@ type ComponentProps = QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Varia
 const Component = Object.assign(
   React.memo<ComponentProps>(({ data, loading }) => {
     const intl = useIntl()
+    const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const {
-      dispatch,
       ui: { Page },
     } = useContext(CoreContext)
 
@@ -284,7 +294,7 @@ const Component = Object.assign(
         title={intl.formatMessage(messages.titleText)}
         button={{
           title: intl.formatMessage(messages.bankAdd),
-          onClick: () => dispatch(actions.openDlg.bankCreate()),
+          onClick: openBankCreateDlg,
         }}
       >
         {data && //
@@ -374,14 +384,7 @@ const route = docuri.route<void, string>(path)
 
 export const AccountsPage = Object.assign(
   React.memo<Props>(props => {
-    const { dispatch } = useContext(CoreContext)
-    const [dispatched, setDispatched] = useState(false)
     const q = useQuery(AccountsPage.queries.AccountsPage)
-
-    if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
-      dispatch(actions.openDlg.login())
-      setDispatched(true)
-    }
 
     return (
       <>

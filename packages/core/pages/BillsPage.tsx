@@ -6,7 +6,7 @@ import React, { useContext, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, useIntl } from '../context'
+import { CoreContext, useAction, useIntl } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:BillsPage')
@@ -60,14 +60,7 @@ const route = docuri.route<void, string>(path)
 
 export const BillsPage = Object.assign(
   React.memo<Props>(props => {
-    const { dispatch } = useContext(CoreContext)
-    const [dispatched, setDispatched] = useState(false)
     const q = useQuery(BillsPage.queries.BillsPage)
-
-    if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
-      dispatch(actions.openDlg.login())
-      setDispatched(true)
-    }
 
     return (
       <>

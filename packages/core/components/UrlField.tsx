@@ -12,6 +12,8 @@ import {
   CommonTextFieldProps,
   CoreContext,
   typedFields,
+  useAction,
+  useCoreStore,
   useIntl,
 } from '../context'
 
@@ -47,7 +49,8 @@ type Field<T> = [{ value: T }, {}]
 
 export const UrlField = <Values extends Record<string, any>>(props: Props<Values>) => {
   const intl = useIntl()
-  const { ui, dispatch, getImageFromLibrary, online } = useContext(CoreContext)
+  const openPictureDlg = useAction(actions.openDlg.picture)
+  const { ui, getImageFromLibrary, online } = useContext(CoreContext)
   const { PopoverButton, Image, Text } = ui
   const { TextField } = typedFields<Values>(ui)
   const { disabled } = props
@@ -125,8 +128,8 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
 
   const onClickSelect = useCallback(() => {
     log('openDlg.picture %s', url)
-    dispatch(actions.openDlg.picture({ url, onSelected: onPictureChosen }))
-  }, [url, dispatch, onPictureChosen])
+    openPictureDlg({ url, onSelected: onPictureChosen })
+  }, [openPictureDlg, url, onPictureChosen])
 
   const onClickLibrary = useCallback(async () => {
     const val = await getImageFromLibrary(favicoWidth, favicoHeight)

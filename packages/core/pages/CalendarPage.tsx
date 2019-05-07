@@ -60,14 +60,7 @@ const route = docuri.route<void, string>(path)
 
 export const CalendarPage = Object.assign(
   React.memo<Props>(props => {
-    const { dispatch } = useContext(CoreContext)
-    const [dispatched, setDispatched] = useState(false)
     const q = useQuery(CalendarPage.queries.CalendarPage)
-
-    if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
-      dispatch(actions.openDlg.login())
-      setDispatched(true)
-    }
 
     return (
       <>

@@ -5,8 +5,8 @@ import {
   BudgetsPage,
   CalendarPage,
   CoreAction,
-  CoreContext,
   HomePage,
+  useCoreStore,
   useIntl,
 } from '@ag/core'
 import { Icon, Menu } from '@ag/ui-antd'
@@ -22,7 +22,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import debug from 'debug'
 import { DocRoute } from 'docuri'
-import React, { useContext } from 'react'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import useReactRouter from 'use-react-router'
 
@@ -78,7 +78,7 @@ const navItems: NavItem[] = [
 
 export const NavBar = React.memo<Props>(props => {
   const intl = useIntl()
-  const { dispatch } = useContext(CoreContext)
+  const { dispatch } = useCoreStore()
   const { location } = useReactRouter()
 
   const selectedKeys = navItems

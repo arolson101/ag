@@ -26,13 +26,9 @@ interface CreateContextParams {
   deps: ClientDependencies
 }
 export const createContext = ({ store, deps }: CreateContextParams): CoreContext => {
-  const { dispatch, getState } = store
-
   const context: CoreContext = {
     uniqueId,
     store,
-    dispatch,
-    getState,
     ...deps,
   }
 

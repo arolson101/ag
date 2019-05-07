@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { CoreContext, useIntl } from '../context'
+import { CoreContext, useAction, useIntl } from '../context'
 import { AccountForm } from '../forms'
 
 interface Props {
@@ -13,8 +13,8 @@ interface Props {
 export const AccountDialog = Object.assign(
   React.memo<Props>(function _AccountDialog({ bankId, accountId, isOpen }) {
     const intl = useIntl()
+    const closeDlg = useAction(actions.closeDlg)
     const {
-      dispatch,
       ui: { Dialog },
     } = useContext(CoreContext)
 
@@ -31,9 +31,9 @@ export const AccountDialog = Object.assign(
 
     const close = useCallback(
       function _close() {
-        dispatch(actions.closeDlg('account'))
+        closeDlg('account')
       },
-      [dispatch]
+      [closeDlg]
     )
 
     return (

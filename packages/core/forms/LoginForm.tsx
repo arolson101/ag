@@ -7,7 +7,7 @@ import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, typedFields, useIntl } from '../context'
+import { CoreContext, typedFields, useAction, useIntl } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:LoginForm')
@@ -106,8 +106,8 @@ const FormComponent = Object.assign(
 const Component = Object.assign(
   React.forwardRef<LoginForm, ComponentProps>(function LoginFormComponent(props, ref) {
     const intl = useIntl()
+    const closeDlg = useAction(actions.closeDlg)
     const context = useContext(CoreContext)
-    const { dispatch } = context
     const { createDb, openDb, query } = props
     const dbId = query.dbs && query.dbs.length ? query.dbs[0].dbId : undefined
     const create = !dbId
@@ -139,7 +139,7 @@ const Component = Object.assign(
             await createDb({ variables: values })
           }
           log('logged in')
-          dispatch(actions.closeDlg('login'))
+          closeDlg('login')
         } catch (error) {
           ErrorDisplay.show(context, intl, error)
         } finally {
