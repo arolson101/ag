@@ -147,7 +147,7 @@ export const PictureDialog = Object.assign(
         }}
       >
         <Row>
-          <FormikProvider value={formik}>
+          <FormikProvider value={formik as any}>
             <Form onSubmit={formik.handleSubmit} lastFieldSubmit>
               <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
             </Form>

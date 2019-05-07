@@ -153,7 +153,7 @@ const Component = Object.assign(
     }))
 
     return (
-      <FormikProvider value={formik}>
+      <FormikProvider value={formik as any}>
         <FormComponent {...props} />
       </FormikProvider>
     )

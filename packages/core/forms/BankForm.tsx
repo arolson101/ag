@@ -291,7 +291,7 @@ const Component = Object.assign(
 
     // log('initial values: %o', initialValues)
     return (
-      <FormikProvider value={formik}>
+      <FormikProvider value={formik as any}>
         <FormComponent {...props} />
       </FormikProvider>
     )
