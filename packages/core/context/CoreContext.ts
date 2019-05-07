@@ -1,6 +1,6 @@
 import { Online } from '@ag/online'
 import { ImageBuf } from '@ag/util'
-import React, { Dispatch } from 'react'
+import React, { Dispatch, useContext } from 'react'
 import { InjectedIntl as IntlContext1 } from 'react-intl'
 import { CoreAction } from '../actions'
 import { CoreState, CoreStore } from '../reducers'
@@ -30,3 +30,7 @@ CoreContext.displayName = 'AppContext'
 export type IntlContext = IntlContext1
 export const IntlContext = React.createContext<IntlContext1>(null as any)
 IntlContext.displayName = 'IntlContext'
+
+export const useIntl = () => {
+  return useContext(IntlContext)
+}

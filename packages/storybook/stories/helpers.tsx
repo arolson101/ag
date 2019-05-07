@@ -51,9 +51,7 @@ export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, childre
     <ApolloProvider client={client}>
       <ApolloHooksProvider client={client}>
         <IntlContext.Provider value={intl}>
-          <IntlProvider locale='en'>
-            <CoreContext.Provider value={context}>{children}</CoreContext.Provider>
-          </IntlProvider>
+          <CoreContext.Provider value={context}>{children}</CoreContext.Provider>
         </IntlContext.Provider>
       </ApolloHooksProvider>
     </ApolloProvider>

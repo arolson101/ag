@@ -7,8 +7,7 @@ import {
   CoreAction,
   CoreContext,
   HomePage,
-  IntlContext,
-  MenuBar,
+  useIntl,
 } from '@ag/core'
 import { Icon, Menu } from '@ag/ui-antd'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
@@ -78,7 +77,7 @@ const navItems: NavItem[] = [
 ]
 
 export const NavBar = React.memo<Props>(props => {
-  const intl = useContext(IntlContext)
+  const intl = useIntl()
   const { dispatch } = useContext(CoreContext)
   const { location } = useReactRouter()
 

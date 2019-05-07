@@ -7,7 +7,7 @@ import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, IntlContext, typedFields } from '../context'
+import { CoreContext, typedFields, useIntl } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:LoginForm')
@@ -64,7 +64,7 @@ interface ComponentProps extends Props {
 
 const FormComponent = Object.assign(
   React.memo<ComponentProps>(props => {
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const { ui } = useContext(CoreContext)
     const { Text } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
@@ -105,7 +105,7 @@ const FormComponent = Object.assign(
 
 const Component = Object.assign(
   React.forwardRef<LoginForm, ComponentProps>(function LoginFormComponent(props, ref) {
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const context = useContext(CoreContext)
     const { dispatch } = context
     const { createDb, openDb, query } = props

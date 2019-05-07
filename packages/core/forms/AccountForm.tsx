@@ -1,19 +1,12 @@
 import { Account } from '@ag/db'
 import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
 import debug from 'debug'
-import {
-  FormikConfig,
-  FormikErrors,
-  FormikProvider,
-  useField,
-  useFormik,
-  useFormikContext,
-} from 'formik'
+import { FormikErrors, FormikProvider, useField, useFormik, useFormikContext } from 'formik'
 import gql from 'graphql-tag'
 import React, { useCallback, useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, IntlContext, typedFields } from '../context'
+import { CoreContext, typedFields, useIntl } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('AccountForm')
@@ -86,7 +79,7 @@ interface ComponentProps extends Props {
 
 const FormComponent = Object.assign(
   React.memo<ComponentProps>(props => {
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const { ui } = useContext(CoreContext)
     const { Text } = ui
     const { Form, SelectField, TextField } = typedFields<FormValues>(ui)
@@ -159,7 +152,7 @@ const FormComponent = Object.assign(
 const Component = Object.assign(
   React.forwardRef<AccountForm, ComponentProps>((props, ref) => {
     // log('AccountForm.Component render %o', props)
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const { ui } = useContext(CoreContext)
     const { showToast } = ui
     const { data, saveAccount, loading, accountId, bankId, onClosed } = props

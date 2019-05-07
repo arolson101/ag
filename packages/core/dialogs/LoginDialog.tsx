@@ -2,7 +2,7 @@ import { useApolloClient, useQuery } from '@ag/util'
 import React, { useCallback, useContext, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, IntlContext } from '../context'
+import { CoreContext, useIntl } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
 
@@ -12,7 +12,7 @@ interface Props {
 
 export const LoginDialog = React.memo<Props>(props => {
   const { isOpen } = props
-  const intl = useContext(IntlContext)
+  const intl = useIntl()
   const context = useContext(CoreContext)
   const {
     ui: { LoadingOverlay, Dialog },

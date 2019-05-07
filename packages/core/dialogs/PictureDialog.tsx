@@ -5,7 +5,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { CoreContext, IntlContext, typedFields } from '../context'
+import { CoreContext, typedFields, useIntl } from '../context'
 
 const log = debug('core:PictureDialog')
 
@@ -65,7 +65,7 @@ const ImageTile = React.memo<ImageTileProps>(({ link, selectItem }) => {
 
 export const PictureDialog = Object.assign(
   React.memo<Props>(props => {
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const context = useContext(CoreContext)
     const { ui, dispatch, scaleImage, online } = context
     const [url, setUrl] = useState(props.url)

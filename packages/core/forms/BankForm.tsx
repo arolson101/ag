@@ -15,7 +15,7 @@ import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { UrlField } from '../components/UrlField'
-import { CoreContext, IntlContext, tabConfig, typedFields } from '../context'
+import { CoreContext, tabConfig, typedFields, useIntl } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
 
@@ -91,7 +91,7 @@ interface ComponentProps extends Props {
 
 const FormComponent = Object.assign(
   React.memo<ComponentProps>(props => {
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const { ui } = useContext(CoreContext)
     const { LoadingOverlay, Tabs, Tab, Text, showToast } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
@@ -240,7 +240,7 @@ const FormComponent = Object.assign(
 
 const Component = Object.assign(
   React.forwardRef<BankForm, ComponentProps>((props, ref) => {
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const { ui } = useContext(CoreContext)
     const { showToast } = ui
     const { data, saveBank, loading, bankId, onClosed, cancelToken } = props

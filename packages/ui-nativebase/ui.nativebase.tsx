@@ -1,4 +1,4 @@
-import { IntlContext, PopoverButtonProps, TabProps, TabsProps, UiContext } from '@ag/core'
+import { PopoverButtonProps, TabProps, TabsProps, UiContext, useIntl } from '@ag/core'
 import debug from 'debug'
 import {
   ActionSheet,
@@ -7,7 +7,6 @@ import {
   Container,
   Content,
   H3,
-  Icon,
   List,
   ListItem,
   Spinner,
@@ -17,7 +16,7 @@ import {
   Toast,
   View,
 } from 'native-base'
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import { defineMessages } from 'react-intl'
 import { Alert as RnAlert, Dimensions, FlatList } from 'react-native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -132,7 +131,7 @@ export const ui: Omit<UiContext, RNNTypes> = {
   },
   PopoverButton: React.memo<PopoverButtonProps>(props => {
     const { loading, icon, children, minimal, content } = props
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
 
     const onPress = useCallback(
       function _onPress() {

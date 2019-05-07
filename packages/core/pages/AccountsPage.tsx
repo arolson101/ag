@@ -11,11 +11,11 @@ import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { ActionItem, ContextMenuProps, CoreContext, IntlContext, TableColumn } from '../context'
+import { ActionItem, ContextMenuProps, CoreContext, TableColumn, useIntl } from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
 
@@ -111,7 +111,7 @@ const mutations = {
 const BankTable = Object.assign(
   React.memo<T.AccountsPage.Banks>(bank => {
     type Row = typeof bank.accounts[number]
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const context = useContext(CoreContext)
     const {
       dispatch,
@@ -273,7 +273,7 @@ const BankTable = Object.assign(
 type ComponentProps = QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
 const Component = Object.assign(
   React.memo<ComponentProps>(({ data, loading }) => {
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const {
       dispatch,
       ui: { Page },

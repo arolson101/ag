@@ -5,14 +5,14 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { timer } from 'rxjs'
 import { useEventCallback } from 'rxjs-hooks'
-import { debounce, distinctUntilChanged, filter, ignoreElements, map, tap } from 'rxjs/operators'
+import { debounce, distinctUntilChanged, ignoreElements, map, tap } from 'rxjs/operators'
 import { actions } from '../actions'
 import {
   CommonFieldProps,
   CommonTextFieldProps,
   CoreContext,
-  IntlContext,
   typedFields,
+  useIntl,
 } from '../context'
 
 const log = debug('core:UrlField')
@@ -46,7 +46,7 @@ interface FavicoButtonProps {
 type Field<T> = [{ value: T }, {}]
 
 export const UrlField = <Values extends Record<string, any>>(props: Props<Values>) => {
-  const intl = useContext(IntlContext)
+  const intl = useIntl()
   const { ui, dispatch, getImageFromLibrary, online } = useContext(CoreContext)
   const { PopoverButton, Image, Text } = ui
   const { TextField } = typedFields<Values>(ui)

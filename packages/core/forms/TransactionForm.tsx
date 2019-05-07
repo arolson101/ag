@@ -1,12 +1,12 @@
 import { Transaction } from '@ag/db'
 import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
 import accounting from 'accounting'
-import { Formik, FormikErrors, useFormik } from 'formik'
+import { FormikErrors, useFormik } from 'formik'
 import gql from 'graphql-tag'
 import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { CoreContext, IntlContext, typedFields } from '../context'
+import { CoreContext, typedFields, useIntl } from '../context'
 import * as T from '../graphql-types'
 
 interface Props {
@@ -78,7 +78,7 @@ interface ComponentProps extends Props {
 
 const Component = Object.assign(
   React.forwardRef<TransactionForm, ComponentProps>((props, ref) => {
-    const intl = useContext(IntlContext)
+    const intl = useIntl()
     const { ui } = useContext(CoreContext)
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
     const { data, saveTransaction, loading, accountId, transactionId } = props
