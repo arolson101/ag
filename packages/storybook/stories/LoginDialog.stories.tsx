@@ -2,54 +2,35 @@ import { LoginDialog, LoginForm } from '@ag/core'
 import React from 'react'
 import { MockApp, storiesOf } from './helpers'
 
-const createMocks = [
-  {
-    request: { query: LoginForm.queries.LoginForm },
-    result: {
-      data: {
-        dbs: [],
-      },
-    },
-  },
-]
+const createData: DbInfo[] = []
 
-const loginMocks = [
+const loginData: DbInfo[] = [
   {
-    request: { query: LoginForm.queries.LoginForm },
-    result: {
-      data: {
-        dbs: [
-          {
-            __typename: 'Db' as 'Db',
-            dbId: 'oLhHJYViPrw=',
-            name: 'appdb',
-          },
-        ],
-      },
-    },
+    dbId: 'oLhHJYViPrw=',
+    name: 'appdb',
   },
 ]
 
 storiesOf('Forms/LoginForm', module)
   .add('create', () => (
     <MockApp>
-      <LoginForm query={createMocks[0].result.data} />
+      <LoginForm dbs={createData} />
     </MockApp>
   ))
   .add('login', () => (
     <MockApp>
-      <LoginForm query={loginMocks[0].result.data} />
+      <LoginForm dbs={loginData} />
     </MockApp>
   ))
 
 storiesOf('Dialogs/LoginDialog', module)
   .add('create', () => (
-    <MockApp mocks={createMocks}>
+    <MockApp>
       <LoginDialog isOpen />
     </MockApp>
   ))
   .add('login', () => (
-    <MockApp mocks={loginMocks}>
+    <MockApp>
       <LoginDialog isOpen />
     </MockApp>
   ))

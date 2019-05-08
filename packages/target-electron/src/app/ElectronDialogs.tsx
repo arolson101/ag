@@ -1,42 +1,21 @@
 import {
   AccountDialog,
   BankDialog,
-  CoreState,
   LoginDialog,
   PictureDialog,
-  useCoreStore,
+  selectors,
+  useSelector,
 } from '@ag/core'
 import debug from 'debug'
-import React, { useEffect, useState } from 'react'
-import shallowequal from 'shallowequal'
+import React from 'react'
 
 const log = debug('electron:ElectronDialogs')
 
 interface Props {}
 
-interface State {
-  dialog: CoreState['dialog']
-}
-
-const subState = (state: CoreState): State => ({
-  dialog: state.dialog,
-})
-
 export const ElectronDialogs = Object.assign(
   React.memo<Props>(function _ElectronDialogs(props) {
-    const store = useCoreStore()
-    const [state, setState] = useState(subState(store.getState() as any))
-
-    useEffect(() => {
-      return store.subscribe(() => {
-        const nextState = subState(store.getState() as any)
-        if (!shallowequal(state, nextState)) {
-          setState(nextState)
-        }
-      })
-    }, [store])
-
-    const { dialog } = state
+    const dialog = useSelector(selectors.getDialogs)
 
     return (
       <>

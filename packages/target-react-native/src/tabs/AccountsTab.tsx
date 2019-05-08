@@ -1,4 +1,4 @@
-import { AccountsPage } from '@ag/core'
+import { AccountsPage, selectors } from '@ag/core'
 import React from 'react'
 import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'
@@ -12,7 +12,8 @@ export class AccountsTab extends React.PureComponent<Props> {
   static readonly id = 'AccountsTab'
   static readonly stackId = 'AccountsTabStack'
 
-  static options: RnnOptionsHandler = ({ intl }) => {
+  static options: RnnOptionsHandler = ({ store }) => {
+    const intl = selectors.getIntl(store.getState())
     return {
       bottomTab: {
         text: intl.formatMessage(AccountsPage.messages.tabText),

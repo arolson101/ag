@@ -9,20 +9,21 @@ import { schema } from './schema'
 const log = debug('db:client')
 
 export class ExecuteLink extends ApolloLink {
-  constructor(private context: DbContext) {
+  constructor(private context: () => DbContext) {
     super()
   }
 
   request(operation: Operation, forward?: NextLink): Observable<FetchResult> | null {
     return new Observable(observer => {
-      log('ExecuteLink %o', { operation, context: this.context })
+      const contextValue = this.context()
+      log('ExecuteLink %o', { operation, contextValue })
       Promise.resolve(
         execute({
           schema,
           document: operation.query,
           variableValues: operation.variables,
           operationName: operation.operationName,
-          contextValue: this.context,
+          contextValue,
         })
       )
         .then(data => {
@@ -38,7 +39,7 @@ export class ExecuteLink extends ApolloLink {
   }
 }
 
-export const createClient = (context: DbContext) =>
+export const createClient = (context: () => DbContext) =>
   new ApolloClient({
     link: new ExecuteLink(context),
     cache: new InMemoryCache(),

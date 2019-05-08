@@ -6,7 +6,7 @@ import {
   CalendarPage,
   CoreAction,
   HomePage,
-  useCoreStore,
+  useDispatch,
   useIntl,
 } from '@ag/core'
 import { Icon, Menu } from '@ag/ui-antd'
@@ -78,7 +78,7 @@ const navItems: NavItem[] = [
 
 export const NavBar = React.memo<Props>(props => {
   const intl = useIntl()
-  const { dispatch } = useCoreStore()
+  const dispatch = useDispatch()
   const { location } = useReactRouter()
 
   const selectedKeys = navItems

@@ -1,8 +1,10 @@
+import { CoreStore } from '@ag/core'
 import { Online } from '@ag/online'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
 
 export interface DbContext {
+  store: CoreStore
   online: Online
   intl: IntlContext
   openDb: (

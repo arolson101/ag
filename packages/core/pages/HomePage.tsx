@@ -53,14 +53,7 @@ const route = docuri.route<void, string>(path)
 
 export const HomePage = Object.assign(
   React.memo<Props>(props => {
-    const openLoginDlg = useAction(actions.openDlg.login)
-    const [dispatched, setDispatched] = useState(false)
     const q = useQuery(queries.HomePage)
-
-    if (!q.loading && !q.error && q.data && !q.data.appDb && !dispatched) {
-      openLoginDlg()
-      setDispatched(true)
-    }
 
     return <Component {...q} />
   }),

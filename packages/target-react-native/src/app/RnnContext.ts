@@ -1,8 +1,8 @@
-import { IntlContext } from '@ag/core'
+import { CoreStore, IntlContext } from '@ag/core'
 import { Options } from 'react-native-navigation'
 
 export interface RnnContext {
-  intl: IntlContext
+  store: CoreStore
 }
 
 export type RnnOptionsHandler = (context: RnnContext) => Options

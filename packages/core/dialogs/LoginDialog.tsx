@@ -1,10 +1,11 @@
-import { useApolloClient, useQuery } from '@ag/util'
-import React, { useCallback, useContext, useRef } from 'react'
+import { useApolloClient } from '@ag/util'
+import React, { useCallback, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { useIntl, useUi } from '../context'
+import { useIntl, useSelector, useUi } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
+import { selectors } from '../reducers'
 
 interface Props {
   isOpen: boolean
@@ -15,7 +16,10 @@ export const LoginDialog = React.memo<Props>(props => {
   const intl = useIntl()
   const ui = useUi()
   const { LoadingOverlay, Dialog } = ui
-  const { data, loading, error } = useQuery(LoginForm.queries.LoginForm)
+  const isDbInitializing = useSelector(selectors.isDbInitializing)
+  const isDbInitialized = useSelector(selectors.isDbInitialized)
+  const dbs = useSelector(selectors.getDbs)
+  const indexError = useSelector(selectors.getIndexError)
   const client = useApolloClient()
   const loginForm = useRef<LoginForm>(null)
 
@@ -25,14 +29,14 @@ export const LoginDialog = React.memo<Props>(props => {
     }
   }, [loginForm.current])
 
-  const dbId = data && data.dbs && data.dbs.length ? data.dbs[0].dbId : undefined
+  const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
 
   return (
     <>
-      <ErrorDisplay error={error} />
+      <ErrorDisplay error={indexError} />
 
-      <LoadingOverlay show={loading} title='LoginDialog' />
-      {!loading && (
+      <LoadingOverlay show={isDbInitializing} title='LoginDialog' />
+      {isDbInitialized && (
         <Dialog
           isOpen={isOpen}
           title={intl.formatMessage(messages.title)}
@@ -50,7 +54,7 @@ export const LoginDialog = React.memo<Props>(props => {
               : undefined
           }
         >
-          <LoginForm ref={loginForm} query={data!} />
+          <LoginForm ref={loginForm} dbs={dbs} />
         </Dialog>
       )}
     </>

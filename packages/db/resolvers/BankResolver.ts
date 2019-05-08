@@ -1,23 +1,22 @@
+import { selectors } from '@ag/core'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
 import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
 import { DbContext } from '../DbContext'
 import { Account, Bank, BankInput, DbChange, DbRecordEdit } from '../entities'
-import { AppDb } from './AppDb'
+import { dbWrite } from './dbWrite'
 
 const log = debug('db:BankResolver')
 
 @Resolver(Bank)
 export class BankResolver {
-  constructor(private appDb: AppDb) {}
-
   @FieldResolver(type => [Account])
   async accounts(
+    @Ctx() { store }: DbContext,
     @Root() bank: Bank //
   ): Promise<Account[]> {
-    const app = this.appDb
-    const accounts = this.appDb.accountsRepository
+    const accounts = selectors.getAccountsRepository(store.getState())
     if (!accounts) {
       throw new Error('app db is not open')
     }
@@ -27,16 +26,18 @@ export class BankResolver {
 
   @Mutation(returns => Bank)
   async saveBank(
-    @Ctx() context: DbContext,
+    @Ctx() { store }: DbContext,
     @Arg('input') input: BankInput,
     @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Bank> {
-    const app = this.appDb
+    const state = store.getState()
+    const db = selectors.getAppDb(state)
+    const banks = selectors.getBanksRepository(state)
     const t = Date.now()
     let bank: Bank
     let changes: DbChange[]
     if (bankId) {
-      bank = await app.bank(bankId)
+      bank = await banks.getById(bankId)
       const q = diff<Bank.Props>(bank, input)
       changes = [Bank.change.edit(t, bankId, q)]
       bank.update(t, q)
@@ -46,35 +47,36 @@ export class BankResolver {
       changes = [Bank.change.add(t, bank)]
     }
     // log('dbwrite %o', changes)
-    await app.dbWrite(changes)
+    await dbWrite(db, changes)
     assert.equal(bankId, bank.id)
     // log('get bank %s', bankId)
-    assert.deepEqual(bank, await app.bank(bankId))
+    assert.deepEqual(bank, await banks.getById(bankId))
     // log('done')
     return bank
   }
 
   @Mutation(returns => Boolean)
   async deleteBank(
+    @Ctx() { store }: DbContext,
     @Arg('bankId') bankId: string //
   ): Promise<boolean> {
-    const app = this.appDb
+    const db = selectors.getAppDb(store.getState())
     const t = Date.now()
     const changes = [Bank.change.remove(t, bankId)]
-    await app.dbWrite(changes)
+    await dbWrite(db, changes)
     return true
   }
 
   @Mutation(returns => Boolean)
   async setAccountsOrder(
+    @Ctx() { store }: DbContext,
     @Arg('accountIds', type => [String]) accountIds: string[]
   ): Promise<boolean> {
-    const app = this.appDb
+    const state = store.getState()
+    const db = selectors.getAppDb(state)
+    const accountsRepo = selectors.getAccountsRepository(state)
     const t = Date.now()
-    if (!app.accountsRepository) {
-      throw new Error('db not open')
-    }
-    const accounts = await app.accountsRepository.getByIds(accountIds)
+    const accounts = await accountsRepo.getByIds(accountIds)
     if (accounts.length !== accountIds.length) {
       throw new Error('got back wrong number of accounts')
     }
@@ -92,7 +94,7 @@ export class BankResolver {
       edits,
       table: Account,
     }
-    await app.dbWrite([change])
+    await dbWrite(db, [change])
     return true
   }
 }

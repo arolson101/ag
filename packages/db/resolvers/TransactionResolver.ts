@@ -1,27 +1,28 @@
+import { selectors } from '@ag/core'
 import { diff, uniqueId } from '@ag/util'
 import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
 import { DbContext } from '../DbContext'
 import { DbChange, Transaction, TransactionInput } from '../entities'
-import { AppDb } from './AppDb'
+import { dbWrite } from './dbWrite'
 
 @Resolver(objectType => Transaction)
 export class TransactionResolver {
-  constructor(private appDb: AppDb) {}
-
   @Mutation(returns => Transaction)
   async saveTransaction(
-    @Ctx() context: DbContext,
+    @Ctx() { store }: DbContext,
     @Arg('input') input: TransactionInput,
     @Arg('transactionId', { nullable: true }) transactionId: string,
     @Arg('accountId', { nullable: true }) accountId?: string
   ): Promise<Transaction> {
-    const app = this.appDb
+    const state = store.getState()
+    const db = selectors.getAppDb(state)
+    const transactionRepo = selectors.getTransactionsRepository(state)
     const t = Date.now()
     const table = Transaction
     let transaction: Transaction
     let changes: DbChange[]
     if (transactionId) {
-      transaction = await app.transaction(transactionId)
+      transaction = await transactionRepo.getById(transactionId)
       const q = diff<Transaction.Props>(transaction, input)
       changes = [{ table, t, edits: [{ id: transactionId, q }] }]
       transaction.update(t, q)
@@ -33,20 +34,23 @@ export class TransactionResolver {
       transactionId = transaction.id
       changes = [{ table, t, adds: [transaction] }]
     }
-    await app.dbWrite(changes)
+    await dbWrite(db, changes)
     return transaction
   }
 
   @Mutation(returns => Transaction)
   async deleteTransaction(
+    @Ctx() { store }: DbContext,
     @Arg('transactionId') transactionId: string //
   ): Promise<Transaction> {
-    const app = this.appDb
+    const state = store.getState()
+    const db = selectors.getAppDb(state)
+    const transactionRepo = selectors.getTransactionsRepository(state)
     const t = Date.now()
     const table = Transaction
-    const transaction = await app.transaction(transactionId)
+    const transaction = await transactionRepo.getById(transactionId)
     const changes: DbChange[] = [{ table, t, deletes: [transactionId] }]
-    await app.dbWrite(changes)
+    await dbWrite(db, changes)
     return transaction
   }
 }

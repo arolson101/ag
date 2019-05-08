@@ -1,4 +1,4 @@
-import { HomePage } from '@ag/core'
+import { HomePage, selectors } from '@ag/core'
 import debug from 'debug'
 import React from 'react'
 import { Options } from 'react-native-navigation'
@@ -25,16 +25,19 @@ export const HomeTab = Object.assign(
     id: 'HomeTab',
     stackId: 'HomeTabStack',
 
-    options: ({ intl }: RnnContext): Options => ({
-      bottomTab: {
-        text: intl.formatMessage(HomePage.messages.tabText),
-        icon: icons.home,
-      },
-      topBar: {
-        title: {
-          text: intl.formatMessage(HomePage.messages.titleText),
+    options: ({ store }: RnnContext): Options => {
+      const intl = selectors.getIntl(store.getState())
+      return {
+        bottomTab: {
+          text: intl.formatMessage(HomePage.messages.tabText),
+          icon: icons.home,
         },
-      },
-    }),
+        topBar: {
+          title: {
+            text: intl.formatMessage(HomePage.messages.titleText),
+          },
+        },
+      }
+    },
   }
 )

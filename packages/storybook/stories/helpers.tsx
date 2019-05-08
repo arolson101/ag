@@ -1,12 +1,12 @@
 // tslint:disable:no-implicit-dependencies
-import { App, CoreStore, SystemCallbacks } from '@ag/core'
+import { App, SystemCallbacks } from '@ag/core'
 import { online } from '@ag/online'
+import { createStore } from '@ag/target-electron/src/store'
 import { action } from '@storybook/addon-actions'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { ApolloClient } from 'apollo-client'
 import { MockedResponse, MockLink } from 'apollo-link-mock'
 import React from 'react'
-import { IntlProvider } from 'react-intl'
 import { storiesOf, ui } from './platform-specific'
 
 export { MockedResponse }
@@ -19,19 +19,12 @@ export const addDelay = (responses: MockedResponse[], delay: number) => {
 }
 
 const sys: SystemCallbacks = {
+  openDb: action('openDb') as any,
+  deleteDb: action('deleteDb') as any,
   scaleImage: action('scaleImage') as any,
   openCropper: action('openCropper') as any,
   getImageFromLibrary: action('getImageFromLibrary') as any,
 }
-
-const store = ({
-  getState: () => {
-    throw new Error('no getState')
-  },
-  dispatch: action('dispatch'),
-} as unknown) as CoreStore
-
-const { intl } = new IntlProvider({ locale: 'en' }).getChildContext()
 
 const createClient = (mocks: ReadonlyArray<MockedResponse>) => {
   return new ApolloClient({
@@ -41,6 +34,7 @@ const createClient = (mocks: ReadonlyArray<MockedResponse>) => {
 }
 
 export const MockApp: React.FC<{ mocks?: MockedResponse[] }> = ({ mocks, children }) => {
+  const store = createStore({ sys, online, ui })
   const client = createClient(mocks || [])
-  return <App {...{ sys, ui, client, intl, store, online }}>{children}</App>
+  return <App {...{ sys, ui, client, store, online }}>{children}</App>
 }

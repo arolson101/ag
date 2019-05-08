@@ -1,11 +1,13 @@
-import { ActionType } from 'typesafe-actions'
-import { coreActions } from './coreActions'
+import { ActionType, createStandardAction } from 'typesafe-actions'
+import { dbActions } from './dbActions'
 import { dialogActions } from './dialogActions'
 import { navActions } from './navActions'
 import { onlineActions } from './onlineActions'
 
 export const actions = {
-  ...coreActions,
+  init: createStandardAction('core/init')(),
+
+  ...dbActions,
   ...dialogActions,
   ...navActions,
   ...onlineActions,

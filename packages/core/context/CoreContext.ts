@@ -1,25 +1,30 @@
 import { Online } from '@ag/online'
 import { ImageBuf } from '@ag/util'
-import React, { useContext } from 'react'
-import { InjectedIntl as IntlContext1 } from 'react-intl'
+import React, { Dispatch, useContext, useMemo } from 'react'
+import { InjectedIntl as IntlContext } from 'react-intl'
+import { useDispatch as useDispatch1, useSelector as useSelector1 } from 'react-redux'
 import { ActionCreator, bindActionCreators } from 'redux'
-import { CoreStore } from '../reducers'
+import { Connection, ConnectionOptions } from 'typeorm'
+import { CoreAction } from '../actions'
+import { CoreState, selectors } from '../reducers'
 import { UiContext } from './uiContext'
 
 export const maxImageSize = 512
 
 export interface SystemCallbacks {
+  openDb: (
+    name: string,
+    key: string,
+    entities: ConnectionOptions['entities']
+  ) => Promise<Connection>
+  deleteDb: (name: string) => Promise<void>
+
   getImageFromLibrary: (width: number, height: number) => Promise<ImageBuf | undefined>
   openCropper: (image: ImageBuf) => Promise<ImageBuf | undefined>
   scaleImage: (image: ImageBuf, scale: number) => Promise<ImageBuf>
 }
 
-export type IntlContext = IntlContext1
-export const IntlContext = React.createContext<IntlContext1>(null as any)
-IntlContext.displayName = 'IntlContext'
-
-export const CoreStoreContext = React.createContext<CoreStore>(null as any)
-CoreStoreContext.displayName = 'CoreStoreContext'
+export { IntlContext }
 
 export const OnlineContext = React.createContext<Online>(null as any)
 OnlineContext.displayName = 'OnlineContext'
@@ -27,15 +32,22 @@ OnlineContext.displayName = 'OnlineContext'
 export const SystemContext = React.createContext<SystemCallbacks>(null as any)
 SystemContext.displayName = 'SystemContext'
 
-export const useIntl = () => {
-  return useContext(IntlContext)
+export const useDispatch: () => Dispatch<CoreAction> = useDispatch1
+export const useSelector: <TSelected>(
+  selector: (state: CoreState) => TSelected,
+  deps?: ReadonlyArray<any>
+) => TSelected = useSelector1
+
+export const useIntl = (): IntlContext => {
+  return useSelector(selectors.getIntl)
 }
 
-export const useCoreStore = () => useContext(CoreStoreContext)
-
 export const useAction = <A, C extends ActionCreator<A>>(actionCreator: C) => {
-  const store = useContext(CoreStoreContext)
-  return bindActionCreators(actionCreator, store.dispatch)
+  // https://react-redux.js.org/next/api/hooks#removed-useactions
+  const dispatch = useDispatch1()
+  return useMemo(() => {
+    return bindActionCreators(actionCreator, dispatch)
+  }, [actionCreator, dispatch])
 }
 
 export const useOnline = () => useContext(OnlineContext)

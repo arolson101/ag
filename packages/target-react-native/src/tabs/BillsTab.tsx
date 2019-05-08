@@ -1,4 +1,4 @@
-import { BillsPage } from '@ag/core'
+import { BillsPage, selectors } from '@ag/core'
 import React from 'react'
 import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'
@@ -12,17 +12,20 @@ export class BillsTab extends React.PureComponent<Props> {
   static readonly id = 'BillsTab'
   static readonly stackId = 'BillsTabStack'
 
-  static options: RnnOptionsHandler = ({ intl }) => ({
-    bottomTab: {
-      text: intl.formatMessage(BillsPage.messages.tabText),
-      icon: icons.bills,
-    },
-    topBar: {
-      title: {
-        text: intl.formatMessage(BillsPage.messages.titleText),
+  static options: RnnOptionsHandler = ({ store }) => {
+    const intl = selectors.getIntl(store.getState())
+    return {
+      bottomTab: {
+        text: intl.formatMessage(BillsPage.messages.tabText),
+        icon: icons.bills,
       },
-    },
-  })
+      topBar: {
+        title: {
+          text: intl.formatMessage(BillsPage.messages.titleText),
+        },
+      },
+    }
+  }
 
   render() {
     return (

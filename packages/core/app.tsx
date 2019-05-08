@@ -4,21 +4,14 @@ import ApolloClient from 'apollo-client'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
-import {
-  CoreStoreContext,
-  IntlContext,
-  OnlineContext,
-  SystemCallbacks,
-  SystemContext,
-  UiContext,
-} from './context'
+import { Provider as StoreProvider } from 'react-redux'
+import { OnlineContext, SystemCallbacks, SystemContext, UiContext } from './context'
 import { CoreStore } from './reducers'
 
 const log = debug('core:app')
 
 type Props = React.PropsWithChildren<{
   client: ApolloClient<any>
-  intl: IntlContext
   store: CoreStore
   online: Online
   ui: UiContext
@@ -26,19 +19,17 @@ type Props = React.PropsWithChildren<{
 }>
 
 export const App = Object.assign(
-  React.memo<Props>(({ client, sys, store, ui, online, intl, children }) => {
+  React.memo<Props>(({ client, sys, store, ui, online, children }) => {
     return (
       <SystemContext.Provider value={sys}>
         <UiContext.Provider value={ui}>
           <OnlineContext.Provider value={online}>
             <ApolloProvider client={client}>
               <ApolloHooksProvider client={client}>
-                <CoreStoreContext.Provider value={store}>
-                  <IntlContext.Provider value={intl}>
-                    {/* tslint:disable-next-line:prettier */}
-                    {children}
-                  </IntlContext.Provider>
-                </CoreStoreContext.Provider>
+                <StoreProvider store={store}>
+                  {/* tslint:disable-next-line:prettier */}
+                  {children}
+                </StoreProvider>
               </ApolloHooksProvider>
             </ApolloProvider>
           </OnlineContext.Provider>

@@ -1,14 +1,12 @@
-// tslint:disable:max-line-length
-import { Gql, MutationFn, useApolloClient, useMutation } from '@ag/util'
 import debug from 'debug'
 import { FormikErrors, FormikProvider, useFormik, useFormikContext } from 'formik'
-import gql from 'graphql-tag'
 import React, { useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
+import { useSelector } from 'react-redux'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
 import { typedFields, useAction, useIntl, useUi } from '../context'
-import * as T from '../graphql-types'
+import { selectors } from '../reducers'
 
 const log = debug('core:LoginForm')
 
@@ -25,32 +23,7 @@ const initialValues: FormValues = {
 }
 
 interface Props {
-  query: T.LoginForm.Query
-}
-
-const queries = {
-  LoginForm: gql`
-    query LoginForm {
-      dbs {
-        dbId
-        name
-      }
-    }
-  ` as Gql<T.LoginForm.Query, T.LoginForm.Variables>,
-}
-
-const mutations = {
-  createDb: gql`
-    mutation CreateDb($name: String!, $password: String!) {
-      createDb(name: $name, password: $password)
-    }
-  ` as Gql<T.CreateDb.Mutation, T.CreateDb.Variables>,
-
-  openDb: gql`
-    mutation OpenDb($dbId: String!, $password: String!) {
-      openDb(dbId: $dbId, password: $password)
-    }
-  ` as Gql<T.OpenDb.Mutation, T.OpenDb.Variables>,
+  dbs: DbInfo[]
 }
 
 export interface LoginForm {
@@ -58,8 +31,9 @@ export interface LoginForm {
 }
 
 interface ComponentProps extends Props {
-  createDb: MutationFn<T.CreateDb.Mutation, T.CreateDb.Variables>
-  openDb: MutationFn<T.OpenDb.Mutation, T.OpenDb.Variables>
+  appError?: Error
+  createDb: (params: { name: string; password: string }) => any
+  openDb: (params: { dbId: string; password: string }) => any
 }
 
 const FormComponent = Object.assign(
@@ -68,34 +42,39 @@ const FormComponent = Object.assign(
     const ui = useUi()
     const { Text } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
-    const { query } = props
-    const dbId = query.dbs && query.dbs.length ? query.dbs[0].dbId : undefined
+    const { dbs, appError } = props
+    const dbId = dbs.length ? dbs[0].dbId : undefined
     const create = !dbId
 
     const formik = useFormikContext()
 
     return (
-      <Form onSubmit={formik.handleSubmit} lastFieldSubmit>
-        <Text>
-          {intl.formatMessage(create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen)}
-        </Text>
-        <TextField
-          autoFocus
-          secure
-          field='password'
-          label={intl.formatMessage(messages.passwordLabel)}
-          placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-        />
-        {create && (
+      <>
+        <ErrorDisplay error={appError} />
+        <Form onSubmit={formik.handleSubmit} lastFieldSubmit>
+          <Text>
+            {intl.formatMessage(
+              create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
+            )}
+          </Text>
           <TextField
+            autoFocus
             secure
-            field='passwordConfirm'
-            label={intl.formatMessage(messages.passwordConfirmLabel)}
-            placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
-            onSubmitEditing={formik.submitForm}
+            field='password'
+            label={intl.formatMessage(messages.passwordLabel)}
+            placeholder={intl.formatMessage(messages.passwordPlaceholder)}
           />
-        )}
-      </Form>
+          {create && (
+            <TextField
+              secure
+              field='passwordConfirm'
+              label={intl.formatMessage(messages.passwordConfirmLabel)}
+              placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
+              onSubmitEditing={formik.submitForm}
+            />
+          )}
+        </Form>
+      </>
     )
   }),
   {
@@ -108,8 +87,8 @@ const Component = Object.assign(
     const intl = useIntl()
     const ui = useUi()
     const closeDlg = useAction(actions.closeDlg)
-    const { createDb, openDb, query } = props
-    const dbId = query.dbs && query.dbs.length ? query.dbs[0].dbId : undefined
+    const { createDb, openDb, dbs } = props
+    const dbId = dbs.length ? dbs[0].dbId : undefined
     const create = !dbId
 
     const formik = useFormik({
@@ -132,18 +111,10 @@ const Component = Object.assign(
         return errors
       },
       onSubmit: async (values, factions) => {
-        try {
-          if (dbId) {
-            await openDb({ variables: { ...values, dbId } })
-          } else {
-            await createDb({ variables: values })
-          }
-          log('logged in')
-          closeDlg('login')
-        } catch (error) {
-          ErrorDisplay.show(ui, intl, error)
-        } finally {
-          factions.setSubmitting(false)
+        if (dbId) {
+          openDb({ ...values, dbId })
+        } else {
+          createDb(values)
         }
       },
     })
@@ -167,20 +138,11 @@ const Component = Object.assign(
 
 export const LoginForm = Object.assign(
   React.forwardRef<LoginForm, Props>((props, ref) => {
-    const client = useApolloClient()
     const component = useRef<LoginForm>(null)
 
-    const createDb = useMutation(mutations.createDb, {
-      update: () => {
-        client.reFetchObservableQueries()
-      },
-    })
-
-    const openDb = useMutation(mutations.openDb, {
-      update: () => {
-        client.reFetchObservableQueries()
-      },
-    })
+    const createDb = useAction(actions.dbCreate.request)
+    const appError = useSelector(selectors.getAppError)
+    const openDb = useAction(actions.dbLogin.request)
 
     useImperativeHandle(ref, () => ({
       submit: () => {
@@ -188,14 +150,12 @@ export const LoginForm = Object.assign(
       },
     }))
 
-    return <Component ref={component} {...{ ...props, createDb, openDb }} />
+    return <Component ref={component} {...{ ...props, appError, createDb, openDb }} />
   }),
   {
     id: 'LoginForm',
     displayName: 'LoginForm',
     Component,
-    queries,
-    mutations,
   }
 )
 

@@ -1,12 +1,12 @@
-import { CoreAction, CoreState, SystemCallbacks } from '@ag/core'
+import { actions, CoreAction, CoreDependencies, CoreState } from '@ag/core'
 import { applyMiddleware, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
 import { epics } from '../epics/epics'
 import { RnState, rootReducer } from '../reducers'
 
-export const createStore = (dependencies: SystemCallbacks) => {
-  const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, SystemCallbacks>({
+export const createStore = (dependencies: CoreDependencies) => {
+  const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, CoreDependencies>({
     dependencies,
   })
 
@@ -19,8 +19,10 @@ export const createStore = (dependencies: SystemCallbacks) => {
     composeWithDevTools(applyMiddleware(...middleware))
   )
 
-  const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, SystemCallbacks>(...epics)
+  const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, CoreDependencies>(...epics)
   epicMiddleware.run(rootEpic)
+
+  store.dispatch(actions.init())
 
   return store
 }
