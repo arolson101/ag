@@ -33,10 +33,8 @@ const fragments = {
 const queries = {
   Transaction: gql`
     query Transaction($transactionId: String) {
-      appDb {
-        transaction(transactionId: $transactionId) {
-          ...transactionFields
-        }
+      transaction(transactionId: $transactionId) {
+        ...transactionFields
       }
     }
     ${fragments.transactionFields}

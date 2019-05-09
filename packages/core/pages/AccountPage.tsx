@@ -20,25 +20,23 @@ const fragments = {}
 const queries = {
   AccountPage: gql`
     query AccountPage($accountId: String!) {
-      appDb {
-        account(accountId: $accountId) {
-          id
+      account(accountId: $accountId) {
+        id
+        name
+        bank {
           name
-          bank {
-            name
-            favicon
-          }
-          transactions {
-            id
-            time
-            account
-            serverid
-            type
-            name
-            memo
-            amount
-            balance
-          }
+          favicon
+        }
+        transactions {
+          id
+          time
+          account
+          serverid
+          type
+          name
+          memo
+          amount
+          balance
         }
       }
     }

@@ -60,10 +60,8 @@ const fragments = {
 const queries = {
   AccountsPage: gql`
     query AccountsPage {
-      appDb {
-        banks {
-          ...bankFields_AccountsPage
-        }
+      banks {
+        ...bankFields_AccountsPage
       }
     }
     ${fragments.bankFields}

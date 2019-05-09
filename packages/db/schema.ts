@@ -6,6 +6,7 @@ import { ImageSourceScalar } from './customTypes'
 import {
   AccountOnlineResolver,
   AccountResolver,
+  AppDb,
   BankResolver,
   BillResolver,
   BudgetResolver,
@@ -17,6 +18,7 @@ ormUseContainer(Container)
 
 export const schema = buildSchemaSync({
   resolvers: [
+    AppDb,
     BankResolver,
     AccountResolver,
     AccountOnlineResolver,

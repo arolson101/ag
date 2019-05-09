@@ -16,11 +16,9 @@ type ComponentProps = QueryHookResult<T.CalendarPage.Query, T.CalendarPage.Varia
 const queries = {
   CalendarPage: gql`
     query CalendarPage {
-      appDb {
-        accounts {
-          id
-          name
-        }
+      accounts {
+        id
+        name
       }
     }
   ` as Gql<T.CalendarPage.Query, T.CalendarPage.Variables>,

@@ -11,11 +11,9 @@ const log = debug('electron:SplitPane')
 const queries = {
   SidebarWidth: gql`
     query SidebarWidth {
-      appDb {
-        get(key: "sidebarWidth") {
-          key
-          value
-        }
+      get(key: "sidebarWidth") {
+        key
+        value
       }
     }
   ` as Gql<T.SidebarWidth.Query, T.SidebarWidth.Variables>,

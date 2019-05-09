@@ -41,14 +41,12 @@ const fragments = {
 const queries = {
   AccountForm: gql`
     query AccountForm($accountId: String, $bankId: String) {
-      appDb {
-        account(accountId: $accountId) {
-          id
-          ...accountFields_AccountForm
-        }
-        bank(bankId: $bankId) {
-          name
-        }
+      account(accountId: $accountId) {
+        id
+        ...accountFields_AccountForm
+      }
+      bank(bankId: $bankId) {
+        name
       }
     }
     ${fragments.accountFields}

@@ -1,6 +1,6 @@
 import { selectors } from '@ag/core'
 import debug from 'debug'
-import { Arg, Ctx, Field, Mutation, ObjectType } from 'type-graphql'
+import { Arg, Ctx, Field, Mutation, Query, Resolver } from 'type-graphql'
 import { DbContext } from '../DbContext'
 import { Account, Bank, Setting, Transaction } from '../entities'
 
@@ -11,7 +11,7 @@ export interface Change {
   readonly text: string
 }
 
-@ObjectType()
+@Resolver()
 export class AppDb {
   @Field(returns => Setting, { nullable: true })
   async get(
@@ -36,7 +36,7 @@ export class AppDb {
     return setting
   }
 
-  @Field(returns => Bank, { nullable: true })
+  @Query(returns => Bank, { nullable: true })
   async bank(
     @Ctx() { store }: DbContext, //
     @Arg('bankId', { nullable: true }) bankId?: string
@@ -45,7 +45,7 @@ export class AppDb {
     return bankId ? banksRepository.getById(bankId) : undefined
   }
 
-  @Field(returns => [Bank])
+  @Query(returns => [Bank])
   async banks(
     @Ctx() { store }: DbContext //
   ): Promise<Bank[]> {
@@ -53,7 +53,7 @@ export class AppDb {
     return banksRepository.all()
   }
 
-  @Field(returns => Account, { nullable: true })
+  @Query(returns => Account, { nullable: true })
   async account(
     @Ctx() { store }: DbContext, //
     @Arg('accountId', { nullable: true }) accountId?: string
@@ -62,7 +62,7 @@ export class AppDb {
     return accountId ? accountsRepository.getById(accountId) : undefined
   }
 
-  @Field(returns => [Account])
+  @Query(returns => [Account])
   async accounts(
     @Ctx() { store }: DbContext //
   ): Promise<Account[]> {
@@ -70,7 +70,7 @@ export class AppDb {
     return accountsRepository.all()
   }
 
-  @Field(returns => Transaction, { nullable: true })
+  @Query(returns => Transaction, { nullable: true })
   async transaction(
     @Ctx() { store }: DbContext, //
     @Arg('transactionId', { nullable: true }) transactionId?: string

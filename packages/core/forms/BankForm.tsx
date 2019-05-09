@@ -57,10 +57,8 @@ const fragments = {
 const queries = {
   BankForm: gql`
     query BankForm($bankId: String) {
-      appDb {
-        bank(bankId: $bankId) {
-          ...bankFields
-        }
+      bank(bankId: $bankId) {
+        ...bankFields
       }
     }
     ${fragments.bankFields}

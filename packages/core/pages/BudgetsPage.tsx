@@ -16,11 +16,9 @@ type ComponentProps = QueryHookResult<T.BudgetsPage.Query, T.BudgetsPage.Variabl
 const queries = {
   BudgetsPage: gql`
     query BudgetsPage {
-      appDb {
-        accounts {
-          id
-          name
-        }
+      accounts {
+        id
+        name
       }
     }
   ` as Gql<T.BudgetsPage.Query, T.BudgetsPage.Variables>,

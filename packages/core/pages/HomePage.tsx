@@ -16,10 +16,8 @@ type ComponentProps = QueryHookResult<T.HomePage.Query, T.HomePage.Variables>
 const queries = {
   HomePage: gql`
     query HomePage {
-      appDb {
-        banks {
-          id
-        }
+      banks {
+        id
       }
     }
   ` as Gql<T.HomePage.Query, T.HomePage.Variables>,

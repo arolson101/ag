@@ -14,15 +14,13 @@ interface Props {}
 const queries = {
   MenuBar: gql`
     query MenuBar {
-      appDb {
-        banks {
+      banks {
+        id
+        name
+        favicon
+        accounts {
           id
           name
-          favicon
-          accounts {
-            id
-            name
-          }
         }
       }
     }
