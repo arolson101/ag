@@ -1,28 +1,15 @@
-import { Gql } from '@ag/util'
-import ApolloClient from 'apollo-client'
-import gql from 'graphql-tag'
 import { defineMessages } from 'react-intl'
-import { ErrorDisplay } from '../components'
 import { IntlContext } from '../context'
 import { UiContext } from '../context/uiContext'
-import * as T from '../graphql-types'
-
-const mutations = {
-  deleteDb: gql`
-    mutation DeleteDb($dbId: String!) {
-      deleteDb(dbId: $dbId)
-    }
-  ` as Gql<T.DeleteDb.Mutation, T.DeleteDb.Variables>,
-}
 
 interface DeleteDbParams {
-  client: ApolloClient<any>
+  dbDelete: (params: { dbId: string }) => any
   intl: IntlContext
   dbId: string
   ui: UiContext
 }
 
-export const deleteDb = ({ client, ui, intl, dbId }: DeleteDbParams) => {
+export const deleteDb = ({ dbDelete, ui, intl, dbId }: DeleteDbParams) => {
   const { alert, showToast } = ui
 
   alert({
@@ -32,16 +19,7 @@ export const deleteDb = ({ client, ui, intl, dbId }: DeleteDbParams) => {
 
     confirmText: intl.formatMessage(messages.delete),
     onConfirm: async () => {
-      const variables = { dbId }
-      const result = await client.mutate<T.DeleteDb.Mutation, T.DeleteDb.Variables>({
-        mutation: mutations.deleteDb,
-        variables,
-        update: () => {
-          client.reFetchObservableQueries()
-        },
-      })
-
-      ErrorDisplay.show(ui, intl, result.errors)
+      dbDelete({ dbId })
       showToast(intl.formatMessage(messages.deleted), true)
     },
 

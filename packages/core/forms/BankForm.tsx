@@ -95,7 +95,7 @@ const FormComponent = Object.assign(
     const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
     const { data, saveBank, loading, bankId, onClosed, cancelToken } = props
 
-    const bank = loading ? undefined : data && data.appDb && data.appDb.bank
+    const bank = loading ? undefined : data && data.bank
     const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0
     const initialValues = {
       fi: defaultFi.toString(),
@@ -108,8 +108,8 @@ const FormComponent = Object.assign(
     // const favicoField = useRef<UrlField<FormValues>>(null)
     const [online] = useField('online')
 
-    if (!loading && (!data || !data.appDb)) {
-      throw new Error('db not open')
+    if (!loading && !data) {
+      throw new Error('no data')
     }
 
     // log('initial values: %o', initialValues)
@@ -242,7 +242,7 @@ const Component = Object.assign(
     const { showToast } = useUi()
     const { data, saveBank, loading, bankId, onClosed, cancelToken } = props
 
-    const bank = loading ? undefined : data && data.appDb && data.appDb.bank
+    const bank = loading ? undefined : data && data.bank
     const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0
     const initialValues = {
       fi: defaultFi.toString(),
@@ -284,8 +284,8 @@ const Component = Object.assign(
       },
     }))
 
-    if (!loading && (!data || !data.appDb)) {
-      throw new Error('db not open')
+    if (!loading && !data) {
+      throw new Error('no data')
     }
 
     // log('initial values: %o', initialValues)

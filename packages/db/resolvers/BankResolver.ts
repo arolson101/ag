@@ -2,7 +2,7 @@ import { selectors } from '@ag/core'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
-import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Mutation, Query, Resolver, Root } from 'type-graphql'
 import { DbContext } from '../DbContext'
 import { Account, Bank, BankInput, DbChange, DbRecordEdit } from '../entities'
 import { dbWrite } from './dbWrite'
@@ -19,6 +19,27 @@ export class BankResolver {
     const { accountsRepository } = selectors.getAppDb(store.getState())
     const res = await accountsRepository.getForBank(bank.id)
     return res
+  }
+
+  @Query(returns => Bank, { nullable: true })
+  async bank(
+    @Ctx() { store }: DbContext, //
+    @Arg('bankId', { nullable: true }) bankId?: string
+  ): Promise<Bank | undefined> {
+    if (selectors.isLoggedIn(store.getState())) {
+      const { banksRepository } = selectors.getAppDb(store.getState())
+      return bankId ? banksRepository.getById(bankId) : undefined
+    }
+  }
+
+  @Query(returns => [Bank])
+  async banks(
+    @Ctx() { store }: DbContext //
+  ): Promise<Bank[]> {
+    const { banksRepository } = selectors.getAppDb(store.getState())
+    const banks = await banksRepository.all()
+    log('banks- %o', banks)
+    return banks
   }
 
   @Mutation(returns => Bank)

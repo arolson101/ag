@@ -1,4 +1,13 @@
-import { AccountPage, AccountsPage, BillsPage, BudgetsPage, CalendarPage, HomePage } from '@ag/core'
+import {
+  AccountPage,
+  AccountsPage,
+  BillsPage,
+  BudgetsPage,
+  CalendarPage,
+  HomePage,
+  selectors,
+  useSelector,
+} from '@ag/core'
 import { Content, Layout } from '@ag/ui-antd'
 import debug from 'debug'
 import React from 'react'
@@ -25,6 +34,11 @@ interface Props {}
 
 export const ElectronRouter = React.memo<Props>(props => {
   const fallback = routes[0].path
+
+  const isLoggedIn = useSelector(selectors.isLoggedIn)
+  if (!isLoggedIn) {
+    return <div>db not open</div>
+  }
 
   return (
     <ReactRouter history={history}>

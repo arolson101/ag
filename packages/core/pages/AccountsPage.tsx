@@ -284,9 +284,16 @@ const Component = Object.assign(
           onClick: openBankCreateDlg,
         }}
       >
-        {data && //
-          data.appDb &&
-          data.appDb.banks.map(bank => <BankTable {...bank} key={bank.id} />)}
+        {data &&
+          data.banks &&
+          data.banks.map(bank => (
+            <BankTable
+              {...bank}
+              key={
+                bank.id //
+              }
+            />
+          ))}
       </Page>
     )
   }),
@@ -372,6 +379,7 @@ const route = docuri.route<void, string>(path)
 export const AccountsPage = Object.assign(
   React.memo<Props>(props => {
     const q = useQuery(AccountsPage.queries.AccountsPage)
+    log('AccountsPage render %o', q)
 
     return (
       <>

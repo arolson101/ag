@@ -1,16 +1,7 @@
 import { Account, Bank, Bill, Budget, Category, Db, Setting, Transaction } from '@ag/db/entities'
 import crypto from 'crypto'
 import { from, of } from 'rxjs'
-import {
-  catchError,
-  filter,
-  map,
-  mapTo,
-  mergeMap,
-  switchMap,
-  takeUntil,
-  withLatestFrom,
-} from 'rxjs/operators'
+import { catchError, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators'
 import sanitize from 'sanitize-filename'
 import { isActionOf } from 'typesafe-actions'
 import { actions } from '../actions'
@@ -31,15 +22,9 @@ const appEntities = [
   Setting,
 ]
 
-const initEpic: CoreEpic = (action$, state$) =>
+const initEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
   action$.pipe(
     filter(isActionOf(actions.init)),
-    mapTo(actions.dbInit.request())
-  )
-
-const dbInitEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
-  action$.pipe(
-    filter(isActionOf(actions.dbInit.request)),
     switchMap(action => {
       const p = (async () => {
         const connection = await openDb('index', '', indexEntities)
@@ -50,17 +35,18 @@ const dbInitEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
 
       return from(p).pipe(
         mergeMap(res => [
-          actions.dbInit.success(res), //
+          actions.dbSetIndex(res.connection), //
+          actions.dbSetInfos(res.dbs),
           actions.openDlg.login(),
         ]),
-        catchError(error => of(actions.dbInit.failure(error)))
+        catchError(error => of(actions.dbInitFailure(error)))
       )
     })
   )
 
 const dbCreateEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
   action$.pipe(
-    filter(isActionOf(actions.dbCreate.request)),
+    filter(isActionOf(actions.dbCreate)),
     withLatestFrom(state$),
     switchMap(([action, state]) => {
       const { name, password } = action.payload
@@ -84,17 +70,18 @@ const dbCreateEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
 
       return from(p).pipe(
         mergeMap(res => [
-          actions.dbCreate.success(res), //
+          actions.dbLoginSuccess(res.connection), //
+          actions.dbSetInfos(res.dbs),
           actions.closeDlg('login'),
         ]),
-        catchError(error => of(actions.dbCreate.failure(error)))
+        catchError(error => of(actions.dbLoginFailure(error)))
       )
     })
   )
 
 const dbOpenEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
   action$.pipe(
-    filter(isActionOf(actions.dbLogin.request)),
+    filter(isActionOf(actions.dbOpen)),
     withLatestFrom(state$),
     switchMap(([action, state]) => {
       const { dbId, password } = action.payload
@@ -105,15 +92,15 @@ const dbOpenEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
         const key = dbInfo.getKey(password)
 
         const connection = await openDb(dbInfo.path, key, appEntities)
-        return { connection }
+        return connection
       })()
 
       return from(p).pipe(
         mergeMap(res => [
-          actions.dbLogin.success(res), //
+          actions.dbLoginSuccess(res), //
           actions.closeDlg('login'),
         ]),
-        catchError(error => of(actions.dbLogin.failure(error)))
+        catchError(error => of(actions.dbLoginFailure(error)))
       )
     })
   )
@@ -153,7 +140,6 @@ const dbDeleteEpic: CoreEpic = (action$, state$, { sys: { deleteDb } }) =>
 
 export const dbEpics = [
   initEpic, //
-  dbInitEpic,
   dbCreateEpic,
   dbOpenEpic,
   dbDeleteEpic,

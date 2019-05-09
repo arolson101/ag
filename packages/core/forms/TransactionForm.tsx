@@ -81,7 +81,7 @@ const Component = Object.assign(
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
     const { data, saveTransaction, loading, accountId, transactionId } = props
 
-    const transaction = data && data.appDb && data.appDb.transaction
+    const transaction = data && data.transaction
     const initialValues = transaction
       ? pick(transaction, Object.keys(Transaction.defaultValues()) as Array<
           keyof Transaction.Props
@@ -118,8 +118,8 @@ const Component = Object.assign(
       },
     }))
 
-    if (!loading && (!data || !data.appDb)) {
-      throw new Error('db not open')
+    if (!loading && !data) {
+      throw new Error('no data')
     }
 
     return (

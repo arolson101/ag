@@ -1,8 +1,6 @@
 import { CoreStore, selectors } from '@ag/core'
-import { AppDb } from '@ag/db/resolvers/AppDb'
 import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
-import Container from 'typedi'
 import { Connection } from 'typeorm'
 import XLSX from 'xlsx'
 
@@ -37,8 +35,6 @@ export const exportDb = async (connection: Connection) => {
 export const init = (store: CoreStore) => {
   const exportMenuItem = () => {
     log('exportMenuItem')
-    const appDb = Container.get(AppDb)
-
     const { connection } = selectors.getAppDb(store.getState())
     if (connection) {
       exportDb(connection)

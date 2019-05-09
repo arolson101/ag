@@ -14,8 +14,8 @@ export interface DbState {
   index?: {
     connection: Connection
     dbRepository: DbRepository
-    dbs: DbInfo[]
   }
+  dbs: DbInfo[]
   indexError?: Error
   appError?: Error
   app?: {
@@ -27,13 +27,15 @@ export interface DbState {
   }
 }
 
-const defaultState: DbState = {}
+const defaultState: DbState = {
+  dbs: [],
+}
 
 export const dbSelectors = {
   isDbInitializing: (state: DbState) => !state.index && !state.indexError,
   isDbInitialized: (state: DbState) => !!state.index,
   getIndexDb: (state: DbState) => state.index,
-  getDbs: (state: DbState) => (state.index ? state.index.dbs : []),
+  getDbs: (state: DbState) => state.dbs,
   getDbRepository: (state: DbState) => {
     if (!state.index) {
       throw new Error('index db not open')
@@ -60,39 +62,30 @@ export const dbSelectors = {
 
 export const db = (state: DbState = defaultState, action: CoreAction): DbState => {
   switch (action.type) {
-    case getType(actions.dbInit.request):
-      return { ...state, index: undefined, indexError: undefined }
-
-    case getType(actions.dbInit.success): {
-      const { connection, dbs } = action.payload
+    case getType(actions.dbSetIndex): {
       return {
         ...state,
         index: {
-          connection, //
-          dbs,
-          dbRepository: connection.getRepository(Db),
+          connection: action.payload, //
+          dbRepository: action.payload.getRepository(Db),
         },
       }
     }
 
-    case getType(actions.dbInit.failure):
+    case getType(actions.dbSetInfos): {
+      return { ...state, dbs: action.payload }
+    }
+
+    case getType(actions.dbInitFailure):
       return { ...state, indexError: action.payload }
 
-    case getType(actions.dbCreate.request):
-    case getType(actions.dbLogin.request):
+    case getType(actions.dbCreate):
+    case getType(actions.dbOpen):
     case getType(actions.dbLogout):
       return { ...state, app: undefined, appError: undefined }
 
-    case getType(actions.dbCreate.success):
-    case getType(actions.dbLogin.success): {
-      if (!state.index) {
-        throw new Error('index db not open')
-      }
-      const { connection } = action.payload
-      const dbs =
-        action.type === getType(actions.dbCreate.success) //
-          ? action.payload.dbs
-          : state.index.dbs
+    case getType(actions.dbLoginSuccess): {
+      const connection = action.payload
       return {
         ...state,
         app: {
@@ -102,22 +95,17 @@ export const db = (state: DbState = defaultState, action: CoreAction): DbState =
           accountsRepository: connection.getCustomRepository(AccountRepository),
           transactionsRepository: connection.getCustomRepository(TransactionRepository),
         },
-        index: {
-          ...state.index,
-          dbs,
-        },
       }
     }
 
-    case getType(actions.dbCreate.failure):
-    case getType(actions.dbLogin.failure):
+    case getType(actions.dbLoginFailure):
       return { ...state, appError: action.payload }
 
     case getType(actions.dbDelete.success):
       if (!state.index) {
         throw new Error('index db not open')
       }
-      return { ...state, index: { ...state.index, dbs: action.payload.dbs } }
+      return { ...state, dbs: action.payload.dbs }
 
     default:
       return state

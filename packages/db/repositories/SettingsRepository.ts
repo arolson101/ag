@@ -3,6 +3,10 @@ import { Setting } from '../entities'
 
 @EntityRepository(Setting)
 export class SettingsRepository extends AbstractRepository<Setting> {
+  async all() {
+    return this.repository.find()
+  }
+
   async get(key: string) {
     return this.repository.findOne(key)
   }

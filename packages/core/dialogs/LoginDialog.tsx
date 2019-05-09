@@ -1,8 +1,8 @@
-import { useApolloClient } from '@ag/util'
 import React, { useCallback, useRef } from 'react'
 import { defineMessages } from 'react-intl'
+import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { useIntl, useSelector, useUi } from '../context'
+import { useAction, useIntl, useSelector, useUi } from '../context'
 import { LoginForm } from '../forms'
 import { deleteDb } from '../mutations'
 import { selectors } from '../reducers'
@@ -20,7 +20,7 @@ export const LoginDialog = React.memo<Props>(props => {
   const isDbInitialized = useSelector(selectors.isDbInitialized)
   const dbs = useSelector(selectors.getDbs)
   const indexError = useSelector(selectors.getIndexError)
-  const client = useApolloClient()
+  const dbDelete = useAction(actions.dbDelete.request)
   const loginForm = useRef<LoginForm>(null)
 
   const open = useCallback(() => {
@@ -29,7 +29,7 @@ export const LoginDialog = React.memo<Props>(props => {
     }
   }, [loginForm.current])
 
-  const dbId = dbs && dbs.length ? dbs[0].dbId : undefined
+  const dbId = dbs.length ? dbs[0].dbId : undefined
 
   return (
     <>
@@ -48,7 +48,7 @@ export const LoginDialog = React.memo<Props>(props => {
             dbId
               ? {
                   title: intl.formatMessage(messages.delete),
-                  onClick: () => deleteDb({ ui, intl, dbId, client }),
+                  onClick: () => deleteDb({ ui, intl, dbId, dbDelete }),
                   isDanger: true,
                 }
               : undefined

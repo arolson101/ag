@@ -33,8 +33,6 @@ export const MenuBar = Object.assign(
     const { NavMenu } = useUi()
     const { data, error } = useQuery(queries.MenuBar)
 
-    const appDb = data && data.appDb
-
     return (
       <>
         <ErrorDisplay error={error} />
@@ -44,8 +42,8 @@ export const MenuBar = Object.assign(
               key: 'accounts',
               title: 'accounts',
               subitems: [
-                ...(appDb
-                  ? appDb.banks.map(
+                ...(data
+                  ? data.banks.map(
                       (bank): NavMenuItem => ({
                         key: bank.id,
                         title: bank.name,

@@ -140,9 +140,9 @@ export const LoginForm = Object.assign(
   React.forwardRef<LoginForm, Props>((props, ref) => {
     const component = useRef<LoginForm>(null)
 
-    const createDb = useAction(actions.dbCreate.request)
+    const createDb = useAction(actions.dbCreate)
     const appError = useSelector(selectors.getAppError)
-    const openDb = useAction(actions.dbLogin.request)
+    const openDb = useAction(actions.dbOpen)
 
     useImperativeHandle(ref, () => ({
       submit: () => {

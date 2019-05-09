@@ -52,7 +52,7 @@ const Component = Object.assign(
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const { Page, Table, Text } = useUi()
 
-    const account = data && data.appDb && data.appDb.account
+    const account = data && data.account
     const title = (account && account.name) || 'no account'
     const subtitle = (account && account.bank.name) || 'no bank'
 

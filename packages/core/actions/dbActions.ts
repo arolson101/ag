@@ -2,38 +2,16 @@ import { Connection } from 'typeorm'
 import { createAsyncAction, createStandardAction } from 'typesafe-actions'
 
 export const dbActions = {
-  dbInit: createAsyncAction(
-    'core/dbInit:request', //
-    'core/dbInit:success',
-    'core/dbInit:failure'
-  )<
-    void,
-    {
-      connection: Connection //
-      dbs: DbInfo[]
-    },
-    Error
-  >(),
+  dbInitFailure: createStandardAction('core/dbInitFailure')<Error>(),
+  dbSetIndex: createStandardAction('core/dbSetIndex')<Connection>(),
+  dbSetInfos: createStandardAction('core/dbSetInfos')<DbInfo[]>(),
 
-  dbLogin: createAsyncAction(
-    'core/dbLogin:request', //
-    'core/dbLogin:success',
-    'core/dbLogin:failure'
-  )<
-    { dbId: string; password: string }, //
-    { connection: Connection },
-    Error
-  >(),
+  dbOpen: createStandardAction('core/dbOpen')<{ dbId: string; password: string }>(),
+  dbCreate: createStandardAction('core/dbCreate')<{ name: string; password: string }>(),
 
-  dbCreate: createAsyncAction(
-    'core/dbCreate:request', //
-    'core/dbCreate:success',
-    'core/dbCreate:failure'
-  )<
-    { name: string; password: string }, //
-    { connection: Connection; dbs: DbInfo[] },
-    Error
-  >(),
+  dbLoginSuccess: createStandardAction('core/dbLoginSuccess')<Connection>(),
+
+  dbLoginFailure: createStandardAction('core/dbLoginFailure')<Error>(),
 
   dbLogout: createStandardAction('core/dbLogout')(),
 

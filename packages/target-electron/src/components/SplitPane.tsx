@@ -1,52 +1,29 @@
-import { ErrorDisplay } from '@ag/core'
-import { Gql, useMutation, useQuery } from '@ag/util'
+import { actions, ErrorDisplay, selectors, useAction, useSelector } from '@ag/core'
 import debug from 'debug'
-import gql from 'graphql-tag'
 import React, { useCallback } from 'react'
 import ReactSplitPane from 'react-split-pane'
-import * as T from '../electron-graphql-types'
 
 const log = debug('electron:SplitPane')
 
-const queries = {
-  SidebarWidth: gql`
-    query SidebarWidth {
-      get(key: "sidebarWidth") {
-        key
-        value
-      }
-    }
-  ` as Gql<T.SidebarWidth.Query, T.SidebarWidth.Variables>,
-}
-
-const mutations = {
-  SetSidebarWidth: gql`
-    mutation SetSidebarWidth($value: String!) {
-      set(key: "sidebarWidth", value: $value) {
-        key
-        value
-      }
-    }
-  ` as Gql<T.SetSidebarWidth.Mutation, T.SetSidebarWidth.Variables>,
-}
+const sidebarWidthKey = 'sidebarWidth'
+const sidebarWidthDefault = 150
 
 interface Props {}
 
 export const SplitPane: React.FC<Props> = ({ children }) => {
-  const { loading, data, error } = useQuery(queries.SidebarWidth)
-  const setSidebarWidthMutation = useMutation(mutations.SetSidebarWidth, {
-    refetchQueries: [{ query: queries.SidebarWidth }],
-  })
+  const error = useSelector(selectors.getSettingsError)
+  const getSetting = useSelector(selectors.getSetting)
+  const sidebarWidth = parseFloat(getSetting(sidebarWidthKey, sidebarWidthDefault.toString()))
+  const settingsSetValue = useAction(actions.settingsSetValue)
+
   const setSidebarWidth = useCallback(
     (width: number) => {
       log('setSidebarWidth %d', width)
-      setSidebarWidthMutation({ variables: { value: width.toString() } })
+      settingsSetValue({ key: sidebarWidthKey, value: width.toString() })
     },
-    [setSidebarWidthMutation]
+    [settingsSetValue, sidebarWidthKey]
   )
 
-  const sidebarWidth =
-    !loading && data && data.appDb && data.appDb.get ? parseFloat(data.appDb.get.value) : 150
   // log('render %o', data)
 
   return (

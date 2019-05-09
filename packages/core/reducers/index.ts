@@ -4,11 +4,13 @@ import { CoreAction } from '../actions'
 import { db, dbSelectors } from './dbReducer'
 import { dialog } from './dialogReducer'
 import { intl, intlSelectors } from './intlReducer'
+import { settings, settingsSelectors } from './settingsReducer'
 
 export const appReducers = {
   db,
   dialog,
   intl,
+  settings,
 }
 
 export interface CoreState extends StateType<typeof appReducers> {}
@@ -29,4 +31,7 @@ export const selectors = {
   getDialogs: (state: CoreState) => state.dialog,
 
   getIntl: (state: CoreState) => intlSelectors.getIntl(state.intl),
+
+  getSettingsError: (state: CoreState) => settingsSelectors.getSettingsError(state.settings),
+  getSetting: (state: CoreState) => settingsSelectors.getSetting(state.settings),
 }

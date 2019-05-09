@@ -32,8 +32,8 @@ const Component = React.memo<ComponentProps>(({ data, loading }) => {
     <Page title={intl.formatMessage(messages.titleText)}>
       <Text header>Bills</Text>
       {data &&
-        data.appDb &&
-        data.appDb.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
+        data.accounts &&
+        data.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
     </Page>
   )
 })

@@ -118,12 +118,6 @@ export namespace MenuBar {
   export type Query = {
     __typename?: 'Query'
 
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
-
     banks: Banks[]
   }
 
@@ -156,12 +150,6 @@ export namespace AccountForm {
 
   export type Query = {
     __typename?: 'Query'
-
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
 
     account: Maybe<Account>
 
@@ -209,12 +197,6 @@ export namespace BankForm {
   export type Query = {
     __typename?: 'Query'
 
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
-
     bank: Maybe<Bank>
   }
 
@@ -240,50 +222,6 @@ export namespace SaveBank {
   } & BankFields.Fragment
 }
 
-export namespace LoginForm {
-  export type Variables = {}
-
-  export type Query = {
-    __typename?: 'Query'
-
-    dbs: Dbs[]
-  }
-
-  export type Dbs = {
-    __typename?: 'Db'
-
-    dbId: string
-
-    name: string
-  }
-}
-
-export namespace CreateDb {
-  export type Variables = {
-    name: string
-    password: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    createDb: boolean
-  }
-}
-
-export namespace OpenDb {
-  export type Variables = {
-    dbId: string
-    password: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    openDb: boolean
-  }
-}
-
 export namespace Transaction {
   export type Variables = {
     transactionId?: Maybe<string>
@@ -291,12 +229,6 @@ export namespace Transaction {
 
   export type Query = {
     __typename?: 'Query'
-
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
 
     transaction: Maybe<Transaction>
   }
@@ -362,18 +294,6 @@ export namespace DeleteBank {
   }
 }
 
-export namespace DeleteDb {
-  export type Variables = {
-    dbId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteDb: string
-  }
-}
-
 export namespace AccountPage {
   export type Variables = {
     accountId: string
@@ -381,12 +301,6 @@ export namespace AccountPage {
 
   export type Query = {
     __typename?: 'Query'
-
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
 
     account: Maybe<Account>
   }
@@ -439,12 +353,6 @@ export namespace AccountsPage {
 
   export type Query = {
     __typename?: 'Query'
-
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
 
     banks: Banks[]
   }
@@ -502,12 +410,6 @@ export namespace BillsPage {
   export type Query = {
     __typename?: 'Query'
 
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
-
     accounts: Accounts[]
   }
 
@@ -525,12 +427,6 @@ export namespace BudgetsPage {
 
   export type Query = {
     __typename?: 'Query'
-
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
 
     accounts: Accounts[]
   }
@@ -550,12 +446,6 @@ export namespace CalendarPage {
   export type Query = {
     __typename?: 'Query'
 
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
-
     accounts: Accounts[]
   }
 
@@ -573,12 +463,6 @@ export namespace HomePage {
 
   export type Query = {
     __typename?: 'Query'
-
-    appDb: Maybe<AppDb>
-  }
-
-  export type AppDb = {
-    __typename?: 'AppDb'
 
     banks: Banks[]
   }

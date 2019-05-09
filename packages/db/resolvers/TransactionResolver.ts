@@ -1,12 +1,21 @@
 import { selectors } from '@ag/core'
 import { diff, uniqueId } from '@ag/util'
-import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
+import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { DbContext } from '../DbContext'
 import { DbChange, Transaction, TransactionInput } from '../entities'
 import { dbWrite } from './dbWrite'
 
 @Resolver(objectType => Transaction)
 export class TransactionResolver {
+  @Query(returns => Transaction, { nullable: true })
+  async transaction(
+    @Ctx() { store }: DbContext, //
+    @Arg('transactionId', { nullable: true }) transactionId?: string
+  ): Promise<Transaction | undefined> {
+    const { transactionsRepository } = selectors.getAppDb(store.getState())
+    return transactionId ? transactionsRepository.getById(transactionId) : undefined
+  }
+
   @Mutation(returns => Transaction)
   async saveTransaction(
     @Ctx() { store }: DbContext,

@@ -15,44 +15,49 @@ const Paragraph: React.FC = ({ children }) => <p>{children}</p>
 
 const log = debug('ui-antd:ui')
 
-export const Page: React.FC<PageProps> = ({ button, title, image, subtitle, children }) => {
-  let onBack: undefined | (() => any)
-  try {
-    const { history } = useReactRouter()
-    const h = history as MemoryHistory
-    if (h.canGo(-1)) {
-      onBack = h.goBack
+export const Page = Object.assign(
+  React.memo<PageProps>(({ button, title, image, subtitle, children }) => {
+    let onBack: undefined | (() => any)
+    try {
+      const { history } = useReactRouter()
+      const h = history as MemoryHistory
+      if (h.canGo(-1)) {
+        onBack = h.goBack
+      }
+    } catch (error) {
+      log(error.message)
     }
-  } catch (error) {
-    log(error.message)
-  }
 
-  return (
-    <Layout style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <PageHeader
-        onBack={onBack}
-        title={
-          <Title>
-            {image && <ImageSourceIcon style={{ margin: 5 }} src={image} />}
-            {title}
-          </Title>
-        }
-        subTitle={subtitle}
-      />
-      <Layout.Content style={{ background: '#fff', overflow: 'auto', flex: 1 }}>
-        {children}
-      </Layout.Content>
-      {button && (
-        <Layout.Footer>
-          <Button
-            disabled={button.disabled}
-            type={button.isDanger ? 'danger' : undefined}
-            onClick={button.onClick}
-          >
-            {button.title}
-          </Button>
-        </Layout.Footer>
-      )}
-    </Layout>
-  )
-}
+    return (
+      <Layout style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <PageHeader
+          onBack={onBack}
+          title={
+            <Title>
+              {image && <ImageSourceIcon style={{ margin: 5 }} src={image} />}
+              {title}
+            </Title>
+          }
+          subTitle={subtitle}
+        />
+        <Layout.Content style={{ background: '#fff', overflow: 'auto', flex: 1 }}>
+          {children}
+        </Layout.Content>
+        {button && (
+          <Layout.Footer>
+            <Button
+              disabled={button.disabled}
+              type={button.isDanger ? 'danger' : undefined}
+              onClick={button.onClick}
+            >
+              {button.title}
+            </Button>
+          </Layout.Footer>
+        )}
+      </Layout>
+    )
+  }),
+  {
+    displayName: 'Page',
+  }
+)

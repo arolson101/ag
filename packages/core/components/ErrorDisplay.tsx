@@ -22,7 +22,7 @@ const show = (ui: UiContext, intl: IntlContext, errors: Props['error']) => {
 
   alert({
     title: intl.formatMessage(messages.error),
-    body: (errors as Error[]).map(e => e.message).join('\n'),
+    body: (errors as Error[]).flatMap(e => [e.message, e.stack || '']).join('\n'),
     confirmText: intl.formatMessage(messages.ok),
     onConfirm: () => undefined,
     error: true,

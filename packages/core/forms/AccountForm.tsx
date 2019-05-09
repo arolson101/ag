@@ -82,15 +82,15 @@ const FormComponent = Object.assign(
     const { Form, SelectField, TextField } = typedFields<FormValues>(useUi())
     const { data, loading } = props
 
-    const account = loading ? undefined : data && data.appDb && data.appDb.account
-    const bank = loading ? undefined : data && data.appDb && data.appDb.bank
+    const account = loading ? undefined : data && data.account
+    const bank = loading ? undefined : data && data.bank
 
     const formik = useFormikContext<FormValues>()
     const [type] = useField('type')
     const [color] = useField('color')
 
-    if (!loading && (!data || !data.appDb)) {
-      throw new Error('db not open')
+    if (!loading && !data) {
+      throw new Error('no data')
     }
 
     return (
@@ -153,7 +153,7 @@ const Component = Object.assign(
     const { showToast } = useUi()
     const { data, saveAccount, loading, accountId, bankId, onClosed } = props
 
-    const account = loading ? undefined : data && data.appDb && data.appDb.account
+    const account = loading ? undefined : data && data.account
     const initialValues: FormValues = {
       ...(account
         ? pick(account, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
@@ -203,8 +203,8 @@ const Component = Object.assign(
       },
     }))
 
-    if (!loading && (!data || !data.appDb)) {
-      throw new Error('db not open')
+    if (!loading && !data) {
+      throw new Error('no data')
     }
 
     return (

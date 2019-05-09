@@ -2,10 +2,9 @@ import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useState } from 'react'
+import React from 'react'
 import { defineMessages } from 'react-intl'
-import { actions } from '../actions'
-import { useAction, useIntl, useUi } from '../context'
+import { useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('core:HomePage')
