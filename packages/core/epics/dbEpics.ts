@@ -118,9 +118,43 @@ const dbOpenEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
     })
   )
 
+const dbDeleteEpic: CoreEpic = (action$, state$, { sys: { deleteDb } }) =>
+  action$.pipe(
+    filter(isActionOf(actions.dbDelete.request)),
+    withLatestFrom(state$),
+    switchMap(([action, state]) => {
+      const { dbId } = action.payload
+      const dbRepo = selectors.getDbRepository(state)
+
+      const p = (async () => {
+        const dbInfo = await dbRepo.findOneOrFail(dbId)
+        await deleteDb(dbInfo.path)
+
+        await dbRepo
+          .createQueryBuilder()
+          .delete()
+          .from(Db)
+          .where('dbId = :dbId', { dbId })
+          .execute()
+
+        const dbs: DbInfo[] = await dbRepo.find()
+
+        return { dbs }
+      })()
+
+      return from(p).pipe(
+        mergeMap(res => [
+          actions.dbDelete.success(res), //
+        ]),
+        catchError(error => of(actions.dbDelete.failure(error)))
+      )
+    })
+  )
+
 export const dbEpics = [
   initEpic, //
   dbInitEpic,
   dbCreateEpic,
   dbOpenEpic,
+  dbDeleteEpic,
 ]

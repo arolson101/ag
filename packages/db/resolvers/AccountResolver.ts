@@ -1,38 +1,38 @@
+import { selectors } from '@ag/core'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
-import { Arg, Ctx, Field, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
+import { Arg, Ctx, FieldResolver, Mutation, Resolver, Root } from 'type-graphql'
 import { DbContext } from '../DbContext'
 import { Account, AccountInput, Bank, DbChange, Transaction } from '../entities'
-import { AppDb } from './AppDb'
+import { dbWrite } from './dbWrite'
 
 const log = debug('db:AccountResolver')
 
 @Resolver(Account)
 export class AccountResolver {
-  constructor(
-    private appDb: AppDb //
-  ) {}
-
   @FieldResolver(returns => Bank)
-  async bank(@Root() account: Account): Promise<Bank> {
-    const app = this.appDb
-    return app.bank(account.bankId)
+  async bank(
+    @Ctx() { store }: DbContext, //
+    @Root() account: Account
+  ): Promise<Bank> {
+    const { banksRepository } = selectors.getAppDb(store.getState())
+    return banksRepository.getById(account.bankId)
   }
 
   @Mutation(returns => Account)
   async saveAccount(
-    @Ctx() context: DbContext,
+    @Ctx() { store }: DbContext,
     @Arg('input') input: AccountInput,
     @Arg('accountId', { nullable: true }) accountId?: string,
     @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Account> {
-    const app = this.appDb
+    const { connection, accountsRepository } = selectors.getAppDb(store.getState())
     let account: Account
     let changes: DbChange[]
     const t = Date.now()
     if (accountId) {
-      account = await app.account(accountId)
+      account = await accountsRepository.getById(accountId)
       const q = diff<Account.Props>(account, input)
       changes = [Account.change.edit(t, accountId, q)]
       account.update(t, q)
@@ -44,33 +44,33 @@ export class AccountResolver {
       accountId = account.id
       changes = [Account.change.add(t, account)]
     }
-    await app.dbWrite(changes)
+    await dbWrite(connection, changes)
     assert.equal(accountId, account.id)
-    assert.deepEqual(account, await app.account(accountId))
+    assert.deepEqual(account, await accountsRepository.getById(accountId))
     return account
   }
 
   @Mutation(returns => Boolean)
-  async deleteAccount(@Arg('accountId') accountId: string): Promise<boolean> {
-    const app = this.appDb
+  async deleteAccount(
+    @Ctx() { store }: DbContext, //
+    @Arg('accountId') accountId: string
+  ): Promise<boolean> {
+    const { connection } = selectors.getAppDb(store.getState())
     const t = Date.now()
     const changes = [Account.change.remove(t, accountId)]
-    await app.dbWrite(changes)
+    await dbWrite(connection, changes)
     return true
   }
 
   @FieldResolver(type => [Transaction])
   async transactions(
+    @Ctx() { store }: DbContext, //
     @Root() account: Account,
     @Arg('start', { nullable: true }) start?: Date,
     @Arg('end', { nullable: true }) end?: Date
   ): Promise<Transaction[]> {
-    const app = this.appDb
-    const transactions = app.transactionsRepository
-    if (!transactions) {
-      throw new Error('app db is not open')
-    }
-    const res = await transactions.getForAccount(account.id, start, end)
+    const { transactionsRepository } = selectors.getAppDb(store.getState())
+    const res = await transactionsRepository.getForAccount(account.id, start, end)
     log(
       '%s\n%s\n%o',
       `transactions for account ${account.id} (bank ${account.bankId})`,

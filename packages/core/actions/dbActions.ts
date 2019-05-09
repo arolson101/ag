@@ -35,5 +35,15 @@ export const dbActions = {
     Error
   >(),
 
-  dbLogout: createStandardAction('core/logout')(),
+  dbLogout: createStandardAction('core/dbLogout')(),
+
+  dbDelete: createAsyncAction(
+    'core/dbDelete:request', //
+    'core/dbDelete:success',
+    'core/dbDelete:failure'
+  )<
+    { dbId: string }, //
+    { dbs: DbInfo[] },
+    Error
+  >(),
 }

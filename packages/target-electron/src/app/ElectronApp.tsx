@@ -39,6 +39,6 @@ class ElectronApp extends React.PureComponent {
   }
 }
 
-init()
+init(store)
 
 export default hot(ElectronApp)

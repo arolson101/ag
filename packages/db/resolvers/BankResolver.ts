@@ -16,11 +16,8 @@ export class BankResolver {
     @Ctx() { store }: DbContext,
     @Root() bank: Bank //
   ): Promise<Account[]> {
-    const accounts = selectors.getAccountsRepository(store.getState())
-    if (!accounts) {
-      throw new Error('app db is not open')
-    }
-    const res = await accounts.getForBank(bank.id)
+    const { accountsRepository } = selectors.getAppDb(store.getState())
+    const res = await accountsRepository.getForBank(bank.id)
     return res
   }
 
@@ -31,13 +28,12 @@ export class BankResolver {
     @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Bank> {
     const state = store.getState()
-    const db = selectors.getAppDb(state)
-    const banks = selectors.getBanksRepository(state)
+    const { connection, banksRepository } = selectors.getAppDb(state)
     const t = Date.now()
     let bank: Bank
     let changes: DbChange[]
     if (bankId) {
-      bank = await banks.getById(bankId)
+      bank = await banksRepository.getById(bankId)
       const q = diff<Bank.Props>(bank, input)
       changes = [Bank.change.edit(t, bankId, q)]
       bank.update(t, q)
@@ -47,10 +43,10 @@ export class BankResolver {
       changes = [Bank.change.add(t, bank)]
     }
     // log('dbwrite %o', changes)
-    await dbWrite(db, changes)
+    await dbWrite(connection, changes)
     assert.equal(bankId, bank.id)
     // log('get bank %s', bankId)
-    assert.deepEqual(bank, await banks.getById(bankId))
+    assert.deepEqual(bank, await banksRepository.getById(bankId))
     // log('done')
     return bank
   }
@@ -60,10 +56,10 @@ export class BankResolver {
     @Ctx() { store }: DbContext,
     @Arg('bankId') bankId: string //
   ): Promise<boolean> {
-    const db = selectors.getAppDb(store.getState())
+    const { connection } = selectors.getAppDb(store.getState())
     const t = Date.now()
     const changes = [Bank.change.remove(t, bankId)]
-    await dbWrite(db, changes)
+    await dbWrite(connection, changes)
     return true
   }
 
@@ -72,11 +68,9 @@ export class BankResolver {
     @Ctx() { store }: DbContext,
     @Arg('accountIds', type => [String]) accountIds: string[]
   ): Promise<boolean> {
-    const state = store.getState()
-    const db = selectors.getAppDb(state)
-    const accountsRepo = selectors.getAccountsRepository(state)
+    const { connection, accountsRepository } = selectors.getAppDb(store.getState())
     const t = Date.now()
-    const accounts = await accountsRepo.getByIds(accountIds)
+    const accounts = await accountsRepository.getByIds(accountIds)
     if (accounts.length !== accountIds.length) {
       throw new Error('got back wrong number of accounts')
     }
@@ -94,7 +88,7 @@ export class BankResolver {
       edits,
       table: Account,
     }
-    await dbWrite(db, [change])
+    await dbWrite(connection, [change])
     return true
   }
 }

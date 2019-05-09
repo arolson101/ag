@@ -10,7 +10,6 @@ import {
   BillResolver,
   BudgetResolver,
   CategoryResolver,
-  DbResolver,
   TransactionResolver,
 } from './resolvers'
 
@@ -18,7 +17,6 @@ ormUseContainer(Container)
 
 export const schema = buildSchemaSync({
   resolvers: [
-    DbResolver,
     BankResolver,
     AccountResolver,
     AccountOnlineResolver,

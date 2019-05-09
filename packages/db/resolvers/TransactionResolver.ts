@@ -15,14 +15,13 @@ export class TransactionResolver {
     @Arg('accountId', { nullable: true }) accountId?: string
   ): Promise<Transaction> {
     const state = store.getState()
-    const db = selectors.getAppDb(state)
-    const transactionRepo = selectors.getTransactionsRepository(state)
+    const { connection, transactionsRepository } = selectors.getAppDb(state)
     const t = Date.now()
     const table = Transaction
     let transaction: Transaction
     let changes: DbChange[]
     if (transactionId) {
-      transaction = await transactionRepo.getById(transactionId)
+      transaction = await transactionsRepository.getById(transactionId)
       const q = diff<Transaction.Props>(transaction, input)
       changes = [{ table, t, edits: [{ id: transactionId, q }] }]
       transaction.update(t, q)
@@ -34,7 +33,7 @@ export class TransactionResolver {
       transactionId = transaction.id
       changes = [{ table, t, adds: [transaction] }]
     }
-    await dbWrite(db, changes)
+    await dbWrite(connection, changes)
     return transaction
   }
 
@@ -44,13 +43,12 @@ export class TransactionResolver {
     @Arg('transactionId') transactionId: string //
   ): Promise<Transaction> {
     const state = store.getState()
-    const db = selectors.getAppDb(state)
-    const transactionRepo = selectors.getTransactionsRepository(state)
+    const { connection, transactionsRepository } = selectors.getAppDb(state)
     const t = Date.now()
     const table = Transaction
-    const transaction = await transactionRepo.getById(transactionId)
+    const transaction = await transactionsRepository.getById(transactionId)
     const changes: DbChange[] = [{ table, t, deletes: [transactionId] }]
-    await dbWrite(db, changes)
+    await dbWrite(connection, changes)
     return transaction
   }
 }

@@ -47,7 +47,7 @@ export const dbSelectors = {
     if (!state.app) {
       throw new Error('app db not open')
     }
-    return state.app.connection
+    return state.app
   },
   getAppError: (state: DbState) => state.appError,
   getSettingsRepository: (state: DbState) => {
@@ -56,27 +56,9 @@ export const dbSelectors = {
     }
     return state.app.settingsRepository
   },
-  getBanksRepository: (state: DbState) => {
-    if (!state.app) {
-      throw new Error('app db not open')
-    }
-    return state.app.banksRepository
-  },
-  getAccountsRepository: (state: DbState) => {
-    if (!state.app) {
-      throw new Error('app db not open')
-    }
-    return state.app.accountsRepository
-  },
-  getTransactionsRepository: (state: DbState) => {
-    if (!state.app) {
-      throw new Error('app db not open')
-    }
-    return state.app.transactionsRepository
-  },
 }
 
-export const db = (state: DbState = defaultState, action: CoreAction) => {
+export const db = (state: DbState = defaultState, action: CoreAction): DbState => {
   switch (action.type) {
     case getType(actions.dbInit.request):
       return { ...state, index: undefined, indexError: undefined }
@@ -130,6 +112,12 @@ export const db = (state: DbState = defaultState, action: CoreAction) => {
     case getType(actions.dbCreate.failure):
     case getType(actions.dbLogin.failure):
       return { ...state, appError: action.payload }
+
+    case getType(actions.dbDelete.success):
+      if (!state.index) {
+        throw new Error('index db not open')
+      }
+      return { ...state, index: { ...state.index, dbs: action.payload.dbs } }
 
     default:
       return state

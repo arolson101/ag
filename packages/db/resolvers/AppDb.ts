@@ -1,15 +1,8 @@
-import { fail } from 'assert'
+import { selectors } from '@ag/core'
 import debug from 'debug'
-import { Arg, Field, Mutation, ObjectType } from 'type-graphql'
-import { Connection } from 'typeorm'
-import { Account, Bank, DbChange, Record, Setting, Transaction } from '../entities'
-import {
-  AccountRepository,
-  BankRepository,
-  SettingsRepository,
-  TransactionRepository,
-} from '../repositories'
-import { dbWrite } from './dbWrite'
+import { Arg, Ctx, Field, Mutation, ObjectType } from 'type-graphql'
+import { DbContext } from '../DbContext'
+import { Account, Bank, Setting, Transaction } from '../entities'
 
 const log = debug('db:AppDb')
 
@@ -20,130 +13,69 @@ export interface Change {
 
 @ObjectType()
 export class AppDb {
-  connection?: Connection
-  settingsRepository?: SettingsRepository
-  banksRepository?: BankRepository
-  accountsRepository?: AccountRepository
-  transactionsRepository?: TransactionRepository
-
-  @Field()
-  loggedIn: boolean
-
-  constructor() {
-    this.loggedIn = false
-  }
-
-  open(connection: Connection) {
-    log('open %o', connection)
-    if (this.connection) {
-      throw new Error('app db is already open')
-    }
-    this.loggedIn = true
-    this.connection = connection
-    this.settingsRepository = connection.getCustomRepository(SettingsRepository)
-    this.banksRepository = connection.getCustomRepository(BankRepository)
-    this.accountsRepository = connection.getCustomRepository(AccountRepository)
-    this.transactionsRepository = connection.getCustomRepository(TransactionRepository)
-  }
-
-  async close() {
-    log('close')
-    if (this.connection) {
-      await this.connection.close()
-      this.loggedIn = false
-      this.connection = undefined
-      this.settingsRepository = undefined
-      this.banksRepository = undefined
-      this.accountsRepository = undefined
-      this.transactionsRepository = undefined
-    }
-  }
-
   @Field(returns => Setting, { nullable: true })
   async get(
-    @Arg('key') key: string //
+    @Ctx() { store }: DbContext, //
+    @Arg('key') key: string
   ): Promise<Setting | undefined> {
     // log('get %s', key)
-    if (this.settingsRepository) {
-      const setting = await this.settingsRepository.get(key)
-      return setting
-    }
+    const settingsRepo = selectors.getSettingsRepository(store.getState())
+    const setting = await settingsRepo.get(key)
+    return setting
   }
 
   @Mutation(returns => Setting, { nullable: true })
   async set(
-    @Arg('key') key: string, //
+    @Ctx() { store }: DbContext,
+    @Arg('key') key: string,
     @Arg('value') value: string
   ): Promise<Setting | undefined> {
     log('set %s %s', key, value)
-    if (this.settingsRepository) {
-      const setting = await this.settingsRepository.set(key, value)
-      return setting
-    }
+    const settingsRepo = selectors.getSettingsRepository(store.getState())
+    const setting = await settingsRepo.set(key, value)
+    return setting
   }
-
-  async bank(bankId: string): Promise<Bank>
 
   @Field(returns => Bank, { nullable: true })
   async bank(
-    @Arg('bankId', { nullable: true }) bankId?: string //
+    @Ctx() { store }: DbContext, //
+    @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Bank | undefined> {
-    const banks = this.banksRepository
-    if (!banks) {
-      throw new Error('app db is not open')
-    }
-    return bankId ? banks.getById(bankId) : undefined
+    const { banksRepository } = selectors.getAppDb(store.getState())
+    return bankId ? banksRepository.getById(bankId) : undefined
   }
 
   @Field(returns => [Bank])
-  async banks(): Promise<Bank[]> {
-    const banks = this.banksRepository
-    if (!banks) {
-      throw new Error('app db is not open')
-    }
-    return banks.all()
+  async banks(
+    @Ctx() { store }: DbContext //
+  ): Promise<Bank[]> {
+    const { banksRepository } = selectors.getAppDb(store.getState())
+    return banksRepository.all()
   }
-
-  async account(accountId: string): Promise<Account>
 
   @Field(returns => Account, { nullable: true })
   async account(
+    @Ctx() { store }: DbContext, //
     @Arg('accountId', { nullable: true }) accountId?: string
   ): Promise<Account | undefined> {
-    const accounts = this.accountsRepository
-    if (!accounts) {
-      throw new Error('app db is not open')
-    }
-    return accountId ? accounts.getById(accountId) : undefined
+    const { accountsRepository } = selectors.getAppDb(store.getState())
+    return accountId ? accountsRepository.getById(accountId) : undefined
   }
 
   @Field(returns => [Account])
-  async accounts(): Promise<Account[]> {
-    const accounts = this.accountsRepository
-    if (!accounts) {
-      throw new Error('app db is not open')
-    }
-    return accounts.all()
+  async accounts(
+    @Ctx() { store }: DbContext //
+  ): Promise<Account[]> {
+    const { accountsRepository } = selectors.getAppDb(store.getState())
+    return accountsRepository.all()
   }
-
-  async transaction(transactionId: string): Promise<Transaction>
 
   @Field(returns => Transaction, { nullable: true })
   async transaction(
+    @Ctx() { store }: DbContext, //
     @Arg('transactionId', { nullable: true }) transactionId?: string
   ): Promise<Transaction | undefined> {
-    const transactions = this.transactionsRepository
-    if (!transactions) {
-      throw new Error('app db is not open')
-    }
-    return transactionId ? transactions.getById(transactionId) : undefined
-  }
-
-  async dbWrite(changes: DbChange[]) {
-    const db = this.connection
-    if (!db) {
-      throw new Error('app db is not open')
-    }
-    return dbWrite(db, changes)
+    const { transactionsRepository } = selectors.getAppDb(store.getState())
+    return transactionId ? transactionsRepository.getById(transactionId) : undefined
   }
 }

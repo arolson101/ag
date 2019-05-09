@@ -1,3 +1,4 @@
+import { selectors } from '@ag/core'
 import { toAccountType } from '@ag/online'
 import { diff, uniqueId } from '@ag/util'
 import debug from 'debug'
@@ -13,16 +14,12 @@ import {
   Transaction,
   TransactionInput,
 } from '../entities'
-import { AppDb } from './AppDb'
+import { dbWrite } from './dbWrite'
 
 const log = debug('db:AccountOnlineResolver')
 
 @Resolver()
 export class AccountOnlineResolver {
-  constructor(
-    private appDb: AppDb //
-  ) {}
-
   @Mutation(returns => Bank)
   async syncAccounts(
     @Ctx() context: DbContext, //
@@ -38,14 +35,15 @@ export class AccountOnlineResolver {
     @Arg('bankId') bankId: string,
     @Arg('cancelToken') cancelToken: string
   ): Promise<Bank> {
-    const app = this.appDb
-    const bank = await app.bank(bankId)
+    const state = context.store.getState()
+    const { connection, banksRepository, accountsRepository } = selectors.getAppDb(state)
+    const bank = await banksRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadAccountList: bank is not set online`)
     }
 
     // TODO: make bank query get this for us
-    const existingAccounts = await app.accountsRepository!.getForBank(bank.id)
+    const existingAccounts = await accountsRepository.getForBank(bank.id)
     const { intl, online } = context
     const source = online.CancelToken.source()
 
@@ -84,7 +82,7 @@ export class AccountOnlineResolver {
             edits,
           }
           log('account changes', change)
-          await app.dbWrite([change])
+          await dbWrite(connection, [change])
         } else {
           log('no account changes')
         }
@@ -107,14 +105,19 @@ export class AccountOnlineResolver {
     @Arg('end') end: Date,
     @Arg('cancelToken') cancelToken: string
   ): Promise<Account> {
-    const app = this.appDb
-    const bank = await app.bank(bankId)
+    const { online, intl, store } = context
+    const {
+      connection,
+      banksRepository,
+      accountsRepository,
+      transactionsRepository,
+    } = selectors.getAppDb(store.getState())
+    const bank = await banksRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadTransactions: bank is not set online`)
     }
 
-    const account = await app.account(accountId)
-    const { online, intl } = context
+    const account = await accountsRepository.getById(accountId)
     const source = online.CancelToken.source()
 
     try {
@@ -133,7 +136,7 @@ export class AccountOnlineResolver {
       } else {
         log('transactions', transactions)
 
-        const existingTransactions = await app.transactionsRepository!.getForAccount(
+        const existingTransactions = await transactionsRepository.getForAccount(
           account.id,
           start,
           end
@@ -171,7 +174,7 @@ export class AccountOnlineResolver {
             edits,
           }
           log('transaction changes', change)
-          await app.dbWrite([change])
+          await dbWrite(connection, [change])
         } else {
           log('no transaction changes')
         }

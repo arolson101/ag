@@ -25,9 +25,6 @@ export const selectors = {
   getAppDb: (state: CoreState) => dbSelectors.getAppDb(state.db),
   getAppError: (state: CoreState) => dbSelectors.getAppError(state.db),
   getSettingsRepository: (state: CoreState) => dbSelectors.getSettingsRepository(state.db),
-  getBanksRepository: (state: CoreState) => dbSelectors.getBanksRepository(state.db),
-  getAccountsRepository: (state: CoreState) => dbSelectors.getAccountsRepository(state.db),
-  getTransactionsRepository: (state: CoreState) => dbSelectors.getTransactionsRepository(state.db),
 
   getDialogs: (state: CoreState) => state.dialog,
 
