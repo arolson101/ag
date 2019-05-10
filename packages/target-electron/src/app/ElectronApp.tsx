@@ -1,37 +1,32 @@
+import { actions } from '@ag/core/actions'
 import { App } from '@ag/core/app'
-import { SystemCallbacks } from '@ag/core/context'
-import { selectors } from '@ag/core/reducers'
+import { CoreStore, selectors } from '@ag/core/reducers'
 import { createClient } from '@ag/db'
 import { online } from '@ag/online'
 import { ui } from '@ag/ui-antd'
 import React from 'react'
 import { hot } from 'react-hot-loader/root'
-import { createStore } from '../store'
 import { ElectronDialogs } from './ElectronDialogs'
 import { ElectronRouter } from './ElectronRouter'
 import { init } from './export'
-import { getImageFromLibrary, openCropper, scaleImage } from './image.electron'
 import { deleteDb, openDb } from './openDb.electron'
+import { sys } from './store'
 
-export const sys: SystemCallbacks = {
-  openDb,
-  deleteDb,
-  getImageFromLibrary,
-  openCropper,
-  scaleImage,
+interface Props {
+  store: CoreStore
 }
 
-const store = createStore({ sys, online, ui })
-const client = createClient(() => ({
-  store,
-  online,
-  intl: selectors.getIntl(store.getState()),
-  openDb,
-  deleteDb,
-}))
-
-class ElectronApp extends React.PureComponent {
+class ElectronApp extends React.PureComponent<Props> {
   render() {
+    const { store } = this.props
+    const client = createClient(() => ({
+      store,
+      online,
+      intl: selectors.getIntl(store.getState()),
+      openDb,
+      deleteDb,
+    }))
+
     return (
       <App {...{ sys, ui, client, store, online }}>
         <ElectronRouter />
@@ -39,8 +34,11 @@ class ElectronApp extends React.PureComponent {
       </App>
     )
   }
-}
 
-init(store)
+  static start(store: CoreStore) {
+    store.dispatch(actions.init())
+    init(store)
+  }
+}
 
 export default hot(ElectronApp)

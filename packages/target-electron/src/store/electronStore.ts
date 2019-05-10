@@ -38,7 +38,6 @@ export const createStore = (dependencies: CoreDependencies) => {
   epicMiddleware.run(hotReloadingEpic)
 
   log('store init')
-  store.dispatch(actions.init())
 
   if (process.env.NODE_ENV !== 'production' && module.hot) {
     module.hot.accept('../epics', () => {
