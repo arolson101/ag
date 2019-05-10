@@ -22,17 +22,21 @@ const queries = {
   ` as Gql<T.HomePage.Query, T.HomePage.Variables>,
 }
 
-const Component = React.memo<ComponentProps>(({ data, loading }) => {
-  const intl = useIntl()
-  const { Page, Row, Text } = useUi()
+const Component = Object.assign(
+  React.memo<ComponentProps>(({ data, loading }) => {
+    const intl = useIntl()
+    const { Page, Row, Text } = useUi()
 
-  return (
-    <Page title={intl.formatMessage(messages.titleText)}>
-      <Text header>Home</Text>
-    </Page>
-  )
-})
-Component.displayName = 'HomePage.Component'
+    return (
+      <Page title={intl.formatMessage(messages.titleText)}>
+        <Text header>Home</Text>
+      </Page>
+    )
+  }),
+  {
+    displayName: 'HomePage.Component',
+  }
+)
 
 const messages = defineMessages({
   tabText: {

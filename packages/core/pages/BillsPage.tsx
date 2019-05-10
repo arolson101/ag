@@ -24,20 +24,24 @@ const queries = {
   ` as Gql<T.BillsPage.Query, T.BillsPage.Variables>,
 }
 
-const Component = React.memo<ComponentProps>(({ data, loading }) => {
-  const intl = useIntl()
-  const { Page, Row, Text } = useUi()
+const Component = Object.assign(
+  React.memo<ComponentProps>(({ data, loading }) => {
+    const intl = useIntl()
+    const { Page, Row, Text } = useUi()
 
-  return (
-    <Page title={intl.formatMessage(messages.titleText)}>
-      <Text header>Bills</Text>
-      {data &&
-        data.accounts &&
-        data.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
-    </Page>
-  )
-})
-Component.displayName = 'BillsPage.Component'
+    return (
+      <Page title={intl.formatMessage(messages.titleText)}>
+        <Text header>Bills</Text>
+        {data &&
+          data.accounts &&
+          data.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
+      </Page>
+    )
+  }),
+  {
+    displayName: 'BillsPage.Component',
+  }
+)
 
 const messages = defineMessages({
   tabText: {
