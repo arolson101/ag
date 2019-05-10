@@ -129,7 +129,7 @@ export const ui: Omit<UiContext, RNNTypes> = {
       </Component>
     )
   },
-  PopoverButton: React.memo<PopoverButtonProps>(props => {
+  PopoverButton: React.memo<PopoverButtonProps>(function _PopoverButton(props) {
     const { loading, icon, children, minimal, content } = props
     const intl = useIntl()
 

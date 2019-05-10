@@ -25,7 +25,7 @@ const queries = {
 }
 
 const Component = Object.assign(
-  React.memo<ComponentProps>(({ data, loading }) => {
+  React.memo<ComponentProps>(function _CalendarPage_Component({ data, loading }) {
     const intl = useIntl()
     const { Page, Row, Text } = useUi()
 
@@ -58,7 +58,7 @@ const path = '/calendar'
 const route = docuri.route<void, string>(path)
 
 export const CalendarPage = Object.assign(
-  React.memo<Props>(props => {
+  React.memo<Props>(function _CalendarPage(props) {
     const q = useQuery(CalendarPage.queries.CalendarPage)
 
     return (

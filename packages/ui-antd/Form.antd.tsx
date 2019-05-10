@@ -3,7 +3,7 @@ import { Form as AntdForm } from 'antd'
 import React, { useCallback } from 'react'
 
 export const Form = Object.assign(
-  React.memo<FormProps>(props => {
+  React.memo<FormProps>(function _Form(props) {
     const { onSubmit: onSubmitProp, children } = props
 
     const onSubmit = useCallback(

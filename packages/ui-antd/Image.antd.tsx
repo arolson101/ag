@@ -2,7 +2,7 @@ import { ImageProps } from '@ag/core'
 import React from 'react'
 
 export const Image = Object.assign(
-  React.memo<ImageProps>(props => {
+  React.memo<ImageProps>(function _Image(props) {
     const { src, size, margin, title } = props
     if (!src.uri) {
       return null

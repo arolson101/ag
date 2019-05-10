@@ -19,7 +19,7 @@ type Props = React.PropsWithChildren<{
 }>
 
 export const App = Object.assign(
-  React.memo<Props>(({ client, sys, store, ui, online, children }) => {
+  React.memo<Props>(function _App({ client, sys, store, ui, online, children }) {
     return (
       <SystemContext.Provider value={sys}>
         <UiContext.Provider value={ui}>

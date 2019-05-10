@@ -25,7 +25,7 @@ const queries = {
 }
 
 const Component = Object.assign(
-  React.memo<ComponentProps>(({ data, loading }) => {
+  React.memo<ComponentProps>(function _BudgetsPage_Component({ data, loading }) {
     const intl = useIntl()
     const { Page, Row, Text } = useUi()
 
@@ -58,7 +58,7 @@ const path = '/budgets'
 const route = docuri.route<void, string>(path)
 
 export const BudgetsPage = Object.assign(
-  React.memo<Props>(props => {
+  React.memo<Props>(function _BudgetsPage(props) {
     const q = useQuery(BudgetsPage.queries.BudgetsPage)
 
     return (

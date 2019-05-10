@@ -76,7 +76,7 @@ interface ComponentProps extends Props {
 }
 
 const FormComponent = Object.assign(
-  React.memo<ComponentProps>(props => {
+  React.memo<ComponentProps>(function _FormComponent(props) {
     const intl = useIntl()
     const { Text } = useUi()
     const { Form, SelectField, TextField } = typedFields<FormValues>(useUi())

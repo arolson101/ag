@@ -23,7 +23,7 @@ const queries = {
 }
 
 const Component = Object.assign(
-  React.memo<ComponentProps>(({ data, loading }) => {
+  React.memo<ComponentProps>(function _HomePage_Component({ data, loading }) {
     const intl = useIntl()
     const { Page, Row, Text } = useUi()
 
@@ -53,7 +53,7 @@ const path = '/home'
 const route = docuri.route<void, string>(path)
 
 export const HomePage = Object.assign(
-  React.memo<Props>(props => {
+  React.memo<Props>(function _HomePage(props) {
     const q = useQuery(queries.HomePage)
 
     return <Component {...q} />

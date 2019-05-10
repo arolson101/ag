@@ -4,7 +4,7 @@ import { useField, useFormikContext } from 'formik'
 import React, { useCallback } from 'react'
 
 export const CurrencyField = Object.assign(
-  React.memo<CurrencyFieldProps>(props => {
+  React.memo<CurrencyFieldProps>(function _CurrencyField(props) {
     const { field: name, label, placeholder, flex, disabled } = props
     const [field, { error }] = useField(name)
     const formik = useFormikContext<any>()

@@ -32,7 +32,7 @@ interface ImageTileProps {
   selectItem: (source: ImageSource) => any
 }
 
-const ImageTile = React.memo<ImageTileProps>(({ link, selectItem }) => {
+const ImageTile = React.memo<ImageTileProps>(function _ImageTile({ link, selectItem }) {
   const online = useOnline()
   const ui = useUi()
   const { Button, Spinner, Tile, Text, Image } = ui
@@ -65,7 +65,7 @@ const ImageTile = React.memo<ImageTileProps>(({ link, selectItem }) => {
 })
 
 export const PictureDialog = Object.assign(
-  React.memo<Props>(props => {
+  React.memo<Props>(function _PictureDialog(props) {
     const intl = useIntl()
     const online = useOnline()
     const ui = useUi()

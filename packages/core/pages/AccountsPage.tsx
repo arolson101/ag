@@ -107,7 +107,7 @@ const mutations = {
 }
 
 const BankTable = Object.assign(
-  React.memo<T.AccountsPage.Banks>(bank => {
+  React.memo<T.AccountsPage.Banks>(function _BankTable(bank) {
     type Row = typeof bank.accounts[number]
     const intl = useIntl()
     const openBankEditDlg = useAction(actions.openDlg.bankEdit)
@@ -271,7 +271,7 @@ const BankTable = Object.assign(
 
 type ComponentProps = QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
 const Component = Object.assign(
-  React.memo<ComponentProps>(({ data, loading }) => {
+  React.memo<ComponentProps>(function _AccountsPage_Component({ data, loading }) {
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const { Page } = useUi()
@@ -377,7 +377,7 @@ const path = '/accounts'
 const route = docuri.route<void, string>(path)
 
 export const AccountsPage = Object.assign(
-  React.memo<Props>(props => {
+  React.memo<Props>(function _AccountsPage(props) {
     const q = useQuery(AccountsPage.queries.AccountsPage)
     log('AccountsPage render %o', q)
 

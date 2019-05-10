@@ -13,7 +13,7 @@ type TextArea = import('antd/lib/input/TextArea').default
 type InputRefType = Input & Password & TextArea
 
 export const TextField = Object.assign(
-  React.memo<TextFieldProps>(props => {
+  React.memo<TextFieldProps>(function _TextField(props) {
     const {
       field: name,
       label,

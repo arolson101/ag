@@ -16,7 +16,7 @@ const Paragraph: React.FC = ({ children }) => <p>{children}</p>
 const log = debug('ui-antd:ui')
 
 export const Page = Object.assign(
-  React.memo<PageProps>(({ button, title, image, subtitle, children }) => {
+  React.memo<PageProps>(function _Page({ button, title, image, subtitle, children }) {
     let onBack: undefined | (() => any)
     try {
       const { history } = useReactRouter()

@@ -47,7 +47,7 @@ const mutations = {}
 
 type ComponentProps = Props & QueryHookResult<T.AccountPage.Query, T.AccountPage.Variables>
 const Component = Object.assign(
-  React.memo<ComponentProps>(({ accountId, data, loading }) => {
+  React.memo<ComponentProps>(function _AccountPage_Component({ accountId, data, loading }) {
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const { Page, Table, Text } = useUi()
@@ -155,7 +155,7 @@ const path = '/accounts/:accountId'
 const route = docuri.route<Props, string>(path)
 
 export const AccountPage = Object.assign(
-  React.memo<Props>(props => {
+  React.memo<Props>(function _AccountPage(props) {
     const { accountId } = props
     const q = useQuery(AccountPage.queries.AccountPage, { variables: { accountId } })
 

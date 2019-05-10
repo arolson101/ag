@@ -38,7 +38,7 @@ export class BankResolver {
   ): Promise<Bank[]> {
     const { banksRepository } = selectors.getAppDb(store.getState())
     const banks = await banksRepository.all()
-    log('banks- %o', banks)
+    // log('banks- %o', banks)
     return banks
   }
 
@@ -95,7 +95,7 @@ export class BankResolver {
     if (accounts.length !== accountIds.length) {
       throw new Error('got back wrong number of accounts')
     }
-    log('accounts (before) %o', accounts)
+    // log('accounts (before) %o', accounts)
     accounts.sort((a, b) => accountIds.indexOf(a.id) - accountIds.indexOf(b.id))
     const edits = accounts.map(
       ({ id }, idx): DbRecordEdit<Account.Spec> => ({
@@ -103,7 +103,7 @@ export class BankResolver {
         q: { sortOrder: { $set: idx } },
       })
     )
-    log('accounts: %o, edits: %o', accounts, edits)
+    // log('accounts: %o, edits: %o', accounts, edits)
     const change: DbChange = {
       t,
       edits,

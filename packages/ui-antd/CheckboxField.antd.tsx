@@ -4,7 +4,7 @@ import { useField, useFormikContext } from 'formik'
 import React from 'react'
 
 export const CheckboxField = Object.assign(
-  React.memo<CheckboxFieldProps>(props => {
+  React.memo<CheckboxFieldProps>(function _CheckboxField(props) {
     const { field: name, label, disabled, flex } = props
     const [field, { error }] = useField(name)
     const form = useFormikContext<any>()

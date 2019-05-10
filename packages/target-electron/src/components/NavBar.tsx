@@ -76,30 +76,35 @@ const navItems: NavItem[] = [
   },
 ]
 
-export const NavBar = React.memo<Props>(props => {
-  const intl = useIntl()
-  const dispatch = useDispatch()
-  const { location } = useReactRouter()
+export const NavBar = Object.assign(
+  React.memo<Props>(function _NavBar(props) {
+    const intl = useIntl()
+    const dispatch = useDispatch()
+    const { location } = useReactRouter()
 
-  const selectedKeys = navItems
-    .filter(item => location.pathname.startsWith(item.Component.path))
-    .map(item => item.Component.path)
+    const selectedKeys = navItems
+      .filter(item => location.pathname.startsWith(item.Component.path))
+      .map(item => item.Component.path)
 
-  return (
-    <div style={{ overflow: 'auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Menu selectable selectedKeys={selectedKeys} mode='inline'>
-        {navItems.map(item => (
-          <Menu.Item
-            key={item.Component.path} //
-            onClick={() => dispatch(item.nav())}
-          >
-            <FontIcon icon={item.icon} />
-            <span>{intl.formatMessage(item.Component.messages.tabText)}</span>
-          </Menu.Item>
-        ))}
-      </Menu>
+    return (
+      <div style={{ overflow: 'auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Menu selectable selectedKeys={selectedKeys} mode='inline'>
+          {navItems.map(item => (
+            <Menu.Item
+              key={item.Component.path} //
+              onClick={() => dispatch(item.nav())}
+            >
+              <FontIcon icon={item.icon} />
+              <span>{intl.formatMessage(item.Component.messages.tabText)}</span>
+            </Menu.Item>
+          ))}
+        </Menu>
 
-      {/* <MenuBar /> */}
-    </div>
-  )
-})
+        {/* <MenuBar /> */}
+      </div>
+    )
+  }),
+  {
+    displayName: 'NavBar',
+  }
+)

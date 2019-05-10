@@ -11,7 +11,7 @@ interface Props {
   isOpen: boolean
 }
 
-export const LoginDialog = React.memo<Props>(props => {
+export const LoginDialog = React.memo<Props>(function _LoginDialog(props) {
   const { isOpen } = props
   const intl = useIntl()
   const ui = useUi()

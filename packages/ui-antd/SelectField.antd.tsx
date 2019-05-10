@@ -7,7 +7,7 @@ import React, { useCallback } from 'react'
 const log = debug('ui-antd:SelectField')
 
 export const SelectField = Object.assign(
-  React.memo<SelectFieldProps>(props => {
+  React.memo<SelectFieldProps>(function _SelectField(props) {
     const { field: name, label, disabled, items, flex, searchable, onValueChange } = props
     const [field, { error }] = useField(name)
     const formik = useFormikContext<any>()

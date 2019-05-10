@@ -28,7 +28,7 @@ const queries = {
 }
 
 export const MenuBar = Object.assign(
-  React.memo<Props>(props => {
+  React.memo<Props>(function _MenuBar(props) {
     const bankCreate = useAction(actions.openDlg.bankCreate)
     const { NavMenu } = useUi()
     const { data, error } = useQuery(queries.MenuBar)
