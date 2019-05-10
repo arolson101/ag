@@ -8,17 +8,19 @@ import {
   CoreAction,
   HomePage,
 } from '@ag/core'
-import { createMemoryHistory, History } from 'history'
+import { createMemoryHistory, MemoryHistory } from 'history'
 import { getType } from 'typesafe-actions'
 
 export interface RouterState {
-  history: History
+  history: MemoryHistory
 }
 
-export const history = createMemoryHistory()
+export const routerSelectors = {
+  getHistory: (state: RouterState) => state.history,
+}
 
 const initialState = {
-  history,
+  history: createMemoryHistory(),
 }
 
 export const router = (state: RouterState = initialState, action: CoreAction): RouterState => {

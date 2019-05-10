@@ -1,1 +1,1 @@
-export * from './epics'
+export * from './rootEpic'

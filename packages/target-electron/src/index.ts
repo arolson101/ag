@@ -1,6 +1,9 @@
+import debug from 'debug'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import ElectronApp from './app/ElectronApp'
+
+const log = debug('electron:index')
 
 if (process.env.NODE_ENV === 'development') {
   process.traceProcessWarnings = true
@@ -8,18 +11,21 @@ if (process.env.NODE_ENV === 'development') {
   process.noDeprecation = true // TODO
 }
 
-const runApp = () => {
+const render = (Component: React.ComponentType) => {
   ReactDOM.render(
-    React.createElement(ElectronApp, {}), //
+    React.createElement(Component, {}), //
     document.getElementById('root')
   )
 }
 
-runApp()
+render(ElectronApp)
 
 // const registerServiceWorker = require('./registerServiceWorker').default
 // registerServiceWorker()
 
 if (module.hot) {
-  module.hot.accept()
+  module.hot.accept('./app/ElectronApp', () => {
+    log('re-render')
+    render(ElectronApp)
+  })
 }

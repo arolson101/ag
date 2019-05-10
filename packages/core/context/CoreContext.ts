@@ -2,14 +2,23 @@ import { Online } from '@ag/online'
 import { ImageBuf } from '@ag/util'
 import React, { Dispatch, useContext, useMemo } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
-import { useDispatch as useDispatch1, useSelector as useSelector1 } from 'react-redux'
+import { useDispatch as useDispatch1, useSelector } from 'react-redux'
 import { ActionCreator, bindActionCreators } from 'redux'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { CoreAction } from '../actions'
-import { CoreState, selectors } from '../reducers'
+import { selectors } from '../reducers'
 import { UiContext } from './uiContext'
 
+export { IntlContext, useSelector }
+
 export const maxImageSize = 512
+
+export interface CoreDependencies {
+  // client: ApolloClient<any>
+  online: Online
+  ui: UiContext
+  sys: SystemCallbacks
+}
 
 export interface SystemCallbacks {
   openDb: (
@@ -24,8 +33,6 @@ export interface SystemCallbacks {
   scaleImage: (image: ImageBuf, scale: number) => Promise<ImageBuf>
 }
 
-export { IntlContext }
-
 export const OnlineContext = React.createContext<Online>(null as any)
 OnlineContext.displayName = 'OnlineContext'
 
@@ -33,10 +40,6 @@ export const SystemContext = React.createContext<SystemCallbacks>(null as any)
 SystemContext.displayName = 'SystemContext'
 
 export const useDispatch: () => Dispatch<CoreAction> = useDispatch1
-export const useSelector: <TSelected>(
-  selector: (state: CoreState) => TSelected,
-  deps?: ReadonlyArray<any>
-) => TSelected = useSelector1
 
 export const useIntl = (): IntlContext => {
   return useSelector(selectors.getIntl)

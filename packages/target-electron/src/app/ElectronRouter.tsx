@@ -13,7 +13,7 @@ import debug from 'debug'
 import React from 'react'
 import { Redirect, Route, Router as ReactRouter, Switch } from 'react-router-dom'
 import { NavBar, SplitPane } from '../components'
-import { history } from '../reducers'
+import { electronSelectors } from '../reducers'
 
 const log = debug('electron:router')
 
@@ -32,9 +32,10 @@ const routes: RouteComponent[] = [
 
 interface Props {}
 
-export const ElectronRouter = React.memo<Props>(props => {
+export const ElectronRouter = React.memo<Props>(function _ElectronRouter(props) {
   const fallback = routes[0].path
 
+  const history = useSelector(electronSelectors.getHistory)
   const isLoggedIn = useSelector(selectors.isLoggedIn)
   if (!isLoggedIn) {
     return <div>db not open</div>

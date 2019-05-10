@@ -1,11 +1,14 @@
 import { actions, CoreAction, CoreDependencies, CoreState } from '@ag/core'
+import debug from 'debug'
 import { applyMiddleware, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { ActionsObservable, createEpicMiddleware, StateObservable } from 'redux-observable'
 import { BehaviorSubject } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
 import { rootEpic } from '../epics'
-import { RnState, rootReducer } from '../reducers'
+import { electronReducer, ElectronState } from '../reducers'
+
+const log = debug('electron:electronStore')
 
 export const createStore = (dependencies: CoreDependencies) => {
   const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, CoreDependencies>({
@@ -16,8 +19,8 @@ export const createStore = (dependencies: CoreDependencies) => {
     epicMiddleware, //
   ]
 
-  const store = reduxCreateStore<RnState, CoreAction, {}, {}>(
-    rootReducer,
+  const store = reduxCreateStore<ElectronState, CoreAction, {}, {}>(
+    electronReducer,
     composeWithDevTools(applyMiddleware(...middleware))
   )
 
@@ -31,14 +34,20 @@ export const createStore = (dependencies: CoreDependencies) => {
   ) => epic$.pipe(switchMap(epic => epic(action$, state$, deps)))
 
   epicMiddleware.run(hotReloadingEpic)
-  if (module.hot) {
+
+  log('store init')
+  store.dispatch(actions.init())
+
+  if (process.env.NODE_ENV !== 'production' && module.hot) {
     module.hot.accept('../epics', () => {
-      const nextRootEpic = require('../epics').rootEpic
-      epic$.next(nextRootEpic)
+      log('epics updated')
+      epic$.next(rootEpic)
+    })
+    module.hot.accept('../reducers', () => {
+      log('reducers updated')
+      store.replaceReducer(electronReducer)
     })
   }
-
-  store.dispatch(actions.init())
 
   return store
 }
