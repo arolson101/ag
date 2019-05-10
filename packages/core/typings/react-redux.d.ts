@@ -1,3 +1,4 @@
+// tslint:disable:max-line-length
 // Type definitions for react-redux 7.1
 // Project: https://github.com/reduxjs/react-redux
 // Definitions by: Qubo <https://github.com/tkqubo>,

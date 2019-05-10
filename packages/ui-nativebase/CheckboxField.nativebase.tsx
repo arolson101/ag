@@ -1,4 +1,4 @@
-import { CheckboxFieldProps } from '@ag/core'
+import { CheckboxFieldProps } from '@ag/core/context'
 import { Field, FieldProps } from 'formik'
 import { Item, Right, Switch } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'

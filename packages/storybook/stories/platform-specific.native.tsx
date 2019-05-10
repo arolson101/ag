@@ -1,4 +1,4 @@
-import { UiContext } from '@ag/core'
+import { UiContext } from '@ag/core/context'
 import { ui as nbUi } from '@ag/ui-nativebase'
 import { storiesOf } from '@storybook/react-native'
 import {

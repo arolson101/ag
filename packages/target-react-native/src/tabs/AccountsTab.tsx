@@ -1,4 +1,5 @@
-import { AccountsPage, selectors } from '@ag/core'
+import { AccountsPage } from '@ag/core/pages'
+import { selectors } from '@ag/core/reducers'
 import React from 'react'
 import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'

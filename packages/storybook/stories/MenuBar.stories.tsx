@@ -1,5 +1,5 @@
 // tslint:disable:max-line-length
-import { MenuBar } from '@ag/core'
+import { MenuBar } from '@ag/core/components'
 import React from 'react'
 import { MockApp, storiesOf } from './helpers'
 

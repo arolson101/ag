@@ -1,4 +1,4 @@
-import { ImageProps } from '@ag/core'
+import { ImageProps } from '@ag/core/context'
 import React from 'react'
 
 export const Image = Object.assign(

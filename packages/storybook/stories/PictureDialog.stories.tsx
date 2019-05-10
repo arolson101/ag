@@ -1,5 +1,5 @@
 // tslint:disable:max-line-length
-import { PictureDialog } from '@ag/core'
+import { PictureDialog } from '@ag/core/dialogs'
 import { ImageSource } from '@ag/util'
 import React from 'react'
 import { action, MockApp, storiesOf } from './helpers'

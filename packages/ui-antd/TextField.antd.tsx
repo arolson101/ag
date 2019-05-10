@@ -1,4 +1,4 @@
-import { TextFieldProps } from '@ag/core'
+import { TextFieldProps } from '@ag/core/context'
 import { Form, Icon, Input } from 'antd'
 import debug from 'debug'
 import { useField } from 'formik'

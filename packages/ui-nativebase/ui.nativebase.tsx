@@ -1,4 +1,4 @@
-import { PopoverButtonProps, TabProps, TabsProps, UiContext, useIntl } from '@ag/core'
+import { PopoverButtonProps, TabProps, TabsProps, UiContext, useIntl } from '@ag/core/context'
 import debug from 'debug'
 import {
   ActionSheet,

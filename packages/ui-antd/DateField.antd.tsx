@@ -1,9 +1,8 @@
-import { DateFieldProps } from '@ag/core'
+import { DateFieldProps } from '@ag/core/context'
 import { DatePicker, Form, Icon } from 'antd'
+import { DatePickerProps } from 'antd/lib/date-picker/interface'
 import { useField, useFormikContext } from 'formik'
 import React, { useCallback } from 'react'
-
-import { DatePickerProps } from 'antd/lib/date-picker/interface'
 
 export const DateField = Object.assign(
   React.memo<DateFieldProps>(function _DateField(props) {

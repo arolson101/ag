@@ -1,4 +1,4 @@
-import { CoreStore, selectors } from '@ag/core'
+import { CoreStore, selectors } from '@ag/core/reducers'
 import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
 import { Connection } from 'typeorm'

@@ -1,5 +1,6 @@
 // tslint:disable:no-implicit-dependencies
-import { App, SystemCallbacks } from '@ag/core'
+import { App } from '@ag/core/app'
+import { SystemCallbacks } from '@ag/core/context'
 import { online } from '@ag/online'
 import { createStore } from '@ag/target-electron/src/store'
 import { action } from '@storybook/addon-actions'

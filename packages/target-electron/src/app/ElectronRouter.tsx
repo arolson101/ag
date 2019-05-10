@@ -1,3 +1,4 @@
+import { useSelector } from '@ag/core/context'
 import {
   AccountPage,
   AccountsPage,
@@ -5,9 +6,8 @@ import {
   BudgetsPage,
   CalendarPage,
   HomePage,
-  selectors,
-  useSelector,
-} from '@ag/core'
+} from '@ag/core/pages'
+import { selectors } from '@ag/core/reducers'
 import { Content, Layout } from '@ag/ui-antd'
 import debug from 'debug'
 import React from 'react'

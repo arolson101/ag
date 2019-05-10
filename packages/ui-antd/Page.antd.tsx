@@ -1,4 +1,4 @@
-import { PageProps } from '@ag/core'
+import { PageProps } from '@ag/core/context'
 import { Button, Layout, PageHeader } from 'antd'
 import 'antd/dist/antd.css'
 import debug from 'debug'

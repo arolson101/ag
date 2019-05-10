@@ -1,4 +1,4 @@
-import { IconName } from '@ag/core'
+import { IconName } from '@ag/core/context'
 import { ImageSource } from '@ag/util'
 import * as Antd from 'antd'
 import React from 'react'

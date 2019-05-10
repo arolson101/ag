@@ -1,4 +1,5 @@
-import { HomePage, selectors } from '@ag/core'
+import { HomePage } from '@ag/core/pages'
+import { selectors } from '@ag/core/reducers'
 import debug from 'debug'
 import React from 'react'
 import { Options } from 'react-native-navigation'

@@ -1,4 +1,4 @@
-import { ImageProps } from '@ag/core'
+import { ImageProps } from '@ag/core/context'
 import { SvgUri } from '@ag/react-native-svg-image'
 import debug from 'debug'
 import React from 'react'

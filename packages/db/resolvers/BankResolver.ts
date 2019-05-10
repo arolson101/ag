@@ -1,4 +1,4 @@
-import { selectors } from '@ag/core'
+import { selectors } from '@ag/core/reducers'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'

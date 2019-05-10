@@ -1,4 +1,4 @@
-import { selectors } from '@ag/core'
+import { selectors } from '@ag/core/reducers'
 import { diff, uniqueId } from '@ag/util'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { DbContext } from '../DbContext'

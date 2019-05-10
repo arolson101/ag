@@ -1,14 +1,6 @@
-import {
-  AccountsPage,
-  actions,
-  BillsPage,
-  BudgetsPage,
-  CalendarPage,
-  CoreAction,
-  HomePage,
-  useDispatch,
-  useIntl,
-} from '@ag/core'
+import { actions, CoreAction } from '@ag/core/actions'
+import { useDispatch, useIntl } from '@ag/core/context'
+import { AccountsPage, BillsPage, BudgetsPage, CalendarPage, HomePage } from '@ag/core/pages'
 import { Icon, Menu } from '@ag/ui-antd'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 // see target-react-native/src/icons.ts

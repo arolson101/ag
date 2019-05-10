@@ -1,4 +1,4 @@
-import { ContextMenuProps } from '@ag/core'
+import { ContextMenuProps } from '@ag/core/context'
 import { Dropdown, Icon, Menu } from 'antd'
 import React from 'react'
 import { mapIconName } from './ImageSourceIcon'

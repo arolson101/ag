@@ -1,4 +1,4 @@
-import { CurrencyFieldProps } from '@ag/core'
+import { CurrencyFieldProps } from '@ag/core/context'
 import { Form, InputNumber } from 'antd'
 import { useField, useFormikContext } from 'formik'
 import React, { useCallback } from 'react'

@@ -1,4 +1,4 @@
-import { FormProps } from '@ag/core'
+import { FormProps } from '@ag/core/context'
 import { Form as AntdForm } from 'antd'
 import React, { useCallback } from 'react'
 

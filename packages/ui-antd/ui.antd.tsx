@@ -1,4 +1,4 @@
-import { ListItem, LoadingOverlayProps, NavMenuItem, UiContext } from '@ag/core'
+import { ListItem, LoadingOverlayProps, NavMenuItem, UiContext } from '@ag/core/context'
 import { Button, Card, Divider, Dropdown, Icon, List, Menu, message, Modal, Spin, Tabs } from 'antd'
 import 'antd/dist/antd.css'
 import debug from 'debug'

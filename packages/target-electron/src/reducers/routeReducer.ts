@@ -1,13 +1,12 @@
+import { actions, CoreAction } from '@ag/core/actions'
 import {
   AccountPage,
   AccountsPage,
-  actions,
   BillsPage,
   BudgetsPage,
   CalendarPage,
-  CoreAction,
   HomePage,
-} from '@ag/core'
+} from '@ag/core/pages'
 import { createMemoryHistory, MemoryHistory } from 'history'
 import { getType } from 'typesafe-actions'
 

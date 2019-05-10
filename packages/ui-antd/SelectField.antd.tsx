@@ -1,4 +1,4 @@
-import { SelectFieldProps } from '@ag/core'
+import { SelectFieldProps } from '@ag/core/context'
 import { Form, Select } from 'antd'
 import debug from 'debug'
 import { useField, useFormikContext } from 'formik'

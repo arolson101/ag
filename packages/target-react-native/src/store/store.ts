@@ -1,4 +1,6 @@
-import { actions, CoreAction, CoreDependencies, CoreState } from '@ag/core'
+import { actions, CoreAction } from '@ag/core/actions'
+import { CoreDependencies } from '@ag/core/context'
+import { CoreState } from '@ag/core/reducers'
 import { applyMiddleware, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { ActionsObservable, createEpicMiddleware, StateObservable } from 'redux-observable'

@@ -1,4 +1,4 @@
-import { SystemCallbacks } from '@ag/core'
+import { SystemCallbacks } from '@ag/core/context'
 import { imageSize, ImageSource } from '@ag/util'
 import crypto from 'crypto'
 import debug from 'debug'

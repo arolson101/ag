@@ -1,4 +1,5 @@
-import { BudgetsPage, selectors } from '@ag/core'
+import { BudgetsPage } from '@ag/core/pages'
+import { selectors } from '@ag/core/reducers'
 import React from 'react'
 import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'

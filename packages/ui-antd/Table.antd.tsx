@@ -1,4 +1,4 @@
-import { TableColumn, TableProps } from '@ag/core'
+import { TableColumn, TableProps } from '@ag/core/context'
 import * as Antd from 'antd'
 import { TableComponents } from 'antd/lib/table'
 import debug from 'debug'

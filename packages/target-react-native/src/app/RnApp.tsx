@@ -1,4 +1,6 @@
-import { App, selectors, SystemCallbacks } from '@ag/core'
+import { App } from '@ag/core/app'
+import { SystemCallbacks } from '@ag/core/context'
+import { selectors } from '@ag/core/reducers'
 import { createClient } from '@ag/db'
 import { online } from '@ag/online'
 import debug from 'debug'

@@ -1,4 +1,4 @@
-import { ButtonConfig, DialogProps } from '@ag/core'
+import { ButtonConfig, DialogProps } from '@ag/core/context'
 import { platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React, { useContext, useEffect } from 'react'

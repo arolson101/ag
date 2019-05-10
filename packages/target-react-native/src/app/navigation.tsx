@@ -1,4 +1,4 @@
-import { appDialogs } from '@ag/core'
+import { appDialogs } from '@ag/core/dialogs'
 import { platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React from 'react'

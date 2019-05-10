@@ -1,4 +1,4 @@
-import { selectors } from '@ag/core'
+import { selectors } from '@ag/core/reducers'
 import { toAccountType } from '@ag/online'
 import { diff, uniqueId } from '@ag/util'
 import debug from 'debug'

@@ -1,4 +1,7 @@
-import { actions, ErrorDisplay, selectors, useAction, useSelector } from '@ag/core'
+import { actions } from '@ag/core/actions'
+import { ErrorDisplay } from '@ag/core/components'
+import { useAction, useSelector } from '@ag/core/context'
+import { selectors } from '@ag/core/reducers'
 import debug from 'debug'
 import React, { useCallback } from 'react'
 import ReactSplitPane from 'react-split-pane'

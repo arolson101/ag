@@ -1,4 +1,4 @@
-import { CheckboxFieldProps } from '@ag/core'
+import { CheckboxFieldProps } from '@ag/core/context'
 import { Form, Switch } from 'antd'
 import { useField, useFormikContext } from 'formik'
 import React from 'react'

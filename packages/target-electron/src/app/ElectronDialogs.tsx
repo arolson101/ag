@@ -1,11 +1,6 @@
-import {
-  AccountDialog,
-  BankDialog,
-  LoginDialog,
-  PictureDialog,
-  selectors,
-  useSelector,
-} from '@ag/core'
+import { useSelector } from '@ag/core/context'
+import { AccountDialog, BankDialog, LoginDialog, PictureDialog } from '@ag/core/dialogs'
+import { selectors } from '@ag/core/reducers'
 import debug from 'debug'
 import React from 'react'
 

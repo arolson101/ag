@@ -1,4 +1,4 @@
-import { CommonTextFieldProps, FormProps } from '@ag/core'
+import { CommonTextFieldProps, FormProps } from '@ag/core/context'
 import debug from 'debug'
 import * as NB from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'

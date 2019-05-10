@@ -1,5 +1,6 @@
 // tslint:disable:max-line-length
-import { BankDialog, BankForm, UrlField } from '@ag/core'
+import { BankDialog } from '@ag/core/dialogs'
+import { BankForm } from '@ag/core/forms'
 import { ImageSource } from '@ag/util'
 import React from 'react'
 import { action, addDelay, forever, MockApp, MockedResponse, storiesOf } from './helpers'

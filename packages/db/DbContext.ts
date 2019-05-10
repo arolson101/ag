@@ -1,4 +1,4 @@
-import { CoreStore } from '@ag/core'
+import { CoreStore } from '@ag/core/reducers'
 import { Online } from '@ag/online'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { Connection, ConnectionOptions } from 'typeorm'
