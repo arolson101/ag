@@ -6,14 +6,14 @@ import { dialog } from './dialogReducer'
 import { intl, intlSelectors } from './intlReducer'
 import { settings, settingsSelectors } from './settingsReducer'
 
-export const appReducers = {
+export const coreReducers = {
   db,
   dialog,
   intl,
   settings,
 }
 
-export interface CoreState extends StateType<typeof appReducers> {}
+export interface CoreState extends StateType<typeof coreReducers> {}
 export interface CoreStore extends Store<CoreState, CoreAction> {}
 
 export const selectors = {

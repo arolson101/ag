@@ -11,7 +11,7 @@ import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useCallback, useContext, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
@@ -379,7 +379,7 @@ const route = docuri.route<void, string>(path)
 export const AccountsPage = Object.assign(
   React.memo<Props>(function _AccountsPage(props) {
     const q = useQuery(AccountsPage.queries.AccountsPage)
-    log('AccountsPage render %o', q)
+    // log('AccountsPage render %o', q)
 
     return (
       <>

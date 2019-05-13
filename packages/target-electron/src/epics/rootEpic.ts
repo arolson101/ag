@@ -1,11 +1,19 @@
-import { CoreAction } from '@ag/core/actions'
 import { CoreDependencies } from '@ag/core/context'
-import { CoreEpic, coreEpics } from '@ag/core/epics'
-import { CoreState } from '@ag/core/reducers'
-import { combineEpics } from 'redux-observable'
+import { coreEpics } from '@ag/core/epics'
+import { combineEpics, Epic } from 'redux-observable'
+import { ElectronAction, ElectronState } from '../reducers'
+import { routeEpics } from './routeEpics'
 
-export const epics: CoreEpic[] = [
-  ...coreEpics, //
+export type ElectronEpic = Epic<ElectronAction, ElectronAction, ElectronState, CoreDependencies>
+
+export const epics: ElectronEpic[] = [
+  ...((coreEpics as unknown) as ElectronEpic[]), //
+  ...routeEpics,
 ]
 
-export const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, CoreDependencies>(...epics)
+export const rootEpic = combineEpics<
+  ElectronAction,
+  ElectronAction,
+  ElectronState,
+  CoreDependencies
+>(...epics)

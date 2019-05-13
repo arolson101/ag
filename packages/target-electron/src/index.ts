@@ -2,7 +2,7 @@ import debug from 'debug'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import ElectronApp from './app/ElectronApp'
-import { store } from './app/store'
+import { hist, store } from './app/store'
 
 const log = debug('electron:index')
 
@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const render = (Component: typeof ElectronApp) => {
   ReactDOM.render(
-    React.createElement(Component, { store }), //
+    React.createElement(Component, { store, hist }), //
     document.getElementById('root')
   )
 }

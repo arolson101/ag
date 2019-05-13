@@ -1,22 +1,26 @@
-import { appReducers, CoreState, selectors } from '@ag/core/reducers'
-import { combineReducers } from 'redux'
-import { router, routerSelectors, RouterState } from './routeReducer'
+import { CoreAction } from '@ag/core/actions'
+import { coreReducers, CoreState, selectors } from '@ag/core/reducers'
+import { connectRouter, RouterAction, RouterState } from 'connected-react-router'
+import { History } from 'history'
+import { combineReducers, Reducer, Store } from 'redux'
 
-const electronReducers = {
-  router,
-}
-
-export const electronReducer = combineReducers({
-  ...appReducers,
-  ...electronReducers,
-})
+export type ElectronAction = CoreAction | RouterAction
+export type ElectronStore = Store<ElectronState, ElectronAction>
 
 export interface ElectronState extends CoreState {
   router: RouterState
 }
 
+const electronReducers = (history: History) => ({
+  router: connectRouter(history),
+})
+
+export const createRootReducer = (history: History): Reducer<ElectronState> =>
+  combineReducers({
+    ...coreReducers,
+    ...electronReducers(history),
+  })
+
 export const electronSelectors = {
   ...selectors,
-
-  getHistory: (state: ElectronState) => routerSelectors.getHistory(state.router),
 }

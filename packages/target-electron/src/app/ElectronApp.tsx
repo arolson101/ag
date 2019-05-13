@@ -14,11 +14,12 @@ import { sys } from './store'
 
 interface Props {
   store: CoreStore
+  hist: HistoryType
 }
 
 class ElectronApp extends React.PureComponent<Props> {
   render() {
-    const { store } = this.props
+    const { store, hist } = this.props
     const client = createClient(() => ({
       store,
       online,
@@ -29,7 +30,7 @@ class ElectronApp extends React.PureComponent<Props> {
 
     return (
       <App {...{ sys, ui, client, store, online }}>
-        <ElectronRouter />
+        <ElectronRouter hist={hist} />
         <ElectronDialogs />
       </App>
     )

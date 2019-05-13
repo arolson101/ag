@@ -1,6 +1,5 @@
-import { actions, CoreAction } from '@ag/core/actions'
 import { CoreDependencies } from '@ag/core/context'
-import { CoreState } from '@ag/core/reducers'
+import { routerMiddleware } from 'connected-react-router'
 import debug from 'debug'
 import { applyMiddleware, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
@@ -8,21 +7,27 @@ import { ActionsObservable, createEpicMiddleware, StateObservable } from 'redux-
 import { BehaviorSubject } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
 import { rootEpic } from '../epics'
-import { electronReducer, ElectronState } from '../reducers'
+import { createRootReducer, ElectronAction, ElectronState } from '../reducers'
 
 const log = debug('electron:electronStore')
 
-export const createStore = (dependencies: CoreDependencies) => {
-  const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, CoreDependencies>({
+export const createStore = (hist: HistoryType, dependencies: CoreDependencies) => {
+  const epicMiddleware = createEpicMiddleware<
+    ElectronAction,
+    ElectronAction,
+    ElectronState,
+    CoreDependencies
+  >({
     dependencies,
   })
 
   const middleware = [
-    epicMiddleware, //
+    routerMiddleware(hist), //
+    epicMiddleware,
   ]
 
-  const store = reduxCreateStore<ElectronState, CoreAction, {}, {}>(
-    electronReducer,
+  const store = reduxCreateStore<ElectronState, ElectronAction, {}, {}>(
+    createRootReducer(hist),
     composeWithDevTools(applyMiddleware(...middleware))
   )
 
@@ -30,14 +35,12 @@ export const createStore = (dependencies: CoreDependencies) => {
   // Every time a new epic is given to epic$ it will unsubscribe from the previous one then
   // call and subscribe to the new one because of how switchMap works
   const hotReloadingEpic = (
-    action$: ActionsObservable<CoreAction>,
-    state$: StateObservable<CoreState>,
+    action$: ActionsObservable<ElectronAction>,
+    state$: StateObservable<ElectronState>,
     deps: CoreDependencies
   ) => epic$.pipe(switchMap(epic => epic(action$, state$, deps)))
 
   epicMiddleware.run(hotReloadingEpic)
-
-  log('store init')
 
   if (process.env.NODE_ENV !== 'production' && module.hot) {
     module.hot.accept('../epics', () => {
@@ -46,7 +49,7 @@ export const createStore = (dependencies: CoreDependencies) => {
     })
     module.hot.accept('../reducers', () => {
       log('reducers updated')
-      store.replaceReducer(electronReducer)
+      store.replaceReducer(createRootReducer(hist))
     })
   }
 

@@ -9,11 +9,11 @@ import {
 } from '@ag/core/pages'
 import { selectors } from '@ag/core/reducers'
 import { Content, Layout } from '@ag/ui-antd'
+import { ConnectedRouter } from 'connected-react-router'
 import debug from 'debug'
 import React from 'react'
-import { Redirect, Route, Router as ReactRouter, Switch } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import { NavBar, SplitPane } from '../components'
-import { electronSelectors } from '../reducers'
 
 const log = debug('electron:router')
 
@@ -30,19 +30,20 @@ const routes: RouteComponent[] = [
   CalendarPage,
 ]
 
-interface Props {}
+interface Props {
+  hist: HistoryType
+}
 
-export const ElectronRouter = React.memo<Props>(function _ElectronRouter(props) {
+export const ElectronRouter = React.memo<Props>(function _ElectronRouter({ hist }) {
   const fallback = routes[0].path
 
-  const history = useSelector(electronSelectors.getHistory)
   const isLoggedIn = useSelector(selectors.isLoggedIn)
   if (!isLoggedIn) {
     return <div>db not open</div>
   }
 
   return (
-    <ReactRouter history={history}>
+    <ConnectedRouter history={hist}>
       <Layout>
         <SplitPane>
           <NavBar />
@@ -50,7 +51,7 @@ export const ElectronRouter = React.memo<Props>(function _ElectronRouter(props) 
           <Content>
             <Route
               render={params => {
-                log('route %s %O %O', params.location.pathname, params, history.entries)
+                log('route %s %O %O', params.location.pathname, params, hist.entries)
                 return null
               }}
             />
@@ -77,6 +78,6 @@ export const ElectronRouter = React.memo<Props>(function _ElectronRouter(props) 
           </Content>
         </SplitPane>
       </Layout>
-    </ReactRouter>
+    </ConnectedRouter>
   )
 })

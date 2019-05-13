@@ -84,7 +84,10 @@ export const NavBar = Object.assign(
           {navItems.map(item => (
             <Menu.Item
               key={item.Component.path} //
-              onClick={() => dispatch(item.nav())}
+              onClick={() => {
+                log('dispatching %s', item.nav().type)
+                dispatch(item.nav())
+              }}
             >
               <FontIcon icon={item.icon} />
               <span>{intl.formatMessage(item.Component.messages.tabText)}</span>
