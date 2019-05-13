@@ -36,6 +36,7 @@
     "redux-observable": "^1.1.0",
     "rxjs": "^6.5.1",
     "rxjs-hooks": "^0.4.3",
+    "typeorm": "^0.2.17",
     "typesafe-actions": "^4.2.0",
     "utility-types": "^3.6.1"
   },

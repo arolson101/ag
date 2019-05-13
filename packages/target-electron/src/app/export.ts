@@ -32,6 +32,11 @@ export const exportDb = async (connection: Connection) => {
   }
 }
 
+export const importDb = async (connection: Connection, data: ) => {
+  log('importDb')
+
+}
+
 export const init = (store: CoreStore) => {
   const exportMenuItem = () => {
     log('exportMenuItem')

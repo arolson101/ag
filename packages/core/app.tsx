@@ -1,17 +1,16 @@
+import { createClient } from '@ag/db'
 import { Online } from '@ag/online'
 import { ApolloHooksProvider } from '@ag/util'
-import ApolloClient from 'apollo-client'
 import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { Provider as StoreProvider } from 'react-redux'
 import { OnlineContext, SystemCallbacks, SystemContext, UiContext } from './context'
-import { CoreStore } from './reducers'
+import { CoreStore, selectors } from './reducers'
 
 const log = debug('core:app')
 
 type Props = React.PropsWithChildren<{
-  client: ApolloClient<any>
   store: CoreStore
   online: Online
   ui: UiContext
@@ -19,7 +18,15 @@ type Props = React.PropsWithChildren<{
 }>
 
 export const App = Object.assign(
-  React.memo<Props>(function _App({ client, sys, store, ui, online, children }) {
+  React.memo<Props>(function _App({ sys, store, ui, online, children }) {
+    const client = createClient(() => ({
+      store,
+      online,
+      intl: selectors.getIntl(store.getState()),
+      openDb: sys.openDb,
+      deleteDb: sys.deleteDb,
+    }))
+
     return (
       <SystemContext.Provider value={sys}>
         <UiContext.Provider value={ui}>

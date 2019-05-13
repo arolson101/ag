@@ -19,6 +19,10 @@ module.exports = async ({ config }: Params): Promise<webpack.Configuration> => {
         getCustomTransformers: () => ({ before: [getTransformer()] }),
       },
     },
+    {
+      test: /\.xlsx$/i,
+      use: 'raw-loader',
+    },
     // {
     //   test: /\.css$/,
     //   use: ['style-loader', 'css-loader'],

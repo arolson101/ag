@@ -55,6 +55,7 @@
     "react-native-fs": "^2.13.3",
     "react-native-sqlite-storage": "^3.3.10",
     "react-native-stream": "^0.1.9",
+    "sql.js": "^1.0.0",
     "typeorm": "^0.2.17"
   },
   "devDependencies": {
@@ -74,6 +75,7 @@
     "css-loader": "^2.1.1",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.0",
+    "raw-loader": "^2.0.0",
     "react-native-typescript-transformer": "^1.2.12",
     "style-loader": "^0.23.1",
     "ts-transform-graphql-tag": "^0.2.1",

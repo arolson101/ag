@@ -14,7 +14,6 @@ export { IntlContext, useSelector }
 export const maxImageSize = 512
 
 export interface CoreDependencies {
-  // client: ApolloClient<any>
   online: Online
   ui: UiContext
   sys: SystemCallbacks
