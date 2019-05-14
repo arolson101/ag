@@ -5,7 +5,7 @@ import debug from 'debug'
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
 import { Provider as StoreProvider } from 'react-redux'
-import { OnlineContext, SystemCallbacks, SystemContext, UiContext } from './context'
+import { CoreContext, SystemCallbacks, UiContext } from './context'
 import { CoreStore, selectors } from './reducers'
 
 const log = debug('core:app')
@@ -28,20 +28,16 @@ export const App = Object.assign(
     }))
 
     return (
-      <SystemContext.Provider value={sys}>
-        <UiContext.Provider value={ui}>
-          <OnlineContext.Provider value={online}>
-            <ApolloProvider client={client}>
-              <ApolloHooksProvider client={client}>
-                <StoreProvider store={store}>
-                  {/* tslint:disable-next-line:prettier */}
-                  {children}
-                </StoreProvider>
-              </ApolloHooksProvider>
-            </ApolloProvider>
-          </OnlineContext.Provider>
-        </UiContext.Provider>
-      </SystemContext.Provider>
+      <CoreContext.Provider value={{ sys, online, ui }}>
+        <ApolloProvider client={client}>
+          <ApolloHooksProvider client={client}>
+            <StoreProvider store={store}>
+              {/* tslint:disable-next-line:prettier */}
+              {children}
+            </StoreProvider>
+          </ApolloHooksProvider>
+        </ApolloProvider>
+      </CoreContext.Provider>
     )
   }),
   {

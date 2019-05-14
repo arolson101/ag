@@ -21,7 +21,7 @@ module.exports = async ({ config }: Params): Promise<webpack.Configuration> => {
     },
     {
       test: /\.xlsx$/i,
-      use: 'raw-loader',
+      use: 'arraybuffer-loader',
     },
     // {
     //   test: /\.css$/,

@@ -8,7 +8,7 @@ import React from 'react'
 import { hot } from 'react-hot-loader/root'
 import { ElectronDialogs } from './ElectronDialogs'
 import { ElectronRouter } from './ElectronRouter'
-import { init } from './export'
+import { init } from './menu'
 import { deleteDb, openDb } from './openDb.electron'
 import { sys } from './store'
 

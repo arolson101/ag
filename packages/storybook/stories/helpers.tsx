@@ -19,10 +19,11 @@ import { storiesOf, ui } from './platform-specific'
 export { MockedResponse }
 export { action, storiesOf }
 
-import minimal from './data/minimal.xlsx'
+import { importDb } from '@ag/db/export'
+import normal from './data/normal.xlsx'
 
-const empty = minimal
-const maximal = minimal
+const empty = normal
+const full = normal
 
 export const data = {
   bankId: 'cjrbfiy580000415s2ibuxm2c',
@@ -31,14 +32,16 @@ export const data = {
 
 const log = debug('helpers')
 
+type Dataset = 'empty' | 'normal' | 'full'
+
+const datasets: Record<Dataset, XlsxData> = {
+  empty,
+  normal,
+  full,
+}
+
 const initSqlJs = require('sql.js/dist/sql-asm.js')
 initSqlJs().then((x: SQLJS) => (window.SQL = x))
-
-export const forever = 2 ** 31 - 1
-
-export const addDelay = (responses: MockedResponse[], delay: number) => {
-  return responses.map(r => ({ ...r, delay }))
-}
 
 const createStore = (dependencies: CoreDependencies) => {
   const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, CoreDependencies>({
@@ -101,8 +104,6 @@ const waitForState = (store: CoreStore, finished: (state: CoreState) => boolean)
     })
   })
 
-type Dataset = 'empty' | 'normal' | 'full'
-
 export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) => {
   const store = useRef<CoreStore | undefined>()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -116,10 +117,11 @@ export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) 
       waitForState(store.current!, selectors.isDbInitialized) //
         .then(async () => {
           // log('initialized')
-          // if (dataset)
-          {
+          if (dataset) {
             store.current!.dispatch(actions.dbCreate({ name: 'app', password: '1234' }))
-            await waitForState(store.current!, selectors.isLoggedIn) //
+            await waitForState(store.current!, selectors.isLoggedIn)
+            const { connection } = selectors.getAppDb(store.current!.getState())
+            await importDb(connection, datasets[dataset])
             // log('logged in')
             setIsLoggedIn(true)
           }

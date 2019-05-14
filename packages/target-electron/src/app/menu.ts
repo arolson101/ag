@@ -1,14 +1,15 @@
 import { CoreStore, selectors } from '@ag/core/reducers'
+import { exportDb } from '@ag/db/export'
 import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
+import fs from 'fs'
 import { Connection } from 'typeorm'
-import XLSX from 'xlsx'
 
 const { app, Menu, MenuItem, dialog } = remote
 
-const log = debug('export')
+const log = debug('menu')
 
-export const exportDb = async (connection: Connection) => {
+export const exportToFile = async (connection: Connection) => {
   log('exportDb')
 
   const o = dialog.showSaveDialog({
@@ -17,24 +18,9 @@ export const exportDb = async (connection: Connection) => {
   })
 
   if (o) {
-    const wb = XLSX.utils.book_new()
-    for (const entityMetadata of connection.entityMetadatas) {
-      const { tableName } = entityMetadata
-      log(tableName)
-      const repo = connection.manager.getRepository(tableName)
-      const data = await repo.createQueryBuilder().getMany()
-      const header = entityMetadata.columns.map(col => col.propertyName)
-      const ws = XLSX.utils.json_to_sheet(data, { header })
-      XLSX.utils.book_append_sheet(wb, ws, tableName)
-    }
-
-    XLSX.writeFile(wb, o)
+    const data = exportDb(connection)
+    fs.writeFileSync(o, data)
   }
-}
-
-export const importDb = async (connection: Connection, data: ) => {
-  log('importDb')
-
 }
 
 export const init = (store: CoreStore) => {
@@ -42,7 +28,7 @@ export const init = (store: CoreStore) => {
     log('exportMenuItem')
     const { connection } = selectors.getAppDb(store.getState())
     if (connection) {
-      exportDb(connection)
+      exportToFile(connection)
     }
   }
 

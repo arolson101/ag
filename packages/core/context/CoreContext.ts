@@ -32,11 +32,8 @@ export interface SystemCallbacks {
   scaleImage: (image: ImageBuf, scale: number) => Promise<ImageBuf>
 }
 
-export const OnlineContext = React.createContext<Online>(null as any)
-OnlineContext.displayName = 'OnlineContext'
-
-export const SystemContext = React.createContext<SystemCallbacks>(null as any)
-SystemContext.displayName = 'SystemContext'
+export const CoreContext = React.createContext<CoreDependencies>(null as any)
+CoreContext.displayName = 'CoreContext'
 
 export const useDispatch: () => Dispatch<CoreAction> = useDispatch1
 
@@ -52,8 +49,8 @@ export const useAction = <A, C extends ActionCreator<A>>(actionCreator: C) => {
   }, [actionCreator, dispatch])
 }
 
-export const useOnline = () => useContext(OnlineContext)
+export const useOnline = () => useContext(CoreContext).online
 
-export const useUi = () => useContext(UiContext)
+export const useUi = () => useContext(CoreContext).ui
 
-export const useSystem = () => useContext(SystemContext)
+export const useSystem = () => useContext(CoreContext).sys

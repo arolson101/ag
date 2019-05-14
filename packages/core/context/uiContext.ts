@@ -233,6 +233,3 @@ export interface UiContext {
   Tabs: React.ComponentType<TabsProps>
   Tab: React.ComponentType<TabProps>
 }
-
-export const UiContext = React.createContext<UiContext>(null as any)
-UiContext.displayName = 'UiContext'
