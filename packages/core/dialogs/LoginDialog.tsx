@@ -4,7 +4,6 @@ import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
 import { useAction, useIntl, useSelector, useUi } from '../context'
 import { LoginForm } from '../forms'
-import { deleteDb } from '../mutations'
 import { selectors } from '../reducers'
 
 interface Props {
@@ -20,8 +19,8 @@ export const LoginDialog = React.memo<Props>(function _LoginDialog(props) {
   const isDbInitialized = useSelector(selectors.isDbInitialized)
   const dbs = useSelector(selectors.getDbs)
   const indexError = useSelector(selectors.getIndexError)
-  const dbDelete = useAction(actions.dbDelete.request)
   const loginForm = useRef<LoginForm>(null)
+  const deleteDb = useAction(actions.deleteDb)
 
   const open = useCallback(() => {
     if (loginForm.current) {
@@ -48,7 +47,7 @@ export const LoginDialog = React.memo<Props>(function _LoginDialog(props) {
             dbId
               ? {
                   title: intl.formatMessage(messages.delete),
-                  onClick: () => deleteDb({ ui, intl, dbId, dbDelete }),
+                  onClick: () => deleteDb({ dbId }),
                   isDanger: true,
                 }
               : undefined

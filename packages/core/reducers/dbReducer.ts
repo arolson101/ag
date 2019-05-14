@@ -63,11 +63,12 @@ export const dbSelectors = {
 export const db = (state: DbState = defaultState, action: CoreAction): DbState => {
   switch (action.type) {
     case getType(actions.dbSetIndex): {
+      const connection = action.payload
       return {
         ...state,
         index: {
-          connection: action.payload, //
-          dbRepository: action.payload.getRepository(Db),
+          connection, //
+          dbRepository: connection.getCustomRepository(DbRepository),
         },
       }
     }
@@ -100,12 +101,6 @@ export const db = (state: DbState = defaultState, action: CoreAction): DbState =
 
     case getType(actions.dbLoginFailure):
       return { ...state, appError: action.payload }
-
-    case getType(actions.dbDelete.success):
-      if (!state.index) {
-        throw new Error('index db not open')
-      }
-      return { ...state, dbs: action.payload.dbs }
 
     default:
       return state
