@@ -18,7 +18,7 @@ export const exportToFile = async (connection: Connection) => {
   })
 
   if (o) {
-    const data = exportDb(connection)
+    const data = await exportDb(connection)
     fs.writeFileSync(o, data)
   }
 }

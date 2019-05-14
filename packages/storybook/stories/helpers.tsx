@@ -4,26 +4,23 @@ import { App } from '@ag/core/app'
 import { CoreDependencies, SystemCallbacks } from '@ag/core/context'
 import { coreEpics } from '@ag/core/epics'
 import { coreReducers, CoreState, CoreStore, selectors } from '@ag/core/reducers'
+import { importDb } from '@ag/db/export'
 import { online } from '@ag/online'
 import { action } from '@storybook/addon-actions'
-import { MockedResponse } from 'apollo-link-mock'
 import debug from 'debug'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { applyMiddleware, combineReducers, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { combineEpics, createEpicMiddleware } from 'redux-observable'
-// import 'sql.js'
 import { Connection, ConnectionOptions, createConnection, getConnectionManager } from 'typeorm'
+import empty from './data/empty.xlsx'
+import full from './data/full.xlsx'
+import normal from './data/normal.xlsx'
 import { storiesOf, ui } from './platform-specific'
 
-export { MockedResponse }
 export { action, storiesOf }
 
-import { importDb } from '@ag/db/export'
-import normal from './data/normal.xlsx'
-
-const empty = normal
-const full = normal
+require('sql.js/dist/sql-asm.js')().then((x: SQLJS) => (window.SQL = x))
 
 export const data = {
   bankId: 'a74780f9d696f3646f3177b83093c0667',
@@ -40,21 +37,14 @@ const datasets: Record<Dataset, XlsxData> = {
   full,
 }
 
-const initSqlJs = require('sql.js/dist/sql-asm.js')
-initSqlJs().then((x: SQLJS) => (window.SQL = x))
-
 const createStore = (dependencies: CoreDependencies) => {
   const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, CoreDependencies>({
     dependencies,
   })
 
-  const middleware = [
-    epicMiddleware, //
-  ]
-
   const store = reduxCreateStore<CoreState, CoreAction, {}, {}>(
     combineReducers(coreReducers),
-    composeWithDevTools(applyMiddleware(...middleware))
+    composeWithDevTools(applyMiddleware(epicMiddleware))
   )
 
   const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, CoreDependencies>(...coreEpics)
@@ -73,11 +63,10 @@ const openDb = async (
     await mgr.get(name).close()
   }
 
-  const type = 'sqljs'
   // log('opening %s', name)
   const db = await createConnection({
     name,
-    type,
+    type: 'sqljs',
     synchronize: true,
     entities,
     // logging: true,

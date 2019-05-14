@@ -6,7 +6,7 @@ import { action, data, MockApp, storiesOf } from './helpers'
 
 storiesOf('Dialogs/AccountDialog', module)
   .add('create', () => (
-    <MockApp dataset='empty'>
+    <MockApp dataset='normal'>
       <AccountDialog isOpen={true} bankId={data.bankId} />
     </MockApp>
   ))
@@ -18,7 +18,7 @@ storiesOf('Dialogs/AccountDialog', module)
 
 storiesOf('Forms/AccountForm', module)
   .add('create', () => (
-    <MockApp dataset='empty'>
+    <MockApp dataset='normal'>
       <AccountForm bankId={data.bankId} onClosed={action('onClosed')} />
     </MockApp>
   ))

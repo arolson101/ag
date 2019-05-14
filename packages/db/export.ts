@@ -8,15 +8,15 @@ export const exportDb = async (connection: Connection) => {
   const wb = XLSX.utils.book_new()
   for (const entityMetadata of connection.entityMetadatas) {
     const { tableName } = entityMetadata
-    log(tableName)
     const repo = connection.manager.getRepository(tableName)
     const data = await repo.createQueryBuilder().getMany()
     const header = entityMetadata.columns.map(col => col.propertyName)
+    log('%s: %d items', tableName, data.length)
     const ws = XLSX.utils.json_to_sheet(data, { header })
     XLSX.utils.book_append_sheet(wb, ws, tableName)
   }
 
-  return XLSX.write(wb, { bookType: 'xlsx' })
+  return XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' })
 }
 
 export const importDb = async (connection: Connection, data: any) => {
