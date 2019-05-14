@@ -6,7 +6,7 @@ declare module 'icojs/index.js' {
     buffer: ArrayBuffer
   }
 
-  export function isICO(source: ArrayBuffer | Buffer): Boolean
+  export function isICO(source: ArrayBuffer | Buffer): boolean
 
   export function parse(buffer: ArrayBuffer | Buffer, mime?: string): Promise<ParsedImage[]>
 

@@ -42,7 +42,7 @@ export const MenuBar = Object.assign(
               key: 'accounts',
               title: 'accounts',
               subitems: [
-                ...(data
+                ...(data && data.banks
                   ? data.banks.map(
                       (bank): NavMenuItem => ({
                         key: bank.id,
