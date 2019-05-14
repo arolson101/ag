@@ -26,8 +26,8 @@ const empty = normal
 const full = normal
 
 export const data = {
-  bankId: 'cjrbfiy580000415s2ibuxm2c',
-  accountId: 'cjrbhh3dw0000415s5awimr3f',
+  bankId: 'a74780f9d696f3646f3177b83093c0667',
+  accountId: 'a13cb3bf09d932e0b00d4eedee1b22e85',
 }
 
 const log = debug('helpers')
@@ -105,37 +105,39 @@ const waitForState = (store: CoreStore, finished: (state: CoreState) => boolean)
   })
 
 export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) => {
-  const store = useRef<CoreStore | undefined>()
+  const [store, setStore] = useState<CoreStore | undefined>(undefined)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
     if (window.SQL) {
       // log('create store')
-      store.current = createStore({ sys, online, ui })
-      store.current.dispatch(actions.init())
+      const s = createStore({ sys, online, ui })
+      s.dispatch(actions.init())
 
-      waitForState(store.current!, selectors.isDbInitialized) //
+      setStore(s)
+
+      waitForState(s, selectors.isDbInitialized) //
         .then(async () => {
           // log('initialized')
           if (dataset) {
-            store.current!.dispatch(actions.dbCreate({ name: 'app', password: '1234' }))
-            await waitForState(store.current!, selectors.isLoggedIn)
-            const { connection } = selectors.getAppDb(store.current!.getState())
+            s.dispatch(actions.dbCreate({ name: 'app', password: '1234' }))
+            await waitForState(s, selectors.isLoggedIn)
+            const { connection } = selectors.getAppDb(s.getState())
             await importDb(connection, datasets[dataset])
-            // log('logged in')
+            log('logged in')
             setIsLoggedIn(true)
           }
         })
     }
-  }, [store, window.SQL])
+  }, [window.SQL])
 
-  if (!store.current) {
+  if (!store) {
     return <div>initializing...</div>
   }
 
-  if (!isLoggedIn) {
+  if (dataset && !isLoggedIn) {
     return <div>logging in...</div>
   }
 
-  return <App {...{ sys, ui, store: store.current, online }}>{children}</App>
+  return <App {...{ sys, ui, store, online }}>{children}</App>
 }

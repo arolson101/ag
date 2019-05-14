@@ -20,7 +20,7 @@ export const exportDb = async (connection: Connection) => {
 }
 
 export const importDb = async (connection: Connection, data: any) => {
-  log('importDb')
+  // log('importDb')
 
   const wb = XLSX.read(data, { type: 'buffer' })
   // log('importDb %o', wb)
@@ -30,7 +30,7 @@ export const importDb = async (connection: Connection, data: any) => {
 
     const repo = connection.manager.getRepository(sheetName)
     const ents = obj.map(o => repo.create(o))
-    log('importDb %s %o', sheetName, ents)
+    // log('importDb %s %o', sheetName, ents)
     if (ents.length) {
       await repo.insert(ents)
     }
