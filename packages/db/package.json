@@ -16,6 +16,7 @@
     "apollo-client": "^2.5.1",
     "apollo-link": "^1.2.11",
     "debug": "^4.1.1",
+    "flatnest": "^1.0.0",
     "graphql": "^14.2.1",
     "icojs": "^0.12.3",
     "is-url": "^1.2.4",

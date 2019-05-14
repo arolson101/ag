@@ -23,7 +23,7 @@ storiesOf('Dialogs/BankDialog', module)
   ))
   .add('edit', () => (
     <MockApp dataset='normal'>
-      <BankDialog {...dialogProps} bankId={data.bankId} />
+      <BankDialog {...dialogProps} bankId={data.normal.bankId} />
     </MockApp>
   ))
 
@@ -39,7 +39,7 @@ storiesOf('Forms/BankForm', module)
     <MockApp dataset='normal'>
       <BankForm
         {...formProps} //
-        bankId={data.bankId}
+        bankId={data.normal.bankId}
       />
     </MockApp>
   ))

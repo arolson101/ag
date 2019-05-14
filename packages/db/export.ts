@@ -1,4 +1,5 @@
 import debug from 'debug'
+import { flatten, nest } from 'flatnest'
 import { Connection } from 'typeorm'
 import XLSX from 'xlsx'
 
@@ -9,8 +10,8 @@ export const exportDb = async (connection: Connection) => {
   for (const entityMetadata of connection.entityMetadatas) {
     const { tableName } = entityMetadata
     const repo = connection.manager.getRepository(tableName)
-    const data = await repo.createQueryBuilder().getMany()
-    const header = entityMetadata.columns.map(col => col.propertyName)
+    const data = (await repo.createQueryBuilder().getMany()).map(flatten)
+    const header = entityMetadata.columns.map(col => col.propertyPath)
     log('%s: %d items', tableName, data.length)
     const ws = XLSX.utils.json_to_sheet(data, { header })
     XLSX.utils.book_append_sheet(wb, ws, tableName)
@@ -29,7 +30,7 @@ export const importDb = async (connection: Connection, data: any) => {
     const obj = XLSX.utils.sheet_to_json(sheet)
 
     const repo = connection.manager.getRepository(sheetName)
-    const ents = obj.map(o => repo.create(o))
+    const ents = obj.map(o => repo.create(nest(o)))
     // log('importDb %s %o', sheetName, ents)
     if (ents.length) {
       await repo.insert(ents)

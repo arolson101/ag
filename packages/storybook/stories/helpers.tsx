@@ -23,8 +23,14 @@ export { action, storiesOf }
 require('sql.js/dist/sql-asm.js')().then((x: SQLJS) => (window.SQL = x))
 
 export const data = {
-  bankId: 'a74780f9d696f3646f3177b83093c0667',
-  accountId: 'a13cb3bf09d932e0b00d4eedee1b22e85',
+  normal: {
+    bankId: 'a372cda0d53a2f9b0f4c46d0cd3136748',
+    accountId: 'a30cdcfe7d083e8e4470e63f61c782928',
+  },
+  full: {
+    bankId: 'a74780f9d696f3646f3177b83093c0667',
+    accountId: 'a13cb3bf09d932e0b00d4eedee1b22e85',
+  },
 }
 
 const log = debug('helpers')
