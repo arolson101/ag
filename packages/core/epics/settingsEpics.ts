@@ -21,7 +21,7 @@ const dbLoginSuccessEpic: CoreEpic = (action$, state$) =>
       })()
 
       return from(p).pipe(
-        map(actions.settingsInit), //
+        map(actions.settingsLoaded), //
         catchError(error => of(actions.settingsError(error)))
       )
     })
@@ -31,7 +31,7 @@ const dbLogoutEpic: CoreEpic = (action$, state$) =>
   action$.pipe(
     filter(isActionOf(actions.dbLogout)),
     withLatestFrom(state$),
-    map(() => actions.settingsInit({}))
+    map(() => actions.settingsLoaded({}))
   )
 
 const settingsSetValueEpic: CoreEpic = (action$, state$) =>
@@ -49,7 +49,7 @@ const settingsSetValueEpic: CoreEpic = (action$, state$) =>
       })()
 
       return from(p).pipe(
-        map(actions.settingsInit), //
+        map(actions.settingsLoaded), //
         catchError(error => of(actions.settingsError(error)))
       )
     })

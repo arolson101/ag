@@ -5,7 +5,7 @@ import { filter, map } from 'rxjs/operators'
 import { isActionOf } from 'typesafe-actions'
 import { ElectronEpic } from './rootEpic'
 
-export const routeEpics: ElectronEpic[] = [
+export const navEpics: ElectronEpic[] = [
   action$ =>
     action$.pipe(
       filter(isActionOf(actions.nav.home)),

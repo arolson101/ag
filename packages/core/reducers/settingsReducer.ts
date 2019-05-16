@@ -26,7 +26,7 @@ export const settings = (
   action: CoreAction
 ): SettingsState => {
   switch (action.type) {
-    case getType(actions.settingsInit):
+    case getType(actions.settingsLoaded):
       return { ...state, error: undefined, values: action.payload }
 
     case getType(actions.settingsError):
