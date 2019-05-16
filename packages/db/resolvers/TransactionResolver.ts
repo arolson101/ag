@@ -1,4 +1,3 @@
-import { selectors } from '@ag/core/reducers'
 import { diff, uniqueId } from '@ag/util'
 import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
 import { DbContext } from '../DbContext'
@@ -9,22 +8,21 @@ import { dbWrite } from './dbWrite'
 export class TransactionResolver {
   @Query(returns => Transaction, { nullable: true })
   async transaction(
-    @Ctx() { store }: DbContext, //
+    @Ctx() { getAppDb }: DbContext, //
     @Arg('transactionId', { nullable: true }) transactionId?: string
   ): Promise<Transaction | undefined> {
-    const { transactionsRepository } = selectors.getAppDb(store.getState())
+    const { transactionsRepository } = getAppDb()
     return transactionId ? transactionsRepository.getById(transactionId) : undefined
   }
 
   @Mutation(returns => Transaction)
   async saveTransaction(
-    @Ctx() { store }: DbContext,
+    @Ctx() { getAppDb }: DbContext,
     @Arg('input') input: TransactionInput,
     @Arg('transactionId', { nullable: true }) transactionId: string,
     @Arg('accountId', { nullable: true }) accountId?: string
   ): Promise<Transaction> {
-    const state = store.getState()
-    const { connection, transactionsRepository } = selectors.getAppDb(state)
+    const { connection, transactionsRepository } = getAppDb()
     const t = Date.now()
     const table = Transaction
     let transaction: Transaction
@@ -48,11 +46,10 @@ export class TransactionResolver {
 
   @Mutation(returns => Transaction)
   async deleteTransaction(
-    @Ctx() { store }: DbContext,
+    @Ctx() { getAppDb }: DbContext,
     @Arg('transactionId') transactionId: string //
   ): Promise<Transaction> {
-    const state = store.getState()
-    const { connection, transactionsRepository } = selectors.getAppDb(state)
+    const { connection, transactionsRepository } = getAppDb()
     const t = Date.now()
     const table = Transaction
     const transaction = await transactionsRepository.getById(transactionId)

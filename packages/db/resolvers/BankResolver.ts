@@ -1,4 +1,3 @@
-import { selectors } from '@ag/core/reducers'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
@@ -13,30 +12,30 @@ const log = debug('db:BankResolver')
 export class BankResolver {
   @FieldResolver(type => [Account])
   async accounts(
-    @Ctx() { store }: DbContext,
+    @Ctx() { getAppDb }: DbContext,
     @Root() bank: Bank //
   ): Promise<Account[]> {
-    const { accountsRepository } = selectors.getAppDb(store.getState())
+    const { accountsRepository } = getAppDb()
     const res = await accountsRepository.getForBank(bank.id)
     return res
   }
 
   @Query(returns => Bank, { nullable: true })
   async bank(
-    @Ctx() { store }: DbContext, //
+    @Ctx() { isLoggedIn, getAppDb }: DbContext, //
     @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Bank | undefined> {
-    if (selectors.isLoggedIn(store.getState())) {
-      const { banksRepository } = selectors.getAppDb(store.getState())
+    if (isLoggedIn()) {
+      const { banksRepository } = getAppDb()
       return bankId ? banksRepository.getById(bankId) : undefined
     }
   }
 
   @Query(returns => [Bank])
   async banks(
-    @Ctx() { store }: DbContext //
+    @Ctx() { getAppDb }: DbContext //
   ): Promise<Bank[]> {
-    const { banksRepository } = selectors.getAppDb(store.getState())
+    const { banksRepository } = getAppDb()
     const banks = await banksRepository.all()
     // log('banks- %o', banks)
     return banks
@@ -44,12 +43,11 @@ export class BankResolver {
 
   @Mutation(returns => Bank)
   async saveBank(
-    @Ctx() { store }: DbContext,
+    @Ctx() { getAppDb }: DbContext,
     @Arg('input') input: BankInput,
     @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Bank> {
-    const state = store.getState()
-    const { connection, banksRepository } = selectors.getAppDb(state)
+    const { connection, banksRepository } = getAppDb()
     const t = Date.now()
     let bank: Bank
     let changes: DbChange[]
@@ -74,10 +72,10 @@ export class BankResolver {
 
   @Mutation(returns => Boolean)
   async deleteBank(
-    @Ctx() { store }: DbContext,
+    @Ctx() { getAppDb }: DbContext,
     @Arg('bankId') bankId: string //
   ): Promise<boolean> {
-    const { connection } = selectors.getAppDb(store.getState())
+    const { connection } = getAppDb()
     const t = Date.now()
     const changes = [Bank.change.remove(t, bankId)]
     await dbWrite(connection, changes)
@@ -86,10 +84,10 @@ export class BankResolver {
 
   @Mutation(returns => Boolean)
   async setAccountsOrder(
-    @Ctx() { store }: DbContext,
+    @Ctx() { getAppDb }: DbContext,
     @Arg('accountIds', type => [String]) accountIds: string[]
   ): Promise<boolean> {
-    const { connection, accountsRepository } = selectors.getAppDb(store.getState())
+    const { connection, accountsRepository } = getAppDb()
     const t = Date.now()
     const accounts = await accountsRepository.getByIds(accountIds)
     if (accounts.length !== accountIds.length) {

@@ -13,6 +13,8 @@ export { IntlContext, useSelector }
 
 export const maxImageSize = 512
 
+export type CoreDispatch = Dispatch<CoreAction>
+
 export interface CoreDependencies {
   online: Online
   ui: UiContext
@@ -35,7 +37,7 @@ export interface SystemCallbacks {
 export const CoreContext = React.createContext<CoreDependencies>(null as any)
 CoreContext.displayName = 'CoreContext'
 
-export const useDispatch: () => Dispatch<CoreAction> = useDispatch1
+export const useDispatch: () => CoreDispatch = useDispatch1
 
 export const useIntl = (): IntlContext => {
   return useSelector(selectors.getIntl)

@@ -1,15 +1,16 @@
 import { defineMessages } from 'react-intl'
-import { IntlContext } from '../context'
+import { actions } from '../actions'
+import { CoreDispatch, IntlContext } from '../context'
 import { UiContext } from '../context/uiContext'
 
 interface DeleteDbParams {
-  dbDelete: (params: { dbId: string }) => any
+  dispatch: CoreDispatch
   intl: IntlContext
   dbId: string
   ui: UiContext
 }
 
-export const deleteDb = ({ dbDelete, ui, intl, dbId }: DeleteDbParams) => {
+export const deleteDb = ({ dispatch, ui, intl, dbId }: DeleteDbParams) => {
   const { alert, showToast } = ui
 
   alert({
@@ -18,8 +19,8 @@ export const deleteDb = ({ dbDelete, ui, intl, dbId }: DeleteDbParams) => {
     danger: true,
 
     confirmText: intl.formatMessage(messages.delete),
-    onConfirm: async () => {
-      dbDelete({ dbId })
+    onConfirm: () => {
+      dispatch(actions.dbDelete.request({ dbId }))
       showToast(intl.formatMessage(messages.deleted), true)
     },
 
@@ -30,23 +31,23 @@ export const deleteDb = ({ dbDelete, ui, intl, dbId }: DeleteDbParams) => {
 
 const messages = defineMessages({
   title: {
-    id: 'DeleteDb.title',
+    id: 'deleteDb.title',
     defaultMessage: 'Are you sure?',
   },
   body: {
-    id: 'DeleteDb.body',
+    id: 'deleteDb.body',
     defaultMessage: 'This will all your data.  This action cannot be undone.',
   },
   delete: {
-    id: 'DeleteDb.delete',
+    id: 'deleteDb.delete',
     defaultMessage: 'Delete',
   },
   cancel: {
-    id: 'DeleteDb.cancel',
+    id: 'deleteDb.cancel',
     defaultMessage: 'Cancel',
   },
   deleted: {
-    id: 'DeleteDb.deleted',
+    id: 'deleteDb.deleted',
     defaultMessage: 'Data deleted',
   },
 })

@@ -20,10 +20,6 @@ import {
 
 const log = debug('core:UrlField')
 
-interface State {
-  gettingIcon: boolean
-}
-
 interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldProps {
   nameField: keyof Values & string
   favicoField: keyof Values & string
@@ -31,19 +27,6 @@ interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldP
   favicoHeight: number
   placeholder?: string
   cancelToken?: string
-}
-
-type UrlFieldGeneric = <Values extends Record<string, any>>(
-  p: Props<Values>
-) => React.ReactElement<Props<Values>>
-
-interface FavicoButtonProps {
-  name: string
-  url: string
-  favico: ImageSource
-  favicoField: string
-  favicoSize: number
-  disabled?: boolean
 }
 
 type Field<T> = [{ value: T }, {}]
@@ -90,14 +73,21 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
     const cancelSource = online.CancelToken.source()
 
     // download image
-    Promise.resolve()
-      .then(() => setLoading(true))
-      .then(() => online.getFavico(newUrl, cancelSource.token))
-      .then(favico => {
+    Promise.resolve().then(async () => {
+      try {
+        setLoading(true)
+        const favico = await online.getFavico(newUrl, cancelSource.token)
         // log('got favico %O', favico)
         formik.setFieldValue(favicoField, ImageSource.fromImageBuf(favico))
-      })
-      .finally(() => setLoading(false))
+        setLoading(false)
+      } catch (err) {
+        if (!online.isCancel(err)) {
+          setLoading(false)
+        } else {
+          log('caught error %o', err)
+        }
+      }
+    })
 
     return cancelSource.cancel
   }, [source, online, generateDefaultIcon])

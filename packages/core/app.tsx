@@ -20,6 +20,8 @@ type Props = React.PropsWithChildren<{
 export const App = Object.assign(
   React.memo<Props>(function _App({ sys, store, ui, online, children }) {
     const client = createClient(() => ({
+      isLoggedIn: () => selectors.isLoggedIn(store.getState()),
+      getAppDb: () => selectors.getAppDb(store.getState()),
       store,
       online,
       intl: selectors.getIntl(store.getState()),

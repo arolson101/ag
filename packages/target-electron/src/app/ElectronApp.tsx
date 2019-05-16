@@ -21,6 +21,8 @@ class ElectronApp extends React.PureComponent<Props> {
   render() {
     const { store, hist } = this.props
     const client = createClient(() => ({
+      isLoggedIn: () => selectors.isLoggedIn(store.getState()),
+      getAppDb: () => selectors.getAppDb(store.getState()),
       store,
       online,
       intl: selectors.getIntl(store.getState()),

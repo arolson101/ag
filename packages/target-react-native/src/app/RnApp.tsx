@@ -30,6 +30,8 @@ export const sys: SystemCallbacks = {
 
 const store = createStore({ sys, online, ui })
 const client = createClient(() => ({
+  isLoggedIn: () => selectors.isLoggedIn(store.getState()),
+  getAppDb: () => selectors.getAppDb(store.getState()),
   store,
   online,
   intl: selectors.getIntl(store.getState()),

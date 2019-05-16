@@ -1,4 +1,3 @@
-import { selectors } from '@ag/core/reducers'
 import { toAccountType } from '@ag/online'
 import { diff, uniqueId } from '@ag/util'
 import debug from 'debug'
@@ -35,8 +34,8 @@ export class AccountOnlineResolver {
     @Arg('bankId') bankId: string,
     @Arg('cancelToken') cancelToken: string
   ): Promise<Bank> {
-    const state = context.store.getState()
-    const { connection, banksRepository, accountsRepository } = selectors.getAppDb(state)
+    const { intl, online, getAppDb } = context
+    const { connection, banksRepository, accountsRepository } = getAppDb()
     const bank = await banksRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadAccountList: bank is not set online`)
@@ -44,7 +43,6 @@ export class AccountOnlineResolver {
 
     // TODO: make bank query get this for us
     const existingAccounts = await accountsRepository.getForBank(bank.id)
-    const { intl, online } = context
     const source = online.CancelToken.source()
 
     try {
@@ -105,13 +103,8 @@ export class AccountOnlineResolver {
     @Arg('end') end: Date,
     @Arg('cancelToken') cancelToken: string
   ): Promise<Account> {
-    const { online, intl, store } = context
-    const {
-      connection,
-      banksRepository,
-      accountsRepository,
-      transactionsRepository,
-    } = selectors.getAppDb(store.getState())
+    const { online, intl, getAppDb } = context
+    const { connection, banksRepository, accountsRepository, transactionsRepository } = getAppDb()
     const bank = await banksRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadTransactions: bank is not set online`)

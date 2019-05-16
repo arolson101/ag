@@ -1,4 +1,3 @@
-import { selectors } from '@ag/core/reducers'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
@@ -13,38 +12,38 @@ const log = debug('db:AccountResolver')
 export class AccountResolver {
   @FieldResolver(returns => Bank)
   async bank(
-    @Ctx() { store }: DbContext, //
+    @Ctx() { getAppDb }: DbContext, //
     @Root() account: Account
   ): Promise<Bank> {
-    const { banksRepository } = selectors.getAppDb(store.getState())
+    const { banksRepository } = getAppDb()
     return banksRepository.getById(account.bankId)
   }
 
   @Query(returns => Account, { nullable: true })
   async account(
-    @Ctx() { store }: DbContext, //
+    @Ctx() { getAppDb }: DbContext, //
     @Arg('accountId', { nullable: true }) accountId?: string
   ): Promise<Account | undefined> {
-    const { accountsRepository } = selectors.getAppDb(store.getState())
+    const { accountsRepository } = getAppDb()
     return accountId ? accountsRepository.getById(accountId) : undefined
   }
 
   @Query(returns => [Account])
   async accounts(
-    @Ctx() { store }: DbContext //
+    @Ctx() { getAppDb }: DbContext //
   ): Promise<Account[]> {
-    const { accountsRepository } = selectors.getAppDb(store.getState())
+    const { accountsRepository } = getAppDb()
     return accountsRepository.all()
   }
 
   @Mutation(returns => Account)
   async saveAccount(
-    @Ctx() { store }: DbContext,
+    @Ctx() { getAppDb }: DbContext,
     @Arg('input') input: AccountInput,
     @Arg('accountId', { nullable: true }) accountId?: string,
     @Arg('bankId', { nullable: true }) bankId?: string
   ): Promise<Account> {
-    const { connection, accountsRepository } = selectors.getAppDb(store.getState())
+    const { connection, accountsRepository } = getAppDb()
     let account: Account
     let changes: DbChange[]
     const t = Date.now()
@@ -69,10 +68,10 @@ export class AccountResolver {
 
   @Mutation(returns => Boolean)
   async deleteAccount(
-    @Ctx() { store }: DbContext, //
+    @Ctx() { getAppDb }: DbContext, //
     @Arg('accountId') accountId: string
   ): Promise<boolean> {
-    const { connection } = selectors.getAppDb(store.getState())
+    const { connection } = getAppDb()
     const t = Date.now()
     const changes = [Account.change.remove(t, accountId)]
     await dbWrite(connection, changes)
@@ -81,12 +80,12 @@ export class AccountResolver {
 
   @FieldResolver(type => [Transaction])
   async transactions(
-    @Ctx() { store }: DbContext, //
+    @Ctx() { getAppDb }: DbContext, //
     @Root() account: Account,
     @Arg('start', { nullable: true }) start?: Date,
     @Arg('end', { nullable: true }) end?: Date
   ): Promise<Transaction[]> {
-    const { transactionsRepository } = selectors.getAppDb(store.getState())
+    const { transactionsRepository } = getAppDb()
     const res = await transactionsRepository.getForAccount(account.id, start, end)
     log(
       '%s\n%s\n%o',

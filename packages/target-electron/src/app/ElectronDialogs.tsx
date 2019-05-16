@@ -14,10 +14,14 @@ export const ElectronDialogs = Object.assign(
 
     return (
       <>
-        {dialog.loginDialog && <LoginDialog {...dialog.loginDialog} />}
-        {dialog.pictureDialog && <PictureDialog {...dialog.pictureDialog} />}
-        {dialog.bankDialog && <BankDialog {...dialog.bankDialog} />}
-        {dialog.accountDialog && <AccountDialog {...dialog.accountDialog} />}
+        {dialog.loginDialog && dialog.loginDialog.isOpen && <LoginDialog {...dialog.loginDialog} />}
+        {dialog.pictureDialog && dialog.pictureDialog.isOpen && (
+          <PictureDialog {...dialog.pictureDialog} />
+        )}
+        {dialog.bankDialog && dialog.bankDialog.isOpen && <BankDialog {...dialog.bankDialog} />}
+        {dialog.accountDialog && dialog.accountDialog.isOpen && (
+          <AccountDialog {...dialog.accountDialog} />
+        )}
       </>
     )
   }),

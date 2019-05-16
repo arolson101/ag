@@ -15,7 +15,7 @@ import React, { useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { UrlField } from '../components/UrlField'
-import { tabConfig, typedFields, useIntl, useUi } from '../context'
+import { tabConfig, typedFields, useIntl, useOnline, useUi } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
 
@@ -240,6 +240,7 @@ const Component = Object.assign(
   React.forwardRef<BankForm, ComponentProps>((props, ref) => {
     const intl = useIntl()
     const { showToast } = useUi()
+    const online = useOnline()
     const { data, saveBank, loading, bankId, onClosed, cancelToken } = props
 
     const bank = loading ? undefined : data && data.bank
@@ -272,8 +273,12 @@ const Component = Object.assign(
             })
           )
           onClosed()
-        } finally {
           factions.setSubmitting(false)
+        } catch (err) {
+          log('caught %o', err)
+          if (!online.isCancel(err)) {
+            factions.setSubmitting(false)
+          }
         }
       },
     })
