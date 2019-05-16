@@ -17,6 +17,7 @@ import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
 import { ActionItem, ContextMenuProps, TableColumn, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
+import { deleteAccount, deleteBank } from '../mutations'
 
 const log = debug('core:AccountsPage')
 
@@ -112,8 +113,6 @@ const BankTable = Object.assign(
     const openBankEditDlg = useAction(actions.openDlg.bankEdit)
     const openAccountCreateDlg = useAction(actions.openDlg.accountCreate)
     const openAccountEditDlg = useAction(actions.openDlg.accountEdit)
-    const deleteBank = useAction(actions.deleteBank)
-    const deleteAccount = useAction(actions.deleteAccount)
     const navAccount = useAction(actions.nav.account)
     const ui = useUi()
     const { Link, Text, Row, Table, showToast } = ui
@@ -135,8 +134,6 @@ const BankTable = Object.assign(
     const syncAccounts = useMutation(mutations.SyncAccounts)
     const downloadTransactions = useMutation(mutations.DownloadTransactions)
 
-    const onDeleteComplete = () => client.reFetchObservableQueries()
-
     const client = useApolloClient()
     const titleActions = useRef<ActionItem[]>([
       {
@@ -147,7 +144,7 @@ const BankTable = Object.assign(
       {
         icon: 'trash',
         text: intl.formatMessage(messages.deleteBank),
-        onClick: () => deleteBank({ bank, onComplete: onDeleteComplete }),
+        onClick: () => deleteBank({ ui, intl, bank, client }),
       },
       {
         icon: 'add',
@@ -190,7 +187,7 @@ const BankTable = Object.assign(
             {
               icon: 'trash',
               text: intl.formatMessage(messages.deleteAccount),
-              onClick: () => deleteAccount({ account, onComplete: onDeleteComplete }),
+              onClick: () => deleteAccount({ ui, intl, account, client }),
             },
             {
               icon: 'refresh',

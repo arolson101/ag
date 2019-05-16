@@ -1,8 +1,7 @@
 import { Account, Bank, Bill, Budget, Category, Db, Setting, Transaction } from '@ag/db/entities'
 import crypto from 'crypto'
-import { defineMessages } from 'react-intl'
 import { from, of } from 'rxjs'
-import { catchError, filter, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators'
+import { catchError, filter, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators'
 import sanitize from 'sanitize-filename'
 import { isActionOf } from 'typesafe-actions'
 import { actions } from '../actions'
@@ -64,7 +63,7 @@ const dbCreateEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
         const connection = await openDb(dbInfo.path, key, appEntities)
         await dbRepo.save(dbInfo)
 
-        const dbs = await dbRepo.all()
+        const dbs: DbInfo[] = await dbRepo.find()
 
         return { connection, dbs }
       })()
@@ -89,7 +88,7 @@ const dbOpenEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
       const dbRepo = selectors.getDbRepository(state)
 
       const p = (async () => {
-        const dbInfo = await dbRepo.get(dbId)
+        const dbInfo = await dbRepo.findOneOrFail(dbId)
         const key = dbInfo.getKey(password)
 
         const connection = await openDb(dbInfo.path, key, appEntities)
@@ -106,48 +105,35 @@ const dbOpenEpic: CoreEpic = (action$, state$, { sys: { openDb } }) =>
     })
   )
 
-const dbDeleteEpic: CoreEpic = (action$, state$, { ui: { alert, showToast }, sys: { deleteDb } }) =>
+const dbDeleteEpic: CoreEpic = (action$, state$, { sys: { deleteDb } }) =>
   action$.pipe(
-    filter(isActionOf(actions.deleteDb)),
+    filter(isActionOf(actions.dbDelete.request)),
     withLatestFrom(state$),
     switchMap(([action, state]) => {
       const { dbId } = action.payload
       const dbRepo = selectors.getDbRepository(state)
-      const intl = selectors.getIntl(state)
 
-      const prompt = () =>
-        new Promise<boolean>((resolve, reject) => {
-          alert({
-            title: intl.formatMessage(messages.title),
-            body: intl.formatMessage(messages.body),
-            danger: true,
+      const p = (async () => {
+        const dbInfo = await dbRepo.findOneOrFail(dbId)
+        await deleteDb(dbInfo.path)
 
-            confirmText: intl.formatMessage(messages.delete),
-            onConfirm: () => resolve(true),
+        await dbRepo
+          .createQueryBuilder()
+          .delete()
+          .from(Db)
+          .where('dbId = :dbId', { dbId })
+          .execute()
 
-            cancelText: intl.formatMessage(messages.cancel),
-            onCancel: () => resolve(false),
-          })
-        })
+        const dbs: DbInfo[] = await dbRepo.find()
 
-      const p = (async (): Promise<DbInfo[] | undefined> => {
-        const confirmed = await prompt()
-
-        if (confirmed) {
-          const dbInfo = await dbRepo.get(dbId)
-          await deleteDb(dbInfo.path)
-          await dbRepo.deleteDb(dbId)
-
-          showToast(intl.formatMessage(messages.deleted), true)
-
-          const dbs = await dbRepo.all()
-          return dbs
-        }
+        return { dbs }
       })()
 
       return from(p).pipe(
-        filter((res): res is DbInfo[] => !!res),
-        map(res => actions.dbSetInfos(res)) //
+        mergeMap(res => [
+          actions.dbDelete.success(res), //
+        ]),
+        catchError(error => of(actions.dbDelete.failure(error)))
       )
     })
   )
@@ -158,26 +144,3 @@ export const dbEpics = [
   dbOpenEpic,
   dbDeleteEpic,
 ]
-
-const messages = defineMessages({
-  title: {
-    id: 'dbEpics.title',
-    defaultMessage: 'Are you sure?',
-  },
-  body: {
-    id: 'dbEpics.body',
-    defaultMessage: 'This will all your data.  This action cannot be undone.',
-  },
-  delete: {
-    id: 'dbEpics.delete',
-    defaultMessage: 'Delete',
-  },
-  cancel: {
-    id: 'dbEpics.cancel',
-    defaultMessage: 'Cancel',
-  },
-  deleted: {
-    id: 'dbEpics.deleted',
-    defaultMessage: 'Data deleted',
-  },
-})

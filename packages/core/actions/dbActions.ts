@@ -15,23 +15,13 @@ export const dbActions = {
 
   dbLogout: createStandardAction('core/dbLogout')(),
 
-  deleteDb: createStandardAction('core/deleteDb')<{
-    dbId: string
-  }>(),
-
-  deleteBank: createStandardAction('core/deleteBank')<{
-    bank: {
-      id: string
-      name: string
-    }
-    onComplete: () => any
-  }>(),
-
-  deleteAccount: createStandardAction('core/deleteAccount')<{
-    account: {
-      id: string
-      name: string
-    }
-    onComplete: () => any
-  }>(),
+  dbDelete: createAsyncAction(
+    'core/dbDelete:request', //
+    'core/dbDelete:success',
+    'core/dbDelete:failure'
+  )<
+    { dbId: string }, //
+    { dbs: DbInfo[] },
+    Error
+  >(),
 }
