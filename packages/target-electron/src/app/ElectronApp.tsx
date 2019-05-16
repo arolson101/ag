@@ -4,7 +4,9 @@ import { CoreStore, selectors } from '@ag/core/reducers'
 import { createClient } from '@ag/db'
 import { online } from '@ag/online'
 import { ui } from '@ag/ui-antd'
+import electron from 'electron'
 import React from 'react'
+import { MenuItem, Provider, WindowMenu } from 'react-electron-menu'
 import { hot } from 'react-hot-loader/root'
 import { ElectronDialogs } from './ElectronDialogs'
 import { ElectronRouter } from './ElectronRouter'
@@ -31,16 +33,24 @@ class ElectronApp extends React.PureComponent<Props> {
     }))
 
     return (
-      <App {...{ sys, ui, client, store, online }}>
-        <ElectronRouter hist={hist} />
-        <ElectronDialogs />
-      </App>
+      <Provider electron={electron}>
+        <WindowMenu>
+          <MenuItem label='File'>
+            <MenuItem label='Asdf...' onClick={() => {}} />
+          </MenuItem>
+        </WindowMenu>
+
+        <App {...{ sys, ui, client, store, online }}>
+          <ElectronRouter hist={hist} />
+          <ElectronDialogs />
+        </App>
+      </Provider>
     )
   }
 
   static start(store: CoreStore) {
     store.dispatch(actions.init())
-    init(store)
+    // init(store)
   }
 }
 

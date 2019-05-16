@@ -1,5 +1,5 @@
 import { CoreStore, selectors } from '@ag/core/reducers'
-import { exportDb } from '@ag/db/export'
+import { exportDb, importDb } from '@ag/db/export'
 import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
 import fs from 'fs'
@@ -9,8 +9,8 @@ const { app, Menu, MenuItem, dialog } = remote
 
 const log = debug('menu')
 
-export const exportToFile = async (connection: Connection) => {
-  log('exportDb')
+const exportToFile = async (connection: Connection) => {
+  log('exportToFile')
 
   const o = dialog.showSaveDialog({
     title: 'export',
@@ -23,12 +23,34 @@ export const exportToFile = async (connection: Connection) => {
   }
 }
 
+const importFromFile = async (connection: Connection) => {
+  log('importFromFile')
+
+  const o = dialog.showOpenDialog({
+    title: 'import',
+    filters: [{ name: 'Excel', extensions: ['xlsx'] }],
+  })
+
+  if (o && o.length > 0) {
+    const data = fs.readFileSync(o[0])
+    await importDb(connection, data)
+  }
+}
+
 export const init = (store: CoreStore) => {
   const exportMenuItem = () => {
-    log('exportMenuItem')
+    // log('exportMenuItem')
     const { connection } = selectors.getAppDb(store.getState())
     if (connection) {
       exportToFile(connection)
+    }
+  }
+
+  const importMenuItem = () => {
+    // log('exportMenuItem')
+    const { connection } = selectors.getAppDb(store.getState())
+    if (connection) {
+      importFromFile(connection)
     }
   }
 
@@ -36,6 +58,10 @@ export const init = (store: CoreStore) => {
     {
       label: 'File',
       submenu: [
+        {
+          label: 'Import',
+          click: importMenuItem,
+        },
         {
           label: 'Export',
           click: exportMenuItem,
