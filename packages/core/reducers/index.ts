@@ -25,6 +25,7 @@ export const selectors = {
   getIndexError: (state: CoreState) => dbSelectors.getIndexError(state.db),
   isLoggedIn: (state: CoreState) => dbSelectors.isLoggedIn(state.db),
   getAppDb: (state: CoreState) => dbSelectors.getAppDb(state.db),
+  getConnection: (state: CoreState) => dbSelectors.getConnection(state.db),
   getAppError: (state: CoreState) => dbSelectors.getAppError(state.db),
   getSettingsRepository: (state: CoreState) => dbSelectors.getSettingsRepository(state.db),
 

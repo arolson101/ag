@@ -5,14 +5,20 @@ declare module 'react-electron-menu' {
 
   export class WindowMenu extends React.Component {}
   export class MenuItem extends React.Component<{
+    label?: string
+    role?: string
+    type?: string
+    accelerator?: string
+    icon?: string
     checked?: boolean
-    onClick?: () => any
     enabled?: boolean
-    label: string
-    visible?: boolean
+    onClick?: () => any
   }> {}
 
+  export class DefaultFileMenu extends React.Component<{
+    appName: string
+    onAbout: () => any
+  }> {}
   export class DefaultEditMenu extends React.Component {}
-  export class DefaultFileMenu extends React.Component {}
   export class DefaultWindowMenu extends React.Component {}
 }

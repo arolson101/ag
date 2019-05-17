@@ -51,6 +51,7 @@ export const dbSelectors = {
     }
     return state.app
   },
+  getConnection: (state: DbState) => state.app && state.app.connection,
   getAppError: (state: DbState) => state.appError,
   getSettingsRepository: (state: DbState) => {
     if (!state.app) {

@@ -1,7 +1,7 @@
 import { SystemCallbacks } from '@ag/core/context'
-import electron, { nativeImage } from 'electron'
+import { nativeImage, remote } from 'electron'
 
-const dialog = (electron.remote || electron).dialog
+const { dialog } = remote
 
 export const getImageFromLibrary: SystemCallbacks['getImageFromLibrary'] = async (
   width,
