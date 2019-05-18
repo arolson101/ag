@@ -7171,7 +7171,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.3, create-react-class@^15.6.0, create-react-class@^15.6.3:
+create-react-class@^15.5.3, create-react-class@^15.6.3:
   version "15.6.3"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   integrity sha512-M+/3Q6E6DLO6Yx3OwrWjwHBnvfXXYA7W+dFjt/ZDBemHO1DDZhsalX/NUtnTYclN6GfnBDRh4qRHjcDHmlJBJg==
@@ -16287,14 +16287,6 @@ react-draggable@^3.1.1:
     classnames "^2.2.5"
     prop-types "^15.6.0"
 
-react-electron-menu@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/react-electron-menu/-/react-electron-menu-0.3.0.tgz#d1a6e001d6550edde95b86cf67dbbc474cb5a155"
-  integrity sha1-0abgAdZVDt3pW4bPZ9u8R0y1oVU=
-  dependencies:
-    react "^15.4.2"
-    react-test-renderer "^15.4.2"
-
 react-error-overlay@^5.1.4:
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.5.tgz#884530fd055476c764eaa8ab13b8ecf1f57bbf2c"
@@ -16782,14 +16774,6 @@ react-syntax-highlighter@^8.0.1:
     prismjs "^1.8.4"
     refractor "^2.4.1"
 
-react-test-renderer@^15.4.2:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-15.6.2.tgz#d0333434fc2c438092696ca770da5ed48037efa8"
-  integrity sha1-0DM0NPwsQ4CSaWyncNpe1IA376g=
-  dependencies:
-    fbjs "^0.8.9"
-    object-assign "^4.1.0"
-
 react-textarea-autosize@^7.0.4:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-7.1.0.tgz#3132cb77e65d94417558d37c0bfe415a5afd3445"
@@ -16828,17 +16812,6 @@ react-tween-state@^0.1.5:
   dependencies:
     raf "^3.1.0"
     tween-functions "^1.0.1"
-
-react@^15.4.2:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.6.2.tgz#dba0434ab439cfe82f108f0f511663908179aa72"
-  integrity sha1-26BDSrQ5z+gvEI8PURZjkIF5qnI=
-  dependencies:
-    create-react-class "^15.6.0"
-    fbjs "^0.8.9"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
 
 react@^16.7.0, react@^16.8.1, react@^16.8.6:
   version "16.8.6"
