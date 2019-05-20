@@ -47,6 +47,7 @@ export const ui: UiContext = {
       visible={isOpen}
       onCancel={onClose}
       maskClosable={false}
+      destroyOnClose
       centered
       bodyStyle={{ maxHeight: 'calc(100vh - 325px)', overflowY: 'auto' }}
       footer={[
