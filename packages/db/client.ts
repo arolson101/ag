@@ -16,7 +16,7 @@ export class ExecuteLink extends ApolloLink {
   request(operation: Operation, forward?: NextLink): Observable<FetchResult> | null {
     return new Observable(observer => {
       const contextValue = this.context()
-      log('ExecuteLink %o', { operation, contextValue })
+      // log('ExecuteLink %o', { operation, contextValue })
       Promise.resolve(
         execute({
           schema,
@@ -27,7 +27,7 @@ export class ExecuteLink extends ApolloLink {
         })
       )
         .then(data => {
-          log('success %o', data)
+          // log('success %o', data)
           observer.next(data)
           observer.complete()
         })
