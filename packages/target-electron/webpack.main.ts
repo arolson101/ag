@@ -26,11 +26,17 @@ const config: webpack.Configuration = {
     // },
   },
   resolve: {
+    // mainFields: ['browser', 'main', 'module'],
     aliasFields: [],
     extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
   },
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        use: ['source-map-loader'],
+        enforce: 'pre',
+      },
       {
         test: /\.tsx?$/,
         exclude: '/node_modules/',

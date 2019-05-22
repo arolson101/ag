@@ -29,11 +29,17 @@ const config: webpack.Configuration = {
   name: 'vendor',
   // mode: "development || "production",
   resolve: {
+    // mainFields: ['browser', 'main', 'module'],
     aliasFields: [],
     extensions: ['.mjs', '.js', '.jsx'],
   },
   module: {
     rules: [
+      {
+        test: /\.js$/,
+        use: ['source-map-loader'],
+        enforce: 'pre',
+      },
       {
         test: /\.mjs$/,
         type: 'javascript/auto',
