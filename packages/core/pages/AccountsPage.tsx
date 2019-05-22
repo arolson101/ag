@@ -231,18 +231,18 @@ const BankTable = Object.assign(
           </Link>
         ),
       },
-      {
-        dataIndex: 'sortOrder',
-        title: 'sortOrder',
-      },
-      {
-        dataIndex: 'id',
-        title: 'id',
-      },
-      {
-        dataIndex: 'number',
-        title: intl.formatMessage(messages.colNumber),
-      },
+      // {
+      //   dataIndex: 'sortOrder',
+      //   title: 'sortOrder',
+      // },
+      // {
+      //   dataIndex: 'id',
+      //   title: 'id',
+      // },
+      // {
+      //   dataIndex: 'number',
+      //   title: intl.formatMessage(messages.colNumber),
+      // },
       {
         dataIndex: 'visible',
         title: intl.formatMessage(messages.colVisible),
