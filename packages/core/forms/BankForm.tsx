@@ -40,7 +40,7 @@ const fragments = {
       web
       address
       notes
-      favicon
+      icon
 
       online
 
@@ -138,7 +138,7 @@ const FormComponent = Object.assign(
                       formik.setFieldValue('name', name)
                       formik.setFieldValue('fi', valueStr)
                       formik.setFieldValue('web', web)
-                      formik.setFieldValue('favicon', generateAvatar(name))
+                      formik.setFieldValue('icon', '')
                       formik.setFieldValue('address', formatAddress(fi) || '')
                       formik.setFieldValue('fid', fi.fid || '')
                       formik.setFieldValue('org', fi.org || '')

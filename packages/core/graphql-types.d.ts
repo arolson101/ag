@@ -1,4 +1,4 @@
-import { ImageSource } from '@ag/util'
+import { ImageSource, ImageString } from '@ag/util'
 export type Maybe<T> = T | null
 
 export interface AccountInput {
@@ -28,7 +28,7 @@ export interface BankInput {
 
   notes?: Maybe<string>
 
-  favicon?: Maybe<ImageSource>
+  icon?: Maybe<ImageString>
 
   online?: Maybe<boolean>
 
@@ -128,7 +128,7 @@ export namespace MenuBar {
 
     name: string
 
-    favicon: ImageSource
+    icon: ImageString
 
     accounts: Accounts[]
   }
@@ -322,7 +322,7 @@ export namespace AccountPage {
 
     name: string
 
-    favicon: ImageSource
+    icon: ImageString
   }
 
   export type Transactions = {
@@ -518,7 +518,7 @@ export namespace BankFields {
 
     notes: string
 
-    favicon: ImageSource
+    icon: ImageString
 
     online: boolean
 
@@ -562,7 +562,7 @@ export namespace BankFieldsAccountsPage {
 
     name: string
 
-    favicon: ImageSource
+    icon: ImageString
 
     online: boolean
 

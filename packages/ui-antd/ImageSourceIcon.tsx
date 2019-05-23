@@ -1,24 +1,29 @@
 import { IconName } from '@ag/core/context'
-import { ImageSource } from '@ag/util'
+import { ImageSource, ImageString } from '@ag/util'
 import * as Antd from 'antd'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 type Props = React.ComponentProps<typeof Antd.Icon> & {
-  src: ImageSource | undefined
+  src: ImageString | undefined
 }
 
-export const ImageSourceIcon: React.FC<Props> = ({ src, ...props }) => (
-  <Antd.Icon
-    {...props}
-    component={
-      src
-        ? () => (
-            <Antd.Avatar size='small' shape='square' style={{ borderRadius: 0 }} src={src.uri} />
-          )
-        : undefined
-    }
-  />
-)
+export const ImageSourceIcon: React.FC<Props> = ({ src, ...props }) => {
+  const img = useMemo(() => {
+    return ImageSource.fromString(src)
+  }, [src])
+  return (
+    <Antd.Icon
+      {...props}
+      component={
+        src
+          ? () => (
+              <Antd.Avatar size='small' shape='square' style={{ borderRadius: 0 }} src={img.uri} />
+            )
+          : undefined
+      }
+    />
+  )
+}
 
 export const mapIconName = (icon?: IconName): string | undefined => {
   // https://beta.ant.design/components/icon/

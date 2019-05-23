@@ -5,7 +5,7 @@
   "generates": {
     "graphql-types.d.ts": {
       "plugins": [
-        { "add": "import { ImageSource } from '@ag/util'" },
+        { "add": "import { ImageSource, ImageString } from '@ag/util'" },
         "typescript-common",
         "typescript-client"
       ],
@@ -15,7 +15,8 @@
           "AccountType": "@ag/db#AccountType"
         },
         "scalars": {
-          "ImageSource": "ImageSource"
+          "ImageSource": "ImageSource",
+          "ImageString": "ImageString"
         }
       }
     }

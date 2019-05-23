@@ -17,7 +17,7 @@ const queries = {
       banks {
         id
         name
-        favicon
+        icon
         accounts {
           id
           name
@@ -47,10 +47,10 @@ export const MenuBar = Object.assign(
                       (bank): NavMenuItem => ({
                         key: bank.id,
                         title: bank.name,
-                        image: bank.favicon,
+                        image: bank.icon,
                         subitems: bank.accounts.map(
                           (account): NavMenuItem => ({
-                            image: bank.favicon,
+                            image: bank.icon,
                             key: account.id,
                             title: account.name,
                             active: false,

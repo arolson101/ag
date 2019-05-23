@@ -1,4 +1,4 @@
-import { ImageSource } from '@ag/util'
+import { ImageSource, ImageString } from '@ag/util'
 import debug from 'debug'
 import { FormikProvider, useFormik } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -12,13 +12,8 @@ const log = debug('core:PictureDialog')
 interface Props {
   isOpen: boolean
   url: string
-  onSelected: (uri: ImageSource) => any
+  onSelected: (uri: ImageString) => any
   cancelToken?: string
-}
-
-interface State {
-  url: string
-  cancelToken: string
 }
 
 interface Values {
@@ -29,7 +24,7 @@ const thumbnailSize = 100
 
 interface ImageTileProps {
   link: string
-  selectItem: (source: ImageSource) => any
+  selectItem: (source: ImageString) => any
 }
 
 const ImageTile = React.memo<ImageTileProps>(function _ImageTile({ link, selectItem }) {
@@ -37,14 +32,14 @@ const ImageTile = React.memo<ImageTileProps>(function _ImageTile({ link, selectI
   const ui = useUi()
   const { Button, Spinner, Tile, Text, Image } = ui
   const [loading, setLoading] = useState(false)
-  const [image, setImage] = useState<ImageSource | undefined>(undefined)
+  const [image, setImage] = useState<ImageString | undefined>(undefined)
 
   useEffect(() => {
     const cancelToken = online.CancelToken.source()
     setLoading(true)
     online
       .getImage(link, cancelToken.token)
-      .then(buf => setImage(ImageSource.fromImageBuf(buf)))
+      .then(buf => setImage(ImageSource.fromImageBuf(buf).encodeString()))
       .finally(() => setLoading(false))
     return cancelToken.cancel
   }, [online.getImage, link, setImage])
@@ -89,8 +84,8 @@ export const PictureDialog = Object.assign(
     }, [closeDlg])
 
     const selectItem = useCallback(
-      async (source: ImageSource) => {
-        let image = source.toImageBuf()
+      async (source: ImageString) => {
+        let image = ImageSource.fromString(source).toImageBuf()
         // image = await openCropper(source.toImageBuf())
         // if (!image) {
         //   return
@@ -101,7 +96,8 @@ export const PictureDialog = Object.assign(
           image = await scaleImage(image, scale)
         }
 
-        onSelected(ImageSource.fromImageBuf(image))
+        const str = ImageSource.fromImageBuf(image).encodeString()
+        onSelected(str)
         close()
       },
       [onSelected, close, thumbnailSize, scaleImage]

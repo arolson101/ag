@@ -1,4 +1,4 @@
-import { ImageSource } from '@ag/util'
+import { ImageString } from '@ag/util'
 import debug from 'debug'
 import React, { ComponentType } from 'react'
 import { Omit } from 'utility-types'
@@ -39,7 +39,7 @@ export interface ButtonProps {
 }
 
 export interface CardProps {
-  image?: ImageSource
+  image?: ImageString
   title?: string
 }
 
@@ -57,7 +57,7 @@ export interface DialogProps {
 }
 
 export interface ListItem {
-  image?: ImageSource
+  image?: ImageString
   title?: React.ReactNode
   subtitle?: React.ReactNode
   content?: React.ReactNode
@@ -90,7 +90,7 @@ export interface ButtonConfig {
 export interface NavMenuItem {
   key: string
   divider?: boolean
-  image?: ImageSource
+  image?: ImageString
   title?: string
   active?: boolean
   onClick?: () => any
@@ -104,7 +104,7 @@ export interface NavMenuProps {
 
 export interface PageProps {
   title: string
-  image?: ImageSource
+  image?: ImageString
   subtitle?: string
   button?: ButtonConfig
 }
@@ -120,7 +120,7 @@ export interface TableColumn<T extends {}> {
 
 export interface TableProps<T extends {} = any> {
   titleText?: string
-  titleImage?: ImageSource
+  titleImage?: ImageString
   titleContextMenuHeader?: string
   titleActions?: ActionItem[]
   rowContextMenu?: (row: T) => ContextMenuProps
@@ -152,7 +152,7 @@ export const tabConfig = (id: string, name: string) => ({
 })
 
 export interface ImageProps {
-  src: ImageSource
+  src: ImageString
   size?: number | string
   margin?: number
   title?: string

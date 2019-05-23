@@ -1,4 +1,4 @@
-import { fixUrl, generateAvatar, ImageSource, isUrl } from '@ag/util'
+import { fixUrl, generateAvatar, ImageSource, ImageString, isUrl } from '@ag/util'
 import debug from 'debug'
 import { Field, useField, useFormikContext } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -45,7 +45,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const formik = useFormikContext<any>()
   const [{ value: name }] = useField(nameField) as Field<string>
   const [{ value: url }] = useField(field) as Field<string>
-  const [{ value }] = useField(favicoField) as Field<ImageSource>
+  const [{ value }] = useField(favicoField) as Field<ImageString>
 
   const [source, setSource] = useState<string | undefined>(undefined)
   const [loading, setLoading] = useState(false)
@@ -112,7 +112,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   }, [url, source])
 
   const onPictureChosen = useCallback(
-    (val: ImageSource) => {
+    (val: ImageString) => {
       formik.setFieldValue(favicoField, val)
     },
     [formik, favicoField]
@@ -174,9 +174,9 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
           ]}
           minimal
           loading={loading}
-          icon={value && value.width ? <Image size={20} src={value} /> : undefined}
+          icon={value ? <Image size={20} src={value} /> : undefined}
         >
-          {!loading && (!value || !value.width) && <Text>...</Text>}
+          {!loading && !value && <Text>...</Text>}
         </PopoverButton>
       }
     />

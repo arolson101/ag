@@ -1,4 +1,4 @@
-import { ImageSource } from '@ag/util'
+import { ImageSource, ImageString } from '@ag/util'
 import { getType } from 'typesafe-actions'
 import { actions, CoreAction } from '../actions'
 
@@ -9,7 +9,7 @@ export interface DialogState {
   pictureDialog?: {
     isOpen: boolean
     url: string
-    onSelected: (uri: ImageSource) => any
+    onSelected: (uri: ImageString) => any
   }
   bankDialog?: {
     isOpen: boolean

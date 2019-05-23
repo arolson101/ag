@@ -1,7 +1,8 @@
-import { ImageSource, ISpec } from '@ag/util'
+import { ImageSource, ImageString, ISpec } from '@ag/util'
 import debug from 'debug'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { ImageStringScalar } from '../customTypes'
 import { BankInput } from './BankInput'
 import { DbChange } from './DbChange'
 import { Record } from './Record'
@@ -17,7 +18,7 @@ export class Bank extends Record<Bank.Props> {
   @Column() @Field() web!: string
   @Column() @Field() address!: string
   @Column() @Field() notes!: string
-  @Column(type => ImageSource) @Field() favicon!: ImageSource
+  @Column() @Field(type => ImageStringScalar) icon!: ImageString
 
   @Column() @Field() online!: boolean
 
@@ -30,7 +31,6 @@ export class Bank extends Record<Bank.Props> {
 
   constructor(id?: string, props?: BankInput) {
     super(id, { ...Bank.defaultValues, ...props })
-    this.favicon = new ImageSource(this.favicon)
     // log('Bank constructor %o', this)
   }
 }
@@ -64,7 +64,7 @@ export namespace Bank {
     web: '',
     address: '',
     notes: '',
-    favicon: ImageSource.fromString(''),
+    icon: '' as ImageString,
 
     online: true,
 

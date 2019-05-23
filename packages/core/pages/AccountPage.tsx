@@ -25,7 +25,7 @@ const queries = {
         name
         bank {
           name
-          favicon
+          icon
         }
         transactions {
           id
@@ -98,7 +98,7 @@ const Component = Object.assign(
 
     return (
       <Page
-        image={account ? account.bank.favicon : undefined}
+        image={account ? account.bank.icon : undefined}
         title={title}
         subtitle={subtitle}
         button={{

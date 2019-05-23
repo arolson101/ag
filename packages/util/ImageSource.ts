@@ -5,6 +5,8 @@ import { CompressedJson, dehydrate, hydrate } from './dehydrate'
 
 const log = debug('util:ImageSource')
 
+export type ImageString = CompressedJson<{ width: number; height: number; uri: string }>
+
 export interface ImageBuf {
   width: number
   height: number
@@ -24,7 +26,7 @@ export class ImageSource {
     // log('ImageSource constructor %o', this)
   }
 
-  encodeString(): string {
+  encodeString(): ImageString {
     return dehydrate({ width: this.width, height: this.height, uri: this.uri })
   }
 
@@ -34,9 +36,9 @@ export class ImageSource {
     return { width, height, mime, buf }
   }
 
-  static fromString(data: CompressedJson<ImageSource> | string): ImageSource {
+  static fromString(data: undefined | ImageString): ImageSource {
     if (data) {
-      const props = hydrate(data as CompressedJson<ImageSource>)
+      const props = hydrate(data)
       return new ImageSource(props)
     } else {
       return new ImageSource()

@@ -28,7 +28,7 @@ const fragments = {
     fragment bankFields_AccountsPage on Bank {
       id
       name
-      favicon
+      icon
       online
       accounts {
         id
@@ -252,7 +252,7 @@ const BankTable = Object.assign(
     return (
       <Table
         titleText={bank.name}
-        titleImage={bank.favicon}
+        titleImage={bank.icon}
         titleContextMenuHeader={bank.name}
         titleActions={titleActions.current}
         rowKey={'id'}
