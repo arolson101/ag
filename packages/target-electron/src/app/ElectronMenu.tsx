@@ -28,7 +28,7 @@ export const ElectronMenu: React.FC = () => {
 
   useEffect(() => {
     const template: MenuItemConstructorOptions[] = [
-      { role: 'appMenu' as any },
+      ...(isMac ? [{ role: 'appMenu' as any }] : []),
       {
         role: 'fileMenu' as any,
         submenu: [
