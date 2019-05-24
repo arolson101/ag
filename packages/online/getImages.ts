@@ -1,4 +1,4 @@
-import { decodeDataURI, fixUrl, ImageBuf, imageSize, isDataURI } from '@ag/util'
+import { DataURI, decodeDataURI, fixUrl, ImageBuf, imageSize, isDataURI } from '@ag/util'
 import Axios, { AxiosResponse, CancelToken } from 'axios'
 import debug from 'debug'
 import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
@@ -94,7 +94,7 @@ export const getImage = async (link: string, cancelToken: CancelToken) => {
     let mime: string
 
     if (isDataURI(link)) {
-      const data = decodeDataURI(link)
+      const data = decodeDataURI(link as DataURI)
       buf = data.buf
       mime = data.mime
     } else {

@@ -1,10 +1,11 @@
 import debug from 'debug'
 import { Column } from 'typeorm'
-import { decodeDataURI, encodeDataURI } from './datauri'
+import { DataURI, decodeDataURI, encodeDataURI } from './datauri'
 import { CompressedJson, dehydrate, hydrate } from './dehydrate'
 
 const log = debug('util:ImageSource')
 
+export type ImageURI = DataURI<{ width: string; height: string }>
 export type ImageString = CompressedJson<{ width: number; height: number; uri: string }>
 
 export interface ImageBuf {
@@ -32,7 +33,7 @@ export class ImageSource {
 
   toImageBuf(): ImageBuf {
     const { width, height, uri } = this
-    const { buf, mime } = decodeDataURI(uri)
+    const { buf, mime } = decodeDataURI(uri as ImageURI)
     return { width, height, mime, buf }
   }
 

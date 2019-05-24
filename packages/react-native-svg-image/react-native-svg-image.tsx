@@ -1,4 +1,4 @@
-import { decodeDataURI, isDataURI } from '@ag/util'
+import { DataURI, decodeDataURI, isDataURI } from '@ag/util'
 import Axios, { CancelTokenSource } from 'axios'
 import css, { Declaration, Rule } from 'css'
 import debug from 'debug'
@@ -83,7 +83,7 @@ export class SvgUri extends Component<SvgUriProps, State> {
     } else {
       let text: string
       if (isDataURI(uri)) {
-        const { buf } = decodeDataURI(uri)
+        const { buf } = decodeDataURI(uri as DataURI)
         text = buf.toString()
       } else {
         const data = await Axios.get<string>(uri, { cancelToken: this.cancelSource.token })
