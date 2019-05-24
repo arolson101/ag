@@ -32,6 +32,7 @@ const fragments = {
       online
       accounts {
         id
+        icon
         name
         number
         visible
@@ -46,6 +47,7 @@ const fragments = {
       bankId
 
       name
+      icon
       color
       type
       number
@@ -115,7 +117,7 @@ const BankTable = Object.assign(
     const openAccountEditDlg = useAction(actions.openDlg.accountEdit)
     const navAccount = useAction(actions.nav.account)
     const ui = useUi()
-    const { Link, Text, Row, Table, showToast } = ui
+    const { Link, Text, Row, Table, Image, showToast } = ui
 
     const setAccountsOrder = useMutation(mutations.SetAccountsOrder, {
       refetchQueries: [{ query: queries.AccountsPage }],
@@ -227,7 +229,10 @@ const BankTable = Object.assign(
         title: intl.formatMessage(messages.colName),
         render: (text: string, account: Row) => (
           <Link onClick={() => navAccount({ accountId: account.id })}>
-            <Text>{account.name}</Text>
+            <Row>
+              <Image src={account.icon || bank.icon} size={16} />
+              <Text>{account.name}</Text>
+            </Row>
           </Link>
         ),
       },

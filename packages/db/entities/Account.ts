@@ -1,8 +1,9 @@
-import { ISpec } from '@ag/util'
+import { ImageUri, ISpec } from '@ag/util'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { ImageUriScalar } from '../customTypes'
 import { AccountInput } from './AccountInput'
 import { AccountType } from './AccountType'
 import { DbChange } from './DbChange'
@@ -21,6 +22,7 @@ export class Account extends Record<Account.Props> {
   @Column() @Field() visible!: boolean
   @Column() @Field() routing!: string
   @Column() @Field() key!: string
+  @Column() @Field(type => ImageUriScalar) icon!: ImageUri
   @Column() @Field() sortOrder!: number
 
   constructor(bankId?: string, id?: string, props?: AccountInput) {
@@ -107,5 +109,6 @@ export namespace Account {
     routing: '',
     key: '',
     sortOrder: -1,
+    icon: '',
   })
 }

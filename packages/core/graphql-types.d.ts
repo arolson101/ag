@@ -17,6 +17,8 @@ export interface AccountInput {
 
   key?: Maybe<string>
 
+  icon?: Maybe<ImageUri>
+
   sortOrder?: Maybe<number>
 }
 
@@ -104,8 +106,7 @@ export type AccountTypeValueMap = {
   CREDITCARD: AccountType
 }
 
-/** An object containing image data */
-export type ImageUri = any
+/** An image data URI */
 
 /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
 export type DateTime = any
@@ -168,6 +169,10 @@ export namespace AccountForm {
     __typename?: 'Bank'
 
     name: string
+
+    icon: ImageUri
+
+    web: string
   }
 }
 
@@ -498,6 +503,8 @@ export namespace AccountFieldsAccountForm {
 
     sortOrder: number
 
+    icon: ImageUri
+
     bank: Bank
   }
 
@@ -505,6 +512,10 @@ export namespace AccountFieldsAccountForm {
     __typename?: 'Bank'
 
     name: string
+
+    icon: ImageUri
+
+    web: string
   }
 }
 
@@ -576,6 +587,8 @@ export namespace BankFieldsAccountsPage {
 
     id: string
 
+    icon: ImageUri
+
     name: string
 
     number: string
@@ -595,6 +608,8 @@ export namespace AccountFieldsAccountsPage {
     bankId: string
 
     name: string
+
+    icon: ImageUri
 
     color: string
 

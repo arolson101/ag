@@ -1,4 +1,5 @@
 export * from './ErrorDisplay'
 export * from './Link'
 export * from './MenuBar'
+export * from './TextFieldWithIcon'
 export * from './UrlField'

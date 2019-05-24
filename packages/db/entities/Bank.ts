@@ -64,7 +64,7 @@ export namespace Bank {
     web: '',
     address: '',
     notes: '',
-    icon: '' as ImageUri,
+    icon: '',
 
     online: true,
 

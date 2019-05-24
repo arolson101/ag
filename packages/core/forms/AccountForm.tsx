@@ -5,7 +5,7 @@ import { FormikErrors, FormikProvider, useField, useFormik, useFormikContext } f
 import gql from 'graphql-tag'
 import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
-import { ErrorDisplay } from '../components'
+import { ErrorDisplay, TextFieldWithIcon } from '../components'
 import { typedFields, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
@@ -31,8 +31,11 @@ const fragments = {
       routing
       key
       sortOrder
+      icon
       bank {
         name
+        icon
+        web
       }
     }
   `,
@@ -47,6 +50,8 @@ const queries = {
       }
       bank(bankId: $bankId) {
         name
+        icon
+        web
       }
     }
     ${fragments.accountFields}
@@ -75,15 +80,19 @@ interface ComponentProps extends Props {
   saveAccount: MutationFn<T.SaveAccount.Mutation, T.SaveAccount.Variables>
 }
 
+const iconSize = 100
+
 const FormComponent = Object.assign(
   React.memo<ComponentProps>(function _FormComponent(props) {
     const intl = useIntl()
-    const { Text } = useUi()
+    const { Text, Image, Row } = useUi()
     const { Form, SelectField, TextField } = typedFields<FormValues>(useUi())
     const { data, loading } = props
 
     const account = loading ? undefined : data && data.account
     const bank = loading ? undefined : data && data.bank
+    const bankUrl = account ? account.bank.web : bank ? bank.web : ''
+    const bankIcon = account ? account.bank.icon : bank ? bank.icon : ''
 
     const formik = useFormikContext<FormValues>()
     const [type] = useField('type')
@@ -95,9 +104,17 @@ const FormComponent = Object.assign(
 
     return (
       <Form onSubmit={formik.handleSubmit}>
-        <Text header>{account ? account.bank.name : bank ? bank.name : '<no bank>'}</Text>
-        <TextField
+        <Row>
+          <Image size={24} src={bankIcon} />
+          <Text header>{account ? account.bank.name : bank ? bank.name : '<no bank>'}</Text>
+        </Row>
+        <TextFieldWithIcon<FormValues>
           field='name'
+          favicoField='icon'
+          defaultUrl={bankUrl}
+          defaultIcon={bankIcon}
+          favicoWidth={iconSize}
+          favicoHeight={iconSize}
           label={intl.formatMessage(messages.name)}
           placeholder={intl.formatMessage(messages.namePlaceholder)}
           autoFocus={!account}
