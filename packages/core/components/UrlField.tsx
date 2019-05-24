@@ -78,7 +78,8 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
         setLoading(true)
         const favico = await online.getFavico(newUrl, cancelSource.token)
         // log('got favico %O', favico)
-        formik.setFieldValue(favicoField, ImageSource.fromImageBuf(favico))
+        const str = ImageSource.fromImageBuf(favico).encodeString()
+        formik.setFieldValue(favicoField, str)
         setLoading(false)
       } catch (err) {
         if (!online.isCancel(err)) {
@@ -127,7 +128,8 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
     const val = await getImageFromLibrary(favicoWidth, favicoHeight)
     log('getImageFromLibrary from %o', val)
     if (val) {
-      formik.setFieldValue(favicoField, ImageSource.fromImageBuf(val))
+      const str = ImageSource.fromImageBuf(val).encodeString()
+      formik.setFieldValue(favicoField, str)
     }
   }, [getImageFromLibrary, favicoWidth, favicoHeight, favicoField, formik])
 
