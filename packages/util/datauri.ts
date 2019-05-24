@@ -8,22 +8,24 @@ export interface DataURIProps<T extends StringMap = StringMap> {
   buf: Buffer
 }
 
-export type DataURI<T extends StringMap = StringMap> = string & { __tag: T }
+export type DataUri<T extends StringMap = StringMap> = string & { __tag: T }
 
-export const isDataURI = (str: string): boolean => {
+export const isDataUri = (str: string): str is DataUri => {
   return str.startsWith(dataSig)
 }
 
 export const encodeDataURI = <T extends StringMap = StringMap>(
-  props: DataURIProps<T>,
+  mime: string,
+  buf: Buffer,
+  attrs: T,
   encoding: string = 'base64'
-): DataURI<T> => {
-  const kvps = Object.keys(props.attrs || {}).map(key => `${key}=${props.attrs![key]}`)
-  const mediaType = [props.mime, ...kvps].join(';')
-  return `${dataSig}${mediaType};${encoding},${props.buf.toString(encoding)}` as DataURI<T>
+): DataUri<T> => {
+  const kvps = Object.keys(attrs || {}).map(key => `${key}=${attrs![key]}`)
+  const mediaType = [mime, ...kvps].join(';')
+  return `${dataSig}${mediaType};${encoding},${buf.toString(encoding)}` as DataUri<T>
 }
 
-const getInfo = <T extends StringMap>(input: DataURI<T>) => {
+const getInfo = <T extends StringMap>(input: DataUri<T>) => {
   const colon = input.indexOf(':')
   const semi = input.lastIndexOf(';')
   const comma = input.indexOf(',')
@@ -42,15 +44,13 @@ const getInfo = <T extends StringMap>(input: DataURI<T>) => {
   return { mime, encoding, data, attrs }
 }
 
-export const decodeDataURI = <T extends StringMap = StringMap>(
-  input: DataURI<T>
-): DataURIProps<T> => {
+export const decodeDataUri = <T extends StringMap = StringMap>(input: DataUri<T>) => {
   const { mime, encoding, data, attrs } = getInfo(input)
   const buf = Buffer.from(data, encoding || undefined)
   return { mime, buf, attrs }
 }
 
-export const getDataURIAttribs = <T extends StringMap = StringMap>(input: DataURI<T>): T => {
+export const getDataURIAttribs = <T extends StringMap = StringMap>(input: DataUri<T>): T => {
   const { attrs } = getInfo(input)
   return attrs
 }

@@ -1,5 +1,5 @@
 import { SystemCallbacks } from '@ag/core/context'
-import { imageSize, ImageSource } from '@ag/util'
+import { imageBufToUri, imageSize } from '@ag/util'
 import crypto from 'crypto'
 import debug from 'debug'
 import Path from 'path'
@@ -77,10 +77,10 @@ export const openCropper: SystemCallbacks['openCropper'] = async image => {
 }
 
 export const scaleImage: SystemCallbacks['scaleImage'] = async (image, scale) => {
-  const source = ImageSource.fromImageBuf(image)
-  const width = scale * source.width
-  const height = scale * source.height
-  const result = await ImageResizer.createResizedImage(source.uri, width, width, 'PNG', 100)
+  const uri = imageBufToUri(image)
+  const width = scale * image.width
+  const height = scale * image.height
+  const result = await ImageResizer.createResizedImage(uri, width, width, 'PNG', 100)
   try {
     const base64 = await RNFS.readFile(result.uri, 'base64')
     const buf = Buffer.from(base64, 'base64')

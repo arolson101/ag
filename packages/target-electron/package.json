@@ -10,8 +10,6 @@
   "scripts": {
     "build": "webpack --mode=production",
     "build:dev": "webpack --mode=development",
-    "precodegen": "lerna run schema --loglevel silent",
-    "codegen": "gql-gen",
     "dev": "ts-node ./dev.ts",
     "electron-builder": "electron-builder install-app-deps",
     "vendor": "webpack --config webpack.dll.ts --mode development"

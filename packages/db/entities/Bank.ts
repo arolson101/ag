@@ -1,8 +1,8 @@
-import { ImageSource, ImageString, ISpec } from '@ag/util'
+import { ImageUri, ISpec } from '@ag/util'
 import debug from 'debug'
 import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { ImageStringScalar } from '../customTypes'
+import { ImageUriScalar } from '../customTypes'
 import { BankInput } from './BankInput'
 import { DbChange } from './DbChange'
 import { Record } from './Record'
@@ -18,7 +18,7 @@ export class Bank extends Record<Bank.Props> {
   @Column() @Field() web!: string
   @Column() @Field() address!: string
   @Column() @Field() notes!: string
-  @Column() @Field(type => ImageStringScalar) icon!: ImageString
+  @Column() @Field(type => ImageUriScalar) icon!: ImageUri
 
   @Column() @Field() online!: boolean
 
@@ -64,7 +64,7 @@ export namespace Bank {
     web: '',
     address: '',
     notes: '',
-    icon: '' as ImageString,
+    icon: '' as ImageUri,
 
     online: true,
 

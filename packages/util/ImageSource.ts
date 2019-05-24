@@ -1,12 +1,11 @@
 import debug from 'debug'
-import { Column } from 'typeorm'
-import { DataURI, decodeDataURI, encodeDataURI } from './datauri'
-import { CompressedJson, dehydrate, hydrate } from './dehydrate'
+import { DataUri, decodeDataUri, encodeDataURI, getDataURIAttribs } from './datauri'
 
 const log = debug('util:ImageSource')
 
-export type ImageURI = DataURI<{ width: string; height: string }>
-export type ImageString = CompressedJson<{ width: number; height: number; uri: string }>
+export type ImageUri = DataUri<{ width: string; height: string }> | ''
+
+const size0x0 = { width: 0, height: 0 }
 
 export interface ImageBuf {
   width: number
@@ -15,46 +14,35 @@ export interface ImageBuf {
   buf: Buffer
 }
 
-export class ImageSource {
-  @Column() width: number
-  @Column() height: number
-  @Column() uri: string
+const attribsFromDimensions = ({ width, height }: { width: number; height: number }) => ({
+  width: width.toString(),
+  height: height.toString(),
+})
 
-  constructor(props?: { width: number; height: number; uri: string }) {
-    this.width = props ? props.width : 0
-    this.height = props ? props.height : 0
-    this.uri = props ? props.uri : ''
-    // log('ImageSource constructor %o', this)
-  }
+export const imageBufToUri = (buf: ImageBuf | undefined): ImageUri => {
+  return buf ? encodeDataURI(buf.mime, buf.buf, attribsFromDimensions(buf)) : ''
+}
 
-  encodeString(): ImageString {
-    return dehydrate({ width: this.width, height: this.height, uri: this.uri })
-  }
+const dimensionsFromAttribs = ({ width, height }: { width: string; height: string }) => ({
+  width: parseFloat(width),
+  height: parseFloat(height),
+})
 
-  toImageBuf(): ImageBuf {
-    const { width, height, uri } = this
-    const { buf, mime } = decodeDataURI(uri as ImageURI)
-    return { width, height, mime, buf }
-  }
+export const imageUriDimensions = (uri: ImageUri) => {
+  return uri ? dimensionsFromAttribs(getDataURIAttribs(uri)) : size0x0
+}
 
-  static fromString(data: undefined | ImageString): ImageSource {
-    if (data) {
-      const props = hydrate(data)
-      return new ImageSource(props)
-    } else {
-      return new ImageSource()
-    }
-  }
+export const toImageURISource = (uri: ImageUri) => {
+  const { width, height } = imageUriDimensions(uri)
+  return { width, height, uri }
+}
 
-  static fromImageBuf(data: ImageBuf | undefined): ImageSource {
-    if (data) {
-      const { buf, mime, width, height } = data
-      const uri = encodeDataURI({ mime, buf })
-      return new ImageSource({ width, height, uri })
-    } else {
-      return new ImageSource()
-    }
+export const imageUriToBuf = (uri: ImageUri): ImageBuf => {
+  if (!uri) {
+    throw new Error('empty URI')
   }
+  const { buf, attrs, mime } = decodeDataUri(uri)
+  return { ...(attrs ? dimensionsFromAttribs(attrs) : size0x0), mime, buf }
 }
 
 interface ImageSize {

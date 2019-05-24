@@ -1,4 +1,4 @@
-import { fixUrl, generateAvatar, ImageSource, ImageString, isUrl } from '@ag/util'
+import { fixUrl, generateAvatar, imageBufToUri, ImageUri, isUrl } from '@ag/util'
 import debug from 'debug'
 import { Field, useField, useFormikContext } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -26,7 +26,6 @@ interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldP
   favicoWidth: number
   favicoHeight: number
   placeholder?: string
-  cancelToken?: string
 }
 
 type Field<T> = [{ value: T }, {}]
@@ -45,7 +44,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const formik = useFormikContext<any>()
   const [{ value: name }] = useField(nameField) as Field<string>
   const [{ value: url }] = useField(field) as Field<string>
-  const [{ value }] = useField(favicoField) as Field<ImageString>
+  const [{ value }] = useField(favicoField) as Field<ImageUri>
 
   const [source, setSource] = useState<string | undefined>(undefined)
   const [loading, setLoading] = useState(false)
@@ -77,9 +76,10 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
       try {
         setLoading(true)
         const favico = await online.getFavico(newUrl, cancelSource.token)
-        // log('got favico %O', favico)
-        const str = ImageSource.fromImageBuf(favico).encodeString()
-        formik.setFieldValue(favicoField, str)
+        log('got favico %O', favico)
+        const uri = imageBufToUri(favico)
+        log('uri %s', uri)
+        formik.setFieldValue(favicoField, uri)
         setLoading(false)
       } catch (err) {
         if (!online.isCancel(err)) {
@@ -113,7 +113,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   }, [url, source])
 
   const onPictureChosen = useCallback(
-    (val: ImageString) => {
+    (val: ImageUri) => {
       formik.setFieldValue(favicoField, val)
     },
     [formik, favicoField]
@@ -128,7 +128,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
     const val = await getImageFromLibrary(favicoWidth, favicoHeight)
     log('getImageFromLibrary from %o', val)
     if (val) {
-      const str = ImageSource.fromImageBuf(val).encodeString()
+      const str = imageBufToUri(val)
       formik.setFieldValue(favicoField, str)
     }
   }, [getImageFromLibrary, favicoWidth, favicoHeight, favicoField, formik])

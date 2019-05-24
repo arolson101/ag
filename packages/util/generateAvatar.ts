@@ -1,8 +1,7 @@
 // tslint:disable:max-line-length
-import { encodeDataURI } from './datauri'
-import { ImageSource } from './ImageSource'
+import { imageBufToUri, ImageUri } from './ImageSource'
 
-export const generateAvatar = (text: string): ImageSource => {
+export const generateAvatar = (text: string): ImageUri => {
   let initials = text
     .split(' ')
     .filter(word => word.length > 1)
@@ -46,8 +45,7 @@ export const generateAvatar = (text: string): ImageSource => {
   `)
 
   const mime = 'image/svg+xml'
-  const uri = encodeDataURI({ buf, mime }, 'base64')
-  return new ImageSource({ width, height, uri })
+  return imageBufToUri({ width, height, buf, mime })
 }
 
 const escapeChars: Record<string, string> = {

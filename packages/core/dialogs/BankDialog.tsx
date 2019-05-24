@@ -10,11 +10,10 @@ const log = debug('core:BankDialog')
 export interface BankDialogProps {
   bankId?: string
   isOpen: boolean
-  cancelToken?: string
 }
 
 export const BankDialog = Object.assign(
-  React.memo<BankDialogProps>(function _BankDialog({ bankId, isOpen, cancelToken }) {
+  React.memo<BankDialogProps>(function _BankDialog({ bankId, isOpen }) {
     const intl = useIntl()
     const closeDlg = useAction(actions.closeDlg)
     const { Dialog } = useUi()
@@ -51,7 +50,7 @@ export const BankDialog = Object.assign(
           onClick: close,
         }}
       >
-        <BankForm onClosed={close} ref={bankForm} bankId={bankId} cancelToken={cancelToken} />
+        <BankForm onClosed={close} ref={bankForm} bankId={bankId} />
       </Dialog>
     )
   }),

@@ -1,4 +1,5 @@
-import { ImageSource, ImageString } from '@ag/util'
+// tslint:disable all
+import { ImageUri } from '@ag/util'
 export type Maybe<T> = T | null
 
 export interface AccountInput {
@@ -28,7 +29,7 @@ export interface BankInput {
 
   notes?: Maybe<string>
 
-  icon?: Maybe<ImageString>
+  icon?: Maybe<ImageUri>
 
   online?: Maybe<boolean>
 
@@ -104,6 +105,7 @@ export type AccountTypeValueMap = {
 }
 
 /** An object containing image data */
+export type ImageUri = any
 
 /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
 export type DateTime = any
@@ -128,7 +130,7 @@ export namespace MenuBar {
 
     name: string
 
-    icon: ImageString
+    icon: ImageUri
 
     accounts: Accounts[]
   }
@@ -322,7 +324,7 @@ export namespace AccountPage {
 
     name: string
 
-    icon: ImageString
+    icon: ImageUri
   }
 
   export type Transactions = {
@@ -518,7 +520,7 @@ export namespace BankFields {
 
     notes: string
 
-    icon: ImageString
+    icon: ImageUri
 
     online: boolean
 
@@ -562,7 +564,7 @@ export namespace BankFieldsAccountsPage {
 
     name: string
 
-    icon: ImageString
+    icon: ImageUri
 
     online: boolean
 

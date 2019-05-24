@@ -1,24 +1,19 @@
 import { IconName } from '@ag/core/context'
-import { ImageSource, ImageString } from '@ag/util'
+import { ImageUri } from '@ag/util'
 import * as Antd from 'antd'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 type Props = React.ComponentProps<typeof Antd.Icon> & {
-  src: ImageString | undefined
+  src: ImageUri | undefined
 }
 
 export const ImageSourceIcon: React.FC<Props> = ({ src, ...props }) => {
-  const img = useMemo(() => {
-    return ImageSource.fromString(src)
-  }, [src])
   return (
     <Antd.Icon
       {...props}
       component={
         src
-          ? () => (
-              <Antd.Avatar size='small' shape='square' style={{ borderRadius: 0 }} src={img.uri} />
-            )
+          ? () => <Antd.Avatar size='small' shape='square' style={{ borderRadius: 0 }} src={src} />
           : undefined
       }
     />

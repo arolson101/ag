@@ -1,13 +1,5 @@
 import { Bank } from '@ag/db'
-import {
-  generateAvatar,
-  Gql,
-  MutationFn,
-  pick,
-  useApolloClient,
-  useMutation,
-  useQuery,
-} from '@ag/util'
+import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
 import debug from 'debug'
 import { FormikErrors, FormikProvider, useField, useFormik, useFormikContext } from 'formik'
 import gql from 'graphql-tag'
@@ -28,7 +20,6 @@ type FormValues = typeof Bank.defaultValues & {
 interface Props {
   bankId?: string
   onClosed: () => any
-  cancelToken?: string
 }
 
 const bankAvatarSize = 100
@@ -91,18 +82,9 @@ const FormComponent = Object.assign(
   React.memo<ComponentProps>(function _FormComponent(props) {
     const intl = useIntl()
     const ui = useUi()
-    const { LoadingOverlay, Tabs, Tab, Text, showToast } = ui
+    const { LoadingOverlay, Tabs, Tab, Text } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
-    const { data, saveBank, loading, bankId, onClosed, cancelToken } = props
-
-    const bank = loading ? undefined : data && data.bank
-    const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0
-    const initialValues = {
-      fi: defaultFi.toString(),
-      ...(bank
-        ? pick(bank, Object.keys(Bank.defaultValues) as Array<keyof Bank.Props>)
-        : Bank.defaultValues),
-    }
+    const { data, loading, bankId } = props
 
     const formik = useFormikContext<FormValues>()
     // const favicoField = useRef<UrlField<FormValues>>(null)
@@ -165,14 +147,13 @@ const FormComponent = Object.assign(
                 rows={4}
                 disabled={loading}
               />
-              <UrlField
+              <UrlField<FormValues>
                 field='web'
                 nameField='name'
-                favicoField='favicon'
+                favicoField='icon'
                 favicoWidth={bankAvatarSize}
                 favicoHeight={bankAvatarSize}
                 label={intl.formatMessage(messages.web)}
-                cancelToken={cancelToken}
                 // ref={favicoField}
                 disabled={loading}
               />
@@ -241,7 +222,7 @@ const Component = Object.assign(
     const intl = useIntl()
     const { showToast } = useUi()
     const online = useOnline()
-    const { data, saveBank, loading, bankId, onClosed, cancelToken } = props
+    const { data, saveBank, loading, bankId, onClosed } = props
 
     const bank = loading ? undefined : data && data.bank
     const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0

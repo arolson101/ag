@@ -1,4 +1,4 @@
-import { ImageSource, ImageString } from '@ag/util'
+import { imageBufToUri, ImageUri, imageUriToBuf } from '@ag/util'
 import debug from 'debug'
 import { FormikProvider, useFormik } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -12,8 +12,7 @@ const log = debug('core:PictureDialog')
 interface Props {
   isOpen: boolean
   url: string
-  onSelected: (uri: ImageString) => any
-  cancelToken?: string
+  onSelected: (uri: ImageUri) => any
 }
 
 interface Values {
@@ -24,7 +23,7 @@ const thumbnailSize = 100
 
 interface ImageTileProps {
   link: string
-  selectItem: (source: ImageString) => any
+  selectItem: (source: ImageUri) => any
 }
 
 const ImageTile = React.memo<ImageTileProps>(function _ImageTile({ link, selectItem }) {
@@ -32,14 +31,14 @@ const ImageTile = React.memo<ImageTileProps>(function _ImageTile({ link, selectI
   const ui = useUi()
   const { Button, Spinner, Tile, Text, Image } = ui
   const [loading, setLoading] = useState(false)
-  const [image, setImage] = useState<ImageString | undefined>(undefined)
+  const [image, setImage] = useState<ImageUri | undefined>(undefined)
 
   useEffect(() => {
     const cancelToken = online.CancelToken.source()
     setLoading(true)
     online
       .getImage(link, cancelToken.token)
-      .then(buf => setImage(ImageSource.fromImageBuf(buf).encodeString()))
+      .then(buf => setImage(imageBufToUri(buf)))
       .finally(() => setLoading(false))
     return cancelToken.cancel
   }, [online.getImage, link, setImage])
@@ -84,8 +83,8 @@ export const PictureDialog = Object.assign(
     }, [closeDlg])
 
     const selectItem = useCallback(
-      async (source: ImageString) => {
-        let image = ImageSource.fromString(source).toImageBuf()
+      async (source: ImageUri) => {
+        let image = imageUriToBuf(source)
         // image = await openCropper(source.toImageBuf())
         // if (!image) {
         //   return
@@ -96,8 +95,8 @@ export const PictureDialog = Object.assign(
           image = await scaleImage(image, scale)
         }
 
-        const str = ImageSource.fromImageBuf(image).encodeString()
-        onSelected(str)
+        const uri = imageBufToUri(image)
+        onSelected(uri)
         close()
       },
       [onSelected, close, thumbnailSize, scaleImage]

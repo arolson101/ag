@@ -54,7 +54,7 @@ export class AccountOnlineResolver {
         const t = Date.now()
         const accounts = accountProfiles
           .map(accountProfile => toAccountInput(bank, accountProfiles, accountProfile))
-          .filter((input): input is Account => input !== undefined)
+          .filter((input): input is Account => !!input)
 
         const adds = accounts
           .filter(account => !existingAccounts.find(acct => accountsEqual(account, acct)))
