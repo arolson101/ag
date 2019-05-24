@@ -123,7 +123,7 @@ const BankTable = Object.assign(
 
     const moveRow = useCallback(
       (srcIndex: number, dstIndex: number) => {
-        log('moveRow %d %d', srcIndex, dstIndex)
+        // log('moveRow %d %d', srcIndex, dstIndex)
         const accountIds = arrayMove(bank.accounts, srcIndex, dstIndex) //
           .map(account => account.id)
         setAccountsOrder({ variables: { accountIds } })

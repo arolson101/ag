@@ -1,6 +1,6 @@
 import { fixUrl, generateAvatar, imageBufToUri, ImageUri, isUrl } from '@ag/util'
 import debug from 'debug'
-import { Field, useField, useFormikContext } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { timer } from 'rxjs'
@@ -28,8 +28,6 @@ interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldP
   placeholder?: string
 }
 
-type Field<T> = [{ value: T }, {}]
-
 export const UrlField = <Values extends Record<string, any>>(props: Props<Values>) => {
   const intl = useIntl()
   const openPictureDlg = useAction(actions.openDlg.picture)
@@ -42,9 +40,9 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const { favicoWidth, favicoHeight, favicoField } = props
 
   const formik = useFormikContext<any>()
-  const [{ value: name }] = useField(nameField) as Field<string>
-  const [{ value: url }] = useField(field) as Field<string>
-  const [{ value }] = useField(favicoField) as Field<ImageUri>
+  const [{ value: name }] = useField<string>(nameField)
+  const [{ value: url }] = useField<string>(field)
+  const [{ value }] = useField<ImageUri>(favicoField)
 
   const [source, setSource] = useState<string | undefined>(undefined)
   const [loading, setLoading] = useState(false)
