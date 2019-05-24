@@ -266,6 +266,7 @@ const BankTable = Object.assign(
         data={bank.accounts}
         columns={columns.current}
         moveRow={moveRow}
+        dragId={bank.id}
       />
     )
   }),

@@ -91,18 +91,19 @@ const rowTarget: DropTargetSpec<BodyRowProps> = {
   },
 }
 
-const type = 'row'
+const getDragableBodyRow = (type: string) => {
+  const dragSource = DragSource(type, rowSource, connect => ({
+    connectDragSource: connect.dragSource(),
+  }))
 
-const dragSource = DragSource(type, rowSource, connect => ({
-  connectDragSource: connect.dragSource(),
-}))
+  const dropTarget = DropTarget(type, rowTarget, (connect, monitor) => ({
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+  }))
 
-const dropTarget = DropTarget(type, rowTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-}))
-
-const DragableBodyRow = dropTarget(dragSource(BodyRow))
+  const DragableBodyRow = dropTarget(dragSource(BodyRow))
+  return DragableBodyRow
+}
 
 const DragSortingTable: React.FC<TableProps> = ({
   titleText,
@@ -115,7 +116,15 @@ const DragSortingTable: React.FC<TableProps> = ({
   rowContextMenu,
   data,
   moveRow,
+  dragId,
 }) => {
+  if (moveRow && !dragId) {
+    throw new Error('moveRow specified but dragId is not')
+  }
+  const DragableBodyRow: React.ComponentType<any> | undefined = dragId
+    ? getDragableBodyRow(dragId)
+    : undefined
+
   const renderCell = ({ render: userRender, format }: TableColumn<any>) => (
     text: string,
     row: any,
@@ -135,7 +144,7 @@ const DragSortingTable: React.FC<TableProps> = ({
 
   const components: TableComponents = {
     body: {
-      row: moveRow ? DragableBodyRow : BodyRow,
+      row: moveRow ? DragableBodyRow! : BodyRow,
     },
   }
 
