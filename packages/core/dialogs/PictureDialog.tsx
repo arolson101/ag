@@ -1,6 +1,5 @@
 import { imageBufToUri, ImageUri, imageUriToBuf } from '@ag/util'
 import debug from 'debug'
-import { FormikProvider, useFormik } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
@@ -102,18 +101,17 @@ export const PictureDialog = Object.assign(
       [onSelected, close, thumbnailSize, scaleImage]
     )
 
-    const formik = useFormik<Values>({
-      enableReinitialize: true,
-      initialValues,
-      onSubmit: async (values, factions) => {
+    const submit = useCallback(
+      async values => {
         try {
           log('onSubmit %o', values)
           setUrl(values.url)
-        } finally {
-          factions.setSubmitting(false)
+        } catch (error) {
+          log('error submitting: %o', error)
         }
       },
-    })
+      [setUrl]
+    )
 
     useEffect(() => {
       setUrl(props.url)
@@ -142,11 +140,11 @@ export const PictureDialog = Object.assign(
         }}
       >
         <Row>
-          <FormikProvider value={formik as any}>
-            <Form onSubmit={formik.handleSubmit} lastFieldSubmit>
+          <Form initialValues={initialValues} submit={submit} lastFieldSubmit>
+            {() => (
               <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
-            </Form>
-          </FormikProvider>
+            )}
+          </Form>
         </Row>
         {listLoading && <Spinner />}
 

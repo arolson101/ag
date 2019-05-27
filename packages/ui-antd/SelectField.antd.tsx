@@ -1,7 +1,7 @@
 import { SelectFieldProps } from '@ag/core/context'
+import { useField, useForm } from '@ag/util'
 import { Form, Select } from 'antd'
 import debug from 'debug'
-import { useField, useFormikContext } from 'formik'
 import React, { useCallback } from 'react'
 
 const log = debug('ui-antd:SelectField')
@@ -10,11 +10,11 @@ export const SelectField = Object.assign(
   React.memo<SelectFieldProps>(function _SelectField(props) {
     const { field: name, label, disabled, items, flex, searchable, onValueChange } = props
     const [field, { error }] = useField(name)
-    const formik = useFormikContext<any>()
+    const form = useForm()
 
     const onChange = useCallback(
       (value: string) => {
-        formik.setFieldValue(name, value)
+        form.change(name, value)
         if (onValueChange) {
           onValueChange(value)
         }

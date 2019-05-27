@@ -1,12 +1,19 @@
 import { Transaction } from '@ag/db'
-import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
+import {
+  Gql,
+  MutationFn,
+  pick,
+  useApolloClient,
+  useMutation,
+  useQuery,
+  useSubmitRef,
+} from '@ag/util'
 import accounting from 'accounting'
-import { FormikErrors, useFormik } from 'formik'
 import gql from 'graphql-tag'
-import React, { useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { typedFields, useIntl, useUi } from '../context'
+import { Errors, typedFields, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 interface Props {
@@ -78,6 +85,7 @@ const Component = Object.assign(
   React.forwardRef<TransactionForm, ComponentProps>((props, ref) => {
     const intl = useIntl()
     const ui = useUi()
+    const submitFormRef = useSubmitRef()
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
     const { data, saveTransaction, loading, accountId, transactionId } = props
 
@@ -88,17 +96,19 @@ const Component = Object.assign(
         >)
       : Transaction.defaultValues()
 
-    const formik = useFormik<FormValues>({
-      enableReinitialize: true,
-      initialValues,
-      validate: values => {
-        const errors: FormikErrors<FormValues> = {}
+    const validate = useCallback(
+      values => {
+        const errors: Errors<FormValues> = {}
         if (!values.name.trim()) {
           errors.name = intl.formatMessage(messages.valueEmpty)
         }
         return errors
       },
-      onSubmit: input => {
+      [intl]
+    )
+
+    const submit = useCallback(
+      async input => {
         const { amount } = input
         const variables = {
           accountId,
@@ -108,13 +118,14 @@ const Component = Object.assign(
             amount: accounting.unformat(amount.toString()),
           },
         }
-        saveTransaction({ variables })
+        await saveTransaction({ variables })
       },
-    })
+      [accountId, transactionId, saveTransaction]
+    )
 
     useImperativeHandle(ref, () => ({
       save: () => {
-        formik.submitForm()
+        submitFormRef.current()
       },
     }))
 
@@ -123,7 +134,12 @@ const Component = Object.assign(
     }
 
     return (
-      <Form onSubmit={formik.handleSubmit}>
+      <Form
+        initialValues={initialValues}
+        validate={validate}
+        submit={submit}
+        submitRef={submitFormRef}
+      >
         <DateField field='time' label={intl.formatMessage(messages.date)} />
         <TextField field='name' autoFocus label={intl.formatMessage(messages.name)} />
         <CurrencyField field='amount' label={intl.formatMessage(messages.amount)} />

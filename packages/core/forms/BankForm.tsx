@@ -1,13 +1,21 @@
 import { Bank } from '@ag/db'
-import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
+import {
+  Gql,
+  MutationFn,
+  pick,
+  useApolloClient,
+  useFieldValue,
+  useMutation,
+  useQuery,
+  useSubmitRef,
+} from '@ag/util'
 import debug from 'debug'
-import { FormikErrors, FormikProvider, useField, useFormik, useFormikContext } from 'formik'
 import gql from 'graphql-tag'
-import React, { useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { UrlField } from '../components/UrlField'
-import { tabConfig, typedFields, useIntl, useOnline, useUi } from '../context'
+import { Errors, tabConfig, typedFields, useIntl, useUi } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
 
@@ -78,151 +86,14 @@ interface ComponentProps extends Props {
   saveBank: MutationFn<T.SaveBank.Mutation, T.SaveBank.Variables>
 }
 
-const FormComponent = Object.assign(
-  React.memo<ComponentProps>(function _FormComponent(props) {
+const Component = Object.assign(
+  React.forwardRef<BankForm, ComponentProps>(function _BankFormComponent(props, ref) {
     const intl = useIntl()
     const ui = useUi()
-    const { LoadingOverlay, Tabs, Tab, Text } = ui
+    const { LoadingOverlay, Tabs, Tab, Text, showToast } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
-    const { data, loading, bankId } = props
-
-    const formik = useFormikContext<FormValues>()
-    // const favicoField = useRef<UrlField<FormValues>>(null)
-    const [online] = useField('online')
-
-    if (!loading && !data) {
-      throw new Error('no data')
-    }
-
-    // log('initial values: %o', initialValues)
-    return (
-      <>
-        <LoadingOverlay show={loading} title={`BankForm loading`} />
-        <Form onSubmit={formik.handleSubmit}>
-          <Tabs id='BankForm' defaultActiveKey='location'>
-            <Tab {...tabConfig('location', intl.formatMessage(messages.tabInfo))}>
-              {!bankId && (
-                <>
-                  <Text>{intl.formatMessage(messages.fiHelp)}</Text>
-                  <Divider />
-                  <SelectField
-                    field='fi'
-                    items={filist.map(fi => ({
-                      label: fi.name,
-                      value: fi.id.toString(),
-                    }))}
-                    label={intl.formatMessage(messages.fi)}
-                    onValueChange={valueStr => {
-                      const value = +valueStr
-                      const fi = filist[value]
-                      const name = value ? fi.name || '' : ''
-                      const web = fi.profile.siteURL || ''
-                      formik.setFieldValue('name', name)
-                      formik.setFieldValue('fi', valueStr)
-                      formik.setFieldValue('web', web)
-                      formik.setFieldValue('icon', '')
-                      formik.setFieldValue('address', formatAddress(fi) || '')
-                      formik.setFieldValue('fid', fi.fid || '')
-                      formik.setFieldValue('org', fi.org || '')
-                      formik.setFieldValue('ofx', fi.ofx || '')
-                      // if (favicoField.current) {
-                      //   favicoField.current.onValueChanged(web)
-                      // }
-                    }}
-                    searchable
-                    disabled={loading}
-                  />
-                  <Divider />
-                </>
-              )}
-              <TextField
-                field='name'
-                label={intl.formatMessage(messages.name)}
-                placeholder={intl.formatMessage(messages.namePlaceholder)}
-                disabled={loading}
-              />
-              <TextField
-                field='address'
-                label={intl.formatMessage(messages.address)}
-                rows={4}
-                disabled={loading}
-              />
-              <UrlField<FormValues>
-                field='web'
-                nameField='name'
-                favicoField='icon'
-                favicoWidth={bankAvatarSize}
-                favicoHeight={bankAvatarSize}
-                label={intl.formatMessage(messages.web)}
-                // ref={favicoField}
-                disabled={loading}
-              />
-              <TextField
-                field='notes'
-                label={intl.formatMessage(messages.notes)}
-                rows={4}
-                disabled={loading}
-              />
-            </Tab>
-            <Tab {...tabConfig('online', intl.formatMessage(messages.tabOnline))}>
-              <CheckboxField
-                field='online'
-                label={intl.formatMessage(messages.online)}
-                disabled={loading}
-              />
-              <TextField
-                field='username'
-                noCorrect
-                label={intl.formatMessage(messages.username)}
-                placeholder={intl.formatMessage(messages.usernamePlaceholder)}
-                disabled={loading || !online.value}
-              />
-              <TextField
-                secure
-                field='password'
-                label={intl.formatMessage(messages.password)}
-                placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-                disabled={loading || !online.value}
-              />
-              <Divider />
-              <TextField
-                noCorrect
-                field='fid'
-                label={intl.formatMessage(messages.fid)}
-                placeholder={intl.formatMessage(messages.fidPlaceholder)}
-                disabled={loading || !online.value}
-              />
-              <TextField
-                noCorrect
-                field='org'
-                label={intl.formatMessage(messages.org)}
-                placeholder={intl.formatMessage(messages.orgPlaceholder)}
-                disabled={loading || !online.value}
-              />
-              <TextField
-                noCorrect
-                field='ofx'
-                label={intl.formatMessage(messages.ofx)}
-                placeholder={intl.formatMessage(messages.ofxPlaceholder)}
-                disabled={loading || !online.value}
-              />
-            </Tab>
-          </Tabs>
-        </Form>
-      </>
-    )
-  }),
-  {
-    displayName: 'BankForm.Component',
-  }
-)
-
-const Component = Object.assign(
-  React.forwardRef<BankForm, ComponentProps>((props, ref) => {
-    const intl = useIntl()
-    const { showToast } = useUi()
-    const online = useOnline()
     const { data, saveBank, loading, bankId, onClosed } = props
+    const submitFormRef = useSubmitRef()
 
     const bank = loading ? undefined : data && data.bank
     const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0
@@ -233,18 +104,25 @@ const Component = Object.assign(
         : Bank.defaultValues),
     }
 
-    const formik = useFormik({
-      validateOnBlur: false,
-      enableReinitialize: true,
-      initialValues,
-      validate: values => {
-        const errors: FormikErrors<FormValues> = {}
+    // const favicoField = useRef<UrlField<FormValues>>(null)
+
+    if (!loading && !data) {
+      throw new Error('no data')
+    }
+
+    const validate = useCallback(
+      values => {
+        const errors: Errors<FormValues> = {}
         if (!values.name.trim()) {
           errors.name = intl.formatMessage(messages.valueEmpty)
         }
         return errors
       },
-      onSubmit: async ({ fi, ...input }, factions) => {
+      [intl]
+    )
+
+    const submit = useCallback(
+      async ({ fi, ...input }) => {
         try {
           // log('onSubmit %o', { input, bankId })
           await saveBank({ variables: { input, bankId } })
@@ -254,31 +132,144 @@ const Component = Object.assign(
             })
           )
           onClosed()
-          factions.setSubmitting(false)
         } catch (err) {
           log('caught %o', err)
-          if (!online.isCancel(err)) {
-            factions.setSubmitting(false)
-          }
         }
       },
-    })
+      [saveBank, showToast, onClosed]
+    )
 
     useImperativeHandle(ref, () => ({
       save: () => {
-        formik.submitForm()
+        submitFormRef.current()
       },
     }))
 
-    if (!loading && !data) {
-      throw new Error('no data')
-    }
-
     // log('initial values: %o', initialValues)
     return (
-      <FormikProvider value={formik as any}>
-        <FormComponent {...props} />
-      </FormikProvider>
+      <>
+        <LoadingOverlay show={loading} title={`BankForm loading`} />
+        <Form
+          initialValues={initialValues}
+          validate={validate}
+          submit={submit}
+          submitRef={submitFormRef}
+        >
+          {({ change, values: { online } }) => {
+            return (
+              <Tabs id='BankForm' defaultActiveKey='location'>
+                <Tab {...tabConfig('location', intl.formatMessage(messages.tabInfo))}>
+                  {!bankId && (
+                    <>
+                      <Text>{intl.formatMessage(messages.fiHelp)}</Text>
+                      <Divider />
+                      <SelectField
+                        field='fi'
+                        items={filist.map(fi => ({
+                          label: fi.name,
+                          value: fi.id.toString(),
+                        }))}
+                        label={intl.formatMessage(messages.fi)}
+                        onValueChange={valueStr => {
+                          const value = +valueStr
+                          const fi = filist[value]
+                          const name = value ? fi.name || '' : ''
+                          const web = fi.profile.siteURL || ''
+                          change('name', name)
+                          change('fi', valueStr)
+                          change('web', web)
+                          change('icon', '')
+                          change('address', formatAddress(fi) || '')
+                          change('fid', fi.fid || '')
+                          change('org', fi.org || '')
+                          change('ofx', fi.ofx || '')
+                          // if (favicoField.current) {
+                          //   favicoField.current.onValueChanged(web)
+                          // }
+                        }}
+                        searchable
+                        disabled={loading}
+                      />
+                      <Divider />
+                    </>
+                  )}
+                  <TextField
+                    field='name'
+                    label={intl.formatMessage(messages.name)}
+                    placeholder={intl.formatMessage(messages.namePlaceholder)}
+                    disabled={loading}
+                  />
+                  <TextField
+                    field='address'
+                    label={intl.formatMessage(messages.address)}
+                    rows={4}
+                    disabled={loading}
+                  />
+                  <UrlField<FormValues>
+                    field='web'
+                    nameField='name'
+                    favicoField='icon'
+                    favicoWidth={bankAvatarSize}
+                    favicoHeight={bankAvatarSize}
+                    label={intl.formatMessage(messages.web)}
+                    // ref={favicoField}
+                    disabled={loading}
+                  />
+                  <TextField
+                    field='notes'
+                    label={intl.formatMessage(messages.notes)}
+                    rows={4}
+                    disabled={loading}
+                  />
+                </Tab>
+                <Tab {...tabConfig('online', intl.formatMessage(messages.tabOnline))}>
+                  <CheckboxField
+                    field='online'
+                    label={intl.formatMessage(messages.online)}
+                    disabled={loading}
+                  />
+                  <TextField
+                    field='username'
+                    noCorrect
+                    label={intl.formatMessage(messages.username)}
+                    placeholder={intl.formatMessage(messages.usernamePlaceholder)}
+                    disabled={loading || !online}
+                  />
+                  <TextField
+                    secure
+                    field='password'
+                    label={intl.formatMessage(messages.password)}
+                    placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+                    disabled={loading || !online}
+                  />
+                  <Divider />
+                  <TextField
+                    noCorrect
+                    field='fid'
+                    label={intl.formatMessage(messages.fid)}
+                    placeholder={intl.formatMessage(messages.fidPlaceholder)}
+                    disabled={loading || !online}
+                  />
+                  <TextField
+                    noCorrect
+                    field='org'
+                    label={intl.formatMessage(messages.org)}
+                    placeholder={intl.formatMessage(messages.orgPlaceholder)}
+                    disabled={loading || !online}
+                  />
+                  <TextField
+                    noCorrect
+                    field='ofx'
+                    label={intl.formatMessage(messages.ofx)}
+                    placeholder={intl.formatMessage(messages.ofxPlaceholder)}
+                    disabled={loading || !online}
+                  />
+                </Tab>
+              </Tabs>
+            )
+          }}
+        </Form>
+      </>
     )
   }),
   {

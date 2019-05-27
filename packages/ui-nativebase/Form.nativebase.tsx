@@ -1,8 +1,10 @@
 import { CommonTextFieldProps, FormProps } from '@ag/core/context'
+import { useSubmitRef } from '@ag/util'
 import debug from 'debug'
 import * as NB from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
-import React, { useCallback, useContext, useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
+import { Form as FinalForm } from 'react-final-form'
 import { StyleSheet } from 'react-native'
 
 const log = debug('ui-nativebase:Form')
@@ -22,9 +24,17 @@ export interface FormContext {
 export const FormContext = React.createContext<FormContext>(null as any)
 
 export const Form = Object.assign(
-  React.memo<FormProps>(function _Form({ onSubmit, lastFieldSubmit, children }) {
+  React.memo<FormProps>(function _Form({
+    initialValues,
+    validate,
+    submit,
+    lastFieldSubmit,
+    submitRef,
+    children,
+  }) {
     const fieldNames = useRef<string[]>([])
     const fields = useRef<Record<string, FormContextChild>>({})
+    const submitRef2 = useSubmitRef()
 
     const updateFields = useCallback(
       function _updateFields() {
@@ -39,7 +49,7 @@ export const Form = Object.assign(
           current.setCommonTextFieldProps({
             returnKeyType: next ? 'next' : lastFieldSubmit ? 'done' : undefined,
             blurOnSubmit: !next,
-            onSubmitEditing: next ? next.focus : lastFieldSubmit ? onSubmit : undefined,
+            onSubmitEditing: next ? next.focus : lastFieldSubmit ? submitRef2.current : undefined,
           })
         }
       },
@@ -70,9 +80,19 @@ export const Form = Object.assign(
     )
 
     return (
-      <FormContext.Provider value={{ addField, rmvField }}>
-        <NB.Form style={styles.form}>{children}</NB.Form>
-      </FormContext.Provider>
+      <FinalForm initialValues={initialValues} validate={validate} onSubmit={submit}>
+        {({ handleSubmit }) => {
+          submitRef2.current = handleSubmit
+          if (submitRef) {
+            submitRef.current = handleSubmit
+          }
+          return (
+            <FormContext.Provider value={{ addField, rmvField }}>
+              <NB.Form style={styles.form}>{children}</NB.Form>
+            </FormContext.Provider>
+          )
+        }}
+      </FinalForm>
     )
   }),
   {

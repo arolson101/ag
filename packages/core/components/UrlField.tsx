@@ -1,7 +1,7 @@
-import { fixUrl, generateAvatar, imageBufToUri, ImageUri, isUrl } from '@ag/util'
+import { fixUrl, generateAvatar, imageBufToUri, ImageUri, isUrl, useFieldValue } from '@ag/util'
 import debug from 'debug'
-import { useField, useFormikContext } from 'formik'
 import React, { useCallback, useEffect, useState } from 'react'
+import { useForm } from 'react-final-form'
 import { defineMessages } from 'react-intl'
 import { timer } from 'rxjs'
 import { useEventCallback } from 'rxjs-hooks'
@@ -39,10 +39,10 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const { field, nameField } = props
   const { favicoWidth, favicoHeight, favicoField } = props
 
-  const formik = useFormikContext<any>()
-  const [{ value: name }] = useField<string>(nameField)
-  const [{ value: url }] = useField<string>(field)
-  const [{ value }] = useField<ImageUri>(favicoField)
+  const form = useForm()
+  const name = useFieldValue<string>(nameField)
+  const url = useFieldValue<string>(field)
+  const value = useFieldValue<ImageUri>(favicoField)
 
   const [source, setSource] = useState<string | undefined>(undefined)
   const [loading, setLoading] = useState(false)
@@ -62,7 +62,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
     const newUrl = fixUrl(source)
     if (!isUrl(newUrl)) {
       log('not an url; setting default (%s)', newUrl)
-      formik.setFieldValue(favicoField, generateDefaultIcon())
+      form.change(favicoField, generateDefaultIcon())
       return
     }
 
@@ -77,7 +77,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
         log('got favico %O', favico)
         const uri = imageBufToUri(favico)
         log('uri %s', uri)
-        formik.setFieldValue(favicoField, uri)
+        form.change(favicoField, uri)
         setLoading(false)
       } catch (err) {
         if (!online.isCancel(err)) {
@@ -112,9 +112,9 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
 
   const onPictureChosen = useCallback(
     (val: ImageUri) => {
-      formik.setFieldValue(favicoField, val)
+      form.change(favicoField, val)
     },
-    [formik, favicoField]
+    [form, favicoField]
   )
 
   const onClickSelect = useCallback(() => {
@@ -127,14 +127,14 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
     log('getImageFromLibrary from %o', val)
     if (val) {
       const str = imageBufToUri(val)
-      formik.setFieldValue(favicoField, str)
+      form.change(favicoField, str)
     }
-  }, [getImageFromLibrary, favicoWidth, favicoHeight, favicoField, formik])
+  }, [getImageFromLibrary, favicoWidth, favicoHeight, favicoField, form])
 
   const onClickReset = useCallback(() => {
     log('reset favico')
-    formik.setFieldValue(favicoField, generateDefaultIcon())
-  }, [favicoField, formik, generateDefaultIcon])
+    form.change(favicoField, generateDefaultIcon())
+  }, [favicoField, form, generateDefaultIcon])
 
   return (
     <TextField

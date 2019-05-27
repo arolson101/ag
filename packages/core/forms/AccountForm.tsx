@@ -1,12 +1,22 @@
 import { Account } from '@ag/db'
-import { Gql, MutationFn, pick, useApolloClient, useMutation, useQuery } from '@ag/util'
+import {
+  Gql,
+  MutationFn,
+  pick,
+  useApolloClient,
+  useField,
+  useFieldValue,
+  useForm,
+  useMutation,
+  useQuery,
+  useSubmitRef,
+} from '@ag/util'
 import debug from 'debug'
-import { FormikErrors, FormikProvider, useField, useFormik, useFormikContext } from 'formik'
 import gql from 'graphql-tag'
 import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay, TextFieldWithIcon } from '../components'
-import { typedFields, useIntl, useUi } from '../context'
+import { Errors, typedFields, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 
 const log = debug('AccountForm')
@@ -82,152 +92,133 @@ interface ComponentProps extends Props {
 
 const iconSize = 100
 
-const FormComponent = Object.assign(
-  React.memo<ComponentProps>(function _FormComponent(props) {
+const Component = Object.assign(
+  React.forwardRef<AccountForm, ComponentProps>(function _AccountFormComponent(props, ref) {
     const intl = useIntl()
-    const { Text, Image, Row } = useUi()
+    const submitFormRef = useSubmitRef()
+    const { Text, Image, Row, showToast } = useUi()
     const { Form, SelectField, TextField } = typedFields<FormValues>(useUi())
-    const { data, loading } = props
+    const { data, saveAccount, loading, accountId, bankId, onClosed } = props
 
     const account = loading ? undefined : data && data.account
     const bank = loading ? undefined : data && data.bank
     const bankUrl = account ? account.bank.web : bank ? bank.web : ''
     const bankIcon = account ? account.bank.icon : bank ? bank.icon : ''
 
-    const formik = useFormikContext<FormValues>()
-    const [type] = useField('type')
-    const [color] = useField('color')
-
     if (!loading && !data) {
       throw new Error('no data')
     }
 
-    return (
-      <Form onSubmit={formik.handleSubmit}>
-        <Row>
-          <Image size={24} src={bankIcon} />
-          <Text header>{account ? account.bank.name : bank ? bank.name : '<no bank>'}</Text>
-        </Row>
-        <TextFieldWithIcon<FormValues>
-          field='name'
-          favicoField='icon'
-          defaultUrl={bankUrl}
-          defaultIcon={bankIcon}
-          favicoWidth={iconSize}
-          favicoHeight={iconSize}
-          label={intl.formatMessage(messages.name)}
-          placeholder={intl.formatMessage(messages.namePlaceholder)}
-          autoFocus={!account}
-        />
-        <TextField
-          field='number'
-          label={intl.formatMessage(messages.number)}
-          placeholder={intl.formatMessage(messages.numberPlaceholder)}
-        />
-        <SelectField
-          field='type'
-          items={Object.keys(Account.Type).map(acct => ({
-            value: acct.toString(),
-            label: intl.formatMessage((Account.messages as Record<string, any>)[acct]),
-          }))}
-          label={intl.formatMessage(messages.type)}
-          onValueChange={value => {
-            formik.setFieldValue('color', Account.generateColor(value as Account.Type))
-          }}
-        />
-        <TextField
-          field='color'
-          label={intl.formatMessage(messages.color)}
-          placeholder={intl.formatMessage(messages.colorPlaceholder)}
-          color={color.value}
-        />
-        {(type.value === Account.Type.CHECKING || type.value === Account.Type.SAVINGS) && (
-          <TextField
-            field='routing'
-            label={intl.formatMessage(messages.routing)}
-            placeholder={intl.formatMessage(messages.routingPlaceholder)}
-          />
-        )}
-        {type.value === Account.Type.CREDITCARD && (
-          <TextField
-            field='key'
-            label={intl.formatMessage(messages.key)}
-            placeholder={intl.formatMessage(messages.keyPlaceholder)}
-          />
-        )}
-      </Form>
-    )
-  }),
-  {
-    displayName: 'AccountForm.FormComponent',
-  }
-)
-
-const Component = Object.assign(
-  React.forwardRef<AccountForm, ComponentProps>((props, ref) => {
-    // log('AccountForm.Component render %o', props)
-    const intl = useIntl()
-    const { showToast } = useUi()
-    const { data, saveAccount, loading, accountId, bankId, onClosed } = props
-
-    const account = loading ? undefined : data && data.account
     const initialValues: FormValues = {
       ...(account
         ? pick(account, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
         : Account.defaultValues()),
     }
 
-    const formik = useFormik<FormValues>({
-      validateOnBlur: false,
-      // enableReinitialize: true,
-      initialValues,
-      validate: useCallback(
-        (values: FormValues) => {
-          const errors: FormikErrors<FormValues> = {}
-          if (!values.name || !values.name.trim()) {
-            errors.name = intl.formatMessage(messages.valueEmpty)
+    const validate = useCallback(
+      (values: FormValues) => {
+        const errors: Errors<FormValues> = {}
+        if (!values.name || !values.name.trim()) {
+          errors.name = intl.formatMessage(messages.valueEmpty)
+        }
+        return errors
+      },
+      [intl]
+    )
+
+    const submit = useCallback(
+      async ({ ...input }) => {
+        try {
+          const variables = {
+            bankId,
+            accountId,
+            input,
           }
-          return errors
-        },
-        [intl]
-      ),
-      onSubmit: useCallback(
-        async ({ ...input }, factions) => {
-          try {
-            const variables = {
-              bankId,
-              accountId,
-              input,
-            }
-            await saveAccount({ variables } as any)
-            showToast(
-              intl.formatMessage(accountId ? messages.saved : messages.created, {
-                name: input.name,
-              })
-            )
-            onClosed()
-          } finally {
-            factions.setSubmitting(false)
-          }
-        },
-        [bankId, accountId, saveAccount, showToast, onClosed]
-      ),
-    })
+          await saveAccount({ variables })
+          showToast(
+            intl.formatMessage(accountId ? messages.saved : messages.created, {
+              name: input.name,
+            })
+          )
+          onClosed()
+        } catch (error) {
+          log('error %o', error)
+        }
+      },
+      [bankId, accountId, saveAccount, showToast, onClosed]
+    )
 
     useImperativeHandle(ref, () => ({
       save: () => {
-        formik.submitForm()
+        submitFormRef.current()
       },
     }))
 
-    if (!loading && !data) {
-      throw new Error('no data')
-    }
-
     return (
-      <FormikProvider value={formik as any}>
-        <FormComponent {...props} />
-      </FormikProvider>
+      <Form
+        initialValues={initialValues} //
+        validate={validate}
+        submit={submit}
+        submitRef={submitFormRef}
+      >
+        {({ change, values: { type, color } }) => {
+          return (
+            <>
+              <Row>
+                <Image size={24} src={bankIcon} />
+                <Text header>{account ? account.bank.name : bank ? bank.name : '<no bank>'}</Text>
+              </Row>
+              <TextFieldWithIcon<FormValues>
+                field='name'
+                favicoField='icon'
+                defaultUrl={bankUrl}
+                defaultIcon={bankIcon}
+                favicoWidth={iconSize}
+                favicoHeight={iconSize}
+                label={intl.formatMessage(messages.name)}
+                placeholder={intl.formatMessage(messages.namePlaceholder)}
+                autoFocus={!account}
+              />
+              <TextField
+                field='number'
+                label={intl.formatMessage(messages.number)}
+                placeholder={intl.formatMessage(messages.numberPlaceholder)}
+              />
+              <SelectField
+                field='type'
+                items={Object.keys(Account.Type).map(acct => ({
+                  value: acct.toString(),
+                  label: intl.formatMessage((Account.messages as Record<string, any>)[acct]),
+                }))}
+                label={intl.formatMessage(messages.type)}
+                onValueChange={value => {
+                  change('color', Account.generateColor(value as Account.Type))
+                }}
+              />
+              <TextField
+                field='color'
+                label={intl.formatMessage(messages.color)}
+                placeholder={intl.formatMessage(messages.colorPlaceholder)}
+                color={color}
+              />
+              {(type === Account.Type.CHECKING || type === Account.Type.SAVINGS) && (
+                <TextField
+                  field='routing'
+                  label={intl.formatMessage(messages.routing)}
+                  placeholder={intl.formatMessage(messages.routingPlaceholder)}
+                />
+              )}
+              {type === Account.Type.CREDITCARD && (
+                <TextField
+                  field='key'
+                  label={intl.formatMessage(messages.key)}
+                  placeholder={intl.formatMessage(messages.keyPlaceholder)}
+                />
+              )}
+            </>
+          )
+        }}
+      </Form>
     )
   }),
   {
@@ -238,7 +229,7 @@ const Component = Object.assign(
 export const AccountForm = Object.assign(
   React.forwardRef<AccountForm, Props>((props, ref) => {
     // log('AccountForm render %o', props)
-    const { accountId, onClosed, bankId } = props
+    const { accountId, bankId } = props
 
     const component = useRef<AccountForm>(null)
     const { data, loading, error } = useQuery(queries.AccountForm, {
@@ -276,63 +267,63 @@ export const AccountForm = Object.assign(
 
 const messages = defineMessages({
   save: {
-    id: 'BankForm.save',
+    id: 'AccountForm.save',
     defaultMessage: 'Save',
   },
   create: {
-    id: 'BankForm.create',
+    id: 'AccountForm.create',
     defaultMessage: 'Add',
   },
   valueEmpty: {
-    id: 'BankForm.valueEmpty',
+    id: 'AccountForm.valueEmpty',
     defaultMessage: 'Cannot be empty',
   },
   createTitle: {
-    id: 'AccountDialog.createTitle',
+    id: 'AccountForm.createTitle',
     defaultMessage: 'Add Account',
   },
   editTitle: {
-    id: 'AccountDialog.editTitle',
+    id: 'AccountForm.editTitle',
     defaultMessage: 'Edit Account',
   },
   name: {
-    id: 'AccountDialog.name',
+    id: 'AccountForm.name',
     defaultMessage: 'Name',
   },
   namePlaceholder: {
-    id: 'AccountDialog.namePlaceholder',
+    id: 'AccountForm.namePlaceholder',
     defaultMessage: 'My Checking',
   },
   number: {
-    id: 'AccountDialog.number',
+    id: 'AccountForm.number',
     defaultMessage: 'Number',
   },
   numberPlaceholder: {
-    id: 'AccountDialog.numberPlaceholder',
+    id: 'AccountForm.numberPlaceholder',
     defaultMessage: '54321',
   },
   type: {
-    id: 'AccountDialog.type',
+    id: 'AccountForm.type',
     defaultMessage: 'Type',
   },
   uniqueName: {
-    id: 'AccountDialog.uniqueName',
+    id: 'AccountForm.uniqueName',
     defaultMessage: 'This account name is already used',
   },
   uniqueNumber: {
-    id: 'AccountDialog.uniqueNumber',
+    id: 'AccountForm.uniqueNumber',
     defaultMessage: 'This account number is already used',
   },
   color: {
-    id: 'AccountDialog.color',
+    id: 'AccountForm.color',
     defaultMessage: 'Color',
   },
   colorPlaceholder: {
-    id: 'AccountDialog.colorPlaceholder',
+    id: 'AccountForm.colorPlaceholder',
     defaultMessage: 'red',
   },
   routing: {
-    id: 'AccountDialog.routing',
+    id: 'AccountForm.routing',
     defaultMessage: 'Routing Number',
     description: `Bank identifier, A-9
       Use of this field by country:
@@ -349,15 +340,15 @@ const messages = defineMessages({
       USA         Routing and transit number`,
   },
   routingPlaceholder: {
-    id: 'AccountDialog.routingPlaceholder',
+    id: 'AccountForm.routingPlaceholder',
     defaultMessage: '0123456',
   },
   key: {
-    id: 'AccountDialog.key',
+    id: 'AccountForm.key',
     defaultMessage: 'Account Key',
   },
   keyPlaceholder: {
-    id: 'AccountDialog.keyPlaceholder',
+    id: 'AccountForm.keyPlaceholder',
     defaultMessage: '(for international accounts)',
   },
   saved: {

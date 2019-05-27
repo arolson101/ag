@@ -1,19 +1,19 @@
 import { CurrencyFieldProps } from '@ag/core/context'
+import { useField, useForm } from '@ag/util'
 import { Form, InputNumber } from 'antd'
-import { useField, useFormikContext } from 'formik'
 import React, { useCallback } from 'react'
 
 export const CurrencyField = Object.assign(
   React.memo<CurrencyFieldProps>(function _CurrencyField(props) {
     const { field: name, label, placeholder, flex, disabled } = props
-    const [field, { error }] = useField(name)
-    const formik = useFormikContext<any>()
+    const [field, { error }] = useField<number>(name)
+    const form = useForm()
 
     const onChange = useCallback(
       (value: number | undefined) => {
-        formik.setFieldValue(name, value)
+        form.change(name, value)
       },
-      [formik, name]
+      [form, name]
     )
 
     return (

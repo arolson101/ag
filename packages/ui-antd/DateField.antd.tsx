@@ -1,20 +1,20 @@
 import { DateFieldProps } from '@ag/core/context'
+import { useField, useForm } from '@ag/util'
 import { DatePicker, Form, Icon } from 'antd'
 import { DatePickerProps } from 'antd/lib/date-picker/interface'
-import { useField, useFormikContext } from 'formik'
 import React, { useCallback } from 'react'
 
 export const DateField = Object.assign(
   React.memo<DateFieldProps>(function _DateField(props) {
     const { field: name, label, flex, disabled } = props
-    const [field, { error }] = useField(name)
-    const formik = useFormikContext<any>()
+    const [field, { error }] = useField<any>(name)
+    const form = useForm()
 
     const onChange = useCallback<NonNullable<DatePickerProps['onChange']>>(
       (date, dateString) => {
-        formik.setFieldValue(name, date.toDate())
+        form.change(name, date.toDate())
       },
-      [formik, name]
+      [form, name]
     )
 
     return (

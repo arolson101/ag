@@ -24,7 +24,6 @@ export const TextField = Object.assign(
       placeholder,
       secure,
       rows,
-      onSubmitEditing,
       disabled,
       noCorrect,
       leftIcon,
@@ -80,7 +79,6 @@ export const TextField = Object.assign(
             style={{ flex: 1, ...inputStyle }}
             onChangeText={onChangeText}
             value={field.value.toString()}
-            onSubmitEditing={onSubmitEditing}
             secureTextEntry={secure}
             numberOfLines={rows}
             autoCapitalize={noCorrect ? 'none' : undefined}

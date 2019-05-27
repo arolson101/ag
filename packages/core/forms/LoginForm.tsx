@@ -1,11 +1,11 @@
+import { useSubmitRef } from '@ag/util'
 import debug from 'debug'
-import { FormikErrors, FormikProvider, useFormik, useFormikContext } from 'formik'
-import React, { useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { useSelector } from 'react-redux'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { typedFields, useAction, useIntl, useUi } from '../context'
+import { Errors, typedFields, useAction, useIntl, useUi } from '../context'
 import { selectors } from '../reducers'
 
 const log = debug('core:LoginForm')
@@ -36,22 +36,64 @@ interface ComponentProps extends Props {
   openDb: (params: { dbId: string; password: string }) => any
 }
 
-const FormComponent = Object.assign(
-  React.memo<ComponentProps>(function _FormComponent(props) {
+const Component = Object.assign(
+  React.forwardRef<LoginForm, ComponentProps>(function _LoginFormComponent(props, ref) {
     const intl = useIntl()
     const ui = useUi()
+    const submitRef = useSubmitRef()
     const { Text } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
-    const { dbs, appError } = props
+    const { createDb, openDb, dbs, appError } = props
     const dbId = dbs.length ? dbs[0].dbId : undefined
     const create = !dbId
 
-    const formik = useFormikContext()
+    const validate = useCallback(
+      (values: FormValues) => {
+        const errors: Errors<FormValues> = {}
+        if (create) {
+          if (!values.password.trim()) {
+            errors.password = intl.formatMessage(messages.valueEmpty)
+          }
+          if (values.password !== values.passwordConfirm) {
+            errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
+          }
+        } else {
+          if (!values.password.trim()) {
+            errors.password = intl.formatMessage(messages.valueEmpty)
+          }
+        }
+        return errors
+      },
+      [intl]
+    )
+
+    const submit = useCallback(
+      async values => {
+        if (dbId) {
+          openDb({ ...values, dbId })
+        } else {
+          createDb(values)
+        }
+      },
+      [dbId, openDb, createDb]
+    )
+
+    useImperativeHandle(ref, () => ({
+      submit: () => {
+        submitRef.current()
+      },
+    }))
 
     return (
       <>
         <ErrorDisplay error={appError} />
-        <Form onSubmit={formik.handleSubmit} lastFieldSubmit>
+        <Form
+          initialValues={initialValues} //
+          validate={validate}
+          submit={submit}
+          submitRef={submitRef}
+          lastFieldSubmit
+        >
           <Text>
             {intl.formatMessage(
               create ? messages.welcomeMessageCreate : messages.welcomeMessageOpen
@@ -70,65 +112,10 @@ const FormComponent = Object.assign(
               field='passwordConfirm'
               label={intl.formatMessage(messages.passwordConfirmLabel)}
               placeholder={intl.formatMessage(messages.passwordConfirmPlaceholder)}
-              onSubmitEditing={formik.submitForm}
             />
           )}
         </Form>
       </>
-    )
-  }),
-  {
-    displayName: 'LoginForm.FormComponent',
-  }
-)
-
-const Component = Object.assign(
-  React.forwardRef<LoginForm, ComponentProps>(function LoginFormComponent(props, ref) {
-    const intl = useIntl()
-    const ui = useUi()
-    const closeDlg = useAction(actions.closeDlg)
-    const { createDb, openDb, dbs } = props
-    const dbId = dbs.length ? dbs[0].dbId : undefined
-    const create = !dbId
-
-    const formik = useFormik({
-      validateOnBlur: false,
-      initialValues,
-      validate: values => {
-        const errors: FormikErrors<FormValues> = {}
-        if (create) {
-          if (!values.password.trim()) {
-            errors.password = intl.formatMessage(messages.valueEmpty)
-          }
-          if (values.password !== values.passwordConfirm) {
-            errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
-          }
-        } else {
-          if (!values.password.trim()) {
-            errors.password = intl.formatMessage(messages.valueEmpty)
-          }
-        }
-        return errors
-      },
-      onSubmit: async (values, factions) => {
-        if (dbId) {
-          openDb({ ...values, dbId })
-        } else {
-          createDb(values)
-        }
-      },
-    })
-
-    useImperativeHandle(ref, () => ({
-      submit: () => {
-        formik.submitForm()
-      },
-    }))
-
-    return (
-      <FormikProvider value={formik as any}>
-        <FormComponent {...props} />
-      </FormikProvider>
     )
   }),
   {

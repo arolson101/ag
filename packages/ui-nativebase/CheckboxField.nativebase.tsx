@@ -1,33 +1,31 @@
 import { CheckboxFieldProps } from '@ag/core/context'
-import { Field, FieldProps } from 'formik'
+import { useField, useForm } from '@ag/util'
 import { Item, Right, Switch } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
 import React from 'react'
 import { Label } from './Label.nativebase'
 
-export class CheckboxField extends React.PureComponent<CheckboxFieldProps> {
-  render() {
-    const { field: name, label, disabled } = this.props
+export const CheckboxField = Object.assign(
+  React.memo<CheckboxFieldProps>(function _CheckboxField(props) {
+    const { field: name, label, disabled } = props
+    const [field, { error }] = useField<boolean>(name)
+    const form = useForm()
     return (
-      <Field name={name} disabled={disabled}>
-        {({ field, form }: FieldProps) => {
-          const error = !!form.errors[name]
-          return (
-            <Item inlineLabel error={error} style={styles.item}>
-              <Label label={label} error={error} />
-              <Right>
-                <Switch
-                  onValueChange={(value: boolean) => form.setFieldValue(name, value)}
-                  value={field.value}
-                />
-              </Right>
-            </Item>
-          )
-        }}
-      </Field>
+      <Item inlineLabel error={error} style={styles.item}>
+        <Label label={label} error={error} />
+        <Right>
+          <Switch
+            onValueChange={(value: boolean) => form.change(name, value)}
+            value={field.value}
+          />
+        </Right>
+      </Item>
     )
+  }),
+  {
+    displayName: 'CheckboxField',
   }
-}
+)
 
 const styles = {
   item: {

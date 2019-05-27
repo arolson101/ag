@@ -1,23 +1,36 @@
 import { FormProps } from '@ag/core/context'
 import { Form as AntdForm } from 'antd'
-import React, { useCallback } from 'react'
+import React from 'react'
+import { Form as FinalForm } from 'react-final-form'
 
 export const Form = Object.assign(
   React.memo<FormProps>(function _Form(props) {
-    const { onSubmit: onSubmitProp, children } = props
+    const { initialValues, validate, submit, submitRef, children } = props
 
-    const onSubmit = useCallback(
-      (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        onSubmitProp()
-      },
-      [onSubmitProp]
-    )
+    // TODO: preventDefault?
+    // const onSubmit = useCallback(
+    //   (event: React.FormEvent<HTMLFormElement>) => {
+    //     event.preventDefault()
+    //     submit()
+    //   },
+    //   [submit]
+    // )
 
     return (
-      <AntdForm style={{ flex: 1 }} layout='vertical' onSubmit={onSubmit}>
-        {children}
-      </AntdForm>
+      <FinalForm initialValues={initialValues} validate={validate} onSubmit={submit}>
+        {({ handleSubmit, form, values }) => {
+          if (submitRef) {
+            submitRef.current = form.submit
+          }
+          return (
+            <AntdForm style={{ flex: 1 }} layout='vertical' onSubmit={handleSubmit}>
+              {typeof children === 'function'
+                ? children({ change: form.change, handleSubmit, values })
+                : children}
+            </AntdForm>
+          )
+        }}
+      </FinalForm>
     )
   }),
   {

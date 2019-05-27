@@ -1,16 +1,11 @@
 import { TextFieldProps } from '@ag/core/context'
+import { useField } from '@ag/util'
 import { Form, Icon, Input } from 'antd'
 import debug from 'debug'
-import { useField } from 'formik'
 import React, { useCallback, useState } from 'react'
 import { mapIconName } from './ImageSourceIcon'
 
 const log = debug('TextField.antd')
-
-type Password = import('antd/lib/input/Password').default
-type TextArea = import('antd/lib/input/TextArea').default
-
-type InputRefType = Input & Password & TextArea
 
 export const TextField = Object.assign(
   React.memo<TextFieldProps>(function _TextField(props) {
