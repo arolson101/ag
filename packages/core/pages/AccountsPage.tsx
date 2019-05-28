@@ -86,15 +86,8 @@ const mutations = {
       $accountId: String!
       $start: DateTime!
       $end: DateTime!
-      $cancelToken: String!
     ) {
-      downloadTransactions(
-        bankId: $bankId
-        accountId: $accountId
-        start: $start
-        end: $end
-        cancelToken: $cancelToken
-      ) {
+      downloadTransactions(bankId: $bankId, accountId: $accountId, start: $start, end: $end) {
         ...accountFields_AccountsPage
       }
     }
@@ -201,7 +194,6 @@ const BankTable = Object.assign(
                   await downloadTransactions({
                     variables: {
                       accountId: account.id,
-                      cancelToken: 'asdf',
                       bankId: bank.id,
                       start,
                       end,

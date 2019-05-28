@@ -387,7 +387,6 @@ export namespace DownloadTransactions {
     accountId: string
     start: DateTime
     end: DateTime
-    cancelToken: string
   }
 
   export type Mutation = {

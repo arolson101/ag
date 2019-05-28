@@ -100,8 +100,7 @@ export class AccountOnlineResolver {
     @Arg('bankId') bankId: string,
     @Arg('accountId') accountId: string,
     @Arg('start') start: Date,
-    @Arg('end') end: Date,
-    @Arg('cancelToken') cancelToken: string
+    @Arg('end') end: Date
   ): Promise<Account> {
     const { online, intl, getAppDb } = context
     const { connection, banksRepository, accountsRepository, transactionsRepository } = getAppDb()
