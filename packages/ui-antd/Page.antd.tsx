@@ -30,7 +30,7 @@ export const Page = Object.assign(
         <PageHeader
           onBack={onBack}
           title={
-            <Title>
+            <Title level={2}>
               {image && <ImageSourceIcon style={{ margin: 5 }} src={image} />}
               {title}
             </Title>

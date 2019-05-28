@@ -160,13 +160,19 @@ const DragSortingTable: React.FC<TableProps> = ({
           titleText
             ? () => (
                 <ContextMenu header={titleContextMenuHeader} actions={titleActions}>
-                  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
-                    <Title>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      alignItems: 'baseline',
+                    }}
+                  >
+                    <Title level={3} style={{ margin: 0 }}>
                       {titleImage && (
                         <Antd.Avatar
                           shape='square'
                           size='large'
-                          style={{ margin: 5, verticalAlign: 'middle' }}
+                          style={{ marginLeft: 5, marginRight: 5 }}
                           src={titleImage}
                         />
                       )}
@@ -186,6 +192,7 @@ const DragSortingTable: React.FC<TableProps> = ({
         components={components}
         rowKey={rowKey}
         dataSource={data}
+        style={{ marginTop: 20 }}
       />
     </Antd.ConfigProvider>
   )

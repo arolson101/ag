@@ -232,8 +232,8 @@ export const ui: UiContext = {
         {icon && (
           <Avatar
             shape='square'
-            style={{ margin: 5, verticalAlign: 'middle' }}
-            size={header ? 'large' : 'small'}
+            style={{ marginLeft: 5, marginRight: 5 }}
+            size={header ? 'large' : 16}
             src={icon}
           />
         )}
