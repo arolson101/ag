@@ -1,6 +1,5 @@
 import debug from 'debug'
 import { DateTime } from 'luxon'
-import { FormattedDate } from 'react-intl'
 
 const log = debug('util:date')
 

@@ -1,6 +1,6 @@
-import { actions } from '@ag/core/actions'
 import { App } from '@ag/core/app'
 import { CoreStore, selectors } from '@ag/core/reducers'
+import { thunks } from '@ag/core/thunks'
 import { createClient } from '@ag/db'
 import { online } from '@ag/online'
 import { ui } from '@ag/ui-antd'
@@ -40,7 +40,7 @@ class ElectronApp extends React.PureComponent<Props> {
   }
 
   static start(store: CoreStore) {
-    store.dispatch(actions.init())
+    store.dispatch(thunks.init())
   }
 }
 

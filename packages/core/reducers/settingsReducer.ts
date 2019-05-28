@@ -32,6 +32,9 @@ export const settings = (
     case getType(actions.settingsError):
       return { ...state, error: action.payload }
 
+    case getType(actions.dbLogout):
+      return { ...state, error: undefined, values: {} }
+
     default:
       return state
   }

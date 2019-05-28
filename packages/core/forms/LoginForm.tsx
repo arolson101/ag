@@ -7,6 +7,7 @@ import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
 import { Errors, typedFields, useAction, useIntl, useUi } from '../context'
 import { selectors } from '../reducers'
+import { thunks } from '../thunks'
 
 const log = debug('core:LoginForm')
 
@@ -127,9 +128,9 @@ export const LoginForm = Object.assign(
   React.forwardRef<LoginForm, Props>((props, ref) => {
     const component = useRef<LoginForm>(null)
 
-    const createDb = useAction(actions.dbCreate)
+    const createDb = useAction(thunks.dbCreate)
     const appError = useSelector(selectors.getAppError)
-    const openDb = useAction(actions.dbOpen)
+    const openDb = useAction(thunks.dbOpen)
 
     useImperativeHandle(ref, () => ({
       submit: () => {

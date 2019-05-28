@@ -1,6 +1,8 @@
 import { Store } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 import { StateType } from 'typesafe-actions'
 import { CoreAction } from '../actions'
+import { CoreDependencies } from '../context'
 import { db, dbSelectors } from './dbReducer'
 import { dialog } from './dialogReducer'
 import { intl, intlSelectors } from './intlReducer'
@@ -14,7 +16,9 @@ export const coreReducers = {
 }
 
 export interface CoreState extends StateType<typeof coreReducers> {}
-export interface CoreStore extends Store<CoreState, CoreAction> {}
+export interface CoreStore extends Store<CoreState, CoreAction> {
+  dispatch: ThunkDispatch<CoreState, CoreDependencies, CoreAction>
+}
 
 export const selectors = {
   isDbInitializing: (state: CoreState) => dbSelectors.isDbInitializing(state.db),

@@ -1,10 +1,10 @@
 import React, { useCallback, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { useDispatch, useIntl, useSelector, useUi } from '../context'
+import { useAction, useIntl, useSelector, useUi } from '../context'
 import { LoginForm } from '../forms'
-import { deleteDb } from '../mutations'
 import { selectors } from '../reducers'
+import { thunks } from '../thunks'
 
 interface Props {
   isOpen: boolean
@@ -13,12 +13,12 @@ interface Props {
 export const LoginDialog = React.memo<Props>(function _LoginDialog(props) {
   const { isOpen } = props
   const intl = useIntl()
-  const ui = useUi()
-  const { LoadingOverlay, Dialog } = ui
+  const { LoadingOverlay, Dialog, showToast, alert } = useUi()
   const isDbInitializing = useSelector(selectors.isDbInitializing)
   const isDbInitialized = useSelector(selectors.isDbInitialized)
   const dbs = useSelector(selectors.getDbs)
-  const dispatch = useDispatch()
+  const dbId = dbs.length ? dbs[0].dbId : undefined
+  const dbDelete = useAction(thunks.dbDelete)
   const indexError = useSelector(selectors.getIndexError)
   const loginForm = useRef<LoginForm>(null)
 
@@ -28,7 +28,22 @@ export const LoginDialog = React.memo<Props>(function _LoginDialog(props) {
     }
   }, [loginForm.current])
 
-  const dbId = dbs.length ? dbs[0].dbId : undefined
+  const confirmDeleteDb = useCallback(() => {
+    alert({
+      title: intl.formatMessage(messages.dlgTitle),
+      body: intl.formatMessage(messages.dlgBody),
+      danger: true,
+
+      confirmText: intl.formatMessage(messages.dlgDelete),
+      onConfirm: async () => {
+        await dbDelete({ dbId: dbId! })
+        showToast(intl.formatMessage(messages.dlgDeleted), true)
+      },
+
+      cancelText: intl.formatMessage(messages.dlgCancel),
+      onCancel: () => {},
+    })
+  }, [dbDelete, showToast, intl])
 
   return (
     <>
@@ -47,7 +62,7 @@ export const LoginDialog = React.memo<Props>(function _LoginDialog(props) {
             dbId
               ? {
                   title: intl.formatMessage(messages.delete),
-                  onClick: () => deleteDb({ ui, intl, dbId, dispatch }),
+                  onClick: confirmDeleteDb,
                   isDanger: true,
                 }
               : undefined
@@ -76,5 +91,25 @@ const messages = defineMessages({
   delete: {
     id: 'LoginDialog.delete',
     defaultMessage: 'Delete',
+  },
+  dlgTitle: {
+    id: 'LoginDialog.dlgTitle',
+    defaultMessage: 'Are you sure?',
+  },
+  dlgBody: {
+    id: 'LoginDialog.dlgBody',
+    defaultMessage: 'This will all your data.  This action cannot be undone.',
+  },
+  dlgDelete: {
+    id: 'LoginDialog.dlgDelete',
+    defaultMessage: 'Delete',
+  },
+  dlgCancel: {
+    id: 'LoginDialog.dlgCancel',
+    defaultMessage: 'Cancel',
+  },
+  dlgDeleted: {
+    id: 'LoginDialog.dlgDeleted',
+    defaultMessage: 'Data deleted',
   },
 })

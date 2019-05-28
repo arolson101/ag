@@ -80,8 +80,6 @@ export const db = (state: DbState = defaultState, action: CoreAction): DbState =
     case getType(actions.dbInitFailure):
       return { ...state, indexError: action.payload }
 
-    case getType(actions.dbCreate):
-    case getType(actions.dbOpen):
     case getType(actions.dbLogout):
       return { ...state, app: undefined, appError: undefined }
 
@@ -101,12 +99,6 @@ export const db = (state: DbState = defaultState, action: CoreAction): DbState =
 
     case getType(actions.dbLoginFailure):
       return { ...state, appError: action.payload }
-
-    case getType(actions.dbDelete.success):
-      if (!state.index) {
-        throw new Error('index db not open')
-      }
-      return { ...state, dbs: action.payload.dbs }
 
     default:
       return state

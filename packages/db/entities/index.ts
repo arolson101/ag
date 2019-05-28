@@ -1,3 +1,12 @@
+import { Account } from './Account'
+import { Bank } from './Bank'
+import { Bill } from './Bill'
+import { Budget } from './Budget'
+import { Category } from './Category'
+import { Db } from './Db'
+import { Setting } from './Setting'
+import { Transaction } from './Transaction'
+
 export * from './Account'
 export * from './AccountInput'
 export * from './AccountType'
@@ -15,3 +24,17 @@ export * from './Record'
 export * from './Setting'
 export * from './Transaction'
 export * from './TransactionInput'
+
+export const indexEntities = [
+  Db, //
+]
+
+export const appEntities = [
+  Account, //
+  Bank,
+  Bill,
+  Budget,
+  Category,
+  Transaction,
+  Setting,
+]

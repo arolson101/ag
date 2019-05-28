@@ -1,7 +1,7 @@
-import { actions } from '@ag/core/actions'
 import { ErrorDisplay } from '@ag/core/components'
 import { useAction, useSelector } from '@ag/core/context'
 import { selectors } from '@ag/core/reducers'
+import { thunks } from '@ag/core/thunks'
 import debug from 'debug'
 import React, { useCallback } from 'react'
 import ReactSplitPane from 'react-split-pane'
@@ -17,12 +17,12 @@ export const SplitPane: React.FC<Props> = ({ children }) => {
   const error = useSelector(selectors.getSettingsError)
   const getSetting = useSelector(selectors.getSetting)
   const sidebarWidth = parseFloat(getSetting(sidebarWidthKey, sidebarWidthDefault.toString()))
-  const settingsSetValue = useAction(actions.settingsSetValue)
+  const settingsSetValue = useAction(thunks.settingsSetValue)
 
   const setSidebarWidth = useCallback(
     (width: number) => {
       log('setSidebarWidth %d', width)
-      settingsSetValue({ key: sidebarWidthKey, value: width.toString() })
+      settingsSetValue(sidebarWidthKey, width.toString())
     },
     [settingsSetValue, sidebarWidthKey]
   )

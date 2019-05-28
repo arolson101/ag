@@ -1,19 +1,20 @@
 import { Online } from '@ag/online'
 import { ImageBuf } from '@ag/util'
-import React, { Dispatch, useContext, useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { InjectedIntl as IntlContext } from 'react-intl'
 import { useDispatch as useDispatch1, useSelector } from 'react-redux'
 import { ActionCreator, bindActionCreators } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 import { Connection, ConnectionOptions } from 'typeorm'
 import { CoreAction } from '../actions'
-import { selectors } from '../reducers'
+import { CoreState, selectors } from '../reducers'
 import { UiContext } from './uiContext'
 
 export { IntlContext, useSelector }
 
 export const maxImageSize = 512
 
-export type CoreDispatch = Dispatch<CoreAction>
+export type CoreDispatch = ThunkDispatch<CoreState, CoreDependencies, CoreAction>
 
 export interface CoreDependencies {
   online: Online

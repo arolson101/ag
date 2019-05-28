@@ -1,46 +1,33 @@
-import { actions, CoreAction } from '@ag/core/actions'
+import { CoreAction } from '@ag/core/actions'
 import { CoreDependencies } from '@ag/core/context'
-import { CoreState } from '@ag/core/reducers'
+import { CoreStore } from '@ag/core/reducers'
+import { thunks } from '@ag/core/thunks'
+import debug from 'debug'
 import { applyMiddleware, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { ActionsObservable, createEpicMiddleware, StateObservable } from 'redux-observable'
-import { BehaviorSubject } from 'rxjs'
-import { switchMap } from 'rxjs/operators'
-import { rootEpic } from '../epics'
+import thunk from 'redux-thunk'
 import { RnState, rootReducer } from '../reducers'
 
-export const createStore = (dependencies: CoreDependencies) => {
-  const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, CoreDependencies>({
-    dependencies,
-  })
+const log = debug('rn:store')
 
+export const createStore = (dependencies: CoreDependencies) => {
   const middleware = [
-    epicMiddleware, //
+    thunk.withExtraArgument(dependencies), //
   ]
 
   const store = reduxCreateStore<RnState, CoreAction, {}, {}>(
     rootReducer,
     composeWithDevTools(applyMiddleware(...middleware))
-  )
+  ) as CoreStore
 
-  const epic$ = new BehaviorSubject(rootEpic)
-  // Every time a new epic is given to epic$ it will unsubscribe from the previous one then
-  // call and subscribe to the new one because of how switchMap works
-  const hotReloadingEpic = (
-    action$: ActionsObservable<CoreAction>,
-    state$: StateObservable<CoreState>,
-    deps: CoreDependencies
-  ) => epic$.pipe(switchMap(epic => epic(action$, state$, deps)))
-
-  epicMiddleware.run(hotReloadingEpic)
-  if (module.hot) {
-    module.hot.accept('../epics', () => {
-      const nextRootEpic = require('../epics').rootEpic
-      epic$.next(nextRootEpic)
+  if (process.env.NODE_ENV !== 'production' && module.hot) {
+    module.hot.accept('../reducers', () => {
+      log('reducers updated')
+      store.replaceReducer(rootReducer)
     })
   }
 
-  store.dispatch(actions.init())
+  store.dispatch(thunks.init())
 
   return store
 }

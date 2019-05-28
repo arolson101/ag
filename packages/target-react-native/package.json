@@ -38,7 +38,7 @@
     "react-native-vector-icons": "^6.4.2",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
-    "redux-observable": "^1.1.0",
+    "redux-thunk": "^2.3.0",
     "rxjs": "^6.5.1",
     "shallowequal": "^1.1.0",
     "typeorm": "^0.2.17",

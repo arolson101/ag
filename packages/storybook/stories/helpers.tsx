@@ -1,9 +1,9 @@
 // tslint:disable:no-implicit-dependencies
-import { actions, CoreAction } from '@ag/core/actions'
+import { CoreAction } from '@ag/core/actions'
 import { App } from '@ag/core/app'
 import { CoreDependencies, SystemCallbacks } from '@ag/core/context'
-import { coreEpics } from '@ag/core/epics'
 import { coreReducers, CoreState, CoreStore, selectors } from '@ag/core/reducers'
+import { thunks } from '@ag/core/thunks'
 import { importDb } from '@ag/db/export'
 import { online } from '@ag/online'
 import { action } from '@storybook/addon-actions'
@@ -11,7 +11,7 @@ import debug from 'debug'
 import React, { useEffect, useState } from 'react'
 import { applyMiddleware, combineReducers, createStore as reduxCreateStore } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { combineEpics, createEpicMiddleware } from 'redux-observable'
+import thunk from 'redux-thunk'
 import { Connection, ConnectionOptions, createConnection, getConnectionManager } from 'typeorm'
 import empty from './data/empty.xlsx'
 import full from './data/full.xlsx'
@@ -43,18 +43,11 @@ const datasets: Record<Dataset, XlsxData> = {
   full,
 }
 
-const createStore = (dependencies: CoreDependencies) => {
-  const epicMiddleware = createEpicMiddleware<CoreAction, CoreAction, CoreState, CoreDependencies>({
-    dependencies,
-  })
-
+const createStore = (dependencies: CoreDependencies): CoreStore => {
   const store = reduxCreateStore<CoreState, CoreAction, {}, {}>(
     combineReducers(coreReducers),
-    composeWithDevTools(applyMiddleware(epicMiddleware))
+    composeWithDevTools(applyMiddleware(thunk.withExtraArgument(dependencies)))
   )
-
-  const rootEpic = combineEpics<CoreAction, CoreAction, CoreState, CoreDependencies>(...coreEpics)
-  epicMiddleware.run(rootEpic)
 
   return store
 }
@@ -92,7 +85,9 @@ const waitForState = (store: CoreStore, finished: (state: CoreState) => boolean)
   new Promise<any>((resolve, reject) => {
     const unsubscribe = store.subscribe(() => {
       const state = store.getState()
+      // log('store update: %o', state)
       if (finished(state)) {
+        // log('finished')
         unsubscribe()
         resolve()
       }
@@ -107,7 +102,7 @@ export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) 
     if (window.SQL) {
       // log('create store')
       const s = createStore({ sys, online, ui })
-      s.dispatch(actions.init())
+      s.dispatch(thunks.init())
 
       setStore(s)
 
@@ -115,7 +110,7 @@ export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) 
         .then(async () => {
           // log('initialized')
           if (dataset) {
-            s.dispatch(actions.dbCreate({ name: 'app', password: '1234' }))
+            s.dispatch(thunks.dbCreate({ name: 'app', password: '1234' }))
             await waitForState(s, selectors.isLoggedIn)
             const { connection } = selectors.getAppDb(s.getState())
             await importDb(connection, datasets[dataset])
