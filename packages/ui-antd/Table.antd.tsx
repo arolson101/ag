@@ -18,8 +18,7 @@ import { ImageSourceIcon } from './ImageSourceIcon'
 
 const log = debug('ui-antd:Table')
 
-const Text: React.FC = ({ children }) => <span>{children}</span>
-const Title: React.FC = ({ children }) => <h3>{children}</h3>
+const { Title } = Antd.Typography
 
 let dragingIndex = -1
 

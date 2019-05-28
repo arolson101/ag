@@ -1,5 +1,18 @@
 import { ListItem, LoadingOverlayProps, NavMenuItem, UiContext } from '@ag/core/context'
-import { Button, Card, Divider, Dropdown, Icon, List, Menu, message, Modal, Spin, Tabs } from 'antd'
+import {
+  Button,
+  Card,
+  Divider,
+  Dropdown,
+  Icon,
+  List,
+  Menu,
+  message,
+  Modal,
+  Spin,
+  Tabs,
+  Typography,
+} from 'antd'
 import 'antd/dist/antd.css'
 import debug from 'debug'
 import NProgress from 'nprogress'
@@ -17,10 +30,7 @@ import { SelectField } from './SelectField.antd'
 import { Table } from './Table.antd'
 import { TextField } from './TextField.antd'
 
-// const { Text, Title, Paragraph } = Typography
-const Text: React.FC = ({ children }) => <span>{children}</span>
-const Title: React.FC = ({ children }) => <h3>{children}</h3>
-const Paragraph: React.FC = ({ children }) => <p>{children}</p>
+const { Text, Title, Paragraph } = Typography
 
 const log = debug('ui-antd:ui')
 

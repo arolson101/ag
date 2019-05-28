@@ -7,7 +7,7 @@ import React, { useCallback } from 'react'
 export const DateField = Object.assign(
   React.memo<DateFieldProps>(function _DateField(props) {
     const { field: name, label, flex, disabled } = props
-    const [field, { error }] = useField<any>(name)
+    const [field, { error, touched }] = useField<any>(name)
     const form = useForm()
 
     const onChange = useCallback<NonNullable<DatePickerProps['onChange']>>(
@@ -19,8 +19,8 @@ export const DateField = Object.assign(
 
     return (
       <Form.Item
-        validateStatus={error ? 'error' : undefined}
-        help={error}
+        validateStatus={touched && error ? 'error' : undefined}
+        help={touched && error}
         label={label}
         style={{ flex }}
       >

@@ -8,11 +8,11 @@ import { Label } from './Label.nativebase'
 export const CheckboxField = Object.assign(
   React.memo<CheckboxFieldProps>(function _CheckboxField(props) {
     const { field: name, label, disabled } = props
-    const [field, { error }] = useField<boolean>(name)
+    const [field, { error, touched }] = useField<boolean>(name)
     const form = useForm()
     return (
-      <Item inlineLabel error={error} style={styles.item}>
-        <Label label={label} error={error} />
+      <Item inlineLabel error={touched && error} style={styles.item}>
+        <Label label={label} error={touched && error} />
         <Right>
           <Switch
             onValueChange={(value: boolean) => form.change(name, value)}

@@ -1,74 +1,57 @@
 import { DateFieldProps } from '@ag/core/context'
-import { formatDate, standardizeDate } from '@ag/util'
-import { Field, FieldProps, FormikProps } from 'formik'
+import { formatDate, standardizeDate, useField, useForm } from '@ag/util'
 import { Body, Icon, ListItem, Text } from 'native-base'
 import platform from 'native-base/dist/src/theme/variables/platform'
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { DatePickerIOS } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { Label } from './Label.nativebase'
 
-interface State {
-  picking: boolean
-}
+export const DateField = Object.assign(
+  React.memo<DateFieldProps>(function _DisplayName(props) {
+    const { field: name, label, collapsed } = props
+    const [picking, setPicking] = useState(false)
+    const [field, { error, touched }] = useField(name)
+    const colorStyle = {
+      ...(picking ? { color: platform.brandPrimary } : {}),
+      ...(error ? { color: platform.brandDanger } : {}),
+    }
 
-export class DateField extends React.PureComponent<DateFieldProps> {
-  private form?: FormikProps<any>
+    const form = useForm()
 
-  state: State = {
-    picking: false,
-  }
+    const onPress = useCallback(() => {
+      setPicking(!picking)
+    }, [picking, setPicking])
 
-  render() {
-    const { field: name, label, collapsed } = this.props
+    const onDateChange = useCallback(
+      (date: Date) => {
+        const value = standardizeDate(date)
+        form.change(name, value)
+        setPicking(false)
+      },
+      [setPicking, form]
+    )
+
     if (collapsed) {
       return null
     }
+
     return (
-      <Field name={name}>
-        {({ field, form }: FieldProps) => {
-          this.form = form
-          const error = !!(form.touched[name] && form.errors[name])
-          const itemProps = { onPress: this.onPress }
-          const colorStyle = {
-            ...(this.state.picking ? { color: platform.brandPrimary } : {}),
-            ...(error ? { color: platform.brandDanger } : {}),
-          }
-          return (
-            <>
-              <ListItem button {...itemProps}>
-                <Label label={label} error={error} />
-                <Body>
-                  <Text style={{ color: platform.textColor, ...colorStyle }}>
-                    {formatDate(new Date(field.value))}
-                  </Text>
-                </Body>
-                {error && <Icon name='close-circle' />}
-              </ListItem>
-              <Collapsible collapsed={this.state.picking}>
-                <DatePickerIOS
-                  mode='date'
-                  date={new Date(field.value)}
-                  onDateChange={this.onDateChange}
-                />
-              </Collapsible>
-            </>
-          )
-        }}
-      </Field>
+      <>
+        <ListItem button onPress={onPress}>
+          <Label label={label} error={error} />
+          <Body>
+            <Text style={{ color: platform.textColor, ...colorStyle }}>
+              {formatDate(new Date(field.value))}
+            </Text>
+          </Body>
+          {touched && error && <Icon name='close-circle' />}
+        </ListItem>
+        <Collapsible collapsed={picking}>
+          <DatePickerIOS mode='date' date={new Date(field.value)} onDateChange={onDateChange} />
+        </Collapsible>
+      </>
     )
-  }
-
-  onPress = () => {
-    this.setState({ picking: !this.state.picking })
-  }
-
-  onDateChange = (date: Date) => {
-    if (this.form) {
-      const { field } = this.props
-      const value = standardizeDate(date)
-      this.form.setFieldValue(field, value)
-      this.setState({ picking: false })
-    }
-  }
-}
+  }),
+  { displayName: 'DateField' }
+)

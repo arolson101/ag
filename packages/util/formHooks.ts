@@ -5,15 +5,14 @@ import {
   useField as useField1,
   useForm,
 } from 'react-final-form'
-import { Omit } from 'utility-types'
 
 export { useForm }
 
-interface FieldInputProps<T> extends Omit<FieldInputProps1<any>, 'value'> {
+interface FieldInputProps<T> extends FieldInputProps1<any> {
   value: T
 }
 
-interface FieldRenderProps<T> extends Omit<FieldRenderProps1<any>, 'input'> {
+interface FieldRenderProps<T> extends FieldRenderProps1<any> {
   input: FieldInputProps<T>
 }
 

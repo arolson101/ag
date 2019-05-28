@@ -1,6 +1,6 @@
 import { CommonTextFieldProps, TextFieldProps } from '@ag/core/context'
+import { useField, useForm } from '@ag/util'
 import debug from 'debug'
-import { FormikProps, useField } from 'formik'
 import { Icon, Input, Item, Textarea } from 'native-base'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { TextInput } from 'react-native'
@@ -11,11 +11,6 @@ const log = debug('ui-nativebase:TextField.nativebase')
 
 export const TextField = Object.assign(
   React.memo<TextFieldProps>(function _TextField(props) {
-    const [commonTextFieldProps, setCommonTextFieldProps] = useState<CommonTextFieldProps>({})
-    const context = useContext(FormContext)
-    const textInput = useRef<TextInput & Textarea>(null)
-    const form = useRef<FormikProps<any>>(null)
-
     const {
       field: name,
       autoFocus,
@@ -30,7 +25,12 @@ export const TextField = Object.assign(
       rightElement,
     } = props
 
-    const [field, { error }] = useField(name)
+    const [commonTextFieldProps, setCommonTextFieldProps] = useState<CommonTextFieldProps>({})
+    const context = useContext(FormContext)
+    const textInput = useRef<TextInput & Textarea>(null)
+
+    const form = useForm()
+    const [field, { touched, error }] = useField(name)
 
     useEffect(() => {
       const ref = {
@@ -45,7 +45,7 @@ export const TextField = Object.assign(
     const onChangeText = (text: string) => {
       // log('onChangeText %s', text)
       const { onValueChanged } = props
-      form.current!.setFieldValue(name, text)
+      form.change(name, text)
       if (onValueChanged) {
         onValueChanged(text)
       }
@@ -58,7 +58,7 @@ export const TextField = Object.assign(
     return (
       <Item
         {...itemProps}
-        error={!!error}
+        error={touched && error}
         secureTextEntry={secure}
         placeholder={placeholder}
         disabled={disabled}

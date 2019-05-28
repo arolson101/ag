@@ -9,7 +9,7 @@ const log = debug('ui-antd:SelectField')
 export const SelectField = Object.assign(
   React.memo<SelectFieldProps>(function _SelectField(props) {
     const { field: name, label, disabled, items, flex, searchable, onValueChange } = props
-    const [field, { error }] = useField(name)
+    const [field, { error, touched }] = useField(name)
     const form = useForm()
 
     const onChange = useCallback(
@@ -25,8 +25,8 @@ export const SelectField = Object.assign(
     // log('render %o', name)
     return (
       <Form.Item
-        validateStatus={error ? 'error' : undefined}
-        help={error}
+        validateStatus={touched && error ? 'error' : undefined}
+        help={touched && error}
         label={label}
         style={{ flex }}
       >

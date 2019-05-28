@@ -23,7 +23,7 @@ export const TextField = Object.assign(
       onValueChanged,
     } = props
 
-    const [field, { error }] = useField(name)
+    const [field, { error, touched }] = useField(name)
     const onChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         field.onChange(e)
@@ -45,11 +45,11 @@ export const TextField = Object.assign(
     }
 
     const Component = secure ? Input.Password : Input
-    const validateStatus = error ? 'error' : undefined
+    const validateStatus = touched && error ? 'error' : undefined
     return (
       <Form.Item
         validateStatus={validateStatus} //
-        help={error}
+        help={touched && error}
         label={label}
         style={{ flex }}
       >

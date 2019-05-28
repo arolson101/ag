@@ -23,7 +23,7 @@ export const CurrencyField = Object.assign(
       // returnKeyType,
     } = props
 
-    const [field, { error }] = useField(name)
+    const [field, { error, touched }] = useField(name)
 
     const focus = useCallback(() => {
       const input: any = textInput.current
@@ -53,8 +53,8 @@ export const CurrencyField = Object.assign(
     const itemProps = { onPress: focus }
     const inputProps = { autoFocus }
     return (
-      <Item {...itemProps} error={!!error} placeholder={placeholder}>
-        <Label label={label} error={!!error} />
+      <Item {...itemProps} error={touched && error} placeholder={placeholder}>
+        <Label label={label} error={touched && error} />
         {/* <CalculatorInput
             prefix='$ '
             suffix=' USD'
@@ -76,7 +76,7 @@ export const CurrencyField = Object.assign(
           {...commonTextFieldProps}
           {...inputProps}
         />
-        {error && <Icon name='close-circle' />}
+        {touched && error && <Icon name='close-circle' />}
       </Item>
     )
   }),

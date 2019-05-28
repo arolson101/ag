@@ -7,12 +7,12 @@ import { useForm } from 'react-final-form'
 export const CheckboxField = Object.assign(
   React.memo<CheckboxFieldProps>(function _CheckboxField(props) {
     const { field: name, label, disabled, flex } = props
-    const [field, { error }] = useField<boolean>(name)
+    const [field, { error, touched }] = useField<boolean>(name)
     const form = useForm()
     return (
       <Form.Item
-        validateStatus={error ? 'error' : undefined} //
-        help={error}
+        validateStatus={touched && error ? 'error' : undefined} //
+        help={touched && error}
         label={label}
         style={{ flex }}
       >

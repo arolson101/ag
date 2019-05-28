@@ -6,7 +6,7 @@ import React, { useCallback } from 'react'
 export const CurrencyField = Object.assign(
   React.memo<CurrencyFieldProps>(function _CurrencyField(props) {
     const { field: name, label, placeholder, flex, disabled } = props
-    const [field, { error }] = useField<number>(name)
+    const [field, { error, touched }] = useField<number>(name)
     const form = useForm()
 
     const onChange = useCallback(
@@ -18,8 +18,8 @@ export const CurrencyField = Object.assign(
 
     return (
       <Form.Item
-        validateStatus={error ? 'error' : undefined}
-        help={error}
+        validateStatus={touched && error ? 'error' : undefined}
+        help={touched && error}
         label={label}
         style={{ flex }}
       >

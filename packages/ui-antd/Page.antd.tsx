@@ -1,5 +1,5 @@
 import { PageProps } from '@ag/core/context'
-import { Button, Layout, PageHeader } from 'antd'
+import { Button, Layout, PageHeader, Typography } from 'antd'
 import 'antd/dist/antd.css'
 import debug from 'debug'
 import { MemoryHistory } from 'history'
@@ -8,10 +8,7 @@ import React from 'react'
 import useReactRouter from 'use-react-router'
 import { ImageSourceIcon } from './ImageSourceIcon'
 
-// const { Text, Title, Paragraph } = Typography
-const Text: React.FC = ({ children }) => <span>{children}</span>
-const Title: React.FC = ({ children }) => <h3>{children}</h3>
-const Paragraph: React.FC = ({ children }) => <p>{children}</p>
+const { Title } = Typography
 
 const log = debug('ui-antd:ui')
 
