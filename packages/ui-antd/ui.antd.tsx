@@ -1,5 +1,6 @@
 import { ListItem, LoadingOverlayProps, NavMenuItem, UiContext } from '@ag/core/context'
 import {
+  Avatar,
   Button,
   Card,
   Divider,
@@ -224,10 +225,18 @@ export const ui: UiContext = {
   // controls
   Spinner: Spin,
   Link: ({ onClick, children }) => <a onClick={onClick}>{children}</a>,
-  Text: ({ flex, header, muted, children, onClick }) => {
+  Text: ({ flex, header, muted, icon, children, onClick }) => {
     const Component: React.ComponentType<any> = header ? Title : Text
     return (
       <Component style={{ flex }} type={muted ? 'secondary' : undefined} onClick={onClick}>
+        {icon && (
+          <Avatar
+            shape='square'
+            style={{ margin: 5, verticalAlign: 'middle' }}
+            size={header ? 'large' : 'small'}
+            src={icon}
+          />
+        )}
         {children}
       </Component>
     )

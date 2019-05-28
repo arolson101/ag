@@ -162,7 +162,14 @@ const DragSortingTable: React.FC<TableProps> = ({
                 <ContextMenu header={titleContextMenuHeader} actions={titleActions}>
                   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'baseline' }}>
                     <Title>
-                      {titleImage && <ImageSourceIcon style={{ margin: 5 }} src={titleImage} />}
+                      {titleImage && (
+                        <Antd.Avatar
+                          shape='square'
+                          size='large'
+                          style={{ margin: 5, verticalAlign: 'middle' }}
+                          src={titleImage}
+                        />
+                      )}
                       {titleText}
                     </Title>
                   </div>

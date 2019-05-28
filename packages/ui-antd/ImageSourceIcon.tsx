@@ -5,15 +5,23 @@ import React from 'react'
 
 type Props = React.ComponentProps<typeof Antd.Icon> & {
   src: ImageUri | undefined
+  header?: boolean
 }
 
-export const ImageSourceIcon: React.FC<Props> = ({ src, ...props }) => {
+export const ImageSourceIcon: React.FC<Props> = ({ src, header, ...props }) => {
   return (
     <Antd.Icon
       {...props}
       component={
         src
-          ? () => <Antd.Avatar size='small' shape='square' style={{ borderRadius: 0 }} src={src} />
+          ? () => (
+              <Antd.Avatar
+                size={header ? 'large' : 'small'}
+                shape='square'
+                style={{ borderRadius: 0 }}
+                src={src}
+              />
+            )
           : undefined
       }
     />

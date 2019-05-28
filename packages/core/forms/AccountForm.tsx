@@ -165,8 +165,9 @@ const Component = Object.assign(
           return (
             <>
               <Row>
-                <Image size={24} src={bankIcon} />
-                <Text header>{account ? account.bank.name : bank ? bank.name : '<no bank>'}</Text>
+                <Text header icon={bankIcon}>
+                  {account ? account.bank.name : bank ? bank.name : '<no bank>'}
+                </Text>
               </Row>
               <TextFieldWithIcon<FormValues>
                 field='name'

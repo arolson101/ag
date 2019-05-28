@@ -212,6 +212,7 @@ export interface UiContext {
   Link: ComponentType<{ onClick?: (e: React.SyntheticEvent) => any }>
   Text: ComponentType<{
     flex?: number
+    icon?: ImageUri
     header?: boolean
     muted?: boolean
     onClick?: (e: React.SyntheticEvent) => any

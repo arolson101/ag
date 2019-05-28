@@ -221,10 +221,7 @@ const BankTable = Object.assign(
         title: intl.formatMessage(messages.colName),
         render: (text: string, account: Row) => (
           <Link onClick={() => navAccount({ accountId: account.id })}>
-            <Row>
-              <Image src={account.icon || bank.icon} size={16} />
-              <Text>{account.name}</Text>
-            </Row>
+            <Text icon={account.icon || bank.icon}>{account.name}</Text>
           </Link>
         ),
       },
