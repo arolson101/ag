@@ -55,6 +55,7 @@ export const BankDialog = Object.assign(
     )
   }),
   {
+    name: 'BankDialog',
     displayName: 'BankDialog',
   }
 )

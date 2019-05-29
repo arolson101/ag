@@ -22,6 +22,7 @@ export const HomeTab = Object.assign(
     )
   }),
   {
+    name: 'HomeTab',
     displayName: 'HomeTab',
     id: 'HomeTab',
     stackId: 'HomeTabStack',

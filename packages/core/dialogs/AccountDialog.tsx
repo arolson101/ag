@@ -57,6 +57,7 @@ export const AccountDialog = Object.assign(
     )
   }),
   {
+    name: 'AccountDialog',
     displayName: 'AccountDialog',
   }
 )

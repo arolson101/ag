@@ -163,6 +163,7 @@ export const PictureDialog = Object.assign(
     )
   }),
   {
+    name: 'PictureDialog',
     displayName: 'PictureDialog',
   }
 )
