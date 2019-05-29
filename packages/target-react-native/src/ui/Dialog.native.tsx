@@ -53,8 +53,8 @@ export const Dialog = Object.assign(
         }
       })
 
-      return listener.remove
-    }, [componentId])
+      return () => listener.remove()
+    }, [componentId, primary, secondary])
 
     return <>{children}</>
   }),

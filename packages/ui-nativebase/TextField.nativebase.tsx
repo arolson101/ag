@@ -2,7 +2,7 @@ import { CommonTextFieldProps, TextFieldProps } from '@ag/core/context'
 import { useField, useForm } from '@ag/util'
 import debug from 'debug'
 import { Icon, Input, Item, Textarea } from 'native-base'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { TextInput } from 'react-native'
 import { FormContext } from './Form.nativebase'
 import { Label } from './Label.nativebase'
@@ -31,6 +31,16 @@ export const TextField = Object.assign(
 
     const form = useForm()
     const [field, { touched, error }] = useField(name)
+
+    const focus = useCallback(() => {
+      let x: any = textInput.current
+      if (x && x.wrappedInstance) {
+        x = x.wrappedInstance
+      }
+      if (x && x.focus) {
+        x.focus()
+      }
+    }, [textInput.current])
 
     useEffect(() => {
       const ref = {
@@ -63,7 +73,7 @@ export const TextField = Object.assign(
         placeholder={placeholder}
         disabled={disabled}
       >
-        <Label label={label} error={!!error} />
+        <Label label={label} error={touched && error} />
         {rows && rows > 0 ? (
           <Textarea
             editable={!disabled}
@@ -89,7 +99,7 @@ export const TextField = Object.assign(
             {...inputProps}
           />
         )}
-        {error && <Icon name='close-circle' />}
+        {touched && error && <Icon style={{ color: 'red' }} name='close-circle' />}
         {rightElement}
       </Item>
     )

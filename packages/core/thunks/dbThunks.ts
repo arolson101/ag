@@ -16,6 +16,7 @@ const dbInit = (): CoreThunk =>
 
       dispatch(actions.dbSetIndex(connection))
       dispatch(actions.dbSetInfos(dbs))
+      dispatch(actions.openDlg.login())
     } catch (error) {
       dispatch(actions.dbInitFailure(error))
     }
@@ -25,6 +26,7 @@ const dbLogin = (connection: Connection): CoreThunk =>
   async function _dbLogin(dispatch, getState) {
     dispatch(actions.dbLoginSuccess(connection))
     dispatch(settingsThunks.settingsInit(connection))
+    dispatch(actions.closeDlg('login'))
   }
 
 const dbCreate = ({ name, password }: { name: string; password: string }): CoreThunk =>

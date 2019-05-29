@@ -34,50 +34,55 @@ interface Props {
   hist: HistoryType
 }
 
-export const ElectronRouter = React.memo<Props>(function _ElectronRouter({ hist }) {
-  const fallback = routes[0].path
+export const ElectronRouter = Object.assign(
+  React.memo<Props>(function _ElectronRouter({ hist }) {
+    const fallback = routes[0].path
 
-  const isLoggedIn = useSelector(selectors.isLoggedIn)
-  if (!isLoggedIn) {
-    return <div>db not open</div>
-  }
+    const isLoggedIn = useSelector(selectors.isLoggedIn)
+    if (!isLoggedIn) {
+      return <div>db not open</div>
+    }
 
-  return (
-    <ConnectedRouter history={hist}>
-      <Layout>
-        <SplitPane>
-          <NavBar />
+    return (
+      <ConnectedRouter history={hist}>
+        <Layout>
+          <SplitPane>
+            <NavBar />
 
-          <Content>
-            <Route
-              render={params => {
-                log('route %s %O %O', params.location.pathname, params, hist.entries)
-                return null
-              }}
-            />
-            <Switch>
-              {routes.map(Component => (
-                <Route
-                  key={Component.path}
-                  path={Component.path}
-                  exact
-                  render={({ match }) => <Component {...match.params} />}
-                />
-              ))}
+            <Content>
               <Route
-                render={({ location }) => {
-                  log(
-                    `"%s" (%O) not found- redirecting to ${fallback}`,
-                    location.pathname,
-                    location
-                  )
-                  return <Redirect to={fallback} />
+                render={params => {
+                  log('route %s %O %O', params.location.pathname, params, hist.entries)
+                  return null
                 }}
               />
-            </Switch>
-          </Content>
-        </SplitPane>
-      </Layout>
-    </ConnectedRouter>
-  )
-})
+              <Switch>
+                {routes.map(Component => (
+                  <Route
+                    key={Component.path}
+                    path={Component.path}
+                    exact
+                    render={({ match }) => <Component {...match.params} />}
+                  />
+                ))}
+                <Route
+                  render={({ location }) => {
+                    log(
+                      `"%s" (%O) not found- redirecting to ${fallback}`,
+                      location.pathname,
+                      location
+                    )
+                    return <Redirect to={fallback} />
+                  }}
+                />
+              </Switch>
+            </Content>
+          </SplitPane>
+        </Layout>
+      </ConnectedRouter>
+    )
+  }),
+  {
+    displayName: 'ElectronRouter',
+  }
+)
