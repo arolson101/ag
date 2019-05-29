@@ -7,7 +7,7 @@
     "appId": "com.example.ag"
   },
   "scripts": {
-    "android": "cross-env-shell react-native run-android --no-packager --config $INIT_CWD/rn-cli.config.js",
+    "android": "cross-env-shell react-native run-android --no-packager",
     "bundle-android": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform android --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.android.dev.js",
     "bundle-ios": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform ios --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.ios.dev.js",
     "electron": "concurrently --raw --kill-others \"yarn:electron:server\" \"yarn:electron:main\"",
