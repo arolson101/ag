@@ -1,7 +1,7 @@
 import { fixUrl, imageBufToUri, ImageUri, isUrl, useFieldValue } from '@ag/util'
 import debug from 'debug'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useField, useForm } from 'react-final-form'
+import { useForm } from 'react-final-form'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import {
@@ -153,19 +153,19 @@ export const TextFieldWithIcon = <Values extends Record<string, any>>(props: Pro
 
 const messages = defineMessages({
   library: {
-    id: 'TextFieldWithIcon.electron.library',
+    id: 'TextFieldWithIcon.library',
     defaultMessage: 'Browse...',
   },
   reset: {
-    id: 'TextFieldWithIcon.electron.reset',
+    id: 'TextFieldWithIcon.reset',
     defaultMessage: 'Clear',
   },
   redownload: {
-    id: 'TextFieldWithIcon.electron.redownload',
+    id: 'TextFieldWithIcon.redownload',
     defaultMessage: 'Download again',
   },
   selectImage: {
-    id: 'TextFieldWithIcon.electron.selectImage',
+    id: 'TextFieldWithIcon.selectImage',
     defaultMessage: 'Choose image...',
   },
 })

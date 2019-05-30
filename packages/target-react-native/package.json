@@ -8,7 +8,7 @@
     "bundle-ios": "cross-env-shell react-native bundle --config $INIT_CWD/rn-cli.config.js --platform ios --dev true --entry-file $INIT_CWD/index.js --bundle-output $INIT_CWD/dist/bundle.ios.dev.js",
     "debug": "react-native-debugger",
     "preios": "cd ./ios && pod install",
-    "ios": "cross-env-shell react-native run-ios --no-packager --config $INIT_CWD/rn-cli.config.js",
+    "ios": "cross-env-shell react-native run-ios --no-packager",
     "start": "cross-env-shell react-native start --config $INIT_CWD/rn-cli.config.js",
     "test": "jest"
   },
