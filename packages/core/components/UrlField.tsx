@@ -185,19 +185,19 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
 
 const messages = defineMessages({
   library: {
-    id: 'UrlField.electron.library',
+    id: 'UrlField.library',
     defaultMessage: 'Browse...',
   },
   reset: {
-    id: 'UrlField.electron.reset',
+    id: 'UrlField.reset',
     defaultMessage: 'Clear',
   },
   redownload: {
-    id: 'UrlField.electron.redownload',
+    id: 'UrlField.redownload',
     defaultMessage: 'Download again',
   },
   selectImage: {
-    id: 'UrlField.electron.selectImage',
+    id: 'UrlField.selectImage',
     defaultMessage: 'Choose image...',
   },
 })
