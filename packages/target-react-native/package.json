@@ -9,7 +9,7 @@
     "debug": "react-native-debugger",
     "preios": "cd ./ios && pod install",
     "ios": "cross-env-shell react-native run-ios --no-packager",
-    "start": "cross-env-shell react-native start --config $INIT_CWD/rn-cli.config.js",
+    "start": "cross-env-shell REACT_DEBUGGER='' react-native start --config $INIT_CWD/rn-cli.config.js",
     "test": "jest"
   },
   "jest": {

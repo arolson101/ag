@@ -1,9 +1,12 @@
 import { BudgetsPage } from '@ag/core/pages'
 import { selectors } from '@ag/core/reducers'
+import debug from 'debug'
 import React from 'react'
 import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'
 import { VisibleRoot } from './VisibleRoot'
+
+const log = debug('BudgetsTab')
 
 interface Props {
   componentId: string
@@ -31,7 +34,7 @@ export class BudgetsTab extends React.PureComponent<Props> {
   render() {
     return (
       <VisibleRoot componentId={this.props.componentId}>
-        <BudgetsPage />
+        <BudgetsPage componentId={this.props.componentId} />
       </VisibleRoot>
     )
   }

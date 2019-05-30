@@ -10,8 +10,10 @@ import * as T from '../graphql-types'
 
 const log = debug('core:CalendarPage')
 
-interface Props {}
-type ComponentProps = QueryHookResult<T.CalendarPage.Query, T.CalendarPage.Variables>
+interface Props {
+  componentId?: string
+}
+type ComponentProps = Props & QueryHookResult<T.CalendarPage.Query, T.CalendarPage.Variables>
 
 const queries = {
   CalendarPage: gql`
@@ -25,12 +27,12 @@ const queries = {
 }
 
 const Component = Object.assign(
-  React.memo<ComponentProps>(function _CalendarPage_Component({ data, loading }) {
+  React.memo<ComponentProps>(function _CalendarPage_Component({ data, componentId, loading }) {
     const intl = useIntl()
     const { Page, Row, Text } = useUi()
 
     return (
-      <Page title={intl.formatMessage(messages.titleText)}>
+      <Page title={intl.formatMessage(messages.titleText)} componentId={componentId}>
         <Text header>Calendar</Text>
         {data &&
           data.accounts &&
@@ -64,7 +66,7 @@ export const CalendarPage = Object.assign(
     return (
       <>
         <ErrorDisplay error={q.error} />
-        <Component {...q} />
+        <Component {...props} {...q} />
       </>
     )
   }),

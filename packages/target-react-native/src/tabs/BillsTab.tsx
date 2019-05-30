@@ -31,7 +31,7 @@ export class BillsTab extends React.PureComponent<Props> {
   render() {
     return (
       <VisibleRoot componentId={this.props.componentId}>
-        <BillsPage />
+        <BillsPage componentId={this.props.componentId} />
       </VisibleRoot>
     )
   }

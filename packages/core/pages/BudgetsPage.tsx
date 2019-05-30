@@ -10,8 +10,10 @@ import * as T from '../graphql-types'
 
 const log = debug('core:BudgetsPage')
 
-interface Props {}
-type ComponentProps = QueryHookResult<T.BudgetsPage.Query, T.BudgetsPage.Variables>
+interface Props {
+  componentId?: string
+}
+type ComponentProps = Props & QueryHookResult<T.BudgetsPage.Query, T.BudgetsPage.Variables>
 
 const queries = {
   BudgetsPage: gql`
@@ -25,12 +27,12 @@ const queries = {
 }
 
 const Component = Object.assign(
-  React.memo<ComponentProps>(function _BudgetsPage_Component({ data, loading }) {
+  React.memo<ComponentProps>(function _BudgetsPage_Component({ componentId, data, loading }) {
     const intl = useIntl()
-    const { Page, Row, Text } = useUi()
+    const { Page, Text } = useUi()
 
     return (
-      <Page title={intl.formatMessage(messages.titleText)}>
+      <Page title={intl.formatMessage(messages.titleText)} componentId={componentId}>
         <Text header>Budgets</Text>
         {data &&
           data.accounts &&
@@ -64,7 +66,7 @@ export const BudgetsPage = Object.assign(
     return (
       <>
         <ErrorDisplay error={q.error} />
-        <Component {...q} />
+        <Component {...props} {...q} />
       </>
     )
   }),

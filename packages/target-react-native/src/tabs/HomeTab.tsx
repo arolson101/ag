@@ -17,7 +17,7 @@ export const HomeTab = Object.assign(
   React.memo<Props>(function _HomeTab({ componentId }) {
     return (
       <VisibleRoot componentId={componentId}>
-        <HomePage />
+        <HomePage componentId={componentId} />
       </VisibleRoot>
     )
   }),

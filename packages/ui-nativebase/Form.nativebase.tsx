@@ -81,14 +81,18 @@ export const Form = Object.assign(
 
     return (
       <FinalForm initialValues={initialValues} validate={validate} onSubmit={submit}>
-        {({ handleSubmit }) => {
+        {({ handleSubmit, form, values }) => {
           submitRef2.current = handleSubmit
           if (submitRef) {
             submitRef.current = handleSubmit
           }
           return (
             <FormContext.Provider value={{ addField, rmvField }}>
-              <NB.Form style={styles.form}>{children}</NB.Form>
+              <NB.Form style={styles.form}>
+                {typeof children === 'function'
+                  ? children({ change: form.change, handleSubmit, values })
+                  : children}
+              </NB.Form>
             </FormContext.Provider>
           )
         }}

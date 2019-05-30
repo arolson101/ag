@@ -21,7 +21,9 @@ import { deleteAccount, deleteBank } from '../mutations'
 
 const log = debug('core:AccountsPage')
 
-interface Props {}
+interface Props {
+  componentId?: string
+}
 
 const fragments = {
   bankFields: gql`
@@ -264,16 +266,19 @@ const BankTable = Object.assign(
   }
 )
 
-type ComponentProps = QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
+type ComponentProps = Props & QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
 const Component = Object.assign(
-  React.memo<ComponentProps>(function _AccountsPage_Component({ data, loading }) {
+  React.memo<ComponentProps>(function _AccountsPage_Component({ componentId, data, loading }) {
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const { Page } = useUi()
 
+    log('data %o', data)
+
     return (
       <Page
         title={intl.formatMessage(messages.titleText)}
+        componentId={componentId}
         button={{
           title: intl.formatMessage(messages.bankAdd),
           onClick: openBankCreateDlg,
@@ -379,7 +384,7 @@ export const AccountsPage = Object.assign(
     return (
       <>
         <ErrorDisplay error={q.error} />
-        <Component {...q} />
+        <Component {...props} {...q} />
       </>
     )
   }),

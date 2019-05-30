@@ -31,7 +31,7 @@ export class CalendarTab extends React.PureComponent<Props> {
   render() {
     return (
       <VisibleRoot componentId={this.props.componentId}>
-        <CalendarPage />
+        <CalendarPage componentId={this.props.componentId} />
       </VisibleRoot>
     )
   }

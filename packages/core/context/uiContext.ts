@@ -103,6 +103,7 @@ export interface NavMenuProps {
 }
 
 export interface PageProps {
+  componentId?: string
   title: string
   image?: ImageUri
   subtitle?: string
