@@ -1,4 +1,11 @@
-import { PopoverButtonProps, TabProps, TabsProps, UiContext, useIntl } from '@ag/core/context'
+import {
+  PageProps,
+  PopoverButtonProps,
+  TabProps,
+  TabsProps,
+  UiContext,
+  useIntl,
+} from '@ag/core/context'
 import debug from 'debug'
 import {
   ActionSheet,
@@ -27,6 +34,7 @@ import { DateField } from './DateField.nativebase'
 import { Form } from './Form.nativebase'
 import { Image } from './NativeImage'
 import { SelectField } from './SelectField.nativebase'
+import { Table } from './Table.nativebase'
 import { TextField } from './TextField.nativebase'
 
 const log = debug('ui-nativebase:ui')
@@ -79,10 +87,15 @@ export const ui: Omit<UiContext, RNNTypes> = {
     )
   },
 
-  Page: ({ children }) => (
-    <Container>
-      <Content>{children}</Content>
-    </Container>
+  Page: Object.assign(
+    React.memo<PageProps>(({ children }) => (
+      <Container>
+        <Content>{children}</Content>
+      </Container>
+    )),
+    {
+      displayName: 'nativebase.Page',
+    }
   ),
   Tile: ({ size, margin, children }) => (
     <Container
@@ -112,7 +125,7 @@ export const ui: Omit<UiContext, RNNTypes> = {
   // ListItem: ({ title, image, children, actions }) => <ListItem>{children}</ListItem>,
 
   // table
-  Table: ({ columns, data }) => null,
+  Table,
 
   // controls
   Spinner,

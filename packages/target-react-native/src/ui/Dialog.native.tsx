@@ -1,5 +1,5 @@
 import { ButtonConfig, DialogProps } from '@ag/core/context'
-import { platform } from '@ag/ui-nativebase'
+import { Content, platform } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React, { useContext, useEffect } from 'react'
 import { Platform } from 'react-native'
@@ -56,7 +56,7 @@ export const Dialog = Object.assign(
       return () => listener.remove()
     }, [componentId, primary, secondary])
 
-    return <>{children}</>
+    return <Content>{children}</Content>
   }),
   {
     displayName: 'Dialog',

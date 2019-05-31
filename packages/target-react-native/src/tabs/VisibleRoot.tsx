@@ -1,4 +1,4 @@
-import { Root, View } from '@ag/ui-nativebase'
+import { Container, Content, Root, View } from '@ag/ui-nativebase'
 import debug from 'debug'
 import React from 'react'
 import { Navigation } from 'react-native-navigation'
@@ -44,7 +44,7 @@ export class VisibleRoot extends React.PureComponent<Props, State> {
     if (this.state.visible) {
       return <Root>{this.props.children}</Root>
     } else {
-      return <View>{this.props.children}</View>
+      return <>{this.props.children}</>
     }
   }
 }

@@ -84,21 +84,21 @@ export interface AccountForm {
   save: () => any
 }
 
-interface ComponentProps extends Props {
-  loading: boolean
-  data: T.AccountForm.Query | undefined
-  saveAccount: MutationFn<T.SaveAccount.Mutation, T.SaveAccount.Variables>
-}
-
 const iconSize = 100
 
-const Component = Object.assign(
-  React.forwardRef<AccountForm, ComponentProps>(function _AccountFormComponent(props, ref) {
+const AccountForm = Object.assign(
+  React.forwardRef<AccountForm, Props>(function _AccountFormComponent(props, ref) {
     const intl = useIntl()
     const submitFormRef = useSubmitRef()
     const { Text, Image, Row, showToast } = useUi()
+    const client = useApolloClient()
     const { Form, SelectField, TextField } = typedFields<FormValues>(useUi())
-    const { data, saveAccount, loading, accountId, bankId, onClosed } = props
+    const { accountId, bankId, onClosed } = props
+
+    const { data, loading, error } = useQuery(queries.AccountForm, {
+      variables: { accountId, bankId },
+    })
+    const saveAccount = useMutation(mutations.SaveAccount)
 
     const account = loading ? undefined : data && data.account
     const bank = loading ? undefined : data && data.bank
@@ -135,6 +135,7 @@ const Component = Object.assign(
             input,
           }
           await saveAccount({ variables })
+          client.reFetchObservableQueries()
           showToast(
             intl.formatMessage(accountId ? messages.saved : messages.created, {
               name: input.name,
@@ -155,104 +156,74 @@ const Component = Object.assign(
     }))
 
     return (
-      <Form
-        initialValues={initialValues} //
-        validate={validate}
-        submit={submit}
-        submitRef={submitFormRef}
-      >
-        {({ change, values: { type, color } }) => {
-          return (
-            <>
-              <Row>
-                <Text header icon={bankIcon}>
-                  {account ? account.bank.name : bank ? bank.name : '<no bank>'}
-                </Text>
-              </Row>
-              <TextFieldWithIcon<FormValues>
-                field='name'
-                favicoField='icon'
-                defaultUrl={bankUrl}
-                defaultIcon={bankIcon}
-                favicoWidth={iconSize}
-                favicoHeight={iconSize}
-                label={intl.formatMessage(messages.name)}
-                placeholder={intl.formatMessage(messages.namePlaceholder)}
-                autoFocus={!account}
-              />
-              <TextField
-                field='number'
-                label={intl.formatMessage(messages.number)}
-                placeholder={intl.formatMessage(messages.numberPlaceholder)}
-              />
-              <SelectField
-                field='type'
-                items={Object.keys(Account.Type).map(acct => ({
-                  value: acct.toString(),
-                  label: intl.formatMessage((Account.messages as Record<string, any>)[acct]),
-                }))}
-                label={intl.formatMessage(messages.type)}
-                onValueChange={value => {
-                  change('color', Account.generateColor(value as Account.Type))
-                }}
-              />
-              <TextField
-                field='color'
-                label={intl.formatMessage(messages.color)}
-                placeholder={intl.formatMessage(messages.colorPlaceholder)}
-                color={color}
-              />
-              {(type === Account.Type.CHECKING || type === Account.Type.SAVINGS) && (
-                <TextField
-                  field='routing'
-                  label={intl.formatMessage(messages.routing)}
-                  placeholder={intl.formatMessage(messages.routingPlaceholder)}
-                />
-              )}
-              {type === Account.Type.CREDITCARD && (
-                <TextField
-                  field='key'
-                  label={intl.formatMessage(messages.key)}
-                  placeholder={intl.formatMessage(messages.keyPlaceholder)}
-                />
-              )}
-            </>
-          )
-        }}
-      </Form>
-    )
-  }),
-  {
-    displayName: 'AccountForm.Component',
-  }
-)
-
-export const AccountForm = Object.assign(
-  React.forwardRef<AccountForm, Props>((props, ref) => {
-    // log('AccountForm render %o', props)
-    const { accountId, bankId } = props
-
-    const component = useRef<AccountForm>(null)
-    const { data, loading, error } = useQuery(queries.AccountForm, {
-      variables: { accountId, bankId },
-    })
-    const client = useApolloClient()
-    const saveAccount = useMutation(mutations.SaveAccount, {
-      update: () => {
-        client.reFetchObservableQueries()
-      },
-    })
-
-    useImperativeHandle(ref, () => ({
-      save: () => {
-        component.current!.save()
-      },
-    }))
-
-    return (
       <>
         <ErrorDisplay error={error} />
-        <Component ref={component} {...{ ...props, saveAccount, data, loading }} />
+
+        <Form
+          initialValues={initialValues} //
+          validate={validate}
+          submit={submit}
+          submitRef={submitFormRef}
+        >
+          {({ change, values: { type, color } }) => {
+            return (
+              <>
+                <Row>
+                  <Text header icon={bankIcon}>
+                    {account ? account.bank.name : bank ? bank.name : '<no bank>'}
+                  </Text>
+                </Row>
+                <TextFieldWithIcon<FormValues>
+                  field='name'
+                  favicoField='icon'
+                  defaultUrl={bankUrl}
+                  defaultIcon={bankIcon}
+                  favicoWidth={iconSize}
+                  favicoHeight={iconSize}
+                  label={intl.formatMessage(messages.name)}
+                  placeholder={intl.formatMessage(messages.namePlaceholder)}
+                  autoFocus={!account}
+                />
+                <TextField
+                  field='number'
+                  label={intl.formatMessage(messages.number)}
+                  placeholder={intl.formatMessage(messages.numberPlaceholder)}
+                />
+                <SelectField
+                  field='type'
+                  items={Object.keys(Account.Type).map(acct => ({
+                    value: acct.toString(),
+                    label: intl.formatMessage((Account.messages as Record<string, any>)[acct]),
+                  }))}
+                  label={intl.formatMessage(messages.type)}
+                  onValueChange={value => {
+                    change('color', Account.generateColor(value as Account.Type))
+                  }}
+                />
+                <TextField
+                  field='color'
+                  label={intl.formatMessage(messages.color)}
+                  placeholder={intl.formatMessage(messages.colorPlaceholder)}
+                  color={color}
+                />
+                {(type === Account.Type.CHECKING || type === Account.Type.SAVINGS) && (
+                  <TextField
+                    field='routing'
+                    label={intl.formatMessage(messages.routing)}
+                    placeholder={intl.formatMessage(messages.routingPlaceholder)}
+                  />
+                )}
+                {type === Account.Type.CREDITCARD && (
+                  <TextField
+                    field='key'
+                    label={intl.formatMessage(messages.key)}
+                    placeholder={intl.formatMessage(messages.keyPlaceholder)}
+                  />
+                )}
+              </>
+            )
+          }}
+        </Form>
       </>
     )
   }),
@@ -262,7 +233,6 @@ export const AccountForm = Object.assign(
     queries,
     mutations,
     fragments,
-    Component,
   }
 )
 

@@ -185,6 +185,7 @@ const BankTable = Object.assign(
               icon: 'trash',
               text: intl.formatMessage(messages.deleteAccount),
               onClick: () => deleteAccount({ ui, intl, account, client }),
+              danger: true,
             },
             {
               icon: 'refresh',
