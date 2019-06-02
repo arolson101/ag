@@ -14,8 +14,8 @@
     "electron:main": "wait-on http://localhost:6006/ && cross-env DEBUG=* electron . --url http://localhost:6006/",
     "electron:server": "start-storybook --ci --quiet -p 6006",
     "preios": "cd ./ios && pod install",
-    "ios": "cross-env-shell react-native run-ios --no-packager --config $INIT_CWD/rn-cli.config.js",
-    "start": "cross-env-shell react-native start --config $INIT_CWD/rn-cli.config.js",
+    "ios": "cross-env-shell react-native run-ios --no-packager",
+    "start": "cross-env-shell node --max-old-space-size=8192 ../../node_modules/react-native/local-cli/cli.js start --config $INIT_CWD/rn-cli.config.js",
     "test": "jest"
   },
   "jest": {
@@ -32,9 +32,9 @@
     "@storybook/addon-actions": "^5.0.11",
     "@storybook/addon-knobs": "^5.0.11",
     "@storybook/addon-links": "^5.0.11",
-    "@storybook/addon-ondevice-knobs": "^5.0.0-beta.4",
+    "@storybook/addon-ondevice-knobs": "^5.1.0-rc.3",
     "@storybook/react": "^5.0.11",
-    "@storybook/react-native": "^5.0.0-beta.4",
+    "@storybook/react-native": "^5.1.0-rc.3",
     "@storybook/theming": "^5.0.11",
     "apollo-link-mock": "^1.0.1",
     "babel-runtime": "^7.0.0-beta.3",

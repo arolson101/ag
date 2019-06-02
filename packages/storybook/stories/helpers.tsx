@@ -13,9 +13,9 @@ import { applyMiddleware, combineReducers, createStore as reduxCreateStore } fro
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import { Connection, ConnectionOptions, createConnection, getConnectionManager } from 'typeorm'
-import empty from './data/empty.xlsx'
-import full from './data/full.xlsx'
-import normal from './data/normal.xlsx'
+// import empty from './data/empty.xlsx'
+// import full from './data/full.xlsx'
+// import normal from './data/normal.xlsx'
 import { storiesOf, ui } from './platform-specific'
 
 export { action, storiesOf }
@@ -38,9 +38,9 @@ const log = debug('helpers')
 type Dataset = 'empty' | 'normal' | 'full'
 
 const datasets: Record<Dataset, XlsxData> = {
-  empty,
-  normal,
-  full,
+  empty: null as any,
+  normal: null as any,
+  full: null as any,
 }
 
 const createStore = (dependencies: CoreDependencies): CoreStore => {

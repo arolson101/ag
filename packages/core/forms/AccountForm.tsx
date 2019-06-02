@@ -86,7 +86,7 @@ export interface AccountForm {
 
 const iconSize = 100
 
-const AccountForm = Object.assign(
+export const AccountForm = Object.assign(
   React.forwardRef<AccountForm, Props>(function _AccountFormComponent(props, ref) {
     const intl = useIntl()
     const submitFormRef = useSubmitRef()
