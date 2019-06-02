@@ -151,12 +151,12 @@ if (alternateRoots && alternateRoots.length)
 
 module.exports = (async () => {
   const {
-    resolver: { assetExts },
+    resolver: { sourceExts, assetExts },
   } = await getDefaultConfig()
 
   return {
     transformer: {
-      babelTransformerPath: require.resolve('react-native-typescript-transformer'),
+      babelTransformerPath: require.resolve('./babelTransformer'),
       getTransformOptions: async () => ({
         transform: {
           experimentalImportSupport: false,
@@ -183,7 +183,7 @@ module.exports = (async () => {
         ...extraNodeModules,
       },
 
-      // assetExts: [...assetExts, 'xlsx']
+      sourceExts: [...sourceExts, 'xlsx'],
     },
     watchFolders: alternateRoots,
     serializer: {

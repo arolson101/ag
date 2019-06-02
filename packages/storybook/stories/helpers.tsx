@@ -13,14 +13,21 @@ import { applyMiddleware, combineReducers, createStore as reduxCreateStore } fro
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import { Connection, ConnectionOptions, createConnection, getConnectionManager } from 'typeorm'
-// import empty from './data/empty.xlsx'
-// import full from './data/full.xlsx'
-// import normal from './data/normal.xlsx'
 import { storiesOf, ui } from './platform-specific'
 
 export { action, storiesOf }
 
 require('sql.js/dist/sql-asm.js')().then((x: SQLJS) => (window.SQL = x))
+
+const log = debug('helpers')
+
+const datasets = {
+  empty: require<XlsxData>('./data/empty.xlsx'),
+  full: require<XlsxData>('./data/full.xlsx'),
+  normal: require<XlsxData>('./data/normal.xlsx'),
+}
+
+type Dataset = keyof typeof datasets
 
 export const data = {
   normal: {
@@ -31,16 +38,6 @@ export const data = {
     bankId: 'a74780f9d696f3646f3177b83093c0667',
     accountId: 'a13cb3bf09d932e0b00d4eedee1b22e85',
   },
-}
-
-const log = debug('helpers')
-
-type Dataset = 'empty' | 'normal' | 'full'
-
-const datasets: Record<Dataset, XlsxData> = {
-  empty: null as any,
-  normal: null as any,
-  full: null as any,
 }
 
 const createStore = (dependencies: CoreDependencies): CoreStore => {
@@ -97,6 +94,7 @@ const waitForState = (store: CoreStore, finished: (state: CoreState) => boolean)
 export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) => {
   const [store, setStore] = useState<CoreStore | undefined>(undefined)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { Text } = ui
 
   useEffect(() => {
     if (window.SQL) {
@@ -122,11 +120,11 @@ export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) 
   }, [window.SQL])
 
   if (!store) {
-    return <div>initializing...</div>
+    return <Text>initializing...</Text>
   }
 
   if (dataset && !isLoggedIn) {
-    return <div>logging in...</div>
+    return <Text>logging in...</Text>
   }
 
   return <App {...{ sys, ui, store, online }}>{children}</App>
