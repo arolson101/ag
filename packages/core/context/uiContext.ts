@@ -163,7 +163,7 @@ export interface ImageProps {
 export interface ActionItem {
   divider?: boolean
   text?: string
-  icon: IconName
+  icon?: IconName
   disabled?: boolean
   onClick?: () => any
   danger?: boolean

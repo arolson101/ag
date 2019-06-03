@@ -26,7 +26,7 @@ const FontIcon: React.FC<{ icon: IconDefinition }> = ({ icon }) => (
   <Icon component={() => <FontAwesomeIcon icon={icon} />} />
 )
 
-type NavComponent = React.ComponentType & {
+interface NavComponent {
   path: string
   route: DocRoute<any, string>
   messages: {

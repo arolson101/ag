@@ -97,18 +97,20 @@ export const Table = React.memo<TableProps>(function _Table(props) {
         }
         right={
           <View style={{ flexDirection: 'row', height: '100%' }}>
-            {(titleActions || []).map((action, idx) => (
-              <Button
-                danger={action.danger}
-                disabled={action.disabled}
-                onPress={action.onClick}
-                key={idx}
-                style={{ flexDirection: 'column', height: '100%' }}
-              >
-                <Icon active name={mapIconName(action.icon)} />
-                {/* <Text>{action.icon}</Text> */}
-              </Button>
-            ))}
+            {(titleActions || [])
+              .filter(action => !action.divider)
+              .map((action, idx) => (
+                <Button
+                  danger={action.danger}
+                  disabled={action.disabled}
+                  onPress={action.onClick}
+                  key={idx}
+                  style={{ flexDirection: 'column', height: '100%' }}
+                >
+                  <Icon active name={mapIconName(action.icon)} />
+                  {/* <Text>{action.icon}</Text> */}
+                </Button>
+              ))}
           </View>
         }
       />
@@ -121,7 +123,11 @@ export const Table = React.memo<TableProps>(function _Table(props) {
   )
 })
 
-export const mapIconName = (icon: IconName): string => {
+export const mapIconName = (icon: IconName | undefined): string => {
+  if (!icon) {
+    throw new Error('icon name must be specified')
+  }
+
   // https://ionicons.com/
   switch (icon) {
     case 'url':
