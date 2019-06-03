@@ -55,6 +55,7 @@ async function createWindow() {
     y: mainWindowState.y,
     width: mainWindowState.width,
     height: mainWindowState.height,
+    show: false,
 
     webPreferences: {
       nodeIntegration: true,
@@ -65,17 +66,22 @@ async function createWindow() {
   // and load the index.html of the app.
   mainWindow.loadURL(program.url)
 
-  if (isDev) {
-    mainWindow.webContents.openDevTools()
-  }
+  mainWindow.on('ready-to-show', () => {
+    if (!mainWindow) {
+      throw new Error('mainWindow undefined')
+    }
 
-  // Let us register listeners on the window, so we can update the state
-  // automatically (the listeners will be removed when the window is closed)
-  // and restore the maximized or full screen state
-  mainWindowState.manage(mainWindow)
+    if (isDev) {
+      mainWindow.webContents.openDevTools()
+    }
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+    mainWindow.show()
+
+    // Let us register listeners on the window, so we can update the state
+    // automatically (the listeners will be removed when the window is closed)
+    // and restore the maximized or full screen state
+    mainWindowState.manage(mainWindow)
+  })
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
