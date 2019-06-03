@@ -36,8 +36,8 @@ const getInfo = <T extends StringMap>(input: DataUri<T>) => {
       obj[key] = value
       return obj
     },
-    {} as T
-  )
+    {} as StringMap
+  ) as T
   const encoding = input.substring(semi + 1, comma) as BufferEncoding
   const data = input.substring(comma + 1)
 

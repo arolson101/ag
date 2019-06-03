@@ -1,22 +1,10 @@
 {
   "defaultSeverity": "warning",
-  "extends": [
-    "tslint:latest",
-    "tslint-config-prettier"
-  ],
-  "rulesDirectory": [
-    "tslint-plugin-prettier",
-    "node_modules/rxjs-tslint"
-  ],
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
-    "rxjs-collapse-imports": true,
-    "rxjs-pipeable-operators-only": true,
-    "rxjs-no-static-observable-methods": true,
-    "rxjs-proper-imports": true,
     "max-line-length": {
-      "options": [
-        100
-      ]
+      "options": [100]
     },
     "exhaustive-deps": true,
     "prettier": true,
@@ -28,23 +16,13 @@
     "no-empty-interface": false,
     "no-empty": false,
     "max-classes-per-file": false,
-    "member-access": [
-      true,
-      "no-public"
-    ],
-    "variable-name": [
-      true,
-      "ban-keywords",
-      "allow-leading-underscore"
-    ],
+    "member-access": [true, "no-public"],
+    "variable-name": [true, "ban-keywords", "allow-leading-underscore"],
     "member-ordering": false,
     "no-namespace": false,
     "no-this-assignment": false
   },
   "linterOptions": {
-    "exclude": [
-      "**/node_modules/**",
-      "**/graphql-types.d.ts"
-    ]
+    "exclude": ["**/node_modules/**", "**/graphql-types.d.ts"]
   }
 }

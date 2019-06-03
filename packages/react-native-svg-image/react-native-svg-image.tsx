@@ -209,7 +209,7 @@ const numericOrArrayAttribute = (node: Element, attr: string): number | number[]
   }
 }
 
-const filter = <T extends { [key: string]: any }>(o: T): T => {
+const filter = <T extends Record<string, any>>(o: T): T => {
   return Object.keys(o)
     .filter(key => typeof o[key] !== 'undefined')
     .reduce(
@@ -217,8 +217,8 @@ const filter = <T extends { [key: string]: any }>(o: T): T => {
         res[key] = o[key]
         return res
       },
-      {} as T
-    )
+      {} as Record<string, any>
+    ) as T
 }
 
 const fillProps = (node: Element): RnSvg.FillProps =>

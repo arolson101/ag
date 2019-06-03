@@ -263,9 +263,9 @@ const runWebpackDevServer = async (promises: Array<Promise<any>>) => {
       host,
       stats: minimalStats,
     }
-    WebpackDevServer.addDevServerEntrypoints(config, options)
+    WebpackDevServer.addDevServerEntrypoints(config as any, options)
     const compiler = webpack(config)
-    server = new WebpackDevServer(compiler, options)
+    server = new WebpackDevServer(compiler as any, options)
     server.listen(port, host, () => {
       print(channels.wds, `dev server listening on http://${host}:${port}`)
       resolve()

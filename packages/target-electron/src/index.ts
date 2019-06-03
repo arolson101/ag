@@ -1,7 +1,7 @@
 import debug from 'debug'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import ElectronApp from './app/ElectronApp'
+import ElectronApp, { start } from './app/ElectronApp'
 import { hist, store } from './app/store'
 
 const log = debug('electron:index')
@@ -21,7 +21,7 @@ const render = (Component: typeof ElectronApp) => {
 
 render(ElectronApp)
 
-ElectronApp.start(store)
+start(store)
 
 // const registerServiceWorker = require('./registerServiceWorker').default
 // registerServiceWorker()

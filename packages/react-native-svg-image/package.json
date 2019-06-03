@@ -5,20 +5,20 @@
   "main": "index.ts",
   "dependencies": {
     "@ag/util": "^0.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.19.0",
     "css": "^2.2.4",
     "debug": "^4.1.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-native": "^0.59.5",
+    "react-native": "^0.59.8",
     "react-native-svg": "^9.4.0",
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
     "@types/css": "^0.0.31",
     "@types/debug": "^4.1.4",
-    "@types/react": "^16.8.16",
-    "@types/react-native": "^0.57.51",
+    "@types/react": "^16.8.19",
+    "@types/react-native": "^0.57.60",
     "@types/xmldom": "^0.1.29"
   }
 }

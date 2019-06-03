@@ -55,8 +55,8 @@ export const Table = React.memo<TableProps>(function _Table(props) {
             <View style={{ flexDirection: 'row' }}>
               {columns.map(({ dataIndex, render, align, width, format, title }, colIndex) => {
                 assert(dataIndex in item)
-                const data = (item as any)[dataIndex]
-                const formatted = format ? format(data) : data
+                const itemData = (item as any)[dataIndex]
+                const formatted = format ? format(itemData) : itemData
                 return (
                   <React.Fragment key={dataIndex}>
                     {render ? (

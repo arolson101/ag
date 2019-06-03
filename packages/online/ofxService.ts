@@ -1,6 +1,6 @@
 import { Account } from '@ag/db'
 import assert from 'assert'
-import Axios, { CancelToken } from 'axios'
+import Axios, { CancelToken, AxiosRequestConfig, Method } from 'axios'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
 import { defineMessages, InjectedIntl } from 'react-intl'
@@ -15,7 +15,7 @@ const ajaxHandler = (cancelToken: CancelToken): ofx4js.AjaxHandler => async (
   body,
   async
 ): Promise<string> => {
-  const res = await Axios({ url, method: verb.toLowerCase(), headers, data: body, cancelToken })
+  const res = await Axios({ url, method: verb.toLowerCase() as Method, headers, data: body, cancelToken })
   if (res.status !== 200) {
     throw new Error(res.statusText)
   }

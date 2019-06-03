@@ -17,31 +17,30 @@ interface Props {
   hist: HistoryType
 }
 
-class ElectronApp extends React.PureComponent<Props> {
-  render() {
-    const { store, hist } = this.props
-    const client = createClient(() => ({
-      isLoggedIn: () => selectors.isLoggedIn(store.getState()),
-      getAppDb: () => selectors.getAppDb(store.getState()),
-      store,
-      online,
-      intl: selectors.getIntl(store.getState()),
-      openDb,
-      deleteDb,
-    }))
+const ElectronApp = React.memo<Props>(function _ElectronApp(props) {
+  const { store, hist } = props
 
-    return (
-      <App {...{ sys, ui, client, store, online }}>
-        <ElectronMenu />
-        <ElectronRouter hist={hist} />
-        <ElectronDialogs />
-      </App>
-    )
-  }
+  const client = createClient(() => ({
+    isLoggedIn: () => selectors.isLoggedIn(store.getState()),
+    getAppDb: () => selectors.getAppDb(store.getState()),
+    store,
+    online,
+    intl: selectors.getIntl(store.getState()),
+    openDb,
+    deleteDb,
+  }))
 
-  static start(store: CoreStore) {
-    store.dispatch(thunks.init())
-  }
+  return (
+    <App {...{ sys, ui, client, store, online }}>
+      <ElectronMenu />
+      <ElectronRouter hist={hist} />
+      <ElectronDialogs />
+    </App>
+  )
+})
+
+export const start = (store: CoreStore) => {
+  store.dispatch(thunks.init())
 }
 
 export default hot(ElectronApp)

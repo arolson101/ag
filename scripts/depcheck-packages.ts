@@ -144,7 +144,7 @@ interface PackageJson {
   }
 })()
 
-const sortObject = <T extends Record<string, any>>(obj: T): T => {
+const sortObject = (obj: Record<string, any>): Record<string, any> => {
   return Object.keys(obj)
     .sort()
     .reduce(
@@ -152,7 +152,7 @@ const sortObject = <T extends Record<string, any>>(obj: T): T => {
         sortedObj[key] = obj[key]
         return sortedObj
       },
-      {} as T
+      {} as Record<string, any>
     )
 }
 

@@ -20,7 +20,7 @@ index 4285aba..af49e5c 100644
  }
  exports.loadResolversFromGlob = loadResolversFromGlob;
 diff --git a/node_modules/type-graphql/dist/utils/emitSchemaDefinitionFile.js b/node_modules/type-graphql/dist/utils/emitSchemaDefinitionFile.js
-index 7dcc029..f2a3979 100644
+index 7dcc029..7fe60bb 100644
 --- a/node_modules/type-graphql/dist/utils/emitSchemaDefinitionFile.js
 +++ b/node_modules/type-graphql/dist/utils/emitSchemaDefinitionFile.js
 @@ -2,7 +2,7 @@

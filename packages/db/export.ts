@@ -9,7 +9,7 @@ export const exportDb = async (connection: Connection) => {
   const wb = XLSX.utils.book_new()
   for (const entityMetadata of connection.entityMetadatas) {
     const { tableName } = entityMetadata
-    const repo = connection.manager.getRepository(tableName)
+    const repo = connection.manager.getRepository<object>(tableName)
     const data = (await repo.createQueryBuilder().getMany()).map(flatten)
     const header = entityMetadata.columns.map(col => col.propertyPath)
     log('%s: %d items', tableName, data.length)
@@ -27,9 +27,9 @@ export const importDb = async (connection: Connection, data: any) => {
   // log('importDb %o', wb)
   for (const sheetName of wb.SheetNames) {
     const sheet = wb.Sheets[sheetName]
-    const obj = XLSX.utils.sheet_to_json(sheet)
+    const obj = XLSX.utils.sheet_to_json<object>(sheet)
 
-    const repo = connection.manager.getRepository(sheetName)
+    const repo = connection.manager.getRepository<object>(sheetName)
     const ents = obj.map(o => repo.create(nest(o)))
     // log('importDb %s %o', sheetName, ents)
     if (ents.length) {
