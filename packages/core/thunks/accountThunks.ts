@@ -1,9 +1,3 @@
-import { toAccountType } from '@ag/online'
-import { diff, uniqueId } from '@ag/util'
-import debug from 'debug'
-import * as ofx4js from 'ofx4js'
-import { Arg, Ctx, Mutation, Resolver } from 'type-graphql'
-import { DbContext } from '../DbContext'
 import {
   Account,
   AccountInput,
@@ -12,30 +6,27 @@ import {
   DbChange,
   Transaction,
   TransactionInput,
-} from '../entities'
-import { dbWrite } from './dbWrite'
+} from '@ag/db/entities'
+import { dbWrite } from '@ag/db/resolvers/dbWrite'
+import { toAccountType } from '@ag/online'
+import { diff, uniqueId } from '@ag/util'
+import debug from 'debug'
+import * as ofx4js from 'ofx4js'
+import { selectors } from '../reducers'
+import { CoreThunk } from './CoreThunk'
 
 const log = debug('db:AccountOnlineResolver')
 
-@Resolver()
-export class AccountOnlineResolver {
-  @Mutation(returns => Bank)
-  async syncAccounts(
-    @Ctx() context: DbContext, //
-    @Arg('bankId') bankId: string
-  ): Promise<Bank> {
-    const bank = await this.downloadAccountList(context, bankId, uniqueId())
-    return bank
+const syncAccounts = (bankId: string): CoreThunk =>
+  async function _syncAccounts(dispatch) {
+    await dispatch(downloadAccountList(bankId))
   }
 
-  @Mutation(returns => Bank)
-  async downloadAccountList(
-    @Ctx() context: DbContext,
-    @Arg('bankId') bankId: string,
-    @Arg('cancelToken') cancelToken: string
-  ): Promise<Bank> {
-    const { intl, online, getAppDb } = context
-    const { connection, banksRepository, accountsRepository } = getAppDb()
+const downloadAccountList = (bankId: string): CoreThunk<Bank> =>
+  async function _downloadAccountList(dispatch, getState, { online }) {
+    const state = getState()
+    const intl = selectors.getIntl(state)
+    const { connection, banksRepository, accountsRepository } = selectors.getAppDb(state)
     const bank = await banksRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadAccountList: bank is not set online`)
@@ -94,16 +85,26 @@ export class AccountOnlineResolver {
     return bank
   }
 
-  @Mutation(returns => Account)
-  async downloadTransactions(
-    @Ctx() context: DbContext,
-    @Arg('bankId') bankId: string,
-    @Arg('accountId') accountId: string,
-    @Arg('start') start: Date,
-    @Arg('end') end: Date
-  ): Promise<Account> {
-    const { online, intl, getAppDb } = context
-    const { connection, banksRepository, accountsRepository, transactionsRepository } = getAppDb()
+const downloadTransactions = ({
+  bankId,
+  accountId,
+  start,
+  end,
+}: {
+  bankId: string
+  accountId: string
+  start: Date
+  end: Date
+}): CoreThunk<Account> =>
+  async function _downloadTransactions(dispatch, getState, { online }) {
+    const state = getState()
+    const intl = selectors.getIntl(state)
+    const {
+      connection,
+      banksRepository,
+      accountsRepository,
+      transactionsRepository,
+    } = selectors.getAppDb(state)
     const bank = await banksRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadTransactions: bank is not set online`)
@@ -179,7 +180,6 @@ export class AccountOnlineResolver {
 
     return account
   }
-}
 
 const defined = <T>(object: T | undefined): object is T => !!object
 
@@ -240,4 +240,10 @@ const toTransactionInput = (tx: ofx4js.Transaction): TransactionInput => ({
 
 const transactionsEqual = (a: TransactionInput, b: TransactionInput): boolean => {
   return a.serverid === b.serverid
+}
+
+export const accountThunks = {
+  syncAccounts, //
+  downloadAccountList,
+  downloadTransactions,
 }

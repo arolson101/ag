@@ -18,6 +18,7 @@ import { ErrorDisplay } from '../components'
 import { ActionItem, ContextMenuProps, TableColumn, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
+import { thunks } from '../thunks'
 
 const log = debug('core:AccountsPage')
 
@@ -73,29 +74,6 @@ const queries = {
 }
 
 const mutations = {
-  SyncAccounts: gql`
-    mutation SyncAccounts($bankId: String!) {
-      syncAccounts(bankId: $bankId) {
-        ...bankFields_AccountsPage
-      }
-    }
-    ${fragments.bankFields}
-  ` as Gql<T.SyncAccounts.Mutation, T.SyncAccounts.Variables>,
-
-  DownloadTransactions: gql`
-    mutation DownloadTransactions(
-      $bankId: String!
-      $accountId: String!
-      $start: DateTime!
-      $end: DateTime!
-    ) {
-      downloadTransactions(bankId: $bankId, accountId: $accountId, start: $start, end: $end) {
-        ...accountFields_AccountsPage
-      }
-    }
-    ${fragments.accountFields}
-  ` as Gql<T.DownloadTransactions.Mutation, T.DownloadTransactions.Variables>,
-
   SetAccountsOrder: gql`
     mutation SetAccountsOrder($accountIds: [String!]!) {
       setAccountsOrder(accountIds: $accountIds)
@@ -128,8 +106,8 @@ const BankTable = Object.assign(
       [bank.accounts, setAccountsOrder]
     )
 
-    const syncAccounts = useMutation(mutations.SyncAccounts)
-    const downloadTransactions = useMutation(mutations.DownloadTransactions)
+    const syncAccounts = useAction(thunks.syncAccounts)
+    const downloadTransactions = useAction(thunks.downloadTransactions)
 
     const client = useApolloClient()
     const titleActions = useRef<ActionItem[]>([
@@ -155,7 +133,7 @@ const BankTable = Object.assign(
               text: intl.formatMessage(messages.syncAccounts),
               onClick: async () => {
                 try {
-                  await syncAccounts({ variables: { bankId: bank.id } })
+                  await syncAccounts(bank.id)
                   client.reFetchObservableQueries()
                   showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
                 } catch (error) {
@@ -195,12 +173,10 @@ const BankTable = Object.assign(
                   const start = monthsAgo(1)
                   const end = standardizeDate(new Date())
                   await downloadTransactions({
-                    variables: {
-                      accountId: account.id,
-                      bankId: bank.id,
-                      start,
-                      end,
-                    },
+                    accountId: account.id,
+                    bankId: bank.id,
+                    start,
+                    end,
                   })
                   client.reFetchObservableQueries()
                   showToast(

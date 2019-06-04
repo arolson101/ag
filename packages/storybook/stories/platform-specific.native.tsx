@@ -16,6 +16,13 @@ import {
   Title,
 } from 'native-base'
 import React from 'react'
+import { YellowBox } from 'react-native'
+
+YellowBox.ignoreWarnings([
+  'Async Storage has been extracted from react-native core and will be removed in a future release',
+  'Remote debugger is in a background tab',
+  'Require cycle:',
+])
 
 const ui: UiContext = {
   ...nbUi,
