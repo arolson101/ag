@@ -124,6 +124,11 @@ export interface TableProps<T extends {} = any> {
   titleImage?: ImageUri
   titleContextMenuHeader?: string
   titleActions?: ActionItem[]
+  tableEdit?: ActionDesc
+  tableDelete?: ActionDesc
+  rowAdd?: ActionDesc
+  rowEdit?: ActionDesc
+  rowDelete?: ActionDesc
   rowContextMenu?: (row: T) => ContextMenuProps
   rowKey: keyof T & string
   emptyText?: string
@@ -158,6 +163,14 @@ export interface ImageProps {
   size?: number | string
   margin?: number
   title?: string
+}
+
+export interface ActionDesc {
+  text: string
+  icon: IconName
+  disabled?: boolean
+  onClick: () => any
+  danger?: boolean
 }
 
 export interface ActionItem {

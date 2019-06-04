@@ -14,7 +14,7 @@ import {
 } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import { ContextMenu } from './ContextMenu'
-import { ImageSourceIcon } from './ImageSourceIcon'
+import { Image } from './Image.antd'
 
 const log = debug('ui-antd:Table')
 
@@ -167,15 +167,8 @@ const DragSortingTable: React.FC<TableProps> = ({
                       alignItems: 'baseline',
                     }}
                   >
-                    <Title level={3} style={{ margin: 0 }}>
-                      {titleImage && (
-                        <Antd.Avatar
-                          shape='square'
-                          size='large'
-                          style={{ marginLeft: 5, marginRight: 5 }}
-                          src={titleImage}
-                        />
-                      )}
+                    <Title level={4} style={{ margin: 0 }}>
+                      <Image src={titleImage} size='1.5em' margin={5} />
                       {titleText}
                     </Title>
                   </div>
@@ -193,6 +186,7 @@ const DragSortingTable: React.FC<TableProps> = ({
         rowKey={rowKey}
         dataSource={data}
         style={{ marginTop: 20 }}
+        size='middle'
       />
     </Antd.ConfigProvider>
   )

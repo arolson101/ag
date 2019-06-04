@@ -15,7 +15,15 @@ import React, { useCallback, useMemo, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import { ActionItem, ContextMenuProps, TableColumn, useAction, useIntl, useUi } from '../context'
+import {
+  ActionDesc,
+  ActionItem,
+  ContextMenuProps,
+  TableColumn,
+  useAction,
+  useIntl,
+  useUi,
+} from '../context'
 import * as T from '../graphql-types'
 import { deleteAccount, deleteBank } from '../mutations'
 import { thunks } from '../thunks'
@@ -91,6 +99,7 @@ const BankTable = Object.assign(
     const navAccount = useAction(actions.nav.account)
     const ui = useUi()
     const { Link, Text, Row, Table, Image, showToast } = ui
+    const client = useApolloClient()
 
     const setAccountsOrder = useMutation(mutations.SetAccountsOrder, {
       refetchQueries: [{ query: queries.AccountsPage }],
@@ -109,24 +118,38 @@ const BankTable = Object.assign(
     const syncAccounts = useAction(thunks.syncAccounts)
     const downloadTransactions = useAction(thunks.downloadTransactions)
 
-    const client = useApolloClient()
+    const tableEdit = useMemo<ActionDesc>(
+      () => ({
+        icon: 'edit',
+        text: intl.formatMessage(messages.bankEdit),
+        onClick: () => openBankEditDlg({ bankId: bank.id }),
+      }),
+      [intl, openBankEditDlg, bank.id]
+    )
+
+    const tableDelete = useMemo<ActionDesc>(
+      () => ({
+        icon: 'trash',
+        text: intl.formatMessage(messages.deleteBank),
+        onClick: () => deleteBank({ ui, intl, bank, client }),
+      }),
+      [deleteBank, ui, intl, bank, client]
+    )
+
+    const rowAdd = useMemo<ActionDesc>(
+      () => ({
+        icon: 'add',
+        text: intl.formatMessage(messages.accountCreate),
+        onClick: () => openAccountCreateDlg({ bankId: bank.id }),
+      }),
+      [intl, bank.id]
+    )
+
     const titleActions = useMemo<ActionItem[]>(
       () => [
-        {
-          icon: 'edit',
-          text: intl.formatMessage(messages.bankEdit),
-          onClick: () => openBankEditDlg({ bankId: bank.id }),
-        },
-        {
-          icon: 'trash',
-          text: intl.formatMessage(messages.deleteBank),
-          onClick: () => deleteBank({ ui, intl, bank, client }),
-        },
-        {
-          icon: 'add',
-          text: intl.formatMessage(messages.accountCreate),
-          onClick: () => openAccountCreateDlg({ bankId: bank.id }),
-        },
+        tableEdit,
+        tableDelete,
+        rowAdd,
         ...(bank.online
           ? [
               {
@@ -211,11 +234,25 @@ const BankTable = Object.assign(
     const columns = useMemo<Array<TableColumn<Row>>>(
       () => [
         {
+          dataIndex: 'visible', // TODO
+          width: 30,
+          align: 'center',
+          title: intl.formatMessage(messages.colVisible),
+          render: (text: string, account: Row) => <Text>*</Text>,
+        },
+        {
+          dataIndex: 'number', // TODO
+          width: 30,
+          align: 'center',
+          title: 'favorite',
+          render: (text: string, account: Row) => <Text>X</Text>,
+        },
+        {
           dataIndex: 'icon',
           title: '',
           width: 30,
           render: (text: string, account: Row) => (
-            <Image src={account.icon || bank.icon} size={24} />
+            <Image src={account.icon || bank.icon} size='1.5em' />
           ),
         },
         {
@@ -226,6 +263,13 @@ const BankTable = Object.assign(
               <Text>{account.name}</Text>
             </Link>
           ),
+        },
+        {
+          dataIndex: 'sortOrder', // TODO
+          width: 30,
+          title: 'amount',
+          align: 'right',
+          render: (text: string, account: Row) => <Text>$123.45</Text>,
         },
         // {
         //   dataIndex: 'sortOrder',
@@ -239,10 +283,6 @@ const BankTable = Object.assign(
         //   dataIndex: 'number',
         //   title: intl.formatMessage(messages.colNumber),
         // },
-        {
-          dataIndex: 'visible',
-          title: intl.formatMessage(messages.colVisible),
-        },
       ],
       [navAccount, bank.icon, intl]
     )
@@ -253,7 +293,10 @@ const BankTable = Object.assign(
         titleImage={bank.icon}
         titleContextMenuHeader={bank.name}
         titleActions={titleActions}
+        tableEdit={tableEdit}
+        tableDelete={tableDelete}
         rowKey={'id'}
+        rowAdd={rowAdd}
         rowContextMenu={rowContextMenu}
         emptyText={intl.formatMessage(messages.noAccounts)}
         data={bank.accounts}
