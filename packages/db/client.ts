@@ -43,14 +43,14 @@ export const createClient = (context: () => DbContext) =>
   new ApolloClient({
     link: new ExecuteLink(context),
     cache: new InMemoryCache(),
-    defaultOptions: {
-      watchQuery: {
-        fetchPolicy: 'no-cache',
-        errorPolicy: 'ignore',
-      },
-      query: {
-        fetchPolicy: 'no-cache',
-        errorPolicy: 'all',
-      },
-    },
+    // defaultOptions: {
+    //   watchQuery: {
+    //     fetchPolicy: 'no-cache',
+    //     errorPolicy: 'ignore',
+    //   },
+    //   query: {
+    //     fetchPolicy: 'no-cache',
+    //     errorPolicy: 'all',
+    //   },
+    // },
   })

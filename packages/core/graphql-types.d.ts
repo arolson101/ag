@@ -367,37 +367,6 @@ export namespace AccountsPage {
   export type Banks = BankFieldsAccountsPage.Fragment
 }
 
-export namespace SyncAccounts {
-  export type Variables = {
-    bankId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    syncAccounts: SyncAccounts
-  }
-
-  export type SyncAccounts = BankFieldsAccountsPage.Fragment
-}
-
-export namespace DownloadTransactions {
-  export type Variables = {
-    bankId: string
-    accountId: string
-    start: DateTime
-    end: DateTime
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    downloadTransactions: DownloadTransactions
-  }
-
-  export type DownloadTransactions = AccountFieldsAccountsPage.Fragment
-}
-
 export namespace SetAccountsOrder {
   export type Variables = {
     accountIds: string[]
