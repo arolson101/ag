@@ -8,7 +8,7 @@ interface Params {
 }
 
 module.exports = async ({ config }: Params): Promise<webpack.Configuration> => {
-  config.target = 'web'
+  // config.target = 'web'
 
   config.module!.rules!.push(
     {
@@ -51,7 +51,8 @@ module.exports = async ({ config }: Params): Promise<webpack.Configuration> => {
   config.plugins.push(
     new webpack.NormalModuleReplacementPlugin(/typeorm$/, (result: any) => {
       result.request = result.request.replace(/typeorm/, 'typeorm/browser')
-    })
+    }),
+    new webpack.NormalModuleReplacementPlugin(/\.\/raw/, require.resolve('asap/browser-raw.js'))
   )
 
   return config
