@@ -2,7 +2,7 @@ import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useRef } from 'react'
+import React, { useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
@@ -57,44 +57,47 @@ const Component = Object.assign(
     const subtitle = (account && account.bank.name) || 'no bank'
 
     type Row = NonNullable<typeof account>['transactions'][number]
-    const columns = useRef<Array<TableColumn<Row>>>([
-      {
-        dataIndex: 'time',
-        title: intl.formatMessage(messages.colTime),
-        format: (text: string) => intl.formatDate(new Date(text)),
-      },
-      {
-        dataIndex: 'name',
-        title: intl.formatMessage(messages.colName),
-      },
-      {
-        dataIndex: 'memo',
-        title: 'memo',
-      },
-      {
-        dataIndex: 'type',
-        title: 'type',
-      },
-      {
-        dataIndex: 'account',
-        title: 'account',
-      },
-      {
-        dataIndex: 'serverid',
-        title: 'serverid',
-      },
-      {
-        dataIndex: 'amount',
-        align: 'right',
-        title: intl.formatMessage(messages.colAmount),
-        format: (text: string) =>
-          intl.formatNumber(parseFloat(text), {
-            style: 'currency',
-            currency: 'USD',
-            // currencyDisplay: 'symbol',
-          }),
-      },
-    ])
+    const columns = useMemo<Array<TableColumn<Row>>>(
+      () => [
+        {
+          dataIndex: 'time',
+          title: intl.formatMessage(messages.colTime),
+          format: (text: string) => intl.formatDate(new Date(text)),
+        },
+        {
+          dataIndex: 'name',
+          title: intl.formatMessage(messages.colName),
+        },
+        {
+          dataIndex: 'memo',
+          title: 'memo',
+        },
+        {
+          dataIndex: 'type',
+          title: 'type',
+        },
+        {
+          dataIndex: 'account',
+          title: 'account',
+        },
+        {
+          dataIndex: 'serverid',
+          title: 'serverid',
+        },
+        {
+          dataIndex: 'amount',
+          align: 'right',
+          title: intl.formatMessage(messages.colAmount),
+          format: (text: string) =>
+            intl.formatNumber(parseFloat(text), {
+              style: 'currency',
+              currency: 'USD',
+              // currencyDisplay: 'symbol',
+            }),
+        },
+      ],
+      [intl]
+    )
 
     return (
       <Page
@@ -108,7 +111,7 @@ const Component = Object.assign(
       >
         <Table
           rowKey={'id'}
-          columns={columns.current}
+          columns={columns}
           emptyText={intl.formatMessage(messages.noTransactions)}
           data={account ? account.transactions : []}
         />

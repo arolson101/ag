@@ -11,7 +11,7 @@ import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useMemo, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
@@ -110,44 +110,58 @@ const BankTable = Object.assign(
     const downloadTransactions = useAction(thunks.downloadTransactions)
 
     const client = useApolloClient()
-    const titleActions = useRef<ActionItem[]>([
-      {
-        icon: 'edit',
-        text: intl.formatMessage(messages.bankEdit),
-        onClick: () => openBankEditDlg({ bankId: bank.id }),
-      },
-      {
-        icon: 'trash',
-        text: intl.formatMessage(messages.deleteBank),
-        onClick: () => deleteBank({ ui, intl, bank, client }),
-      },
-      {
-        icon: 'add',
-        text: intl.formatMessage(messages.accountCreate),
-        onClick: () => openAccountCreateDlg({ bankId: bank.id }),
-      },
-      ...(bank.online
-        ? [
-            {
-              icon: 'sync',
-              text: intl.formatMessage(messages.syncAccounts),
-              onClick: async () => {
-                try {
-                  await syncAccounts(bank.id)
-                  client.reFetchObservableQueries()
-                  showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
-                } catch (error) {
-                  ErrorDisplay.show(ui, intl, error)
-                }
-              },
-              disabled: !bank.online,
-            } as ActionItem,
-          ]
-        : []),
-    ])
+    const titleActions = useMemo<ActionItem[]>(
+      () => [
+        {
+          icon: 'edit',
+          text: intl.formatMessage(messages.bankEdit),
+          onClick: () => openBankEditDlg({ bankId: bank.id }),
+        },
+        {
+          icon: 'trash',
+          text: intl.formatMessage(messages.deleteBank),
+          onClick: () => deleteBank({ ui, intl, bank, client }),
+        },
+        {
+          icon: 'add',
+          text: intl.formatMessage(messages.accountCreate),
+          onClick: () => openAccountCreateDlg({ bankId: bank.id }),
+        },
+        ...(bank.online
+          ? [
+              {
+                icon: 'sync',
+                text: intl.formatMessage(messages.syncAccounts),
+                onClick: async () => {
+                  try {
+                    await syncAccounts(bank.id)
+                    client.reFetchObservableQueries()
+                    showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
+                  } catch (error) {
+                    ErrorDisplay.show(ui, intl, error)
+                  }
+                },
+                disabled: !bank.online,
+              } as ActionItem,
+            ]
+          : []),
+      ],
+      [
+        intl,
+        openBankEditDlg,
+        deleteBank,
+        openAccountCreateDlg,
+        bank.id,
+        bank.online,
+        bank.name,
+        syncAccounts,
+        client,
+        showToast,
+      ]
+    )
 
     const rowContextMenu = useCallback(
-      function RowContextMenu(account: Row): ContextMenuProps {
+      function _rowContextMenu(account: Row): ContextMenuProps {
         return {
           header: intl.formatMessage(messages.contextMenuHeader, {
             bankName: bank.name,
@@ -194,45 +208,56 @@ const BankTable = Object.assign(
       [bank, intl, client]
     )
 
-    const columns = useRef<Array<TableColumn<Row>>>([
-      {
-        dataIndex: 'name',
-        title: intl.formatMessage(messages.colName),
-        render: (text: string, account: Row) => (
-          <Link onClick={() => navAccount({ accountId: account.id })}>
-            <Text icon={account.icon || bank.icon}>{account.name}</Text>
-          </Link>
-        ),
-      },
-      // {
-      //   dataIndex: 'sortOrder',
-      //   title: 'sortOrder',
-      // },
-      // {
-      //   dataIndex: 'id',
-      //   title: 'id',
-      // },
-      // {
-      //   dataIndex: 'number',
-      //   title: intl.formatMessage(messages.colNumber),
-      // },
-      {
-        dataIndex: 'visible',
-        title: intl.formatMessage(messages.colVisible),
-      },
-    ])
+    const columns = useMemo<Array<TableColumn<Row>>>(
+      () => [
+        {
+          dataIndex: 'icon',
+          title: '',
+          width: 30,
+          render: (text: string, account: Row) => (
+            <Image src={account.icon || bank.icon} size={24} />
+          ),
+        },
+        {
+          dataIndex: 'name',
+          title: intl.formatMessage(messages.colName),
+          render: (text: string, account: Row) => (
+            <Link onClick={() => navAccount({ accountId: account.id })}>
+              <Text>{account.name}</Text>
+            </Link>
+          ),
+        },
+        // {
+        //   dataIndex: 'sortOrder',
+        //   title: 'sortOrder',
+        // },
+        // {
+        //   dataIndex: 'id',
+        //   title: 'id',
+        // },
+        // {
+        //   dataIndex: 'number',
+        //   title: intl.formatMessage(messages.colNumber),
+        // },
+        {
+          dataIndex: 'visible',
+          title: intl.formatMessage(messages.colVisible),
+        },
+      ],
+      [navAccount, bank.icon, intl]
+    )
 
     return (
       <Table
         titleText={bank.name}
         titleImage={bank.icon}
         titleContextMenuHeader={bank.name}
-        titleActions={titleActions.current}
+        titleActions={titleActions}
         rowKey={'id'}
         rowContextMenu={rowContextMenu}
         emptyText={intl.formatMessage(messages.noAccounts)}
         data={bank.accounts}
-        columns={columns.current}
+        columns={columns}
         moveRow={moveRow}
         dragId={bank.id}
       />
@@ -250,7 +275,7 @@ const Component = Object.assign(
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const { Page } = useUi()
 
-    log('data %o', data)
+    // log('data %o', data)
 
     return (
       <Page
