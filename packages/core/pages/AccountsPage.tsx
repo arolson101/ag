@@ -289,11 +289,9 @@ const Component = Object.assign(
         {data &&
           data.banks &&
           data.banks.map(bank => (
-            <BankTable
+            <BankTable //
               {...bank}
-              key={
-                bank.id //
-              }
+              key={bank.id}
             />
           ))}
       </Page>

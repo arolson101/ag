@@ -37,6 +37,7 @@ export class BankResolver {
   ): Promise<Bank[]> {
     const { banksRepository } = getAppDb()
     const banks = await banksRepository.all()
+    banks.sort((a, b) => a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()))
     // log('banks- %o', banks)
     return banks
   }
