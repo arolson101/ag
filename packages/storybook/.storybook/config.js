@@ -4,7 +4,7 @@ import debug from 'debug'
 debug.enable('*')
 
 // https://github.com/facebook/metro/issues/287#issuecomment-450903701
-if (__DEV__) {
+if (true) {
   const IGNORED_WARNINGS = [
     'Remote debugger is in a background tab which may cause apps to perform slowly',
     // 'Require cycle:',
