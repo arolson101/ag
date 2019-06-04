@@ -8,7 +8,7 @@ interface Params {
 }
 
 module.exports = async ({ config }: Params): Promise<webpack.Configuration> => {
-  // config.target = 'web'
+  config.target = 'web'
 
   config.module!.rules!.push(
     {
