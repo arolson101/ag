@@ -3,6 +3,7 @@ import { selectors } from '@ag/core/reducers'
 import React from 'react'
 import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'
+import { LoggedIn } from './LoggedIn'
 import { VisibleRoot } from './VisibleRoot'
 
 interface Props {
@@ -31,7 +32,9 @@ export class BillsTab extends React.PureComponent<Props> {
   render() {
     return (
       <VisibleRoot componentId={this.props.componentId}>
-        <BillsPage componentId={this.props.componentId} />
+        <LoggedIn>
+          <BillsPage componentId={this.props.componentId} />
+        </LoggedIn>
       </VisibleRoot>
     )
   }

@@ -26,7 +26,8 @@ export const Image = Object.assign(
       return <SvgUri source={source} style={style} width={size} height={size} />
     } else {
       // log('not svg, src %o style %o', src, style)
-      return <RNImage source={source} style={style} />
+      // return <RNImage source={source} style={style} />
+      return null
     }
   }),
   {

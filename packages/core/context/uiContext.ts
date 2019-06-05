@@ -122,14 +122,12 @@ export interface TableColumn<T extends {}> {
 export interface TableProps<T extends {} = any> {
   titleText?: string
   titleImage?: ImageUri
-  titleContextMenuHeader?: string
   titleActions?: ActionItem[]
   tableEdit?: ActionDesc
   tableDelete?: ActionDesc
   rowAdd?: ActionDesc
-  rowEdit?: ActionDesc
-  rowDelete?: ActionDesc
-  rowContextMenu?: (row: T) => ContextMenuProps
+  rowEdit?: (row: T) => ActionDesc
+  rowDelete?: (row: T) => ActionDesc
   rowKey: keyof T & string
   emptyText?: string
   data: T[]

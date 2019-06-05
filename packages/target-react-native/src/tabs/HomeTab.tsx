@@ -5,6 +5,7 @@ import React from 'react'
 import { Options } from 'react-native-navigation'
 import { RnnContext } from '../app/RnnContext'
 import { icons } from '../icons'
+import { LoggedIn } from './LoggedIn'
 import { VisibleRoot } from './VisibleRoot'
 
 const log = debug('rn:HomeTab')
@@ -17,7 +18,9 @@ export const HomeTab = Object.assign(
   React.memo<Props>(function _HomeTab({ componentId }) {
     return (
       <VisibleRoot componentId={componentId}>
-        <HomePage componentId={componentId} />
+        <LoggedIn>
+          <HomePage componentId={componentId} />
+        </LoggedIn>
       </VisibleRoot>
     )
   }),

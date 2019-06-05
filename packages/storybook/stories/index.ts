@@ -1,4 +1,5 @@
 import './AccountDialog.stories'
+import './AccountsPage.stories'
 import './BankDialog.stories'
 import './HomePage.stories'
 import './LoginDialog.stories'

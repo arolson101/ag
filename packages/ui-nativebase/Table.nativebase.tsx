@@ -1,4 +1,4 @@
-import { IconName, TableProps } from '@ag/core/context'
+import { ActionDesc, IconName, TableProps } from '@ag/core/context'
 import assert from 'assert'
 import debug from 'debug'
 import {
@@ -32,8 +32,52 @@ import { Image } from './NativeImage'
 
 const log = debug('ui-nativebase:Table')
 
+const ActionButton = Object.assign(
+  React.memo<{ action?: ActionDesc; danger?: boolean; info?: boolean; active?: boolean }>(
+    function _ActionButton({ action, danger, info, active }) {
+      if (!action) {
+        return null
+      }
+      return (
+        <Button
+          disabled={action.disabled}
+          onPress={action.onClick}
+          key={action.text}
+          style={{ flexDirection: 'column', height: '100%' }}
+          danger={danger}
+          info={info}
+          active={active}
+        >
+          <Icon active name={mapIconName(action.icon)} />
+        </Button>
+      )
+    }
+  ),
+  {
+    displayName: 'ActionButton',
+  }
+)
+
 export const Table = React.memo<TableProps>(function _Table(props) {
-  const { titleText, titleImage, titleActions, data, emptyText, rowKey, columns } = props
+  const {
+    titleText,
+    titleImage,
+    tableEdit,
+    tableDelete,
+    rowAdd,
+    rowDelete,
+    rowEdit,
+    data,
+    emptyText,
+    rowKey,
+    columns,
+  } = props
+
+  const tableActions: React.ReactNode[] = [
+    <ActionButton key='delete' action={tableDelete} danger />,
+    <ActionButton key='edit' action={tableEdit} info />,
+    <ActionButton key='add' action={rowAdd} active />,
+  ].filter(x => !!x)
 
   const renderItem = useCallback(
     function _renderItem<ItemT = Record<string, any>>({
@@ -42,15 +86,19 @@ export const Table = React.memo<TableProps>(function _Table(props) {
       separators,
     }: ListRenderItemInfo<ItemT>) {
       log('renderItem %o', item)
+
+      const rowActions: React.ReactNode[] = [
+        <ActionButton key='delete' action={rowDelete ? rowDelete(item) : undefined} danger />,
+        <ActionButton key='edit' action={rowEdit ? rowEdit(item) : undefined} info />,
+      ].filter(x => !!x)
+
       return (
         <SwipeRow
-          leftOpenValue={75}
-          rightOpenValue={-75}
-          left={
-            <Button success onPress={() => alert('Add')}>
-              <Icon active name='add' />
-            </Button>
-          }
+          closeOnRowPress
+          disableRightSwipe
+          disableLeftSwipe={!rowActions}
+          rightOpenValue={-75 * rowActions.length}
+          right={<View style={{ flexDirection: 'row', height: '100%' }}>{rowActions}</View>}
           body={
             <View style={{ flexDirection: 'row' }}>
               {columns.map(({ dataIndex, render, align, width, format, title }, colIndex) => {
@@ -86,33 +134,17 @@ export const Table = React.memo<TableProps>(function _Table(props) {
   return (
     <List>
       <SwipeRow
+        closeOnRowPress
         disableRightSwipe
-        disableLeftSwipe={!titleActions}
-        rightOpenValue={-75 * (titleActions ? titleActions.length : 0)}
+        disableLeftSwipe={!tableActions.length}
+        rightOpenValue={-75 * tableActions.length}
         body={
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Image src={titleImage} size={24} />
             <H2>{titleText}</H2>
           </View>
         }
-        right={
-          <View style={{ flexDirection: 'row', height: '100%' }}>
-            {(titleActions || [])
-              .filter(action => !action.divider)
-              .map((action, idx) => (
-                <Button
-                  danger={action.danger}
-                  disabled={action.disabled}
-                  onPress={action.onClick}
-                  key={idx}
-                  style={{ flexDirection: 'column', height: '100%' }}
-                >
-                  <Icon active name={mapIconName(action.icon)} />
-                  {/* <Text>{action.icon}</Text> */}
-                </Button>
-              ))}
-          </View>
-        }
+        right={<View style={{ flexDirection: 'row', height: '100%' }}>{tableActions}</View>}
       />
       {data.length === 0 ? (
         <Text>{emptyText}</Text>

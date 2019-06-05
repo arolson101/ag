@@ -1,8 +1,8 @@
-import { TableColumn, TableProps } from '@ag/core/context'
+import { ActionDesc, TableColumn, TableProps } from '@ag/core/context'
 import * as Antd from 'antd'
 import { TableComponents } from 'antd/lib/table'
 import debug from 'debug'
-import React from 'react'
+import React, { useCallback } from 'react'
 import {
   ConnectDragSource,
   ConnectDropTarget,
@@ -15,6 +15,7 @@ import {
 import HTML5Backend from 'react-dnd-html5-backend'
 import { ContextMenu } from './ContextMenu'
 import { Image } from './Image.antd'
+import { mapIconName } from './ImageSourceIcon'
 
 const log = debug('ui-antd:Table')
 
@@ -104,15 +105,25 @@ const getDragableBodyRow = (type: string) => {
   return DragableBodyRow
 }
 
+const actionMenuItem = (action?: ActionDesc) =>
+  action ? (
+    <Antd.Menu.Item onClick={action.onClick} disabled={action.disabled}>
+      <Antd.Icon type={mapIconName(action.icon)} />
+      {action.text}
+    </Antd.Menu.Item>
+  ) : null
+
 const DragSortingTable: React.FC<TableProps> = ({
   titleText,
   titleImage,
-  titleContextMenuHeader,
-  titleActions,
+  tableDelete,
+  tableEdit,
   emptyText,
   columns,
+  rowAdd,
+  rowDelete,
+  rowEdit,
   rowKey,
-  rowContextMenu,
   data,
   moveRow,
   dragId,
@@ -120,26 +131,47 @@ const DragSortingTable: React.FC<TableProps> = ({
   if (moveRow && !dragId) {
     throw new Error('moveRow specified but dragId is not')
   }
+
   const DragableBodyRow: React.ComponentType<any> | undefined = dragId
     ? getDragableBodyRow(dragId)
     : undefined
 
-  const renderCell = ({ render: userRender, format }: TableColumn<any>) => (
-    text: string,
-    row: any,
-    index: number
-  ) => {
-    if (format) {
-      text = format(text)
-    }
-    return (
-      <ContextMenu {...(rowContextMenu ? rowContextMenu(row) : {})}>
-        <div style={{ margin: -16, padding: 16 }}>
-          {userRender ? userRender(text, row, index) : text}
-        </div>
-      </ContextMenu>
-    )
-  }
+  const renderCell = useCallback(
+    ({ render: userRender, format }: TableColumn<any>) => (
+      text: string,
+      row: any,
+      index: number
+    ) => {
+      if (format) {
+        text = format(text)
+      }
+      const actions: ActionDesc[] = [
+        rowEdit, //
+        rowDelete,
+      ]
+        .map(fcn => fcn && fcn(row))
+        .filter((action): action is ActionDesc => !!action)
+
+      return (
+        <ContextMenu actions={actions}>
+          <div style={{ margin: -16, padding: 16 }}>
+            {userRender ? userRender(text, row, index) : text}
+          </div>
+        </ContextMenu>
+      )
+    },
+    [rowDelete, rowEdit]
+  )
+
+  const menu = (
+    <Antd.Menu>
+      <Antd.Menu.ItemGroup title={titleText} />
+      {actionMenuItem(rowAdd)}
+      <Antd.Menu.Divider />
+      {actionMenuItem(tableEdit)}
+      {actionMenuItem(tableDelete)}
+    </Antd.Menu>
+  )
 
   const components: TableComponents = {
     body: {
@@ -151,7 +183,7 @@ const DragSortingTable: React.FC<TableProps> = ({
     <Antd.ConfigProvider
       renderEmpty={() => (
         <div style={{ textAlign: 'center' }}>
-          <span>{emptyText}</span>
+          <div>{emptyText}</div>
         </div>
       )}
     >
@@ -159,20 +191,17 @@ const DragSortingTable: React.FC<TableProps> = ({
         title={
           titleText
             ? () => (
-                <ContextMenu header={titleContextMenuHeader} actions={titleActions}>
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignItems: 'baseline',
-                    }}
-                  >
-                    <Title level={4} style={{ margin: 0 }}>
-                      <Image src={titleImage} size='1.5em' margin={5} />
-                      {titleText}
-                    </Title>
-                  </div>
-                </ContextMenu>
+                <div
+                  style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
+                >
+                  <Title level={4} style={{ margin: 0 }}>
+                    <Image src={titleImage} size='1.5em' margin={5} />
+                    {titleText}
+                  </Title>
+                  <Antd.Dropdown overlay={menu}>
+                    <Antd.Button icon='ellipsis' shape='round' />
+                  </Antd.Dropdown>
+                </div>
               )
             : undefined
         }
@@ -180,6 +209,7 @@ const DragSortingTable: React.FC<TableProps> = ({
           index,
           moveRow,
         })}
+        footer={() => <div />}
         pagination={false}
         columns={columns.map(col => ({ ...col, render: renderCell(col) }))}
         components={components}

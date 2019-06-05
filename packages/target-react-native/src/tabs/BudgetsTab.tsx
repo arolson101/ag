@@ -4,6 +4,7 @@ import debug from 'debug'
 import React from 'react'
 import { RnnOptionsHandler } from '../app/RnnContext'
 import { icons } from '../icons'
+import { LoggedIn } from './LoggedIn'
 import { VisibleRoot } from './VisibleRoot'
 
 const log = debug('BudgetsTab')
@@ -34,7 +35,9 @@ export class BudgetsTab extends React.PureComponent<Props> {
   render() {
     return (
       <VisibleRoot componentId={this.props.componentId}>
-        <BudgetsPage componentId={this.props.componentId} />
+        <LoggedIn>
+          <BudgetsPage componentId={this.props.componentId} />
+        </LoggedIn>
       </VisibleRoot>
     )
   }

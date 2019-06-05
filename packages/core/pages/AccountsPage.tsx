@@ -132,6 +132,7 @@ const BankTable = Object.assign(
         icon: 'trash',
         text: intl.formatMessage(messages.deleteBank),
         onClick: () => deleteBank({ ui, intl, bank, client }),
+        danger: true,
       }),
       [deleteBank, ui, intl, bank, client]
     )
@@ -145,90 +146,23 @@ const BankTable = Object.assign(
       [intl, bank.id]
     )
 
-    const titleActions = useMemo<ActionItem[]>(
-      () => [
-        tableEdit,
-        tableDelete,
-        rowAdd,
-        ...(bank.online
-          ? [
-              {
-                icon: 'sync',
-                text: intl.formatMessage(messages.syncAccounts),
-                onClick: async () => {
-                  try {
-                    await syncAccounts(bank.id)
-                    client.reFetchObservableQueries()
-                    showToast(intl.formatMessage(messages.syncComplete, { name: bank.name }))
-                  } catch (error) {
-                    ErrorDisplay.show(ui, intl, error)
-                  }
-                },
-                disabled: !bank.online,
-              } as ActionItem,
-            ]
-          : []),
-      ],
-      [
-        intl,
-        openBankEditDlg,
-        deleteBank,
-        openAccountCreateDlg,
-        bank.id,
-        bank.online,
-        bank.name,
-        syncAccounts,
-        client,
-        showToast,
-      ]
+    const rowEdit = useCallback(
+      (account: Row): ActionDesc => ({
+        icon: 'edit',
+        text: intl.formatMessage(messages.editAccount),
+        onClick: () => openAccountEditDlg({ accountId: account.id }),
+      }),
+      [intl, openAccountEditDlg]
     )
 
-    const rowContextMenu = useCallback(
-      function _rowContextMenu(account: Row): ContextMenuProps {
-        return {
-          header: intl.formatMessage(messages.contextMenuHeader, {
-            bankName: bank.name,
-            accountName: account.name,
-          }),
-          actions: [
-            {
-              icon: 'edit',
-              text: intl.formatMessage(messages.editAccount),
-              onClick: () => openAccountEditDlg({ accountId: account.id }),
-            },
-            {
-              icon: 'trash',
-              text: intl.formatMessage(messages.deleteAccount),
-              onClick: () => deleteAccount({ ui, intl, account, client }),
-              danger: true,
-            },
-            {
-              icon: 'refresh',
-              text: intl.formatMessage(messages.getTransactions),
-              onClick: async () => {
-                try {
-                  const start = monthsAgo(1)
-                  const end = standardizeDate(new Date())
-                  await downloadTransactions({
-                    accountId: account.id,
-                    bankId: bank.id,
-                    start,
-                    end,
-                  })
-                  client.reFetchObservableQueries()
-                  showToast(
-                    intl.formatMessage(messages.getTransactionsComplete, { name: account.name })
-                  )
-                } catch (error) {
-                  log('error downloading transactions: %o', error)
-                  ErrorDisplay.show(ui, intl, error)
-                }
-              },
-            },
-          ],
-        }
-      },
-      [bank, intl, client]
+    const rowDelete = useCallback(
+      (account: Row): ActionDesc => ({
+        icon: 'trash',
+        text: intl.formatMessage(messages.deleteAccount),
+        onClick: () => deleteAccount({ ui, intl, account, client }),
+        danger: true,
+      }),
+      [intl, deleteAccount]
     )
 
     const columns = useMemo<Array<TableColumn<Row>>>(
@@ -291,13 +225,12 @@ const BankTable = Object.assign(
       <Table
         titleText={bank.name}
         titleImage={bank.icon}
-        titleContextMenuHeader={bank.name}
-        titleActions={titleActions}
         tableEdit={tableEdit}
         tableDelete={tableDelete}
         rowKey={'id'}
         rowAdd={rowAdd}
-        rowContextMenu={rowContextMenu}
+        rowEdit={rowEdit}
+        rowDelete={rowDelete}
         emptyText={intl.formatMessage(messages.noAccounts)}
         data={bank.accounts}
         columns={columns}
