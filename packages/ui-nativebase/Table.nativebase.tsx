@@ -85,7 +85,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
       item,
       separators,
     }: ListRenderItemInfo<ItemT>) {
-      log('renderItem %o', item)
+      // log('renderItem %o', item)
 
       const rowActions: React.ReactNode[] = [
         <ActionButton key='delete' action={rowDelete ? rowDelete(item) : undefined} danger />,
@@ -120,7 +120,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
         />
       )
     },
-    [...columns]
+    [...columns, rowDelete, rowEdit]
   )
 
   const keyExtractor = useCallback(
