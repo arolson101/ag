@@ -1,5 +1,6 @@
 import 'node-libs-react-native/globals'
 import 'abortcontroller-polyfill'
+import 'stream.finished/auto'
 import flatMap from 'array.prototype.flatmap'
 import debug from 'debug'
 
@@ -35,7 +36,6 @@ if (!window.localStorage)
     setItem: (name: string, value: any) => undefined,
     removeItem: (name: string) => undefined,
   }
-
 
 // bypass lodash exceptions 'process.binding is not supported'
 process.binding = () => undefined

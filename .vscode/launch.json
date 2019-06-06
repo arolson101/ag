@@ -7,21 +7,18 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "app: jest",
-      "program": "${workspaceFolder}/../../node_modules/jest/bin/jest.js",
+      "name": "jest",
+      "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": ["-i"],
       "internalConsoleOptions": "openOnSessionStart"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "app: schema",
-      "args": [
-        "-r",
-        "ts-node/register/transpile-only",
-        "${workspaceFolder}/scripts/buildSchema.ts",
-        "./dist/schema.json"
-      ],
-    },
+      "name": "decryptFile",
+      "program": "${workspaceFolder}/node_modules/ts-node/dist/bin.js",
+      "args": ["${workspaceFolder}/scripts/decryptFile.ts"],
+      "internalConsoleOptions": "openOnSessionStart"
+    }
   ]
 }

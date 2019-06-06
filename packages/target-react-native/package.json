@@ -41,6 +41,7 @@
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.5.2",
     "shallowequal": "^1.1.0",
+    "stream.finished": "^1.2.0",
     "typeorm": "^0.2.17",
     "utility-types": "^3.7.0"
   },
