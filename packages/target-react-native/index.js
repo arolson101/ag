@@ -1,6 +1,7 @@
 import 'node-libs-react-native/globals'
 import 'abortcontroller-polyfill'
 import 'stream.finished/auto'
+import 'intl'
 import flatMap from 'array.prototype.flatmap'
 import debug from 'debug'
 
