@@ -37,7 +37,6 @@
     "@storybook/react": "^5.1.0-rc.3",
     "@storybook/react-native": "^5.1.0-rc.3",
     "@storybook/theming": "^5.1.0-rc.3",
-    "apollo-link-mock": "^1.0.1",
     "babel-runtime": "^7.0.0-beta.3",
     "commander": "^2.20.0",
     "debug": "^4.1.1",
@@ -49,7 +48,6 @@
     "node-libs-react-native": "^1.0.3",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-apollo": "^2.5.6",
     "react-dom": "^16.8.6",
     "react-intl": "^2.9.0",
     "react-native": "^0.59.8",
@@ -79,7 +77,6 @@
     "metro-react-native-babel-preset": "^0.54.1",
     "react-native-typescript-transformer": "^1.2.12",
     "style-loader": "^0.23.1",
-    "ts-transform-graphql-tag": "^0.2.1",
     "wait-on": "^3.2.0",
     "webpack": "^4.32.2"
   }

@@ -1,47 +1,39 @@
-import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
-import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { ErrorDisplay } from '../components'
-import { useIntl, useUi } from '../context'
-import * as T from '../graphql-types'
+import { useIntl, useSelector, useUi } from '../context'
+import { selectors } from '../reducers'
 
 const log = debug('core:CalendarPage')
 
 interface Props {
   componentId?: string
 }
-type ComponentProps = Props & QueryHookResult<T.CalendarPage.Query, T.CalendarPage.Variables>
 
-const queries = {
-  CalendarPage: gql`
-    query CalendarPage {
-      accounts {
-        id
-        name
-      }
-    }
-  ` as Gql<T.CalendarPage.Query, T.CalendarPage.Variables>,
-}
+const path = '/calendar'
+const route = docuri.route<void, string>(path)
 
-const Component = Object.assign(
-  React.memo<ComponentProps>(function _CalendarPage_Component({ data, componentId, loading }) {
+export const CalendarPage = Object.assign(
+  React.memo<Props>(function _CalendarPage({ componentId }) {
     const intl = useIntl()
     const { Page, Row, Text } = useUi()
+    const accounts = useSelector(selectors.getAccounts)
 
     return (
       <Page title={intl.formatMessage(messages.titleText)} componentId={componentId}>
         <Text header>Calendar</Text>
-        {data &&
-          data.accounts &&
-          data.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
+        {accounts.map(account => (
+          <Text key={account.id}>{account.name}</Text>
+        ))}
       </Page>
     )
   }),
   {
-    displayName: 'CalendarPage.Component',
+    displayName: 'CalendarPage',
+    path,
+    route,
+    messages: () => messages,
   }
 )
 
@@ -55,27 +47,3 @@ const messages = defineMessages({
     defaultMessage: 'Calendar',
   },
 })
-
-const path = '/calendar'
-const route = docuri.route<void, string>(path)
-
-export const CalendarPage = Object.assign(
-  React.memo<Props>(function _CalendarPage(props) {
-    const q = useQuery(CalendarPage.queries.CalendarPage)
-
-    return (
-      <>
-        <ErrorDisplay error={q.error} />
-        <Component {...props} {...q} />
-      </>
-    )
-  }),
-  {
-    displayName: 'CalendarPage',
-    queries,
-    Component,
-    messages,
-    path,
-    route,
-  }
-)

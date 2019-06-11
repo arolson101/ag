@@ -1,23 +1,12 @@
 import { Bank } from '@ag/db'
-import {
-  Gql,
-  MutationFn,
-  pick,
-  useApolloClient,
-  useFieldValue,
-  useMutation,
-  useQuery,
-  useSubmitRef,
-} from '@ag/util'
+import { pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
-import gql from 'graphql-tag'
-import React, { useCallback, useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle } from 'react'
 import { defineMessages } from 'react-intl'
-import { ErrorDisplay } from '../components'
 import { UrlField } from '../components/UrlField'
-import { Errors, tabConfig, typedFields, useAction, useIntl, useUi } from '../context'
+import { Errors, tabConfig, typedFields, useAction, useIntl, useSelector, useUi } from '../context'
 import { filist, formatAddress } from '../data'
-import * as T from '../graphql-types'
+import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
 const log = debug('core:BankForm')
@@ -33,58 +22,20 @@ interface Props {
 
 const bankAvatarSize = 100
 
-const fragments = {
-  bankFields: gql`
-    fragment bankFields on Bank {
-      name
-      web
-      address
-      notes
-      icon
-
-      online
-
-      fid
-      org
-      ofx
-
-      username
-      password
-    }
-  `,
-}
-
-const queries = {
-  BankForm: gql`
-    query BankForm($bankId: String) {
-      bank(bankId: $bankId) {
-        ...bankFields
-      }
-    }
-    ${fragments.bankFields}
-  ` as Gql<T.BankForm.Query, T.BankForm.Variables>,
-}
-
 export interface BankForm {
   save: () => any
 }
 
-interface ComponentProps extends Props {
-  loading: boolean
-  data: T.BankForm.Query | undefined
-}
-
-const Component = Object.assign(
-  React.forwardRef<BankForm, ComponentProps>(function _BankFormComponent(props, ref) {
+export const BankForm = Object.assign(
+  React.forwardRef<BankForm, Props>(function _BankForm({ bankId, onClosed }, ref) {
     const intl = useIntl()
     const ui = useUi()
     const { LoadingOverlay, Tabs, Tab, Text } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
-    const { data, loading, bankId, onClosed } = props
     const saveBank = useAction(thunks.saveBank)
     const submitFormRef = useSubmitRef()
 
-    const bank = loading ? undefined : data && data.bank
+    const bank = useSelector(selectors.getBank)(bankId)
     const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0
     const initialValues = {
       fi: defaultFi.toString(),
@@ -93,10 +44,8 @@ const Component = Object.assign(
         : Bank.defaultValues),
     }
 
-    // const favicoField = useRef<UrlField<FormValues>>(null)
-
-    if (!loading && !data) {
-      throw new Error('no data')
+    if (!bank) {
+      throw new Error('no bank')
     }
 
     const validate = useCallback(
@@ -131,163 +80,125 @@ const Component = Object.assign(
 
     // log('initial values: %o', initialValues)
     return (
-      <>
-        <LoadingOverlay show={loading} title={`BankForm loading`} />
-        <Form
-          initialValues={initialValues}
-          validate={validate}
-          submit={submit}
-          submitRef={submitFormRef}
-        >
-          {({ change, values: { online } }) => {
-            return (
-              <Tabs id='BankForm' defaultActiveKey='location'>
-                <Tab {...tabConfig('location', intl.formatMessage(messages.tabInfo))}>
-                  {!bankId && (
-                    <>
-                      <Text>{intl.formatMessage(messages.fiHelp)}</Text>
-                      <Divider />
-                      <SelectField
-                        field='fi'
-                        items={filist.map(fi => ({
-                          label: fi.name,
-                          value: fi.id.toString(),
-                        }))}
-                        label={intl.formatMessage(messages.fi)}
-                        onValueChange={valueStr => {
-                          const value = +valueStr
-                          const fi = filist[value]
-                          const name = value ? fi.name || '' : ''
-                          const web = fi.profile.siteURL || ''
-                          change('name', name)
-                          change('fi', valueStr)
-                          change('web', web)
-                          change('icon', '')
-                          change('address', formatAddress(fi) || '')
-                          change('fid', fi.fid || '')
-                          change('org', fi.org || '')
-                          change('ofx', fi.ofx || '')
-                          // if (favicoField.current) {
-                          //   favicoField.current.onValueChanged(web)
-                          // }
-                        }}
-                        searchable
-                        disabled={loading}
-                      />
-                      <Divider />
-                    </>
-                  )}
-                  <TextField
-                    field='name'
-                    label={intl.formatMessage(messages.name)}
-                    placeholder={intl.formatMessage(messages.namePlaceholder)}
-                    disabled={loading}
-                  />
-                  <TextField
-                    field='address'
-                    label={intl.formatMessage(messages.address)}
-                    rows={4}
-                    disabled={loading}
-                  />
-                  <UrlField<FormValues>
-                    field='web'
-                    nameField='name'
-                    favicoField='icon'
-                    favicoWidth={bankAvatarSize}
-                    favicoHeight={bankAvatarSize}
-                    label={intl.formatMessage(messages.web)}
-                    // ref={favicoField}
-                    disabled={loading}
-                  />
-                  <TextField
-                    field='notes'
-                    label={intl.formatMessage(messages.notes)}
-                    rows={4}
-                    disabled={loading}
-                  />
-                </Tab>
-                <Tab {...tabConfig('online', intl.formatMessage(messages.tabOnline))}>
-                  <CheckboxField
-                    field='online'
-                    label={intl.formatMessage(messages.online)}
-                    disabled={loading}
-                  />
-                  <TextField
-                    field='username'
-                    noCorrect
-                    label={intl.formatMessage(messages.username)}
-                    placeholder={intl.formatMessage(messages.usernamePlaceholder)}
-                    disabled={loading || !online}
-                  />
-                  <TextField
-                    secure
-                    field='password'
-                    label={intl.formatMessage(messages.password)}
-                    placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-                    disabled={loading || !online}
-                  />
-                  <Divider />
-                  <TextField
-                    noCorrect
-                    field='fid'
-                    label={intl.formatMessage(messages.fid)}
-                    placeholder={intl.formatMessage(messages.fidPlaceholder)}
-                    disabled={loading || !online}
-                  />
-                  <TextField
-                    noCorrect
-                    field='org'
-                    label={intl.formatMessage(messages.org)}
-                    placeholder={intl.formatMessage(messages.orgPlaceholder)}
-                    disabled={loading || !online}
-                  />
-                  <TextField
-                    noCorrect
-                    field='ofx'
-                    label={intl.formatMessage(messages.ofx)}
-                    placeholder={intl.formatMessage(messages.ofxPlaceholder)}
-                    disabled={loading || !online}
-                  />
-                </Tab>
-              </Tabs>
-            )
-          }}
-        </Form>
-      </>
-    )
-  }),
-  {
-    displayName: 'BankForm.Component',
-  }
-)
-
-export const BankForm = Object.assign(
-  React.forwardRef<BankForm, Props>((props, ref) => {
-    const { bankId } = props
-
-    const component = useRef<BankForm>(null)
-    const { data, loading, error } = useQuery(queries.BankForm, { variables: { bankId } })
-
-    useImperativeHandle(ref, () => ({
-      save: () => {
-        component.current!.save()
-      },
-    }))
-
-    // log('initial values: %o', initialValues)
-    return (
-      <>
-        <ErrorDisplay error={error} />
-        <Component ref={component} {...{ ...props, data, loading }} />
-      </>
+      <Form
+        initialValues={initialValues}
+        validate={validate}
+        submit={submit}
+        submitRef={submitFormRef}
+      >
+        {({ change, values: { online } }) => {
+          return (
+            <Tabs id='BankForm' defaultActiveKey='location'>
+              <Tab {...tabConfig('location', intl.formatMessage(messages.tabInfo))}>
+                {!bankId && (
+                  <>
+                    <Text>{intl.formatMessage(messages.fiHelp)}</Text>
+                    <Divider />
+                    <SelectField
+                      field='fi'
+                      items={filist.map(fi => ({
+                        label: fi.name,
+                        value: fi.id.toString(),
+                      }))}
+                      label={intl.formatMessage(messages.fi)}
+                      onValueChange={valueStr => {
+                        const value = +valueStr
+                        const fi = filist[value]
+                        const name = value ? fi.name || '' : ''
+                        const web = fi.profile.siteURL || ''
+                        change('name', name)
+                        change('fi', valueStr)
+                        change('web', web)
+                        change('icon', '')
+                        change('address', formatAddress(fi) || '')
+                        change('fid', fi.fid || '')
+                        change('org', fi.org || '')
+                        change('ofx', fi.ofx || '')
+                        // if (favicoField.current) {
+                        //   favicoField.current.onValueChanged(web)
+                        // }
+                      }}
+                      searchable
+                    />
+                    <Divider />
+                  </>
+                )}
+                <TextField
+                  field='name'
+                  label={intl.formatMessage(messages.name)}
+                  placeholder={intl.formatMessage(messages.namePlaceholder)}
+                />
+                <TextField
+                  field='address' //
+                  label={intl.formatMessage(messages.address)}
+                  rows={4}
+                />
+                <UrlField<FormValues>
+                  field='web'
+                  nameField='name'
+                  favicoField='icon'
+                  favicoWidth={bankAvatarSize}
+                  favicoHeight={bankAvatarSize}
+                  label={intl.formatMessage(messages.web)}
+                  // ref={favicoField}
+                />
+                <TextField
+                  field='notes' //
+                  label={intl.formatMessage(messages.notes)}
+                  rows={4}
+                />
+              </Tab>
+              <Tab {...tabConfig('online', intl.formatMessage(messages.tabOnline))}>
+                <CheckboxField
+                  field='online' //
+                  label={intl.formatMessage(messages.online)}
+                />
+                <TextField
+                  field='username'
+                  noCorrect
+                  label={intl.formatMessage(messages.username)}
+                  placeholder={intl.formatMessage(messages.usernamePlaceholder)}
+                  disabled={!online}
+                />
+                <TextField
+                  secure
+                  field='password'
+                  label={intl.formatMessage(messages.password)}
+                  placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+                  disabled={!online}
+                />
+                <Divider />
+                <TextField
+                  noCorrect
+                  field='fid'
+                  label={intl.formatMessage(messages.fid)}
+                  placeholder={intl.formatMessage(messages.fidPlaceholder)}
+                  disabled={!online}
+                />
+                <TextField
+                  noCorrect
+                  field='org'
+                  label={intl.formatMessage(messages.org)}
+                  placeholder={intl.formatMessage(messages.orgPlaceholder)}
+                  disabled={!online}
+                />
+                <TextField
+                  noCorrect
+                  field='ofx'
+                  label={intl.formatMessage(messages.ofx)}
+                  placeholder={intl.formatMessage(messages.ofxPlaceholder)}
+                  disabled={!online}
+                />
+              </Tab>
+            </Tabs>
+          )
+        }}
+      </Form>
     )
   }),
   {
     id: 'BankForm',
     displayName: 'BankForm',
-    queries,
-    fragments,
-    Component,
   }
 )
 

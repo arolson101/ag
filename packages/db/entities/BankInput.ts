@@ -1,21 +1,18 @@
 import { ImageUri } from '@ag/util'
-import { Field, InputType } from 'type-graphql'
-import { ImageUriScalar } from '../customTypes'
 
-@InputType()
 export class BankInput {
-  @Field({ nullable: true }) name?: string
-  @Field({ nullable: true }) web?: string
-  @Field({ nullable: true }) address?: string
-  @Field({ nullable: true }) notes?: string
-  @Field(type => ImageUriScalar, { nullable: true }) icon?: ImageUri
+  name?: string
+  web?: string
+  address?: string
+  notes?: string
+  icon?: ImageUri
 
-  @Field({ nullable: true }) online?: boolean
+  online?: boolean
 
-  @Field({ nullable: true }) fid?: string
-  @Field({ nullable: true }) org?: string
-  @Field({ nullable: true }) ofx?: string
+  fid?: string
+  org?: string
+  ofx?: string
 
-  @Field({ nullable: true }) username?: string
-  @Field({ nullable: true }) password?: string
+  username?: string
+  password?: string
 }

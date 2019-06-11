@@ -21,12 +21,12 @@ export class BudgetsTab extends React.PureComponent<Props> {
     const intl = selectors.getIntl(store.getState())
     return {
       bottomTab: {
-        text: intl.formatMessage(BudgetsPage.messages.tabText),
+        text: intl.formatMessage(BudgetsPage.messages().tabText),
         icon: icons.budgets,
       },
       topBar: {
         title: {
-          text: intl.formatMessage(BudgetsPage.messages.titleText),
+          text: intl.formatMessage(BudgetsPage.messages().titleText),
         },
       },
     }

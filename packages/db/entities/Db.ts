@@ -1,5 +1,4 @@
 import crypto from 'crypto'
-import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 
 const iterations = 10000
@@ -7,11 +6,10 @@ const keylen = 32
 const digest = 'sha256'
 const algorithm = 'aes-256-gcm'
 
-@ObjectType()
 @Entity({ name: 'dbs' })
 export class Db {
-  @PrimaryColumn() @Field() dbId!: string
-  @Column() @Field() name!: string
+  @PrimaryColumn() dbId!: string
+  @Column() name!: string
   @Column() path!: string
 
   @Column() salt!: string

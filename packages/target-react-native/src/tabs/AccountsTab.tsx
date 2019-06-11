@@ -18,12 +18,12 @@ export class AccountsTab extends React.PureComponent<Props> {
     const intl = selectors.getIntl(store.getState())
     return {
       bottomTab: {
-        text: intl.formatMessage(AccountsPage.messages.tabText),
+        text: intl.formatMessage(AccountsPage.messages().tabText),
         icon: icons.accounts,
       },
       topBar: {
         title: {
-          text: intl.formatMessage(AccountsPage.messages.titleText),
+          text: intl.formatMessage(AccountsPage.messages().titleText),
         },
       },
     }

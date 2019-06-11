@@ -1,7 +1,6 @@
 /* tslint:disable:no-implicit-dependencies */
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
-import { getTransformer } from 'ts-transform-graphql-tag'
 import webpack from 'webpack'
 import pkg from './package.json'
 const WriteFilePlugin = require('write-file-webpack-plugin')
@@ -39,9 +38,6 @@ const config: webpack.Configuration = {
         test: /\.tsx?$/,
         exclude: '/node_modules/',
         loader: 'ts-loader',
-        options: {
-          getCustomTransformers: () => ({ before: [getTransformer()] }),
-        },
 
         // use: [
         //   { loader: 'babel-loader' }, //

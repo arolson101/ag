@@ -34,12 +34,12 @@ export const HomeTab = Object.assign(
       const intl = selectors.getIntl(store.getState())
       return {
         bottomTab: {
-          text: intl.formatMessage(HomePage.messages.tabText),
+          text: intl.formatMessage(HomePage.messages().tabText),
           icon: icons.home,
         },
         topBar: {
           title: {
-            text: intl.formatMessage(HomePage.messages.titleText),
+            text: intl.formatMessage(HomePage.messages().titleText),
           },
         },
       }

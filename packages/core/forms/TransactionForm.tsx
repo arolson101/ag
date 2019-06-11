@@ -1,12 +1,10 @@
 import { Transaction } from '@ag/db'
-import { Gql, pick, useQuery, useSubmitRef } from '@ag/util'
+import { pick, useSubmitRef } from '@ag/util'
 import accounting from 'accounting'
-import gql from 'graphql-tag'
-import React, { useCallback, useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle } from 'react'
 import { defineMessages } from 'react-intl'
-import { ErrorDisplay } from '../components'
-import { Errors, typedFields, useAction, useIntl, useUi } from '../context'
-import * as T from '../graphql-types'
+import { Errors, typedFields, useAction, useIntl, useSelector, useUi } from '../context'
+import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
 interface Props {
@@ -16,50 +14,25 @@ interface Props {
 
 type FormValues = ReturnType<typeof Transaction.defaultValues>
 
-const fragments = {
-  transactionFields: gql`
-    fragment transactionFields on Transaction {
-      account
-      serverid
-      time
-      type
-      name
-      memo
-      amount
-    }
-  `,
-}
-
-const queries = {
-  Transaction: gql`
-    query Transaction($transactionId: String) {
-      transaction(transactionId: $transactionId) {
-        ...transactionFields
-      }
-    }
-    ${fragments.transactionFields}
-  ` as Gql<T.Transaction.Query, T.Transaction.Variables>,
-}
-
 export interface TransactionForm {
   save: () => any
 }
 
-interface ComponentProps extends Props {
-  loading: boolean
-  data: T.Transaction.Query | undefined
-}
-
-const Component = Object.assign(
-  React.forwardRef<TransactionForm, ComponentProps>((props, ref) => {
+export const TransactionForm = Object.assign(
+  React.forwardRef<TransactionForm, Props>((props, ref) => {
     const intl = useIntl()
     const ui = useUi()
     const saveTransaction = useAction(thunks.saveTransaction)
     const submitFormRef = useSubmitRef()
+    const getTransaction = useSelector(selectors.getTransaction)
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
-    const { data, loading, accountId, transactionId } = props
+    const { accountId, transactionId } = props
 
-    const transaction = data && data.transaction
+    const transaction = getTransaction(transactionId)
+    if (!transaction) {
+      return null
+    }
+
     const initialValues = transaction
       ? pick(transaction, Object.keys(Transaction.defaultValues()) as Array<
           keyof Transaction.Props
@@ -98,10 +71,6 @@ const Component = Object.assign(
       },
     }))
 
-    if (!loading && !data) {
-      throw new Error('no data')
-    }
-
     return (
       <Form
         initialValues={initialValues}
@@ -117,33 +86,8 @@ const Component = Object.assign(
     )
   }),
   {
-    displayName: 'TransactionForm.Component',
-  }
-)
-
-export const TransactionForm = Object.assign(
-  React.forwardRef<TransactionForm, Props>((props, ref) => {
-    const { transactionId } = props
-
-    const component = useRef<TransactionForm>(null)
-    const { data, loading, error } = useQuery(queries.Transaction, { variables: { transactionId } })
-    useImperativeHandle(ref, () => ({
-      save: () => {
-        component.current!.save()
-      },
-    }))
-
-    return (
-      <>
-        <ErrorDisplay error={error} />
-        <Component ref={component} {...{ ...props, data, loading }} />
-      </>
-    )
-  }),
-  {
     id: 'TransactionForm',
     displayName: 'TransactionForm',
-    Component,
   }
 )
 

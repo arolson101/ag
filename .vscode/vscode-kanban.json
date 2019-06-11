@@ -44,19 +44,6 @@
       "assignedTo": {
         "name": "arolson101"
       },
-      "creation_time": "2019-02-25T22:59:57.129Z",
-      "description": {
-        "content": "graphql service should do the online things",
-        "mime": "text/markdown"
-      },
-      "id": "17",
-      "references": [],
-      "title": "move online stuff to db"
-    },
-    {
-      "assignedTo": {
-        "name": "arolson101"
-      },
       "creation_time": "2019-02-26T21:23:54.944Z",
       "description": {
         "content": "debug('app:...') => debug('core:...') or debug('db:...')",

@@ -18,12 +18,12 @@ export class BillsTab extends React.PureComponent<Props> {
     const intl = selectors.getIntl(store.getState())
     return {
       bottomTab: {
-        text: intl.formatMessage(BillsPage.messages.tabText),
+        text: intl.formatMessage(BillsPage.messages().tabText),
         icon: icons.bills,
       },
       topBar: {
         title: {
-          text: intl.formatMessage(BillsPage.messages.titleText),
+          text: intl.formatMessage(BillsPage.messages().titleText),
         },
       },
     }

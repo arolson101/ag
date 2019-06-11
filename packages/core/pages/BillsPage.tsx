@@ -1,47 +1,39 @@
-import { Gql, QueryHookResult, useQuery } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
-import gql from 'graphql-tag'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { ErrorDisplay } from '../components'
-import { useIntl, useUi } from '../context'
-import * as T from '../graphql-types'
+import { useIntl, useSelector, useUi } from '../context'
+import { selectors } from '../reducers'
 
 const log = debug('core:BillsPage')
 
 interface Props {
   componentId?: string
 }
-type ComponentProps = Props & QueryHookResult<T.BillsPage.Query, T.BillsPage.Variables>
 
-const queries = {
-  BillsPage: gql`
-    query BillsPage {
-      accounts {
-        id
-        name
-      }
-    }
-  ` as Gql<T.BillsPage.Query, T.BillsPage.Variables>,
-}
+const path = '/bills'
+const route = docuri.route<void, string>(path)
 
-const Component = Object.assign(
-  React.memo<ComponentProps>(function _BillsPage_Component({ componentId, data, loading }) {
+export const BillsPage = Object.assign(
+  React.memo<Props>(function _BillsPage({ componentId }) {
     const intl = useIntl()
     const { Page, Row, Text } = useUi()
+    const accounts = useSelector(selectors.getAccounts)
 
     return (
       <Page title={intl.formatMessage(messages.titleText)} componentId={componentId}>
         <Text header>Bills</Text>
-        {data &&
-          data.accounts &&
-          data.accounts.map(account => <Text key={account.id}>{account.name}</Text>)}
+        {accounts.map(account => (
+          <Text key={account.id}>{account.name}</Text>
+        ))}
       </Page>
     )
   }),
   {
-    displayName: 'BillsPage.Component',
+    displayName: 'BillsPage',
+    path,
+    route,
+    messages: () => messages,
   }
 )
 
@@ -55,27 +47,3 @@ const messages = defineMessages({
     defaultMessage: 'Bills',
   },
 })
-
-const path = '/bills'
-const route = docuri.route<void, string>(path)
-
-export const BillsPage = Object.assign(
-  React.memo<Props>(function _BillsPage(props) {
-    const q = useQuery(BillsPage.queries.BillsPage)
-
-    return (
-      <>
-        <ErrorDisplay error={q.error} />
-        <Component {...props} {...q} />
-      </>
-    )
-  }),
-  {
-    displayName: 'BillsPage',
-    queries,
-    Component,
-    messages,
-    path,
-    route,
-  }
-)

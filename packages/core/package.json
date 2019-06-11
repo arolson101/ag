@@ -17,18 +17,14 @@
     "@ag/online": "^0.0.0",
     "@ag/util": "^0.0.0",
     "accounting": "^0.4.1",
-    "apollo-client": "^2.6.0",
     "array-move": "^2.1.0",
     "axios": "^0.19.0",
     "debug": "^4.1.1",
     "docuri": "^4.2.2",
     "filist": "^1.0.3",
     "final-form": "^4.13.1",
-    "graphql": "^14.3.1",
-    "graphql-tag": "^2.10.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
-    "react-apollo": "^2.5.6",
     "react-dom": "^16.8.6",
     "react-final-form": "^6.0.1",
     "react-intl": "^2.9.0",
@@ -46,13 +42,8 @@
     "@2fd/graphdoc": "^2.4.0",
     "@types/accounting": "^0.4.1",
     "@types/debug": "^4.1.4",
-    "@types/graphql": "^14.2.0",
     "@types/react": "^16.8.19",
     "@types/react-intl": "^2.3.17",
-    "@types/sanitize-filename": "^1.1.28",
-    "graphql-code-generator": "^0.18.2",
-    "graphql-codegen-add": "^0.18.2",
-    "graphql-codegen-typescript-client": "^0.18.2",
-    "graphql-codegen-typescript-common": "^0.18.2"
+    "@types/sanitize-filename": "^1.1.28"
   }
 }

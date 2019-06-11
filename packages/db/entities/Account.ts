@@ -1,29 +1,26 @@
 import { ImageUri, ISpec } from '@ag/util'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
-import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { ImageUriScalar } from '../customTypes'
 import { AccountInput } from './AccountInput'
 import { AccountType } from './AccountType'
 import { DbChange } from './DbChange'
 import { Record } from './Record'
 
-@ObjectType()
 @Entity({ name: 'accounts' })
 export class Account extends Record<Account.Props> {
-  @PrimaryColumn() @Field() id!: string
-  @Column() @Field() bankId!: string
+  @PrimaryColumn() id!: string
+  @Column() bankId!: string
 
-  @Column() @Field() name!: string
-  @Column() @Field() color!: string
-  @Column('text') @Field(type => AccountType) type!: AccountType
-  @Column() @Field() number!: string
-  @Column() @Field() visible!: boolean
-  @Column() @Field() routing!: string
-  @Column() @Field() key!: string
-  @Column('text') @Field(type => ImageUriScalar) icon!: ImageUri
-  @Column() @Field() sortOrder!: number
+  @Column() name!: string
+  @Column() color!: string
+  @Column('text') type!: AccountType
+  @Column() number!: string
+  @Column() visible!: boolean
+  @Column() routing!: string
+  @Column() key!: string
+  @Column('text') icon!: ImageUri
+  @Column() sortOrder!: number
 
   constructor(bankId?: string, id?: string, props?: AccountInput) {
     super(id, { ...Account.defaultValues(), ...props })

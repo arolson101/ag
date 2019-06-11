@@ -1,4 +1,3 @@
-import { ApolloError } from 'apollo-client'
 import React, { useEffect } from 'react'
 import { defineMessages } from 'react-intl'
 import { IntlContext, UiContext, useIntl, useUi } from '../context'
@@ -12,9 +11,7 @@ const show = (alert: UiContext['alert'], intl: IntlContext, errors: Props['error
     return null
   }
 
-  if (errors instanceof ApolloError) {
-    errors = errors.graphQLErrors.length ? errors.graphQLErrors : [errors]
-  } else if (errors instanceof Error) {
+  if (errors instanceof Error) {
     errors = [errors]
   }
 

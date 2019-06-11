@@ -1,7 +1,5 @@
 import { App } from '@ag/core/app'
 import { SystemCallbacks } from '@ag/core/context'
-import { selectors } from '@ag/core/reducers'
-import { createClient } from '@ag/db'
 import { online } from '@ag/online'
 import debug from 'debug'
 import React from 'react'
@@ -29,19 +27,8 @@ export const sys: SystemCallbacks = {
 }
 
 const store = createStore({ sys, online, ui })
-const client = createClient(() => ({
-  isLoggedIn: () => selectors.isLoggedIn(store.getState()),
-  getAppDb: () => selectors.getAppDb(store.getState()),
-  store,
-  online,
-  intl: selectors.getIntl(store.getState()),
-  openDb,
-  deleteDb,
-}))
 
-const RnApp: React.FC = ({ children }) => (
-  <App {...{ sys, ui, client, store, online }}>{children}</App>
-)
+const RnApp: React.FC = ({ children }) => <App {...{ sys, ui, store, online }}>{children}</App>
 
 registerComponents(RnApp)
 

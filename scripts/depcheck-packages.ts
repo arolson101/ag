@@ -36,7 +36,6 @@ interface PackageJson {
       {
         ignoreMatches: [
           'utility-types',
-          'graphql-code*',
           '@2fd/graphdoc',
           'cross-env',
           'sqlite3',

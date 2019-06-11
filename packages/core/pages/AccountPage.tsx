@@ -1,13 +1,11 @@
-import { Gql, QueryHookResult, useQuery } from '@ag/util'
+import { Transaction } from '@ag/db'
 import debug from 'debug'
 import docuri from 'docuri'
-import gql from 'graphql-tag'
 import React, { useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { ErrorDisplay } from '../components'
-import { TableColumn, useAction, useIntl, useUi } from '../context'
-import * as T from '../graphql-types'
+import { TableColumn, useAction, useIntl, useSelector, useUi } from '../context'
+import { selectors } from '../reducers'
 
 const log = debug('core:AccountPage')
 
@@ -15,44 +13,33 @@ interface Props {
   accountId: string
 }
 
-const queries = {
-  AccountPage: gql`
-    query AccountPage($accountId: String!) {
-      account(accountId: $accountId) {
-        id
-        name
-        bank {
-          name
-          icon
-        }
-        transactions {
-          id
-          time
-          account
-          serverid
-          type
-          name
-          memo
-          amount
-          balance
-        }
-      }
-    }
-  ` as Gql<T.AccountPage.Query, T.AccountPage.Variables>,
-}
+const path = '/accounts/:accountId'
+const route = docuri.route<Props, string>(path)
 
-type ComponentProps = Props & QueryHookResult<T.AccountPage.Query, T.AccountPage.Variables>
-const Component = Object.assign(
-  React.memo<ComponentProps>(function _AccountPage_Component({ accountId, data, loading }) {
+export const AccountPage = Object.assign(
+  React.memo<Props>(function _AccountPage({ accountId }) {
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
+    const getBank = useSelector(selectors.getBank)
+    const getTransactions = useSelector(selectors.getTransactions)
     const { Page, Table, Text } = useUi()
 
-    const account = data && data.account
-    const title = (account && account.name) || 'no account'
-    const subtitle = (account && account.bank.name) || 'no bank'
+    const account = useSelector(selectors.getAccount)(accountId)
+    if (!account) {
+      return null
+    }
 
-    type Row = NonNullable<typeof account>['transactions'][number]
+    const bank = getBank(account.bankId)
+    if (!bank) {
+      throw new Error('no bank')
+    }
+
+    const transactions = getTransactions(account.id)
+
+    const title = account.name
+    const subtitle = bank.name
+
+    type Row = Transaction
     const columns = useMemo<Array<TableColumn<Row>>>(
       () => [
         {
@@ -97,7 +84,7 @@ const Component = Object.assign(
 
     return (
       <Page
-        image={account ? account.bank.icon : undefined}
+        image={bank.icon}
         title={title}
         subtitle={subtitle}
         button={{
@@ -109,13 +96,16 @@ const Component = Object.assign(
           rowKey={'id'}
           columns={columns}
           emptyText={intl.formatMessage(messages.noTransactions)}
-          data={account ? account.transactions : []}
+          data={transactions}
         />
       </Page>
     )
   }),
   {
-    displayName: 'AccountPage.Component',
+    displayName: 'AccountPage',
+    messages: () => messages,
+    path,
+    route,
   }
 )
 
@@ -149,28 +139,3 @@ const messages = defineMessages({
     defaultMessage: 'Date',
   },
 })
-
-const path = '/accounts/:accountId'
-const route = docuri.route<Props, string>(path)
-
-export const AccountPage = Object.assign(
-  React.memo<Props>(function _AccountPage(props) {
-    const { accountId } = props
-    const q = useQuery(AccountPage.queries.AccountPage, { variables: { accountId } })
-
-    return (
-      <>
-        <ErrorDisplay error={q.error} />
-        <Component {...props} {...q} />
-      </>
-    )
-  }),
-  {
-    displayName: 'AccountPage',
-    queries,
-    Component,
-    messages,
-    path,
-    route,
-  }
-)

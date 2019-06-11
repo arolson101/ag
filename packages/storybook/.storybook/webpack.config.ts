@@ -1,5 +1,4 @@
 /* tslint:disable:no-implicit-dependencies no-string-literal */
-import { getTransformer } from 'ts-transform-graphql-tag'
 import webpack from 'webpack'
 
 interface Params {
@@ -15,9 +14,6 @@ module.exports = async ({ config }: Params): Promise<webpack.Configuration> => {
       test: /\.tsx?$/,
       exclude: ['/node_modules/', /test.ts/],
       loader: 'ts-loader',
-      options: {
-        getCustomTransformers: () => ({ before: [getTransformer()] }),
-      },
     },
     {
       test: /\.xlsx$/i,

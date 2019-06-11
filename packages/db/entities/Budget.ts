@@ -1,15 +1,13 @@
 import { ISpec } from '@ag/util'
-import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { BudgetInput } from './BudgetInput'
 import { Record } from './Record'
 
-@ObjectType()
 @Entity({ name: 'budgets' })
 export class Budget extends Record<Budget.Props> {
-  @PrimaryColumn() @Field() id!: string
-  @Column() @Field() name!: string
-  @Column() @Field() sortOrder!: number
+  @PrimaryColumn() id!: string
+  @Column() name!: string
+  @Column() sortOrder!: number
 }
 
 export namespace Budget {

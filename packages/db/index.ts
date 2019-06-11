@@ -1,5 +1,2 @@
-export * from './client'
 export * from './entities'
-export * from './resolvers'
-export * from './schema'
 export * from './DbContext'

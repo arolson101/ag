@@ -29,7 +29,7 @@ const FontIcon: React.FC<{ icon: IconDefinition }> = ({ icon }) => (
 interface NavComponent {
   path: string
   route: DocRoute<any, string>
-  messages: {
+  messages: () => {
     tabText: FormattedMessage.MessageDescriptor
   }
 }
@@ -90,7 +90,7 @@ export const NavBar = Object.assign(
               }}
             >
               <FontIcon icon={item.icon} />
-              <span>{intl.formatMessage(item.Component.messages.tabText)}</span>
+              <span>{intl.formatMessage(item.Component.messages().tabText)}</span>
             </Menu.Item>
           ))}
         </Menu>

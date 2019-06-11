@@ -6,6 +6,7 @@ import { CoreDependencies } from '../context'
 import { db, dbSelectors } from './dbReducer'
 import { dialog } from './dialogReducer'
 import { intl, intlSelectors } from './intlReducer'
+import { records, recordsSelectors } from './recordsReducer'
 import { settings, settingsSelectors } from './settingsReducer'
 
 export const coreReducers = {
@@ -13,6 +14,7 @@ export const coreReducers = {
   dialog,
   intl,
   settings,
+  records,
 }
 
 export interface CoreState extends StateType<typeof coreReducers> {}
@@ -39,4 +41,17 @@ export const selectors = {
 
   getSettingsError: (state: CoreState) => settingsSelectors.getSettingsError(state.settings),
   getSetting: (state: CoreState) => settingsSelectors.getSetting(state.settings),
+
+  getBanks: (state: CoreState) => recordsSelectors.getBanks(state.records),
+  getBank: (state: CoreState) => (bankId?: string) =>
+    recordsSelectors.getBank(state.records, bankId),
+  getAccountsForBank: (state: CoreState) => (bankId: string) =>
+    recordsSelectors.getAccountsForBank(state.records, bankId),
+  getAccount: (state: CoreState) => (accountId?: string) =>
+    recordsSelectors.getAccount(state.records, accountId),
+  getAccounts: (state: CoreState) => recordsSelectors.getAccounts(state.records),
+  getTransactions: (state: CoreState) => (accountId: string) =>
+    recordsSelectors.getTransactions(state.records, accountId),
+  getTransaction: (state: CoreState) => (transactionId?: string) =>
+    recordsSelectors.getTransaction(state.records, transactionId),
 }

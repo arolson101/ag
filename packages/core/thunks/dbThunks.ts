@@ -1,4 +1,4 @@
-import { appEntities, Db, indexEntities } from '@ag/db/entities'
+import { Account, appEntities, Bank, Db, indexEntities } from '@ag/db/entities'
 import crypto from 'crypto'
 import { defineMessages } from 'react-intl'
 import sanitize from 'sanitize-filename'
@@ -24,11 +24,29 @@ const dbInit = (): CoreThunk =>
     }
   }
 
+const dbLoadEntities = (): CoreThunk =>
+  async function _dbLoadEntities(dispatch, getState) {
+    const {
+      accountsRepository, //
+      banksRepository,
+    } = selectors.getAppDb(getState())
+
+    const banks = await banksRepository.all()
+    const accounts = await accountsRepository.all()
+    dispatch(
+      actions.changesWritten([
+        { table: Bank, entities: banks, deletes: [] },
+        { table: Account, entities: accounts, deletes: [] },
+      ])
+    )
+  }
+
 const dbLoginSuccess = (connection: Connection): CoreThunk =>
   async function _dbLoginSuccess(dispatch) {
-    dispatch(actions.dbLogin.success(connection))
-    dispatch(settingsThunks.settingsInit(connection))
-    dispatch(actions.closeDlg('login'))
+    await dispatch(actions.dbLogin.success(connection))
+    await dispatch(settingsThunks.settingsInit(connection))
+    await dispatch(dbLoadEntities())
+    await dispatch(actions.closeDlg('login'))
   }
 
 const dbCreate = ({ name, password }: { name: string; password: string }): CoreThunk =>

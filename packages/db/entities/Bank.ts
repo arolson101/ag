@@ -1,33 +1,30 @@
 import { ImageUri, ISpec } from '@ag/util'
 import debug from 'debug'
-import { Field, ObjectType } from 'type-graphql'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { ImageUriScalar } from '../customTypes'
 import { BankInput } from './BankInput'
 import { DbChange } from './DbChange'
 import { Record } from './Record'
 
 const log = debug('db:Bank')
 
-@ObjectType()
 @Entity({ name: 'banks' })
 export class Bank extends Record<Bank.Props> {
-  @PrimaryColumn() @Field() id!: string
+  @PrimaryColumn() id!: string
 
-  @Column() @Field() name!: string
-  @Column() @Field() web!: string
-  @Column() @Field() address!: string
-  @Column() @Field() notes!: string
-  @Column('text') @Field(type => ImageUriScalar) icon!: ImageUri
+  @Column() name!: string
+  @Column() web!: string
+  @Column() address!: string
+  @Column() notes!: string
+  @Column('text') icon!: ImageUri
 
-  @Column() @Field() online!: boolean
+  @Column() online!: boolean
 
-  @Column() @Field() fid!: string
-  @Column() @Field() org!: string
-  @Column() @Field() ofx!: string
+  @Column() fid!: string
+  @Column() org!: string
+  @Column() ofx!: string
 
-  @Column() @Field() username!: string
-  @Column() @Field() password!: string
+  @Column() username!: string
+  @Column() password!: string
 
   constructor(id?: string, props?: BankInput) {
     super(id, { ...Bank.defaultValues, ...props })

@@ -1,23 +1,21 @@
-import { formatDate, ISpec, standardizeDate } from '@ag/util'
-import { Field, ObjectType } from 'type-graphql'
+import { ISpec, standardizeDate } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { Record } from './Record'
 import { TransactionInput } from './TransactionInput'
 
-@ObjectType()
 @Entity({ name: 'transactions' })
 export class Transaction extends Record<Transaction.Props> {
-  @PrimaryColumn() @Field() id!: string
-  @Column() @Field() accountId!: string
+  @PrimaryColumn() id!: string
+  @Column() accountId!: string
 
-  @Column() @Field() time!: Date
-  @Column() @Field() account!: string
-  @Column() @Field() serverid!: string
-  @Column() @Field() type!: string
-  @Column() @Field() name!: string
-  @Column() @Field() memo!: string
-  @Column() @Field() amount!: number
-  @Column({ default: 0 }) @Field() balance!: number
+  @Column() time!: Date
+  @Column() account!: string
+  @Column() serverid!: string
+  @Column() type!: string
+  @Column() name!: string
+  @Column() memo!: string
+  @Column() amount!: number
+  @Column({ default: 0 }) balance!: number
   // split: Split
 
   constructor(accountId?: string, id?: string, props?: TransactionInput) {

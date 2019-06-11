@@ -44,7 +44,6 @@
     "recommendations": [
       "esbenp.prettier-vscode",
       "kuhe.html-untagged",
-      "kumar-harsh.graphql-for-vscode",
       "mkloubert.vscode-kanban",
       "ms-vscode.vscode-typescript-tslint-plugin"
     ],

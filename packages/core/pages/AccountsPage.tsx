@@ -1,14 +1,12 @@
-import { Gql, QueryHookResult, useMutation, useQuery } from '@ag/util'
+import { Account, Bank } from '@ag/db'
 import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
-import gql from 'graphql-tag'
 import React, { useCallback, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { ErrorDisplay } from '../components'
-import { ActionDesc, TableColumn, useAction, useIntl, useUi } from '../context'
-import * as T from '../graphql-types'
+import { ActionDesc, TableColumn, useAction, useIntl, useSelector, useUi } from '../context'
+import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
 const log = debug('core:AccountsPage')
@@ -17,57 +15,11 @@ interface Props {
   componentId?: string
 }
 
-const fragments = {
-  bankFields: gql`
-    fragment bankFields_AccountsPage on Bank {
-      id
-      name
-      icon
-      online
-      accounts {
-        id
-        icon
-        name
-        number
-        visible
-        sortOrder
-      }
-    }
-  `,
-
-  accountFields: gql`
-    fragment accountFields_AccountsPage on Account {
-      id
-      bankId
-
-      name
-      icon
-      color
-      type
-      number
-      visible
-      routing
-      key
-      sortOrder
-    }
-  `,
-}
-
-const queries = {
-  AccountsPage: gql`
-    query AccountsPage {
-      banks {
-        ...bankFields_AccountsPage
-      }
-    }
-    ${fragments.bankFields}
-  ` as Gql<T.AccountsPage.Query, T.AccountsPage.Variables>,
-}
-
 const BankTable = Object.assign(
-  React.memo<T.AccountsPage.Banks>(function _BankTable(bank) {
-    type Row = typeof bank.accounts[number]
+  React.memo<{ bank: Bank }>(function _BankTable({ bank }) {
+    type Row = Account
     const intl = useIntl()
+    const { Link, Text, Row, Table, Image } = useUi()
     const openBankEditDlg = useAction(actions.openDlg.bankEdit)
     const openAccountCreateDlg = useAction(actions.openDlg.accountCreate)
     const openAccountEditDlg = useAction(actions.openDlg.accountEdit)
@@ -75,17 +27,16 @@ const BankTable = Object.assign(
     const deleteAccount = useAction(thunks.deleteAccount)
     const deleteBank = useAction(thunks.deleteBank)
     const setAccountsOrder = useAction(thunks.setAccountsOrder)
-    const ui = useUi()
-    const { Link, Text, Row, Table, Image } = ui
+    const accounts = useSelector(selectors.getAccountsForBank)(bank.id)
 
     const moveRow = useCallback(
       (srcIndex: number, dstIndex: number) => {
         // log('moveRow %d %d', srcIndex, dstIndex)
-        const accountIds = arrayMove(bank.accounts, srcIndex, dstIndex) //
+        const accountIds = arrayMove(accounts, srcIndex, dstIndex) //
           .map(account => account.id)
         setAccountsOrder(accountIds)
       },
-      [bank.accounts, setAccountsOrder]
+      [accounts, setAccountsOrder]
     )
 
     const syncAccounts = useAction(thunks.syncAccounts)
@@ -205,7 +156,7 @@ const BankTable = Object.assign(
         rowEdit={rowEdit}
         rowDelete={rowDelete}
         emptyText={intl.formatMessage(messages.noAccounts)}
-        data={bank.accounts}
+        data={accounts}
         columns={columns}
         moveRow={moveRow}
         dragId={bank.id}
@@ -217,12 +168,15 @@ const BankTable = Object.assign(
   }
 )
 
-type ComponentProps = Props & QueryHookResult<T.AccountsPage.Query, T.AccountsPage.Variables>
-const Component = Object.assign(
-  React.memo<ComponentProps>(function _AccountsPage_Component({ componentId, data, loading }) {
+const path = '/accounts'
+const route = docuri.route<void, string>(path)
+
+export const AccountsPage = Object.assign(
+  React.memo<Props>(function _AccountsPage({ componentId }) {
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const { Page } = useUi()
+    const banks = useSelector(selectors.getBanks)
 
     // log('data %o', data)
 
@@ -235,19 +189,17 @@ const Component = Object.assign(
           onClick: openBankCreateDlg,
         }}
       >
-        {data &&
-          data.banks &&
-          data.banks.map(bank => (
-            <BankTable //
-              {...bank}
-              key={bank.id}
-            />
-          ))}
+        {banks.map(bank => (
+          <BankTable bank={bank} key={bank.id} />
+        ))}
       </Page>
     )
   }),
   {
-    displayName: 'AccountsPage.Component',
+    displayName: 'AccountsPage',
+    messages: () => messages,
+    path,
+    route,
   }
 )
 
@@ -321,28 +273,3 @@ const messages = defineMessages({
     defaultMessage: 'Downloaded transactions for account {name}',
   },
 })
-
-const path = '/accounts'
-const route = docuri.route<void, string>(path)
-
-export const AccountsPage = Object.assign(
-  React.memo<Props>(function _AccountsPage(props) {
-    const q = useQuery(AccountsPage.queries.AccountsPage)
-    // log('AccountsPage render %o', q)
-
-    return (
-      <>
-        <ErrorDisplay error={q.error} />
-        <Component {...props} {...q} />
-      </>
-    )
-  }),
-  {
-    displayName: 'AccountsPage',
-    queries,
-    Component,
-    messages,
-    path,
-    route,
-  }
-)

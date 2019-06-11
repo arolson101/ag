@@ -30,9 +30,8 @@ async function createWindow() {
   if (isDev) {
     const { default: installExtension, ...exts } = await import('electron-devtools-installer')
     for (const ext of [
-      exts.REACT_DEVELOPER_TOOLS,
+      exts.REACT_DEVELOPER_TOOLS, //
       exts.REDUX_DEVTOOLS,
-      exts.APOLLO_DEVELOPER_TOOLS,
     ]) {
       try {
         const name = await installExtension(ext)

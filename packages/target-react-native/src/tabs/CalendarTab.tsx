@@ -18,12 +18,12 @@ export class CalendarTab extends React.PureComponent<Props> {
     const intl = selectors.getIntl(store.getState())
     return {
       bottomTab: {
-        text: intl.formatMessage(CalendarPage.messages.tabText),
+        text: intl.formatMessage(CalendarPage.messages().tabText),
         icon: icons.calendar,
       },
       topBar: {
         title: {
-          text: intl.formatMessage(CalendarPage.messages.titleText),
+          text: intl.formatMessage(CalendarPage.messages().titleText),
         },
       },
     }

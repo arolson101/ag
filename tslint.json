@@ -23,6 +23,6 @@
     "no-this-assignment": false
   },
   "linterOptions": {
-    "exclude": ["**/node_modules/**", "**/graphql-types.d.ts"]
+    "exclude": ["**/node_modules/**"]
   }
 }
