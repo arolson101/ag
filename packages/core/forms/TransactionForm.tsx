@@ -1,20 +1,13 @@
 import { Transaction } from '@ag/db'
-import {
-  Gql,
-  MutationFn,
-  pick,
-  useApolloClient,
-  useMutation,
-  useQuery,
-  useSubmitRef,
-} from '@ag/util'
+import { Gql, pick, useQuery, useSubmitRef } from '@ag/util'
 import accounting from 'accounting'
 import gql from 'graphql-tag'
 import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
-import { Errors, typedFields, useIntl, useUi } from '../context'
+import { Errors, typedFields, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
+import { thunks } from '../thunks'
 
 interface Props {
   accountId: string
@@ -48,29 +41,6 @@ const queries = {
   ` as Gql<T.Transaction.Query, T.Transaction.Variables>,
 }
 
-const mutations = {
-  SaveTransaction: gql`
-    mutation SaveTransaction(
-      $input: TransactionInput!
-      $transactionId: String
-      $accountId: String!
-    ) {
-      saveTransaction(input: $input, transactionId: $transactionId, accountId: $accountId) {
-        ...transactionFields
-      }
-    }
-    ${fragments.transactionFields}
-  ` as Gql<T.SaveTransaction.Mutation, T.SaveTransaction.Variables>,
-
-  DeleteTransaction: gql`
-    mutation DeleteTransaction($transactionId: String!) {
-      deleteTransaction(transactionId: $transactionId) {
-        accountId
-      }
-    }
-  ` as Gql<T.DeleteTransaction.Mutation, T.DeleteTransaction.Variables>,
-}
-
 export interface TransactionForm {
   save: () => any
 }
@@ -78,16 +48,16 @@ export interface TransactionForm {
 interface ComponentProps extends Props {
   loading: boolean
   data: T.Transaction.Query | undefined
-  saveTransaction: MutationFn<T.SaveTransaction.Mutation, T.SaveTransaction.Variables>
 }
 
 const Component = Object.assign(
   React.forwardRef<TransactionForm, ComponentProps>((props, ref) => {
     const intl = useIntl()
     const ui = useUi()
+    const saveTransaction = useAction(thunks.saveTransaction)
     const submitFormRef = useSubmitRef()
     const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
-    const { data, saveTransaction, loading, accountId, transactionId } = props
+    const { data, loading, accountId, transactionId } = props
 
     const transaction = data && data.transaction
     const initialValues = transaction
@@ -110,15 +80,14 @@ const Component = Object.assign(
     const submit = useCallback(
       async input => {
         const { amount } = input
-        const variables = {
+        await saveTransaction({
           accountId,
           transactionId,
           input: {
             ...input,
             amount: accounting.unformat(amount.toString()),
           },
-        }
-        await saveTransaction({ variables })
+        })
       },
       [accountId, transactionId, saveTransaction]
     )
@@ -154,16 +123,10 @@ const Component = Object.assign(
 
 export const TransactionForm = Object.assign(
   React.forwardRef<TransactionForm, Props>((props, ref) => {
-    const { transactionId, accountId } = props
+    const { transactionId } = props
 
     const component = useRef<TransactionForm>(null)
     const { data, loading, error } = useQuery(queries.Transaction, { variables: { transactionId } })
-    const client = useApolloClient()
-    const saveTransaction = useMutation(mutations.SaveTransaction, {
-      update: () => {
-        client.reFetchObservableQueries()
-      },
-    })
     useImperativeHandle(ref, () => ({
       save: () => {
         component.current!.save()
@@ -173,7 +136,7 @@ export const TransactionForm = Object.assign(
     return (
       <>
         <ErrorDisplay error={error} />
-        <Component ref={component} {...{ ...props, saveTransaction, data, loading }} />
+        <Component ref={component} {...{ ...props, data, loading }} />
       </>
     )
   }),

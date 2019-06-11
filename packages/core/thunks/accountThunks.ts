@@ -7,7 +7,6 @@ import {
   Transaction,
   TransactionInput,
 } from '@ag/db/entities'
-import { dbWrite } from '@ag/db/resolvers/dbWrite'
 import { toAccountType } from '@ag/online'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
@@ -17,6 +16,7 @@ import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
+import { dbWrite } from './dbWrite'
 
 const log = debug('db:accountThunks')
 
@@ -27,33 +27,38 @@ interface SaveAccountParams {
 }
 
 const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk =>
-  async function _saveAccount(dispatch, getState, { ui: { showToast } }) {
+  async function _saveAccount(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
     const intl = selectors.getIntl(state)
-    const { connection, accountsRepository } = selectors.getAppDb(state)
 
-    let account: Account
-    let changes: DbChange[]
-    const t = Date.now()
-    if (accountId) {
-      account = await accountsRepository.getById(accountId)
-      const q = diff<Account.Props>(account, input)
-      changes = [Account.change.edit(t, accountId, q)]
-      account.update(t, q)
-    } else {
-      if (!bankId) {
-        throw new Error('when creating an account, bankId must be specified')
+    try {
+      const { accountsRepository } = selectors.getAppDb(state)
+
+      let account: Account
+      let changes: DbChange[]
+      const t = Date.now()
+      if (accountId) {
+        account = await accountsRepository.getById(accountId)
+        const q = diff<Account.Props>(account, input)
+        changes = [Account.change.edit(t, accountId, q)]
+        account.update(t, q)
+      } else {
+        if (!bankId) {
+          throw new Error('when creating an account, bankId must be specified')
+        }
+        account = new Account(bankId, uniqueId(), input)
+        accountId = account.id
+        changes = [Account.change.add(t, account)]
       }
-      account = new Account(bankId, uniqueId(), input)
-      accountId = account.id
-      changes = [Account.change.add(t, account)]
-    }
-    await dbWrite(connection, changes)
-    assert.equal(accountId, account.id)
-    assert.deepEqual(account, await accountsRepository.getById(accountId))
+      await dispatch(dbWrite(changes))
+      assert.equal(accountId, account.id)
+      assert.deepEqual(account, await accountsRepository.getById(accountId))
 
-    const intlCtx = { name: account.name }
-    showToast(intl.formatMessage(accountId ? messages.saved : messages.created, intlCtx))
+      const intlCtx = { name: account.name }
+      showToast(intl.formatMessage(accountId ? messages.saved : messages.created, intlCtx))
+    } catch (error) {
+      ErrorDisplay.show(alert, intl, error)
+    }
   }
 
 interface DeleteAccountParams {
@@ -67,27 +72,27 @@ const deleteAccount = ({ account }: DeleteAccountParams): CoreThunk =>
   async function _deleteAccount(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
     const intl = selectors.getIntl(state)
-    const intlCtx = { name: account.name }
 
-    const confirmed = await alert({
-      title: intl.formatMessage(messages.title),
-      body: intl.formatMessage(messages.deleteAccountBody, intlCtx),
-      danger: true,
+    try {
+      const intlCtx = { name: account.name }
 
-      confirmText: intl.formatMessage(messages.deleteAccountConfirm),
-      cancelText: intl.formatMessage(messages.cancel),
-    })
+      const confirmed = await alert({
+        title: intl.formatMessage(messages.title),
+        body: intl.formatMessage(messages.deleteAccountBody, intlCtx),
+        danger: true,
 
-    if (confirmed) {
-      try {
-        const { connection } = selectors.getAppDb(state)
+        confirmText: intl.formatMessage(messages.deleteAccountConfirm),
+        cancelText: intl.formatMessage(messages.cancel),
+      })
+
+      if (confirmed) {
         const t = Date.now()
         const changes = [Account.change.remove(t, account.id)]
-        await dbWrite(connection, changes)
+        await dispatch(dbWrite(changes))
         showToast(intl.formatMessage(messages.deleted, intlCtx), true)
-      } catch (error) {
-        ErrorDisplay.show(alert, intl, error)
       }
+    } catch (error) {
+      ErrorDisplay.show(alert, intl, error)
     }
   }
 
@@ -96,21 +101,21 @@ const syncAccounts = (bankId: string): CoreThunk =>
     await dispatch(downloadAccountList(bankId))
   }
 
-const downloadAccountList = (bankId: string): CoreThunk<Bank> =>
+const downloadAccountList = (bankId: string): CoreThunk =>
   async function _downloadAccountList(dispatch, getState, { online }) {
     const state = getState()
     const intl = selectors.getIntl(state)
-    const { connection, banksRepository, accountsRepository } = selectors.getAppDb(state)
-    const bank = await banksRepository.getById(bankId)
-    if (!bank.online) {
-      throw new Error(`downloadAccountList: bank is not set online`)
-    }
-
-    // TODO: make bank query get this for us
-    const existingAccounts = await accountsRepository.getForBank(bank.id)
-    const source = online.CancelToken.source()
-
     try {
+      const { banksRepository, accountsRepository } = selectors.getAppDb(state)
+      const bank = await banksRepository.getById(bankId)
+      if (!bank.online) {
+        throw new Error(`downloadAccountList: bank is not set online`)
+      }
+
+      // TODO: make bank query get this for us
+      const existingAccounts = await accountsRepository.getForBank(bank.id)
+      const source = online.CancelToken.source()
+
       const accountProfiles = await online.getAccountList(bank, bank, source.token, intl)
       if (accountProfiles.length === 0) {
         log('server reports no accounts')
@@ -145,7 +150,7 @@ const downloadAccountList = (bankId: string): CoreThunk<Bank> =>
             edits,
           }
           log('account changes', change)
-          await dbWrite(connection, [change])
+          await dispatch(dbWrite([change]))
         } else {
           log('no account changes')
         }
@@ -155,8 +160,6 @@ const downloadAccountList = (bankId: string): CoreThunk<Bank> =>
         throw ex
       }
     }
-
-    return bank
   }
 
 const downloadTransactions = ({
@@ -173,12 +176,9 @@ const downloadTransactions = ({
   async function _downloadTransactions(dispatch, getState, { online }) {
     const state = getState()
     const intl = selectors.getIntl(state)
-    const {
-      connection,
-      banksRepository,
-      accountsRepository,
-      transactionsRepository,
-    } = selectors.getAppDb(state)
+    const { banksRepository, accountsRepository, transactionsRepository } = selectors.getAppDb(
+      state
+    )
     const bank = await banksRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadTransactions: bank is not set online`)
@@ -241,7 +241,7 @@ const downloadTransactions = ({
             edits,
           }
           log('transaction changes', change)
-          await dbWrite(connection, [change])
+          await dispatch(dbWrite([change]))
         } else {
           log('no transaction changes')
         }
@@ -317,7 +317,7 @@ const transactionsEqual = (a: TransactionInput, b: TransactionInput): boolean =>
 }
 
 export const accountThunks = {
-  saveAccount, //
+  saveAccount,
   deleteAccount,
   syncAccounts,
   downloadAccountList,

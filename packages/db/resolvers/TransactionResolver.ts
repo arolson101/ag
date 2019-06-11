@@ -1,8 +1,6 @@
-import { diff, uniqueId } from '@ag/util'
-import { Arg, Ctx, Mutation, Query, Resolver } from 'type-graphql'
+import { Arg, Ctx, Query, Resolver } from 'type-graphql'
 import { DbContext } from '../DbContext'
-import { DbChange, Transaction, TransactionInput } from '../entities'
-import { dbWrite } from './dbWrite'
+import { Transaction } from '../entities'
 
 @Resolver(objectType => Transaction)
 export class TransactionResolver {
@@ -13,48 +11,5 @@ export class TransactionResolver {
   ): Promise<Transaction | undefined> {
     const { transactionsRepository } = getAppDb()
     return transactionId ? transactionsRepository.getById(transactionId) : undefined
-  }
-
-  @Mutation(returns => Transaction)
-  async saveTransaction(
-    @Ctx() { getAppDb }: DbContext,
-    @Arg('input') input: TransactionInput,
-    @Arg('transactionId', { nullable: true }) transactionId: string,
-    @Arg('accountId', { nullable: true }) accountId?: string
-  ): Promise<Transaction> {
-    const { connection, transactionsRepository } = getAppDb()
-    const t = Date.now()
-    const table = Transaction
-    let transaction: Transaction
-    let changes: DbChange[]
-    if (transactionId) {
-      transaction = await transactionsRepository.getById(transactionId)
-      const q = diff<Transaction.Props>(transaction, input)
-      changes = [{ table, t, edits: [{ id: transactionId, q }] }]
-      transaction.update(t, q)
-    } else {
-      if (!accountId) {
-        throw new Error('when creating an transaction, accountId must be specified')
-      }
-      transaction = new Transaction(uniqueId(), accountId, input)
-      transactionId = transaction.id
-      changes = [{ table, t, adds: [transaction] }]
-    }
-    await dbWrite(connection, changes)
-    return transaction
-  }
-
-  @Mutation(returns => Transaction)
-  async deleteTransaction(
-    @Ctx() { getAppDb }: DbContext,
-    @Arg('transactionId') transactionId: string //
-  ): Promise<Transaction> {
-    const { connection, transactionsRepository } = getAppDb()
-    const t = Date.now()
-    const table = Transaction
-    const transaction = await transactionsRepository.getById(transactionId)
-    const changes: DbChange[] = [{ table, t, deletes: [transactionId] }]
-    await dbWrite(connection, changes)
-    return transaction
   }
 }

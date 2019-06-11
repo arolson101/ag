@@ -2,22 +2,6 @@
 import { ImageUri } from '@ag/util'
 export type Maybe<T> = T | null
 
-export interface TransactionInput {
-  account?: Maybe<string>
-
-  serverid?: Maybe<string>
-
-  time?: Maybe<DateTime>
-
-  type?: Maybe<string>
-
-  name?: Maybe<string>
-
-  memo?: Maybe<string>
-
-  amount?: Maybe<number>
-}
-
 export interface AccountInput {
   name?: Maybe<string>
 
@@ -92,6 +76,22 @@ export interface BudgetInput {
 
 export interface CategoryInput {
   name?: Maybe<string>
+
+  amount?: Maybe<number>
+}
+
+export interface TransactionInput {
+  account?: Maybe<string>
+
+  serverid?: Maybe<string>
+
+  time?: Maybe<DateTime>
+
+  type?: Maybe<string>
+
+  name?: Maybe<string>
+
+  memo?: Maybe<string>
 
   amount?: Maybe<number>
 }
@@ -204,40 +204,6 @@ export namespace Transaction {
   export type Transaction = TransactionFields.Fragment
 }
 
-export namespace SaveTransaction {
-  export type Variables = {
-    input: TransactionInput
-    transactionId?: Maybe<string>
-    accountId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    saveTransaction: SaveTransaction
-  }
-
-  export type SaveTransaction = TransactionFields.Fragment
-}
-
-export namespace DeleteTransaction {
-  export type Variables = {
-    transactionId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteTransaction: DeleteTransaction
-  }
-
-  export type DeleteTransaction = {
-    __typename?: 'Transaction'
-
-    accountId: string
-  }
-}
-
 export namespace AccountPage {
   export type Variables = {
     accountId: string
@@ -302,18 +268,6 @@ export namespace AccountsPage {
   }
 
   export type Banks = BankFieldsAccountsPage.Fragment
-}
-
-export namespace SetAccountsOrder {
-  export type Variables = {
-    accountIds: string[]
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    setAccountsOrder: boolean
-  }
 }
 
 export namespace BillsPage {

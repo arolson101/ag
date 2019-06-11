@@ -1,11 +1,11 @@
-import { Bank, BankInput, DbChange } from '@ag/db/entities'
-import { dbWrite } from '@ag/db/resolvers/dbWrite'
+import { Account, Bank, BankInput, DbChange, DbRecordEdit } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
+import { dbWrite } from './dbWrite'
 
 interface SaveBankParams {
   input: BankInput
@@ -13,33 +13,38 @@ interface SaveBankParams {
 }
 
 const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
-  async function _saveBank(dispatch, getState, { ui: { showToast } }) {
+  async function _saveBank(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
     const intl = selectors.getIntl(state)
-    const { connection, banksRepository } = selectors.getAppDb(state)
 
-    const t = Date.now()
-    let bank: Bank
-    let changes: DbChange[]
-    if (bankId) {
-      bank = await banksRepository.getById(bankId)
-      const q = diff<Bank.Props>(bank, input)
-      changes = [Bank.change.edit(t, bankId, q)]
-      bank.update(t, q)
-    } else {
-      bank = new Bank(uniqueId(), input)
-      bankId = bank.id
-      changes = [Bank.change.add(t, bank)]
+    try {
+      const { banksRepository } = selectors.getAppDb(state)
+
+      const t = Date.now()
+      let bank: Bank
+      let changes: DbChange[]
+      if (bankId) {
+        bank = await banksRepository.getById(bankId)
+        const q = diff<Bank.Props>(bank, input)
+        changes = [Bank.change.edit(t, bankId, q)]
+        bank.update(t, q)
+      } else {
+        bank = new Bank(uniqueId(), input)
+        bankId = bank.id
+        changes = [Bank.change.add(t, bank)]
+      }
+      // log('dbwrite %o', changes)
+      await dispatch(dbWrite(changes))
+      assert.equal(bankId, bank.id)
+      // log('get bank %s', bankId)
+      assert.deepEqual(bank, await banksRepository.getById(bankId))
+      // log('done')
+
+      const intlCtx = { name: bank.name }
+      showToast(intl.formatMessage(bankId ? messages.saved : messages.created, intlCtx))
+    } catch (error) {
+      ErrorDisplay.show(alert, intl, error)
     }
-    // log('dbwrite %o', changes)
-    await dbWrite(connection, changes)
-    assert.equal(bankId, bank.id)
-    // log('get bank %s', bankId)
-    assert.deepEqual(bank, await banksRepository.getById(bankId))
-    // log('done')
-
-    const intlCtx = { name: bank.name }
-    showToast(intl.formatMessage(bankId ? messages.saved : messages.created, intlCtx))
   }
 
 interface DeleteBankParams {
@@ -53,34 +58,66 @@ const deleteBank = ({ bank }: DeleteBankParams): CoreThunk =>
   async function _deleteBank(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
     const intl = selectors.getIntl(state)
-    const { connection } = selectors.getAppDb(state)
 
-    const intlCtx = { name: bank.name }
+    try {
+      const intlCtx = { name: bank.name }
 
-    const confirmed = await alert({
-      title: intl.formatMessage(messages.title),
-      body: intl.formatMessage(messages.deleteBankBody, intlCtx),
-      danger: true,
+      const confirmed = await alert({
+        title: intl.formatMessage(messages.title),
+        body: intl.formatMessage(messages.deleteBankBody, intlCtx),
+        danger: true,
 
-      confirmText: intl.formatMessage(messages.deleteBankConfirm),
-      cancelText: intl.formatMessage(messages.cancel),
-    })
+        confirmText: intl.formatMessage(messages.deleteBankConfirm),
+        cancelText: intl.formatMessage(messages.cancel),
+      })
 
-    if (confirmed) {
-      try {
+      if (confirmed) {
         const t = Date.now()
         const changes = [Bank.change.remove(t, bank.id)]
-        await dbWrite(connection, changes)
+        await dispatch(dbWrite(changes))
         showToast(intl.formatMessage(messages.bankDeleted, intlCtx), true)
-      } catch (error) {
-        ErrorDisplay.show(alert, intl, error)
       }
+    } catch (error) {
+      ErrorDisplay.show(alert, intl, error)
+    }
+  }
+
+const setAccountsOrder = (accountIds: string[]): CoreThunk =>
+  async function _setAccountsOrder(dispatch, getState, { ui: { alert } }) {
+    const state = getState()
+    const intl = selectors.getIntl(state)
+
+    try {
+      const { accountsRepository } = selectors.getAppDb(state)
+      const t = Date.now()
+      const accounts = await accountsRepository.getByIds(accountIds)
+      if (accounts.length !== accountIds.length) {
+        throw new Error('got back wrong number of accounts')
+      }
+      // log('accounts (before) %o', accounts)
+      accounts.sort((a, b) => accountIds.indexOf(a.id) - accountIds.indexOf(b.id))
+      const edits = accounts.map(
+        ({ id }, idx): DbRecordEdit<Account.Spec> => ({
+          id,
+          q: { sortOrder: { $set: idx } },
+        })
+      )
+      // log('accounts: %o, edits: %o', accounts, edits)
+      const change: DbChange = {
+        t,
+        edits,
+        table: Account,
+      }
+      await dispatch(dbWrite([change]))
+    } catch (error) {
+      ErrorDisplay.show(alert, intl, error)
     }
   }
 
 export const bankThunks = {
   saveBank,
   deleteBank,
+  setAccountsOrder,
 }
 
 const messages = defineMessages({

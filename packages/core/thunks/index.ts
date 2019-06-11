@@ -4,6 +4,7 @@ import { bankThunks } from './bankThunks'
 import { dbThunks } from './dbThunks'
 import { initThunk } from './initThunk'
 import { settingsThunks } from './settingsThunks'
+import { transactionThunks } from './transactionThunks'
 
 export const thunks = {
   ...initThunk,
@@ -11,6 +12,7 @@ export const thunks = {
   ...settingsThunks,
   ...bankThunks,
   ...accountThunks,
+  ...transactionThunks,
 }
 
 type ThunkActionType<M extends any> = {

@@ -64,14 +64,6 @@ const queries = {
   ` as Gql<T.AccountsPage.Query, T.AccountsPage.Variables>,
 }
 
-const mutations = {
-  SetAccountsOrder: gql`
-    mutation SetAccountsOrder($accountIds: [String!]!) {
-      setAccountsOrder(accountIds: $accountIds)
-    }
-  ` as Gql<T.SetAccountsOrder.Mutation, T.SetAccountsOrder.Variables>,
-}
-
 const BankTable = Object.assign(
   React.memo<T.AccountsPage.Banks>(function _BankTable(bank) {
     type Row = typeof bank.accounts[number]
@@ -82,19 +74,16 @@ const BankTable = Object.assign(
     const navAccount = useAction(actions.nav.account)
     const deleteAccount = useAction(thunks.deleteAccount)
     const deleteBank = useAction(thunks.deleteBank)
+    const setAccountsOrder = useAction(thunks.setAccountsOrder)
     const ui = useUi()
     const { Link, Text, Row, Table, Image } = ui
-
-    const setAccountsOrder = useMutation(mutations.SetAccountsOrder, {
-      refetchQueries: [{ query: queries.AccountsPage }],
-    })
 
     const moveRow = useCallback(
       (srcIndex: number, dstIndex: number) => {
         // log('moveRow %d %d', srcIndex, dstIndex)
         const accountIds = arrayMove(bank.accounts, srcIndex, dstIndex) //
           .map(account => account.id)
-        setAccountsOrder({ variables: { accountIds } })
+        setAccountsOrder(accountIds)
       },
       [bank.accounts, setAccountsOrder]
     )
