@@ -63,27 +63,25 @@ export const dbSelectors = {
 
 export const db = (state: DbState = defaultState, action: CoreAction): DbState => {
   switch (action.type) {
-    case getType(actions.dbSetIndex): {
+    case getType(actions.dbInit.request):
+      return { ...state, index: undefined, indexError: undefined }
+
+    case getType(actions.dbInit.success):
       return {
         ...state,
         index: {
-          connection: action.payload, //
+          connection: action.payload,
           dbRepository: action.payload.getRepository(Db),
         },
       }
-    }
 
-    case getType(actions.dbSetInfos): {
-      return { ...state, dbs: action.payload }
-    }
-
-    case getType(actions.dbInitFailure):
+    case getType(actions.dbInit.failure):
       return { ...state, indexError: action.payload }
 
-    case getType(actions.dbLogout):
+    case getType(actions.dbLogin.request):
       return { ...state, app: undefined, appError: undefined }
 
-    case getType(actions.dbLoginSuccess): {
+    case getType(actions.dbLogin.success): {
       const connection = action.payload
       return {
         ...state,
@@ -97,8 +95,14 @@ export const db = (state: DbState = defaultState, action: CoreAction): DbState =
       }
     }
 
-    case getType(actions.dbLoginFailure):
+    case getType(actions.dbLogin.failure):
       return { ...state, appError: action.payload }
+
+    case getType(actions.dbSetInfos):
+      return { ...state, dbs: action.payload }
+
+    case getType(actions.dbLogout):
+      return { ...state, app: undefined, appError: undefined }
 
     default:
       return state

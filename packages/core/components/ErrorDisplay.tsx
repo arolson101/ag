@@ -7,7 +7,7 @@ interface Props {
   error: undefined | Error | Error[] | ReadonlyArray<Error>
 }
 
-const show = (ui: UiContext, intl: IntlContext, errors: Props['error']) => {
+const show = (alert: UiContext['alert'], intl: IntlContext, errors: Props['error']) => {
   if (!errors) {
     return null
   }
@@ -18,13 +18,10 @@ const show = (ui: UiContext, intl: IntlContext, errors: Props['error']) => {
     errors = [errors]
   }
 
-  const { alert } = ui
-
   alert({
     title: intl.formatMessage(messages.error),
     body: (errors as Error[]).flatMap(e => [e.message, e.stack || '']).join('\n'),
     confirmText: intl.formatMessage(messages.ok),
-    onConfirm: () => undefined,
     error: true,
   })
 }
@@ -32,9 +29,9 @@ const show = (ui: UiContext, intl: IntlContext, errors: Props['error']) => {
 export const ErrorDisplay = Object.assign(
   React.memo<Props>(function _ErrorDisplay({ error }) {
     const intl = useIntl()
-    const ui = useUi()
+    const { alert } = useUi()
     useEffect(() => {
-      show(ui, intl, error)
+      show(alert, intl, error)
     }, [error])
     return null
   }),

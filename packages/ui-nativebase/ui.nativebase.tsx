@@ -41,7 +41,7 @@ const log = debug('ui-nativebase:ui')
 
 type RNNTypes = 'LoadingOverlay' | 'Dialog'
 
-export const ui: Omit<UiContext, RNNTypes> = {
+export const NbUi: Omit<UiContext, RNNTypes> = {
   // special ui
   showToast: (message, danger) =>
     Toast.show({
@@ -50,18 +50,28 @@ export const ui: Omit<UiContext, RNNTypes> = {
       duration: 5000,
       type: danger ? 'danger' : undefined,
     }),
-  alert: ({ title, body, danger, onConfirm, confirmText, onCancel, cancelText }) => {
-    RnAlert.alert(
-      title,
-      body,
-      [
-        { text: cancelText, onPress: onCancel, style: 'cancel' }, //
-        { text: confirmText, onPress: onConfirm, style: danger ? 'destructive' : 'default' },
-      ],
-      { cancelable: false }
-    )
-  },
 
+  alert: ({ title, body, danger, confirmText, cancelText }) => {
+    return new Promise<boolean>(resolve => {
+      RnAlert.alert(
+        title,
+        body,
+        [
+          {
+            text: cancelText, //
+            onPress: () => resolve(true),
+            style: 'cancel',
+          },
+          {
+            text: confirmText,
+            onPress: () => resolve(false),
+            style: danger ? 'destructive' : 'default',
+          },
+        ],
+        { cancelable: false }
+      )
+    })
+  },
   // navigation
   NavMenu: ({ items }) => null,
 

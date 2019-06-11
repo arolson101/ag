@@ -14,7 +14,7 @@ export const LoginDialog = Object.assign(
   React.memo<Props>(function _LoginDialog(props) {
     const { isOpen } = props
     const intl = useIntl()
-    const { LoadingOverlay, Dialog, showToast, alert } = useUi()
+    const { LoadingOverlay, Dialog } = useUi()
     const isDbInitializing = useSelector(selectors.isDbInitializing)
     const isDbInitialized = useSelector(selectors.isDbInitialized)
     const dbs = useSelector(selectors.getDbs)
@@ -30,21 +30,8 @@ export const LoginDialog = Object.assign(
     }, [loginForm.current])
 
     const confirmDeleteDb = useCallback(() => {
-      alert({
-        title: intl.formatMessage(messages.dlgTitle),
-        body: intl.formatMessage(messages.dlgBody),
-        danger: true,
-
-        confirmText: intl.formatMessage(messages.dlgDelete),
-        onConfirm: async () => {
-          await dbDelete({ dbId: dbId! })
-          showToast(intl.formatMessage(messages.dlgDeleted), true)
-        },
-
-        cancelText: intl.formatMessage(messages.dlgCancel),
-        onCancel: () => {},
-      })
-    }, [dbDelete, showToast, intl])
+      return dbDelete({ dbId: dbId! })
+    }, [dbDelete])
 
     return (
       <>

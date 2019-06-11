@@ -15,17 +15,14 @@ const log = debug('core:uiContext')
 
 export type IconName = 'url' | 'refresh' | 'image' | 'library' | 'trash' | 'edit' | 'add' | 'sync'
 
-export interface AlertParams {
+interface AlertParams {
   title: string
 
   body?: string
   danger?: boolean
   error?: boolean
 
-  onConfirm: () => any
   confirmText: string
-
-  onCancel?: () => any
   cancelText?: string
 }
 
@@ -187,9 +184,8 @@ export interface PopoverButtonProps extends Omit<ButtonProps, 'onPress'> {
 }
 
 export interface UiContext {
-  // special ui
   showToast: (message: string, danger?: boolean) => any
-  alert: (params: AlertParams) => any
+  alert: (params: AlertParams) => Promise<boolean>
 
   // dialog
   Dialog: ComponentType<DialogProps>

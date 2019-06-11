@@ -3,7 +3,6 @@ import debug from 'debug'
 import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { useSelector } from 'react-redux'
-import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
 import { Errors, typedFields, useAction, useIntl, useUi } from '../context'
 import { selectors } from '../reducers'
@@ -31,20 +30,16 @@ export interface LoginForm {
   submit: () => any
 }
 
-interface ComponentProps extends Props {
-  appError?: Error
-  createDb: (params: { name: string; password: string }) => any
-  openDb: (params: { dbId: string; password: string }) => any
-}
-
-const Component = Object.assign(
-  React.forwardRef<LoginForm, ComponentProps>(function _LoginFormComponent(props, ref) {
+export const LoginForm = Object.assign(
+  React.forwardRef<LoginForm, Props>(({ dbs }, ref) => {
     const intl = useIntl()
     const ui = useUi()
     const submitRef = useSubmitRef()
+    const createDb = useAction(thunks.dbCreate)
+    const appError = useSelector(selectors.getAppError)
+    const openDb = useAction(thunks.dbOpen)
     const { Text } = ui
     const { Form, TextField } = typedFields<FormValues>(ui)
-    const { createDb, openDb, dbs, appError } = props
     const dbId = dbs.length ? dbs[0].dbId : undefined
     const create = !dbId
 
@@ -71,9 +66,9 @@ const Component = Object.assign(
     const submit = useCallback(
       async values => {
         if (dbId) {
-          openDb({ ...values, dbId })
+          await openDb({ ...values, dbId })
         } else {
-          createDb(values)
+          await createDb(values)
         }
       },
       [dbId, openDb, createDb]
@@ -120,30 +115,8 @@ const Component = Object.assign(
     )
   }),
   {
-    displayName: 'LoginForm.Component',
-  }
-)
-
-export const LoginForm = Object.assign(
-  React.forwardRef<LoginForm, Props>((props, ref) => {
-    const component = useRef<LoginForm>(null)
-
-    const createDb = useAction(thunks.dbCreate)
-    const appError = useSelector(selectors.getAppError)
-    const openDb = useAction(thunks.dbOpen)
-
-    useImperativeHandle(ref, () => ({
-      submit: () => {
-        component.current!.submit()
-      },
-    }))
-
-    return <Component ref={component} {...{ ...props, appError, createDb, openDb }} />
-  }),
-  {
     id: 'LoginForm',
     displayName: 'LoginForm',
-    Component,
   }
 )
 

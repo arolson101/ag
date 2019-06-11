@@ -36,48 +36,6 @@ export class AccountResolver {
     return accountsRepository.all()
   }
 
-  @Mutation(returns => Account)
-  async saveAccount(
-    @Ctx() { getAppDb }: DbContext,
-    @Arg('input') input: AccountInput,
-    @Arg('accountId', { nullable: true }) accountId?: string,
-    @Arg('bankId', { nullable: true }) bankId?: string
-  ): Promise<Account> {
-    const { connection, accountsRepository } = getAppDb()
-    let account: Account
-    let changes: DbChange[]
-    const t = Date.now()
-    if (accountId) {
-      account = await accountsRepository.getById(accountId)
-      const q = diff<Account.Props>(account, input)
-      changes = [Account.change.edit(t, accountId, q)]
-      account.update(t, q)
-    } else {
-      if (!bankId) {
-        throw new Error('when creating an account, bankId must be specified')
-      }
-      account = new Account(bankId, uniqueId(), input)
-      accountId = account.id
-      changes = [Account.change.add(t, account)]
-    }
-    await dbWrite(connection, changes)
-    assert.equal(accountId, account.id)
-    assert.deepEqual(account, await accountsRepository.getById(accountId))
-    return account
-  }
-
-  @Mutation(returns => Boolean)
-  async deleteAccount(
-    @Ctx() { getAppDb }: DbContext, //
-    @Arg('accountId') accountId: string
-  ): Promise<boolean> {
-    const { connection } = getAppDb()
-    const t = Date.now()
-    const changes = [Account.change.remove(t, accountId)]
-    await dbWrite(connection, changes)
-    return true
-  }
-
   @FieldResolver(type => [Transaction])
   async transactions(
     @Ctx() { getAppDb }: DbContext, //

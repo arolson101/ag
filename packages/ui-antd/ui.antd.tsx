@@ -38,16 +38,19 @@ const log = debug('ui-antd:ui')
 export const ui: UiContext = {
   // special ui
   showToast: (text, danger) => (danger ? message.error(text) : message.success(text)),
-  alert: ({ title, body, danger, error, onConfirm, confirmText, onCancel, cancelText }) => {
-    ;(cancelText ? Modal.confirm : error ? Modal.error : Modal.info)({
-      centered: true,
-      title,
-      content: body,
-      onOk: onConfirm,
-      onCancel,
-      okText: confirmText,
-      okType: danger ? 'danger' : 'primary',
-      cancelText,
+  alert: ({ title, body, danger, error, confirmText, cancelText }) => {
+    return new Promise(resolve => {
+      const modal = cancelText ? Modal.confirm : error ? Modal.error : Modal.info
+      modal({
+        centered: true,
+        title,
+        content: body,
+        onOk: () => resolve(true),
+        onCancel: cancelText ? () => resolve(false) : undefined,
+        okText: confirmText,
+        okType: danger ? 'danger' : 'primary',
+        cancelText,
+      })
     })
   },
 

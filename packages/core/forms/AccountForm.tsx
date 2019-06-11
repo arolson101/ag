@@ -1,23 +1,13 @@
 import { Account } from '@ag/db'
-import {
-  Gql,
-  MutationFn,
-  pick,
-  useApolloClient,
-  useField,
-  useFieldValue,
-  useForm,
-  useMutation,
-  useQuery,
-  useSubmitRef,
-} from '@ag/util'
+import { Gql, pick, useQuery, useSubmitRef } from '@ag/util'
 import debug from 'debug'
 import gql from 'graphql-tag'
-import React, { useCallback, useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay, TextFieldWithIcon } from '../components'
-import { Errors, typedFields, useIntl, useUi } from '../context'
+import { Errors, typedFields, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
+import { thunks } from '../thunks'
 
 const log = debug('AccountForm')
 
@@ -68,18 +58,6 @@ const queries = {
   ` as Gql<T.AccountForm.Query, T.AccountForm.Variables>,
 }
 
-const mutations = {
-  SaveAccount: gql`
-    mutation SaveAccount($input: AccountInput!, $accountId: String, $bankId: String) {
-      saveAccount(input: $input, accountId: $accountId, bankId: $bankId) {
-        id
-        ...accountFields_AccountForm
-      }
-    }
-    ${fragments.accountFields}
-  ` as Gql<T.SaveAccount.Mutation, T.SaveAccount.Variables>,
-}
-
 export interface AccountForm {
   save: () => any
 }
@@ -90,15 +68,14 @@ export const AccountForm = Object.assign(
   React.forwardRef<AccountForm, Props>(function _AccountFormComponent(props, ref) {
     const intl = useIntl()
     const submitFormRef = useSubmitRef()
-    const { Text, Image, Row, showToast } = useUi()
-    const client = useApolloClient()
+    const { Text, Row } = useUi()
     const { Form, SelectField, TextField } = typedFields<FormValues>(useUi())
     const { accountId, bankId, onClosed } = props
 
     const { data, loading, error } = useQuery(queries.AccountForm, {
       variables: { accountId, bankId },
     })
-    const saveAccount = useMutation(mutations.SaveAccount)
+    const saveAccount = useAction(thunks.saveAccount)
 
     const account = loading ? undefined : data && data.account
     const bank = loading ? undefined : data && data.bank
@@ -128,25 +105,14 @@ export const AccountForm = Object.assign(
 
     const submit = useCallback(
       async ({ ...input }) => {
-        try {
-          const variables = {
-            bankId,
-            accountId,
-            input,
-          }
-          await saveAccount({ variables })
-          client.reFetchObservableQueries()
-          showToast(
-            intl.formatMessage(accountId ? messages.saved : messages.created, {
-              name: input.name,
-            })
-          )
-          onClosed()
-        } catch (error) {
-          log('error %o', error)
-        }
+        await saveAccount({
+          bankId,
+          accountId,
+          input,
+        })
+        onClosed()
       },
-      [bankId, accountId, saveAccount, showToast, onClosed]
+      [bankId, accountId, saveAccount, onClosed]
     )
 
     useImperativeHandle(ref, () => ({
@@ -231,7 +197,6 @@ export const AccountForm = Object.assign(
     id: 'AccountForm',
     displayName: 'AccountForm',
     queries,
-    mutations,
     fragments,
   }
 )

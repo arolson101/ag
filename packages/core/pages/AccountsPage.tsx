@@ -1,31 +1,14 @@
-import {
-  Gql,
-  monthsAgo,
-  QueryHookResult,
-  standardizeDate,
-  useApolloClient,
-  useMutation,
-  useQuery,
-} from '@ag/util'
+import { Gql, QueryHookResult, useMutation, useQuery } from '@ag/util'
 import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
 import gql from 'graphql-tag'
-import React, { useCallback, useMemo, useRef } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay } from '../components'
-import {
-  ActionDesc,
-  ActionItem,
-  ContextMenuProps,
-  TableColumn,
-  useAction,
-  useIntl,
-  useUi,
-} from '../context'
+import { ActionDesc, TableColumn, useAction, useIntl, useUi } from '../context'
 import * as T from '../graphql-types'
-import { deleteAccount, deleteBank } from '../mutations'
 import { thunks } from '../thunks'
 
 const log = debug('core:AccountsPage')
@@ -97,9 +80,10 @@ const BankTable = Object.assign(
     const openAccountCreateDlg = useAction(actions.openDlg.accountCreate)
     const openAccountEditDlg = useAction(actions.openDlg.accountEdit)
     const navAccount = useAction(actions.nav.account)
+    const deleteAccount = useAction(thunks.deleteAccount)
+    const deleteBank = useAction(thunks.deleteBank)
     const ui = useUi()
-    const { Link, Text, Row, Table, Image, showToast } = ui
-    const client = useApolloClient()
+    const { Link, Text, Row, Table, Image } = ui
 
     const setAccountsOrder = useMutation(mutations.SetAccountsOrder, {
       refetchQueries: [{ query: queries.AccountsPage }],
@@ -131,10 +115,10 @@ const BankTable = Object.assign(
       () => ({
         icon: 'trash',
         text: intl.formatMessage(messages.deleteBank),
-        onClick: () => deleteBank({ ui, intl, bank, client }),
+        onClick: () => deleteBank({ bank }),
         danger: true,
       }),
-      [deleteBank, ui, intl, bank, client]
+      [deleteBank, bank]
     )
 
     const rowAdd = useMemo<ActionDesc>(
@@ -159,10 +143,10 @@ const BankTable = Object.assign(
       (account: Row): ActionDesc => ({
         icon: 'trash',
         text: intl.formatMessage(messages.deleteAccount),
-        onClick: () => deleteAccount({ ui, intl, account, client }),
+        onClick: () => deleteAccount({ account }),
         danger: true,
       }),
-      [intl, deleteAccount]
+      [deleteAccount]
     )
 
     const columns = useMemo<Array<TableColumn<Row>>>(

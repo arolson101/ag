@@ -68,7 +68,7 @@ export const PictureDialog = Object.assign(
     const [listLoading, setListLoading] = useState(false)
     const [listData, setListData] = useState<string[]>([])
     const { onSelected, isOpen } = props
-    const { Dialog, Spinner, Row, Grid } = useUi()
+    const { Dialog, Spinner, Row, Grid, alert } = useUi()
     const { Form, TextField } = typedFields<Values>(useUi())
 
     const initialValues: Values = {
@@ -125,7 +125,7 @@ export const PictureDialog = Object.assign(
         .then(imageList => {
           setListData(imageList)
         })
-        .catch(error => ErrorDisplay.show(ui, intl, error))
+        .catch(error => ErrorDisplay.show(alert, intl, error))
         .finally(() => setListLoading(false))
       return cancelToken.cancel
     }, [setListLoading, online.getImageList, setListData, url])

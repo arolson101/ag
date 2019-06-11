@@ -2,6 +2,22 @@
 import { ImageUri } from '@ag/util'
 export type Maybe<T> = T | null
 
+export interface TransactionInput {
+  account?: Maybe<string>
+
+  serverid?: Maybe<string>
+
+  time?: Maybe<DateTime>
+
+  type?: Maybe<string>
+
+  name?: Maybe<string>
+
+  memo?: Maybe<string>
+
+  amount?: Maybe<number>
+}
+
 export interface AccountInput {
   name?: Maybe<string>
 
@@ -44,22 +60,6 @@ export interface BankInput {
   username?: Maybe<string>
 
   password?: Maybe<string>
-}
-
-export interface TransactionInput {
-  account?: Maybe<string>
-
-  serverid?: Maybe<string>
-
-  time?: Maybe<DateTime>
-
-  type?: Maybe<string>
-
-  name?: Maybe<string>
-
-  memo?: Maybe<string>
-
-  amount?: Maybe<number>
 }
 
 export interface BillInput {
@@ -176,26 +176,6 @@ export namespace AccountForm {
   }
 }
 
-export namespace SaveAccount {
-  export type Variables = {
-    input: AccountInput
-    accountId?: Maybe<string>
-    bankId?: Maybe<string>
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    saveAccount: SaveAccount
-  }
-
-  export type SaveAccount = {
-    __typename?: 'Account'
-
-    id: string
-  } & AccountFieldsAccountForm.Fragment
-}
-
 export namespace BankForm {
   export type Variables = {
     bankId?: Maybe<string>
@@ -208,25 +188,6 @@ export namespace BankForm {
   }
 
   export type Bank = BankFields.Fragment
-}
-
-export namespace SaveBank {
-  export type Variables = {
-    input: BankInput
-    bankId?: Maybe<string>
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    saveBank: SaveBank
-  }
-
-  export type SaveBank = {
-    __typename?: 'Bank'
-
-    id: string
-  } & BankFields.Fragment
 }
 
 export namespace Transaction {
@@ -274,30 +235,6 @@ export namespace DeleteTransaction {
     __typename?: 'Transaction'
 
     accountId: string
-  }
-}
-
-export namespace DeleteAccount {
-  export type Variables = {
-    accountId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteAccount: boolean
-  }
-}
-
-export namespace DeleteBank {
-  export type Variables = {
-    bankId: string
-  }
-
-  export type Mutation = {
-    __typename?: 'Mutation'
-
-    deleteBank: boolean
   }
 }
 

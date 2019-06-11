@@ -1,5 +1,5 @@
 import { PageProps, UiContext } from '@ag/core/context'
-import { platform, ui as NbUi } from '@ag/ui-nativebase'
+import { NbUi, platform } from '@ag/ui-nativebase'
 import assert from 'assert'
 import React, { useEffect } from 'react'
 import { Navigation } from 'react-native-navigation'

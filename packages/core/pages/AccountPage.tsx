@@ -15,8 +15,6 @@ interface Props {
   accountId: string
 }
 
-const fragments = {}
-
 const queries = {
   AccountPage: gql`
     query AccountPage($accountId: String!) {
@@ -42,8 +40,6 @@ const queries = {
     }
   ` as Gql<T.AccountPage.Query, T.AccountPage.Variables>,
 }
-
-const mutations = {}
 
 type ComponentProps = Props & QueryHookResult<T.AccountPage.Query, T.AccountPage.Variables>
 const Component = Object.assign(

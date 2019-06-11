@@ -15,9 +15,10 @@ import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { UrlField } from '../components/UrlField'
-import { Errors, tabConfig, typedFields, useIntl, useUi } from '../context'
+import { Errors, tabConfig, typedFields, useAction, useIntl, useUi } from '../context'
 import { filist, formatAddress } from '../data'
 import * as T from '../graphql-types'
+import { thunks } from '../thunks'
 
 const log = debug('core:BankForm')
 
@@ -64,18 +65,6 @@ const queries = {
   ` as Gql<T.BankForm.Query, T.BankForm.Variables>,
 }
 
-const mutations = {
-  SaveBank: gql`
-    mutation SaveBank($input: BankInput!, $bankId: String) {
-      saveBank(input: $input, bankId: $bankId) {
-        id
-        ...bankFields
-      }
-    }
-    ${fragments.bankFields}
-  ` as Gql<T.SaveBank.Mutation, T.SaveBank.Variables>,
-}
-
 export interface BankForm {
   save: () => any
 }
@@ -83,16 +72,16 @@ export interface BankForm {
 interface ComponentProps extends Props {
   loading: boolean
   data: T.BankForm.Query | undefined
-  saveBank: MutationFn<T.SaveBank.Mutation, T.SaveBank.Variables>
 }
 
 const Component = Object.assign(
   React.forwardRef<BankForm, ComponentProps>(function _BankFormComponent(props, ref) {
     const intl = useIntl()
     const ui = useUi()
-    const { LoadingOverlay, Tabs, Tab, Text, showToast } = ui
+    const { LoadingOverlay, Tabs, Tab, Text } = ui
     const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
-    const { data, saveBank, loading, bankId, onClosed } = props
+    const { data, loading, bankId, onClosed } = props
+    const saveBank = useAction(thunks.saveBank)
     const submitFormRef = useSubmitRef()
 
     const bank = loading ? undefined : data && data.bank
@@ -125,18 +114,13 @@ const Component = Object.assign(
       async ({ fi, ...input }) => {
         try {
           // log('onSubmit %o', { input, bankId })
-          await saveBank({ variables: { input, bankId } })
-          showToast(
-            intl.formatMessage(bankId ? messages.saved : messages.created, {
-              name: input.name,
-            })
-          )
+          await saveBank({ input, bankId })
           onClosed()
         } catch (err) {
           log('caught %o', err)
         }
       },
-      [saveBank, showToast, onClosed]
+      [saveBank, onClosed]
     )
 
     useImperativeHandle(ref, () => ({
@@ -283,12 +267,6 @@ export const BankForm = Object.assign(
 
     const component = useRef<BankForm>(null)
     const { data, loading, error } = useQuery(queries.BankForm, { variables: { bankId } })
-    const client = useApolloClient()
-    const saveBank = useMutation(mutations.SaveBank, {
-      update: () => {
-        client.reFetchObservableQueries()
-      },
-    })
 
     useImperativeHandle(ref, () => ({
       save: () => {
@@ -300,7 +278,7 @@ export const BankForm = Object.assign(
     return (
       <>
         <ErrorDisplay error={error} />
-        <Component ref={component} {...{ ...props, saveBank, data, loading }} />
+        <Component ref={component} {...{ ...props, data, loading }} />
       </>
     )
   }),
@@ -308,7 +286,6 @@ export const BankForm = Object.assign(
     id: 'BankForm',
     displayName: 'BankForm',
     queries,
-    mutations,
     fragments,
     Component,
   }

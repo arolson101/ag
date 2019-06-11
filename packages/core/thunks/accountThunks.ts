@@ -10,12 +10,86 @@ import {
 import { dbWrite } from '@ag/db/resolvers/dbWrite'
 import { toAccountType } from '@ag/online'
 import { diff, uniqueId } from '@ag/util'
+import assert from 'assert'
 import debug from 'debug'
 import * as ofx4js from 'ofx4js'
+import { defineMessages } from 'react-intl'
+import { ErrorDisplay } from '../components'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
 
-const log = debug('db:AccountOnlineResolver')
+const log = debug('db:accountThunks')
+
+interface SaveAccountParams {
+  input: AccountInput
+  accountId?: string
+  bankId?: string
+}
+
+const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk =>
+  async function _saveAccount(dispatch, getState, { ui: { showToast } }) {
+    const state = getState()
+    const intl = selectors.getIntl(state)
+    const { connection, accountsRepository } = selectors.getAppDb(state)
+
+    let account: Account
+    let changes: DbChange[]
+    const t = Date.now()
+    if (accountId) {
+      account = await accountsRepository.getById(accountId)
+      const q = diff<Account.Props>(account, input)
+      changes = [Account.change.edit(t, accountId, q)]
+      account.update(t, q)
+    } else {
+      if (!bankId) {
+        throw new Error('when creating an account, bankId must be specified')
+      }
+      account = new Account(bankId, uniqueId(), input)
+      accountId = account.id
+      changes = [Account.change.add(t, account)]
+    }
+    await dbWrite(connection, changes)
+    assert.equal(accountId, account.id)
+    assert.deepEqual(account, await accountsRepository.getById(accountId))
+
+    const intlCtx = { name: account.name }
+    showToast(intl.formatMessage(accountId ? messages.saved : messages.created, intlCtx))
+  }
+
+interface DeleteAccountParams {
+  account: {
+    id: string
+    name: string
+  }
+}
+
+const deleteAccount = ({ account }: DeleteAccountParams): CoreThunk =>
+  async function _deleteAccount(dispatch, getState, { ui: { alert, showToast } }) {
+    const state = getState()
+    const intl = selectors.getIntl(state)
+    const intlCtx = { name: account.name }
+
+    const confirmed = await alert({
+      title: intl.formatMessage(messages.title),
+      body: intl.formatMessage(messages.deleteAccountBody, intlCtx),
+      danger: true,
+
+      confirmText: intl.formatMessage(messages.deleteAccountConfirm),
+      cancelText: intl.formatMessage(messages.cancel),
+    })
+
+    if (confirmed) {
+      try {
+        const { connection } = selectors.getAppDb(state)
+        const t = Date.now()
+        const changes = [Account.change.remove(t, account.id)]
+        await dbWrite(connection, changes)
+        showToast(intl.formatMessage(messages.deleted, intlCtx), true)
+      } catch (error) {
+        ErrorDisplay.show(alert, intl, error)
+      }
+    }
+  }
 
 const syncAccounts = (bankId: string): CoreThunk =>
   async function _syncAccounts(dispatch) {
@@ -243,7 +317,40 @@ const transactionsEqual = (a: TransactionInput, b: TransactionInput): boolean =>
 }
 
 export const accountThunks = {
-  syncAccounts, //
+  saveAccount, //
+  deleteAccount,
+  syncAccounts,
   downloadAccountList,
   downloadTransactions,
 }
+
+const messages = defineMessages({
+  title: {
+    id: 'accountThunks.title',
+    defaultMessage: 'Are you sure?',
+  },
+  deleteAccountBody: {
+    id: 'accountThunks.deleteAccountBody',
+    defaultMessage: "This will delete the account '{name}' and all its transactions",
+  },
+  deleteAccountConfirm: {
+    id: 'accountThunks.deleteAccountConfirm',
+    defaultMessage: 'Delete',
+  },
+  cancel: {
+    id: 'accountThunks.cancel',
+    defaultMessage: 'Cancel',
+  },
+  deleted: {
+    id: 'accountThunks.deleted',
+    defaultMessage: "Account '{name}' deleted",
+  },
+  saved: {
+    id: 'AccountForm.saved',
+    defaultMessage: "Account '{name}' saved",
+  },
+  created: {
+    id: 'AccountForm.created',
+    defaultMessage: "Account '{name}' added",
+  },
+})

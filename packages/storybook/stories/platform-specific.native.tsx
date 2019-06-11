@@ -1,5 +1,5 @@
 import { UiContext } from '@ag/core/context'
-import { ui as nbUi } from '@ag/ui-nativebase'
+import { NbUi } from '@ag/ui-nativebase'
 import { storiesOf } from '@storybook/react-native'
 import {
   Body,
@@ -25,7 +25,7 @@ YellowBox.ignoreWarnings([
 ])
 
 const ui: UiContext = {
-  ...nbUi,
+  ...NbUi,
 
   LoadingOverlay: () => null,
 

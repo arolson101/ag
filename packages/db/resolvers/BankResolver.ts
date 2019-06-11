@@ -42,47 +42,6 @@ export class BankResolver {
     return banks
   }
 
-  @Mutation(returns => Bank)
-  async saveBank(
-    @Ctx() { getAppDb }: DbContext,
-    @Arg('input') input: BankInput,
-    @Arg('bankId', { nullable: true }) bankId?: string
-  ): Promise<Bank> {
-    const { connection, banksRepository } = getAppDb()
-    const t = Date.now()
-    let bank: Bank
-    let changes: DbChange[]
-    if (bankId) {
-      bank = await banksRepository.getById(bankId)
-      const q = diff<Bank.Props>(bank, input)
-      changes = [Bank.change.edit(t, bankId, q)]
-      bank.update(t, q)
-    } else {
-      bank = new Bank(uniqueId(), input)
-      bankId = bank.id
-      changes = [Bank.change.add(t, bank)]
-    }
-    // log('dbwrite %o', changes)
-    await dbWrite(connection, changes)
-    assert.equal(bankId, bank.id)
-    // log('get bank %s', bankId)
-    assert.deepEqual(bank, await banksRepository.getById(bankId))
-    // log('done')
-    return bank
-  }
-
-  @Mutation(returns => Boolean)
-  async deleteBank(
-    @Ctx() { getAppDb }: DbContext,
-    @Arg('bankId') bankId: string //
-  ): Promise<boolean> {
-    const { connection } = getAppDb()
-    const t = Date.now()
-    const changes = [Bank.change.remove(t, bankId)]
-    await dbWrite(connection, changes)
-    return true
-  }
-
   @Mutation(returns => Boolean)
   async setAccountsOrder(
     @Ctx() { getAppDb }: DbContext,
