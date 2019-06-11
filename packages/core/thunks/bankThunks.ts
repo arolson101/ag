@@ -47,14 +47,7 @@ const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
     }
   }
 
-interface DeleteBankParams {
-  bank: {
-    id: string
-    name: string
-  }
-}
-
-const deleteBank = ({ bank }: DeleteBankParams): CoreThunk =>
+const deleteBank = (bank: { id: string; name: string }): CoreThunk =>
   async function _deleteBank(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
     const intl = selectors.getIntl(state)

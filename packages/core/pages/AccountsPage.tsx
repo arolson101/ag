@@ -104,7 +104,7 @@ const BankTable = Object.assign(
       () => ({
         icon: 'trash',
         text: intl.formatMessage(messages.deleteBank),
-        onClick: () => deleteBank({ bank }),
+        onClick: () => deleteBank(bank),
         danger: true,
       }),
       [deleteBank, bank]
@@ -132,7 +132,7 @@ const BankTable = Object.assign(
       (account: Row): ActionDesc => ({
         icon: 'trash',
         text: intl.formatMessage(messages.deleteAccount),
-        onClick: () => deleteAccount({ account }),
+        onClick: () => deleteAccount(account),
         danger: true,
       }),
       [deleteAccount]

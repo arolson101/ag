@@ -1,6 +1,5 @@
 import { DbChange, Record } from '@ag/db/entities'
 import debug from 'debug'
-import { Connection } from 'typeorm'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
 

@@ -61,14 +61,7 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
     }
   }
 
-interface DeleteAccountParams {
-  account: {
-    id: string
-    name: string
-  }
-}
-
-const deleteAccount = ({ account }: DeleteAccountParams): CoreThunk =>
+const deleteAccount = (account: { id: string; name: string }): CoreThunk =>
   async function _deleteAccount(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
     const intl = selectors.getIntl(state)
