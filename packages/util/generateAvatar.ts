@@ -17,7 +17,7 @@ export const generateAvatar = (text: string): ImageUri => {
   const color = '#888'
   const fontSize = width / Math.min(Math.max(2, initials.length), 4)
 
-  // tslint:disable-next-line:prettier
+  // prettier-ignore
   const buf = Buffer.from(/*html*/`<?xml version="1.0"?>
     <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
     <svg xmlns="http://www.w3.org/2000/svg" height="100%" width="100%" viewBox='0 0 ${width} ${height}'>
