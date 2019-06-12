@@ -1,5 +1,12 @@
+import { DbEntity, DbTable } from '@ag/db'
 import { Connection } from 'typeorm'
 import { createAsyncAction, createStandardAction } from 'typesafe-actions'
+
+export interface LoadEntities {
+  table: DbTable
+  deletes: string[]
+  entities: Array<DbEntity<any>>
+}
 
 export const dbActions = {
   dbInit: createAsyncAction(
@@ -21,6 +28,8 @@ export const dbActions = {
   )<void, void, Error>(),
 
   dbSetInfos: createStandardAction('core/dbSetInfos')<DbInfo[]>(),
+
+  dbEntities: createStandardAction('core/dbEntities')<LoadEntities[]>(),
 
   dbLogout: createStandardAction('core/dbLogout')(),
 }

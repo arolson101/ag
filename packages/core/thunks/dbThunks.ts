@@ -2,7 +2,6 @@ import { Account, appEntities, Bank, Db, indexEntities } from '@ag/db/entities'
 import crypto from 'crypto'
 import { defineMessages } from 'react-intl'
 import sanitize from 'sanitize-filename'
-import { Connection } from 'typeorm'
 import { actions } from '../actions'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
@@ -41,10 +40,9 @@ const dbLoadEntities = (): CoreThunk =>
     )
   }
 
-const dbLoginSuccess = (connection: Connection): CoreThunk =>
+const dbPostLogin = (): CoreThunk =>
   async function _dbLoginSuccess(dispatch) {
-    await dispatch(actions.dbLogin.success(connection))
-    await dispatch(settingsThunks.settingsInit(connection))
+    await dispatch(settingsThunks.settingsInit())
     await dispatch(dbLoadEntities())
     await dispatch(actions.closeDlg('login'))
   }
@@ -67,8 +65,9 @@ const dbCreate = ({ name, password }: { name: string; password: string }): CoreT
 
       const dbs: DbInfo[] = await dbRepo.find()
 
-      dispatch(actions.dbSetInfos(dbs))
-      return dispatch(dbLoginSuccess(connection))
+      await dispatch(actions.dbSetInfos(dbs))
+      await dispatch(actions.dbLogin.success(connection))
+      await dispatch(dbPostLogin())
     } catch (error) {
       dispatch(actions.dbLogin.failure(error))
     }
@@ -85,7 +84,8 @@ const dbOpen = ({ dbId, password }: { dbId: string; password: string }): CoreThu
 
       const connection = await openDb(dbInfo.path, key, appEntities)
 
-      return dispatch(dbLoginSuccess(connection))
+      await dispatch(actions.dbLogin.success(connection))
+      await dispatch(dbPostLogin())
     } catch (error) {
       dispatch(actions.dbLogin.failure(error))
     }
@@ -123,8 +123,8 @@ const dbDelete = ({ dbId }: { dbId: string }): CoreThunk =>
         .execute()
 
       const dbs: DbInfo[] = await dbRepo.find()
-      dispatch(actions.dbSetInfos(dbs))
-      dispatch(actions.dbDelete.success())
+      await dispatch(actions.dbSetInfos(dbs))
+      await dispatch(actions.dbDelete.success())
       showToast(intl.formatMessage(messages.dlgDeleted), true)
     } catch (error) {
       dispatch(actions.dbDelete.failure(error))

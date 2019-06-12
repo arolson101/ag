@@ -1,7 +1,6 @@
 import { DbChange, DbEntity } from '@ag/db/entities'
 import debug from 'debug'
-import { actions } from '../actions'
-import { LoadEntities } from '../actions/queryActions'
+import { actions, LoadEntities } from '../actions'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
 

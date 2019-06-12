@@ -1,5 +1,4 @@
 import { Setting } from '@ag/db/entities'
-import { Connection } from 'typeorm'
 import { actions } from '../actions'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
@@ -7,7 +6,7 @@ import { CoreThunk } from './CoreThunk'
 const settingsToRecord = (settings: Setting[]): Record<string, string> =>
   settings.reduce((obj, setting) => ({ ...obj, [setting.key]: setting.value }), {})
 
-const settingsInit = (connection: Connection): CoreThunk =>
+const settingsInit = (): CoreThunk =>
   async function _settingsInit(dispatch, getState) {
     try {
       const { settingsRepository } = selectors.getAppDb(getState())
