@@ -55,7 +55,8 @@ export class CoreMessageSetInfo {
   /**
    * The name of the service provider (sometimes the message set processing is outsourced).
    *
-   * @param serviceProviderName The name of the service provider (sometimes the message set processing is outsourced).
+   * @param serviceProviderName The name of the service provider (sometimes the message set
+   * processing is outsourced).
    */
   setServiceProviderName(serviceProviderName: string): void {
     this.serviceProviderName = serviceProviderName
@@ -182,7 +183,8 @@ export class CoreMessageSetInfo {
   /**
    * Whether there exists support for resposne-file based error recovery.
    *
-   * @param fileBasedErrorRecoverySupport Whether there exists support for resposne-file based error recovery.
+   * @param fileBasedErrorRecoverySupport Whether there exists support for resposne-file
+   * based error recovery.
    */
   setFileBasedErrorRecoverySupport(fileBasedErrorRecoverySupport: boolean): void {
     this.fileBasedErrorRecoverySupport = fileBasedErrorRecoverySupport

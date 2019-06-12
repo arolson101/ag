@@ -3,9 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "main": "index.ts",
-  "scripts": {
-    "test": "jest"
-  },
   "dependencies": {
     "@ag/online": "^0.0.0",
     "@ag/util": "^0.0.0",

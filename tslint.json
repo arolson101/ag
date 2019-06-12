@@ -6,7 +6,6 @@
     "max-line-length": {
       "options": [100]
     },
-    "exhaustive-deps": true,
     "prettier": true,
     "object-literal-sort-keys": false,
     "interface-name": false,

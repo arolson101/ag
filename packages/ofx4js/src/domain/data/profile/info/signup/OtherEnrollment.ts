@@ -2,7 +2,8 @@ import { Aggregate_add } from '../../../../../meta/Aggregate_Add'
 import { Element_add } from '../../../../../meta/Element_add'
 
 /**
- * Other Enrollment option containing a text message directing users to some other method (such as a phone call)
+ * Other Enrollment option containing a text message directing users to some other method (such as
+ * a phone call)
  * @see "Section 8.8 OFX Spec"
  */
 export class OtherEnrollment {

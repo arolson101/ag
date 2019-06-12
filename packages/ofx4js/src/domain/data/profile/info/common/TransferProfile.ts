@@ -50,7 +50,7 @@ export class TransferProfile {
    *
    * Time formatted as "HHMMSS.XXX[gmt offset[:tz name]]",
    * the milliseconds and time zone are still optional, and default to GMT.
-
+   *
    * @see "Section 3.2.8.3 OFX Spec"
    * @param processEndTime formatted as "HHMMSS.XXX[gmt offset[:tz name]]"
    */
@@ -126,7 +126,8 @@ export class TransferProfile {
    * Model window
    * the number of days before a recurring transaction is scheduled to be processed that it is
    * instantiated on the system
-   * @return Number number of days before a recurring transaction is scheduled to be processed that it is instantiated on the system
+   * @return Number number of days before a recurring transaction is scheduled to be processed
+   * that it is instantiated on the system
    */
   getModelWindow(): number {
     return this.modelWindow

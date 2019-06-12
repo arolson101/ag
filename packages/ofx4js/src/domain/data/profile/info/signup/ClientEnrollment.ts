@@ -2,7 +2,8 @@ import { Aggregate_add } from '../../../../../meta/Aggregate_Add'
 import { Element_add } from '../../../../../meta/Element_add'
 
 /**
- * Client Enrollment option, contains indicator as to whether the account number is required as part of enrollment
+ * Client Enrollment option, contains indicator as to whether the account number is required as
+ * part of enrollment
  * @see "Section 8.8 OFX Spec"
  */
 export class ClientEnrollment {

@@ -171,7 +171,8 @@ export class SignonInfo implements SignonProfile {
   /**
    * Whether the server can process a password change request for this realm.
    *
-   * @param changePasswordSupported Whether the server can process a password change request for this realm.
+   * @param changePasswordSupported Whether the server can process a password change request
+   * for this realm.
    */
   setChangePasswordSupported(changePasswordSupported: boolean): void {
     this.changePasswordSupported = changePasswordSupported
@@ -180,7 +181,8 @@ export class SignonInfo implements SignonProfile {
   /**
    * Whether the server requires the user to change their password as part of their first signon.
    *
-   * @return Whether the server requires the user to change their password as part of their first signon.
+   * @return Whether the server requires the user to change their password as part of their first
+   * signon.
    */
   getChangePasswordFirstRequired(): boolean {
     return this.changePasswordFirstRequired
@@ -189,7 +191,8 @@ export class SignonInfo implements SignonProfile {
   /**
    * Whether the server requires the user to change their password as part of their first signon.
    *
-   * @param changePasswordFirstRequired Whether the server requires the user to change their password as part of their first signon.
+   * @param changePasswordFirstRequired Whether the server requires the user to change their
+   * password as part of their first signon.
    */
   setChangePasswordFirstRequired(changePasswordFirstRequired: boolean): void {
     this.changePasswordFirstRequired = changePasswordFirstRequired
@@ -207,7 +210,8 @@ export class SignonInfo implements SignonProfile {
   /**
    * Label for a set of additional credentials that the user must supply.
    *
-   * @param additionalCredientialsLabel1 Label for a set of additional credentials that the user must supply.
+   * @param additionalCredientialsLabel1 Label for a set of additional credentials that the user
+   * must supply.
    */
   setAdditionalCredientialsLabel1(additionalCredientialsLabel1: string): void {
     this.additionalCredientialsLabel1 = additionalCredientialsLabel1
@@ -225,7 +229,8 @@ export class SignonInfo implements SignonProfile {
   /**
    * Label for a set of additional credentials that the user must supply.
    *
-   * @param additionalCredientialsLabel2 Label for a set of additional credentials that the user must supply.
+   * @param additionalCredientialsLabel2 Label for a set of additional credentials that the user
+   * must supply.
    */
   setAdditionalCredientialsLabel2(additionalCredientialsLabel2: string): void {
     this.additionalCredientialsLabel2 = additionalCredientialsLabel2

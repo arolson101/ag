@@ -23,7 +23,7 @@ export enum UnitedStatesAccountType {
   /** Salary Reduction Employer Pension Plan */
   SARSEP,
 
-  /** Savings Incentive Match Plan for Employees*/
+  /** Savings Incentive Match Plan for Employees */
   SIMPLE,
 
   /** Regular investment account */

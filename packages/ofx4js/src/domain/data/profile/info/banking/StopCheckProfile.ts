@@ -43,7 +43,7 @@ export class StopCheckProfile {
    *
    * Time formatted as "HHMMSS.XXX[gmt offset[:tz name]]",
    * the milliseconds and time zone are still optional, and default to GMT.
-
+   *
    * @see "Section 3.2.8.3 OFX Spec"
    * @param processEndTime formatted as "HHMMSS.XXX[gmt offset[:tz name]]"
    */

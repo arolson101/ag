@@ -7,11 +7,10 @@ import {
   Transaction,
   TransactionInput,
 } from '@ag/db/entities'
-import { toAccountType } from '@ag/online'
+import { ofx4js, toAccountType } from '@ag/online'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import debug from 'debug'
-import * as ofx4js from 'ofx4js'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { selectors } from '../reducers'
