@@ -22,8 +22,7 @@
     "react-native-collapsible": "^1.4.0",
     "react-native-draggable-flatlist": "^1.1.7",
     "react-native-sortable-list": "^0.0.23",
-    "react-native-vector-icons": "^6.4.2",
-    "utility-types": "^3.7.0"
+    "react-native-vector-icons": "^6.4.2"
   },
   "devDependencies": {
     "@types/accounting": "^0.4.1",

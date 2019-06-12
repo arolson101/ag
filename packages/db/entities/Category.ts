@@ -1,10 +1,10 @@
 import { ISpec } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { CategoryInput } from './CategoryInput'
-import { Record } from './Record'
+import { DbEntity } from './DbEntity'
 
 @Entity({ name: 'categories' })
-export class Category extends Record<Category.Props> {
+export class Category extends DbEntity<Category.Props> {
   @PrimaryColumn() id!: string
   @Column() name!: string
   @Column() amount!: number

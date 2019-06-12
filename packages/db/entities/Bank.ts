@@ -3,12 +3,12 @@ import debug from 'debug'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { BankInput } from './BankInput'
 import { DbChange } from './DbChange'
-import { Record } from './Record'
+import { DbEntity } from './DbEntity'
 
 const log = debug('db:Bank')
 
 @Entity({ name: 'banks' })
-export class Bank extends Record<Bank.Props> {
+export class Bank extends DbEntity<Bank.Props> {
   @PrimaryColumn() id!: string
 
   @Column() name!: string

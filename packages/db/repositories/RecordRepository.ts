@@ -1,7 +1,7 @@
 import { AbstractRepository } from 'typeorm'
-import { Record } from '../entities'
+import { DbEntity } from '../entities'
 
-export abstract class RecordRepository<T extends Record<any>> extends AbstractRepository<T> {
+export abstract class RecordRepository<T extends DbEntity<any>> extends AbstractRepository<T> {
   async getById(id: string) {
     const res = await this.createQueryBuilder('e')
       .whereInIds([id])

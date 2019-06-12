@@ -1,4 +1,4 @@
-import { Account, Bank, Record as DbRecord, Transaction } from '@ag/db'
+import { Account, Bank, Bill, Budget, Category, DbEntity, Transaction } from '@ag/db'
 import { stringComparer } from '@ag/util'
 import debug from 'debug'
 import { getType } from 'typesafe-actions'
@@ -10,12 +10,18 @@ interface RecordsState {
   banks: Record<string, Bank>
   accounts: Record<string, Account>
   transactions: Record<string, Transaction>
+  bills: Record<string, Bill>
+  budgets: Record<string, Budget>
+  categories: Record<string, Category>
 }
 
 const initialState: RecordsState = {
   banks: {},
   accounts: {},
   transactions: {},
+  bills: {},
+  budgets: {},
+  categories: {},
 }
 
 export const recordsSelectors = {
@@ -55,13 +61,13 @@ export const recordsSelectors = {
   },
 }
 
-const applyChange = (
+const applyChange = <T extends DbEntity<any>>(
   change: {
     deletes: string[]
-    entities: Array<DbRecord<any>>
+    entities: Array<DbEntity<any>>
   },
-  state: Record<string, any>
-) => {
+  state: Record<string, T>
+): Record<string, T> => {
   const nextState = { ...state }
   if (change.deletes) {
     for (const del of change.deletes) {
@@ -70,7 +76,7 @@ const applyChange = (
   }
   if (change.entities) {
     for (const entity of change.entities) {
-      nextState[entity.id] = entity
+      nextState[entity.id] = entity as T
     }
   }
   return nextState
@@ -82,27 +88,31 @@ export const records = (state: RecordsState = initialState, action: CoreAction):
     case getType(actions.dbLogout):
       return initialState
 
-    case getType(actions.changesWritten): {
-      let nextState = state
-      for (const change of action.payload) {
+    case getType(actions.dbEntities): {
+      return action.payload.reduce((nextState, change) => {
         switch (change.table) {
           case Bank:
-            nextState = { ...nextState, banks: applyChange(change, nextState.banks) }
-            break
+            return { ...nextState, banks: applyChange(change, nextState.banks) }
 
           case Account:
-            nextState = { ...nextState, accounts: applyChange(change, nextState.accounts) }
-            break
+            return { ...nextState, accounts: applyChange(change, nextState.accounts) }
 
           case Transaction:
-            nextState = { ...nextState, transactions: applyChange(change, nextState.transactions) }
-            break
+            return { ...nextState, transactions: applyChange(change, nextState.transactions) }
+
+          case Bill:
+            return { ...nextState, bills: applyChange(change, nextState.bills) }
+
+          case Budget:
+            return { ...nextState, budgets: applyChange(change, nextState.budgets) }
+
+          case Category:
+            return { ...nextState, categories: applyChange(change, nextState.categories) }
 
           default:
             throw new Error('unhandled table type')
         }
-      }
-      return nextState
+      }, state)
     }
 
     default:

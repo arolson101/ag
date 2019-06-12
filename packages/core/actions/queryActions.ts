@@ -1,19 +1,12 @@
-import { Record as DbRecord } from '@ag/db'
+import { DbEntity, DbTable } from '@ag/db'
 import { createStandardAction } from 'typesafe-actions'
 
-export interface WrittenChanges {
-  table: Function
+export interface LoadEntities {
+  table: DbTable
   deletes: string[]
-  entities: Array<DbRecord<any>>
+  entities: Array<DbEntity<any>>
 }
 
 export const queryActions = {
-  entitiesLoaded: createStandardAction('core/entitiesLoaded')<
-    Array<{
-      table: Function
-      entities: Array<DbRecord<any>>
-    }>
-  >(),
-
-  changesWritten: createStandardAction('core/changesWritten')<WrittenChanges[]>(),
+  dbEntities: createStandardAction('core/dbEntities')<LoadEntities[]>(),
 }

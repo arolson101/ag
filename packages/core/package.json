@@ -4,8 +4,6 @@
   "license": "MIT",
   "main": "index.ts",
   "scripts": {
-    "precodegen": "lerna run schema --loglevel silent",
-    "codegen": "gql-gen",
     "test": "jest"
   },
   "jest": {
@@ -35,11 +33,9 @@
     "rxjs-hooks": "^0.5.1",
     "sanitize-filename": "^1.6.1",
     "typeorm": "^0.2.17",
-    "typesafe-actions": "^4.4.0",
-    "utility-types": "^3.7.0"
+    "typesafe-actions": "^4.4.0"
   },
   "devDependencies": {
-    "@2fd/graphdoc": "^2.4.0",
     "@types/accounting": "^0.4.1",
     "@types/debug": "^4.1.4",
     "@types/react": "^16.8.19",

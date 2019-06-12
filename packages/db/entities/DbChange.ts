@@ -1,18 +1,18 @@
 import { ISpec } from '@ag/util'
 import { ObjectType } from 'typeorm'
-import { Record } from './Record'
+import { DbEntity } from './DbEntity'
 
-export interface DbRecordEdit<Q extends ISpec<{}> = ISpec<{}>> {
+export interface DbEntityEdit<Q extends ISpec<{}> = ISpec<{}>> {
   id: string
   q: Q
 }
 
-type Table = ObjectType<Record<any>>
+export type DbTable = ObjectType<DbEntity<any>>
 
 export interface DbChange {
-  table: Table
+  table: DbTable
   t: number
-  adds?: Array<Record<any>>
+  adds?: Array<DbEntity<any>>
   deletes?: string[]
-  edits?: DbRecordEdit[]
+  edits?: DbEntityEdit[]
 }

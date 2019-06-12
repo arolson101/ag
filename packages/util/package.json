@@ -19,8 +19,7 @@
     "rxjs": "^6.5.2",
     "typeorm": "^0.2.17",
     "url-regex": "^5.0.0",
-    "util.promisify": "^1.0.0",
-    "utility-types": "^3.7.0"
+    "util.promisify": "^1.0.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.4",

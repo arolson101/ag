@@ -16,7 +16,7 @@ export type HistoryType<T> = CompressedJson<Array<Update<T>>>
 
 @Entity()
 @Index(['_deleted', 'id'])
-export abstract class Record<Props extends {}> {
+export abstract class DbEntity<Props extends {}> {
   @PrimaryColumn() id!: string
   @Column() _deleted: number
   @Column('text', { nullable: true }) _history?: HistoryType<Props>

@@ -1,21 +1,21 @@
-import { Record } from './Record'
+import { DbEntity } from './DbEntity'
 
-interface TestRecordProps {
+interface TestDbEntityProps {
   foo: string
   bar: number
 }
 
-class TestRecord extends Record<TestRecordProps> implements TestRecordProps {
+class TestDbEntity extends DbEntity<TestDbEntityProps> implements TestDbEntityProps {
   foo!: string
   bar!: number
 
-  constructor(props?: TestRecordProps) {
+  constructor(props?: TestDbEntityProps) {
     super(undefined, props)
   }
 }
 
 it('accumulates changes', () => {
-  const test = new TestRecord({ foo: 'test1', bar: 123 })
+  const test = new TestDbEntity({ foo: 'test1', bar: 123 })
   expect(test).toHaveProperty('id', undefined)
   expect(test).not.toHaveProperty('_base')
   expect(test).toHaveProperty('_history')
@@ -35,14 +35,14 @@ it('accumulates changes', () => {
 })
 
 it('keeps the latest change when a conflict occurrs', () => {
-  const test = new TestRecord({ foo: 'foo', bar: 123 })
+  const test = new TestDbEntity({ foo: 'foo', bar: 123 })
   test.update(20, { foo: { $set: 'test2' } })
   test.update(10, { foo: { $set: 'test3' } })
   expect(test).toHaveProperty('foo', 'test2')
 })
 
 it('marks object for delete', () => {
-  const test = new TestRecord({ foo: 'foo', bar: 123 })
+  const test = new TestDbEntity({ foo: 'foo', bar: 123 })
   expect(test.isDeleted()).toBe(false)
   test.delete(20)
   expect(test.isDeleted()).toBe(true)

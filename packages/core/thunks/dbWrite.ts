@@ -1,7 +1,7 @@
-import { DbChange, Record } from '@ag/db/entities'
+import { DbChange, DbEntity } from '@ag/db/entities'
 import debug from 'debug'
 import { actions } from '../actions'
-import { WrittenChanges } from '../actions/queryActions'
+import { LoadEntities } from '../actions/queryActions'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
 
@@ -11,15 +11,15 @@ export const dbWrite = (changes: DbChange[]): CoreThunk =>
   async function _dbWrite(dispatch, getState) {
     log('dbWrite %o', changes)
     const { connection } = selectors.getAppDb(getState())
-    const writtenChanges: WrittenChanges[] = []
+    const loadEntities: LoadEntities[] = []
 
     await connection.transaction(async manager => {
       for (const change of changes) {
-        const wc: WrittenChanges = { table: change.table, deletes: [], entities: [] }
+        const le: LoadEntities = { table: change.table, deletes: [], entities: [] }
 
         if (change.adds) {
           await manager.save(change.table, change.adds)
-          wc.entities.push(...change.adds)
+          le.entities.push(...change.adds)
         }
 
         if (change.deletes) {
@@ -29,28 +29,28 @@ export const dbWrite = (changes: DbChange[]): CoreThunk =>
             .set({ _deleted: change.t })
             .whereInIds(change.deletes)
             .execute()
-          wc.deletes.push(...change.deletes)
+          le.deletes.push(...change.deletes)
         }
 
         if (change.edits) {
           const edits = change.edits
           const ids = change.edits.map(edit => edit.id)
-          const items = await manager.findByIds<Record<any>>(change.table, ids)
+          const items = await manager.findByIds<DbEntity<any>>(change.table, ids)
           items.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
           items.forEach((record, i) => {
             // log('before %o %o', record, edits[i].q)
             record.update(change.t, edits[i].q)
           })
           await manager.save(change.table, items)
-          wc.entities.push(...items)
+          le.entities.push(...items)
         }
 
-        writtenChanges.push(wc)
+        loadEntities.push(le)
       }
 
       // const text = JSON.stringify(changes)
       // await this._changes.add({ text })
     })
 
-    dispatch(actions.changesWritten(writtenChanges))
+    dispatch(actions.dbEntities(loadEntities))
   }

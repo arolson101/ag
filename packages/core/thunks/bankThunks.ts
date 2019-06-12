@@ -1,4 +1,4 @@
-import { Account, Bank, BankInput, DbChange, DbRecordEdit } from '@ag/db/entities'
+import { Account, Bank, BankInput, DbChange, DbEntityEdit } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import { defineMessages } from 'react-intl'
@@ -90,7 +90,7 @@ const setAccountsOrder = (accountIds: string[]): CoreThunk =>
       // log('accounts (before) %o', accounts)
       accounts.sort((a, b) => accountIds.indexOf(a.id) - accountIds.indexOf(b.id))
       const edits = accounts.map(
-        ({ id }, idx): DbRecordEdit<Account.Spec> => ({
+        ({ id }, idx): DbEntityEdit<Account.Spec> => ({
           id,
           q: { sortOrder: { $set: idx } },
         })
@@ -135,11 +135,11 @@ const messages = defineMessages({
     defaultMessage: "Bank '{name}' deleted",
   },
   saved: {
-    id: 'BankForm.saved',
+    id: 'bankThunks.saved',
     defaultMessage: `Bank '{name}' saved`,
   },
   created: {
-    id: 'BankForm.created',
+    id: 'bankThunks.created',
     defaultMessage: `Bank '{name}' added`,
   },
 })

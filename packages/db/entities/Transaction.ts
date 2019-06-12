@@ -1,10 +1,10 @@
 import { ISpec, standardizeDate } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { Record } from './Record'
+import { DbEntity } from './DbEntity'
 import { TransactionInput } from './TransactionInput'
 
 @Entity({ name: 'transactions' })
-export class Transaction extends Record<Transaction.Props> {
+export class Transaction extends DbEntity<Transaction.Props> {
   @PrimaryColumn() id!: string
   @Column() accountId!: string
 

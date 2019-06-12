@@ -34,7 +34,7 @@ const dbLoadEntities = (): CoreThunk =>
     const banks = await banksRepository.all()
     const accounts = await accountsRepository.all()
     dispatch(
-      actions.changesWritten([
+      actions.dbEntities([
         { table: Bank, entities: banks, deletes: [] },
         { table: Account, entities: accounts, deletes: [] },
       ])

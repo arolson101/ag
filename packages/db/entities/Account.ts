@@ -5,10 +5,10 @@ import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { AccountInput } from './AccountInput'
 import { AccountType } from './AccountType'
 import { DbChange } from './DbChange'
-import { Record } from './Record'
+import { DbEntity } from './DbEntity'
 
 @Entity({ name: 'accounts' })
-export class Account extends Record<Account.Props> {
+export class Account extends DbEntity<Account.Props> {
   @PrimaryColumn() id!: string
   @Column() bankId!: string
 

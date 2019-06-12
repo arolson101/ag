@@ -1,10 +1,10 @@
 import { ISpec } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { BillInput } from './BillInput'
-import { Record } from './Record'
+import { DbEntity } from './DbEntity'
 
 @Entity({ name: 'bills' })
-export class Bill extends Record<Bill.Props> {
+export class Bill extends DbEntity<Bill.Props> {
   @PrimaryColumn() id!: string
   @Column() name!: string
   @Column() group!: string

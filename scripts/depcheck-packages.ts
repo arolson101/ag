@@ -35,8 +35,6 @@ interface PackageJson {
       Path.join(packagesDir, dir),
       {
         ignoreMatches: [
-          'utility-types',
-          '@2fd/graphdoc',
           'cross-env',
           'sqlite3',
           'electron-builder',

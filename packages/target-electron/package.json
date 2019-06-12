@@ -48,8 +48,7 @@
     "sqlite3": "^4.0.8",
     "typeorm": "^0.2.17",
     "typesafe-actions": "^4.4.0",
-    "use-react-router": "^1.0.7",
-    "utility-types": "^3.7.0"
+    "use-react-router": "^1.0.7"
   },
   "devDependencies": {
     "@types/copy-webpack-plugin": "^5.0.0",

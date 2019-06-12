@@ -1,7 +1,6 @@
 import { ImageUri } from '@ag/util'
 import debug from 'debug'
 import React, { ComponentType } from 'react'
-import { Omit } from 'utility-types'
 import {
   CheckboxFieldProps,
   CurrencyFieldProps,
