@@ -1,22 +1,37 @@
 import { IntlContext, useIntl, useSelector } from '@ag/core/context'
 import { selectors } from '@ag/core/reducers'
 import { exportDb, importDb } from '@ag/db/export'
+import { Color, Titlebar } from 'custom-electron-titlebar'
 import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
 import fs from 'fs'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Text, TitleBar, Toolbar } from 'react-desktop/macOs'
 import { defineMessages } from 'react-intl'
 import { Connection } from 'typeorm'
+import './ElectronMenu.css'
 
 const { dialog, Menu } = remote
 
 const log = debug('menu')
 
 export const ElectronMenu: React.FC = () => {
-  const isMac = process.platform === 'darwin'
+  const isMac = process.platform === 'darwin' // || true
   const intl = useIntl()
   const isLoggedIn = useSelector(selectors.isLoggedIn)
   const connection = useSelector(selectors.getConnection)
+  const titleBar = useRef<Titlebar>()
+
+  useEffect(() => {
+    if (!isMac) {
+      const tb = new Titlebar({
+        backgroundColor: Color.fromHex('#ECECEC'),
+      })
+
+      titleBar.current = tb
+      return () => tb.dispose()
+    }
+  }, [isMac])
 
   const importClicked = useCallback(() => {
     importFromFile(connection!, intl)
@@ -64,9 +79,74 @@ export const ElectronMenu: React.FC = () => {
 
     const menu = Menu.buildFromTemplate(template)
     Menu.setApplicationMenu(menu)
+    if (titleBar.current) {
+      titleBar.current.updateMenu(menu)
+    }
   }, [isLoggedIn, importClicked, exportClicked])
 
-  return null
+  const minimize = useCallback(() => {
+    const win = remote.getCurrentWindow()
+    if (win.isMinimizable()) {
+      win.minimize()
+    }
+  }, [])
+
+  const maximize = useCallback(() => {
+    const win = remote.getCurrentWindow()
+    if (win.isMaximized()) {
+      win.unmaximize()
+    } else {
+      win.maximize()
+    }
+  }, [])
+
+  const close = useCallback(() => {
+    const win = remote.getCurrentWindow()
+    if (win.isClosable()) {
+      win.close()
+    }
+  }, [])
+
+  const [maximized, setMaximized] = useState(remote.getCurrentWindow().isMaximized())
+  useEffect(() => {
+    const win = remote.getCurrentWindow()
+    const onMaximize = () => {
+      setMaximized(true)
+    }
+    const onUnMaximize = () => {
+      setMaximized(false)
+    }
+
+    win.addListener('maximize', onMaximize)
+    win.addListener('unmaximize', onUnMaximize)
+
+    return () => {
+      win.removeListener('maximize', onMaximize)
+      win.removeListener('unmaximize', onUnMaximize)
+    }
+  }, [])
+
+  if (isMac) {
+    return (
+      <div style={{ zIndex: 1001, position: 'relative' }}>
+        <TitleBar
+          isFullscreen={maximized}
+          controls
+          inset
+          onCloseClick={close}
+          // onMaximizeClick={maximize}
+          onMinimizeClick={minimize}
+          // onResizeClick={maximize}
+        >
+          <Toolbar horizontalAlignment='center'>
+            <Text>{window.document.title}</Text>
+          </Toolbar>
+        </TitleBar>
+      </div>
+    )
+  } else {
+    return null
+  }
 }
 
 const exportToFile = async (connection: Connection, intl: IntlContext) => {
