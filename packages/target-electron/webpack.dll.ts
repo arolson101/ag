@@ -39,6 +39,7 @@ const config: webpack.Configuration = {
         test: /\.js$/,
         use: ['source-map-loader'],
         enforce: 'pre',
+        exclude: [/cli-highlight/],
       },
       {
         test: /\.mjs$/,
@@ -73,6 +74,7 @@ const config: webpack.Configuration = {
       path: path.join(__dirname, 'dist', '[name]-manifest.json'),
       name: 'vendor',
     }),
+    new webpack.ContextReplacementPlugin(/(.+)?parse5(\\|\/)lib(.+)?/, /nothing/, {}),
   ],
 }
 
