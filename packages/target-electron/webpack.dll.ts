@@ -39,7 +39,7 @@ const config: webpack.Configuration = {
         test: /\.js$/,
         use: ['source-map-loader'],
         enforce: 'pre',
-        exclude: [/cli-highlight/],
+        exclude: [/cli-highlight/, /react-uwp/],
       },
       {
         test: /\.mjs$/,

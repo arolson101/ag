@@ -6,7 +6,8 @@ import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
 import fs from 'fs'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Text, TitleBar, Toolbar } from 'react-desktop/macOs'
+import * as Mac from 'react-desktop/macOs'
+import * as Win from 'react-desktop/windows'
 import { defineMessages } from 'react-intl'
 import { Connection } from 'typeorm'
 import './ElectronMenu.css'
@@ -23,14 +24,13 @@ export const ElectronMenu: React.FC = () => {
   const titleBar = useRef<Titlebar>()
 
   useEffect(() => {
-    if (!isMac) {
-      const tb = new Titlebar({
-        backgroundColor: Color.fromHex('#ECECEC'),
-      })
-
-      titleBar.current = tb
-      return () => tb.dispose()
-    }
+    // if (!isMac) {
+    //   const tb = new Titlebar({
+    //     backgroundColor: Color.fromHex('#ECECEC'),
+    //   })
+    //   titleBar.current = tb
+    //   return () => tb.dispose()
+    // }
   }, [isMac])
 
   const importClicked = useCallback(() => {
@@ -129,7 +129,7 @@ export const ElectronMenu: React.FC = () => {
   if (isMac) {
     return (
       <div style={{ zIndex: 1001, position: 'relative' }}>
-        <TitleBar
+        <Mac.TitleBar
           isFullscreen={maximized}
           controls
           inset
@@ -138,14 +138,26 @@ export const ElectronMenu: React.FC = () => {
           onMinimizeClick={minimize}
           // onResizeClick={maximize}
         >
-          <Toolbar horizontalAlignment='center'>
-            <Text>{window.document.title}</Text>
-          </Toolbar>
-        </TitleBar>
+          <Mac.Toolbar horizontalAlignment='center'>
+            <Mac.Text>{window.document.title}</Mac.Text>
+          </Mac.Toolbar>
+        </Mac.TitleBar>
       </div>
     )
   } else {
-    return null
+    return (
+      <Win.TitleBar
+        title='My Windows Application'
+        controls
+        isMaximized={maximized}
+        theme={'dark'}
+        // background={this.props.color}
+        onCloseClick={close}
+        onMinimizeClick={minimize}
+        onMaximizeClick={maximize}
+        onRestoreDownClick={maximize}
+      />
+    )
   }
 }
 
