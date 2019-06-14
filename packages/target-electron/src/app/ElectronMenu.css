@@ -1,3 +1,18 @@
 .titlebar.windows {
   z-index: 1001;
 }
+
+div#root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.container-after-titlebar {
+  display: flex;
+  /* overflow: hidden; */
+}
+
+div[style*='-webkit-app-region: drag'] {
+  z-index: 1001;
+}

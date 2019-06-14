@@ -8,6 +8,7 @@ import { dialog } from './dialogReducer'
 import { intl, intlSelectors } from './intlReducer'
 import { records, recordsSelectors } from './recordsReducer'
 import { settings, settingsSelectors } from './settingsReducer'
+import { theme, themeSelectors } from './themeReducer'
 
 export const coreReducers = {
   db,
@@ -15,6 +16,7 @@ export const coreReducers = {
   intl,
   settings,
   records,
+  theme,
 }
 
 export interface CoreState extends StateType<typeof coreReducers> {}
@@ -54,4 +56,8 @@ export const selectors = {
     recordsSelectors.getTransactions(state.records, accountId),
   getTransaction: (state: CoreState) => (transactionId?: string) =>
     recordsSelectors.getTransaction(state.records, transactionId),
+
+  getTheme: (state: CoreState) => themeSelectors.getTheme(state.theme),
+  getThemeColor: (state: CoreState) => themeSelectors.getThemeColor(state.theme),
+  getPlatform: (state: CoreState) => themeSelectors.getPlatform(state.theme),
 }

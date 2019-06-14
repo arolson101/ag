@@ -26,7 +26,7 @@ export const Page = Object.assign(
     }
 
     return (
-      <Layout style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Layout style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         <PageHeader
           onBack={onBack}
           title={
