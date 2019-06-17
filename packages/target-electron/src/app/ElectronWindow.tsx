@@ -55,7 +55,7 @@ const WinWindow = Object.assign(
   React.memo<WindowProps>(function _WinWindow({ hist, theme, children, ...titleBarProps }) {
     const color = useSelector(selectors.getThemeColor)
     return (
-      <Win.Window theme={theme} height='100%' width='100%'>
+      <Win.Window theme={theme} height='100%' width='100%' chrome color={color}>
         {/* titlebar/menu is created via Titlebar in ElectronMenu */}
         {/* <Win.TitleBar controls {...titleBarProps} /> */}
         <div>{children}</div>

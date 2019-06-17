@@ -11,7 +11,7 @@ import { defineMessages } from 'react-intl'
 import { Connection } from 'typeorm'
 import './ElectronMenu.css'
 
-const { dialog, Menu } = remote
+const { dialog, Menu, systemPreferences } = remote
 
 const log = debug('menu')
 
@@ -20,18 +20,32 @@ export const ElectronMenu: React.FC = () => {
   const isLoggedIn = useSelector(selectors.isLoggedIn)
   const connection = useSelector(selectors.getConnection)
   const platform = useSelector(selectors.getPlatform)
+  const theme = useSelector(selectors.getTheme)
+  const setTheme = useAction(actions.setTheme)
   const themeColor = useSelector(selectors.getThemeColor)
+  const setThemeColor = useAction(actions.setThemeColor)
   const setPlatform = useAction(actions.setPlatform)
   const titleBar = useRef<Titlebar>()
 
   useEffect(() => {
-    // if (remote.process.platform !== 'darwin') {
-    if (platform !== 'mac') {
+    if (remote.process.platform !== 'darwin') {
+      // if (platform !== 'mac') {
       const tb = new Titlebar({
-        backgroundColor: Color.fromHex(themeColor || '#3C3C3C'),
-      } as any)
+        backgroundColor: Color.fromHex(themeColor),
+      })
+
+      const onColorChanged = (event: Event, newColor: string) => {
+        log('onColorChanged: %s', newColor)
+        setThemeColor('#' + newColor)
+      }
+      systemPreferences.addListener('accent-color-changed', onColorChanged)
+
       titleBar.current = tb
-      return () => tb.dispose()
+
+      return () => {
+        tb.dispose()
+        systemPreferences.removeListener('accent-color-changed', onColorChanged)
+      }
     }
   }, [platform, themeColor])
 
@@ -68,18 +82,25 @@ export const ElectronMenu: React.FC = () => {
       {
         label: 'theme',
         submenu: [
-          {
-            label: 'platform',
-            submenu: (['pc', 'mac', 'linux'] as const).map(
-              (plat): MenuItemConstructorOptions => ({
-                label: plat,
-                checked: platform === plat,
-                click: () => {
-                  setPlatform(plat)
-                },
-              })
-            ),
-          },
+          ...(['pc', 'mac', 'linux'] as const).map(
+            (plat): MenuItemConstructorOptions => ({
+              label: `set platform: ${plat}`,
+              checked: platform === plat,
+              click: () => {
+                setPlatform(plat)
+              },
+            })
+          ),
+          { type: 'separator' },
+          ...(['light', 'dark'] as const).map(
+            (t): MenuItemConstructorOptions => ({
+              label: `set theme: ${t}`,
+              checked: theme === t,
+              click: () => {
+                setTheme(t)
+              },
+            })
+          ),
         ],
       },
       { role: 'windowMenu' },
@@ -101,7 +122,7 @@ export const ElectronMenu: React.FC = () => {
     if (titleBar.current) {
       titleBar.current.updateMenu(menu)
     }
-  }, [isLoggedIn, importClicked, exportClicked])
+  }, [isLoggedIn, importClicked, exportClicked, theme, setTheme, platform, setPlatform])
 
   return null
 }
