@@ -2,7 +2,7 @@ import { actions } from '@ag/core/actions'
 import { IntlContext, useAction, useIntl, useSelector } from '@ag/core/context'
 import { selectors } from '@ag/core/reducers'
 import { exportDb, importDb } from '@ag/db/export'
-import { Color, Titlebar } from 'custom-electron-titlebar'
+import { Color, RGBA, Titlebar } from 'custom-electron-titlebar'
 import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
 import fs from 'fs'
@@ -14,6 +14,11 @@ import './ElectronMenu.css'
 const { dialog, Menu, systemPreferences } = remote
 
 const log = debug('menu')
+
+const opaque = (color: Color): Color => {
+  const { r, g, b, a } = color.rgba
+  return new Color(new RGBA(r, g, b))
+}
 
 export const ElectronMenu: React.FC = () => {
   const intl = useIntl()
@@ -31,7 +36,7 @@ export const ElectronMenu: React.FC = () => {
     if (remote.process.platform !== 'darwin') {
       // if (platform !== 'mac') {
       const tb = new Titlebar({
-        backgroundColor: Color.fromHex(themeColor),
+        backgroundColor: opaque(Color.fromHex(themeColor)),
       })
 
       const onColorChanged = (event: Event, newColor: string) => {

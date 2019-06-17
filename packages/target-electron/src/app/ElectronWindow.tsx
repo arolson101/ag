@@ -1,10 +1,10 @@
+import { useSelector } from '@ag/core/context'
 import { selectors } from '@ag/core/reducers'
 import debug from 'debug'
 import { remote } from 'electron'
 import React, { useCallback, useEffect, useState } from 'react'
 import * as Mac from 'react-desktop/macOs'
 import * as Win from 'react-desktop/windows'
-import { useSelector } from 'react-redux'
 import CheckBox from 'react-uwp/CheckBox'
 import ListView from 'react-uwp/ListView'
 import Separator from 'react-uwp/Separator'
@@ -156,31 +156,31 @@ export const ElectronWindow = Object.assign(
 
     return (
       <Window {...windowProps}>
-        {/* <UWPThemeProvider
-        theme={getTheme({
-          themeName: theme,
-          accent: color || '#0078D7', // set accent color
-          useFluentDesign: true, // sure you want use new fluent design.
-        })}
-      > */}
-        {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <SplitViewCommand label='CalendarDay' icon={'\uE161'} visited />
-          <ListView
-            listSource={listSource2}
-            style={baseStyle}
-            // background='none'
-            defaultFocusListIndex={3}
-          />
-          <SplitViewCommand icon={'\uE716'} />
-          <SplitViewCommand label='Print' icon='PrintLegacy' />
+        <UWPThemeProvider
+          theme={getTheme({
+            themeName: theme,
+            accent: color || '#0078D7', // set accent color
+            // useFluentDesign: true, // sure you want use new fluent design.
+          })}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <SplitViewCommand label='CalendarDay' icon={'\uE161'} visited />
+            <ListView
+              listSource={listSource2}
+              style={baseStyle}
+              // background='none'
+              defaultFocusListIndex={3}
+            />
+            <SplitViewCommand icon={'\uE716'} />
+            <SplitViewCommand label='Print' icon='PrintLegacy' />
 
-          <SplitViewCommand label='Print' icon='PrintLegacy' visited />
-          <Separator />
-          <SplitViewCommand label='Print' icon='PrintLegacy' />
-          <SplitViewCommand label='Settings' icon={'\uE713'} />
-        </div> */}
-        {props.children}
-        {/* </UWPThemeProvider> */}
+            <SplitViewCommand label='Print' icon='PrintLegacy' visited />
+            <Separator />
+            <SplitViewCommand label='Print' icon='PrintLegacy' />
+            <SplitViewCommand label='Settings' icon={'\uE713'} />
+          </div>
+          {props.children}
+        </UWPThemeProvider>
       </Window>
     )
   }),
