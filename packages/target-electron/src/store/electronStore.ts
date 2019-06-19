@@ -1,5 +1,5 @@
 import { CoreDependencies, CoreDispatch } from '@ag/core/context'
-import { initialThemeState, ThemeState } from '@ag/core/reducers/themeReducer'
+import { initialThemeState, PlatformName, ThemeState } from '@ag/core/reducers/themeReducer'
 import { routerMiddleware } from 'connected-react-router'
 import debug from 'debug'
 import { remote } from 'electron'
@@ -11,12 +11,13 @@ import { navMiddleware } from './navMiddleware'
 
 const log = debug('electron:electronStore')
 
-const getPlatform = () => {
+const getPlatform = (): PlatformName => {
   switch (remote.process.platform) {
     case 'darwin':
       return 'mac'
 
     default:
+      // return 'mac'
       return 'pc'
   }
 }

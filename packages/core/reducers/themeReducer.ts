@@ -1,10 +1,12 @@
 import { getType } from 'typesafe-actions'
 import { actions, CoreAction } from '../actions'
 
+export type PlatformName = 'pc' | 'mac' | 'linux'
+
 export interface ThemeState {
   theme: 'light' | 'dark'
   color: string
-  platform: 'pc' | 'mac' | 'linux'
+  platform: PlatformName
 }
 
 export const initialThemeState: ThemeState = {
