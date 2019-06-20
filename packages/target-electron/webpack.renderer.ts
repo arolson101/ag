@@ -1,9 +1,11 @@
 /* tslint:disable:no-implicit-dependencies */
+import CopyPlugin from 'copy-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
 import webpack from 'webpack'
 import pkg from './package.json'
 const WriteFilePlugin = require('write-file-webpack-plugin')
+const AntDesignThemePlugin = require('antd-theme-webpack-plugin')
 
 const appName = 'Ag'
 
@@ -75,6 +77,23 @@ const config: webpack.Configuration = {
     new WriteFilePlugin({
       test: /^((?!(hot-update)).)*$/,
     }),
+
+    // https://medium.com/@mzohaib.qc/ant-design-dynamic-runtime-theme-1f9a1a030ba0
+    new AntDesignThemePlugin({
+      antDir: path.join(__dirname, '..', '..', 'node_modules', 'antd'),
+      stylesDir: path.join(__dirname, './src/styles'),
+      varFile: path.join(__dirname, './src/styles/variables.less'),
+      mainLessFile: path.join(__dirname, './src/styles/index.less'),
+      // see variables.less
+      themeVariables: [
+        '@primary-color', //
+      ],
+      indexFileName: 'index.html',
+    }),
+
+    new CopyPlugin([
+      require.resolve('less/dist/less.min.js'), //
+    ]),
 
     // new BundleAnalyzerPlugin({
     //   analyzerMode: 'static',

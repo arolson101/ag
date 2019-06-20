@@ -8,6 +8,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import { CoreState, createRootReducer, ElectronAction, ElectronState } from '../reducers'
 import { navMiddleware } from './navMiddleware'
+import { themeMiddleware, updateThemeVariables } from './themeMiddleware'
 
 const log = debug('electron:electronStore')
 
@@ -29,6 +30,9 @@ export const getInitialState = (): DeepPartial<ElectronState> => {
     mode: remote.systemPreferences.isDarkMode() ? 'dark' : 'light',
     color: '#' + remote.systemPreferences.getAccentColor(),
   }
+
+  updateThemeVariables(theme.color, theme.mode)
+
   return { theme }
 }
 
@@ -37,6 +41,7 @@ export const createStore = (hist: HistoryType, dependencies: CoreDependencies) =
     thunk.withExtraArgument(dependencies),
     routerMiddleware(hist),
     navMiddleware,
+    themeMiddleware,
   ]
 
   const initialState = getInitialState()
