@@ -5,11 +5,6 @@ import { remote } from 'electron'
 import React, { useCallback, useEffect, useState } from 'react'
 import * as Mac from 'react-desktop/macOs'
 import * as Win from 'react-desktop/windows'
-import CheckBox from 'react-uwp/CheckBox'
-import ListView from 'react-uwp/ListView'
-import Separator from 'react-uwp/Separator'
-import SplitViewCommand from 'react-uwp/SplitViewCommand'
-import { getTheme, Theme as UWPThemeProvider } from 'react-uwp/Theme'
 
 const log = debug('ElectronWindow')
 
@@ -19,7 +14,8 @@ interface Props extends React.Props<any> {
 
 interface WindowProps extends Props {
   title: string
-  theme: 'light' | 'dark'
+  color: string
+  mode: ThemeMode
   maximized: boolean
   onCloseClick: () => any
   onMinimizeClick: () => any
@@ -27,38 +23,13 @@ interface WindowProps extends Props {
   onRestoreDownClick: () => any
 }
 
-const baseStyle: React.CSSProperties = {
-  margin: '10px 10px 10px 0',
-}
-
-const listSource = [
-  {
-    itemNode: <p>Text</p>,
-  },
-]
-const listSource2 = [
-  ...Array(10)
-    .fill(0)
-    .map((numb, index) => (
-      <span key={`${index}`}>
-        <span>Confirm{index + 1}</span>
-        <span style={{ float: 'right' }}>$123.45</span>
-      </span>
-    )),
-  <span>
-    <span>Confirm</span>
-    <CheckBox background='none' style={{ float: 'right' }} />
-  </span>,
-]
-
 const WinWindow = Object.assign(
-  React.memo<WindowProps>(function _WinWindow({ hist, theme, children, ...titleBarProps }) {
-    const color = useSelector(selectors.getThemeColor)
+  React.memo<WindowProps>(function _WinWindow({ hist, mode, color, children, ...titleBarProps }) {
     return (
-      <Win.Window theme={theme} height='100%' width='100%' chrome color={color}>
+      <Win.Window theme={mode} height='100%' width='100%' chrome color={color}>
         {/* titlebar/menu is created via Titlebar in ElectronMenu */}
         {/* <Win.TitleBar controls {...titleBarProps} /> */}
-        <div>{children}</div>
+        {children}
       </Win.Window>
     )
   }),
@@ -66,9 +37,9 @@ const WinWindow = Object.assign(
 )
 
 const MacWindow = Object.assign(
-  React.memo<WindowProps>(function _MacWindow({ hist, theme, children, ...titleBarProps }) {
+  React.memo<WindowProps>(function _MacWindow({ hist, mode, color, children, ...titleBarProps }) {
     return (
-      <Mac.Window theme={theme} chrome>
+      <Mac.Window theme={mode} chrome>
         <Mac.TitleBar controls {...titleBarProps} />
         {children}
       </Mac.Window>
@@ -81,7 +52,7 @@ export const ElectronWindow = Object.assign(
   React.memo<Props>(function _ElectronWindow(props) {
     const [maximized, setMaximized] = useState(remote.getCurrentWindow().isMaximized())
     const title = window.document.title
-    const theme = useSelector(selectors.getTheme)
+    const mode = useSelector(selectors.getThemeMode)
     const platform = useSelector(selectors.getPlatform)
     const color = useSelector(selectors.getThemeColor)
 
@@ -145,7 +116,8 @@ export const ElectronWindow = Object.assign(
       ...props,
       maximized,
       title,
-      theme,
+      mode,
+      color,
       onCloseClick,
       onMinimizeClick,
       onMaximizeClick,
@@ -154,35 +126,7 @@ export const ElectronWindow = Object.assign(
 
     const Window = platform === 'mac' ? MacWindow : WinWindow
 
-    return (
-      <Window {...windowProps}>
-        <UWPThemeProvider
-          theme={getTheme({
-            themeName: theme,
-            accent: color || '#0078D7', // set accent color
-            // useFluentDesign: true, // sure you want use new fluent design.
-          })}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <SplitViewCommand label='CalendarDay' icon={'\uE161'} visited />
-            <ListView
-              listSource={listSource2}
-              style={baseStyle}
-              // background='none'
-              defaultFocusListIndex={3}
-            />
-            <SplitViewCommand icon={'\uE716'} />
-            <SplitViewCommand label='Print' icon='PrintLegacy' />
-
-            <SplitViewCommand label='Print' icon='PrintLegacy' visited />
-            <Separator />
-            <SplitViewCommand label='Print' icon='PrintLegacy' />
-            <SplitViewCommand label='Settings' icon={'\uE713'} />
-          </div>
-          {props.children}
-        </UWPThemeProvider>
-      </Window>
-    )
+    return <Window {...windowProps}>{props.children}</Window>
   }),
   { displayName: 'ElectronWindow' }
 )

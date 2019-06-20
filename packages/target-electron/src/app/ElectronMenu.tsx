@@ -25,8 +25,8 @@ export const ElectronMenu: React.FC = () => {
   const isLoggedIn = useSelector(selectors.isLoggedIn)
   const connection = useSelector(selectors.getConnection)
   const platform = useSelector(selectors.getPlatform)
-  const theme = useSelector(selectors.getTheme)
-  const setTheme = useAction(actions.setTheme)
+  const mode = useSelector(selectors.getThemeMode)
+  const setThemeMode = useAction(actions.setThemeMode)
   const themeColor = useSelector(selectors.getThemeColor)
   const setThemeColor = useAction(actions.setThemeColor)
   const setPlatform = useAction(actions.setPlatform)
@@ -100,9 +100,9 @@ export const ElectronMenu: React.FC = () => {
           ...(['light', 'dark'] as const).map(
             (t): MenuItemConstructorOptions => ({
               label: `set theme: ${t}`,
-              checked: theme === t,
+              checked: mode === t,
               click: () => {
-                setTheme(t)
+                setThemeMode(t)
               },
             })
           ),
@@ -127,7 +127,7 @@ export const ElectronMenu: React.FC = () => {
     if (titleBar.current) {
       titleBar.current.updateMenu(menu)
     }
-  }, [isLoggedIn, importClicked, exportClicked, theme, setTheme, platform, setPlatform])
+  }, [isLoggedIn, importClicked, exportClicked, mode, setThemeMode, platform, setPlatform])
 
   return null
 }

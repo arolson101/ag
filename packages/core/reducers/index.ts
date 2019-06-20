@@ -57,7 +57,7 @@ export const selectors = {
   getTransaction: (state: CoreState) => (transactionId?: string) =>
     recordsSelectors.getTransaction(state.records, transactionId),
 
-  getTheme: (state: CoreState) => themeSelectors.getTheme(state.theme),
+  getThemeMode: (state: CoreState) => themeSelectors.getThemeMode(state.theme),
   getThemeColor: (state: CoreState) => themeSelectors.getThemeColor(state.theme),
   getPlatform: (state: CoreState) => themeSelectors.getPlatform(state.theme),
 }

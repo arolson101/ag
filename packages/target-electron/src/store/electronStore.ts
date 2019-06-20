@@ -1,5 +1,5 @@
 import { CoreDependencies, CoreDispatch } from '@ag/core/context'
-import { initialThemeState, PlatformName, ThemeState } from '@ag/core/reducers/themeReducer'
+import { initialThemeState, ThemeState } from '@ag/core/reducers/themeReducer'
 import { routerMiddleware } from 'connected-react-router'
 import debug from 'debug'
 import { remote } from 'electron'
@@ -26,7 +26,7 @@ export const getInitialState = (): DeepPartial<ElectronState> => {
   const theme: ThemeState = {
     ...initialThemeState,
     platform: getPlatform(),
-    theme: remote.systemPreferences.isDarkMode() ? 'dark' : 'light',
+    mode: remote.systemPreferences.isDarkMode() ? 'dark' : 'light',
     color: '#' + remote.systemPreferences.getAccentColor(),
   }
   return { theme }
