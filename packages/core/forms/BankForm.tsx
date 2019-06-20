@@ -44,10 +44,6 @@ export const BankForm = Object.assign(
         : Bank.defaultValues),
     }
 
-    if (!bank) {
-      throw new Error('no bank')
-    }
-
     const validate = useCallback(
       values => {
         const errors: Errors<FormValues> = {}
