@@ -42,10 +42,6 @@ export const AccountForm = Object.assign(
     const bankUrl = bank ? bank.web : ''
     const bankIcon = bank ? bank.icon : ''
 
-    if (!account || !bank) {
-      throw new Error('no bank or account')
-    }
-
     const initialValues: FormValues = {
       ...(account
         ? pick(account, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
