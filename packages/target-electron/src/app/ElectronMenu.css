@@ -2,6 +2,10 @@
   z-index: 1001;
 }
 
+.titlebar.mac {
+  z-index: 1001;
+}
+
 div#root {
   display: flex;
   flex-direction: column;

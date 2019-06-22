@@ -80,7 +80,7 @@ export const NavBar = Object.assign(
 
     return (
       <div style={{ overflow: 'auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <Menu selectable selectedKeys={selectedKeys} mode='inline'>
+        <Menu selectable selectedKeys={selectedKeys} mode='inline' style={{ flex: 1 }}>
           {navItems.map(item => (
             <Menu.Item
               key={item.Component.path} //

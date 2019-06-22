@@ -1,4 +1,5 @@
 import { selectors } from '@ag/core/reducers'
+import assert from 'assert'
 import debug from 'debug'
 import { remote } from 'electron'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -21,6 +22,7 @@ interface WindowProps extends Props {
   title: string
   theme: 'light' | 'dark'
   maximized: boolean
+  color: string | undefined
   onCloseClick: () => any
   onMinimizeClick: () => any
   onMaximizeClick: () => any
@@ -66,9 +68,17 @@ const WinWindow = Object.assign(
 )
 
 const MacWindow = Object.assign(
-  React.memo<WindowProps>(function _MacWindow({ hist, theme, children, ...titleBarProps }) {
+  React.memo<WindowProps>(function _MacWindow(props) {
+    const { onCloseClick, onMaximizeClick, onMinimizeClick, title, maximized, children } = props
+    const titleBarProps = {
+      onCloseClick,
+      onMaximizeClick,
+      onMinimizeClick,
+      title,
+      isFullscreen: maximized,
+    }
     return (
-      <Mac.Window theme={theme} chrome>
+      <Mac.Window chrome padding={0}>
         <Mac.TitleBar controls {...titleBarProps} />
         {children}
       </Mac.Window>
@@ -146,6 +156,7 @@ export const ElectronWindow = Object.assign(
       maximized,
       title,
       theme,
+      color,
       onCloseClick,
       onMinimizeClick,
       onMaximizeClick,
@@ -154,33 +165,35 @@ export const ElectronWindow = Object.assign(
 
     const Window = platform === 'mac' ? MacWindow : WinWindow
 
+    assert(theme === 'light' || theme === 'dark')
+
     return (
       <Window {...windowProps}>
-        {/* <UWPThemeProvider
-        theme={getTheme({
-          themeName: theme,
-          accent: color || '#0078D7', // set accent color
-          useFluentDesign: true, // sure you want use new fluent design.
-        })}
-      > */}
-        {/* <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <SplitViewCommand label='CalendarDay' icon={'\uE161'} visited />
-          <ListView
-            listSource={listSource2}
-            style={baseStyle}
-            // background='none'
-            defaultFocusListIndex={3}
-          />
-          <SplitViewCommand icon={'\uE716'} />
-          <SplitViewCommand label='Print' icon='PrintLegacy' />
+        <UWPThemeProvider
+          theme={getTheme({
+            themeName: theme,
+            accent: color || '#0078D7', // set accent color
+            useFluentDesign: true, // sure you want use new fluent design.
+          })}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <SplitViewCommand label='CalendarDay' icon={'\uE161'} visited />
+            <ListView
+              listSource={listSource2}
+              style={baseStyle}
+              // background='none'
+              defaultFocusListIndex={3}
+            />
+            <SplitViewCommand icon={'\uE716'} />
+            <SplitViewCommand label='Print' icon='PrintLegacy' />
 
-          <SplitViewCommand label='Print' icon='PrintLegacy' visited />
-          <Separator />
-          <SplitViewCommand label='Print' icon='PrintLegacy' />
-          <SplitViewCommand label='Settings' icon={'\uE713'} />
-        </div> */}
-        {props.children}
-        {/* </UWPThemeProvider> */}
+            <SplitViewCommand label='Print' icon='PrintLegacy' visited />
+            <Separator />
+            <SplitViewCommand label='Print' icon='PrintLegacy' />
+            <SplitViewCommand label='Settings' icon={'\uE713'} />
+          </div>
+          {props.children}
+        </UWPThemeProvider>
       </Window>
     )
   }),
