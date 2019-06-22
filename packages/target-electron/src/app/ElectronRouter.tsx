@@ -49,7 +49,7 @@ export const ElectronRouter = Object.assign(
           <SplitPane>
             <NavBar />
 
-            <Content>
+            <Content style={{ height: '100%' }}>
               <Route
                 render={params => {
                   log('route %s %O %O', params.location.pathname, params, hist.entries)

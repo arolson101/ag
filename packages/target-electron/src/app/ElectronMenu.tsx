@@ -2,7 +2,7 @@ import { actions } from '@ag/core/actions'
 import { IntlContext, useAction, useIntl, useSelector } from '@ag/core/context'
 import { selectors } from '@ag/core/reducers'
 import { exportDb, importDb } from '@ag/db/export'
-import { Color, Titlebar } from 'custom-electron-titlebar'
+import { Color, RGBA, Titlebar } from 'custom-electron-titlebar'
 import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
 import fs from 'fs'
@@ -11,27 +11,46 @@ import { defineMessages } from 'react-intl'
 import { Connection } from 'typeorm'
 import './ElectronMenu.css'
 
-const { dialog, Menu } = remote
+const { dialog, Menu, systemPreferences } = remote
 
 const log = debug('menu')
+
+const opaque = (color: Color): Color => {
+  const { r, g, b, a } = color.rgba
+  return new Color(new RGBA(r, g, b))
+}
 
 export const ElectronMenu: React.FC = () => {
   const intl = useIntl()
   const isLoggedIn = useSelector(selectors.isLoggedIn)
   const connection = useSelector(selectors.getConnection)
   const platform = useSelector(selectors.getPlatform)
+  const mode = useSelector(selectors.getThemeMode)
+  const setThemeMode = useAction(actions.setThemeMode)
   const themeColor = useSelector(selectors.getThemeColor)
+  const setThemeColor = useAction(actions.setThemeColor)
   const setPlatform = useAction(actions.setPlatform)
   const titleBar = useRef<Titlebar>()
 
   useEffect(() => {
-    // if (remote.process.platform !== 'darwin') {
-    if (platform !== 'mac') {
+    if (remote.process.platform !== 'darwin') {
+      // if (platform !== 'mac') {
       const tb = new Titlebar({
-        backgroundColor: Color.fromHex(themeColor || '#3C3C3C'),
-      } as any)
+        backgroundColor: opaque(Color.fromHex(themeColor)),
+      })
+
+      const onColorChanged = (event: Event, newColor: string) => {
+        log('onColorChanged: %s', newColor)
+        setThemeColor('#' + newColor)
+      }
+      systemPreferences.addListener('accent-color-changed', onColorChanged)
+
       titleBar.current = tb
-      return () => tb.dispose()
+
+      return () => {
+        tb.dispose()
+        systemPreferences.removeListener('accent-color-changed', onColorChanged)
+      }
     }
   }, [platform, themeColor])
 
@@ -68,18 +87,25 @@ export const ElectronMenu: React.FC = () => {
       {
         label: 'theme',
         submenu: [
-          {
-            label: 'platform',
-            submenu: (['pc', 'mac', 'linux'] as const).map(
-              (plat): MenuItemConstructorOptions => ({
-                label: plat,
-                checked: platform === plat,
-                click: () => {
-                  setPlatform(plat)
-                },
-              })
-            ),
-          },
+          ...(['pc', 'mac', 'linux'] as const).map(
+            (plat): MenuItemConstructorOptions => ({
+              label: `set platform: ${plat}`,
+              checked: platform === plat,
+              click: () => {
+                setPlatform(plat)
+              },
+            })
+          ),
+          { type: 'separator' },
+          ...(['light', 'dark'] as const).map(
+            (t): MenuItemConstructorOptions => ({
+              label: `set theme: ${t}`,
+              checked: mode === t,
+              click: () => {
+                setThemeMode(t)
+              },
+            })
+          ),
         ],
       },
       { role: 'windowMenu' },
@@ -101,7 +127,7 @@ export const ElectronMenu: React.FC = () => {
     if (titleBar.current) {
       titleBar.current.updateMenu(menu)
     }
-  }, [isLoggedIn, importClicked, exportClicked])
+  }, [isLoggedIn, importClicked, exportClicked, mode, setThemeMode, platform, setPlatform])
 
   return null
 }

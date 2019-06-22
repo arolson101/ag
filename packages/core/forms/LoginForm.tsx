@@ -44,17 +44,17 @@ export const LoginForm = Object.assign(
     const create = !dbId
 
     const validate = useCallback(
-      (values: FormValues) => {
+      ({ password = '', passwordConfirm = '' }: FormValues) => {
         const errors: Errors<FormValues> = {}
         if (create) {
-          if (!values.password.trim()) {
+          if (!password.trim()) {
             errors.password = intl.formatMessage(messages.valueEmpty)
           }
-          if (values.password !== values.passwordConfirm) {
+          if (password !== passwordConfirm) {
             errors.passwordConfirm = intl.formatMessage(messages.passwordsMatch)
           }
         } else {
-          if (!values.password.trim()) {
+          if (!password.trim()) {
             errors.password = intl.formatMessage(messages.valueEmpty)
           }
         }

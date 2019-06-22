@@ -1,5 +1,6 @@
+/* custom-electron-titlebar */
 .titlebar.windows {
-  z-index: 1001;
+  z-index: 1002;
 }
 
 .titlebar.mac {

@@ -13,46 +13,49 @@ const sidebarWidthDefault = 150
 
 interface Props {}
 
-export const SplitPane: React.FC<Props> = ({ children }) => {
-  const error = useSelector(selectors.getSettingsError)
-  const getSetting = useSelector(selectors.getSetting)
-  const sidebarWidth = parseFloat(getSetting(sidebarWidthKey, sidebarWidthDefault.toString()))
-  const settingsSetValue = useAction(thunks.settingsSetValue)
+export const SplitPane = Object.assign(
+  React.memo<Props>(function _SplitPane({ children }) {
+    const error = useSelector(selectors.getSettingsError)
+    const getSetting = useSelector(selectors.getSetting)
+    const sidebarWidth = parseFloat(getSetting(sidebarWidthKey, sidebarWidthDefault.toString()))
+    const settingsSetValue = useAction(thunks.settingsSetValue)
 
-  const setSidebarWidth = useCallback(
-    (width: number) => {
-      log('setSidebarWidth %d', width)
-      settingsSetValue(sidebarWidthKey, width.toString())
-    },
-    [settingsSetValue, sidebarWidthKey]
-  )
+    const setSidebarWidth = useCallback(
+      (width: number) => {
+        log('setSidebarWidth %d', width)
+        settingsSetValue(sidebarWidthKey, width.toString())
+      },
+      [settingsSetValue, sidebarWidthKey]
+    )
 
-  // log('render %o', data)
+    // log('render %o', data)
 
-  return (
-    <>
-      <ErrorDisplay error={error} />
-      <ReactSplitPane
-        split='vertical'
-        minSize={50}
-        maxSize={500}
-        size={sidebarWidth}
-        onDragFinished={setSidebarWidth}
-        resizerStyle={{
-          background: '#000',
-          opacity: 0.1,
-          zIndex: 1,
-          boxSizing: 'border-box',
-          backgroundClip: 'padding-box',
-          cursor: 'col-resize',
-          width: 11,
-          margin: '0 -5px',
-          borderLeft: '5px solid rgba(255, 255, 255, 0)',
-          borderRight: '5px solid rgba(255, 255, 255, 0)',
-        }}
-      >
-        {children}
-      </ReactSplitPane>
-    </>
-  )
-}
+    return (
+      <>
+        <ErrorDisplay error={error} />
+        <ReactSplitPane
+          split='vertical'
+          minSize={50}
+          maxSize={500}
+          size={sidebarWidth}
+          onDragFinished={setSidebarWidth}
+          resizerStyle={{
+            background: '#000',
+            opacity: 0.1,
+            zIndex: 1,
+            boxSizing: 'border-box',
+            backgroundClip: 'padding-box',
+            cursor: 'col-resize',
+            width: 11,
+            margin: '0 -5px',
+            borderLeft: '5px solid rgba(255, 255, 255, 0)',
+            borderRight: '5px solid rgba(255, 255, 255, 0)',
+          }}
+        >
+          {children}
+        </ReactSplitPane>
+      </>
+    )
+  }),
+  { displayName: 'SplitPane' }
+)

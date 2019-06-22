@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <div id='root'></div>
+    <!-- https://github.com/mzohaibqc/antd-theme-webpack-plugin -->
+    <link rel="stylesheet/less" type="text/css" href="/color.less" />
+    <script
+      src="/less.min.js"
+      data-javascript-enabled="true"
+      data-async="false"
+      data-env="development"
+    ></script>
+
+    <div id="root"></div>
 
     <script>
       // ensure bundle.js can find node modules
       const app = require('electron').remote.app
-      module.paths.push(app.getAppPath());
+      module.paths.push(app.getAppPath())
     </script>
     <script type="text/javascript" src="/vendor.js"></script>
   </body>

@@ -97,7 +97,7 @@ const checkVendorDll = async (promises: Array<Promise<any>>) => {
 
   return new Promise((resolve, reject) => {
     const configPath = './webpack.dll.ts'
-    const vendorDllFile = './app/vendor.js' //
+    const vendorDllFile = './dist/vendor.js' //
     const dependencies = [
       './package.json', //
       '../../package.json',
@@ -156,7 +156,7 @@ const checkSqlite = async (promises: Array<Promise<any>>) => {
     }
 
     const sqlite3dir = path.dirname(require.resolve('sqlite3/package.json'))
-    console.log(sqlite3dir)
+    // console.log(sqlite3dir)
     const libPath = path.join(
       sqlite3dir,
       'lib',
