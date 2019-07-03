@@ -1,5 +1,6 @@
 import debug from 'debug'
 import { DateTime } from 'luxon'
+export { DateTime }
 
 const log = debug('util:date')
 

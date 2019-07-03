@@ -19,6 +19,7 @@
     "filist": "^1.0.3",
     "final-form": "^4.13.1",
     "prop-types": "^15.7.2",
+    "ramda": "^0.26.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-final-form": "^6.0.1",
@@ -26,6 +27,7 @@
     "react-redux": "^7.1.0-alpha.4",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "rrule": "^2.6.2",
     "rxjs": "^6.5.2",
     "rxjs-hooks": "^0.5.1",
     "sanitize-filename": "^1.6.1",
@@ -35,6 +37,7 @@
   "devDependencies": {
     "@types/accounting": "^0.4.1",
     "@types/debug": "^4.1.4",
+    "@types/ramda": "^0.26.12",
     "@types/react": "^16.8.19",
     "@types/react-intl": "^2.3.17",
     "@types/sanitize-filename": "^1.1.28"

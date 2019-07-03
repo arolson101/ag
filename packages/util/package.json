@@ -14,7 +14,9 @@
     "luxon": "^1.16.0",
     "memoize-one": "^5.0.4",
     "msgpack-lite": "^0.1.26",
+    "numeral": "^2.0.6",
     "react": "^16.8.6",
+    "react-intl": "^2.9.0",
     "react-final-form": "^6.0.1",
     "rxjs": "^6.5.2",
     "typeorm": "^0.2.17",
@@ -30,6 +32,8 @@
     "@types/luxon": "^1.15.1",
     "@types/memoize-one": "^4.1.1",
     "@types/msgpack-lite": "^0.1.6",
+    "@types/numeral": "^0.0.25",
+    "@types/react-intl": "^2.3.17",
     "@types/url-regex": "^5.0.0",
     "@types/util.promisify": "^1.0.1"
   }
