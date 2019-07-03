@@ -31,7 +31,7 @@ export const recordsSelectors = {
     banks.sort((a, b) => stringComparer(a.name, b.name))
     return banks
   },
-  getBank: (state: RecordsState) => (bankId?: string): Bank | undefined => {
+  getBank: (state: RecordsState, bankId?: string): Bank | undefined => {
     return bankId ? state.banks[bankId] : undefined
   },
   getAccountsForBank: (state: RecordsState, bankId: string): Account[] => {
