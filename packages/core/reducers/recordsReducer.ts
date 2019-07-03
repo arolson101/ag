@@ -1,6 +1,7 @@
 import { Account, Bank, Bill, Budget, Category, DbEntity, Transaction } from '@ag/db'
-import { stringComparer } from '@ag/util'
+import { memoizeOne, stringComparer } from '@ag/util'
 import debug from 'debug'
+import { memo } from 'react'
 import { getType } from 'typesafe-actions'
 import { actions, CoreAction } from '../actions'
 
@@ -30,7 +31,7 @@ export const recordsSelectors = {
     banks.sort((a, b) => stringComparer(a.name, b.name))
     return banks
   },
-  getBank: (state: RecordsState, bankId?: string): Bank | undefined => {
+  getBank: (state: RecordsState) => (bankId?: string): Bank | undefined => {
     return bankId ? state.banks[bankId] : undefined
   },
   getAccountsForBank: (state: RecordsState, bankId: string): Account[] => {
