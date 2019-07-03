@@ -2,7 +2,7 @@ import { ActionDesc, TableColumn, TableProps } from '@ag/core/context'
 import * as Antd from 'antd'
 import { TableComponents } from 'antd/lib/table'
 import debug from 'debug'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   ConnectDragSource,
   ConnectDropTarget,
@@ -13,9 +13,74 @@ import {
   DropTargetSpec,
 } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import { Column as VColumn, Table as VTable } from 'react-virtualized'
+import 'react-virtualized/styles.css'
 import { ContextMenu } from './ContextMenu'
 import { Image } from './Image.antd'
 import { mapIconName } from './ImageSourceIcon'
+
+import arrayMove from 'array-move'
+import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
+
+const DragHandle = SortableHandle(() => <span>::</span>)
+
+const ROW_HEIGHT = 30
+
+import { AutoSizer, defaultTableRowRenderer } from 'react-virtualized'
+
+const SortableTable = SortableContainer(VTable)
+const SortableTableRowRenderer = SortableElement(defaultTableRowRenderer as any)
+
+export const Table = React.memo<TableProps>(function _Table(props) {
+  const [cols] = useState([
+    { dataKey: 'col1', label: 'Column1' },
+    { dataKey: 'col2', label: 'Column2' },
+    { dataKey: 'col3', label: 'Column13' },
+  ])
+  const [rows, setRows] = useState([
+    { col1: 'row1 col1', col2: 'row1 col2', col3: 'row1 col3' },
+    { col1: 'row2 col1', col2: 'row2 col2', col3: 'row2 col3' },
+    { col1: 'row3 col1', col2: 'row3 col2', col3: 'row3 col3' },
+  ])
+
+  const onSortEnd = useCallback(
+    ({ oldIndex, newIndex }: any) => {
+      log('onSortEnd %d %d', oldIndex, newIndex)
+      setRows(arrayMove(rows, oldIndex, newIndex))
+    },
+    [setRows, rows]
+  )
+
+  return (
+    <div style={{ height: '300px' }}>
+      <AutoSizer>
+        {({ width, height }) => (
+          <SortableTable
+            lockAxis='y'
+            onSortEnd={onSortEnd}
+            width={width}
+            height={height}
+            headerHeight={ROW_HEIGHT}
+            rowHeight={ROW_HEIGHT}
+            rowCount={rows.length}
+            rowGetter={({ index }) => rows[index]}
+            rowRenderer={params => <SortableTableRowRenderer {...params} />}
+            useDragHandle
+          >
+            {cols.map((col, idx) => (
+              <VColumn
+                {...col}
+                key={col.dataKey}
+                width={width / cols.length}
+                cellRenderer={idx === 0 ? () => <DragHandle /> : undefined}
+              />
+            ))}
+          </SortableTable>
+        )}
+      </AutoSizer>
+    </div>
+  )
+})
 
 const log = debug('ui-antd:Table')
 
@@ -222,4 +287,4 @@ const DragSortingTable: React.FC<TableProps> = ({
   )
 }
 
-export const Table = DragDropContext(HTML5Backend)(DragSortingTable)
+export const Table1 = DragDropContext(HTML5Backend)(DragSortingTable)
