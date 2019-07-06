@@ -60,6 +60,8 @@ export const recordsSelectors = {
   getTransaction: (state: RecordsState, transactionId?: string): Transaction | undefined => {
     return transactionId ? state.transactions[transactionId] : undefined
   },
+  getBills: (state: RecordsState) => Object.values(state.bills),
+  getBill: (state: RecordsState, billId?: string) => (billId ? state.bills[billId] : undefined),
 }
 
 const applyChange = <T extends DbEntity<any>>(

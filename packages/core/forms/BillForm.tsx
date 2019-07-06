@@ -4,16 +4,17 @@ import { Validator } from '@ag/util'
 // import { RRuleErrorMessage, saveBill, toRRule } from 'core/actions'
 // import { Account, Bill, Budget } from 'core/docs'
 // import { selectBills, selectBudgets } from 'core/selectors'
-// import { AppState, mapDispatchToProps, setDialog } from 'core/state'
 // import debug from 'debug'
-// import PropTypes from 'prop-types'
+// import { Info } from 'luxon'
 // import React, { useCallback } from 'react'
 // import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
-// import { connect } from 'react-redux'
+// import { connect, useSelector } from 'react-redux'
 // import { compose, onlyUpdateForPropTypes, setDisplayName, setPropTypes, withState } from 'recompose'
 // import { createSelector } from 'reselect'
 // import { RRule, WeekdayStr } from 'rrule'
-// import { typedFields, useIntl, useUi } from '../context'
+// import { UrlField } from '../components'
+// import { SelectFieldItem, typedFields, useIntl, useUi } from '../context'
+// import { selectors } from '../reducers'
 
 // const log = debug('core:BillForm')
 
@@ -23,8 +24,8 @@ import { Validator } from '@ag/util'
 // }
 
 // interface StateProps {
-//   monthOptions: SelectOption[]
-//   weekdayOptions: SelectOption[]
+//   monthOptions: SelectFieldItem[]
+//   weekdayOptions: SelectFieldItem[]
 //   bills: Bill.View[]
 //   budgets: Budget.View[]
 // }
@@ -43,8 +44,8 @@ import { Validator } from '@ag/util'
 // }
 
 // interface State {
-//   groups: SelectOption[]
-//   setGroups: (groups: SelectOption[]) => void
+//   groups: SelectFieldItem[]
+//   setGroups: (groups: SelectFieldItem[]) => void
 // }
 
 // type Frequency = 'days' | 'weeks' | 'months' | 'years'
@@ -73,10 +74,11 @@ import { Validator } from '@ag/util'
 //   showAdvanced?: boolean
 // }
 
-// export const BillFormComponent = React.memo<Props>(props => {
+// export const BillForm = React.memo<Props>(props => {
 //   const { billId, onClosed } = props
 //   const { edit, groups, monthOptions, weekdayOptions, onHide } = props
 //   const intl = useIntl()
+//   const bills = useSelector(selectors.getBills)
 
 //   const {
 //     Form,
@@ -143,38 +145,36 @@ import { Validator } from '@ag/util'
 //     }
 //   }
 
-//   const validate = useCallback((values: FormValues) => {
-//     const { edit, bills } = props
-//     const v = new Validator(values, intl.formatMessage)
-//     const otherBills = bills.filter(
-//       (otherBill: Bill.View) => !edit || otherBill.doc._id !== edit.doc._id
-//     )
-//     const otherNames = otherBills.map(acct => acct.doc.name)
-//     v.unique('name', otherNames, messages.uniqueName)
-//     v.date('start')
-//     v.date('until')
-//     v.numeral('amount')
-//     return v.errors
-//   }, [])
-
-//   const submit = useCallback(async values => {
-//     try {
-//       const {
-//         edit,
-//         onHide,
-//         saveBill,
-//         intl: { formatMessage },
-//       } = props
+//   const validate = useCallback(
+//     (values: FormValues) => {
 //       const v = new Validator(values, intl.formatMessage)
-//       v.required('name')
-//       v.maybeThrowSubmissionError()
+//       const otherNames = bills
+//         .filter(otherBill => !edit || otherBill.id !== edit.id)
+//         .map(acct => acct.name)
+//       v.unique('name', otherNames, messages.uniqueName)
+//       v.date('start')
+//       v.date('until')
+//       v.numeral('amount')
+//       return v.errors
+//     },
+//     [bills]
+//   )
 
-//       await saveBill({ edit: edit && edit.doc, formatMessage, values })
-//       return onHide()
-//     } catch (err) {
-//       Validator.setErrors(err, state, instance)
-//     }
-//   }, [])
+//   const submit = useCallback(
+//     async values => {
+//       try {
+//         const v = new Validator(values, intl.formatMessage)
+//         v.required('name')
+//         v.maybeThrowSubmissionError()
+
+//         await saveBill({ edit: edit && edit.doc, formatMessage, values })
+//         return onHide()
+//       } catch (err) {
+//         Validator.setErrors(err, state, instance)
+//       }
+//     },
+//     [edit]
+//   )
 
 //   return (
 //     <Form defaultValues={defaultValues} validate={validate} submit={submit}>
@@ -183,159 +183,162 @@ import { Validator } from '@ag/util'
 //         assert(end)
 //         const rrule = rruleSelector(api.values)
 //         const generatedValues = rrule
-//           ? rrule.all((date, index) => endDate.isAfter(date) && index < maxGenerated)
+//           ? rrule.all((date, index) => +endDate > +date && index < maxGenerated)
 //           : []
 //         const text = rrule ? rrule.toText() : ''
 
-//         const onFrequencyChange: SelectCallback = (eventKey: any) => {
-//           api.setValue('frequency', eventKey as Frequency)
+//         const onFrequencyChange = (eventKey: any) => {
+//           api.change('frequency', eventKey as Frequency)
 //         }
-//         const onEndTypeChange: SelectCallback = (eventKey: any) => {
-//           api.setValue('end', eventKey as EndType)
+//         const onEndTypeChange = (eventKey: any) => {
+//           api.change('end', eventKey as EndType)
 //         }
 //         const filterEndDate = (date: Date): boolean => {
 //           if (start) {
-//             return moment(start, 'L').isBefore(date)
+//             return +DateTime.fromISO(start) < +date
 //           }
 //           return false
 //         }
 
 //         return (
-//           <div>
-//             <Modal.Body>
-//               <TextField autoFocus name='name' label={messages.name} />
-//               <SelectField
-//                 createable
-//                 name='group'
-//                 options={groups}
-//                 label={messages.group}
-//                 promptTextCreator={(label: string) => 'create group ' + label}
-//                 placeholder=''
-//               />
-//               <UrlField name='web' favicoName='favicon' label={messages.web} />
-//               <TextField name='notes' label={messages.notes} />
+//           <>
+//             <TextField autoFocus field='name' label={intl.formatMessage(messages.name)} />
+//             <SelectField
+//               // createable
+//               field='group'
+//               items={groups}
+//               label={intl.formatMessage(messages.group)}
+//               // promptTextCreator={(label: string) => 'create group ' + label}
+//               // placeholder=''
+//             />
+//             <UrlField field='web' favicoField='favicon' label={intl.formatMessage(messages.web)} />
+//             <TextField field='notes' label={intl.formatMessage(messages.notes)} />
 
-//               <hr />
-//               <TextField name='amount' label={messages.amount} />
-//               <AccountField name='account' label={messages.account} />
-//               <BudgetField name='category' label={messages.budget} />
+//             <hr />
+//             <TextField field='amount' label={intl.formatMessage(messages.amount)} />
+//             <AccountField field='account' label={intl.formatMessage(messages.account)} />
+//             <BudgetField field='category' label={intl.formatMessage(messages.budget)} />
 
-//               <hr />
-//               <p>
-//                 <em>
-//                   <FormattedMessage {...messages.frequencyHeader} values={{ rule: text }} />
-//                 </em>
-//               </p>
-//               <DateField name='start' label={messages.start} highlightDates={generatedValues} />
-//               {end !== 'endDate' && (
-//                 <TextField
-//                   name='count'
-//                   type='number'
-//                   min={0}
-//                   label={messages.end}
-//                   addonBefore={
-//                     <DropdownButton
-//                       componentClass={InputGroup.Button}
-//                       id='count-addon-end'
-//                       title={intl.formatMessage(messages[end])}
-//                     >
-//                       {['endCount', 'endDate'].map((et: EndType) => (
-//                         <MenuItem
-//                           key={et}
-//                           eventKey={et}
-//                           onSelect={onEndTypeChange}
-//                           active={end === et}
-//                         >
-//                           <FormattedMessage
-//                             {...messages[et]}
-//                             values={{ interval: interval.toString() }}
-//                           />
-//                         </MenuItem>
-//                       ))}
-//                     </DropdownButton>
-//                   }
-//                   addonAfter={
-//                     <InputGroup.Addon>
-//                       <FormattedMessage {...messages.times} />
-//                     </InputGroup.Addon>
-//                   }
-//                 />
-//               )}
-//               {end === 'endDate' && (
-//                 <DateField
-//                   name='until'
-//                   label={messages.end}
-//                   addonBefore={
-//                     <DropdownButton
-//                       componentClass={InputGroup.Button}
-//                       id='count-addon-end'
-//                       title={intl.formatMessage(messages[end])}
-//                     >
-//                       {['endCount', 'endDate'].map((et: EndType) => (
-//                         <MenuItem
-//                           key={et}
-//                           eventKey={et}
-//                           onSelect={onEndTypeChange}
-//                           active={end === et}
-//                         >
-//                           <FormattedMessage
-//                             {...messages[et]}
-//                             values={{ interval: interval.toString() }}
-//                           />
-//                         </MenuItem>
-//                       ))}
-//                     </DropdownButton>
-//                   }
-//                   placeholderText={intl.formatMessage(messages.endDatePlaceholder)}
-//                   filterDate={filterEndDate}
-//                 />
-//               )}
+//             <hr />
+//             <p>
+//               <em>
+//                 <FormattedMessage {...messages.frequencyHeader} values={{ rule: text }} />
+//               </em>
+//             </p>
+//             <DateField
+//               field='start'
+//               label={intl.formatMessage(messages.start)}
+//               highlightDates={generatedValues}
+//             />
+//             {end !== 'endDate' && (
 //               <TextField
-//                 name='interval'
-//                 label={messages.interval}
+//                 field='count'
 //                 type='number'
 //                 min={0}
+//                 label={intl.formatMessage(messages.end)}
 //                 addonBefore={
-//                   <InputGroup.Addon>
-//                     <FormattedMessage {...messages.every} />
-//                   </InputGroup.Addon>
-//                 }
-//                 addonAfter={
 //                   <DropdownButton
-//                     pullRight
 //                     componentClass={InputGroup.Button}
-//                     id='interval-addon-frequency'
-//                     title={intl.formatMessage(messages[frequency], {
-//                       interval: interval.toString(),
-//                     })}
+//                     id='count-addon-end'
+//                     title={intl.formatMessage(messages[end])}
 //                   >
-//                     {['days', 'weeks', 'months', 'years'].map((cf: Frequency) => (
+//                     {['endCount', 'endDate'].map((et: EndType) => (
 //                       <MenuItem
-//                         key={cf}
-//                         eventKey={cf}
-//                         onSelect={onFrequencyChange}
-//                         active={frequency === cf}
+//                         key={et}
+//                         eventKey={et}
+//                         onSelect={onEndTypeChange}
+//                         active={end === et}
 //                       >
 //                         <FormattedMessage
-//                           {...messages[cf]}
+//                           {...messages[et]}
 //                           values={{ interval: interval.toString() }}
 //                         />
 //                       </MenuItem>
 //                     ))}
 //                   </DropdownButton>
 //                 }
+//                 addonAfter={
+//                   <InputGroup.Addon>
+//                     <FormattedMessage {...messages.times} />
+//                   </InputGroup.Addon>
+//                 }
 //               />
+//             )}
+//             {end === 'endDate' && (
+//               <DateField
+//                 field='until'
+//                 label={intl.formatMessage(messages.end)}
+//                 addonBefore={
+//                   <DropdownButton
+//                     componentClass={InputGroup.Button}
+//                     id='count-addon-end'
+//                     title={intl.formatMessage(messages[end])}
+//                   >
+//                     {['endCount', 'endDate'].map((et: EndType) => (
+//                       <MenuItem
+//                         key={et}
+//                         eventKey={et}
+//                         onSelect={onEndTypeChange}
+//                         active={end === et}
+//                       >
+//                         <FormattedMessage
+//                           {...messages[et]}
+//                           values={{ interval: interval.toString() }}
+//                         />
+//                       </MenuItem>
+//                     ))}
+//                   </DropdownButton>
+//                 }
+//                 placeholderText={intl.formatMessage(messages.endDatePlaceholder)}
+//                 filterDate={filterEndDate}
+//               />
+//             )}
+//             <TextField
+//               field='interval'
+//               label={intl.formatMessage(messages.interval)}
+//               type='number'
+//               min={0}
+//               addonBefore={
+//                 <InputGroup.Addon>
+//                   <FormattedMessage {...messages.every} />
+//                 </InputGroup.Addon>
+//               }
+//               addonAfter={
+//                 <DropdownButton
+//                   pullRight
+//                   componentClass={InputGroup.Button}
+//                   id='interval-addon-frequency'
+//                   title={intl.formatMessage(messages[frequency], {
+//                     interval: interval.toString(),
+//                   })}
+//                 >
+//                   {['days', 'weeks', 'months', 'years'].map((cf: Frequency) => (
+//                     <MenuItem
+//                       key={cf}
+//                       eventKey={cf}
+//                       onSelect={onFrequencyChange}
+//                       active={frequency === cf}
+//                     >
+//                       <FormattedMessage
+//                         {...messages[cf]}
+//                         values={{ interval: interval.toString() }}
+//                       />
+//                     </MenuItem>
+//                   ))}
+//                 </DropdownButton>
+//               }
+//             />
 
-//               <CheckboxField
-//                 name='showAdvanced'
-//                 label={messages.advanced}
-//                 message={messages.advancedMessage}
-//               />
-//               <CollapseField name='showAdvanced'>
+//             <CheckboxField
+//               field='showAdvanced'
+//               label={intl.formatMessage(messages.advanced)}
+//               message={messages.advancedMessage}
+//             />
+//             {/* <CollapseField field='showAdvanced'>
 //                 <div>
 //                   <SelectField
-//                     name='byweekday'
-//                     label={messages.byweekday}
+//                     field='byweekday'
+//                     label={intl.formatMessage(messages.byweekday)}
 //                     multi
 //                     joinValues
 //                     delimiter=','
@@ -344,8 +347,8 @@ import { Validator } from '@ag/util'
 //                   />
 
 //                   <SelectField
-//                     name='bymonth'
-//                     label={messages.bymonth}
+//                     field='bymonth'
+//                     label={intl.formatMessage(messages.bymonth)}
 //                     multi
 //                     joinValues
 //                     delimiter=','
@@ -353,35 +356,27 @@ import { Validator } from '@ag/util'
 //                     options={monthOptions}
 //                   />
 //                 </div>
-//               </CollapseField>
+//               </CollapseField> */}
 
-//               {/*__DEVELOPMENT__ &&
+//             {/*__DEVELOPMENT__ &&
 //               <div>{rrule ? rrule.toString() : ''}</div>
 //             */}
-//               {rrule &&
-//                 generatedValues.length > 0 &&
-//                 !moment(rrule.origOptions.dtstart).isSame(generatedValues[0]) && (
-//                   <Alert bsStyle='danger'>
-//                     <FormattedMessage {...messages.startExcluded} />
-//                   </Alert>
-//                 )}
-//             </Modal.Body>
-//           </div>
+//             {rrule &&
+//               rrule.origOptions.dtstart &&
+//               generatedValues.length > 0 &&
+//               !DateTime.fromJSDate(rrule.origOptions.dtstart).equals(
+//                 DateTime.fromJSDate(generatedValues[0])
+//               ) && (
+//                 <Text danger>
+//                   <FormattedMessage {...messages.startExcluded} />
+//                 </Text>
+//               )}
+//           </>
 //         )
 //       }}
 //     </Form>
 //   )
 // })
-
-// export const BillForm = connect<StateProps, DispatchProps, Props>(
-//   (state: AppState): StateProps => ({
-//     bills: selectBills(state),
-//     budgets: selectBudgets(state),
-//     monthOptions: monthOptions(state),
-//     weekdayOptions: weekdayOptions(state),
-//   }),
-//   mapDispatchToProps<DispatchProps>({ saveBill })
-// )(BillFormComponent)
 
 // const dayMap = {
 //   SU: 0,
@@ -395,7 +390,7 @@ import { Validator } from '@ag/util'
 
 // const weekdayOptions = createSelector(
 //   (state: AppState) => state.i18n.locale,
-//   (locale: string): SelectOption[] => {
+//   (locale: string): SelectFieldItem[] => {
 //     const localeData = moment.localeData(locale)
 //     const names = localeData.weekdaysShort() // Sunday = 0
 //     const first = localeData.firstDayOfWeek()
@@ -409,7 +404,7 @@ import { Validator } from '@ag/util'
 
 // const monthOptions = createSelector(
 //   (state: AppState) => state.i18n.locale,
-//   (locale: string): SelectOption[] => {
+//   (locale: string): SelectFieldItem[] => {
 //     const localeData = moment.localeData(locale)
 //     const names = localeData.monthsShort()
 //     const values = R.range(0, 12)
@@ -424,7 +419,7 @@ import { Validator } from '@ag/util'
 //   R.map((bill: Bill.View): string => bill.doc.group),
 //   R.sortBy(R.toLower),
 //   R.uniq,
-//   R.map((name: string): SelectOption => ({ label: name, value: name }))
+//   R.map((name: string): SelectFieldItem => ({ label: name, value: name }))
 // )
 
 // const rruleSelector = (values: Values): RRule | undefined => {

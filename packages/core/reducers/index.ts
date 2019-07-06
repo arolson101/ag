@@ -55,6 +55,8 @@ export const selectors = {
     recordsSelectors.getTransactions(state.records, accountId),
   getTransaction: (state: CoreState) => (transactionId?: string) =>
     recordsSelectors.getTransaction(state.records, transactionId),
+  getBills: (state: CoreState) => recordsSelectors.getBills(state.records),
+  getBill: (state: CoreState, billId?: string) => recordsSelectors.getBill(state.records, billId),
 
   getThemeMode: (state: CoreState) => themeSelectors.getThemeMode(state.theme),
   getThemeColor: (state: CoreState) => themeSelectors.getThemeColor(state.theme),
