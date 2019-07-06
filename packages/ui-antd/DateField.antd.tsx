@@ -2,6 +2,7 @@ import { DateFieldProps } from '@ag/core/context'
 import { useField, useForm } from '@ag/util'
 import { DatePicker, Form, Icon } from 'antd'
 import { DatePickerProps } from 'antd/lib/date-picker/interface'
+import moment from 'moment'
 import React, { useCallback } from 'react'
 
 export const DateField = Object.assign(
@@ -17,6 +18,8 @@ export const DateField = Object.assign(
       [form, name]
     )
 
+    const value = moment(field.value)
+
     return (
       <Form.Item
         validateStatus={touched && error ? 'error' : undefined}
@@ -25,10 +28,12 @@ export const DateField = Object.assign(
         style={{ flex }}
       >
         <DatePicker //
+          allowClear={false}
           {...field}
           disabled={disabled}
           style={{ flex: 1 }}
           onChange={onChange}
+          value={value}
         />
       </Form.Item>
     )
