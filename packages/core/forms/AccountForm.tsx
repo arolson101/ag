@@ -22,8 +22,6 @@ export interface AccountForm {
   save: () => any
 }
 
-const iconSize = 100
-
 export const AccountForm = Object.assign(
   React.forwardRef<AccountForm, Props>(function _AccountFormComponent(
     { accountId, bankId, onClosed },
@@ -97,8 +95,8 @@ export const AccountForm = Object.assign(
                 favicoField='icon'
                 defaultUrl={bankUrl}
                 defaultIcon={bankIcon}
-                favicoWidth={iconSize}
-                favicoHeight={iconSize}
+                favicoWidth={Account.iconSize}
+                favicoHeight={Account.iconSize}
                 label={intl.formatMessage(messages.name)}
                 placeholder={intl.formatMessage(messages.namePlaceholder)}
                 autoFocus={!account}

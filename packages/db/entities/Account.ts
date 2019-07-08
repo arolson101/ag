@@ -36,6 +36,8 @@ export namespace Account {
   export type Type = AccountType
   export type Spec = ISpec<Props>
 
+  export const iconSize = 128
+
   export const messages = defineMessages({
     CHECKING: {
       id: 'Account.Type.CHECKING',

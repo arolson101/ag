@@ -20,8 +20,6 @@ interface Props {
   onClosed: () => any
 }
 
-const bankAvatarSize = 100
-
 export interface BankForm {
   save: () => any
 }
@@ -133,8 +131,8 @@ export const BankForm = Object.assign(
                   field='web'
                   nameField='name'
                   favicoField='icon'
-                  favicoWidth={bankAvatarSize}
-                  favicoHeight={bankAvatarSize}
+                  favicoWidth={Bank.iconSize}
+                  favicoHeight={Bank.iconSize}
                   label={intl.formatMessage(messages.web)}
                   // ref={favicoField}
                 />
