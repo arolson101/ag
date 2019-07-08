@@ -9,7 +9,7 @@ const log = debug('core:dbWrite')
 export const dbWrite = (changes: DbChange[]): CoreThunk =>
   async function _dbWrite(dispatch, getState) {
     log('dbWrite %o', changes)
-    const { connection } = selectors.getAppDb(getState())
+    const { connection } = selectors.appDb(getState())
     const loadEntities: LoadEntities[] = []
 
     await connection.transaction(async manager => {

@@ -26,15 +26,15 @@ const initialState: RecordsState = {
 }
 
 export const recordsSelectors = {
-  getBanks: (state: RecordsState): Bank[] => {
+  banks: (state: RecordsState): Bank[] => {
     const banks = Object.values(state.banks)
     banks.sort((a, b) => stringComparer(a.name, b.name))
     return banks
   },
-  getBank: (state: RecordsState, bankId?: string): Bank | undefined => {
+  getBank: (state: RecordsState) => (bankId?: string): Bank | undefined => {
     return bankId ? state.banks[bankId] : undefined
   },
-  getAccountsForBank: (state: RecordsState, bankId: string): Account[] => {
+  getAccountsForBank: (state: RecordsState) => (bankId: string): Account[] => {
     const accounts: Account[] = []
     for (const account of Object.values(state.accounts)) {
       if (account.bankId === bankId) {
@@ -44,24 +44,24 @@ export const recordsSelectors = {
     accounts.sort((a, b) => a.sortOrder - b.sortOrder)
     return accounts
   },
-  getAccount: (state: RecordsState, accountId?: string): Account | undefined => {
+  getAccount: (state: RecordsState) => (accountId?: string): Account | undefined => {
     return accountId ? state.accounts[accountId] : undefined
   },
-  getAccounts: (state: RecordsState): Account[] => {
+  accounts: (state: RecordsState): Account[] => {
     const accounts = Object.values(state.accounts)
     accounts.sort((a, b) => stringComparer(a.name, b.name))
     return accounts
   },
-  getTransactions: (state: RecordsState, accountId: string): Transaction[] => {
+  getTransactions: (state: RecordsState) => (accountId: string): Transaction[] => {
     const transactions = Object.values(state.transactions).filter(t => t.accountId === accountId)
     transactions.sort((a, b) => a.time.getTime() - b.time.getTime())
     return transactions
   },
-  getTransaction: (state: RecordsState, transactionId?: string): Transaction | undefined => {
+  getTransaction: (state: RecordsState) => (transactionId?: string): Transaction | undefined => {
     return transactionId ? state.transactions[transactionId] : undefined
   },
-  getBills: (state: RecordsState) => Object.values(state.bills),
-  getBill: (state: RecordsState, billId?: string) => (billId ? state.bills[billId] : undefined),
+  bills: (state: RecordsState) => Object.values(state.bills),
+  getBill: (state: RecordsState) => (billId?: string) => (billId ? state.bills[billId] : undefined),
 }
 
 const applyChange = <T extends DbEntity<any>>(

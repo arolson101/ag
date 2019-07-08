@@ -13,18 +13,18 @@ declare global {
   }
 }
 
-export const updateThemeVariables = (color: string, mode: 'light' | 'dark') => {
+export const updateThemeVariables = (themeColor: string, mode: 'light' | 'dark') => {
   window.less.modifyVars({
-    '@primary-color': color,
+    '@primary-color': themeColor,
   })
 }
 
 const setPrimaryColor = (getState: () => ElectronState, color: string) => {
-  updateThemeVariables(color, selectors.getThemeMode(getState()))
+  updateThemeVariables(color, selectors.themeMode(getState()))
 }
 
 const setThemeMode = (getState: () => ElectronState, mode: 'light' | 'dark') => {
-  updateThemeVariables(selectors.getThemeColor(getState()), mode)
+  updateThemeVariables(selectors.themeColor(getState()), mode)
 }
 
 export const themeMiddleware: Middleware = ({ dispatch, getState }) => next => (

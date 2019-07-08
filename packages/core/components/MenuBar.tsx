@@ -12,7 +12,7 @@ export const MenuBar = Object.assign(
   React.memo<Props>(function _MenuBar(props) {
     const { NavMenu } = useUi()
     const bankCreate = useAction(actions.openDlg.bankCreate)
-    const banks = useSelector(selectors.getBanks)
+    const banks = useSelector(selectors.banks)
     const getAccountsForBank = useSelector(selectors.getAccountsForBank)
 
     return (

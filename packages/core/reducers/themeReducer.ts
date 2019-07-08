@@ -14,9 +14,9 @@ export const initialThemeState: ThemeState = {
 }
 
 export const themeSelectors = {
-  getThemeMode: (state: ThemeState) => state.mode,
-  getThemeColor: (state: ThemeState) => state.color,
-  getPlatform: (state: ThemeState) => state.platform,
+  themeMode: (state: ThemeState) => state.mode,
+  themeColor: (state: ThemeState) => state.color,
+  platform: (state: ThemeState) => state.platform,
 }
 
 export const theme = (state: ThemeState = initialThemeState, action: CoreAction): ThemeState => {

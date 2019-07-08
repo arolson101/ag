@@ -15,10 +15,10 @@ interface SaveBankParams {
 const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
   async function _saveBank(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
+    const intl = selectors.intl(state)
 
     try {
-      const { banksRepository } = selectors.getAppDb(state)
+      const { banksRepository } = selectors.appDb(state)
 
       const t = Date.now()
       let bank: Bank
@@ -50,7 +50,7 @@ const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
 const deleteBank = (bank: { id: string; name: string }): CoreThunk =>
   async function _deleteBank(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
+    const intl = selectors.intl(state)
 
     try {
       const intlCtx = { name: bank.name }
@@ -78,10 +78,10 @@ const deleteBank = (bank: { id: string; name: string }): CoreThunk =>
 const setAccountsOrder = (accountIds: string[]): CoreThunk =>
   async function _setAccountsOrder(dispatch, getState, { ui: { alert } }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
+    const intl = selectors.intl(state)
 
     try {
-      const { accountsRepository } = selectors.getAppDb(state)
+      const { accountsRepository } = selectors.appDb(state)
       const t = Date.now()
       const accounts = await accountsRepository.getByIds(accountIds)
       if (accounts.length !== accountIds.length) {

@@ -10,7 +10,7 @@ interface Props {}
 
 export const ElectronDialogs = Object.assign(
   React.memo<Props>(function _ElectronDialogs(props) {
-    const dialog = useSelector(selectors.getDialogs)
+    const dialog = useSelector(selectors.dialogs)
 
     return (
       <>

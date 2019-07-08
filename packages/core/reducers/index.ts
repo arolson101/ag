@@ -27,38 +27,33 @@ export interface CoreStore extends Store<CoreState, CoreAction> {
 export const selectors = {
   isDbInitializing: (state: CoreState) => dbSelectors.isDbInitializing(state.db),
   isDbInitialized: (state: CoreState) => dbSelectors.isDbInitialized(state.db),
-  getIndexDb: (state: CoreState) => dbSelectors.getIndexDb(state.db),
-  getDbs: (state: CoreState) => dbSelectors.getDbs(state.db),
-  getDbRepository: (state: CoreState) => dbSelectors.getDbRepository(state.db),
-  getIndexError: (state: CoreState) => dbSelectors.getIndexError(state.db),
+  indexDb: (state: CoreState) => dbSelectors.indexDb(state.db),
+  dbs: (state: CoreState) => dbSelectors.dbs(state.db),
+  dbRepository: (state: CoreState) => dbSelectors.dbRepository(state.db),
+  indexError: (state: CoreState) => dbSelectors.indexError(state.db),
   isLoggedIn: (state: CoreState) => dbSelectors.isLoggedIn(state.db),
-  getAppDb: (state: CoreState) => dbSelectors.getAppDb(state.db),
-  getConnection: (state: CoreState) => dbSelectors.getConnection(state.db),
-  getAppError: (state: CoreState) => dbSelectors.getAppError(state.db),
-  getSettingsRepository: (state: CoreState) => dbSelectors.getSettingsRepository(state.db),
+  appDb: (state: CoreState) => dbSelectors.appDb(state.db),
+  connection: (state: CoreState) => dbSelectors.connection(state.db),
+  appError: (state: CoreState) => dbSelectors.appError(state.db),
+  settingsRepository: (state: CoreState) => dbSelectors.settingsRepository(state.db),
 
-  getDialogs: (state: CoreState) => state.dialog,
-  getIntl: (state: CoreState) => intlSelectors.getIntl(state.intl),
+  dialogs: (state: CoreState) => state.dialog,
+  intl: (state: CoreState) => intlSelectors.intl(state.intl),
 
-  getSettingsError: (state: CoreState) => settingsSelectors.getSettingsError(state.settings),
+  settingsError: (state: CoreState) => settingsSelectors.settingsError(state.settings),
   getSetting: (state: CoreState) => settingsSelectors.getSetting(state.settings),
 
-  getBanks: (state: CoreState) => recordsSelectors.getBanks(state.records),
-  getBank: (state: CoreState) => (bankId?: string) =>
-    recordsSelectors.getBank(state.records, bankId),
-  getAccountsForBank: (state: CoreState) => (bankId: string) =>
-    recordsSelectors.getAccountsForBank(state.records, bankId),
-  getAccount: (state: CoreState) => (accountId?: string) =>
-    recordsSelectors.getAccount(state.records, accountId),
-  getAccounts: (state: CoreState) => recordsSelectors.getAccounts(state.records),
-  getTransactions: (state: CoreState) => (accountId: string) =>
-    recordsSelectors.getTransactions(state.records, accountId),
-  getTransaction: (state: CoreState) => (transactionId?: string) =>
-    recordsSelectors.getTransaction(state.records, transactionId),
-  getBills: (state: CoreState) => recordsSelectors.getBills(state.records),
-  getBill: (state: CoreState, billId?: string) => recordsSelectors.getBill(state.records, billId),
+  banks: (state: CoreState) => recordsSelectors.banks(state.records),
+  getBank: (state: CoreState) => recordsSelectors.getBank(state.records),
+  getAccountsForBank: (state: CoreState) => recordsSelectors.getAccountsForBank(state.records),
+  getAccount: (state: CoreState) => recordsSelectors.getAccount(state.records),
+  accounts: (state: CoreState) => recordsSelectors.accounts(state.records),
+  getTransactions: (state: CoreState) => recordsSelectors.getTransactions(state.records),
+  getTransaction: (state: CoreState) => recordsSelectors.getTransaction(state.records),
+  bills: (state: CoreState) => recordsSelectors.bills(state.records),
+  getBill: (state: CoreState) => recordsSelectors.getBill(state.records),
 
-  getThemeMode: (state: CoreState) => themeSelectors.getThemeMode(state.theme),
-  getThemeColor: (state: CoreState) => themeSelectors.getThemeColor(state.theme),
-  getPlatform: (state: CoreState) => themeSelectors.getPlatform(state.theme),
+  themeMode: (state: CoreState) => themeSelectors.themeMode(state.theme),
+  themeColor: (state: CoreState) => themeSelectors.themeColor(state.theme),
+  platform: (state: CoreState) => themeSelectors.platform(state.theme),
 }

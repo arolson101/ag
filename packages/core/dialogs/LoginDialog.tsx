@@ -17,10 +17,10 @@ export const LoginDialog = Object.assign(
     const { LoadingOverlay, Dialog } = useUi()
     const isDbInitializing = useSelector(selectors.isDbInitializing)
     const isDbInitialized = useSelector(selectors.isDbInitialized)
-    const dbs = useSelector(selectors.getDbs)
+    const dbs = useSelector(selectors.dbs)
     const dbId = dbs.length ? dbs[0].dbId : undefined
     const dbDelete = useAction(thunks.dbDelete)
-    const indexError = useSelector(selectors.getIndexError)
+    const indexError = useSelector(selectors.indexError)
     const loginForm = useRef<LoginForm>(null)
 
     const open = useCallback(() => {

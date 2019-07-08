@@ -176,7 +176,7 @@ export const AccountsPage = Object.assign(
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const { Page } = useUi()
-    const banks = useSelector(selectors.getBanks)
+    const banks = useSelector(selectors.banks)
 
     // log('data %o', data)
 

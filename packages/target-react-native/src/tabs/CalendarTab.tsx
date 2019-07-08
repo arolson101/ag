@@ -15,7 +15,7 @@ export class CalendarTab extends React.PureComponent<Props> {
   static readonly stackId = 'CalendarTabStack'
 
   static options: RnnOptionsHandler = ({ store }) => {
-    const intl = selectors.getIntl(store.getState())
+    const intl = selectors.intl(store.getState())
     return {
       bottomTab: {
         text: intl.formatMessage(CalendarPage.messages().tabText),

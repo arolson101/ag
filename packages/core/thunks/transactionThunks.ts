@@ -15,10 +15,10 @@ interface SaveTransactionParams {
 const saveTransaction = ({ input, transactionId, accountId }: SaveTransactionParams): CoreThunk =>
   async function _saveTransaction(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
+    const intl = selectors.intl(state)
 
     try {
-      const { transactionsRepository } = selectors.getAppDb(state)
+      const { transactionsRepository } = selectors.appDb(state)
       const t = Date.now()
       const table = Transaction
       let transaction: Transaction
@@ -46,7 +46,7 @@ const saveTransaction = ({ input, transactionId, accountId }: SaveTransactionPar
 const deleteTransaction = (transactionId: string): CoreThunk =>
   async function _deleteTransaction(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
+    const intl = selectors.intl(state)
 
     try {
       const confirmed = await alert({

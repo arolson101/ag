@@ -41,7 +41,7 @@ CoreContext.displayName = 'CoreContext'
 export const useDispatch: () => CoreDispatch = useDispatch1
 
 export const useIntl = (): IntlContext => {
-  return useSelector(selectors.getIntl)
+  return useSelector(selectors.intl)
 }
 
 export const useAction = <A, C extends ActionCreator<A>>(actionCreator: C) => {

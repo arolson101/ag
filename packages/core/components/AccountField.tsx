@@ -10,7 +10,7 @@ interface Props {
 export const AccountField = Object.assign(
   React.memo<Props>(function _AccountField({ field, label }) {
     const { SelectField } = useUi()
-    const accounts = useSelector(selectors.getAccounts)
+    const accounts = useSelector(selectors.accounts)
     const items: SelectFieldItem[] = accounts.map(acct => ({ label: acct.name, value: acct.id }))
 
     return <SelectField field={field} label={label} items={items} />

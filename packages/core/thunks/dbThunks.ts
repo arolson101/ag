@@ -28,7 +28,7 @@ const dbLoadEntities = (): CoreThunk =>
     const {
       accountsRepository, //
       banksRepository,
-    } = selectors.getAppDb(getState())
+    } = selectors.appDb(getState())
 
     const banks = await banksRepository.all()
     const accounts = await accountsRepository.all()
@@ -51,7 +51,7 @@ const dbCreate = ({ name, password }: { name: string; password: string }): CoreT
   async function _dbCreate(dispatch, getState, { sys: { openDb } }) {
     try {
       dispatch(actions.dbLogin.request())
-      const dbRepo = selectors.getDbRepository(getState())
+      const dbRepo = selectors.dbRepository(getState())
 
       const dbInfo = new Db()
       dbInfo.dbId = crypto.randomBytes(8).toString('base64')
@@ -77,7 +77,7 @@ const dbOpen = ({ dbId, password }: { dbId: string; password: string }): CoreThu
   async function _dbOpen(dispatch, getState, { sys: { openDb } }) {
     try {
       dispatch(actions.dbLogin.request())
-      const dbRepo = selectors.getDbRepository(getState())
+      const dbRepo = selectors.dbRepository(getState())
 
       const dbInfo = await dbRepo.findOneOrFail(dbId)
       const key = dbInfo.getKey(password)
@@ -93,7 +93,7 @@ const dbOpen = ({ dbId, password }: { dbId: string; password: string }): CoreThu
 
 const dbDelete = ({ dbId }: { dbId: string }): CoreThunk =>
   async function _dbDelete(dispatch, getState, { sys: { deleteDb }, ui: { alert, showToast } }) {
-    const intl = selectors.getIntl(getState())
+    const intl = selectors.intl(getState())
 
     const confirmed = await alert({
       title: intl.formatMessage(messages.dlgTitle),
@@ -110,7 +110,7 @@ const dbDelete = ({ dbId }: { dbId: string }): CoreThunk =>
 
     try {
       dispatch(actions.dbDelete.request())
-      const dbRepo = selectors.getDbRepository(getState())
+      const dbRepo = selectors.dbRepository(getState())
 
       const dbInfo = await dbRepo.findOneOrFail(dbId)
       await deleteDb(dbInfo.path)
