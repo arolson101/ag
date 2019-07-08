@@ -3,8 +3,8 @@ import { pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
 import React, { useCallback, useImperativeHandle } from 'react'
 import { defineMessages } from 'react-intl'
-import { TextFieldWithIcon } from '../components'
-import { Errors, typedFields, useAction, useIntl, useSelector, useUi } from '../context'
+import { useFields } from '../components'
+import { Errors, useAction, useIntl, useSelector, useUi } from '../context'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
@@ -32,7 +32,7 @@ export const AccountForm = Object.assign(
     const { Text, Row } = useUi()
     const getAccount = useSelector(selectors.getAccount)
     const getBank = useSelector(selectors.getBank)
-    const { Form, SelectField, TextField } = typedFields<FormValues>(useUi())
+    const { Form, SelectField, TextField, TextFieldWithIcon } = useFields<FormValues>()
     const saveAccount = useAction(thunks.saveAccount)
 
     const account = getAccount(accountId)
@@ -90,7 +90,7 @@ export const AccountForm = Object.assign(
                   {bank ? bank.name : '<no bank>'}
                 </Text>
               </Row>
-              <TextFieldWithIcon<FormValues>
+              <TextFieldWithIcon
                 field='name'
                 favicoField='icon'
                 defaultUrl={bankUrl}

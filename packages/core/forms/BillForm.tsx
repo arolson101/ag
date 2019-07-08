@@ -1,9 +1,7 @@
-import { Validator } from '@ag/util'
+import { Account, Bill, Budget } from '@ag/db/entities'
+// import { Validator } from '@ag/util'
 // import { DateTime } from '@ag/util/date'
 // import assert from 'assert'
-// import { RRuleErrorMessage, saveBill, toRRule } from 'core/actions'
-// import { Account, Bill, Budget } from 'core/docs'
-// import { selectBills, selectBudgets } from 'core/selectors'
 // import debug from 'debug'
 // import { Info } from 'luxon'
 // import React, { useCallback } from 'react'
@@ -12,8 +10,8 @@ import { Validator } from '@ag/util'
 // import { compose, onlyUpdateForPropTypes, setDisplayName, setPropTypes, withState } from 'recompose'
 // import { createSelector } from 'reselect'
 // import { RRule, WeekdayStr } from 'rrule'
-// import { UrlField } from '../components'
-// import { SelectFieldItem, typedFields, useIntl, useUi } from '../context'
+// import { useFields } from '../components'
+// import { SelectFieldItem, useIntl, useUi } from '../context'
 // import { selectors } from '../reducers'
 
 // const log = debug('core:BillForm')
@@ -26,8 +24,8 @@ import { Validator } from '@ag/util'
 // interface StateProps {
 //   monthOptions: SelectFieldItem[]
 //   weekdayOptions: SelectFieldItem[]
-//   bills: Bill.View[]
-//   budgets: Budget.View[]
+//   bills: Bill[]
+//   budgets: Budget[]
 // }
 
 // interface DispatchProps {
@@ -68,7 +66,7 @@ import { Validator } from '@ag/util'
 //   web: string
 //   notes: string
 //   amount: string
-//   account?: Account.DocId
+//   account?: string
 //   category: string
 //   favicon?: string
 //   showAdvanced?: boolean
@@ -78,27 +76,27 @@ import { Validator } from '@ag/util'
 //   const { billId, onClosed } = props
 //   const { edit, groups, monthOptions, weekdayOptions, onHide } = props
 //   const intl = useIntl()
-//   const bills = useSelector(selectors.getBills)
+//   const bills = useSelector(selectors.bills)
 
 //   const {
 //     Form,
 //     TextField,
-//     // UrlField,
 //     SelectField,
 //     DateField,
 //     // CollapseField,
 //     CheckboxField,
-//     // AccountField,
+//     UrlField,
+//     AccountField,
 //     // BudgetField,
-//   } = typedFields<FormValues>(useUi())
+//   } = useFields<FormValues>()
 
 //   const endDate = DateTime.local().plus({ years: 2 })
 //   const maxGenerated = 200
 
-//   let defaultValues: Partial<FormValues>
+//   let initialValues: FormValues
 //   if (edit) {
 //     const rrule = edit.rrule
-//     defaultValues = {
+//     initialValues = {
 //       ...(edit.doc as any),
 //       amount: intl.formatNumber(edit.doc.amount, { style: 'currency', currency: 'USD' }),
 //       start: DateTime.local(rrule.options.dtstart).toLocaleString(),
@@ -106,38 +104,39 @@ import { Validator } from '@ag/util'
 
 //     const opts = rrule.origOptions
 //     if (opts.freq === RRule.MONTHLY) {
-//       defaultValues.frequency = 'months'
+//       initialValues.frequency = 'months'
 //     } else if (opts.freq === RRule.WEEKLY) {
-//       defaultValues.frequency = 'weeks'
+//       initialValues.frequency = 'weeks'
 //     } else if (opts.freq === RRule.MONTHLY) {
-//       defaultValues.frequency = 'months'
+//       initialValues.frequency = 'months'
 //     } else if (opts.freq === RRule.YEARLY) {
-//       defaultValues.frequency = 'years'
+//       initialValues.frequency = 'years'
 //     }
 
 //     if (opts.interval) {
-//       defaultValues.interval = opts.interval
+//       initialValues.interval = opts.interval
 //     }
 //     if (Array.isArray(opts.byweekday)) {
-//       defaultValues.byweekday = opts.byweekday.map((str: WeekdayStr) => dayMap[str]).join(',')
-//       defaultValues.showAdvanced = true
+//       initialValues.byweekday = opts.byweekday.map((str: WeekdayStr) => dayMap[str]).join(',')
+//       initialValues.showAdvanced = true
 //     }
 //     if (Array.isArray(opts.bymonth)) {
-//       defaultValues.bymonth = opts.bymonth.join(',')
-//       defaultValues.showAdvanced = true
+//       initialValues.bymonth = opts.bymonth.join(',')
+//       initialValues.showAdvanced = true
 //     }
 
-//     defaultValues.end = 'endCount'
+//     initialValues.end = 'endCount'
 //     if (opts.until) {
-//       defaultValues.until = DateTime.local(opts.until).toLocaleString()
-//       defaultValues.count = 0
-//       defaultValues.end = 'endDate'
+//       initialValues.until = DateTime.local(opts.until).toLocaleString()
+//       initialValues.count = 0
+//       initialValues.end = 'endDate'
 //     } else if (typeof opts.count === 'number') {
-//       defaultValues.count = opts.count
-//       defaultValues.until = ''
+//       initialValues.count = opts.count
+//       initialValues.until = ''
 //     }
 //   } else {
-//     defaultValues = {
+//     initialValues = {
+//       ...Bill.defaultValues,
 //       start: DateTime.local().toLocaleString(),
 //       frequency: 'months',
 //       interval: 1,
@@ -177,7 +176,7 @@ import { Validator } from '@ag/util'
 //   )
 
 //   return (
-//     <Form defaultValues={defaultValues} validate={validate} submit={submit}>
+//     <Form initialValues={initialValues} validate={validate} submit={submit}>
 //       {api => {
 //         const { start, interval, frequency, end } = api.values
 //         assert(end)
@@ -211,13 +210,20 @@ import { Validator } from '@ag/util'
 //               // promptTextCreator={(label: string) => 'create group ' + label}
 //               // placeholder=''
 //             />
-//             <UrlField field='web' favicoField='favicon' label={intl.formatMessage(messages.web)} />
+//             <UrlField
+//               field='web'
+//               nameField='name'
+//               favicoField='favicon'
+//               favicoHeight={Bill.iconSize}
+//               favicoWidth={Bill.iconSize}
+//               label={intl.formatMessage(messages.web)}
+//             />
 //             <TextField field='notes' label={intl.formatMessage(messages.notes)} />
 
 //             <hr />
 //             <TextField field='amount' label={intl.formatMessage(messages.amount)} />
 //             <AccountField field='account' label={intl.formatMessage(messages.account)} />
-//             <BudgetField field='category' label={intl.formatMessage(messages.budget)} />
+//             {/* <BudgetField field='category' label={intl.formatMessage(messages.budget)} /> */}
 
 //             <hr />
 //             <p>

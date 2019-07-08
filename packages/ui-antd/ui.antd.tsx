@@ -26,6 +26,7 @@ import { DateField } from './DateField.antd'
 import { Form } from './Form.antd'
 import { Image } from './Image.antd'
 import { ImageSourceIcon, mapIconName } from './ImageSourceIcon'
+import { NumberField } from './NumberField.antd'
 import { Page } from './Page.antd'
 import { SelectField } from './SelectField.antd'
 import { Table } from './Table.antd'
@@ -300,6 +301,7 @@ export const ui: UiContext = {
   CurrencyField,
   DateField,
   Divider,
+  NumberField,
   SelectField,
   TextField,
 

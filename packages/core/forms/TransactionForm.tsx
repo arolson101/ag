@@ -3,7 +3,8 @@ import { pick, useSubmitRef } from '@ag/util'
 import accounting from 'accounting'
 import React, { useCallback, useImperativeHandle } from 'react'
 import { defineMessages } from 'react-intl'
-import { Errors, typedFields, useAction, useIntl, useSelector, useUi } from '../context'
+import { useFields } from '../components'
+import { Errors, useAction, useIntl, useSelector, useUi } from '../context'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
@@ -21,11 +22,10 @@ export interface TransactionForm {
 export const TransactionForm = Object.assign(
   React.forwardRef<TransactionForm, Props>((props, ref) => {
     const intl = useIntl()
-    const ui = useUi()
     const saveTransaction = useAction(thunks.saveTransaction)
     const submitFormRef = useSubmitRef()
     const getTransaction = useSelector(selectors.getTransaction)
-    const { Form, CurrencyField, DateField, TextField } = typedFields<FormValues>(ui)
+    const { Form, CurrencyField, DateField, TextField } = useFields<FormValues>()
     const { accountId, transactionId } = props
 
     const transaction = getTransaction(transactionId)

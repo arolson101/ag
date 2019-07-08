@@ -6,6 +6,7 @@ import {
   CurrencyFieldProps,
   DateFieldProps,
   FormProps,
+  NumberFieldProps,
   SelectFieldProps,
   TextFieldProps,
 } from './uiContextForms'
@@ -236,6 +237,7 @@ export interface UiContext {
   CurrencyField: React.ComponentType<CurrencyFieldProps>
   DateField: React.ComponentType<DateFieldProps>
   Divider: React.ComponentType
+  NumberField: React.ComponentType<NumberFieldProps>
   SelectField: React.ComponentType<SelectFieldProps>
   TextField: React.ComponentType<TextFieldProps>
 

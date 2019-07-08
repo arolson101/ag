@@ -32,6 +32,7 @@ import { CurrencyField } from './CurrencyField.nativebase'
 import { DateField } from './DateField.nativebase'
 import { Form } from './Form.nativebase'
 import { Image } from './NativeImage'
+import { NumberField } from './NumberField.nativebase'
 import { SelectField } from './SelectField.nativebase'
 import { Table } from './Table.nativebase'
 import { TextField } from './TextField.nativebase'
@@ -219,6 +220,7 @@ export const NbUi: Omit<UiContext, RNNTypes> = {
   CurrencyField,
   DateField,
   Divider: () => <ListItem itemDivider />,
+  NumberField,
   SelectField,
   TextField,
 

@@ -1,6 +1,6 @@
 // tslint:disable:max-line-length
-import { AccountField, UrlField } from '@ag/core/components'
-import { typedFields, useIntl, useUi } from '@ag/core/context'
+import { AccountField, useFields } from '@ag/core/components'
+import { useIntl, useUi } from '@ag/core/context'
 import { ImageUri } from '@ag/util'
 import { action } from '@storybook/addon-actions'
 import React, { useCallback } from 'react'
@@ -8,6 +8,9 @@ import { MockApp, storiesOf } from './helpers'
 
 interface FormValues {
   text: string
+  password: string
+  int: number
+  float: number
   select: string
   date: Date
   check: boolean
@@ -17,11 +20,14 @@ interface FormValues {
 }
 
 const initialValues: FormValues = {
-  text: '',
+  text: 'text',
+  password: 'asdf',
+  int: 2,
+  float: 2.5,
   select: 'two',
   date: new Date(),
   check: false,
-  web: '',
+  web: 'www.google.com',
   icon: '',
   acctId: '',
 }
@@ -30,6 +36,12 @@ const selectValues = [
   { value: '1', label: 'one' },
   { value: '2', label: 'two' },
   { value: '3', label: 'three' },
+]
+
+const highlightDates: Date[] = [
+  new Date(initialValues.date.getTime() - 7 * 24 * 60 * 60 * 1000),
+  new Date(initialValues.date.getTime() + 14 * 24 * 60 * 60 * 1000),
+  new Date(initialValues.date.getTime() + 28 * 24 * 60 * 60 * 1000),
 ]
 
 interface Props {
@@ -42,14 +54,15 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
   const {
     Form,
     TextField,
-    // UrlField,
+    UrlField,
     SelectField,
     DateField,
+    NumberField,
     // CollapseField,
     CheckboxField,
     // AccountField,
     // BudgetField,
-  } = typedFields<FormValues>(useUi())
+  } = useFields<FormValues>()
 
   const validate = useCallback((values: FormValues) => {
     return {}
@@ -63,13 +76,36 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
         return (
           <>
             <TextField label='text field' field='text' disabled={disabled} />
+            <TextField label='password field' field='password' secure disabled={disabled} />
+            <NumberField
+              label='integer field (step 2)'
+              field='int'
+              disabled={disabled}
+              min={1}
+              max={100}
+              step={2}
+              integer
+            />
+            <NumberField
+              label='float field (step 1.1)'
+              field='float'
+              disabled={disabled}
+              min={1}
+              max={100}
+              step={1.1}
+            />
             <SelectField
               label='select field'
               field='select'
               items={selectValues}
               disabled={disabled}
             />
-            <DateField label='date field' field='date' disabled={disabled} />
+            <DateField
+              label='date field'
+              field='date'
+              disabled={disabled}
+              highlightDates={highlightDates}
+            />
             <CheckboxField label='checkbox field' field='check' disabled={disabled} />
             <UrlField
               label='url field'
