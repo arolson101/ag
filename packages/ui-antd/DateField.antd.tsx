@@ -6,7 +6,7 @@ import debug from 'debug'
 import moment from 'moment'
 import React, { useCallback, useMemo } from 'react'
 
-const log = debug('antd:DateField')
+const log = debug('ui-antd:DateField')
 
 export const DateField = Object.assign(
   React.memo<DateFieldProps>(function _DateField(props) {

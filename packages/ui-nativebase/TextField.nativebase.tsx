@@ -22,6 +22,7 @@ export const TextField = Object.assign(
       disabled,
       noCorrect,
       leftIcon,
+      leftElement,
       rightElement,
     } = props
 
@@ -73,6 +74,8 @@ export const TextField = Object.assign(
         placeholder={placeholder}
         disabled={disabled}
       >
+        {leftElement}
+        {leftIcon && <Icon name={leftIcon} />}
         <Label label={label} error={touched && error} />
         {rows && rows > 0 ? (
           <Textarea

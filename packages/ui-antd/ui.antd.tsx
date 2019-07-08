@@ -28,6 +28,7 @@ import { Image } from './Image.antd'
 import { ImageSourceIcon, mapIconName } from './ImageSourceIcon'
 import { NumberField } from './NumberField.antd'
 import { Page } from './Page.antd'
+import { PopoverButton } from './PopoverButton.antd'
 import { SelectField } from './SelectField.antd'
 import { Table } from './Table.antd'
 import { TextField } from './TextField.antd'
@@ -257,37 +258,7 @@ export const ui: UiContext = {
       {children}
     </Button>
   ),
-  PopoverButton: ({ icon, disabled, content, minimal, loading, children }) => (
-    <Dropdown
-      overlay={
-        <Menu
-          onClick={item => {
-            const c = content[+item.key]
-            if (c.onClick) {
-              c.onClick()
-            }
-          }}
-        >
-          {content.map((item, i) =>
-            item.divider ? (
-              <Menu.Divider key={i} />
-            ) : (
-              <Menu.Item disabled={!item.onClick} key={i}>
-                <Icon type={mapIconName(item.icon)} />
-                {item.text}
-              </Menu.Item>
-            )
-          )}
-        </Menu>
-      }
-      disabled={disabled}
-      trigger={['click']}
-    >
-      <Button loading={loading} size='small' style={{ border: 0 }}>
-        {loading ? null : React.isValidElement(icon) ? icon : children}
-      </Button>
-    </Dropdown>
-  ),
+  PopoverButton,
   DeleteButton: ({ onPress, disabled, children }) => (
     <Button type='danger' block ghost onClick={onPress} disabled={disabled}>
       {children}

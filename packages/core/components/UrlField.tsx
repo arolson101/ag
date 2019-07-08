@@ -35,9 +35,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const online = useOnline()
   const { getImageFromLibrary } = useSystem()
   const { PopoverButton, Image, Text, TextField } = useUi()
-  const { disabled } = props
-  const { field, nameField } = props
-  const { favicoWidth, favicoHeight, favicoField } = props
+  const { disabled, field, nameField, favicoWidth, favicoHeight, favicoField } = props
 
   const form = useForm()
   const name = useFieldValue<string>(nameField)

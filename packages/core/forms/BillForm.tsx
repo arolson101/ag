@@ -242,7 +242,7 @@ import { Account, Bill, Budget } from '@ag/db/entities'
 //                 type='number'
 //                 min={0}
 //                 label={intl.formatMessage(messages.end)}
-//                 addonBefore={
+//                 leftElement={
 //                   <DropdownButton
 //                     componentClass={InputGroup.Button}
 //                     id='count-addon-end'
@@ -263,7 +263,7 @@ import { Account, Bill, Budget } from '@ag/db/entities'
 //                     ))}
 //                   </DropdownButton>
 //                 }
-//                 addonAfter={
+//                 rightElement={
 //                   <InputGroup.Addon>
 //                     <FormattedMessage {...messages.times} />
 //                   </InputGroup.Addon>
@@ -274,7 +274,7 @@ import { Account, Bill, Budget } from '@ag/db/entities'
 //               <DateField
 //                 field='until'
 //                 label={intl.formatMessage(messages.end)}
-//                 addonBefore={
+//                 leftElement={
 //                   <DropdownButton
 //                     componentClass={InputGroup.Button}
 //                     id='count-addon-end'
@@ -304,12 +304,12 @@ import { Account, Bill, Budget } from '@ag/db/entities'
 //               label={intl.formatMessage(messages.interval)}
 //               type='number'
 //               min={0}
-//               addonBefore={
+//               leftElement={
 //                 <InputGroup.Addon>
 //                   <FormattedMessage {...messages.every} />
 //                 </InputGroup.Addon>
 //               }
-//               addonAfter={
+//               rightElement={
 //                 <DropdownButton
 //                   pullRight
 //                   componentClass={InputGroup.Button}

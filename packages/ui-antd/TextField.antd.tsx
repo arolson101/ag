@@ -13,6 +13,7 @@ export const TextField = Object.assign(
       field: name,
       label,
       leftIcon,
+      leftElement,
       rightElement,
       autoFocus,
       placeholder,
@@ -72,7 +73,8 @@ export const TextField = Object.assign(
             prefix={
               leftIcon && <Icon type={mapIconName(leftIcon)} style={{ color: 'rgba(0,0,0,.25)' }} />
             }
-            suffix={rightElement}
+            addonBefore={leftElement}
+            addonAfter={rightElement}
             onChange={onChange}
           />
         )}

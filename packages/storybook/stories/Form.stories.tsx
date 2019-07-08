@@ -1,9 +1,9 @@
 // tslint:disable:max-line-length
 import { AccountField, useFields } from '@ag/core/components'
-import { useIntl, useUi } from '@ag/core/context'
+import { ActionItem, useIntl, useUi } from '@ag/core/context'
 import { ImageUri } from '@ag/util'
 import { action } from '@storybook/addon-actions'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { MockApp, storiesOf } from './helpers'
 
 interface FormValues {
@@ -50,6 +50,8 @@ interface Props {
 
 const TestForm: React.FC<Props> = ({ disabled }) => {
   const intl = useIntl()
+  const { Text, PopoverButton } = useUi()
+  const [selection, setSelection] = useState(0)
 
   const {
     Form,
@@ -70,12 +72,26 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
 
   const submit = action('submit') as any
 
+  const prefixes: ActionItem[] = [
+    { text: 'item 0', onClick: () => setSelection(0) },
+    { text: 'item 1', onClick: () => setSelection(1) },
+    { text: 'item 2', onClick: () => setSelection(2) },
+  ]
+
   return (
     <Form initialValues={initialValues} validate={validate} submit={submit}>
       {() => {
         return (
           <>
-            <TextField label='text field' field='text' disabled={disabled} />
+            <TextField
+              label='text field'
+              field='text'
+              disabled={disabled}
+              leftElement={
+                <PopoverButton content={prefixes}>{prefixes[selection].text}</PopoverButton>
+              }
+              rightElement={<Text>right element</Text>}
+            />
             <TextField label='password field' field='password' secure disabled={disabled} />
             <NumberField
               label='integer field (step 2)'

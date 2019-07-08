@@ -30,6 +30,9 @@ export interface CommonFieldProps<Values> {
   label: string
   disabled?: boolean
   flex?: number
+  leftIcon?: IconName
+  leftElement?: React.ReactElement<any>
+  rightElement?: React.ReactElement<any>
 }
 
 export interface CommonTextFieldProps {
@@ -74,7 +77,5 @@ export interface TextFieldProps<Values = any>
   color?: string
   noCorrect?: boolean
   inputRef?: any
-  leftIcon?: IconName
-  rightElement?: React.ReactElement<any>
   onValueChanged?: (value: string) => any
 }
