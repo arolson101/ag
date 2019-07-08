@@ -80,7 +80,7 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
               favicoHeight={100}
               disabled={disabled}
             />
-            <AccountField label='account field' field='acctId' />
+            <AccountField label='account field' field='acctId' disabled={disabled} />
           </>
         )
       }}
