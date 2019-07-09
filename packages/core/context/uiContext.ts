@@ -112,7 +112,7 @@ export interface TableColumn<T extends {}> {
   title: string
   format?: (text: string) => string
   render?: (text: string, record: T, index: number) => React.ReactNode
-  width?: string | number
+  width?: number
   align?: 'left' | 'right' | 'center'
 }
 

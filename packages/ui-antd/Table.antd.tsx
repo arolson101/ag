@@ -22,7 +22,7 @@ import { mapIconName } from './ImageSourceIcon'
 import arrayMove from 'array-move'
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
 
-const DragHandle = SortableHandle(() => <span>::</span>)
+const DragHandle = SortableHandle(() => <Antd.Icon type='menu' />)
 
 const ROW_HEIGHT = 30
 
@@ -32,6 +32,7 @@ const SortableTable = SortableContainer(VTable)
 const SortableTableRowRenderer = SortableElement(defaultTableRowRenderer as any)
 
 export const Table = React.memo<TableProps>(function _Table(props) {
+  const { data, columns } = props
   const [cols] = useState([
     { dataKey: 'col1', label: 'Column1' },
     { dataKey: 'col2', label: 'Column2' },
@@ -51,6 +52,11 @@ export const Table = React.memo<TableProps>(function _Table(props) {
     [setRows, rows]
   )
 
+  const sortwidth = 50
+  const colwidth = columns
+    .map(col => col.width!)
+    .reduce((prev, current) => prev + current, sortwidth)
+
   return (
     <div style={{ height: '300px' }}>
       <AutoSizer>
@@ -62,19 +68,33 @@ export const Table = React.memo<TableProps>(function _Table(props) {
             height={height}
             headerHeight={ROW_HEIGHT}
             rowHeight={ROW_HEIGHT}
-            rowCount={rows.length}
-            rowGetter={({ index }) => rows[index]}
+            rowCount={data.length}
+            rowGetter={({ index }) => data[index]}
             rowRenderer={params => <SortableTableRowRenderer {...params} />}
             useDragHandle
           >
-            {cols.map((col, idx) => (
+            <VColumn
+              dataKey='id'
+              width={sortwidth / colwidth}
+              cellRenderer={() => <DragHandle />}
+            />
+            {columns.map((col, idx) => (
+              <VColumn
+                key={col.dataIndex}
+                dataKey={col.dataIndex}
+                width={(typeof col.width === 'number' ? col.width : 0) / colwidth}
+                // cellRenderer={idx === 0 ? () => <DragHandle /> : undefined}
+                label={col.title}
+              />
+            ))}
+            {/* {cols.map((col, idx) => (
               <VColumn
                 {...col}
                 key={col.dataKey}
                 width={width / cols.length}
                 cellRenderer={idx === 0 ? () => <DragHandle /> : undefined}
               />
-            ))}
+            ))} */}
           </SortableTable>
         )}
       </AutoSizer>
