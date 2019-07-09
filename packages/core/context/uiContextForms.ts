@@ -31,8 +31,8 @@ export interface CommonFieldProps<Values> {
   disabled?: boolean
   flex?: number
   leftIcon?: IconName
-  leftElement?: React.ReactElement<any>
-  rightElement?: React.ReactElement<any>
+  leftElement?: React.ReactChild
+  rightElement?: React.ReactChild
 }
 
 export interface CommonTextFieldProps {
@@ -57,7 +57,7 @@ export interface DateFieldProps<Values = any> extends CommonFieldProps<Values> {
 
 export interface NumberFieldProps<Values = any> extends CommonFieldProps<Values> {
   min: number
-  max: number
+  max?: number
   integer?: boolean
   step?: number
 }

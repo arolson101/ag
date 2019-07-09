@@ -39,6 +39,7 @@ export const selectors = {
 
   dialogs: (state: CoreState) => state.dialog,
   intl: (state: CoreState) => intlSelectors.intl(state.intl),
+  locale: (state: CoreState) => intlSelectors.locale(state.intl),
 
   settingsError: (state: CoreState) => settingsSelectors.settingsError(state.settings),
   getSetting: (state: CoreState) => settingsSelectors.getSetting(state.settings),

@@ -8,6 +8,7 @@ export const defaultState: IntlState = new IntlProvider({ locale: 'en' }).getChi
 
 export const intlSelectors = {
   intl: (state: IntlState) => state,
+  locale: (state: IntlState) => state.locale,
 }
 
 export const intl = (state: IntlState = defaultState, action: CoreAction): IntlState => {
