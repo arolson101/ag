@@ -2,6 +2,7 @@ import { Db } from '@ag/db'
 import {
   AccountRepository,
   BankRepository,
+  BillRepository,
   DbRepository,
   SettingsRepository,
   TransactionRepository,
@@ -22,6 +23,7 @@ export interface DbState {
     connection: Connection
     settingsRepository: SettingsRepository
     banksRepository: BankRepository
+    billsRepository: BillRepository
     accountsRepository: AccountRepository
     transactionsRepository: TransactionRepository
   }
@@ -89,6 +91,7 @@ export const db = (state: DbState = defaultState, action: CoreAction): DbState =
           connection,
           settingsRepository: connection.getCustomRepository(SettingsRepository),
           banksRepository: connection.getCustomRepository(BankRepository),
+          billsRepository: connection.getCustomRepository(BillRepository),
           accountsRepository: connection.getCustomRepository(AccountRepository),
           transactionsRepository: connection.getCustomRepository(TransactionRepository),
         },

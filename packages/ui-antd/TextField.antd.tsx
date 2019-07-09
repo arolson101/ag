@@ -3,6 +3,7 @@ import { useField } from '@ag/util'
 import { Form, Icon, Input } from 'antd'
 import debug from 'debug'
 import React, { useCallback, useState } from 'react'
+import { formItemLayout } from './Form.antd'
 import { mapIconName } from './ImageSourceIcon'
 
 const log = debug('TextField.antd')
@@ -53,6 +54,7 @@ export const TextField = Object.assign(
         help={touched && error}
         label={label}
         style={{ flex }}
+        {...formItemLayout}
       >
         {rows && rows > 1 ? (
           <Input.TextArea

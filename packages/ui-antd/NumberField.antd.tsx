@@ -3,6 +3,7 @@ import { useField } from '@ag/util'
 import { Button, Form, Input, InputNumber } from 'antd'
 import debug from 'debug'
 import React from 'react'
+import { formItemLayout } from './Form.antd'
 
 const log = debug('NumberField.antd')
 
@@ -30,6 +31,7 @@ export const NumberField = Object.assign(
         help={touched && error}
         label={label}
         style={{ flex }}
+        {...formItemLayout}
       >
         <Input.Group compact style={{ flex: 1 }}>
           {leftElement}

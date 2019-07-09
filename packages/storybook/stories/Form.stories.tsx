@@ -89,7 +89,9 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
               label='text field'
               field='text'
               disabled={disabled}
-              leftElement={<SelectField label='' field='select' items={selectValues} />}
+              leftElement={
+                <SelectField label='' field='select' items={selectValues} disabled={disabled} />
+              }
               // leftElement={
               //   <PopoverButton content={prefixes}>{prefixes[selection].text}</PopoverButton>
               // }
@@ -104,7 +106,9 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
               max={100}
               step={2}
               integer
-              leftElement={<SelectField label='' field='intselect' items={selectValues} />}
+              leftElement={
+                <SelectField label='' field='intselect' items={selectValues} disabled={disabled} />
+              }
               rightElement='right element'
             />
             <NumberField
@@ -126,6 +130,16 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
               field='date'
               disabled={disabled}
               highlightDates={highlightDates}
+            />
+            <DateField
+              label='date field with extras'
+              field='date'
+              disabled={disabled}
+              highlightDates={highlightDates}
+              leftElement={
+                <SelectField label='' field='intselect' items={selectValues} disabled={disabled} />
+              }
+              rightElement='right element'
             />
             <CheckboxField label='checkbox field' field='check' disabled={disabled} />
             <UrlField

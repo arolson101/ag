@@ -77,9 +77,8 @@ export class Validator<V extends Record<string, any>> {
   }
 
   date(key: keyof V) {
-    const strValue = this.values[key]
-    const value = DateTime.local(strValue)
-    if (strValue && !value.isValid && !this.errors[key]) {
+    const value: Date = this.values[key]
+    if (!Number.isSafeInteger(+value) && !this.errors[key]) {
       this.errors[key] = this.formatMessage(messages.invalidDate)
     }
   }

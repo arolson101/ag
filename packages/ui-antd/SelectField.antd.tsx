@@ -3,6 +3,7 @@ import { useField, useForm } from '@ag/util'
 import { Form, Select } from 'antd'
 import debug from 'debug'
 import React, { useCallback } from 'react'
+import { formItemLayout } from './Form.antd'
 
 const log = debug('ui-antd:SelectField')
 
@@ -52,6 +53,7 @@ export const SelectField = Object.assign(
           help={touched && error}
           label={label}
           style={{ flex }}
+          {...formItemLayout}
         >
           {select}
         </Form.Item>

@@ -53,6 +53,7 @@ export interface CurrencyFieldProps<Values = any>
 export interface DateFieldProps<Values = any> extends CommonFieldProps<Values> {
   collapsed?: boolean
   highlightDates?: Date[]
+  disabledDate?: (date: Date) => boolean
 }
 
 export interface NumberFieldProps<Values = any> extends CommonFieldProps<Values> {

@@ -1,4 +1,4 @@
-import { Account, Bill, Budget } from '@ag/db/entities'
+import { Bill } from '@ag/db/entities'
 import { toRRule, Validator } from '@ag/util'
 import { DateTime } from '@ag/util/date'
 import assert from 'assert'
@@ -9,8 +9,9 @@ import React, { useCallback, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { ByWeekday, RRule, Weekday, WeekdayStr } from 'rrule'
 import { useFields } from '../components'
-import { SelectFieldItem, useIntl, useSelector, useUi } from '../context'
+import { SelectFieldItem, useAction, useIntl, useSelector, useUi } from '../context'
 import { selectors } from '../reducers'
+import { thunks } from '../thunks'
 
 const log = debug('core:BillForm')
 
@@ -34,7 +35,7 @@ interface RRuleValues {
   frequency: Frequency
   start: Date
   end: EndType
-  until: string
+  until: Date
   count: number
   interval: number
   byweekday: string
@@ -56,11 +57,11 @@ interface FormValues extends RRuleValues {
 export const BillForm = React.memo<Props>(props => {
   const { billId, onClosed } = props
   const intl = useIntl()
-  const { Text } = useUi()
+  const { Text, Divider } = useUi()
   const bills = useSelector(selectors.bills)
   const locale = useSelector(selectors.locale)
   const edit = useSelector(selectors.getBill)(billId)
-
+  const saveBill = useAction(thunks.saveBill)
   const {
     Form,
     AccountField,
@@ -75,25 +76,25 @@ export const BillForm = React.memo<Props>(props => {
   } = useFields<FormValues>()
 
   const endDate = DateTime.local().plus({ years: 2 })
-  const maxGenerated = 200
+  const maxGenerated = 20
 
-  const weekdayOptions = useMemo(
-    () =>
-      Info.weekdays('short', { locale }).map((label, value) => ({
-        label,
-        value: value.toString(),
-      })),
-    [locale]
-  )
+  // const weekdayOptions = useMemo(
+  //   () =>
+  //     Info.weekdays('short', { locale }).map((label, value) => ({
+  //       label,
+  //       value: value.toString(),
+  //     })),
+  //   [locale]
+  // )
 
-  const monthOptions = useMemo(
-    () =>
-      Info.months('short', { locale }).map((label, value) => ({
-        label,
-        value: (value + 1).toString(),
-      })),
-    [locale]
-  )
+  // const monthOptions = useMemo(
+  //   () =>
+  //     Info.months('short', { locale }).map((label, value) => ({
+  //       label,
+  //       value: (value + 1).toString(),
+  //     })),
+  //   [locale]
+  // )
 
   const groups = useMemo(() => getGroupNames(bills), [bills])
 
@@ -131,12 +132,12 @@ export const BillForm = React.memo<Props>(props => {
 
     initialValues.end = 'endCount'
     if (opts.until) {
-      initialValues.until = DateTime.fromJSDate(opts.until).toLocaleString()
+      initialValues.until = opts.until
       initialValues.count = 0
       initialValues.end = 'endDate'
     } else if (typeof opts.count === 'number') {
       initialValues.count = opts.count
-      initialValues.until = ''
+      initialValues.until = new Date()
     }
   } else {
     initialValues = {
@@ -145,8 +146,8 @@ export const BillForm = React.memo<Props>(props => {
       frequency: 'months',
       interval: 1,
       end: 'endCount',
-      until: '',
-      count: 1,
+      until: new Date(),
+      count: 0,
       byweekday: '',
       bymonth: '',
     }
@@ -168,26 +169,24 @@ export const BillForm = React.memo<Props>(props => {
   )
 
   const submit = useCallback(
-    async values => {
-      // try {
-      //   const v = new Validator(values, intl.formatMessage)
-      //   v.required('name')
-      //   v.maybeThrowSubmissionError()
-      //   await saveBill({ edit: edit && edit.doc, formatMessage, values })
-      //   return onHide()
-      // } catch (err) {
-      //   Validator.setErrors(err, state, instance)
-      // }
+    async ({ fi, ...input }) => {
+      try {
+        // log('onSubmit %o', { input, bankId })
+        await saveBill({ input, billId })
+        onClosed()
+      } catch (err) {
+        log('caught %o', err)
+      }
     },
-    [edit]
+    [saveBill, onClosed]
   )
 
   return (
     <Form initialValues={initialValues} validate={validate} submit={submit}>
       {api => {
-        const { start, end, interval } = api.values
+        const { start, end, interval, showAdvanced } = api.values
         assert(end)
-        const rrule = rruleSelector(api.values)
+        const rrule = toRRule(api.values)
         const generatedValues = rrule
           ? rrule.all((date, index) => +endDate > +date && index < maxGenerated)
           : []
@@ -202,12 +201,9 @@ export const BillForm = React.memo<Props>(props => {
           label: intl.formatMessage(messages[ft], { interval: interval.toString() }),
         }))
 
-        const onFrequencyChange = (eventKey: any) => {
-          api.change('frequency', eventKey as Frequency)
-        }
-        const filterEndDate = (date: Date): boolean => {
+        const disableDate = (date: Date): boolean => {
           if (start) {
-            return start < date
+            return start > date
           }
           return false
         }
@@ -233,27 +229,35 @@ export const BillForm = React.memo<Props>(props => {
             />
             <TextField field='notes' label={intl.formatMessage(messages.notes)} />
 
-            <hr />
+            <Divider />
+
             <TextField field='amount' label={intl.formatMessage(messages.amount)} />
             <AccountField field='account' label={intl.formatMessage(messages.account)} />
             {/* <BudgetField field='category' label={intl.formatMessage(messages.budget)} /> */}
 
-            <hr />
-            <p>
-              <em>{intl.formatMessage(messages.frequencyHeader, { rule: text })}</em>
-            </p>
+            <Divider />
+
             <DateField
               field='start'
               label={intl.formatMessage(messages.start)}
               highlightDates={generatedValues}
             />
+
+            <NumberField
+              field='interval'
+              label={intl.formatMessage(messages.interval)}
+              min={1}
+              leftElement={intl.formatMessage(messages.every)}
+              rightElement={<SelectField label='' field='frequency' items={frequencyTypeItems} />}
+            />
+
             {end === 'endDate' ? (
               <DateField
                 field='until'
                 label={intl.formatMessage(messages.end)}
                 leftElement={<SelectField field='end' label='' items={endTypeItems} />}
                 // placeholder={intl.formatMessage(messages.endDatePlaceholder)}
-                // filterDate={filterEndDate}
+                disabledDate={disableDate}
               />
             ) : (
               <NumberField
@@ -265,46 +269,36 @@ export const BillForm = React.memo<Props>(props => {
               />
             )}
 
-            <NumberField
-              field='interval'
-              label={intl.formatMessage(messages.interval)}
-              min={0}
-              leftElement={intl.formatMessage(messages.every)}
-              rightElement={<SelectField label='' field='frequency' items={frequencyTypeItems} />}
-            />
+            {/* {showAdvanced && (
+              <>
+                <CheckboxField
+                  field='showAdvanced' //
+                  label={intl.formatMessage(messages.advanced)}
+                />
+                <SelectField
+                  field='byweekday'
+                  label={intl.formatMessage(messages.byweekday)}
+                  multi
+                  joinValues
+                  delimiter=','
+                  simpleValue
+                  options={weekdayOptions}
+                />
+                <SelectField
+                  field='bymonth'
+                  label={intl.formatMessage(messages.bymonth)}
+                  multi
+                  joinValues
+                  delimiter=','
+                  simpleValue
+                  options={monthOptions}
+                />
+              </>
+            )} */}
 
-            <CheckboxField
-              field='showAdvanced'
-              label={intl.formatMessage(messages.advanced)}
-              // message={messages.advancedMessage}
-            />
-            {/* <CollapseField field='showAdvanced'>
-                <div>
-                  <SelectField
-                    field='byweekday'
-                    label={intl.formatMessage(messages.byweekday)}
-                    multi
-                    joinValues
-                    delimiter=','
-                    simpleValue
-                    options={weekdayOptions}
-                  />
+            <Text muted>{intl.formatMessage(messages.frequencyHeader, { rule: text })}</Text>
+            {/* <Text>{rrule ? rrule.toString() : ''}</Text> */}
 
-                  <SelectField
-                    field='bymonth'
-                    label={intl.formatMessage(messages.bymonth)}
-                    multi
-                    joinValues
-                    delimiter=','
-                    simpleValue
-                    options={monthOptions}
-                  />
-                </div>
-              </CollapseField> */}
-
-            {/*__DEVELOPMENT__ &&
-              <div>{rrule ? rrule.toString() : ''}</div>
-            */}
             {rrule &&
               rrule.origOptions.dtstart &&
               generatedValues.length > 0 &&
@@ -345,15 +339,6 @@ const getGroupNames = R.pipe(
   R.sortBy(R.toLower),
   R.map((group: string): SelectFieldItem => ({ label: group, value: group }))
 )
-
-const rruleSelector = (values: FormValues): RRule | undefined => {
-  const { frequency, start, end, until, count, interval, byweekday, bymonth } = values
-  try {
-    return toRRule({ frequency, start, end, until, count, interval, byweekday, bymonth })
-  } catch (error) {
-    return undefined
-  }
-}
 
 const messages = defineMessages({
   group: {
@@ -403,10 +388,6 @@ const messages = defineMessages({
   advanced: {
     id: 'BillForm.advanced',
     defaultMessage: 'Advanced',
-  },
-  advancedMessage: {
-    id: 'BillForm.advancedMessage',
-    defaultMessage: 'Advanced options',
   },
   frequencyHeader: {
     id: 'BillForm.frequencyHeader',

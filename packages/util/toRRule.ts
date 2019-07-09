@@ -1,25 +1,4 @@
-import luxon from 'luxon'
-import moment from 'moment'
-import { defineMessages, FormattedMessage } from 'react-intl'
 import { Frequency as RRuleFrequency, Options as RRuleOptions, RRule } from 'rrule'
-
-const messages = defineMessages({
-  invalidStartDate: {
-    id: 'toRRule.invalidStartDate',
-    defaultMessage: 'Invalid start date',
-  },
-  invalidUntilDate: {
-    id: 'toRRule.invalidUntilDate',
-    defaultMessage: 'Invalid end date',
-  },
-})
-
-export class RRuleErrorMessage {
-  constructor(
-    public field: keyof Params,
-    public formattedMessage: FormattedMessage.MessageDescriptor
-  ) {}
-}
 
 type Frequency = 'days' | 'weeks' | 'months' | 'years'
 type EndType = 'endDate' | 'endCount'
@@ -28,7 +7,7 @@ interface Params {
   frequency: Frequency
   start?: Date
   end?: EndType
-  until?: string
+  until?: Date
   count?: number
   interval?: number
   byweekday?: string
@@ -63,11 +42,7 @@ export const toRRule = (params: Params): RRule => {
   }
 
   if (end === 'endDate') {
-    const untilDate = moment(until, 'L')
-    if (!untilDate.isValid()) {
-      throw new RRuleErrorMessage('until', messages.invalidUntilDate)
-    }
-    opts.until = untilDate.toDate()
+    opts.until = until
   } else {
     if (count && count > 0) {
       opts.count = +count
