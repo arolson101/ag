@@ -1,5 +1,5 @@
 // tslint:disable:max-line-length
-// import { BillDialog } from '@ag/core/dialogs'
+import { BillDialog } from '@ag/core/dialogs'
 import { BillForm } from '@ag/core/forms'
 import React from 'react'
 import { action, data, MockApp, storiesOf } from './helpers'
@@ -15,30 +15,31 @@ const dialogProps = {
   isOpen: true,
 }
 
-// storiesOf('Dialogs/BillDialog', module)
-//   .add('create', () => (
-//     <MockApp dataset='empty'>
-//       <BillDialog {...dialogProps} />
-//     </MockApp>
-//   ))
-//   .add('edit', () => (
-//     <MockApp dataset='normal'>
-//       <BillDialog {...dialogProps} billId={data.normal.billId} />
-//     </MockApp>
-//   ))
+storiesOf('Dialogs/BillDialog', module)
+  .add('create', () => (
+    <MockApp dataset='normal'>
+      <BillDialog {...dialogProps} />
+    </MockApp>
+  ))
+  .add('edit', () => (
+    <MockApp dataset='normal'>
+      <BillDialog {...dialogProps} billId={data.normal.billId} />
+    </MockApp>
+  ))
 
-storiesOf('Forms/BillForm', module).add('create', () => (
-  <MockApp dataset='normal'>
-    <BillForm
-      {...formProps} //
-    />
-  </MockApp>
-))
-// .add('edit', () => (
-//   <MockApp dataset='normal'>
-//     <BillForm
-//       {...formProps} //
-//       billId={data.normal.billId}
-//     />
-//   </MockApp>
-// ))
+storiesOf('Forms/BillForm', module)
+  .add('create', () => (
+    <MockApp dataset='normal'>
+      <BillForm
+        {...formProps} //
+      />
+    </MockApp>
+  ))
+  .add('edit', () => (
+    <MockApp dataset='normal'>
+      <BillForm
+        {...formProps} //
+        billId={data.normal.billId}
+      />
+    </MockApp>
+  ))

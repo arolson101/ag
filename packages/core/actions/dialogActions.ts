@@ -1,7 +1,7 @@
 import { ImageUri } from '@ag/util'
 import { createStandardAction } from 'typesafe-actions'
 
-export type DialogType = 'login' | 'picture' | 'bank' | 'account'
+export type DialogType = 'login' | 'picture' | 'bank' | 'account' | 'bill'
 
 export const dialogActions = {
   openDlg: {
@@ -15,6 +15,8 @@ export const dialogActions = {
     accountCreate: createStandardAction('dlg/accountCreate')<{ bankId: string }>(),
     accountEdit: createStandardAction('dlg/accountEdit')<{ accountId: string }>(),
     accountDelete: createStandardAction('dlg/accountDelete')<{ accountId: string }>(),
+    billCreate: createStandardAction('dlg/billCreate')(),
+    billEdit: createStandardAction('dlg/billEdit')<{ billId: string }>(),
   },
   closeDlg: createStandardAction('dlg/close')<DialogType>(),
 }

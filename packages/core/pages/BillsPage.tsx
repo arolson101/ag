@@ -2,7 +2,8 @@ import debug from 'debug'
 import docuri from 'docuri'
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { useIntl, useSelector, useUi } from '../context'
+import { actions } from '../actions'
+import { useAction, useIntl, useSelector, useUi } from '../context'
 import { selectors } from '../reducers'
 
 const log = debug('core:BillsPage')
@@ -17,14 +18,22 @@ const route = docuri.route<void, string>(path)
 export const BillsPage = Object.assign(
   React.memo<Props>(function _BillsPage({ componentId }) {
     const intl = useIntl()
+    const openBillCreateDlg = useAction(actions.openDlg.billCreate)
     const { Page, Row, Text } = useUi()
-    const accounts = useSelector(selectors.accounts)
+    const bills = useSelector(selectors.bills)
 
     return (
-      <Page title={intl.formatMessage(messages.titleText)} componentId={componentId}>
+      <Page
+        title={intl.formatMessage(messages.titleText)}
+        componentId={componentId}
+        button={{
+          title: intl.formatMessage(messages.billAdd),
+          onClick: openBillCreateDlg,
+        }}
+      >
         <Text header>Bills</Text>
-        {accounts.map(account => (
-          <Text key={account.id}>{account.name}</Text>
+        {bills.map(bill => (
+          <Text key={bill.id}>{bill.name}</Text>
         ))}
       </Page>
     )
@@ -45,5 +54,9 @@ const messages = defineMessages({
   titleText: {
     id: 'BillsPage.titleText',
     defaultMessage: 'Bills',
+  },
+  billAdd: {
+    id: 'BillsPage.billAdd',
+    defaultMessage: 'Add Bill',
   },
 })
