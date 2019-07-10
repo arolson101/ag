@@ -74,7 +74,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
 
   const noRowsRenderer = useCallback(
     () => (
-      <div style={{ textAlign: 'center', margin: rowHeight }}>
+      <div style={{ textAlign: 'center', height: rowHeight }}>
         <Antd.Typography.Text>{emptyText}</Antd.Typography.Text>
       </div>
     ),
@@ -124,9 +124,9 @@ export const Table = React.memo<TableProps>(function _Table(props) {
     [rowDelete, rowEdit]
   )
 
-  const headerHeight = 0 // 30
+  const headerHeight = 30
   const rowHeight = 30
-  const emptyHeight = rowHeight * 3
+  const emptyHeight = rowHeight
   const height = headerHeight + (data.length ? data.length * rowHeight : emptyHeight)
 
   return (
@@ -140,6 +140,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
             justifyContent: 'space-between',
             paddingTop: 10,
             paddingBottom: 5,
+            paddingRight: 5,
           }}
         >
           <Title level={4} style={{ margin: 0 }}>
@@ -173,9 +174,9 @@ export const Table = React.memo<TableProps>(function _Table(props) {
                 rowGetter={({ index }) => data[index]}
                 rowRenderer={params => <SortableTableRowRenderer {...params} />}
                 useDragHandle
-                disableHeader
+                // disableHeader
                 className='ant-table'
-                // headerClassName='ant-table-thead ant-table-header'
+                headerClassName='ant-table-thead ant-table-header'
                 rowClassName='ant-table-row ant-table-row-level-0'
                 noRowsRenderer={noRowsRenderer}
               >
