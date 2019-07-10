@@ -94,7 +94,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
   const sortwidth = 30
 
   const headerRenderer = ({ align }: TableColumn<any>): VTableHeaderRenderer => props => {
-    log('headerRenderer %o', props)
+    // log('headerRenderer %o', props)
     return <div style={{ textAlign: align, textTransform: 'none' }}>{props.label}</div>
   }
 
