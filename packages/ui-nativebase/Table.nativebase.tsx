@@ -108,7 +108,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
                 return (
                   <React.Fragment key={dataIndex}>
                     {render ? (
-                      render(formatted, item, colIndex)
+                      render(formatted, item)
                     ) : (
                       <Text style={{ textAlign: align }}>{formatted}</Text>
                     )}

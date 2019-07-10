@@ -13,92 +13,192 @@ import {
   DropTargetSpec,
 } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
-import { Column as VColumn, Table as VTable } from 'react-virtualized'
+import {
+  Column as VColumn,
+  Table as VTable,
+  TableCellProps as VTableCellProps,
+  TableCellRenderer as VTableCellRenderer,
+  TableHeaderProps as VTableHeaderProps,
+  TableHeaderRenderer as VTableHeaderRenderer,
+} from 'react-virtualized'
 import 'react-virtualized/styles.css'
 import { ContextMenu } from './ContextMenu'
 import { Image } from './Image.antd'
 import { mapIconName } from './ImageSourceIcon'
 
 import arrayMove from 'array-move'
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
+import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle,
+  SortEndHandler,
+} from 'react-sortable-hoc'
 
-const DragHandle = SortableHandle(() => <Antd.Icon type='menu' />)
-
-const ROW_HEIGHT = 30
+const DragHandle = SortableHandle(() => (
+  <span style={{ cursor: 'ns-resize' }}>
+    <Antd.Icon type='menu' />
+  </span>
+))
 
 import { AutoSizer, defaultTableRowRenderer } from 'react-virtualized'
 
 const SortableTable = SortableContainer(VTable)
 const SortableTableRowRenderer = SortableElement(defaultTableRowRenderer as any)
 
-export const Table = React.memo<TableProps>(function _Table(props) {
-  const { data, columns } = props
-  const [cols] = useState([
-    { dataKey: 'col1', label: 'Column1' },
-    { dataKey: 'col2', label: 'Column2' },
-    { dataKey: 'col3', label: 'Column13' },
-  ])
-  const [rows, setRows] = useState([
-    { col1: 'row1 col1', col2: 'row1 col2', col3: 'row1 col3' },
-    { col1: 'row2 col1', col2: 'row2 col2', col3: 'row2 col3' },
-    { col1: 'row3 col1', col2: 'row3 col2', col3: 'row3 col3' },
-  ])
+const drawDragHandle: VTableCellRenderer = props => <DragHandle />
 
-  const onSortEnd = useCallback(
-    ({ oldIndex, newIndex }: any) => {
-      log('onSortEnd %d %d', oldIndex, newIndex)
-      setRows(arrayMove(rows, oldIndex, newIndex))
+export const Table = React.memo<TableProps>(function _Table(props) {
+  const {
+    data,
+    columns,
+    rowAdd,
+    rowDelete,
+    rowEdit,
+    rowKey,
+    moveRow,
+    emptyText,
+    titleText,
+    titleImage,
+    tableEdit,
+    tableDelete,
+  } = props
+
+  const onSortEnd = useCallback<SortEndHandler>(
+    ({ oldIndex, newIndex }) => {
+      if (moveRow && oldIndex !== newIndex) {
+        moveRow(oldIndex, newIndex)
+      }
     },
-    [setRows, rows]
+    [moveRow]
   )
 
-  const sortwidth = 50
-  const colwidth = columns
-    .map(col => col.width!)
-    .reduce((prev, current) => prev + current, sortwidth)
+  const noRowsRenderer = useCallback(
+    () => (
+      <div style={{ textAlign: 'center', margin: rowHeight }}>
+        <Antd.Typography.Text>{emptyText}</Antd.Typography.Text>
+      </div>
+    ),
+    [emptyText]
+  )
+
+  const menu = (
+    <Antd.Menu>
+      <Antd.Menu.ItemGroup title={titleText} />
+      {actionMenuItem(rowAdd)}
+      <Antd.Menu.Divider />
+      {actionMenuItem(tableEdit)}
+      {actionMenuItem(tableDelete)}
+    </Antd.Menu>
+  )
+
+  const sortwidth = 30
+
+  const headerRenderer = ({ align }: TableColumn<any>): VTableHeaderRenderer => props => {
+    log('headerRenderer %o', props)
+    return <div style={{ textAlign: align, textTransform: 'none' }}>{props.label}</div>
+  }
+
+  const renderCell = useCallback(
+    ({ render: userRender, format, align }: TableColumn<any>): VTableCellRenderer => ({
+      cellData,
+      rowData,
+    }) => {
+      if (format) {
+        cellData = format(cellData)
+      }
+      const actions: ActionDesc[] = [
+        rowEdit, //
+        rowDelete,
+      ]
+        .map(fcn => fcn && fcn(rowData))
+        .filter((action): action is ActionDesc => !!action)
+
+      return (
+        <ContextMenu actions={actions}>
+          <div style={{ margin: -16, padding: 16, textAlign: align }}>
+            {userRender ? userRender(cellData, rowData) : cellData}
+          </div>
+        </ContextMenu>
+      )
+    },
+    [rowDelete, rowEdit]
+  )
+
+  const headerHeight = 0 // 30
+  const rowHeight = 30
+  const emptyHeight = rowHeight * 3
+  const height = headerHeight + (data.length ? data.length * rowHeight : emptyHeight)
 
   return (
-    <div style={{ height: '300px' }}>
-      <AutoSizer>
-        {({ width, height }) => (
-          <SortableTable
-            lockAxis='y'
-            onSortEnd={onSortEnd}
-            width={width}
-            height={height}
-            headerHeight={ROW_HEIGHT}
-            rowHeight={ROW_HEIGHT}
-            rowCount={data.length}
-            rowGetter={({ index }) => data[index]}
-            rowRenderer={params => <SortableTableRowRenderer {...params} />}
-            useDragHandle
-          >
-            <VColumn
-              dataKey='id'
-              width={sortwidth / colwidth}
-              cellRenderer={() => <DragHandle />}
-            />
-            {columns.map((col, idx) => (
-              <VColumn
-                key={col.dataIndex}
-                dataKey={col.dataIndex}
-                width={(typeof col.width === 'number' ? col.width : 0) / colwidth}
-                // cellRenderer={idx === 0 ? () => <DragHandle /> : undefined}
-                label={col.title}
-              />
-            ))}
-            {/* {cols.map((col, idx) => (
-              <VColumn
-                {...col}
-                key={col.dataKey}
-                width={width / cols.length}
-                cellRenderer={idx === 0 ? () => <DragHandle /> : undefined}
-              />
-            ))} */}
-          </SortableTable>
-        )}
-      </AutoSizer>
-    </div>
+    <>
+      {titleText ? (
+        <div
+          className='ant-table-header'
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingTop: 10,
+            paddingBottom: 5,
+          }}
+        >
+          <Title level={4} style={{ margin: 0 }}>
+            <Image src={titleImage} size='1.5em' margin={5} />
+            {titleText}
+          </Title>
+          <Antd.Dropdown overlay={menu}>
+            <Antd.Button icon='ellipsis' shape='round' />
+          </Antd.Dropdown>
+        </div>
+      ) : null}
+      <div style={{ height }}>
+        <AutoSizer>
+          {({ width, height }) => {
+            const columnWidths = columns.map(col => col.width || 0)
+            const fixedColumns = columnWidths.reduce((count, col) => count + (col ? 1 : 0), 0)
+            const fixedwidths = columnWidths.reduce((prev, cur) => prev + cur, sortwidth)
+            const colwidths = columns.map(col =>
+              col.width ? col.width : (width - fixedwidths) / (columns.length - fixedColumns)
+            )
+            // log('width: %d, colwidths: [%s]', width, colwidths.join(', '))
+            return (
+              <SortableTable
+                lockAxis='y'
+                onSortEnd={onSortEnd}
+                width={width}
+                height={height}
+                headerHeight={headerHeight}
+                rowHeight={rowHeight}
+                rowCount={data.length}
+                rowGetter={({ index }) => data[index]}
+                rowRenderer={params => <SortableTableRowRenderer {...params} />}
+                useDragHandle
+                disableHeader
+                className='ant-table'
+                // headerClassName='ant-table-thead ant-table-header'
+                rowClassName='ant-table-row ant-table-row-level-0'
+                noRowsRenderer={noRowsRenderer}
+              >
+                <VColumn dataKey='id' width={sortwidth} cellRenderer={drawDragHandle} />
+                {columns.map((col, idx) => (
+                  <VColumn
+                    headerRenderer={headerRenderer(col)}
+                    key={col.dataIndex}
+                    dataKey={col.dataIndex}
+                    width={colwidths[idx]}
+                    minWidth={col.width}
+                    cellRenderer={renderCell(col)}
+                    label={col.title}
+                  />
+                ))}
+              </SortableTable>
+            )
+          }}
+        </AutoSizer>
+      </div>
+      <div className='ant-table-footer' style={{ marginBottom: 50 }} />
+      {/* <Table1 {...props} /> */}
+    </>
   )
 })
 
@@ -240,7 +340,7 @@ const DragSortingTable: React.FC<TableProps> = ({
       return (
         <ContextMenu actions={actions}>
           <div style={{ margin: -16, padding: 16 }}>
-            {userRender ? userRender(text, row, index) : text}
+            {userRender ? userRender(text, row) : text}
           </div>
         </ContextMenu>
       )
