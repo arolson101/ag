@@ -46,15 +46,7 @@ interface RRuleValues {
   bymonth: string
 }
 
-interface FormValues extends RRuleValues {
-  name: string
-  group: string
-  web: string
-  notes: string
-  amount: number
-  account?: string
-  category: string
-  favicon?: string
+interface FormValues extends RRuleValues, Bill.Props {
   showAdvanced?: boolean
 }
 
@@ -246,7 +238,7 @@ export const BillForm = Object.assign(
               <UrlField
                 field='web'
                 nameField='name'
-                favicoField='favicon'
+                favicoField='icon'
                 favicoHeight={Bill.iconSize}
                 favicoWidth={Bill.iconSize}
                 label={intl.formatMessage(messages.web)}

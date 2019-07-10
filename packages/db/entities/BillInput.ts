@@ -2,7 +2,7 @@ export class BillInput {
   name?: string
   group?: string
   web?: string
-  favicon?: string
+  icon?: string
   notes?: string
   amount?: number
   account?: string

@@ -1,4 +1,4 @@
-import { ISpec } from '@ag/util'
+import { ImageUri, ISpec } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { BillInput } from './BillInput'
 import { DbChange } from './DbChange'
@@ -10,7 +10,7 @@ export class Bill extends DbEntity<Bill.Props> {
   @Column() name!: string
   @Column() group!: string
   @Column() web!: string
-  @Column() favicon!: string
+  @Column('text') icon!: ImageUri
   @Column() notes!: string
   @Column() amount!: number
   @Column() account!: string
@@ -28,7 +28,7 @@ export namespace Bill {
     name: '',
     group: '',
     web: '',
-    favicon: '',
+    icon: '',
     notes: '',
     amount: 0,
     account: '',
