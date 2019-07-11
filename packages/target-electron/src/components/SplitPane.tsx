@@ -15,7 +15,7 @@ interface Props {}
 
 export const SplitPane = Object.assign(
   React.memo<Props>(function _SplitPane({ children }) {
-    const error = useSelector(selectors.getSettingsError)
+    const settingsError = useSelector(selectors.settingsError)
     const getSetting = useSelector(selectors.getSetting)
     const sidebarWidth = parseFloat(getSetting(sidebarWidthKey, sidebarWidthDefault.toString()))
     const settingsSetValue = useAction(thunks.settingsSetValue)
@@ -32,7 +32,7 @@ export const SplitPane = Object.assign(
 
     return (
       <>
-        <ErrorDisplay error={error} />
+        <ErrorDisplay error={settingsError} />
         <ReactSplitPane
           split='vertical'
           minSize={50}

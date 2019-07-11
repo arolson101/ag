@@ -18,7 +18,7 @@ export class BudgetsTab extends React.PureComponent<Props> {
   static readonly stackId = 'BudgetsTabStack'
 
   static options: RnnOptionsHandler = ({ store }) => {
-    const intl = selectors.getIntl(store.getState())
+    const intl = selectors.intl(store.getState())
     return {
       bottomTab: {
         text: intl.formatMessage(BudgetsPage.messages().tabText),

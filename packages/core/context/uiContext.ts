@@ -6,6 +6,7 @@ import {
   CurrencyFieldProps,
   DateFieldProps,
   FormProps,
+  NumberFieldProps,
   SelectFieldProps,
   TextFieldProps,
 } from './uiContextForms'
@@ -110,8 +111,8 @@ export interface TableColumn<T extends {}> {
   dataIndex: keyof T & string
   title: string
   format?: (text: string) => string
-  render?: (text: string, record: T, index: number) => React.ReactNode
-  width?: string | number
+  render?: (text: string, record: T) => React.ReactNode
+  width?: number
   align?: 'left' | 'right' | 'center'
 }
 
@@ -236,6 +237,7 @@ export interface UiContext {
   CurrencyField: React.ComponentType<CurrencyFieldProps>
   DateField: React.ComponentType<DateFieldProps>
   Divider: React.ComponentType
+  NumberField: React.ComponentType<NumberFieldProps>
   SelectField: React.ComponentType<SelectFieldProps>
   TextField: React.ComponentType<TextFieldProps>
 

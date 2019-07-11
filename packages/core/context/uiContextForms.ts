@@ -30,6 +30,9 @@ export interface CommonFieldProps<Values> {
   label: string
   disabled?: boolean
   flex?: number
+  leftIcon?: IconName
+  leftElement?: React.ReactChild
+  rightElement?: React.ReactChild
 }
 
 export interface CommonTextFieldProps {
@@ -49,6 +52,15 @@ export interface CurrencyFieldProps<Values = any>
 
 export interface DateFieldProps<Values = any> extends CommonFieldProps<Values> {
   collapsed?: boolean
+  highlightDates?: Date[]
+  disabledDate?: (date: Date) => boolean
+}
+
+export interface NumberFieldProps<Values = any> extends CommonFieldProps<Values> {
+  min: number
+  max?: number
+  integer?: boolean
+  step?: number
 }
 
 export interface SelectFieldProps<Values = any> extends CommonFieldProps<Values> {
@@ -66,22 +78,5 @@ export interface TextFieldProps<Values = any>
   color?: string
   noCorrect?: boolean
   inputRef?: any
-  leftIcon?: IconName
-  rightElement?: React.ReactElement<any>
   onValueChanged?: (value: string) => any
-}
-
-export const typedFields = <V extends {}>(uiContext: UiContext) => {
-  return {
-    Form: uiContext.Form as React.ComponentType<FormProps<V>>,
-    CheckboxField: uiContext.CheckboxField as React.ComponentType<CheckboxFieldProps<V>>,
-    CurrencyField: uiContext.CurrencyField as React.ComponentType<CurrencyFieldProps<V>>,
-    DateField: uiContext.DateField as React.ComponentType<DateFieldProps<V>>,
-    Divider: uiContext.Divider,
-    SelectField: uiContext.SelectField as React.ComponentType<SelectFieldProps<V>>,
-    TextField: uiContext.TextField as React.ComponentType<TextFieldProps<V>>,
-    // AccountField: AccountField as React.ComponentClass<AccountFieldProps<V>>,
-    // BudgetField: BudgetField as React.ComponentClass<BudgetFieldProps<V>>,
-    // ColorAddon: ColorAddonField as React.ComponentClass<ColorAddonFieldProps<V>>,
-  }
 }

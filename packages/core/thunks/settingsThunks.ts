@@ -9,7 +9,7 @@ const settingsToRecord = (settings: Setting[]): Record<string, string> =>
 const settingsInit = (): CoreThunk =>
   async function _settingsInit(dispatch, getState) {
     try {
-      const { settingsRepository } = selectors.getAppDb(getState())
+      const { settingsRepository } = selectors.appDb(getState())
       const settings = await settingsRepository.all()
       const x = settingsToRecord(settings)
       dispatch(actions.settingsLoaded(x))
@@ -21,7 +21,7 @@ const settingsInit = (): CoreThunk =>
 const settingsSetValue = (key: string, value: string): CoreThunk =>
   async function _settingsSetValue(dispatch, getState) {
     try {
-      const { settingsRepository } = selectors.getAppDb(getState())
+      const { settingsRepository } = selectors.appDb(getState())
       await settingsRepository.set(key, value)
 
       const settings = await settingsRepository.all()

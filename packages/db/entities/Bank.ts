@@ -36,6 +36,8 @@ export namespace Bank {
   export interface Props extends Pick<BankInput, keyof BankInput> {}
   export type Spec = ISpec<Props>
 
+  export const iconSize = 128
+
   export namespace change {
     export const add = (t: number, bank: Bank): DbChange => ({
       table: Bank,

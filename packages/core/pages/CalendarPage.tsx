@@ -18,7 +18,7 @@ export const CalendarPage = Object.assign(
   React.memo<Props>(function _CalendarPage({ componentId }) {
     const intl = useIntl()
     const { Page, Row, Text } = useUi()
-    const accounts = useSelector(selectors.getAccounts)
+    const accounts = useSelector(selectors.accounts)
 
     return (
       <Page title={intl.formatMessage(messages.titleText)} componentId={componentId}>

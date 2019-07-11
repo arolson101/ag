@@ -2,6 +2,7 @@ import { Db } from '@ag/db'
 import {
   AccountRepository,
   BankRepository,
+  BillRepository,
   DbRepository,
   SettingsRepository,
   TransactionRepository,
@@ -22,6 +23,7 @@ export interface DbState {
     connection: Connection
     settingsRepository: SettingsRepository
     banksRepository: BankRepository
+    billsRepository: BillRepository
     accountsRepository: AccountRepository
     transactionsRepository: TransactionRepository
   }
@@ -34,26 +36,26 @@ const defaultState: DbState = {
 export const dbSelectors = {
   isDbInitializing: (state: DbState) => !state.index && !state.indexError,
   isDbInitialized: (state: DbState) => !!state.index,
-  getIndexDb: (state: DbState) => state.index,
-  getDbs: (state: DbState) => state.dbs,
-  getDbRepository: (state: DbState) => {
+  indexDb: (state: DbState) => state.index,
+  dbs: (state: DbState) => state.dbs,
+  dbRepository: (state: DbState) => {
     if (!state.index) {
       throw new Error('index db not open')
     }
     return state.index.dbRepository
   },
-  getIndexError: (state: DbState) => state.indexError,
+  indexError: (state: DbState) => state.indexError,
 
   isLoggedIn: (state: DbState) => !!state.app,
-  getAppDb: (state: DbState) => {
+  appDb: (state: DbState) => {
     if (!state.app) {
       throw new Error('app db not open')
     }
     return state.app
   },
-  getConnection: (state: DbState) => state.app && state.app.connection,
-  getAppError: (state: DbState) => state.appError,
-  getSettingsRepository: (state: DbState) => {
+  connection: (state: DbState) => state.app && state.app.connection,
+  appError: (state: DbState) => state.appError,
+  settingsRepository: (state: DbState) => {
     if (!state.app) {
       throw new Error('app db not open')
     }
@@ -89,6 +91,7 @@ export const db = (state: DbState = defaultState, action: CoreAction): DbState =
           connection,
           settingsRepository: connection.getCustomRepository(SettingsRepository),
           banksRepository: connection.getCustomRepository(BankRepository),
+          billsRepository: connection.getCustomRepository(BillRepository),
           accountsRepository: connection.getCustomRepository(AccountRepository),
           transactionsRepository: connection.getCustomRepository(TransactionRepository),
         },

@@ -124,7 +124,7 @@ const BankTable = Object.assign(
         },
         {
           dataIndex: 'sortOrder', // TODO
-          width: 30,
+          width: 100,
           title: 'amount',
           align: 'right',
           render: (text: string, account: Row) => <Text>$123.45</Text>,
@@ -176,7 +176,7 @@ export const AccountsPage = Object.assign(
     const intl = useIntl()
     const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
     const { Page } = useUi()
-    const banks = useSelector(selectors.getBanks)
+    const banks = useSelector(selectors.banks)
 
     // log('data %o', data)
 

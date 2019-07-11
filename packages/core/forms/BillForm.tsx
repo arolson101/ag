@@ -1,559 +1,486 @@
-import { Validator } from '@ag/util'
-// import { DateTime } from '@ag/util/date'
-// import assert from 'assert'
-// import { RRuleErrorMessage, saveBill, toRRule } from 'core/actions'
-// import { Account, Bill, Budget } from 'core/docs'
-// import { selectBills, selectBudgets } from 'core/selectors'
-// import debug from 'debug'
+import { Bill } from '@ag/db/entities'
+import { pick, toRRule, useSubmitRef, Validator } from '@ag/util'
+import { DateTime } from '@ag/util/date'
+import assert from 'assert'
+import debug from 'debug'
 // import { Info } from 'luxon'
-// import React, { useCallback } from 'react'
-// import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
-// import { connect, useSelector } from 'react-redux'
-// import { compose, onlyUpdateForPropTypes, setDisplayName, setPropTypes, withState } from 'recompose'
-// import { createSelector } from 'reselect'
-// import { RRule, WeekdayStr } from 'rrule'
-// import { UrlField } from '../components'
-// import { SelectFieldItem, typedFields, useIntl, useUi } from '../context'
-// import { selectors } from '../reducers'
+import * as R from 'ramda'
+import React, { useCallback, useImperativeHandle, useMemo } from 'react'
+import { defineMessages } from 'react-intl'
+import { ByWeekday, RRule, Weekday, WeekdayStr } from 'rrule'
+import { useFields } from '../components'
+import { SelectFieldItem, useAction, useIntl, useSelector, useUi } from '../context'
+import { selectors } from '../reducers'
+import { thunks } from '../thunks'
 
-// const log = debug('core:BillForm')
+const log = debug('core:BillForm')
 
-// interface Props {
-//   billId?: string
-//   onClosed: () => any
-// }
+interface Props {
+  billId?: string
+  onClosed: () => any
+}
 
-// interface StateProps {
-//   monthOptions: SelectFieldItem[]
-//   weekdayOptions: SelectFieldItem[]
-//   bills: Bill.View[]
-//   budgets: Budget.View[]
-// }
+export interface BillForm {
+  save: () => any
+}
 
-// interface DispatchProps {
-//   saveBill: saveBill.Fcn
-// }
+type Frequency = 'days' | 'weeks' | 'months' | 'years'
+type EndType = 'endDate' | 'endCount'
 
-// interface ConnectedFormProps {
-//   start: Date
-//   interval: number
-//   count: number
-//   frequency: Frequency
-//   end: EndType
-//   rrule?: RRule
-// }
+const endTypes: Array<EndType & keyof typeof messages> = ['endDate', 'endCount']
+const frequencyTypes: Array<Frequency & keyof typeof messages> = [
+  'days',
+  'weeks',
+  'months',
+  'years',
+]
 
-// interface State {
-//   groups: SelectFieldItem[]
-//   setGroups: (groups: SelectFieldItem[]) => void
-// }
+interface RRuleValues {
+  frequency: Frequency
+  start: Date
+  end: EndType
+  until: Date
+  count: number
+  interval: number
+  byweekday: string
+  bymonth: string
+}
 
-// type Frequency = 'days' | 'weeks' | 'months' | 'years'
-// type EndType = 'endDate' | 'endCount'
+interface FormValues extends RRuleValues, Bill.Props {
+  showAdvanced?: boolean
+}
 
-// interface RRuleValues {
-//   frequency: Frequency
-//   start: string
-//   end: EndType
-//   until: string
-//   count: number
-//   interval: number
-//   byweekday: string
-//   bymonth: string
-// }
+export const BillForm = Object.assign(
+  React.forwardRef<BillForm, Props>(function _BillForm(props, ref) {
+    const { billId, onClosed } = props
+    const intl = useIntl()
+    const { Text, Divider } = useUi()
+    const bills = useSelector(selectors.bills)
+    const locale = useSelector(selectors.locale)
+    const edit = useSelector(selectors.getBill)(billId)
+    const saveBill = useAction(thunks.saveBill)
+    const submitFormRef = useSubmitRef()
+    const {
+      Form,
+      AccountField,
+      TextField,
+      SelectField,
+      DateField,
+      // CollapseField,
+      CheckboxField,
+      NumberField,
+      UrlField,
+      // BudgetField,
+    } = useFields<FormValues>()
 
-// interface FormValues extends RRuleValues {
-//   name: string
-//   group: string
-//   web: string
-//   notes: string
-//   amount: string
-//   account?: Account.DocId
-//   category: string
-//   favicon?: string
-//   showAdvanced?: boolean
-// }
+    const endDate = DateTime.local().plus({ years: 2 })
+    const maxGenerated = 20
 
-// export const BillForm = React.memo<Props>(props => {
-//   const { billId, onClosed } = props
-//   const { edit, groups, monthOptions, weekdayOptions, onHide } = props
-//   const intl = useIntl()
-//   const bills = useSelector(selectors.getBills)
+    // const weekdayOptions = useMemo(
+    //   () =>
+    //     Info.weekdays('short', { locale }).map((label, value) => ({
+    //       label,
+    //       value: value.toString(),
+    //     })),
+    //   [locale]
+    // )
 
-//   const {
-//     Form,
-//     TextField,
-//     // UrlField,
-//     SelectField,
-//     DateField,
-//     // CollapseField,
-//     CheckboxField,
-//     // AccountField,
-//     // BudgetField,
-//   } = typedFields<FormValues>(useUi())
+    // const monthOptions = useMemo(
+    //   () =>
+    //     Info.months('short', { locale }).map((label, value) => ({
+    //       label,
+    //       value: (value + 1).toString(),
+    //     })),
+    //   [locale]
+    // )
 
-//   const endDate = DateTime.local().plus({ years: 2 })
-//   const maxGenerated = 200
+    const groups = useMemo(() => getGroupNames(bills.filter(bill => !!bill.group)), [bills])
+    log('groups %o bills %o', groups, bills)
 
-//   let defaultValues: Partial<FormValues>
-//   if (edit) {
-//     const rrule = edit.rrule
-//     defaultValues = {
-//       ...(edit.doc as any),
-//       amount: intl.formatNumber(edit.doc.amount, { style: 'currency', currency: 'USD' }),
-//       start: DateTime.local(rrule.options.dtstart).toLocaleString(),
-//     }
+    let initialValues: FormValues
+    if (edit) {
+      const rrule = RRule.fromString(edit.rruleString)
+      initialValues = {
+        ...edit,
+        // amount: intl.formatNumber(edit.amount, { style: 'currency', currency: 'USD' }),
+        start: rrule.options.dtstart,
+      } as any
 
-//     const opts = rrule.origOptions
-//     if (opts.freq === RRule.MONTHLY) {
-//       defaultValues.frequency = 'months'
-//     } else if (opts.freq === RRule.WEEKLY) {
-//       defaultValues.frequency = 'weeks'
-//     } else if (opts.freq === RRule.MONTHLY) {
-//       defaultValues.frequency = 'months'
-//     } else if (opts.freq === RRule.YEARLY) {
-//       defaultValues.frequency = 'years'
-//     }
+      const opts = rrule.origOptions
+      if (opts.freq === RRule.MONTHLY) {
+        initialValues.frequency = 'months'
+      } else if (opts.freq === RRule.WEEKLY) {
+        initialValues.frequency = 'weeks'
+      } else if (opts.freq === RRule.MONTHLY) {
+        initialValues.frequency = 'months'
+      } else if (opts.freq === RRule.YEARLY) {
+        initialValues.frequency = 'years'
+      }
 
-//     if (opts.interval) {
-//       defaultValues.interval = opts.interval
-//     }
-//     if (Array.isArray(opts.byweekday)) {
-//       defaultValues.byweekday = opts.byweekday.map((str: WeekdayStr) => dayMap[str]).join(',')
-//       defaultValues.showAdvanced = true
-//     }
-//     if (Array.isArray(opts.bymonth)) {
-//       defaultValues.bymonth = opts.bymonth.join(',')
-//       defaultValues.showAdvanced = true
-//     }
+      if (opts.interval) {
+        initialValues.interval = opts.interval
+      }
+      if (Array.isArray(opts.byweekday)) {
+        initialValues.byweekday = opts.byweekday.map(toWeekdayStr).join(',')
+        initialValues.showAdvanced = true
+      }
+      if (Array.isArray(opts.bymonth)) {
+        initialValues.bymonth = opts.bymonth.join(',')
+        initialValues.showAdvanced = true
+      }
 
-//     defaultValues.end = 'endCount'
-//     if (opts.until) {
-//       defaultValues.until = DateTime.local(opts.until).toLocaleString()
-//       defaultValues.count = 0
-//       defaultValues.end = 'endDate'
-//     } else if (typeof opts.count === 'number') {
-//       defaultValues.count = opts.count
-//       defaultValues.until = ''
-//     }
-//   } else {
-//     defaultValues = {
-//       start: DateTime.local().toLocaleString(),
-//       frequency: 'months',
-//       interval: 1,
-//       end: 'endCount',
-//     }
-//   }
+      initialValues.end = 'endCount'
+      if (opts.until) {
+        initialValues.until = opts.until
+        initialValues.count = 0
+        initialValues.end = 'endDate'
+      } else if (typeof opts.count === 'number') {
+        initialValues.count = opts.count
+        initialValues.until = new Date()
+      }
+    } else {
+      initialValues = {
+        ...Bill.defaultValues,
+        start: DateTime.local().toJSDate(),
+        frequency: 'months',
+        interval: 1,
+        end: 'endCount',
+        until: new Date(),
+        count: 0,
+        byweekday: '',
+        bymonth: '',
+      }
+    }
 
-//   const validate = useCallback(
-//     (values: FormValues) => {
-//       const v = new Validator(values, intl.formatMessage)
-//       const otherNames = bills
-//         .filter(otherBill => !edit || otherBill.id !== edit.id)
-//         .map(acct => acct.name)
-//       v.unique('name', otherNames, messages.uniqueName)
-//       v.date('start')
-//       v.date('until')
-//       v.numeral('amount')
-//       return v.errors
-//     },
-//     [bills]
-//   )
+    const validate = useCallback(
+      (values: FormValues) => {
+        const v = new Validator(values, intl.formatMessage)
+        const otherNames = bills
+          .filter(otherBill => !edit || otherBill.id !== edit.id)
+          .map(acct => acct.name)
+        v.required('name')
+        v.unique('name', otherNames, messages.uniqueName)
+        v.date('start')
+        v.date('until')
+        v.numeral('amount')
+        return v.errors
+      },
+      [bills]
+    )
 
-//   const submit = useCallback(
-//     async values => {
-//       try {
-//         const v = new Validator(values, intl.formatMessage)
-//         v.required('name')
-//         v.maybeThrowSubmissionError()
+    const submit = useCallback(
+      async (values: FormValues) => {
+        try {
+          // log('onSubmit %o', { input, bankId })
+          const rrule = toRRule(values)
+          const input = {
+            ...pick(values, Object.keys(Bill.defaultValues) as Array<keyof Bill.Props>),
+            rruleString: rrule.toString(),
+          }
+          await saveBill({ input, billId })
+          onClosed()
+        } catch (err) {
+          log('caught %o', err)
+        }
+      },
+      [saveBill, onClosed]
+    )
 
-//         await saveBill({ edit: edit && edit.doc, formatMessage, values })
-//         return onHide()
-//       } catch (err) {
-//         Validator.setErrors(err, state, instance)
-//       }
-//     },
-//     [edit]
-//   )
+    useImperativeHandle(ref, () => ({
+      save: () => {
+        submitFormRef.current()
+      },
+    }))
 
-//   return (
-//     <Form defaultValues={defaultValues} validate={validate} submit={submit}>
-//       {api => {
-//         const { start, interval, frequency, end } = api.values
-//         assert(end)
-//         const rrule = rruleSelector(api.values)
-//         const generatedValues = rrule
-//           ? rrule.all((date, index) => +endDate > +date && index < maxGenerated)
-//           : []
-//         const text = rrule ? rrule.toText() : ''
+    return (
+      <Form
+        initialValues={initialValues}
+        validate={validate}
+        submit={submit}
+        submitRef={submitFormRef}
+      >
+        {api => {
+          const { start, end, interval, showAdvanced } = api.values
+          assert(end)
+          const rrule = toRRule(api.values)
+          const generatedValues = rrule
+            ? rrule.all((date, index) => +endDate > +date && index < maxGenerated)
+            : []
+          const text = rrule ? rrule.toText() : ''
 
-//         const onFrequencyChange = (eventKey: any) => {
-//           api.change('frequency', eventKey as Frequency)
-//         }
-//         const onEndTypeChange = (eventKey: any) => {
-//           api.change('end', eventKey as EndType)
-//         }
-//         const filterEndDate = (date: Date): boolean => {
-//           if (start) {
-//             return +DateTime.fromISO(start) < +date
-//           }
-//           return false
-//         }
+          const endTypeItems = endTypes.map(et => ({
+            value: et,
+            label: intl.formatMessage(messages[et], { interval: interval.toString() }),
+          }))
+          const frequencyTypeItems = frequencyTypes.map(ft => ({
+            value: ft,
+            label: intl.formatMessage(messages[ft], { interval: interval.toString() }),
+          }))
 
-//         return (
-//           <>
-//             <TextField autoFocus field='name' label={intl.formatMessage(messages.name)} />
-//             <SelectField
-//               // createable
-//               field='group'
-//               items={groups}
-//               label={intl.formatMessage(messages.group)}
-//               // promptTextCreator={(label: string) => 'create group ' + label}
-//               // placeholder=''
-//             />
-//             <UrlField field='web' favicoField='favicon' label={intl.formatMessage(messages.web)} />
-//             <TextField field='notes' label={intl.formatMessage(messages.notes)} />
+          const disableDate = (date: Date): boolean => {
+            if (start) {
+              return start > date
+            }
+            return false
+          }
 
-//             <hr />
-//             <TextField field='amount' label={intl.formatMessage(messages.amount)} />
-//             <AccountField field='account' label={intl.formatMessage(messages.account)} />
-//             <BudgetField field='category' label={intl.formatMessage(messages.budget)} />
+          return (
+            <>
+              <TextField autoFocus field='name' label={intl.formatMessage(messages.name)} />
+              <SelectField
+                // createable
+                field='group'
+                items={groups}
+                label={intl.formatMessage(messages.group)}
+                // promptTextCreator={(label: string) => 'create group ' + label}
+                // placeholder=''
+              />
+              <UrlField
+                field='web'
+                nameField='name'
+                favicoField='icon'
+                favicoHeight={Bill.iconSize}
+                favicoWidth={Bill.iconSize}
+                label={intl.formatMessage(messages.web)}
+              />
+              <TextField field='notes' label={intl.formatMessage(messages.notes)} />
 
-//             <hr />
-//             <p>
-//               <em>
-//                 <FormattedMessage {...messages.frequencyHeader} values={{ rule: text }} />
-//               </em>
-//             </p>
-//             <DateField
-//               field='start'
-//               label={intl.formatMessage(messages.start)}
-//               highlightDates={generatedValues}
-//             />
-//             {end !== 'endDate' && (
-//               <TextField
-//                 field='count'
-//                 type='number'
-//                 min={0}
-//                 label={intl.formatMessage(messages.end)}
-//                 addonBefore={
-//                   <DropdownButton
-//                     componentClass={InputGroup.Button}
-//                     id='count-addon-end'
-//                     title={intl.formatMessage(messages[end])}
-//                   >
-//                     {['endCount', 'endDate'].map((et: EndType) => (
-//                       <MenuItem
-//                         key={et}
-//                         eventKey={et}
-//                         onSelect={onEndTypeChange}
-//                         active={end === et}
-//                       >
-//                         <FormattedMessage
-//                           {...messages[et]}
-//                           values={{ interval: interval.toString() }}
-//                         />
-//                       </MenuItem>
-//                     ))}
-//                   </DropdownButton>
-//                 }
-//                 addonAfter={
-//                   <InputGroup.Addon>
-//                     <FormattedMessage {...messages.times} />
-//                   </InputGroup.Addon>
-//                 }
-//               />
-//             )}
-//             {end === 'endDate' && (
-//               <DateField
-//                 field='until'
-//                 label={intl.formatMessage(messages.end)}
-//                 addonBefore={
-//                   <DropdownButton
-//                     componentClass={InputGroup.Button}
-//                     id='count-addon-end'
-//                     title={intl.formatMessage(messages[end])}
-//                   >
-//                     {['endCount', 'endDate'].map((et: EndType) => (
-//                       <MenuItem
-//                         key={et}
-//                         eventKey={et}
-//                         onSelect={onEndTypeChange}
-//                         active={end === et}
-//                       >
-//                         <FormattedMessage
-//                           {...messages[et]}
-//                           values={{ interval: interval.toString() }}
-//                         />
-//                       </MenuItem>
-//                     ))}
-//                   </DropdownButton>
-//                 }
-//                 placeholderText={intl.formatMessage(messages.endDatePlaceholder)}
-//                 filterDate={filterEndDate}
-//               />
-//             )}
-//             <TextField
-//               field='interval'
-//               label={intl.formatMessage(messages.interval)}
-//               type='number'
-//               min={0}
-//               addonBefore={
-//                 <InputGroup.Addon>
-//                   <FormattedMessage {...messages.every} />
-//                 </InputGroup.Addon>
-//               }
-//               addonAfter={
-//                 <DropdownButton
-//                   pullRight
-//                   componentClass={InputGroup.Button}
-//                   id='interval-addon-frequency'
-//                   title={intl.formatMessage(messages[frequency], {
-//                     interval: interval.toString(),
-//                   })}
-//                 >
-//                   {['days', 'weeks', 'months', 'years'].map((cf: Frequency) => (
-//                     <MenuItem
-//                       key={cf}
-//                       eventKey={cf}
-//                       onSelect={onFrequencyChange}
-//                       active={frequency === cf}
-//                     >
-//                       <FormattedMessage
-//                         {...messages[cf]}
-//                         values={{ interval: interval.toString() }}
-//                       />
-//                     </MenuItem>
-//                   ))}
-//                 </DropdownButton>
-//               }
-//             />
+              <Divider />
 
-//             <CheckboxField
-//               field='showAdvanced'
-//               label={intl.formatMessage(messages.advanced)}
-//               message={messages.advancedMessage}
-//             />
-//             {/* <CollapseField field='showAdvanced'>
-//                 <div>
-//                   <SelectField
-//                     field='byweekday'
-//                     label={intl.formatMessage(messages.byweekday)}
-//                     multi
-//                     joinValues
-//                     delimiter=','
-//                     simpleValue
-//                     options={weekdayOptions}
-//                   />
+              <TextField field='amount' label={intl.formatMessage(messages.amount)} />
+              <AccountField field='account' label={intl.formatMessage(messages.account)} />
+              {/* <BudgetField field='category' label={intl.formatMessage(messages.budget)} /> */}
 
-//                   <SelectField
-//                     field='bymonth'
-//                     label={intl.formatMessage(messages.bymonth)}
-//                     multi
-//                     joinValues
-//                     delimiter=','
-//                     simpleValue
-//                     options={monthOptions}
-//                   />
-//                 </div>
-//               </CollapseField> */}
+              <Divider />
 
-//             {/*__DEVELOPMENT__ &&
-//               <div>{rrule ? rrule.toString() : ''}</div>
-//             */}
-//             {rrule &&
-//               rrule.origOptions.dtstart &&
-//               generatedValues.length > 0 &&
-//               !DateTime.fromJSDate(rrule.origOptions.dtstart).equals(
-//                 DateTime.fromJSDate(generatedValues[0])
-//               ) && (
-//                 <Text danger>
-//                   <FormattedMessage {...messages.startExcluded} />
-//                 </Text>
-//               )}
-//           </>
-//         )
-//       }}
-//     </Form>
-//   )
-// })
+              <DateField
+                field='start'
+                label={intl.formatMessage(messages.start)}
+                highlightDates={generatedValues}
+              />
 
-// const dayMap = {
-//   SU: 0,
-//   MO: 1,
-//   TU: 2,
-//   WE: 3,
-//   TH: 4,
-//   FR: 5,
-//   SA: 6,
-// } as { [key: string]: number }
+              <NumberField
+                field='interval'
+                label={intl.formatMessage(messages.interval)}
+                min={1}
+                leftElement={intl.formatMessage(messages.every)}
+                rightElement={<SelectField label='' field='frequency' items={frequencyTypeItems} />}
+              />
 
-// const weekdayOptions = createSelector(
-//   (state: AppState) => state.i18n.locale,
-//   (locale: string): SelectFieldItem[] => {
-//     const localeData = moment.localeData(locale)
-//     const names = localeData.weekdaysShort() // Sunday = 0
-//     const first = localeData.firstDayOfWeek()
-//     const values = R.range(first, first + 7).map((i: number) => i % 7)
-//     return values.map(i => ({
-//       value: i.toString(),
-//       label: names[i],
-//     }))
-//   }
-// )
+              {end === 'endDate' ? (
+                <DateField
+                  field='until'
+                  label={intl.formatMessage(messages.end)}
+                  leftElement={<SelectField field='end' label='' items={endTypeItems} />}
+                  // placeholder={intl.formatMessage(messages.endDatePlaceholder)}
+                  disabledDate={disableDate}
+                  highlightDates={generatedValues}
+                />
+              ) : (
+                <NumberField
+                  field='count'
+                  min={0}
+                  label={intl.formatMessage(messages.end)}
+                  leftElement={<SelectField field='end' label='' items={endTypeItems} />}
+                  rightElement={intl.formatMessage(messages.times)}
+                />
+              )}
 
-// const monthOptions = createSelector(
-//   (state: AppState) => state.i18n.locale,
-//   (locale: string): SelectFieldItem[] => {
-//     const localeData = moment.localeData(locale)
-//     const names = localeData.monthsShort()
-//     const values = R.range(0, 12)
-//     return values.map(i => ({
-//       value: (i + 1).toString(), // Jan = 1
-//       label: names[i],
-//     }))
-//   }
-// )
+              {/* {showAdvanced && (
+              <>
+                <CheckboxField
+                  field='showAdvanced' //
+                  label={intl.formatMessage(messages.advanced)}
+                />
+                <SelectField
+                  field='byweekday'
+                  label={intl.formatMessage(messages.byweekday)}
+                  multi
+                  joinValues
+                  delimiter=','
+                  simpleValue
+                  options={weekdayOptions}
+                />
+                <SelectField
+                  field='bymonth'
+                  label={intl.formatMessage(messages.bymonth)}
+                  multi
+                  joinValues
+                  delimiter=','
+                  simpleValue
+                  options={monthOptions}
+                />
+              </>
+            )} */}
 
-// const getGroupNames = R.pipe(
-//   R.map((bill: Bill.View): string => bill.doc.group),
-//   R.sortBy(R.toLower),
-//   R.uniq,
-//   R.map((name: string): SelectFieldItem => ({ label: name, value: name }))
-// )
+              <Text muted>{intl.formatMessage(messages.frequencyHeader, { rule: text })}</Text>
+              {/* <Text>{rrule ? rrule.toString() : ''}</Text> */}
 
-// const rruleSelector = (values: Values): RRule | undefined => {
-//   const { frequency, start, end, until, count, interval, byweekday, bymonth } = values
-//   const rrule = toRRule({ frequency, start, end, until, count, interval, byweekday, bymonth })
-//   if (rrule instanceof RRuleErrorMessage) {
-//     return undefined
-//   }
-//   return rrule
-// }
+              {rrule &&
+                rrule.origOptions.dtstart &&
+                generatedValues.length > 0 &&
+                !DateTime.fromJSDate(rrule.origOptions.dtstart).equals(
+                  DateTime.fromJSDate(generatedValues[0])
+                ) && <Text /*danger*/>{intl.formatMessage(messages.startExcluded)}</Text>}
+            </>
+          )
+        }}
+      </Form>
+    )
+  }),
+  {
+    displayName: 'BillForm',
+  }
+)
 
-// const messages = defineMessages({
-//   group: {
-//     id: 'BillForm.group',
-//     defaultMessage: 'Group',
-//   },
-//   infoHeader: {
-//     id: 'BillForm.infoHeader',
-//     defaultMessage: 'Info',
-//   },
-//   name: {
-//     id: 'BillForm.name',
-//     defaultMessage: 'Name',
-//   },
-//   start: {
-//     id: 'BillForm.start',
-//     defaultMessage: 'Start',
-//   },
-//   notes: {
-//     id: 'BillForm.notes',
-//     defaultMessage: 'Notes',
-//   },
-//   web: {
-//     id: 'BillForm.web',
-//     defaultMessage: 'Website',
-//   },
-//   amountHeader: {
-//     id: 'BillForm.amountHeader',
-//     defaultMessage: 'Amount',
-//   },
-//   amount: {
-//     id: 'BillForm.amount',
-//     defaultMessage: 'Amount',
-//   },
-//   account: {
-//     id: 'BillForm.account',
-//     defaultMessage: 'Account',
-//   },
-//   budget: {
-//     id: 'BillForm.budget',
-//     defaultMessage: 'Budget',
-//   },
-//   uniqueName: {
-//     id: 'BillForm.uniqueName',
-//     defaultMessage: 'This name is already used',
-//   },
-//   advanced: {
-//     id: 'BillForm.advanced',
-//     defaultMessage: 'Advanced',
-//   },
-//   advancedMessage: {
-//     id: 'BillForm.advancedMessage',
-//     defaultMessage: 'Advanced options',
-//   },
-//   frequencyHeader: {
-//     id: 'BillForm.frequencyHeader',
-//     defaultMessage: 'Frequency: {rule}',
-//   },
-//   every: {
-//     id: 'BillForm.every',
-//     defaultMessage: 'Every',
-//   },
-//   days: {
-//     id: 'BillForm.days',
-//     defaultMessage: `{interval, plural,
-//       one {day}
-//       other {days}
-//     }`,
-//   },
-//   interval: {
-//     id: 'BillForm.interval',
-//     defaultMessage: 'Interval',
-//   },
-//   weeks: {
-//     id: 'BillForm.weeks',
-//     defaultMessage: `{interval, plural,
-//       one {week}
-//       other {weeks}
-//     }`,
-//   },
-//   months: {
-//     id: 'BillForm.months',
-//     defaultMessage: `{interval, plural,
-//       one {month}
-//       other {months}
-//     }`,
-//   },
-//   years: {
-//     id: 'BillForm.years',
-//     defaultMessage: `{interval, plural,
-//       one {year}
-//       other {years}
-//     }`,
-//   },
-//   end: {
-//     id: 'BillForm.end',
-//     defaultMessage: 'End',
-//   },
-//   byweekday: {
-//     id: 'BillForm.byweekday',
-//     defaultMessage: 'Days of week',
-//   },
-//   bymonth: {
-//     id: 'BillForm.bymonth',
-//     defaultMessage: 'Months',
-//   },
-//   endCount: {
-//     id: 'BillForm.endCount',
-//     defaultMessage: 'After',
-//   },
-//   endDate: {
-//     id: 'BillForm.endDate',
-//     defaultMessage: 'By date',
-//   },
-//   endDatePlaceholder: {
-//     id: 'BillForm.endDatePlaceholder',
-//     defaultMessage: 'End date',
-//   },
-//   times: {
-//     id: 'BillForm.times',
-//     defaultMessage: 'times',
-//   },
-//   startExcluded: {
-//     id: 'BillForm.startExcluded',
-//     defaultMessage: 'Note: The specified start date does not fit in the specified rules',
-//   },
-// })
+const dayMap: Record<WeekdayStr, number> = {
+  SU: 0,
+  MO: 1,
+  TU: 2,
+  WE: 3,
+  TH: 4,
+  FR: 5,
+  SA: 6,
+}
+
+const toWeekdayStr = (weekday: ByWeekday): number => {
+  if (typeof weekday === 'number') {
+    return weekday
+  }
+  if (weekday instanceof Weekday) {
+    return weekday.getJsWeekday()
+  } else {
+    return dayMap[weekday]
+  }
+}
+
+const getGroupNames = R.pipe(
+  R.map((bill: Bill): string => bill.group),
+  // R.filter(val => !!val),
+  R.uniq,
+  R.sortBy(R.toLower),
+  R.map((group: string): SelectFieldItem => ({ label: group, value: group }))
+)
+
+const messages = defineMessages({
+  group: {
+    id: 'BillForm.group',
+    defaultMessage: 'Group',
+  },
+  infoHeader: {
+    id: 'BillForm.infoHeader',
+    defaultMessage: 'Info',
+  },
+  name: {
+    id: 'BillForm.name',
+    defaultMessage: 'Name',
+  },
+  start: {
+    id: 'BillForm.start',
+    defaultMessage: 'Start',
+  },
+  notes: {
+    id: 'BillForm.notes',
+    defaultMessage: 'Notes',
+  },
+  web: {
+    id: 'BillForm.web',
+    defaultMessage: 'Website',
+  },
+  amountHeader: {
+    id: 'BillForm.amountHeader',
+    defaultMessage: 'Amount',
+  },
+  amount: {
+    id: 'BillForm.amount',
+    defaultMessage: 'Amount',
+  },
+  account: {
+    id: 'BillForm.account',
+    defaultMessage: 'Account',
+  },
+  budget: {
+    id: 'BillForm.budget',
+    defaultMessage: 'Budget',
+  },
+  uniqueName: {
+    id: 'BillForm.uniqueName',
+    defaultMessage: 'This name is already used',
+  },
+  advanced: {
+    id: 'BillForm.advanced',
+    defaultMessage: 'Advanced',
+  },
+  frequencyHeader: {
+    id: 'BillForm.frequencyHeader',
+    defaultMessage: 'Frequency: {rule}',
+  },
+  every: {
+    id: 'BillForm.every',
+    defaultMessage: 'Every',
+  },
+  days: {
+    id: 'BillForm.days',
+    defaultMessage: `{interval, plural,
+      one {day}
+      other {days}
+    }`,
+  },
+  interval: {
+    id: 'BillForm.interval',
+    defaultMessage: 'Interval',
+  },
+  weeks: {
+    id: 'BillForm.weeks',
+    defaultMessage: `{interval, plural,
+      one {week}
+      other {weeks}
+    }`,
+  },
+  months: {
+    id: 'BillForm.months',
+    defaultMessage: `{interval, plural,
+      one {month}
+      other {months}
+    }`,
+  },
+  years: {
+    id: 'BillForm.years',
+    defaultMessage: `{interval, plural,
+      one {year}
+      other {years}
+    }`,
+  },
+  end: {
+    id: 'BillForm.end',
+    defaultMessage: 'End',
+  },
+  byweekday: {
+    id: 'BillForm.byweekday',
+    defaultMessage: 'Days of week',
+  },
+  bymonth: {
+    id: 'BillForm.bymonth',
+    defaultMessage: 'Months',
+  },
+  endCount: {
+    id: 'BillForm.endCount',
+    defaultMessage: 'After',
+  },
+  endDate: {
+    id: 'BillForm.endDate',
+    defaultMessage: 'By date',
+  },
+  endDatePlaceholder: {
+    id: 'BillForm.endDatePlaceholder',
+    defaultMessage: 'End date',
+  },
+  times: {
+    id: 'BillForm.times',
+    defaultMessage: 'times',
+  },
+  startExcluded: {
+    id: 'BillForm.startExcluded',
+    defaultMessage: 'Note: The specified start date does not fit in the specified rules',
+  },
+})

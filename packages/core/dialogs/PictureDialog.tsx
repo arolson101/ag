@@ -3,8 +3,8 @@ import debug from 'debug'
 import React, { useCallback, useEffect, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { ErrorDisplay } from '../components'
-import { typedFields, useAction, useIntl, useOnline, useSystem, useUi } from '../context'
+import { ErrorDisplay, useFields } from '../components'
+import { useAction, useIntl, useOnline, useSystem, useUi } from '../context'
 
 const log = debug('core:PictureDialog')
 
@@ -14,7 +14,7 @@ interface Props {
   onSelected: (uri: ImageUri) => any
 }
 
-interface Values {
+interface FormValues {
   url: string
 }
 
@@ -69,9 +69,9 @@ export const PictureDialog = Object.assign(
     const [listData, setListData] = useState<string[]>([])
     const { onSelected, isOpen } = props
     const { Dialog, Spinner, Row, Grid, alert } = useUi()
-    const { Form, TextField } = typedFields<Values>(useUi())
+    const { Form, TextField } = useFields<FormValues>()
 
-    const initialValues: Values = {
+    const initialValues: FormValues = {
       url,
     }
     // log('render')

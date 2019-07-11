@@ -11,7 +11,7 @@ const defaultState: SettingsState = {
 }
 
 export const settingsSelectors = {
-  getSettingsError: (state: SettingsState) => state.error,
+  settingsError: (state: SettingsState) => state.error,
   getSetting: (state: SettingsState) => (key: string, dflt: string): string => {
     if (key in state.values) {
       return state.values[key]

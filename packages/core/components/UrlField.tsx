@@ -10,7 +10,6 @@ import { actions } from '../actions'
 import {
   CommonFieldProps,
   CommonTextFieldProps,
-  typedFields,
   useAction,
   useIntl,
   useOnline,
@@ -28,16 +27,15 @@ interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldP
   placeholder?: string
 }
 
+export type UrlFieldProps<Values> = Props<Values>
+
 export const UrlField = <Values extends Record<string, any>>(props: Props<Values>) => {
   const intl = useIntl()
   const openPictureDlg = useAction(actions.openDlg.picture)
   const online = useOnline()
   const { getImageFromLibrary } = useSystem()
-  const { PopoverButton, Image, Text } = useUi()
-  const { TextField } = typedFields<Values>(useUi())
-  const { disabled } = props
-  const { field, nameField } = props
-  const { favicoWidth, favicoHeight, favicoField } = props
+  const { PopoverButton, Image, Text, TextField } = useUi()
+  const { disabled, field, nameField, favicoWidth, favicoHeight, favicoField } = props
 
   const form = useForm()
   const name = useFieldValue<string>(nameField)

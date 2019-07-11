@@ -18,7 +18,7 @@ export const BudgetsPage = Object.assign(
   React.memo<Props>(function _BudgetsPage({ componentId }) {
     const intl = useIntl()
     const { Page, Text } = useUi()
-    const accounts = useSelector(selectors.getAccounts)
+    const accounts = useSelector(selectors.accounts)
 
     return (
       <Page title={intl.formatMessage(messages.titleText)} componentId={componentId}>

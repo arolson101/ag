@@ -33,10 +33,12 @@ export const data = {
   normal: {
     bankId: 'a372cda0d53a2f9b0f4c46d0cd3136748',
     accountId: 'a30cdcfe7d083e8e4470e63f61c782928',
+    billId: '',
   },
   full: {
     bankId: 'a74780f9d696f3646f3177b83093c0667',
     accountId: 'a13cb3bf09d932e0b00d4eedee1b22e85',
+    billId: '',
   },
 }
 
@@ -110,7 +112,7 @@ export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) 
           if (dataset) {
             s.dispatch(thunks.dbCreate({ name: 'app', password: '1234' }))
             await waitForState(s, selectors.isLoggedIn)
-            const { connection } = selectors.getAppDb(s.getState())
+            const { connection } = selectors.appDb(s.getState())
             await importDb(connection, datasets[dataset])
             // log('logged in')
             setIsLoggedIn(true)

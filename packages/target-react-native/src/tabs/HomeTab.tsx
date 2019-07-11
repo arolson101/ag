@@ -31,7 +31,7 @@ export const HomeTab = Object.assign(
     stackId: 'HomeTabStack',
 
     options: ({ store }: RnnContext): Options => {
-      const intl = selectors.getIntl(store.getState())
+      const intl = selectors.intl(store.getState())
       return {
         bottomTab: {
           text: intl.formatMessage(HomePage.messages().tabText),

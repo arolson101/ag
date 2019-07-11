@@ -25,19 +25,6 @@ export const AccountPage = Object.assign(
     const { Page, Table, Text } = useUi()
 
     const account = useSelector(selectors.getAccount)(accountId)
-    if (!account) {
-      return null
-    }
-
-    const bank = getBank(account.bankId)
-    if (!bank) {
-      throw new Error('no bank')
-    }
-
-    const transactions = getTransactions(account.id)
-
-    const title = account.name
-    const subtitle = bank.name
 
     type Row = Transaction
     const columns = useMemo<Array<TableColumn<Row>>>(
@@ -81,6 +68,20 @@ export const AccountPage = Object.assign(
       ],
       [intl]
     )
+
+    if (!account) {
+      return null
+    }
+
+    const bank = getBank(account.bankId)
+    if (!bank) {
+      throw new Error('no bank')
+    }
+
+    const transactions = getTransactions(account.id)
+
+    const title = account.name
+    const subtitle = bank.name
 
     return (
       <Page

@@ -3,8 +3,8 @@ import { pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
 import React, { useCallback, useImperativeHandle } from 'react'
 import { defineMessages } from 'react-intl'
-import { UrlField } from '../components/UrlField'
-import { Errors, tabConfig, typedFields, useAction, useIntl, useSelector, useUi } from '../context'
+import { useFields } from '../components'
+import { Errors, tabConfig, useAction, useIntl, useSelector, useUi } from '../context'
 import { filist, formatAddress } from '../data'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
@@ -20,8 +20,6 @@ interface Props {
   onClosed: () => any
 }
 
-const bankAvatarSize = 100
-
 export interface BankForm {
   save: () => any
 }
@@ -29,9 +27,10 @@ export interface BankForm {
 export const BankForm = Object.assign(
   React.forwardRef<BankForm, Props>(function _BankForm({ bankId, onClosed }, ref) {
     const intl = useIntl()
-    const ui = useUi()
-    const { LoadingOverlay, Tabs, Tab, Text } = ui
-    const { Form, CheckboxField, Divider, SelectField, TextField } = typedFields<FormValues>(ui)
+    const { Tabs, Tab, Text } = useUi()
+    const { Form, CheckboxField, Divider, SelectField, TextField, UrlField } = useFields<
+      FormValues
+    >()
     const saveBank = useAction(thunks.saveBank)
     const submitFormRef = useSubmitRef()
 
@@ -129,12 +128,12 @@ export const BankForm = Object.assign(
                   label={intl.formatMessage(messages.address)}
                   rows={4}
                 />
-                <UrlField<FormValues>
+                <UrlField
                   field='web'
                   nameField='name'
                   favicoField='icon'
-                  favicoWidth={bankAvatarSize}
-                  favicoHeight={bankAvatarSize}
+                  favicoWidth={Bank.iconSize}
+                  favicoHeight={Bank.iconSize}
                   label={intl.formatMessage(messages.web)}
                   // ref={favicoField}
                 />

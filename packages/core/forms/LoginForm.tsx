@@ -3,8 +3,8 @@ import debug from 'debug'
 import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { defineMessages } from 'react-intl'
 import { useSelector } from 'react-redux'
-import { ErrorDisplay } from '../components'
-import { Errors, typedFields, useAction, useIntl, useUi } from '../context'
+import { ErrorDisplay, useFields } from '../components'
+import { Errors, useAction, useIntl, useUi } from '../context'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
@@ -33,13 +33,12 @@ export interface LoginForm {
 export const LoginForm = Object.assign(
   React.forwardRef<LoginForm, Props>(({ dbs }, ref) => {
     const intl = useIntl()
-    const ui = useUi()
     const submitRef = useSubmitRef()
     const createDb = useAction(thunks.dbCreate)
-    const appError = useSelector(selectors.getAppError)
+    const appError = useSelector(selectors.appError)
     const openDb = useAction(thunks.dbOpen)
-    const { Text } = ui
-    const { Form, TextField } = typedFields<FormValues>(ui)
+    const { Text } = useUi()
+    const { Form, TextField } = useFields<FormValues>()
     const dbId = dbs.length ? dbs[0].dbId : undefined
     const create = !dbId
 

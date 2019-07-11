@@ -20,6 +20,10 @@ export interface DialogState {
     bankId?: string
     accountId?: string
   }
+  billDialog?: {
+    isOpen: boolean
+    billId?: string
+  }
 }
 
 const initialState: DialogState = {}
@@ -43,6 +47,12 @@ export const dialog = (state: DialogState = initialState, action: CoreAction): D
 
     case getType(actions.openDlg.accountEdit):
       return { ...state, accountDialog: { isOpen: true, ...action.payload } }
+
+    case getType(actions.openDlg.billCreate):
+      return { ...state, billDialog: { isOpen: true } }
+
+    case getType(actions.openDlg.billEdit):
+      return { ...state, billDialog: { isOpen: true, ...action.payload } }
 
     case getType(actions.closeDlg):
       switch (action.payload) {
@@ -68,6 +78,12 @@ export const dialog = (state: DialogState = initialState, action: CoreAction): D
           return {
             ...state,
             bankDialog: state.bankDialog && { ...state.bankDialog, isOpen: false },
+          }
+
+        case 'bill':
+          return {
+            ...state,
+            billDialog: state.billDialog && { ...state.billDialog, isOpen: false },
           }
 
         default:

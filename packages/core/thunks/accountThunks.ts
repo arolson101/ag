@@ -28,10 +28,10 @@ interface SaveAccountParams {
 const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk =>
   async function _saveAccount(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
+    const intl = selectors.intl(state)
 
     try {
-      const { accountsRepository } = selectors.getAppDb(state)
+      const { accountsRepository } = selectors.appDb(state)
 
       let account: Account
       let changes: DbChange[]
@@ -63,7 +63,7 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
 const deleteAccount = (account: { id: string; name: string }): CoreThunk =>
   async function _deleteAccount(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
+    const intl = selectors.intl(state)
 
     try {
       const intlCtx = { name: account.name }
@@ -96,9 +96,9 @@ const syncAccounts = (bankId: string): CoreThunk =>
 const downloadAccountList = (bankId: string): CoreThunk =>
   async function _downloadAccountList(dispatch, getState, { online }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
+    const intl = selectors.intl(state)
     try {
-      const { banksRepository, accountsRepository } = selectors.getAppDb(state)
+      const { banksRepository, accountsRepository } = selectors.appDb(state)
       const bank = await banksRepository.getById(bankId)
       if (!bank.online) {
         throw new Error(`downloadAccountList: bank is not set online`)
@@ -167,10 +167,8 @@ const downloadTransactions = ({
 }): CoreThunk<Account> =>
   async function _downloadTransactions(dispatch, getState, { online }) {
     const state = getState()
-    const intl = selectors.getIntl(state)
-    const { banksRepository, accountsRepository, transactionsRepository } = selectors.getAppDb(
-      state
-    )
+    const intl = selectors.intl(state)
+    const { banksRepository, accountsRepository, transactionsRepository } = selectors.appDb(state)
     const bank = await banksRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadTransactions: bank is not set online`)

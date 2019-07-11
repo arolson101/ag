@@ -2,6 +2,7 @@ import { CurrencyFieldProps } from '@ag/core/context'
 import { useField, useForm } from '@ag/util'
 import { Form, InputNumber } from 'antd'
 import React, { useCallback } from 'react'
+import { formItemLayout } from './Form.antd'
 
 export const CurrencyField = Object.assign(
   React.memo<CurrencyFieldProps>(function _CurrencyField(props) {
@@ -22,6 +23,7 @@ export const CurrencyField = Object.assign(
         help={touched && error}
         label={label}
         style={{ flex }}
+        {...formItemLayout}
       >
         <InputNumber
           {...field}

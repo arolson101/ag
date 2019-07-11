@@ -3,6 +3,7 @@ import { useField, useForm } from '@ag/util'
 import { Form, Select } from 'antd'
 import debug from 'debug'
 import React, { useCallback } from 'react'
+import { formItemLayout } from './Form.antd'
 
 const log = debug('ui-antd:SelectField')
 
@@ -23,33 +24,43 @@ export const SelectField = Object.assign(
     )
 
     // log('render %o', name)
-    return (
-      <Form.Item
-        validateStatus={touched && error ? 'error' : undefined}
-        help={touched && error}
-        label={label}
-        style={{ flex }}
+
+    const select = (
+      <Select<string>
+        style={{ flex: 1 }}
+        disabled={disabled}
+        showSearch={searchable}
+        optionFilterProp='children'
+        filterOption={(input, option) =>
+          option.props
+            .children!.toString()
+            .toLowerCase()
+            .indexOf(input.toLowerCase()) >= 0
+        }
+        value={field.value || ''}
+        onChange={onChange}
       >
-        <Select<string>
-          style={{ flex: 1 }}
-          disabled={disabled}
-          showSearch={searchable}
-          optionFilterProp='children'
-          filterOption={(input, option) =>
-            option.props
-              .children!.toString()
-              .toLowerCase()
-              .indexOf(input.toLowerCase()) >= 0
-          }
-          value={field.value || ''}
-          onChange={onChange}
-        >
-          {items.map(item => (
-            <Select.Option key={item.value}>{item.label}</Select.Option>
-          ))}
-        </Select>
-      </Form.Item>
+        {items.map(item => (
+          <Select.Option key={item.value}>{item.label}</Select.Option>
+        ))}
+      </Select>
     )
+
+    if (label) {
+      return (
+        <Form.Item
+          validateStatus={touched && error ? 'error' : undefined}
+          help={touched && error}
+          label={label}
+          style={{ flex }}
+          {...formItemLayout}
+        >
+          {select}
+        </Form.Item>
+      )
+    } else {
+      return select
+    }
   }),
   {
     displayName: 'Form',

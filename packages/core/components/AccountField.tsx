@@ -1,18 +1,21 @@
 import React from 'react'
 import { defineMessages } from 'react-intl'
-import { SelectFieldItem, typedFields, useIntl, useSelector, useUi } from '../context'
+import { SelectFieldItem, useIntl, useSelector, useUi } from '../context'
 import { selectors } from '../reducers'
 
-interface Props {
-  field: string
+interface Props<Values = any> {
+  field: keyof Values & string
   label: string
+  disabled?: boolean
 }
 
+export type AccountFieldProps<Values> = Props<Values>
+
 export const AccountField = Object.assign(
-  React.memo<Props>(function _AccountField({ field, label }) {
+  React.memo<Props>(function _AccountField({ field, label, disabled }) {
     const intl = useIntl()
     const { SelectField } = useUi()
-    const accounts = useSelector(selectors.getAccounts)
+    const accounts = useSelector(selectors.accounts)
     const getBank = useSelector(selectors.getBank)
     const items: SelectFieldItem[] = accounts.map(acct => {
       const intlContext = { bank: getBank(acct.bankId)!.name, account: acct.name }
@@ -22,7 +25,7 @@ export const AccountField = Object.assign(
       }
     })
 
-    return <SelectField field={field} label={label} items={items} />
+    return <SelectField {...{ field, label, items, disabled }} />
   }),
   {
     displayName: 'AccountField',

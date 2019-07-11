@@ -15,7 +15,7 @@ interface Props extends React.Props<any> {
 
 interface WindowProps extends Props {
   title: string
-  color: string
+  themeColor: string
   mode: ThemeMode
   maximized: boolean
   onCloseClick: () => any
@@ -25,7 +25,13 @@ interface WindowProps extends Props {
 }
 
 const WinWindow = Object.assign(
-  React.memo<WindowProps>(function _WinWindow({ hist, mode, color, children, ...titleBarProps }) {
+  React.memo<WindowProps>(function _WinWindow({
+    hist,
+    mode,
+    themeColor: color,
+    children,
+    ...titleBarProps
+  }) {
     return (
       <Win.Window theme={mode} height='100%' width='100%' chrome color={color}>
         {/* titlebar/menu is created via Titlebar in ElectronMenu */}
@@ -61,9 +67,9 @@ export const ElectronWindow = Object.assign(
   React.memo<Props>(function _ElectronWindow(props) {
     const [maximized, setMaximized] = useState(remote.getCurrentWindow().isMaximized())
     const title = window.document.title
-    const mode = useSelector(selectors.getThemeMode)
-    const platform = useSelector(selectors.getPlatform)
-    const color = useSelector(selectors.getThemeColor)
+    const mode = useSelector(selectors.themeMode)
+    const platform = useSelector(selectors.platform)
+    const themeColor = useSelector(selectors.themeColor)
 
     const onMinimizeClick = useCallback(() => {
       log('onMinimizeClick')
@@ -121,12 +127,12 @@ export const ElectronWindow = Object.assign(
       }
     }, [])
 
-    const windowProps = {
+    const windowProps: WindowProps = {
       ...props,
       maximized,
       title,
       mode,
-      color,
+      themeColor,
       onCloseClick,
       onMinimizeClick,
       onMaximizeClick,

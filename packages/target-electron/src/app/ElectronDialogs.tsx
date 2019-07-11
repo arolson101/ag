@@ -1,5 +1,5 @@
 import { useSelector } from '@ag/core/context'
-import { AccountDialog, BankDialog, LoginDialog, PictureDialog } from '@ag/core/dialogs'
+import { AccountDialog, BankDialog, BillDialog, LoginDialog, PictureDialog } from '@ag/core/dialogs'
 import { selectors } from '@ag/core/reducers'
 import debug from 'debug'
 import React from 'react'
@@ -10,7 +10,7 @@ interface Props {}
 
 export const ElectronDialogs = Object.assign(
   React.memo<Props>(function _ElectronDialogs(props) {
-    const dialog = useSelector(selectors.getDialogs)
+    const dialog = useSelector(selectors.dialogs)
 
     return (
       <>
@@ -18,6 +18,7 @@ export const ElectronDialogs = Object.assign(
         {dialog.pictureDialog && <PictureDialog {...dialog.pictureDialog} />}
         {dialog.bankDialog && <BankDialog {...dialog.bankDialog} />}
         {dialog.accountDialog && <AccountDialog {...dialog.accountDialog} />}
+        {dialog.billDialog && <BillDialog {...dialog.billDialog} />}
       </>
     )
   }),

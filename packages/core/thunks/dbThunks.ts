@@ -1,4 +1,13 @@
-import { Account, appEntities, Bank, Db, indexEntities } from '@ag/db/entities'
+import {
+  Account,
+  appEntities,
+  Bank,
+  Bill,
+  Budget,
+  Category,
+  Db,
+  indexEntities,
+} from '@ag/db/entities'
 import crypto from 'crypto'
 import { defineMessages } from 'react-intl'
 import sanitize from 'sanitize-filename'
@@ -28,14 +37,25 @@ const dbLoadEntities = (): CoreThunk =>
     const {
       accountsRepository, //
       banksRepository,
-    } = selectors.getAppDb(getState())
+      billsRepository,
+      // budgetsRepository,
+      // categoriesRepository,
+    } = selectors.appDb(getState())
 
     const banks = await banksRepository.all()
     const accounts = await accountsRepository.all()
+    const bills = await billsRepository.all()
+    // const budgets = await budgetsRepository.all()
+    // const categories = await categoriesRepository.all()
+
     dispatch(
       actions.dbEntities([
         { table: Bank, entities: banks, deletes: [] },
         { table: Account, entities: accounts, deletes: [] },
+        // { table: Transaction, entities: transactions, deletes: [] },
+        { table: Bill, entities: bills, deletes: [] },
+        // { table: Budget, entities: budgets, deletes: [] },
+        // { table: Category, entities: categories, deletes: [] },
       ])
     )
   }
@@ -51,7 +71,7 @@ const dbCreate = ({ name, password }: { name: string; password: string }): CoreT
   async function _dbCreate(dispatch, getState, { sys: { openDb } }) {
     try {
       dispatch(actions.dbLogin.request())
-      const dbRepo = selectors.getDbRepository(getState())
+      const dbRepo = selectors.dbRepository(getState())
 
       const dbInfo = new Db()
       dbInfo.dbId = crypto.randomBytes(8).toString('base64')
@@ -77,7 +97,7 @@ const dbOpen = ({ dbId, password }: { dbId: string; password: string }): CoreThu
   async function _dbOpen(dispatch, getState, { sys: { openDb } }) {
     try {
       dispatch(actions.dbLogin.request())
-      const dbRepo = selectors.getDbRepository(getState())
+      const dbRepo = selectors.dbRepository(getState())
 
       const dbInfo = await dbRepo.findOneOrFail(dbId)
       const key = dbInfo.getKey(password)
@@ -93,7 +113,7 @@ const dbOpen = ({ dbId, password }: { dbId: string; password: string }): CoreThu
 
 const dbDelete = ({ dbId }: { dbId: string }): CoreThunk =>
   async function _dbDelete(dispatch, getState, { sys: { deleteDb }, ui: { alert, showToast } }) {
-    const intl = selectors.getIntl(getState())
+    const intl = selectors.intl(getState())
 
     const confirmed = await alert({
       title: intl.formatMessage(messages.dlgTitle),
@@ -110,7 +130,7 @@ const dbDelete = ({ dbId }: { dbId: string }): CoreThunk =>
 
     try {
       dispatch(actions.dbDelete.request())
-      const dbRepo = selectors.getDbRepository(getState())
+      const dbRepo = selectors.dbRepository(getState())
 
       const dbInfo = await dbRepo.findOneOrFail(dbId)
       await deleteDb(dbInfo.path)

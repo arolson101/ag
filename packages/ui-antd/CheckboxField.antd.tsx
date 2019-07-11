@@ -3,6 +3,7 @@ import { useField } from '@ag/util'
 import { Form, Switch } from 'antd'
 import React from 'react'
 import { useForm } from 'react-final-form'
+import { formItemLayout } from './Form.antd'
 
 export const CheckboxField = Object.assign(
   React.memo<CheckboxFieldProps>(function _CheckboxField(props) {
@@ -15,6 +16,7 @@ export const CheckboxField = Object.assign(
         help={touched && error}
         label={label}
         style={{ flex }}
+        {...formItemLayout}
       >
         <Switch
           {...field}
