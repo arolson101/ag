@@ -1,4 +1,4 @@
-import { Bill, BillInput, DbChange } from '@ag/db/entities'
+import { Bill, BillInput, DbChange, DbEntityEdit } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import { defineMessages } from 'react-intl'
@@ -75,9 +75,42 @@ const deleteBill = (bill: { id: string; name: string }): CoreThunk =>
     }
   }
 
+const setBillsOrder = (accountIds: string[]): CoreThunk =>
+  async function _setBillsOrder(dispatch, getState, { ui: { alert } }) {
+    const state = getState()
+    const intl = selectors.intl(state)
+
+    try {
+      const { billsRepository } = selectors.appDb(state)
+      const t = Date.now()
+      const bills = await billsRepository.getByIds(accountIds)
+      if (bills.length !== accountIds.length) {
+        throw new Error('got back wrong number of bills')
+      }
+      // log('bills (before) %o', bills)
+      bills.sort((a, b) => accountIds.indexOf(a.id) - accountIds.indexOf(b.id))
+      const edits = bills.map(
+        ({ id }, idx): DbEntityEdit<Bill.Spec> => ({
+          id,
+          q: { sortOrder: { $set: idx } },
+        })
+      )
+      // log('bills: %o, edits: %o', bills, edits)
+      const change: DbChange = {
+        t,
+        edits,
+        table: Bill,
+      }
+      await dispatch(dbWrite([change]))
+    } catch (error) {
+      ErrorDisplay.show(alert, intl, error)
+    }
+  }
+
 export const billThunks = {
   saveBill,
   deleteBill,
+  setBillsOrder,
 }
 
 const messages = defineMessages({

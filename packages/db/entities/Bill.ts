@@ -17,6 +17,7 @@ export class Bill extends DbEntity<Bill.Props> {
   @Column() category!: string
   @Column() rruleString!: string
   @Column() showAdvanced!: boolean
+  @Column({ nullable: true }) sortOrder!: number
 }
 
 export namespace Bill {
@@ -35,6 +36,7 @@ export namespace Bill {
     category: '',
     rruleString: '',
     showAdvanced: false,
+    sortOrder: -1,
   }
 
   export namespace change {

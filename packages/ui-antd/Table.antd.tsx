@@ -1,6 +1,9 @@
 import { ActionDesc, TableColumn, TableProps } from '@ag/core/context'
+import { faGripLines } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import * as Antd from 'antd'
 import { TableComponents } from 'antd/lib/table'
+import arrayMove from 'array-move'
 import debug from 'debug'
 import React, { useCallback, useState } from 'react'
 import {
@@ -14,7 +17,15 @@ import {
 } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle,
+  SortEndHandler,
+} from 'react-sortable-hoc'
+import {
+  AutoSizer,
   Column as VColumn,
+  defaultTableRowRenderer,
   Table as VTable,
   TableCellProps as VTableCellProps,
   TableCellRenderer as VTableCellRenderer,
@@ -25,22 +36,16 @@ import 'react-virtualized/styles.css'
 import { ContextMenu } from './ContextMenu'
 import { Image } from './Image.antd'
 import { mapIconName } from './ImageSourceIcon'
-
-import arrayMove from 'array-move'
-import {
-  SortableContainer,
-  SortableElement,
-  SortableHandle,
-  SortEndHandler,
-} from 'react-sortable-hoc'
+import './Table.antd.css'
 
 const DragHandle = SortableHandle(() => (
   <span style={{ cursor: 'ns-resize' }}>
-    <Antd.Icon type='menu' />
+    <Antd.Icon
+      style={{ color: '#00000040' }}
+      component={() => <FontAwesomeIcon icon={faGripLines} />}
+    />
   </span>
 ))
-
-import { AutoSizer, defaultTableRowRenderer } from 'react-virtualized'
 
 const SortableTable = SortableContainer(VTable)
 const SortableTableRowRenderer = SortableElement(defaultTableRowRenderer as any)

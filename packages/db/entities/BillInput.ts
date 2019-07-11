@@ -9,4 +9,5 @@ export class BillInput {
   category?: string
   rruleString?: string
   showAdvanced?: boolean
+  sortOrder?: number
 }

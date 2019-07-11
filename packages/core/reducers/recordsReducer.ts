@@ -60,7 +60,11 @@ export const recordsSelectors = {
   getTransaction: (state: RecordsState) => (transactionId?: string): Transaction | undefined => {
     return transactionId ? state.transactions[transactionId] : undefined
   },
-  bills: (state: RecordsState) => Object.values(state.bills),
+  bills: (state: RecordsState) => {
+    const bills = Object.values(state.bills)
+    bills.sort((a, b) => a.sortOrder - b.sortOrder)
+    return bills
+  },
   getBill: (state: RecordsState) => (billId?: string) => (billId ? state.bills[billId] : undefined),
 }
 

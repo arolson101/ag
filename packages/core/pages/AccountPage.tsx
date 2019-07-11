@@ -1,4 +1,5 @@
 import { Transaction } from '@ag/db'
+import { formatCurrency } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
 import React, { useMemo } from 'react'
@@ -58,12 +59,7 @@ export const AccountPage = Object.assign(
           dataIndex: 'amount',
           align: 'right',
           title: intl.formatMessage(messages.colAmount),
-          format: (text: string) =>
-            intl.formatNumber(parseFloat(text), {
-              style: 'currency',
-              currency: 'USD',
-              // currencyDisplay: 'symbol',
-            }),
+          format: (text: string) => formatCurrency(intl, text),
         },
       ],
       [intl]

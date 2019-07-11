@@ -1,4 +1,5 @@
 import { Bill } from '@ag/db'
+import { formatCurrency } from '@ag/util'
 import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
@@ -22,10 +23,10 @@ const BillGroup = Object.assign(
   React.memo<{ group: string; bills: Bill[] }>(function _BillGroup({ group, bills }) {
     type Row = Bill
     const intl = useIntl()
-    const { Image, Table } = useUi()
+    const { Image, Table, Text } = useUi()
     const openBillEditDlg = useAction(actions.openDlg.billEdit)
     const deleteBill = useAction(thunks.deleteBill)
-    const setBillsOrder = (billIds: string[]) => {} // useAction(thunks.setBillsOrder)
+    const setBillsOrder = useAction(thunks.setBillsOrder)
 
     const moveRow = useCallback(
       (srcIndex: number, dstIndex: number) => {
@@ -73,10 +74,12 @@ const BillGroup = Object.assign(
           //   </Link>
           // ),
         },
-        // {
-        //   dataIndex: 'sortOrder',
-        //   title: 'sortOrder',
-        // },
+        {
+          dataIndex: 'amount',
+          align: 'right',
+          title: 'amount',
+          render: (value: string) => formatCurrency(intl, value),
+        },
         // {
         //   dataIndex: 'id',
         //   title: 'id',
