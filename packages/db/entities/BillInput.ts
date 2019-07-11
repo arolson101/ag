@@ -1,3 +1,5 @@
+import { RRule } from 'rrule'
+
 export class BillInput {
   name?: string
   group?: string
@@ -7,7 +9,7 @@ export class BillInput {
   amount?: number
   account?: string
   category?: string
-  rruleString?: string
+  rrule?: RRule
   showAdvanced?: boolean
   sortOrder?: number
 }

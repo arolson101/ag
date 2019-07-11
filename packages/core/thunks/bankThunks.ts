@@ -37,7 +37,7 @@ const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
       await dispatch(dbWrite(changes))
       assert.equal(bankId, bank.id)
       // log('get bank %s', bankId)
-      assert.deepEqual(bank, await banksRepository.getById(bankId))
+      assert.deepStrictEqual(bank, await banksRepository.getById(bankId))
       // log('done')
 
       const intlCtx = { name: bank.name }

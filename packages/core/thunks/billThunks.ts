@@ -12,6 +12,11 @@ interface SaveBillParams {
   billId?: string
 }
 
+const comparable = (bill: Bill) => ({
+  ...bill,
+  rrule: bill.rrule.toString(),
+})
+
 const saveBill = ({ input, billId }: SaveBillParams): CoreThunk =>
   async function _saveBill(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
@@ -37,7 +42,7 @@ const saveBill = ({ input, billId }: SaveBillParams): CoreThunk =>
       await dispatch(dbWrite(changes))
       assert.equal(billId, bill.id)
       // log('get bill %s', billId)
-      assert.deepEqual(bill, await billsRepository.getById(billId))
+      assert.deepStrictEqual(comparable(bill), comparable(await billsRepository.getById(billId)))
       // log('done')
 
       const intlCtx = { name: bill.name }

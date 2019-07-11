@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon'
 import numeral from 'numeral'
 import { defineMessages, FormattedMessage, InjectedIntl } from 'react-intl'
 
@@ -14,6 +13,10 @@ const messages = defineMessages({
   invalidNumber: {
     id: 'validator.invalidNumber',
     defaultMessage: 'Invalid number',
+  },
+  notNumberType: {
+    id: 'validator.notNumberType',
+    defaultMessage: 'Not a number type',
   },
 })
 
@@ -89,6 +92,8 @@ export class Validator<V extends Record<string, any>> {
     const x = value.value()
     if (isNaN(x)) {
       this.errors[key] = this.formatMessage(messages.invalidNumber)
+    } else if (typeof x !== 'number') {
+      this.errors[key] = this.formatMessage(messages.notNumberType)
     }
   }
 

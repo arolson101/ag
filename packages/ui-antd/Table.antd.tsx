@@ -86,15 +86,16 @@ export const Table = React.memo<TableProps>(function _Table(props) {
     [emptyText]
   )
 
-  const menu = (
-    <Antd.Menu>
-      <Antd.Menu.ItemGroup title={titleText} />
-      {actionMenuItem(rowAdd)}
-      <Antd.Menu.Divider />
-      {actionMenuItem(tableEdit)}
-      {actionMenuItem(tableDelete)}
-    </Antd.Menu>
-  )
+  const menu =
+    rowAdd || tableEdit || tableDelete ? (
+      <Antd.Menu>
+        <Antd.Menu.ItemGroup title={titleText} />
+        {actionMenuItem(rowAdd)}
+        <Antd.Menu.Divider />
+        {actionMenuItem(tableEdit)}
+        {actionMenuItem(tableDelete)}
+      </Antd.Menu>
+    ) : null
 
   const sortwidth = 30
 
@@ -152,9 +153,11 @@ export const Table = React.memo<TableProps>(function _Table(props) {
             <Image src={titleImage} size='1.5em' margin={5} />
             {titleText}
           </Title>
-          <Antd.Dropdown overlay={menu}>
-            <Antd.Button icon='ellipsis' shape='round' />
-          </Antd.Dropdown>
+          {menu && (
+            <Antd.Dropdown overlay={menu}>
+              <Antd.Button icon='ellipsis' shape='round' />
+            </Antd.Dropdown>
+          )}
         </div>
       ) : null}
       <div style={{ height }}>

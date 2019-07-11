@@ -51,7 +51,7 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
       }
       await dispatch(dbWrite(changes))
       assert.equal(accountId, account.id)
-      assert.deepEqual(account, await accountsRepository.getById(accountId))
+      assert.deepStrictEqual(account, await accountsRepository.getById(accountId))
 
       const intlCtx = { name: account.name }
       showToast(intl.formatMessage(accountId ? messages.saved : messages.created, intlCtx))

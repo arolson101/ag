@@ -1,6 +1,6 @@
 import { Bill } from '@ag/db/entities'
 import { pick, toRRule, useSubmitRef, Validator } from '@ag/util'
-import { DateTime } from '@ag/util/date'
+import { DateTime, standardizeDate } from '@ag/util/date'
 import assert from 'assert'
 import debug from 'debug'
 // import { Info } from 'luxon'
@@ -46,9 +46,7 @@ interface RRuleValues {
   bymonth: string
 }
 
-interface FormValues extends RRuleValues, Bill.Props {
-  showAdvanced?: boolean
-}
+interface FormValues extends RRuleValues, Required<Bill.Props> {}
 
 export const BillForm = Object.assign(
   React.forwardRef<BillForm, Props>(function _BillForm(props, ref) {
@@ -73,7 +71,6 @@ export const BillForm = Object.assign(
       // BudgetField,
     } = useFields<FormValues>()
 
-    const endDate = DateTime.local().plus({ years: 2 })
     const maxGenerated = 20
 
     // const weekdayOptions = useMemo(
@@ -97,16 +94,29 @@ export const BillForm = Object.assign(
     const groups = useMemo(() => getGroupNames(bills.filter(bill => !!bill.group)), [bills])
     // log('groups %o bills %o', groups, bills)
 
+    const initialRRuleValues: RRuleValues = {
+      frequency: 'months',
+      interval: 1,
+      end: 'endCount',
+      start: standardizeDate(new Date()),
+      until: standardizeDate(new Date()),
+      count: 0,
+      byweekday: '',
+      bymonth: '',
+    }
+
     let initialValues: FormValues
     if (edit) {
-      const rrule = RRule.fromString(edit.rruleString)
+      assert(edit.rrule)
+
       initialValues = {
+        ...initialRRuleValues,
         ...edit,
         // amount: intl.formatNumber(edit.amount, { style: 'currency', currency: 'USD' }),
-        start: rrule.options.dtstart,
-      } as any
+        start: edit.rrule.options.dtstart,
+      }
 
-      const opts = rrule.origOptions
+      const opts = edit.rrule.origOptions
       if (opts.freq === RRule.MONTHLY) {
         initialValues.frequency = 'months'
       } else if (opts.freq === RRule.WEEKLY) {
@@ -117,9 +127,11 @@ export const BillForm = Object.assign(
         initialValues.frequency = 'years'
       }
 
-      if (opts.interval) {
+      if (typeof opts.interval === 'number') {
+        assert(opts.interval >= 1)
         initialValues.interval = opts.interval
       }
+
       if (Array.isArray(opts.byweekday)) {
         initialValues.byweekday = opts.byweekday.map(toWeekdayStr).join(',')
         initialValues.showAdvanced = true
@@ -130,25 +142,19 @@ export const BillForm = Object.assign(
       }
 
       initialValues.end = 'endCount'
+      initialValues.until = new Date()
+
       if (opts.until) {
         initialValues.until = opts.until
         initialValues.count = 0
         initialValues.end = 'endDate'
       } else if (typeof opts.count === 'number') {
         initialValues.count = opts.count
-        initialValues.until = new Date()
       }
     } else {
       initialValues = {
+        ...initialRRuleValues,
         ...Bill.defaultValues,
-        start: DateTime.local().toJSDate(),
-        frequency: 'months',
-        interval: 1,
-        end: 'endCount',
-        until: new Date(),
-        count: 0,
-        byweekday: '',
-        bymonth: '',
       }
     }
 
@@ -172,10 +178,10 @@ export const BillForm = Object.assign(
       async (values: FormValues) => {
         try {
           // log('onSubmit %o', { input, bankId })
-          const rrule = toRRule(values)
           const input = {
             ...pick(values, Object.keys(Bill.defaultValues) as Array<keyof Bill.Props>),
-            rruleString: rrule.toString(),
+            rrule: toRRule(values),
+            amount: +values.amount,
           }
           await saveBill({ input, billId })
           onClosed()
@@ -199,14 +205,25 @@ export const BillForm = Object.assign(
         submit={submit}
         submitRef={submitFormRef}
       >
-        {api => {
-          const { start, end, interval, showAdvanced } = api.values
+        {({ values }) => {
+          const { start, end, interval, showAdvanced } = values
           assert(end)
-          const rrule = toRRule(api.values)
-          const generatedValues = rrule
-            ? rrule.all((date, index) => +endDate > +date && index < maxGenerated)
-            : []
-          const text = rrule ? rrule.toText() : ''
+          const rrule = toRRule(values)
+          const endDate = standardizeDate(
+            DateTime.fromJSDate(start)
+              .plus({ years: 2 })
+              .toJSDate()
+          )
+          const [generatedValues, text] = useMemo(
+            () =>
+              rrule
+                ? [
+                    rrule.all((date, index) => date < endDate && index < maxGenerated),
+                    rrule.toText(),
+                  ]
+                : [[], ''],
+            [rrule]
+          )
 
           const endTypeItems = endTypes.map(et => ({
             value: et,

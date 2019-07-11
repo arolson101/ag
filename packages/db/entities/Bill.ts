@@ -1,8 +1,12 @@
 import { ImageUri, ISpec } from '@ag/util'
+import debug from 'debug'
+import { RRule } from 'rrule'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { BillInput } from './BillInput'
 import { DbChange } from './DbChange'
 import { DbEntity } from './DbEntity'
+
+const log = debug('db:Bill')
 
 @Entity({ name: 'bills' })
 export class Bill extends DbEntity<Bill.Props> {
@@ -15,9 +19,23 @@ export class Bill extends DbEntity<Bill.Props> {
   @Column() amount!: number
   @Column() account!: string
   @Column() category!: string
-  @Column() rruleString!: string
   @Column() showAdvanced!: boolean
   @Column({ nullable: true }) sortOrder!: number
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      from: (value: string) => {
+        // log('from %s', value)
+        return RRule.fromString(value)
+      },
+      to: (value: RRule) => {
+        // log('to: %o', value)
+        return value.toString()
+      },
+    },
+  })
+  rrule!: RRule
 }
 
 export namespace Bill {
@@ -34,7 +52,7 @@ export namespace Bill {
     amount: 0,
     account: '',
     category: '',
-    rruleString: '',
+    rrule: new RRule(),
     showAdvanced: false,
     sortOrder: -1,
   }

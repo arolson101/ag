@@ -1,11 +1,13 @@
+import assert from 'assert'
 import { Frequency as RRuleFrequency, Options as RRuleOptions, RRule } from 'rrule'
+import { standardizeDate } from './date'
 
 type Frequency = 'days' | 'weeks' | 'months' | 'years'
 type EndType = 'endDate' | 'endCount'
 
 interface Params {
   frequency: Frequency
-  start?: Date
+  start: Date
   end?: EndType
   until?: Date
   count?: number
@@ -28,7 +30,7 @@ export const toRRule = (params: Params): RRule => {
 
   const opts: Partial<RRuleOptions> = {
     freq: toRRuleFreq[frequency],
-    dtstart: start,
+    dtstart: standardizeDate(start),
   }
 
   if (interval) {
@@ -42,7 +44,8 @@ export const toRRule = (params: Params): RRule => {
   }
 
   if (end === 'endDate') {
-    opts.until = until
+    // assert(until)
+    opts.until = until && standardizeDate(until)
   } else {
     if (count && count > 0) {
       opts.count = +count

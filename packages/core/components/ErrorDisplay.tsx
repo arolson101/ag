@@ -1,23 +1,20 @@
+import debug from 'debug'
 import React, { useEffect } from 'react'
 import { defineMessages } from 'react-intl'
 import { IntlContext, UiContext, useIntl, useUi } from '../context'
 
+const log = debug('core:ErrorDisplay')
+
 interface Props {
-  error: undefined | Error | Error[] | ReadonlyArray<Error>
+  error: undefined | Error
 }
 
-const show = (alert: UiContext['alert'], intl: IntlContext, errors: Props['error']) => {
-  if (!errors) {
-    return null
-  }
-
-  if (errors instanceof Error) {
-    errors = [errors]
-  }
+const show = (alert: UiContext['alert'], intl: IntlContext, error: Error) => {
+  log('%o', error)
 
   alert({
     title: intl.formatMessage(messages.error),
-    body: (errors as Error[]).flatMap(e => [e.message, e.stack || '']).join('\n'),
+    body: error.message,
     confirmText: intl.formatMessage(messages.ok),
     error: true,
   })
@@ -28,7 +25,9 @@ export const ErrorDisplay = Object.assign(
     const intl = useIntl()
     const { alert } = useUi()
     useEffect(() => {
-      show(alert, intl, error)
+      if (error) {
+        show(alert, intl, error)
+      }
     }, [error])
     return null
   }),
