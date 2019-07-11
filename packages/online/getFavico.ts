@@ -9,7 +9,9 @@ const log = debug('online:getFavico')
 
 export const getFavico = async (
   from: string,
-  cancelToken: CancelToken
+  cancelToken: CancelToken,
+  width: number,
+  height: number
 ): Promise<ImageBuf | undefined> => {
   from = fixUrl(from)
 
@@ -84,7 +86,11 @@ export const getFavico = async (
   )
   // log('%s images: %d %O', from, images.length, [...images])
 
+  const rank = (img: ImageBuf) => Math.abs(img.width * img.height - width * height)
+
   // sort by descending size
   images.sort((a, b) => b.width - a.width)
+  images.sort((a, b) => rank(a) - rank(b))
+  log('images: %o', images)
   return images[0]
 }

@@ -1,10 +1,18 @@
 import { FormProps } from '@ag/core/context'
 import { Form as AntdForm } from 'antd'
 import { FormLayout } from 'antd/lib/form/Form'
+import debug from 'debug'
 import React from 'react'
 import { Form as FinalForm } from 'react-final-form'
 
+const log = debug('ui-antd:Form')
+
 const layout = 'vertical' as FormLayout
+
+// const logger: import('final-form').DebugFunction = (state, fieldStates) => {
+//   let err = new Error()
+//   console.log('logger', { state, fieldStates }, err.stack)
+// }
 
 export const formItemLayout =
   layout === 'horizontal'
@@ -28,7 +36,12 @@ export const Form = Object.assign(
     // )
 
     return (
-      <FinalForm initialValues={initialValues} validate={validate} onSubmit={submit}>
+      <FinalForm
+        initialValues={initialValues}
+        validate={validate}
+        onSubmit={submit}
+        // debug={logger}
+      >
         {({ handleSubmit, form, values }) => {
           if (submitRef) {
             submitRef.current = form.submit

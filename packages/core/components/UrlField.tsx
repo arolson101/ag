@@ -41,6 +41,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const name = useFieldValue<string>(nameField)
   const url = useFieldValue<string>(field)
   const value = useFieldValue<ImageUri>(favicoField)
+  // log('UrlField render value %s', value)
 
   const [source, setSource] = useState<string | undefined>(undefined)
   const [loading, setLoading] = useState(false)
@@ -71,7 +72,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
     Promise.resolve().then(async () => {
       try {
         setLoading(true)
-        const favico = await online.getFavico(newUrl, cancelSource.token)
+        const favico = await online.getFavico(newUrl, cancelSource.token, favicoWidth, favicoHeight)
         log('got favico %O', favico)
         const uri = imageBufToUri(favico)
         log('uri %s', uri)
@@ -110,6 +111,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
 
   const onPictureChosen = useCallback(
     (val: ImageUri) => {
+      // log('onPictureChosen: change(%s, %s)', favicoField, val)
       form.change(favicoField, val)
     },
     [form, favicoField]

@@ -94,69 +94,73 @@ export const BillForm = Object.assign(
     const groups = useMemo(() => getGroupNames(bills.filter(bill => !!bill.group)), [bills])
     // log('groups %o bills %o', groups, bills)
 
-    const initialRRuleValues: RRuleValues = {
-      frequency: 'months',
-      interval: 1,
-      end: 'endCount',
-      start: standardizeDate(new Date()),
-      until: standardizeDate(new Date()),
-      count: 0,
-      byweekday: '',
-      bymonth: '',
-    }
-
-    let initialValues: FormValues
-    if (edit) {
-      assert(edit.rrule)
-
-      initialValues = {
-        ...initialRRuleValues,
-        ...edit,
-        // amount: intl.formatNumber(edit.amount, { style: 'currency', currency: 'USD' }),
-        start: edit.rrule.options.dtstart,
+    const initialValues = useMemo(() => {
+      const initialRRuleValues: RRuleValues = {
+        frequency: 'months',
+        interval: 1,
+        end: 'endCount',
+        start: standardizeDate(new Date()),
+        until: standardizeDate(new Date()),
+        count: 0,
+        byweekday: '',
+        bymonth: '',
       }
 
-      const opts = edit.rrule.origOptions
-      if (opts.freq === RRule.MONTHLY) {
-        initialValues.frequency = 'months'
-      } else if (opts.freq === RRule.WEEKLY) {
-        initialValues.frequency = 'weeks'
-      } else if (opts.freq === RRule.MONTHLY) {
-        initialValues.frequency = 'months'
-      } else if (opts.freq === RRule.YEARLY) {
-        initialValues.frequency = 'years'
+      let ivalues: FormValues
+      if (edit) {
+        assert(edit.rrule)
+
+        ivalues = {
+          ...initialRRuleValues,
+          ...edit,
+          // amount: intl.formatNumber(edit.amount, { style: 'currency', currency: 'USD' }),
+          start: edit.rrule.options.dtstart,
+        }
+
+        const opts = edit.rrule.origOptions
+        if (opts.freq === RRule.MONTHLY) {
+          ivalues.frequency = 'months'
+        } else if (opts.freq === RRule.WEEKLY) {
+          ivalues.frequency = 'weeks'
+        } else if (opts.freq === RRule.MONTHLY) {
+          ivalues.frequency = 'months'
+        } else if (opts.freq === RRule.YEARLY) {
+          ivalues.frequency = 'years'
+        }
+
+        if (typeof opts.interval === 'number') {
+          assert(opts.interval >= 1)
+          ivalues.interval = opts.interval
+        }
+
+        if (Array.isArray(opts.byweekday)) {
+          ivalues.byweekday = opts.byweekday.map(toWeekdayStr).join(',')
+          ivalues.showAdvanced = true
+        }
+        if (Array.isArray(opts.bymonth)) {
+          ivalues.bymonth = opts.bymonth.join(',')
+          ivalues.showAdvanced = true
+        }
+
+        ivalues.end = 'endCount'
+        ivalues.until = new Date()
+
+        if (opts.until) {
+          ivalues.until = opts.until
+          ivalues.count = 0
+          ivalues.end = 'endDate'
+        } else if (typeof opts.count === 'number') {
+          ivalues.count = opts.count
+        }
+      } else {
+        ivalues = {
+          ...initialRRuleValues,
+          ...Bill.defaultValues,
+        }
       }
 
-      if (typeof opts.interval === 'number') {
-        assert(opts.interval >= 1)
-        initialValues.interval = opts.interval
-      }
-
-      if (Array.isArray(opts.byweekday)) {
-        initialValues.byweekday = opts.byweekday.map(toWeekdayStr).join(',')
-        initialValues.showAdvanced = true
-      }
-      if (Array.isArray(opts.bymonth)) {
-        initialValues.bymonth = opts.bymonth.join(',')
-        initialValues.showAdvanced = true
-      }
-
-      initialValues.end = 'endCount'
-      initialValues.until = new Date()
-
-      if (opts.until) {
-        initialValues.until = opts.until
-        initialValues.count = 0
-        initialValues.end = 'endDate'
-      } else if (typeof opts.count === 'number') {
-        initialValues.count = opts.count
-      }
-    } else {
-      initialValues = {
-        ...initialRRuleValues,
-        ...Bill.defaultValues,
-      }
-    }
+      return ivalues
+    }, [edit])
 
     const validate = useCallback(
       (values: FormValues) => {
@@ -177,7 +181,7 @@ export const BillForm = Object.assign(
     const submit = useCallback(
       async (values: FormValues) => {
         try {
-          // log('onSubmit %o', { input, bankId })
+          log('onSubmit %o', values)
           const input = {
             ...pick(values, Object.keys(Bill.defaultValues) as Array<keyof Bill.Props>),
             rrule: toRRule(values),

@@ -62,7 +62,7 @@ export const TextFieldWithIcon = <Values extends Record<string, any>>(props: Pro
     Promise.resolve().then(async () => {
       try {
         setLoading(true)
-        const favico = await online.getFavico(newUrl, cancelSource.token)
+        const favico = await online.getFavico(newUrl, cancelSource.token, favicoWidth, favicoHeight)
         log('got favico %O', favico)
         const uri = imageBufToUri(favico)
         log('uri %s', uri)

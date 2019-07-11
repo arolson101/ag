@@ -41,7 +41,7 @@ export class Bill extends DbEntity<Bill.Props> {
 export namespace Bill {
   export interface Props extends Pick<BillInput, keyof BillInput> {}
   export type Spec = ISpec<Props>
-  export const iconSize = 128
+  export const iconSize = 32
 
   export const defaultValues: Required<Props> = {
     name: '',
