@@ -111,7 +111,7 @@ export interface TableColumn<T extends {}> {
   dataIndex: keyof T & string
   title: string
   format?: (text: string) => string
-  render?: (text: string, record: T) => React.ReactNode
+  render?: (text: any, record: T) => React.ReactNode
   width?: number
   align?: 'left' | 'right' | 'center'
 }

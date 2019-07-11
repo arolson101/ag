@@ -60,6 +60,11 @@ const dbLoadEntities = (): CoreThunk =>
     )
   }
 
+const dbReloadAll = (): CoreThunk =>
+  async function _dbReloadAll(dispatch, getState) {
+    dispatch(dbLoadEntities())
+  }
+
 const dbPostLogin = (): CoreThunk =>
   async function _dbLoginSuccess(dispatch) {
     await dispatch(settingsThunks.settingsInit())
@@ -153,6 +158,7 @@ const dbDelete = ({ dbId }: { dbId: string }): CoreThunk =>
 
 export const dbThunks = {
   dbInit,
+  dbReloadAll,
   dbCreate,
   dbOpen,
   dbDelete,

@@ -1,6 +1,7 @@
 import { actions } from '@ag/core/actions'
 import { IntlContext, useAction, useIntl, useSelector } from '@ag/core/context'
 import { selectors } from '@ag/core/reducers'
+import { thunks } from '@ag/core/thunks'
 import { exportDb, importDb } from '@ag/db/export'
 import { Color, RGBA, Titlebar } from 'custom-electron-titlebar'
 import debug from 'debug'
@@ -31,6 +32,7 @@ export const ElectronMenu: React.FC = () => {
   const setThemeColor = useAction(actions.setThemeColor)
   const setPlatform = useAction(actions.setPlatform)
   const titleBar = useRef<Titlebar>()
+  const dbReloadAll = useAction(thunks.dbReloadAll)
 
   useEffect(() => {
     if (remote.process.platform !== 'darwin') {
@@ -54,8 +56,9 @@ export const ElectronMenu: React.FC = () => {
     }
   }, [platform, themeColor])
 
-  const importClicked = useCallback(() => {
-    importFromFile(connection!, intl)
+  const importClicked = useCallback(async () => {
+    await importFromFile(connection!, intl)
+    await dbReloadAll()
   }, [connection, importFromFile])
 
   const exportClicked = useCallback(() => {

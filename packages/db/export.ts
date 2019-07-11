@@ -1,16 +1,36 @@
 import debug from 'debug'
 import { flatten, nest } from 'flatnest'
 import { Connection } from 'typeorm'
+import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
 import XLSX from 'xlsx'
 
 const log = debug('export')
+
+const fixExport = (
+  columns: ColumnMetadata[],
+  object: object | any,
+  fromto: 'from' | 'to'
+): object => {
+  for (const col of columns) {
+    const key = col.propertyPath
+    if (col.transformer) {
+      const transforms = Array.isArray(col.transformer) ? col.transformer : [col.transformer]
+      const value = transforms.reduce((val, tx) => tx[fromto](val), object[key])
+      object[key] = value
+    }
+  }
+
+  return object
+}
 
 export const exportDb = async (connection: Connection) => {
   const wb = XLSX.utils.book_new()
   for (const entityMetadata of connection.entityMetadatas) {
     const { tableName } = entityMetadata
     const repo = connection.manager.getRepository<object>(tableName)
-    const data = (await repo.createQueryBuilder().getMany()).map(flatten)
+    const data = (await repo.createQueryBuilder().getMany())
+      .map(ent => fixExport(entityMetadata.columns, ent, 'to'))
+      .map(flatten)
     const header = entityMetadata.columns.map(col => col.propertyPath)
     log('%s: %d items', tableName, data.length)
     const ws = XLSX.utils.json_to_sheet(data, { header })

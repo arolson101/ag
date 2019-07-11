@@ -1,10 +1,11 @@
 import { Bill } from '@ag/db'
-import { formatCurrency } from '@ag/util'
+import { formatCurrency, formatDate } from '@ag/util'
 import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
 import React, { useCallback, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
+import { RRule } from 'rrule'
 import { actions } from '../actions'
 import { ActionDesc, TableColumn, useAction, useIntl, useSelector, useUi } from '../context'
 import { selectors } from '../reducers'
@@ -75,9 +76,22 @@ const BillGroup = Object.assign(
           // ),
         },
         {
+          dataIndex: 'rrule',
+          title: 'frequency',
+          width: 100,
+          render: (value: RRule, bill: Row) => value.toText(),
+        },
+        {
+          dataIndex: 'rrule',
+          title: 'next',
+          width: 100,
+          render: (value: RRule, bill: Row) => formatDate(value.after(new Date())),
+        },
+        {
           dataIndex: 'amount',
           align: 'right',
           title: 'amount',
+          width: 100,
           render: (value: string) => formatCurrency(intl, value),
         },
         // {
