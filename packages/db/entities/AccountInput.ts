@@ -11,4 +11,5 @@ export class AccountInput {
   key?: string
   icon?: ImageUri
   sortOrder?: number
+  currencyCode?: string
 }

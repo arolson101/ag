@@ -110,7 +110,7 @@ export interface PageProps {
 export interface TableColumn<T extends {}> {
   dataIndex: keyof T & string
   title: string
-  format?: (text: string) => string
+  format?: (text: any) => string
   render?: (text: any, record: T) => React.ReactNode
   width?: number
   align?: 'left' | 'right' | 'center'

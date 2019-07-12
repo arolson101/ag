@@ -21,6 +21,7 @@ export class Account extends DbEntity<Account.Props> {
   @Column() key!: string
   @Column('text') icon!: ImageUri
   @Column() sortOrder!: number
+  @Column() currencyCode!: string
 
   constructor(bankId?: string, id?: string, props?: AccountInput) {
     super(id, { ...Account.defaultValues(), ...props })
@@ -109,5 +110,6 @@ export namespace Account {
     key: '',
     sortOrder: -1,
     icon: '',
+    currencyCode: 'USD',
   })
 }

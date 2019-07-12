@@ -66,6 +66,7 @@ export const BillForm = Object.assign(
       DateField,
       // CollapseField,
       CheckboxField,
+      CurrencyField,
       NumberField,
       UrlField,
       // BudgetField,

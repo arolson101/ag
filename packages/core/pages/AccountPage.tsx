@@ -59,7 +59,7 @@ export const AccountPage = Object.assign(
           dataIndex: 'amount',
           align: 'right',
           title: intl.formatMessage(messages.colAmount),
-          format: (text: string) => formatCurrency(intl, text),
+          format: (value: number) => formatCurrency(intl, value, account!.currencyCode),
         },
       ],
       [intl]

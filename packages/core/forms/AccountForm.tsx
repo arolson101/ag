@@ -1,10 +1,11 @@
 import { Account } from '@ag/db'
-import { pick, useSubmitRef } from '@ag/util'
+import { formatCurrency, pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
 import React, { useCallback, useImperativeHandle } from 'react'
 import { defineMessages } from 'react-intl'
 import { useFields } from '../components'
 import { Errors, useAction, useIntl, useSelector, useUi } from '../context'
+import { currencyItems } from '../data'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
@@ -137,6 +138,11 @@ export const AccountForm = Object.assign(
                   placeholder={intl.formatMessage(messages.keyPlaceholder)}
                 />
               )}
+              <SelectField
+                field='currencyCode'
+                items={currencyItems}
+                label={intl.formatMessage(messages.currency)}
+              />
             </>
           )
         }}
@@ -205,6 +211,10 @@ const messages = defineMessages({
   colorPlaceholder: {
     id: 'AccountForm.colorPlaceholder',
     defaultMessage: 'red',
+  },
+  currency: {
+    id: 'AccountForm.currency',
+    defaultMessage: 'Currency',
   },
   routing: {
     id: 'AccountForm.routing',
