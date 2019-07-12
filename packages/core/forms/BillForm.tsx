@@ -54,9 +54,10 @@ export const BillForm = Object.assign(
     const intl = useIntl()
     const { Text, Divider } = useUi()
     const bills = useSelector(selectors.bills)
-    const locale = useSelector(selectors.locale)
+    const defaultCurrency = useSelector(selectors.currency)
     const edit = useSelector(selectors.getBill)(billId)
     const saveBill = useAction(thunks.saveBill)
+    const getAccount = useSelector(selectors.getAccount)
     const submitFormRef = useSubmitRef()
     const {
       Form,
@@ -230,6 +231,9 @@ export const BillForm = Object.assign(
             [rrule]
           )
 
+          const account = getAccount(values.account)
+          const currencyCode = account ? account.currencyCode : defaultCurrency
+
           const endTypeItems = endTypes.map(et => ({
             value: et,
             label: intl.formatMessage(messages[et], { interval: interval.toString() }),
@@ -265,11 +269,16 @@ export const BillForm = Object.assign(
                 favicoWidth={Bill.iconSize}
                 label={intl.formatMessage(messages.web)}
               />
-              <TextField field='notes' label={intl.formatMessage(messages.notes)} />
+              <TextField field='notes' rows={3} label={intl.formatMessage(messages.notes)} />
 
               <Divider />
 
-              <TextField field='amount' label={intl.formatMessage(messages.amount)} />
+              <CurrencyField
+                field='amount'
+                label={intl.formatMessage(messages.amount)}
+                currencyCode={currencyCode}
+              />
+
               <AccountField field='account' label={intl.formatMessage(messages.account)} />
               {/* <BudgetField field='category' label={intl.formatMessage(messages.budget)} /> */}
 

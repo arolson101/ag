@@ -24,6 +24,7 @@ interface FormValues {
   web: string
   icon: ImageUri
   acctId: string
+  dollars: number
 }
 
 const initialValues: FormValues = {
@@ -38,6 +39,7 @@ const initialValues: FormValues = {
   web: 'www.google.com',
   icon: '',
   acctId: '',
+  dollars: 0,
 }
 
 const highlightDates: Date[] = [
@@ -62,6 +64,7 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
     SelectField,
     DateField,
     NumberField,
+    CurrencyField,
     // CollapseField,
     CheckboxField,
     // AccountField,
@@ -140,6 +143,24 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
                 <SelectField label='' field='intselect' items={selectValues} disabled={disabled} />
               }
               rightElement='right element'
+            />
+            <CurrencyField
+              label='currency field- dollars'
+              field='dollars'
+              currencyCode='USD'
+              disabled={disabled}
+            />
+            <CurrencyField
+              label='currency field- pounds'
+              field='dollars'
+              currencyCode='GBP'
+              disabled={disabled}
+            />
+            <CurrencyField
+              label='currency field- euro'
+              field='dollars'
+              currencyCode='EUR'
+              disabled={disabled}
             />
             <CheckboxField label='checkbox field' field='check' disabled={disabled} />
             <UrlField

@@ -1,4 +1,5 @@
 import { CoreDependencies, CoreDispatch } from '@ag/core/context'
+import { intlStateFromLocale } from '@ag/core/reducers/intlReducer'
 import { initialThemeState, ThemeState } from '@ag/core/reducers/themeReducer'
 import { routerMiddleware } from 'connected-react-router'
 import debug from 'debug'
@@ -33,7 +34,10 @@ export const getInitialState = (): DeepPartial<ElectronState> => {
 
   updateThemeVariables(theme.color, theme.mode)
 
-  return { theme }
+  const locale = remote.app.getLocale()
+  const intl = intlStateFromLocale(locale)
+
+  return { theme, intl }
 }
 
 export const createStore = (hist: HistoryType, dependencies: CoreDependencies) => {

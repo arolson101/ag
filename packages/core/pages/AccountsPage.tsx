@@ -1,4 +1,5 @@
 import { Account, Bank } from '@ag/db'
+import { formatCurrency } from '@ag/util'
 import arrayMove from 'array-move'
 import debug from 'debug'
 import docuri from 'docuri'
@@ -127,7 +128,8 @@ const BankTable = Object.assign(
           width: 100,
           title: 'amount',
           align: 'right',
-          render: (text: string, account: Row) => <Text>$123.45</Text>,
+          render: (text: string, account: Row) =>
+            formatCurrency(intl, 123.45, account.currencyCode),
         },
         // {
         //   dataIndex: 'sortOrder',

@@ -21,12 +21,14 @@ export interface TransactionForm {
 
 export const TransactionForm = Object.assign(
   React.forwardRef<TransactionForm, Props>((props, ref) => {
+    const { accountId, transactionId } = props
     const intl = useIntl()
     const saveTransaction = useAction(thunks.saveTransaction)
     const submitFormRef = useSubmitRef()
     const getTransaction = useSelector(selectors.getTransaction)
+    const defaultCurrency = useSelector(selectors.currency)
+    const account = useSelector(selectors.getAccount)(accountId)
     const { Form, CurrencyField, DateField, TextField } = useFields<FormValues>()
-    const { accountId, transactionId } = props
 
     const transaction = getTransaction(transactionId)
     if (!transaction) {
@@ -80,7 +82,11 @@ export const TransactionForm = Object.assign(
       >
         <DateField field='time' label={intl.formatMessage(messages.date)} />
         <TextField field='name' autoFocus label={intl.formatMessage(messages.name)} />
-        <CurrencyField field='amount' label={intl.formatMessage(messages.amount)} />
+        <CurrencyField
+          field='amount'
+          label={intl.formatMessage(messages.amount)}
+          currencyCode={account ? account.currencyCode : defaultCurrency}
+        />
         <TextField field='memo' label={intl.formatMessage(messages.memo)} />
       </Form>
     )

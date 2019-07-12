@@ -63,11 +63,11 @@ export const BillDialog = Object.assign(
 const messages = defineMessages({
   titleEdit: {
     id: 'BillDialog.titleEdit',
-    defaultMessage: 'Edit Bill',
+    defaultMessage: 'Edit Recurring Transaction',
   },
   titleCreate: {
     id: 'BillDialog.titleCreate',
-    defaultMessage: 'Add Bill',
+    defaultMessage: 'Add Recurring Transaction',
   },
   save: {
     id: 'BillDialog.save',

@@ -16,6 +16,11 @@
     "test": "jest",
     "prettier": "prettier-tslint fix \"**/*{.ts,.tsx}\"",
     "prettier-package-json": "prettier-package-json --write ./package.json packages/*/package.json --key-order name,private,version,description,license,author,maintainers,contributors,homepage,repository,bugs,workspaces,main,build,module,browser,man,preferGlobal,bin,files,directories,scripts,config,jest,optionalDependencies,dependencies,bundleDependencies,bundledDependencies,peerDependencies,devDependencies,keywords,engines,engine-strict,engineStrict,os,cpu,publishConfig",
+    "storybook-android": "cd packages/storybook && yarn run android",
+    "storybook-electron": "cd packages/storybook && yarn run electron",
+    "storybook-ios": "cd packages/storybook && yarn run ios",
+    "target-android": "cd packages/target-react-native && yarn run android",
+    "target-electron": "cd packages/target-electron && yarn dev",
     "update-packages": "ncu -u && lerna exec --concurrency 1 -- ncu -u",
     "watch": "tsc --noemit --skipLibCheck --watch"
   },

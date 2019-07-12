@@ -1,4 +1,5 @@
 import { ImageUri, ISpec } from '@ag/util'
+import { CurrencyCode } from 'currency-code-map'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
@@ -21,7 +22,7 @@ export class Account extends DbEntity<Account.Props> {
   @Column() key!: string
   @Column('text') icon!: ImageUri
   @Column() sortOrder!: number
-  @Column() currencyCode!: string
+  @Column('text') currencyCode!: CurrencyCode
 
   constructor(bankId?: string, id?: string, props?: AccountInput) {
     super(id, { ...Account.defaultValues(), ...props })
@@ -38,6 +39,7 @@ export namespace Account {
   export type Spec = ISpec<Props>
 
   export const iconSize = 128
+  export const defaultCurrencyCode = 'USD'
 
   export const messages = defineMessages({
     CHECKING: {
@@ -110,6 +112,6 @@ export namespace Account {
     key: '',
     sortOrder: -1,
     icon: '',
-    currencyCode: 'USD',
+    currencyCode: defaultCurrencyCode,
   })
 }

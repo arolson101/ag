@@ -1,5 +1,5 @@
 import { Account } from '@ag/db'
-import { formatCurrency, pick, useSubmitRef } from '@ag/util'
+import { pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
 import React, { useCallback, useImperativeHandle } from 'react'
 import { defineMessages } from 'react-intl'

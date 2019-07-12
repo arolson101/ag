@@ -1,4 +1,5 @@
 import { SubmitFunction } from '@ag/util'
+import { CurrencyCode } from 'currency-code-map'
 import { IconName, UiContext } from './uiContext'
 
 export declare type Errors<Values> = {
@@ -48,6 +49,7 @@ export interface CurrencyFieldProps<Values = any>
   extends CommonFieldProps<Values>,
     CommonTextFieldProps {
   placeholder?: string
+  currencyCode: CurrencyCode
 }
 
 export interface DateFieldProps<Values = any> extends CommonFieldProps<Values> {

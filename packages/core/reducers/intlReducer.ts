@@ -1,14 +1,31 @@
+import { CurrencyCode } from 'currency-code-map'
+import LocaleCode from 'locale-code'
 import { IntlProvider } from 'react-intl'
 import { CoreAction } from '../actions'
 import { IntlContext } from '../context'
+import { currencyForLocale } from '../data'
 
-export type IntlState = IntlContext
+export interface IntlState {
+  intl: IntlContext
+  currency: CurrencyCode
+}
 
-export const defaultState: IntlState = new IntlProvider({ locale: 'en' }).getChildContext().intl
+const getIntl = (localeCode: string): IntlContext => {
+  const locale = LocaleCode.getLanguageName(localeCode)
+  return new IntlProvider({ locale }).getChildContext().intl
+}
+
+export const intlStateFromLocale = (locale: string): IntlState => ({
+  intl: getIntl(locale),
+  currency: currencyForLocale(locale),
+})
+
+const defaultState: IntlState = intlStateFromLocale('en-US')
 
 export const intlSelectors = {
-  intl: (state: IntlState) => state,
-  locale: (state: IntlState) => state.locale,
+  intl: (state: IntlState) => state.intl,
+  locale: (state: IntlState) => state.intl.locale,
+  currency: (state: IntlState) => state.currency,
 }
 
 export const intl = (state: IntlState = defaultState, action: CoreAction): IntlState => {

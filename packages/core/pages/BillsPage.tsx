@@ -28,6 +28,8 @@ const BillGroup = Object.assign(
     const openBillEditDlg = useAction(actions.openDlg.billEdit)
     const deleteBill = useAction(thunks.deleteBill)
     const setBillsOrder = useAction(thunks.setBillsOrder)
+    const getAccount = useSelector(selectors.getAccount)
+    const currency = useSelector(selectors.currency)
 
     const moveRow = useCallback(
       (srcIndex: number, dstIndex: number) => {
@@ -92,7 +94,10 @@ const BillGroup = Object.assign(
           align: 'right',
           title: 'amount',
           width: 100,
-          render: (value: string) => formatCurrency(intl, value),
+          render: (value: string, bill: Row) => {
+            const account = getAccount(bill.account)
+            return formatCurrency(intl, value, account ? account.currencyCode : currency)
+          },
         },
         // {
         //   dataIndex: 'id',
@@ -103,7 +108,7 @@ const BillGroup = Object.assign(
         //   title: intl.formatMessage(messages.colNumber),
         // },
       ],
-      [intl, Image]
+      [intl, Image, getAccount]
     )
 
     return (
