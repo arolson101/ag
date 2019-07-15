@@ -174,7 +174,7 @@ const messages = defineMessages({
   },
   billAdd: {
     id: 'BillsPage.billAdd',
-    defaultMessage: 'Add Bill',
+    defaultMessage: 'Add Recurring Transaction',
   },
   editBill: {
     id: 'BillsPage.editBill',

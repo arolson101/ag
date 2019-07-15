@@ -24,9 +24,11 @@ export interface BillForm {
   save: () => any
 }
 
+type BillType = 'income' | 'expense'
 type Frequency = 'days' | 'weeks' | 'months' | 'years'
 type EndType = 'endDate' | 'endCount'
 
+const billTypes: Array<BillType & keyof typeof messages> = ['income', 'expense']
 const endTypes: Array<EndType & keyof typeof messages> = ['endDate', 'endCount']
 const frequencyTypes: Array<Frequency & keyof typeof messages> = [
   'days',
@@ -46,7 +48,9 @@ interface RRuleValues {
   bymonth: string
 }
 
-interface FormValues extends RRuleValues, Required<Bill.Props> {}
+interface FormValues extends RRuleValues, Required<Bill.Props> {
+  billType: BillType
+}
 
 export const BillForm = Object.assign(
   React.forwardRef<BillForm, Props>(function _BillForm(props, ref) {
@@ -115,6 +119,7 @@ export const BillForm = Object.assign(
         ivalues = {
           ...initialRRuleValues,
           ...edit,
+          billType: edit.amount < 0 ? 'expense' : 'income',
           // amount: intl.formatNumber(edit.amount, { style: 'currency', currency: 'USD' }),
           start: edit.rrule.options.dtstart,
         }
@@ -156,6 +161,7 @@ export const BillForm = Object.assign(
         }
       } else {
         ivalues = {
+          billType: 'expense',
           ...initialRRuleValues,
           ...Bill.defaultValues,
         }
@@ -187,7 +193,7 @@ export const BillForm = Object.assign(
           const input = {
             ...pick(values, Object.keys(Bill.defaultValues) as Array<keyof Bill.Props>),
             rrule: toRRule(values),
-            amount: +values.amount,
+            amount: values.billType === 'expense' ? -values.amount : +values.amount,
           }
           await saveBill({ input, billId })
           onClosed()
@@ -242,6 +248,10 @@ export const BillForm = Object.assign(
             value: ft,
             label: intl.formatMessage(messages[ft], { interval: interval.toString() }),
           }))
+          const billTypeItems = billTypes.map(billType => ({
+            label: intl.formatMessage(messages[billType]),
+            value: billType,
+          }))
 
           const disableDate = (date: Date): boolean => {
             if (start) {
@@ -272,6 +282,12 @@ export const BillForm = Object.assign(
               <TextField field='notes' rows={3} label={intl.formatMessage(messages.notes)} />
 
               <Divider />
+
+              <SelectField
+                field='billType'
+                items={billTypeItems}
+                label={intl.formatMessage(messages.billType)}
+              />
 
               <CurrencyField
                 field='amount'
@@ -513,5 +529,17 @@ const messages = defineMessages({
   startExcluded: {
     id: 'BillForm.startExcluded',
     defaultMessage: 'Note: The specified start date does not fit in the specified rules',
+  },
+  billType: {
+    id: 'BillForm.billType',
+    defaultMessage: 'Type',
+  },
+  income: {
+    id: 'BillForm.income',
+    defaultMessage: 'Income',
+  },
+  expense: {
+    id: 'BillForm.expense',
+    defaultMessage: 'Expense',
   },
 })
