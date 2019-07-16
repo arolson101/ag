@@ -1,7 +1,6 @@
-import { Account, Bank, Bill, Budget, Category, DbEntity, Transaction } from '@ag/db'
-import { memoizeOne, stringComparer } from '@ag/util'
+import { Account, Bank, Bill, Budget, Category, DbEntity, Image, Transaction } from '@ag/db'
+import { ImageUri, stringComparer } from '@ag/util'
 import debug from 'debug'
-import { memo } from 'react'
 import { getType } from 'typesafe-actions'
 import { actions, CoreAction } from '../actions'
 
@@ -14,6 +13,7 @@ interface RecordsState {
   bills: Record<string, Bill>
   budgets: Record<string, Budget>
   categories: Record<string, Category>
+  images: Record<string, Image>
 }
 
 const initialState: RecordsState = {
@@ -23,6 +23,7 @@ const initialState: RecordsState = {
   bills: {},
   budgets: {},
   categories: {},
+  images: {},
 }
 
 export const recordsSelectors = {
@@ -66,6 +67,17 @@ export const recordsSelectors = {
     return bills
   },
   getBill: (state: RecordsState) => (billId?: string) => (billId ? state.bills[billId] : undefined),
+  getImage: (state: RecordsState) => (imageId?: string): ImageUri => {
+    if (!imageId) {
+      return ''
+    } else {
+      const image = state.images[imageId]
+      if (!image) {
+        throw new Error('imageId not found')
+      }
+      return image.data ? image.data : ''
+    }
+  },
 }
 
 const applyChange = <T extends DbEntity<any>>(
@@ -104,9 +116,6 @@ export const records = (state: RecordsState = initialState, action: CoreAction):
           case Account:
             return { ...nextState, accounts: applyChange(change, nextState.accounts) }
 
-          case Transaction:
-            return { ...nextState, transactions: applyChange(change, nextState.transactions) }
-
           case Bill:
             return { ...nextState, bills: applyChange(change, nextState.bills) }
 
@@ -115,6 +124,9 @@ export const records = (state: RecordsState = initialState, action: CoreAction):
 
           case Category:
             return { ...nextState, categories: applyChange(change, nextState.categories) }
+
+          case Transaction:
+            return { ...nextState, transactions: applyChange(change, nextState.transactions) }
 
           default:
             throw new Error('unhandled table type')

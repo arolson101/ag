@@ -54,6 +54,7 @@ export const selectors = {
   getTransaction: (state: CoreState) => recordsSelectors.getTransaction(state.records),
   bills: (state: CoreState) => recordsSelectors.bills(state.records),
   getBill: (state: CoreState) => recordsSelectors.getBill(state.records),
+  getImage: (state: CoreState) => recordsSelectors.getImage(state.records),
 
   themeMode: (state: CoreState) => themeSelectors.themeMode(state.theme),
   themeColor: (state: CoreState) => themeSelectors.themeColor(state.theme),

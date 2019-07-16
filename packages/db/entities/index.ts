@@ -4,6 +4,7 @@ import { Bill } from './Bill'
 import { Budget } from './Budget'
 import { Category } from './Category'
 import { Db } from './Db'
+import { Image } from './Image'
 import { Setting } from './Setting'
 import { Transaction } from './Transaction'
 
@@ -21,6 +22,7 @@ export * from './CategoryInput'
 export * from './Db'
 export * from './DbChange'
 export * from './DbEntity'
+export * from './Image'
 export * from './Setting'
 export * from './Transaction'
 export * from './TransactionInput'
@@ -35,6 +37,7 @@ export const appEntities = [
   Bill,
   Budget,
   Category,
+  Image,
   Transaction,
   Setting,
 ]
