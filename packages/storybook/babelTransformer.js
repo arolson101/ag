@@ -13,7 +13,7 @@ module.exports.transform = function(src, filename, options) {
     ;({ src, filename, options } = src)
   }
 
-  if (filename.endsWith('.xlsx')) {
+  if (filename.endsWith('.xlsx') || filename.endsWith('.ods')) {
     const buffer = fs.readFileSync(filename)
     const data = buffer.toString('base64')
     const src =

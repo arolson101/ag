@@ -1,7 +1,7 @@
 import { Transaction } from '@ag/db'
 import { pick, useSubmitRef } from '@ag/util'
 import accounting from 'accounting'
-import React, { useCallback, useImperativeHandle } from 'react'
+import React, { useCallback, useImperativeHandle, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { useFields } from '../components'
 import { Errors, useAction, useIntl, useSelector, useUi } from '../context'
@@ -35,11 +35,15 @@ export const TransactionForm = Object.assign(
       return null
     }
 
-    const initialValues = transaction
-      ? pick(transaction, Object.keys(Transaction.defaultValues()) as Array<
-          keyof Transaction.Props
-        >)
-      : Transaction.defaultValues()
+    const initialValues = useMemo<FormValues>(
+      () =>
+        transaction
+          ? pick(transaction, Object.keys(Transaction.defaultValues()) as Array<
+              keyof Transaction.Props
+            >)
+          : Transaction.defaultValues(),
+      [transaction]
+    )
 
     const validate = useCallback(
       values => {

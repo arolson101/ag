@@ -1,6 +1,6 @@
 import { imageBufToUri, ImageUri, imageUriToBuf } from '@ag/util'
 import debug from 'debug'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay, useFields } from '../components'
@@ -71,9 +71,12 @@ export const PictureDialog = Object.assign(
     const { Dialog, Spinner, Row, Grid, alert } = useUi()
     const { Form, TextField } = useFields<FormValues>()
 
-    const initialValues: FormValues = {
-      url,
-    }
+    const initialValues = useMemo<FormValues>(
+      () => ({
+        url,
+      }),
+      [url]
+    )
     // log('render')
 
     const close = useCallback(() => {

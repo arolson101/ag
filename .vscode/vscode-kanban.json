@@ -16,6 +16,17 @@
       "assignedTo": {
         "name": "arolson101"
       },
+      "category": "features",
+      "creation_time": "2019-02-25T21:51:37.313Z",
+      "id": "7",
+      "prio": 10,
+      "references": [],
+      "title": "import/export data"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
       "creation_time": "2019-02-25T21:30:17.392Z",
       "description": {
         "content": "need to include @ag/util, @ag/db, etc",
@@ -92,15 +103,23 @@
       "assignedTo": {
         "name": "arolson101"
       },
-      "category": "features",
-      "creation_time": "2019-02-25T21:51:37.313Z",
-      "id": "7",
-      "prio": 10,
+      "creation_time": "2019-07-16T15:12:16.899Z",
+      "id": "21",
       "references": [],
-      "title": "import/export data"
+      "title": "export history as object"
     }
   ],
-  "in-progress": [],
+  "in-progress": [
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
+      "creation_time": "2019-07-16T15:12:39.658Z",
+      "id": "22",
+      "references": [],
+      "title": "separate image table"
+    }
+  ],
   "testing": [],
   "todo": [
     {

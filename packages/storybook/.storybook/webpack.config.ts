@@ -16,7 +16,7 @@ module.exports = async ({ config }: Params): Promise<webpack.Configuration> => {
       loader: 'ts-loader',
     },
     {
-      test: /\.xlsx$/i,
+      test: /\.(xlsx|ods)$/i,
       use: 'arraybuffer-loader',
     },
     // {

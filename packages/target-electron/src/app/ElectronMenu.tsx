@@ -140,7 +140,7 @@ const exportToFile = async (connection: Connection, intl: IntlContext) => {
 
   const o = dialog.showSaveDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.exportDialogTitle),
-    filters: [{ name: 'Excel', extensions: ['xlsx'] }],
+    filters: [{ name: 'Spreadsheet', extensions: ['ods'] }],
   })
 
   if (o) {
@@ -154,7 +154,7 @@ const importFromFile = async (connection: Connection, intl: IntlContext) => {
 
   const o = dialog.showOpenDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.importDialogTitle),
-    filters: [{ name: 'Excel', extensions: ['xlsx'] }],
+    filters: [{ name: 'Spreadsheet', extensions: ['ods'] }],
   })
 
   if (o && o.length > 0) {

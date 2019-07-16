@@ -183,7 +183,7 @@ module.exports = (async () => {
         ...extraNodeModules,
       },
 
-      sourceExts: [...sourceExts, 'xlsx'],
+      sourceExts: [...sourceExts, 'xlsx', 'ods'],
     },
     watchFolders: alternateRoots,
     serializer: {

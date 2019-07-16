@@ -1,7 +1,7 @@
 import { Account } from '@ag/db'
 import { pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
-import React, { useCallback, useImperativeHandle } from 'react'
+import React, { useCallback, useImperativeHandle, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { useFields } from '../components'
 import { Errors, useAction, useIntl, useSelector, useUi } from '../context'
@@ -41,11 +41,14 @@ export const AccountForm = Object.assign(
     const bankUrl = bank ? bank.web : ''
     const bankIcon = bank ? bank.icon : ''
 
-    const initialValues: FormValues = {
-      ...(account
-        ? pick(account, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
-        : Account.defaultValues()),
-    }
+    const initialValues = useMemo<FormValues>(
+      () => ({
+        ...(account
+          ? pick(account, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
+          : Account.defaultValues()),
+      }),
+      [account]
+    )
 
     const validate = useCallback(
       (values: FormValues) => {

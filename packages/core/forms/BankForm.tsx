@@ -1,7 +1,7 @@
 import { Bank } from '@ag/db'
 import { pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
-import React, { useCallback, useImperativeHandle } from 'react'
+import React, { useCallback, useImperativeHandle, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { useFields } from '../components'
 import { Errors, tabConfig, useAction, useIntl, useSelector, useUi } from '../context'
@@ -36,12 +36,15 @@ export const BankForm = Object.assign(
 
     const bank = useSelector(selectors.getBank)(bankId)
     const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0
-    const initialValues = {
-      fi: defaultFi.toString(),
-      ...(bank
-        ? pick(bank, Object.keys(Bank.defaultValues) as Array<keyof Bank.Props>)
-        : Bank.defaultValues),
-    }
+    const initialValues = useMemo<FormValues>(
+      () => ({
+        fi: defaultFi.toString(),
+        ...(bank
+          ? pick(bank, Object.keys(Bank.defaultValues) as Array<keyof Bank.Props>)
+          : Bank.defaultValues),
+      }),
+      [bank]
+    )
 
     const validate = useCallback(
       values => {

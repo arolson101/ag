@@ -22,9 +22,9 @@ require('sql.js/dist/sql-asm.js')().then((x: SQLJS) => (window.SQL = x))
 const log = debug('helpers')
 
 const datasets = {
-  empty: require<XlsxData>('./data/empty.xlsx'),
-  full: require<XlsxData>('./data/full.xlsx'),
-  normal: require<XlsxData>('./data/normal.xlsx'),
+  empty: require<OdsData>('./data/empty.ods'),
+  full: require<OdsData>('./data/full.ods'),
+  normal: require<OdsData>('./data/normal.ods'),
 }
 
 type Dataset = keyof typeof datasets
