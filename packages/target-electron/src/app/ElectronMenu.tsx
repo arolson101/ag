@@ -138,7 +138,7 @@ export const ElectronMenu: React.FC = () => {
 const exportToFile = async (connection: Connection, intl: IntlContext) => {
   log('exportToFile')
 
-  const o = dialog.showSaveDialog({
+  const o = dialog.showSaveDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.exportDialogTitle),
     filters: [{ name: 'Excel', extensions: ['xlsx'] }],
   })
@@ -152,7 +152,7 @@ const exportToFile = async (connection: Connection, intl: IntlContext) => {
 const importFromFile = async (connection: Connection, intl: IntlContext) => {
   log('importFromFile')
 
-  const o = dialog.showOpenDialog({
+  const o = dialog.showOpenDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.importDialogTitle),
     filters: [{ name: 'Excel', extensions: ['xlsx'] }],
   })
