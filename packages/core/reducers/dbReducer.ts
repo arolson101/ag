@@ -4,6 +4,7 @@ import {
   BankRepository,
   BillRepository,
   DbRepository,
+  ImageRepository,
   SettingsRepository,
   TransactionRepository,
 } from '@ag/db/repositories'
@@ -26,6 +27,7 @@ export interface DbState {
     billsRepository: BillRepository
     accountsRepository: AccountRepository
     transactionsRepository: TransactionRepository
+    imageRepository: ImageRepository
   }
 }
 
@@ -94,6 +96,7 @@ export const db = (state: DbState = defaultState, action: CoreAction): DbState =
           billsRepository: connection.getCustomRepository(BillRepository),
           accountsRepository: connection.getCustomRepository(AccountRepository),
           transactionsRepository: connection.getCustomRepository(TransactionRepository),
+          imageRepository: connection.getCustomRepository(ImageRepository),
         },
       }
     }

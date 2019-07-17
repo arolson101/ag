@@ -9,7 +9,6 @@ import { Setting } from './Setting'
 import { Transaction } from './Transaction'
 
 export * from './Account'
-export * from './AccountInput'
 export * from './AccountType'
 export * from './Bank'
 export * from './BankInput'

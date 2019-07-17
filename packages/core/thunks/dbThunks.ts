@@ -6,6 +6,7 @@ import {
   Budget,
   Category,
   Db,
+  Image,
   indexEntities,
 } from '@ag/db/entities'
 import crypto from 'crypto'
@@ -38,6 +39,7 @@ const dbLoadEntities = (): CoreThunk =>
       accountsRepository, //
       banksRepository,
       billsRepository,
+      imageRepository,
       // budgetsRepository,
       // categoriesRepository,
     } = selectors.appDb(getState())
@@ -45,6 +47,7 @@ const dbLoadEntities = (): CoreThunk =>
     const banks = await banksRepository.all()
     const accounts = await accountsRepository.all()
     const bills = await billsRepository.all()
+    const images = await imageRepository.all()
     // const budgets = await budgetsRepository.all()
     // const categories = await categoriesRepository.all()
 
@@ -56,6 +59,7 @@ const dbLoadEntities = (): CoreThunk =>
         { table: Bill, entities: bills, deletes: [] },
         // { table: Budget, entities: budgets, deletes: [] },
         // { table: Category, entities: categories, deletes: [] },
+        { table: Image, entities: images, deletes: [] },
       ])
     )
   }

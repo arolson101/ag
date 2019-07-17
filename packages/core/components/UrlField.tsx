@@ -13,9 +13,11 @@ import {
   useAction,
   useIntl,
   useOnline,
+  useSelector,
   useSystem,
   useUi,
 } from '../context'
+import { selectors } from '../reducers'
 
 const log = debug('core:UrlField')
 
@@ -35,12 +37,14 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const online = useOnline()
   const { getImageFromLibrary } = useSystem()
   const { PopoverButton, Image, Text, TextField } = useUi()
+  const getImage = useSelector(selectors.getImage)
   const { disabled, field, nameField, favicoWidth, favicoHeight, favicoField } = props
 
   const form = useForm()
   const name = useFieldValue<string>(nameField)
   const url = useFieldValue<string>(field)
-  const value = useFieldValue<ImageUri>(favicoField)
+  const imageId = useFieldValue<ImageUri>(favicoField)
+  const image = getImage(imageId)
   // log('UrlField render value %s', value)
 
   const [source, setSource] = useState<string | undefined>(undefined)
@@ -74,7 +78,7 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
         setLoading(true)
         const favico = await online.getFavico(newUrl, cancelSource.token, favicoWidth, favicoHeight)
         log('got favico %O', favico)
-        const uri = imageBufToUri(favico)
+        const uri = favico ? imageBufToUri(favico) : undefined
         log('uri %s', uri)
         form.change(favicoField, uri)
         setLoading(false)
@@ -174,9 +178,9 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
           ]}
           minimal
           loading={loading}
-          icon={value ? <Image size={20} src={value} /> : undefined}
+          icon={image ? <Image size={20} src={image} /> : undefined}
         >
-          {!loading && !value && <Text>...</Text>}
+          {!loading && !image && <Text>...</Text>}
         </PopoverButton>
       }
     />

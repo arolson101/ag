@@ -239,7 +239,7 @@ export const ui: UiContext = {
             shape='square'
             style={{ marginLeft: 5, marginRight: 5 }}
             size={header ? 'large' : 16}
-            src={icon}
+            src={icon.src}
           />
         )}
         {children}

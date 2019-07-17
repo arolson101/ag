@@ -13,7 +13,7 @@ export const Image = Object.assign(
       return null
     }
 
-    const source = toImageURISource(src)
+    const source = { width: src.width, height: src.height, uri: src.src }
 
     const style: StyleProp<ImageStyle> = {
       margin,
@@ -22,7 +22,7 @@ export const Image = Object.assign(
     }
 
     // log('uri %s', img.uri)
-    if (src.startsWith('data:image/svg')) {
+    if (source.uri && source.uri.startsWith('data:image/svg')) {
       return <SvgUri source={source} style={style} width={size} height={size} />
     } else {
       // log('not svg, src %o style %o', src, style)

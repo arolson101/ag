@@ -15,7 +15,7 @@ export class Bank extends DbEntity<Bank.Props> {
   @Column() web!: string
   @Column() address!: string
   @Column() notes!: string
-  @Column('text') icon!: ImageUri
+  @Column() iconId!: string
 
   @Column() online!: boolean
 
@@ -63,7 +63,7 @@ export namespace Bank {
     web: '',
     address: '',
     notes: '',
-    icon: '',
+    iconId: '',
 
     online: true,
 

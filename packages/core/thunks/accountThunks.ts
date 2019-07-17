@@ -4,6 +4,7 @@ import {
   AccountType,
   Bank,
   DbChange,
+  Image,
   Transaction,
   TransactionInput,
 } from '@ag/db/entities'
@@ -36,10 +37,14 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
       let account: Account
       let changes: DbChange[]
       const t = Date.now()
+
+      const [iconId, iconChange] = Image.change.create(t, input.iconId)
+      input.iconId = iconId
+
       if (accountId) {
         account = await accountsRepository.getById(accountId)
         const q = diff<Account.Props>(account, input)
-        changes = [Account.change.edit(t, accountId, q)]
+        changes = [Account.change.edit(t, accountId, q), ...iconChange]
         account.update(t, q)
       } else {
         if (!bankId) {
@@ -47,7 +52,7 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
         }
         account = new Account(bankId, uniqueId(), input)
         accountId = account.id
-        changes = [Account.change.add(t, account)]
+        changes = [Account.change.add(t, account), ...iconChange]
       }
       await dispatch(dbWrite(changes))
       assert.equal(accountId, account.id)

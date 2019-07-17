@@ -1,5 +1,5 @@
 import { Bank } from '@ag/db'
-import { pick, useSubmitRef } from '@ag/util'
+import { ImageUri, pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
 import React, { useCallback, useImperativeHandle, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
@@ -35,6 +35,7 @@ export const BankForm = Object.assign(
     const submitFormRef = useSubmitRef()
 
     const bank = useSelector(selectors.getBank)(bankId)
+    const getImage = useSelector(selectors.getImage)
     const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0
     const initialValues = useMemo<FormValues>(
       () => ({
@@ -84,7 +85,9 @@ export const BankForm = Object.assign(
         submit={submit}
         submitRef={submitFormRef}
       >
-        {({ change, values: { online } }) => {
+        {({ change, values }) => {
+          const { online } = values
+          const icon = getImage(values.iconId)
           return (
             <Tabs id='BankForm' defaultActiveKey='location'>
               <Tab {...tabConfig('location', intl.formatMessage(messages.tabInfo))}>
@@ -107,7 +110,7 @@ export const BankForm = Object.assign(
                         change('name', name)
                         change('fi', valueStr)
                         change('web', web)
-                        change('icon', '')
+                        change('iconId', '')
                         change('address', formatAddress(fi) || '')
                         change('fid', fi.fid || '')
                         change('org', fi.org || '')
@@ -134,7 +137,7 @@ export const BankForm = Object.assign(
                 <UrlField
                   field='web'
                   nameField='name'
-                  favicoField='icon'
+                  favicoField='iconId'
                   favicoWidth={Bank.iconSize}
                   favicoHeight={Bank.iconSize}
                   label={intl.formatMessage(messages.web)}

@@ -1,10 +1,9 @@
-import { IconName } from '@ag/core/context'
-import { ImageUri } from '@ag/util'
+import { IconName, ImageSrc } from '@ag/core/context'
 import * as Antd from 'antd'
 import React from 'react'
 
 type Props = React.ComponentProps<typeof Antd.Icon> & {
-  src: ImageUri | undefined
+  src: ImageSrc | undefined
   header?: boolean
 }
 
@@ -19,7 +18,7 @@ export const ImageSourceIcon: React.FC<Props> = ({ src, header, ...props }) => {
                 size={header ? 'large' : 'small'}
                 shape='square'
                 style={{ borderRadius: 0 }}
-                src={src}
+                src={src.src}
               />
             )
           : undefined

@@ -1,8 +1,9 @@
 import { Account, Bank, Bill, Budget, Category, DbEntity, Image, Transaction } from '@ag/db'
-import { ImageUri, stringComparer } from '@ag/util'
+import { ImageUri, imageUriDimensions, imageUriToBuf, stringComparer } from '@ag/util'
 import debug from 'debug'
 import { getType } from 'typesafe-actions'
 import { actions, CoreAction } from '../actions'
+import { ImageSrc } from '../context'
 
 const log = debug('core:recordsReducer')
 
@@ -67,15 +68,18 @@ export const recordsSelectors = {
     return bills
   },
   getBill: (state: RecordsState) => (billId?: string) => (billId ? state.bills[billId] : undefined),
-  getImage: (state: RecordsState) => (imageId?: string): ImageUri => {
-    if (!imageId) {
-      return ''
-    } else {
+  getImage: (state: RecordsState) => (imageId?: string): ImageSrc | undefined => {
+    if (imageId) {
+      if (imageId.startsWith('data:')) {
+        const src = imageId as ImageUri
+        const { width, height, buf, mime } = imageUriToBuf(src)
+        return new Image(undefined, { width, height, src, buf, mime })
+      }
       const image = state.images[imageId]
       if (!image) {
         throw new Error('imageId not found')
       }
-      return image.data ? image.data : ''
+      return image
     }
   },
 }
@@ -127,6 +131,9 @@ export const records = (state: RecordsState = initialState, action: CoreAction):
 
           case Transaction:
             return { ...nextState, transactions: applyChange(change, nextState.transactions) }
+
+          case Image:
+            return { ...nextState, images: applyChange(change, nextState.images) }
 
           default:
             throw new Error('unhandled table type')

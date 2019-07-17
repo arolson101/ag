@@ -1,11 +1,9 @@
-import { ImageUri } from '@ag/util'
-
 export class BankInput {
   name?: string
   web?: string
   address?: string
   notes?: string
-  icon?: ImageUri
+  iconId?: string
 
   online?: boolean
 

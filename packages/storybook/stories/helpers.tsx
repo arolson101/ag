@@ -75,7 +75,7 @@ const openDb = async (
 const sys: SystemCallbacks = {
   openDb,
   deleteDb: action('deleteDb') as any,
-  scaleImage: action('scaleImage') as any,
+  scaleImage: async (image, scale) => image,
   openCropper: action('openCropper') as any,
   getImageFromLibrary: action('getImageFromLibrary') as any,
 }

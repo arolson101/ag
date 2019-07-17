@@ -7,18 +7,21 @@ import { actions } from '../actions'
 import {
   CommonFieldProps,
   CommonTextFieldProps,
+  ImageSrc,
   useAction,
   useIntl,
   useOnline,
+  useSelector,
   useSystem,
   useUi,
 } from '../context'
+import { selectors } from '../reducers'
 
 const log = debug('core:TextFieldWithIcon')
 
 interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldProps {
   defaultUrl: string
-  defaultIcon: ImageUri
+  defaultIcon?: ImageSrc
   favicoField: keyof Values & string
   favicoWidth: number
   favicoHeight: number
@@ -36,7 +39,8 @@ export const TextFieldWithIcon = <Values extends Record<string, any>>(props: Pro
   const { disabled, field, label, defaultUrl, favicoWidth, favicoHeight, favicoField } = props
 
   const form = useForm()
-  const value = useFieldValue<ImageUri>(favicoField)
+  const imageId = useFieldValue<ImageUri>(favicoField)
+  const image = useSelector(selectors.getImage)(imageId)
   // const [{ value }] = useField<ImageUri>(favicoField)
 
   const [source, setSource] = useState<string | undefined>(undefined)
@@ -64,7 +68,7 @@ export const TextFieldWithIcon = <Values extends Record<string, any>>(props: Pro
         setLoading(true)
         const favico = await online.getFavico(newUrl, cancelSource.token, favicoWidth, favicoHeight)
         log('got favico %O', favico)
-        const uri = imageBufToUri(favico)
+        const uri = favico ? imageBufToUri(favico) : undefined
         log('uri %s', uri)
         form.change(favicoField, uri)
         setLoading(false)
@@ -137,14 +141,14 @@ export const TextFieldWithIcon = <Values extends Record<string, any>>(props: Pro
           minimal
           loading={loading}
           icon={
-            value || props.defaultIcon ? (
-              <Image size={20} src={value || props.defaultIcon} />
+            image || props.defaultIcon ? (
+              <Image size={20} src={image || props.defaultIcon} />
             ) : (
               undefined
             )
           }
         >
-          {!loading && !value && <Text>...</Text>}
+          {!loading && !image && <Text>...</Text>}
         </PopoverButton>
       }
     />

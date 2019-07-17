@@ -12,7 +12,7 @@ export const Image = Object.assign(
     return (
       <img
         title={title}
-        src={src}
+        src={src.src}
         style={{ margin, maxWidth: size, maxHeight: size, minWidth: size }}
       />
     )

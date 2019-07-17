@@ -36,7 +36,7 @@ export interface ButtonProps {
 }
 
 export interface CardProps {
-  image?: ImageUri
+  image?: ImageSrc
   title?: string
 }
 
@@ -54,7 +54,7 @@ export interface DialogProps {
 }
 
 export interface ListItem {
-  image?: ImageUri
+  image?: ImageSrc
   title?: React.ReactNode
   subtitle?: React.ReactNode
   content?: React.ReactNode
@@ -87,7 +87,7 @@ export interface ButtonConfig {
 export interface NavMenuItem {
   key: string
   divider?: boolean
-  image?: ImageUri
+  image?: ImageSrc
   title?: string
   active?: boolean
   onClick?: () => any
@@ -102,7 +102,7 @@ export interface NavMenuProps {
 export interface PageProps {
   componentId?: string
   title: string
-  image?: ImageUri
+  image?: ImageSrc
   subtitle?: string
   button?: ButtonConfig
 }
@@ -118,7 +118,7 @@ export interface TableColumn<T extends {}> {
 
 export interface TableProps<T extends {} = any> {
   titleText?: string
-  titleImage?: ImageUri
+  titleImage?: ImageSrc
   titleActions?: ActionItem[]
   tableEdit?: ActionDesc
   tableDelete?: ActionDesc
@@ -153,8 +153,14 @@ export const tabConfig = (id: string, name: string) => ({
   heading: name,
 })
 
+export interface ImageSrc {
+  width: number
+  height: number
+  src?: ImageUri
+}
+
 export interface ImageProps {
-  src: ImageUri | undefined
+  src: ImageSrc | undefined
   size?: number | string
   margin?: number
   title?: string
@@ -221,7 +227,7 @@ export interface UiContext {
   Link: ComponentType<{ onClick?: (e: React.SyntheticEvent) => any }>
   Text: ComponentType<{
     flex?: number
-    icon?: ImageUri
+    icon?: ImageSrc
     header?: boolean
     muted?: boolean
     onClick?: (e: React.SyntheticEvent) => any

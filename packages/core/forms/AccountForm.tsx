@@ -33,13 +33,14 @@ export const AccountForm = Object.assign(
     const { Text, Row } = useUi()
     const getAccount = useSelector(selectors.getAccount)
     const getBank = useSelector(selectors.getBank)
+    const getImage = useSelector(selectors.getImage)
     const { Form, SelectField, TextField, TextFieldWithIcon } = useFields<FormValues>()
     const saveAccount = useAction(thunks.saveAccount)
 
     const account = getAccount(accountId)
     const bank = getBank(account ? account.bankId : bankId)
     const bankUrl = bank ? bank.web : ''
-    const bankIcon = bank ? bank.icon : ''
+    const bankIcon = getImage(bank ? bank.iconId : undefined)
 
     const initialValues = useMemo<FormValues>(
       () => ({
@@ -96,7 +97,7 @@ export const AccountForm = Object.assign(
               </Row>
               <TextFieldWithIcon
                 field='name'
-                favicoField='icon'
+                favicoField='iconId'
                 defaultUrl={bankUrl}
                 defaultIcon={bankIcon}
                 favicoWidth={Account.iconSize}

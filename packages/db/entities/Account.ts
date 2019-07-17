@@ -3,10 +3,22 @@ import { CurrencyCode } from 'currency-code-map'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { AccountInput } from './AccountInput'
 import { AccountType } from './AccountType'
 import { DbChange } from './DbChange'
 import { DbEntity } from './DbEntity'
+
+export class AccountInput {
+  name?: string
+  color?: string
+  type?: AccountType
+  number?: string
+  visible?: boolean
+  routing?: string
+  key?: string
+  iconId?: string
+  sortOrder?: number
+  currencyCode?: string
+}
 
 @Entity({ name: 'accounts' })
 export class Account extends DbEntity<Account.Props> {
@@ -20,7 +32,7 @@ export class Account extends DbEntity<Account.Props> {
   @Column() visible!: boolean
   @Column() routing!: string
   @Column() key!: string
-  @Column('text') icon!: ImageUri
+  @Column() iconId!: string
   @Column() sortOrder!: number
   @Column('text') currencyCode!: CurrencyCode
 
@@ -111,7 +123,7 @@ export namespace Account {
     routing: '',
     key: '',
     sortOrder: -1,
-    icon: '',
+    iconId: '',
     currencyCode: defaultCurrencyCode,
   })
 }

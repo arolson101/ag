@@ -26,6 +26,7 @@ export const AccountPage = Object.assign(
     const { Page, Table, Text } = useUi()
 
     const account = useSelector(selectors.getAccount)(accountId)
+    const getImage = useSelector(selectors.getImage)
 
     type Row = Transaction
     const columns = useMemo<Array<TableColumn<Row>>>(
@@ -78,10 +79,11 @@ export const AccountPage = Object.assign(
 
     const title = account.name
     const subtitle = bank.name
+    const bankIcon = getImage(bank.iconId)
 
     return (
       <Page
-        image={bank.icon}
+        image={bankIcon}
         title={title}
         subtitle={subtitle}
         button={{

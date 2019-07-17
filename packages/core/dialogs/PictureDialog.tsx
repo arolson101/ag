@@ -4,7 +4,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay, useFields } from '../components'
-import { useAction, useIntl, useOnline, useSystem, useUi } from '../context'
+import { useAction, useIntl, useOnline, useSelector, useSystem, useUi } from '../context'
+import { selectors } from '../reducers'
 
 const log = debug('core:PictureDialog')
 
@@ -30,26 +31,27 @@ const ImageTile = React.memo<ImageTileProps>(function _ImageTile({ link, selectI
   const ui = useUi()
   const { Button, Spinner, Tile, Text, Image } = ui
   const [loading, setLoading] = useState(false)
-  const [image, setImage] = useState<ImageUri | undefined>(undefined)
+  const [imageId, setImageId] = useState<ImageUri | undefined>(undefined)
+  const image = useSelector(selectors.getImage)(imageId)
 
   useEffect(() => {
     const cancelToken = online.CancelToken.source()
     setLoading(true)
     online
       .getImage(link, cancelToken.token)
-      .then(buf => setImage(imageBufToUri(buf)))
+      .then(buf => setImageId(imageBufToUri(buf)))
       .finally(() => setLoading(false))
     return cancelToken.cancel
-  }, [online.getImage, link, setImage])
+  }, [online.getImage, link, setImageId])
 
   return (
     <Tile key={link} size={thumbnailSize}>
       {loading ? (
         <Spinner />
-      ) : !image ? (
+      ) : !imageId ? (
         <Text>no data</Text>
       ) : (
-        <Button fill minimal onPress={e => selectItem(image)}>
+        <Button fill minimal onPress={e => selectItem(imageId)}>
           <Image title={link} size={thumbnailSize - 30} src={image} />
         </Button>
       )}
@@ -144,9 +146,7 @@ export const PictureDialog = Object.assign(
       >
         <Row>
           <Form initialValues={initialValues} submit={submit} lastFieldSubmit>
-            {() => (
-              <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
-            )}
+            <TextField field='url' label={intl.formatMessage(messages.urlLabel)} noCorrect />
           </Form>
         </Row>
         {listLoading && <Spinner />}

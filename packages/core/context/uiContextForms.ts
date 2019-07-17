@@ -1,6 +1,6 @@
 import { SubmitFunction } from '@ag/util'
 import { CurrencyCode } from 'currency-code-map'
-import { IconName, UiContext } from './uiContext'
+import { IconName } from './uiContext'
 
 export declare type Errors<Values> = {
   [K in keyof Values]?: Values[K] extends object ? Errors<Values[K]> : string
@@ -8,7 +8,7 @@ export declare type Errors<Values> = {
 
 export type FormChildFcn<Values extends Record<string, any>> = (props: {
   handleSubmit: () => any
-  change: (key: string, value: any) => any
+  change: (key: keyof Values & string, value: any) => any
   values: Values
 }) => React.ReactElement
 

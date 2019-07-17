@@ -3,7 +3,7 @@ import { DataUri, decodeDataUri, encodeDataURI, getDataURIAttribs } from './data
 
 const log = debug('util:ImageSource')
 
-export type ImageUri = DataUri<{ width: string; height: string }> | ''
+export type ImageUri = DataUri<{ width: string; height: string }>
 
 const size0x0 = { width: 0, height: 0 }
 
@@ -19,8 +19,8 @@ const attribsFromDimensions = ({ width, height }: { width: number; height: numbe
   height: height.toString(),
 })
 
-export const imageBufToUri = (buf: ImageBuf | undefined): ImageUri => {
-  return buf ? encodeDataURI(buf.mime, buf.buf, attribsFromDimensions(buf)) : ''
+export const imageBufToUri = (buf: ImageBuf): ImageUri => {
+  return encodeDataURI(buf.mime, buf.buf, attribsFromDimensions(buf))
 }
 
 const dimensionsFromAttribs = ({ width, height }: { width: string; height: string }) => ({

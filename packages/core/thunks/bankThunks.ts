@@ -1,4 +1,4 @@
-import { Account, Bank, BankInput, DbChange, DbEntityEdit } from '@ag/db/entities'
+import { Account, Bank, BankInput, DbChange, DbEntityEdit, Image } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import { defineMessages } from 'react-intl'
@@ -21,17 +21,21 @@ const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
       const { banksRepository } = selectors.appDb(state)
 
       const t = Date.now()
+
+      const [iconId, iconChange] = Image.change.create(t, input.iconId)
+      input.iconId = iconId
+
       let bank: Bank
       let changes: DbChange[]
       if (bankId) {
         bank = await banksRepository.getById(bankId)
         const q = diff<Bank.Props>(bank, input)
-        changes = [Bank.change.edit(t, bankId, q)]
+        changes = [Bank.change.edit(t, bankId, q), ...iconChange]
         bank.update(t, q)
       } else {
         bank = new Bank(uniqueId(), input)
         bankId = bank.id
-        changes = [Bank.change.add(t, bank)]
+        changes = [Bank.change.add(t, bank), ...iconChange]
       }
       // log('dbwrite %o', changes)
       await dispatch(dbWrite(changes))

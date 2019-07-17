@@ -22,7 +22,7 @@ interface FormValues {
   date: Date
   check: boolean
   web: string
-  icon: ImageUri
+  icon: ImageUri | undefined
   acctId: string
   dollars: number
 }
@@ -37,7 +37,7 @@ const initialValues: FormValues = {
   date: new Date(),
   check: false,
   web: 'www.google.com',
-  icon: '',
+  icon: undefined,
   acctId: '',
   dollars: 0,
 }
