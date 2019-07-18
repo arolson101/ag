@@ -68,20 +68,8 @@ export const recordsSelectors = {
     return bills
   },
   getBill: (state: RecordsState) => (billId?: string) => (billId ? state.bills[billId] : undefined),
-  getImage: (state: RecordsState) => (imageId?: string): ImageSrc | undefined => {
-    if (imageId) {
-      if (imageId.startsWith('data:')) {
-        const src = imageId as ImageUri
-        const { width, height, buf, mime } = imageUriToBuf(src)
-        return new Image(undefined, { width, height, src, buf, mime })
-      }
-      const image = state.images[imageId]
-      if (!image) {
-        throw new Error('imageId not found')
-      }
-      return image
-    }
-  },
+  getImage: (state: RecordsState) => (imageId: string): ImageSrc | undefined =>
+    state.images[imageId],
 }
 
 const applyChange = <T extends DbEntity<any>>(
@@ -139,6 +127,11 @@ export const records = (state: RecordsState = initialState, action: CoreAction):
             throw new Error('unhandled table type')
         }
       }, state)
+    }
+
+    case getType(actions.imageLoaded): {
+      const image = action.payload.image
+      return { ...state, images: { ...state.images, [image.id]: image } }
     }
 
     default:

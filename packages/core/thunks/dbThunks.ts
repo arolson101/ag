@@ -9,6 +9,7 @@ import {
   Image,
   indexEntities,
 } from '@ag/db/entities'
+import { ImageBuf, imageBufToUri } from '@ag/util'
 import crypto from 'crypto'
 import { defineMessages } from 'react-intl'
 import sanitize from 'sanitize-filename'
@@ -160,12 +161,21 @@ const dbDelete = ({ dbId }: { dbId: string }): CoreThunk =>
     }
   }
 
+const dbLoadImage = ({ imageId }: { imageId: string }): CoreThunk =>
+  async function _dbLoadImage(dispatch, getState, { ui: { alert, showToast } }) {
+    const state = getState()
+    const { imageRepository } = selectors.appDb(state)
+    const image = await imageRepository.loadFullImage(imageId)
+    dispatch(actions.imageLoaded({ image }))
+  }
+
 export const dbThunks = {
   dbInit,
   dbReloadAll,
   dbCreate,
   dbOpen,
   dbDelete,
+  dbLoadImage,
 }
 
 const messages = defineMessages({

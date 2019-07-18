@@ -30,7 +30,6 @@ const BillGroup = Object.assign(
     const setBillsOrder = useAction(thunks.setBillsOrder)
     const getAccount = useSelector(selectors.getAccount)
     const currency = useSelector(selectors.currency)
-    const getImage = useSelector(selectors.getImage)
 
     const moveRow = useCallback(
       (srcIndex: number, dstIndex: number) => {
@@ -67,7 +66,7 @@ const BillGroup = Object.assign(
           dataIndex: 'icon',
           title: '',
           width: 30,
-          render: (text: string, bill: Row) => <Image src={getImage(bill.icon)} size='1.5em' />,
+          render: (text: string, bill: Row) => <Image id={bill.icon} size='1.5em' />,
         },
         {
           dataIndex: 'name',

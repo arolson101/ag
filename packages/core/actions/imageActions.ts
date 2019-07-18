@@ -1,5 +1,6 @@
+import { Image } from '@ag/db'
 import { createStandardAction } from 'typesafe-actions'
 
 export const imageActions = {
-  loadImage: createStandardAction('core/loadImage')<{ imageId: string }>(),
+  imageLoaded: createStandardAction('core/imageLoaded')<{ image: Image }>(),
 }

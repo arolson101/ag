@@ -31,7 +31,7 @@ export const Page = Object.assign(
           onBack={onBack}
           title={
             <Title level={2}>
-              {image && <ImageSourceIcon style={{ margin: 5 }} src={image} />}
+              {image && <ImageSourceIcon style={{ margin: 5 }} id={image} />}
               {title}
             </Title>
           }

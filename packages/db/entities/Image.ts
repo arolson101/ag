@@ -9,7 +9,7 @@ export interface ImageInput {
   width: number
   height: number
   buf?: Buffer
-  src: ImageUri
+  src?: ImageUri
 }
 
 @Entity({ name: 'images' })
@@ -18,8 +18,9 @@ export class Image extends DbEntity<Image.Props> {
   @Column() mime!: string
   @Column() width!: number
   @Column() height!: number
-  @Column('blob') buf?: Buffer
-  @Column({ type: 'text', select: false, readonly: true }) src?: ImageUri
+  @Column({ type: 'blob', select: false, readonly: true }) buf?: Buffer
+  blob?: Blob
+  src?: ImageUri
 }
 
 export namespace Image {
@@ -47,7 +48,6 @@ export namespace Image {
           width: +width,
           height: +height,
           buf,
-          src: imageId as ImageUri,
         })
         const dbChange: DbChange = {
           table: Image,

@@ -140,7 +140,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
         rightOpenValue={-75 * tableActions.length}
         body={
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image src={titleImage} size={24} />
+            <Image id={titleImage} size={24} />
             <H2>{titleText}</H2>
           </View>
         }

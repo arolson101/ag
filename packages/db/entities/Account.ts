@@ -1,3 +1,4 @@
+import { ImageId } from '@ag/core/context'
 import { ImageUri, ISpec } from '@ag/util'
 import { CurrencyCode } from 'currency-code-map'
 import randomColor from 'randomcolor'
@@ -32,7 +33,7 @@ export class Account extends DbEntity<Account.Props> {
   @Column() visible!: boolean
   @Column() routing!: string
   @Column() key!: string
-  @Column() iconId!: string
+  @Column('text') iconId!: ImageId
   @Column() sortOrder!: number
   @Column('text') currencyCode!: CurrencyCode
 

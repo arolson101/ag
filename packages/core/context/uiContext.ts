@@ -36,7 +36,7 @@ export interface ButtonProps {
 }
 
 export interface CardProps {
-  image?: ImageSrc
+  image?: ImageId
   title?: string
 }
 
@@ -54,7 +54,7 @@ export interface DialogProps {
 }
 
 export interface ListItem {
-  image?: ImageSrc
+  image?: ImageId
   title?: React.ReactNode
   subtitle?: React.ReactNode
   content?: React.ReactNode
@@ -87,7 +87,7 @@ export interface ButtonConfig {
 export interface NavMenuItem {
   key: string
   divider?: boolean
-  image?: ImageSrc
+  image?: ImageId
   title?: string
   active?: boolean
   onClick?: () => any
@@ -102,7 +102,7 @@ export interface NavMenuProps {
 export interface PageProps {
   componentId?: string
   title: string
-  image?: ImageSrc
+  image?: ImageId
   subtitle?: string
   button?: ButtonConfig
 }
@@ -118,7 +118,7 @@ export interface TableColumn<T extends {}> {
 
 export interface TableProps<T extends {} = any> {
   titleText?: string
-  titleImage?: ImageSrc
+  titleImage?: ImageId
   titleActions?: ActionItem[]
   tableEdit?: ActionDesc
   tableDelete?: ActionDesc
@@ -159,8 +159,10 @@ export interface ImageSrc {
   src?: ImageUri
 }
 
+export type ImageId = '' | ImageUri | '<image id>'
+
 export interface ImageProps {
-  src: ImageSrc | undefined
+  id: ImageId | undefined
   size?: number | string
   margin?: number
   title?: string
@@ -227,7 +229,7 @@ export interface UiContext {
   Link: ComponentType<{ onClick?: (e: React.SyntheticEvent) => any }>
   Text: ComponentType<{
     flex?: number
-    icon?: ImageSrc
+    icon?: ImageId
     header?: boolean
     muted?: boolean
     onClick?: (e: React.SyntheticEvent) => any

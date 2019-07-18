@@ -135,7 +135,7 @@ export const ui: UiContext = {
   Card: ({ image, title, children }) => (
     <Card title={title} extra={undefined}>
       <Card.Meta
-        avatar={image && <ImageSourceIcon src={image} />}
+        avatar={image && <ImageSourceIcon id={image} />}
         title={title}
         // description="This is the description"
       />
@@ -206,7 +206,7 @@ export const ui: UiContext = {
           <List.Item>
             <List.Item.Meta
               title={title}
-              avatar={image && <ImageSourceIcon src={image} />}
+              avatar={image && <ImageSourceIcon id={image} />}
               description={subtitle}
               // description={
               //   <>
@@ -235,12 +235,13 @@ export const ui: UiContext = {
     return (
       <Component style={{ flex }} type={muted ? 'secondary' : undefined} onClick={onClick}>
         {icon && (
-          <Avatar
-            shape='square'
-            style={{ marginLeft: 5, marginRight: 5 }}
-            size={header ? 'large' : 16}
-            src={icon.src}
-          />
+          <ImageSourceIcon id={icon} style={{ marginLeft: 5, marginRight: 5 }} header={header} />
+          // <Avatar
+          //   shape='square'
+          //   style={{ marginLeft: 5, marginRight: 5 }}
+          //   size={header ? 'large' : 16}
+          //   src={icon.src}
+          // />
         )}
         {children}
       </Component>
@@ -288,7 +289,7 @@ const buildNavMenu = (item: NavMenuItem) =>
       key={item.key}
       title={
         <span>
-          {item.image && <ImageSourceIcon src={item.image} />}
+          {item.image && <ImageSourceIcon id={item.image} />}
           <span>{item.title}</span>
         </span>
       }
@@ -297,7 +298,7 @@ const buildNavMenu = (item: NavMenuItem) =>
     </Menu.SubMenu>
   ) : (
     <Menu.Item key={item.key} onClick={item.onClick} title={item.title}>
-      {item.image && <ImageSourceIcon src={item.image} />}
+      {item.image && <ImageSourceIcon id={item.image} />}
       <span>{item.title}</span>
     </Menu.Item>
   )

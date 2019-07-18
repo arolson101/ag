@@ -4,8 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { ErrorDisplay, useFields } from '../components'
-import { useAction, useIntl, useOnline, useSelector, useSystem, useUi } from '../context'
-import { selectors } from '../reducers'
+import { useAction, useIntl, useOnline, useSystem, useUi } from '../context'
 
 const log = debug('core:PictureDialog')
 
@@ -32,7 +31,6 @@ const ImageTile = React.memo<ImageTileProps>(function _ImageTile({ link, selectI
   const { Button, Spinner, Tile, Text, Image } = ui
   const [loading, setLoading] = useState(false)
   const [imageId, setImageId] = useState<ImageUri | undefined>(undefined)
-  const image = useSelector(selectors.getImage)(imageId)
 
   useEffect(() => {
     const cancelToken = online.CancelToken.source()
@@ -52,7 +50,7 @@ const ImageTile = React.memo<ImageTileProps>(function _ImageTile({ link, selectI
         <Text>no data</Text>
       ) : (
         <Button fill minimal onPress={e => selectItem(imageId)}>
-          <Image title={link} size={thumbnailSize - 30} src={image} />
+          <Image title={link} size={thumbnailSize - 30} id={imageId} />
         </Button>
       )}
     </Tile>

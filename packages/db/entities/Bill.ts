@@ -1,4 +1,5 @@
-import { ImageUri, ISpec } from '@ag/util'
+import { ImageId } from '@ag/core/context'
+import { ISpec } from '@ag/util'
 import debug from 'debug'
 import { RRule } from 'rrule'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
@@ -14,7 +15,7 @@ export class Bill extends DbEntity<Bill.Props> {
   @Column() name!: string
   @Column() group!: string
   @Column() web!: string
-  @Column('text') icon!: ImageUri
+  @Column('text') icon!: ImageId
   @Column() notes!: string
   @Column() amount!: number
   @Column() account!: string

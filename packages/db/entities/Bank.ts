@@ -1,3 +1,4 @@
+import { ImageId } from '@ag/core/context'
 import { ImageUri, ISpec } from '@ag/util'
 import debug from 'debug'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
@@ -15,7 +16,7 @@ export class Bank extends DbEntity<Bank.Props> {
   @Column() web!: string
   @Column() address!: string
   @Column() notes!: string
-  @Column() iconId!: string
+  @Column('text') iconId!: ImageId
 
   @Column() online!: boolean
 

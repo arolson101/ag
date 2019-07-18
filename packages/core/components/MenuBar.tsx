@@ -13,7 +13,6 @@ export const MenuBar = Object.assign(
     const { NavMenu } = useUi()
     const bankCreate = useAction(actions.openDlg.bankCreate)
     const banks = useSelector(selectors.banks)
-    const getImage = useSelector(selectors.getImage)
     const getAccountsForBank = useSelector(selectors.getAccountsForBank)
 
     return (
@@ -27,10 +26,10 @@ export const MenuBar = Object.assign(
                 (bank): NavMenuItem => ({
                   key: bank.id,
                   title: bank.name,
-                  image: getImage(bank.iconId),
+                  image: bank.iconId,
                   subitems: getAccountsForBank(bank.id).map(
                     (account): NavMenuItem => ({
-                      image: getImage(bank.iconId),
+                      image: bank.iconId,
                       key: account.id,
                       title: account.name,
                       active: false,

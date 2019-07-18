@@ -10,14 +10,13 @@ import { actions } from '../actions'
 import {
   CommonFieldProps,
   CommonTextFieldProps,
+  ImageId,
   useAction,
   useIntl,
   useOnline,
-  useSelector,
   useSystem,
   useUi,
 } from '../context'
-import { selectors } from '../reducers'
 
 const log = debug('core:UrlField')
 
@@ -37,14 +36,12 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
   const online = useOnline()
   const { getImageFromLibrary } = useSystem()
   const { PopoverButton, Image, Text, TextField } = useUi()
-  const getImage = useSelector(selectors.getImage)
   const { disabled, field, nameField, favicoWidth, favicoHeight, favicoField } = props
 
   const form = useForm()
   const name = useFieldValue<string>(nameField)
   const url = useFieldValue<string>(field)
-  const imageId = useFieldValue<ImageUri>(favicoField)
-  const image = getImage(imageId)
+  const imageId = useFieldValue<ImageId>(favicoField)
   // log('UrlField render value %s', value)
 
   const [source, setSource] = useState<string | undefined>(undefined)
@@ -178,9 +175,9 @@ export const UrlField = <Values extends Record<string, any>>(props: Props<Values
           ]}
           minimal
           loading={loading}
-          icon={image ? <Image size={20} src={image} /> : undefined}
+          icon={imageId ? <Image size={20} id={imageId} /> : undefined}
         >
-          {!loading && !image && <Text>...</Text>}
+          {!loading && !imageId && <Text>...</Text>}
         </PopoverButton>
       }
     />

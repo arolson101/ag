@@ -1,5 +1,5 @@
 import { Bank } from '@ag/db'
-import { ImageUri, pick, useSubmitRef } from '@ag/util'
+import { pick, useSubmitRef } from '@ag/util'
 import debug from 'debug'
 import React, { useCallback, useImperativeHandle, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
@@ -35,7 +35,6 @@ export const BankForm = Object.assign(
     const submitFormRef = useSubmitRef()
 
     const bank = useSelector(selectors.getBank)(bankId)
-    const getImage = useSelector(selectors.getImage)
     const defaultFi = bank ? filist.findIndex(fi => fi.name === bank.name) : 0
     const initialValues = useMemo<FormValues>(
       () => ({
@@ -87,7 +86,6 @@ export const BankForm = Object.assign(
       >
         {({ change, values }) => {
           const { online } = values
-          const icon = getImage(values.iconId)
           return (
             <Tabs id='BankForm' defaultActiveKey='location'>
               <Tab {...tabConfig('location', intl.formatMessage(messages.tabInfo))}>

@@ -150,7 +150,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
           }}
         >
           <Title level={4} style={{ margin: 0 }}>
-            <Image src={titleImage} size='1.5em' margin={5} />
+            <Image id={titleImage} size='1.5em' margin={5} />
             {titleText}
           </Title>
           {menu && (
@@ -389,7 +389,7 @@ const DragSortingTable: React.FC<TableProps> = ({
                   style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
                 >
                   <Title level={4} style={{ margin: 0 }}>
-                    <Image src={titleImage} size='1.5em' margin={5} />
+                    <Image id={titleImage} size='1.5em' margin={5} />
                     {titleText}
                   </Title>
                   <Antd.Dropdown overlay={menu}>

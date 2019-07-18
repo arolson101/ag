@@ -7,21 +7,19 @@ import { actions } from '../actions'
 import {
   CommonFieldProps,
   CommonTextFieldProps,
-  ImageSrc,
+  ImageId,
   useAction,
   useIntl,
   useOnline,
-  useSelector,
   useSystem,
   useUi,
 } from '../context'
-import { selectors } from '../reducers'
 
 const log = debug('core:TextFieldWithIcon')
 
 interface Props<Values = any> extends CommonFieldProps<Values>, CommonTextFieldProps {
   defaultUrl: string
-  defaultIcon?: ImageSrc
+  defaultIcon?: ImageId
   favicoField: keyof Values & string
   favicoWidth: number
   favicoHeight: number
@@ -39,9 +37,7 @@ export const TextFieldWithIcon = <Values extends Record<string, any>>(props: Pro
   const { disabled, field, label, defaultUrl, favicoWidth, favicoHeight, favicoField } = props
 
   const form = useForm()
-  const imageId = useFieldValue<ImageUri>(favicoField)
-  const image = useSelector(selectors.getImage)(imageId)
-  // const [{ value }] = useField<ImageUri>(favicoField)
+  const imageId = useFieldValue<ImageId>(favicoField)
 
   const [source, setSource] = useState<string | undefined>(undefined)
   const [loading, setLoading] = useState(false)
@@ -141,14 +137,14 @@ export const TextFieldWithIcon = <Values extends Record<string, any>>(props: Pro
           minimal
           loading={loading}
           icon={
-            image || props.defaultIcon ? (
-              <Image size={20} src={image || props.defaultIcon} />
+            imageId || props.defaultIcon ? (
+              <Image size={20} id={imageId || props.defaultIcon} />
             ) : (
               undefined
             )
           }
         >
-          {!loading && !image && <Text>...</Text>}
+          {!loading && !imageId && <Text>...</Text>}
         </PopoverButton>
       }
     />

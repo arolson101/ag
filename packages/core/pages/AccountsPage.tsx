@@ -29,8 +29,6 @@ const BankTable = Object.assign(
     const deleteBank = useAction(thunks.deleteBank)
     const setAccountsOrder = useAction(thunks.setAccountsOrder)
     const accounts = useSelector(selectors.getAccountsForBank)(bank.id)
-    const getImage = useSelector(selectors.getImage)
-    const bankIcon = getImage(bank.iconId)
 
     const moveRow = useCallback(
       (srcIndex: number, dstIndex: number) => {
@@ -113,7 +111,7 @@ const BankTable = Object.assign(
           title: '',
           width: 30,
           render: (text: string, account: Row) => (
-            <Image src={getImage(account.iconId) || bankIcon} size='1.5em' />
+            <Image id={account.iconId || bank.iconId} size='1.5em' />
           ),
         },
         {
@@ -146,13 +144,13 @@ const BankTable = Object.assign(
         //   title: intl.formatMessage(messages.colNumber),
         // },
       ],
-      [navAccount, bankIcon, intl]
+      [navAccount, bank.iconId, intl]
     )
 
     return (
       <Table
         titleText={bank.name}
-        titleImage={bankIcon}
+        titleImage={bank.iconId}
         tableEdit={tableEdit}
         tableDelete={tableDelete}
         rowKey={'id'}
