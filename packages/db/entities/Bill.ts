@@ -3,11 +3,24 @@ import { ISpec } from '@ag/util'
 import debug from 'debug'
 import { RRule } from 'rrule'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { BillInput } from './BillInput'
 import { DbChange } from './DbChange'
 import { DbEntity } from './DbEntity'
 
 const log = debug('db:Bill')
+
+export class BillInput {
+  name?: string
+  group?: string
+  web?: string
+  iconId?: string
+  notes?: string
+  amount?: number
+  account?: string
+  category?: string
+  rrule?: RRule
+  showAdvanced?: boolean
+  sortOrder?: number
+}
 
 @Entity({ name: 'bills' })
 export class Bill extends DbEntity<Bill.Props> {
@@ -15,7 +28,7 @@ export class Bill extends DbEntity<Bill.Props> {
   @Column() name!: string
   @Column() group!: string
   @Column() web!: string
-  @Column('text') icon!: ImageId
+  @Column('text', { nullable: true }) iconId!: ImageId
   @Column() notes!: string
   @Column() amount!: number
   @Column() account!: string
@@ -48,7 +61,7 @@ export namespace Bill {
     name: '',
     group: '',
     web: '',
-    icon: '',
+    iconId: '',
     notes: '',
     amount: 0,
     account: '',

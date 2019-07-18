@@ -5,8 +5,8 @@ import { CoreAction } from '../actions'
 import { CoreDependencies } from '../context'
 import { db, dbSelectors } from './dbReducer'
 import { dialog } from './dialogReducer'
+import { ents, entsSelectors } from './entsReducer'
 import { intl, intlSelectors } from './intlReducer'
-import { records, recordsSelectors } from './recordsReducer'
 import { settings, settingsSelectors } from './settingsReducer'
 import { theme, themeSelectors } from './themeReducer'
 
@@ -15,7 +15,7 @@ export const coreReducers = {
   dialog,
   intl,
   settings,
-  records,
+  ents,
   theme,
 }
 
@@ -45,16 +45,16 @@ export const selectors = {
   settingsError: (state: CoreState) => settingsSelectors.settingsError(state.settings),
   getSetting: (state: CoreState) => settingsSelectors.getSetting(state.settings),
 
-  banks: (state: CoreState) => recordsSelectors.banks(state.records),
-  getBank: (state: CoreState) => recordsSelectors.getBank(state.records),
-  getAccountsForBank: (state: CoreState) => recordsSelectors.getAccountsForBank(state.records),
-  getAccount: (state: CoreState) => recordsSelectors.getAccount(state.records),
-  accounts: (state: CoreState) => recordsSelectors.accounts(state.records),
-  getTransactions: (state: CoreState) => recordsSelectors.getTransactions(state.records),
-  getTransaction: (state: CoreState) => recordsSelectors.getTransaction(state.records),
-  bills: (state: CoreState) => recordsSelectors.bills(state.records),
-  getBill: (state: CoreState) => recordsSelectors.getBill(state.records),
-  getImage: (state: CoreState) => recordsSelectors.getImage(state.records),
+  banks: (state: CoreState) => entsSelectors.banks(state.ents),
+  getBank: (state: CoreState) => entsSelectors.getBank(state.ents),
+  getAccountsForBank: (state: CoreState) => entsSelectors.getAccountsForBank(state.ents),
+  getAccount: (state: CoreState) => entsSelectors.getAccount(state.ents),
+  accounts: (state: CoreState) => entsSelectors.accounts(state.ents),
+  getTransactions: (state: CoreState) => entsSelectors.getTransactions(state.ents),
+  getTransaction: (state: CoreState) => entsSelectors.getTransaction(state.ents),
+  bills: (state: CoreState) => entsSelectors.bills(state.ents),
+  getBill: (state: CoreState) => entsSelectors.getBill(state.ents),
+  getImage: (state: CoreState) => entsSelectors.getImage(state.ents),
 
   themeMode: (state: CoreState) => themeSelectors.themeMode(state.theme),
   themeColor: (state: CoreState) => themeSelectors.themeColor(state.theme),

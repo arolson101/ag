@@ -17,12 +17,12 @@ class TestDbEntity extends DbEntity<TestDbEntityProps> implements TestDbEntityPr
 it('accumulates changes', () => {
   const test = new TestDbEntity({ foo: 'test1', bar: 123 })
   expect(test).toHaveProperty('id', undefined)
-  expect(test).not.toHaveProperty('_base')
-  expect(test).toHaveProperty('_history')
+  expect(test).not.toHaveProperty('_history')
   expect(test.foo).toBe('test1')
   expect(test.bar).toBe(123)
 
   test.update(1, { foo: { $set: 'test2' } })
+  expect(test).toHaveProperty('_history')
   expect(test.foo).toBe('test2')
   expect(test.bar).toBe(123)
 

@@ -7,7 +7,7 @@ import { ImageSrc } from '../context'
 
 const log = debug('core:recordsReducer')
 
-interface RecordsState {
+interface EntsState {
   banks: Record<string, Bank>
   accounts: Record<string, Account>
   transactions: Record<string, Transaction>
@@ -17,7 +17,7 @@ interface RecordsState {
   images: Record<string, Image>
 }
 
-const initialState: RecordsState = {
+const initialState: EntsState = {
   banks: {},
   accounts: {},
   transactions: {},
@@ -27,16 +27,16 @@ const initialState: RecordsState = {
   images: {},
 }
 
-export const recordsSelectors = {
-  banks: (state: RecordsState): Bank[] => {
+export const entsSelectors = {
+  banks: (state: EntsState): Bank[] => {
     const banks = Object.values(state.banks)
     banks.sort((a, b) => stringComparer(a.name, b.name))
     return banks
   },
-  getBank: (state: RecordsState) => (bankId?: string): Bank | undefined => {
+  getBank: (state: EntsState) => (bankId?: string): Bank | undefined => {
     return bankId ? state.banks[bankId] : undefined
   },
-  getAccountsForBank: (state: RecordsState) => (bankId: string): Account[] => {
+  getAccountsForBank: (state: EntsState) => (bankId: string): Account[] => {
     const accounts: Account[] = []
     for (const account of Object.values(state.accounts)) {
       if (account.bankId === bankId) {
@@ -46,30 +46,29 @@ export const recordsSelectors = {
     accounts.sort((a, b) => a.sortOrder - b.sortOrder)
     return accounts
   },
-  getAccount: (state: RecordsState) => (accountId?: string): Account | undefined => {
+  getAccount: (state: EntsState) => (accountId?: string): Account | undefined => {
     return accountId ? state.accounts[accountId] : undefined
   },
-  accounts: (state: RecordsState): Account[] => {
+  accounts: (state: EntsState): Account[] => {
     const accounts = Object.values(state.accounts)
     accounts.sort((a, b) => stringComparer(a.name, b.name))
     return accounts
   },
-  getTransactions: (state: RecordsState) => (accountId: string): Transaction[] => {
+  getTransactions: (state: EntsState) => (accountId: string): Transaction[] => {
     const transactions = Object.values(state.transactions).filter(t => t.accountId === accountId)
     transactions.sort((a, b) => a.time.getTime() - b.time.getTime())
     return transactions
   },
-  getTransaction: (state: RecordsState) => (transactionId?: string): Transaction | undefined => {
+  getTransaction: (state: EntsState) => (transactionId?: string): Transaction | undefined => {
     return transactionId ? state.transactions[transactionId] : undefined
   },
-  bills: (state: RecordsState) => {
+  bills: (state: EntsState) => {
     const bills = Object.values(state.bills)
     bills.sort((a, b) => a.sortOrder - b.sortOrder)
     return bills
   },
-  getBill: (state: RecordsState) => (billId?: string) => (billId ? state.bills[billId] : undefined),
-  getImage: (state: RecordsState) => (imageId: string): ImageSrc | undefined =>
-    state.images[imageId],
+  getBill: (state: EntsState) => (billId?: string) => (billId ? state.bills[billId] : undefined),
+  getImage: (state: EntsState) => (imageId: string): ImageSrc | undefined => state.images[imageId],
 }
 
 const applyChange = <T extends DbEntity<any>>(
@@ -93,7 +92,7 @@ const applyChange = <T extends DbEntity<any>>(
   return nextState
 }
 
-export const records = (state: RecordsState = initialState, action: CoreAction): RecordsState => {
+export const ents = (state: EntsState = initialState, action: CoreAction): EntsState => {
   switch (action.type) {
     case getType(actions.dbLogin.request):
     case getType(actions.dbLogout):

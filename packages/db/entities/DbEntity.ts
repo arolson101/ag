@@ -27,7 +27,7 @@ export abstract class DbEntity<Props extends {}> {
 
     if (props) {
       assert(!['id', '_deleted', '_history'].some(key => key in props))
-      this.update(0, { $set: props })
+      Object.assign(this, props)
       // log('props %o this %o', props, this)
     }
 

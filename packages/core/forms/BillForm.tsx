@@ -274,7 +274,7 @@ export const BillForm = Object.assign(
               <UrlField
                 field='web'
                 nameField='name'
-                favicoField='icon'
+                favicoField='iconId'
                 favicoHeight={Bill.iconSize}
                 favicoWidth={Bill.iconSize}
                 label={intl.formatMessage(messages.web)}

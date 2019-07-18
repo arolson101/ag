@@ -63,10 +63,10 @@ const BillGroup = Object.assign(
     const columns = useMemo<Array<TableColumn<Row>>>(
       () => [
         {
-          dataIndex: 'icon',
+          dataIndex: 'iconId',
           title: '',
           width: 30,
-          render: (text: string, bill: Row) => <Image id={bill.icon} size='1.5em' />,
+          render: (text: string, bill: Row) => <Image id={bill.iconId} size='1.5em' />,
         },
         {
           dataIndex: 'name',
