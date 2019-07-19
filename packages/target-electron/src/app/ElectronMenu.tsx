@@ -1,5 +1,5 @@
 import { actions } from '@ag/core/actions'
-import { IntlContext, useAction, useIntl, useSelector } from '@ag/core/context'
+import { IntlContext, UiContext, useAction, useIntl, useSelector, useUi } from '@ag/core/context'
 import { selectors } from '@ag/core/reducers'
 import { thunks } from '@ag/core/thunks'
 import { exportDb, importDb } from '@ag/db/export'
@@ -23,6 +23,7 @@ const opaque = (color: Color): Color => {
 
 export const ElectronMenu: React.FC = () => {
   const intl = useIntl()
+  const ui = useUi()
   const isLoggedIn = useSelector(selectors.isLoggedIn)
   const connection = useSelector(selectors.connection)
   const platform = useSelector(selectors.platform)
@@ -57,12 +58,12 @@ export const ElectronMenu: React.FC = () => {
   }, [platform, themeColor])
 
   const importClicked = useCallback(async () => {
-    await importFromFile(connection!, intl)
+    await importFromFile(connection!, intl, ui)
     await dbReloadAll()
   }, [connection, importFromFile])
 
   const exportClicked = useCallback(() => {
-    exportToFile(connection!, intl)
+    exportToFile(connection!, intl, ui)
   }, [connection, exportToFile])
 
   useEffect(() => {
@@ -135,31 +136,34 @@ export const ElectronMenu: React.FC = () => {
   return null
 }
 
-const exportToFile = async (connection: Connection, intl: IntlContext) => {
+const exportToFile = async (connection: Connection, intl: IntlContext, ui: UiContext) => {
   log('exportToFile')
 
-  const o = dialog.showSaveDialog(remote.getCurrentWindow(), {
+  const path = dialog.showSaveDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.exportDialogTitle),
-    filters: [{ name: 'Spreadsheet', extensions: ['ods'] }],
+    filters: [{ name: 'Archive', extensions: ['zip'] }],
   })
 
-  if (o) {
+  if (path) {
     const data = await exportDb(connection)
-    fs.writeFileSync(o, data)
+    fs.writeFileSync(path, data, { encoding: 'base64' })
+    ui.showToast(intl.formatMessage(messages.exportComplete, { path }))
   }
 }
 
-const importFromFile = async (connection: Connection, intl: IntlContext) => {
+const importFromFile = async (connection: Connection, intl: IntlContext, ui: UiContext) => {
   log('importFromFile')
 
   const o = dialog.showOpenDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.importDialogTitle),
-    filters: [{ name: 'Spreadsheet', extensions: ['ods'] }],
+    filters: [{ name: 'Archive', extensions: ['zip'] }],
   })
 
   if (o && o.length > 0) {
-    const data = fs.readFileSync(o[0])
+    const path = o[0]
+    const data = fs.readFileSync(path)
     await importDb(connection, data)
+    ui.showToast(intl.formatMessage(messages.importComplete, { path }))
   }
 }
 
@@ -199,5 +203,13 @@ const messages = defineMessages({
   importDialogTitle: {
     id: 'ElectronMenu.importDialogTitle',
     defaultMessage: 'Import',
+  },
+  importComplete: {
+    id: 'ElectronMenu.importComplete',
+    defaultMessage: 'Imported data from {path}',
+  },
+  exportComplete: {
+    id: 'ElectronMenu.exportComplete',
+    defaultMessage: 'Exported data to {path}',
   },
 })

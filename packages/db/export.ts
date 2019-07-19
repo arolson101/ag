@@ -1,19 +1,43 @@
 import { dehydrate, hydrate } from '@ag/util'
 import assert from 'assert'
+import csvParse from 'csv-parse/lib/sync'
+import csvStringify from 'csv-stringify/lib/sync'
 import debug from 'debug'
 import { flatten, nest } from 'flatnest'
-import { Connection } from 'typeorm'
-import { ColumnMetadata } from 'typeorm/metadata/ColumnMetadata'
-import XLSX from 'xlsx'
+import JSZip from 'jszip'
+import { Connection, EntityMetadata } from 'typeorm'
 import { DbEntity } from './entities'
 
 const log = debug('export')
 
+const getExt = (obj: object | any): string => {
+  const mime = obj.mime
+  switch (mime) {
+    case 'image/png':
+      return '.png'
+    case 'image/svg+xml':
+      return '.svg'
+    case 'image/jpeg':
+      return '.jpg'
+    case 'image/gif':
+      return '.gif'
+    case 'icns':
+      return '.icns'
+    case 'image/bmp':
+      return '.bmp'
+    case 'image/webp':
+      return '.webp'
+    default:
+      return ''
+  }
+}
+
 const fixExport = (
-  columns: ColumnMetadata[],
-  object: DbEntity<any> & Record<string, any>
+  object: DbEntity<any> & Record<string, any>,
+  entityMetadata: EntityMetadata,
+  zip: JSZip
 ): object => {
-  for (const col of columns) {
+  for (const col of entityMetadata.columns) {
     const key = col.propertyPath as keyof typeof object
     if (col.transformer) {
       const transforms = Array.isArray(col.transformer) ? col.transformer : [col.transformer]
@@ -21,7 +45,10 @@ const fixExport = (
       object[key] = value
     } else if (col.type === 'blob') {
       assert(object[key] instanceof Buffer)
-      object[key] = (object[key] as Buffer).toString('base64')
+      const ext = getExt(object)
+      const path = `${entityMetadata.tableName}/${object.id}_${key}${ext}`
+      zip.file(path, object[key] as Buffer)
+      object[key] = path
     } else if (key === '_history' && object._history) {
       try {
         const value = JSON.stringify(hydrate(object._history), null, '  ')
@@ -33,15 +60,21 @@ const fixExport = (
   return object
 }
 
-const fixImport = (columns: ColumnMetadata[], row: Record<string, any>): object => {
+const fixImport = async (
+  zip: JSZip,
+  entityMetadata: EntityMetadata,
+  row: Record<string, any>
+): Promise<object> => {
   for (const key of Object.keys(row) as Array<keyof typeof row>) {
-    const col = columns.find(c => c.propertyPath === key)
+    const col = entityMetadata.columns.find(c => c.propertyPath === key)
     if (!col) {
       continue
     }
 
     if (col.type === 'blob') {
-      row[key] = Buffer.from(row[key] as string, 'base64')
+      const path = row[key] as string
+      const data: Buffer = await zip.file(path).async('nodebuffer')
+      row[key] = data
     }
 
     if (key === '_history') {
@@ -58,7 +91,7 @@ const fixImport = (columns: ColumnMetadata[], row: Record<string, any>): object 
 }
 
 export const exportDb = async (connection: Connection) => {
-  const wb = XLSX.utils.book_new()
+  const zip = new JSZip()
   for (const entityMetadata of connection.entityMetadatas) {
     const { tableName } = entityMetadata
     const hiddenColumns = entityMetadata.columns
@@ -70,31 +103,40 @@ export const exportDb = async (connection: Connection) => {
       .select()
       .addSelect(hiddenColumns)
       .getMany())
-      .map(ent => fixExport(entityMetadata.columns, ent))
+      .map(ent => fixExport(ent, entityMetadata, zip))
       .map(flatten)
-    const header = entityMetadata.columns.map(col => col.propertyPath)
+
     log('%s: %d items', tableName, data.length)
-    const ws = XLSX.utils.json_to_sheet(data, { header })
-    XLSX.utils.book_append_sheet(wb, ws, tableName)
+
+    const csv = csvStringify(data)
+    await zip.file(`${tableName}.csv`, csv)
   }
 
-  return XLSX.write(wb, { type: 'buffer', bookType: 'ods' })
+  return zip.generateAsync({ type: 'base64' })
 }
 
-export const importDb = async (connection: Connection, data: any) => {
+export const importDb = async (connection: Connection, data: Buffer) => {
   // log('importDb')
 
-  const wb = XLSX.read(data, { type: 'buffer' })
+  const zip = new JSZip()
+  await zip.loadAsync(data)
+
   // log('importDb %o', wb)
-  for (const sheetName of wb.SheetNames) {
-    const sheet = wb.Sheets[sheetName]
-    const obj = XLSX.utils.sheet_to_json<object>(sheet)
-    const entityMetadata = connection.entityMetadatas.find(emd => emd.tableName === sheetName)
-    if (!entityMetadata) {
-      continue
-    }
-    const repo = connection.manager.getRepository<object>(sheetName)
-    const ents = obj.map(o => repo.create(fixImport(entityMetadata.columns, nest(o))))
+  for (const entityMetadata of connection.entityMetadatas) {
+    const { tableName } = entityMetadata
+    const csv = await zip.file(`${tableName}.csv`).async('text')
+
+    const obj = csvParse(csv, {
+      columns: true,
+      skip_empty_lines: true,
+      skip_lines_with_error: true,
+      skip_lines_with_empty_values: true,
+    }) as object[]
+
+    const repo = connection.manager.getRepository<object>(tableName)
+    const ents = await Promise.all(
+      obj.map(async o => repo.create(await fixImport(zip, entityMetadata, nest(o))))
+    )
     // log('importDb %s %o', sheetName, ents)
     if (ents.length) {
       await repo.insert(ents)

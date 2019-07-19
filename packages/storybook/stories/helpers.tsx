@@ -13,6 +13,9 @@ import { applyMiddleware, combineReducers, createStore as reduxCreateStore } fro
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import { Connection, ConnectionOptions, createConnection, getConnectionManager } from 'typeorm'
+import empty from './data/empty.zip'
+import full from './data/full.zip'
+import normal from './data/normal.zip'
 import { storiesOf, ui } from './platform-specific'
 
 export { action, storiesOf }
@@ -22,9 +25,9 @@ require('sql.js/dist/sql-asm.js')().then((x: SQLJS) => (window.SQL = x))
 const log = debug('helpers')
 
 const datasets = {
-  empty: require<OdsData>('./data/empty.ods'),
-  full: require<OdsData>('./data/full.ods'),
-  normal: require<OdsData>('./data/normal.ods'),
+  empty,
+  full,
+  normal,
 }
 
 type Dataset = keyof typeof datasets
@@ -113,7 +116,7 @@ export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) 
             s.dispatch(thunks.dbCreate({ name: 'app', password: '1234' }))
             await waitForState(s, selectors.isLoggedIn)
             const { connection } = selectors.appDb(s.getState())
-            await importDb(connection, datasets[dataset])
+            await importDb(connection, Buffer.from(datasets[dataset]))
             // log('logged in')
             setIsLoggedIn(true)
           }

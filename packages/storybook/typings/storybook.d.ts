@@ -23,3 +23,8 @@ declare module '*.ods' {
   const data: OdsData
   export default data
 }
+
+declare module '*.zip' {
+  const data: ArrayBuffer
+  export default data
+}
