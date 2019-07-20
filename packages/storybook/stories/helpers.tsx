@@ -117,6 +117,7 @@ export const MockApp: React.FC<{ dataset?: Dataset }> = ({ dataset, children }) 
             await waitForState(s, selectors.isLoggedIn)
             const { connection } = selectors.appDb(s.getState())
             await importDb(connection, Buffer.from(datasets[dataset]))
+            await s.dispatch(thunks.dbReloadAll())
             // log('logged in')
             setIsLoggedIn(true)
           }
