@@ -37,6 +37,10 @@ const { Text, Title, Paragraph } = Typography
 
 const log = debug('ui-antd:ui')
 
+message.config({
+  top: 50,
+})
+
 export const ui: UiContext = {
   // special ui
   showToast: (text, danger) => (danger ? message.error(text) : message.success(text)),
