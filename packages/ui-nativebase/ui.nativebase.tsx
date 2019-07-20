@@ -59,12 +59,12 @@ export const NbUi: Omit<UiContext, RNNTypes> = {
         [
           {
             text: cancelText, //
-            onPress: () => resolve(true),
+            onPress: () => resolve(false),
             style: 'cancel',
           },
           {
             text: confirmText,
-            onPress: () => resolve(false),
+            onPress: () => resolve(true),
             style: danger ? 'destructive' : 'default',
           },
         ],
