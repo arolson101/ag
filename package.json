@@ -19,7 +19,8 @@
     "storybook-android": "cd packages/storybook && yarn run android",
     "storybook-electron": "cd packages/storybook && yarn run electron",
     "storybook-ios": "cd packages/storybook && yarn run ios",
-    "target-android": "cd packages/target-react-native && yarn run android",
+    "target-android": "cd packages/target-react-native && concurrently \"yarn:start\" \"yarn:android\"",
+    "target-ios": "cd packages/target-react-native && concurrently \"yarn:start\" \"yarn:ios\"",
     "target-electron": "cd packages/target-electron && yarn dev",
     "update-packages": "ncu -u && lerna exec --concurrency 1 -- ncu -u",
     "watch": "tsc --noemit --skipLibCheck --watch"

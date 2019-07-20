@@ -11,7 +11,7 @@ export interface IntlState {
 }
 
 const getIntl = (localeCode: string): IntlContext => {
-  const locale = LocaleCode.getLanguageName(localeCode)
+  const locale = LocaleCode.getLanguageCode(localeCode)
   return new IntlProvider({ locale }).getChildContext().intl
 }
 
