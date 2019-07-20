@@ -1,4 +1,4 @@
-import { AccountDialog, BankDialog, LoginDialog, PictureDialog } from '@ag/core/dialogs'
+import { AccountDialog, BankDialog, BillDialog, LoginDialog, PictureDialog } from '@ag/core/dialogs'
 import assert from 'assert'
 import debug from 'debug'
 import { Navigation } from 'react-native-navigation'
@@ -77,5 +77,6 @@ export const syncNavState = (store: RnStore) => {
     updateModal(PictureDialog, dialog.pictureDialog)
     updateModal(BankDialog, dialog.bankDialog)
     updateModal(AccountDialog, dialog.accountDialog)
+    updateModal(BillDialog, dialog.billDialog)
   })
 }
