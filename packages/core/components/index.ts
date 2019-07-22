@@ -1,5 +1,6 @@
 export * from './AccountField'
 export * from './ErrorDisplay'
+export * from './ImageManager'
 export * from './Link'
 export * from './MenuBar'
 export * from './TextFieldWithIcon'

@@ -1,12 +1,12 @@
 import { ImageUri, imageUriDimensions, isDataUri } from '@ag/util'
-import { useEffect, useMemo } from 'react'
-import { ImageId, ImageSrc, useAction, useSelector } from '../context'
+import { useContext, useEffect, useMemo } from 'react'
+import { ImageId, ImageSrc, useSelector } from '../context'
 import { selectors } from '../reducers'
-import { thunks } from '../thunks'
+import { ImageManagerContext } from './ImageManager'
 
 export const useImage = (imageId: ImageId | undefined): ImageSrc | undefined => {
+  const imageManager = useContext(ImageManagerContext)
   const getImage = useSelector(selectors.getImage)
-  const dbLoadImage = useAction(thunks.dbLoadImage)
   const uriSrc = useMemo(() => {
     if (imageId && isDataUri(imageId)) {
       const src = imageId as ImageUri
@@ -18,7 +18,7 @@ export const useImage = (imageId: ImageId | undefined): ImageSrc | undefined => 
 
   useEffect(() => {
     if (imageId && image && !image.src) {
-      dbLoadImage({ imageId })
+      imageManager.requestImage(imageId)
     }
   }, [image])
 

@@ -2,6 +2,7 @@ import { Online } from '@ag/online'
 import debug from 'debug'
 import React from 'react'
 import { Provider as StoreProvider } from 'react-redux'
+import { ImageManager } from './components'
 import { CoreContext, SystemCallbacks, UiContext } from './context'
 import { CoreStore } from './reducers'
 
@@ -19,8 +20,10 @@ export const App = Object.assign(
     return (
       <CoreContext.Provider value={{ sys, online, ui }}>
         <StoreProvider store={store}>
-          {/* tslint:disable-next-line:prettier */}
-          {children}
+          <ImageManager>
+            {/* tslint:disable-next-line:prettier */}
+            {children}
+          </ImageManager>
         </StoreProvider>
       </CoreContext.Provider>
     )
