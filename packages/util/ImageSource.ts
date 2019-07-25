@@ -14,6 +14,15 @@ export interface ImageBuf {
   buf: Buffer
 }
 
+interface ImageDimensions {
+  width: number
+  height: number
+}
+
+const area = (img: ImageDimensions) => img.width * img.height
+export const imageComparerDescendingSize = (a: ImageDimensions, b: ImageDimensions) =>
+  area(b) - area(a)
+
 const attribsFromDimensions = ({ width, height }: { width: number; height: number }) => ({
   width: width.toString(),
   height: height.toString(),

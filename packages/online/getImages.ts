@@ -1,4 +1,11 @@
-import { decodeDataUri, fixUrl, ImageBuf, imageSize, isDataUri } from '@ag/util'
+import {
+  decodeDataUri,
+  fixUrl,
+  ImageBuf,
+  imageComparerDescendingSize,
+  imageSize,
+  isDataUri,
+} from '@ag/util'
 import Axios, { AxiosResponse, CancelToken } from 'axios'
 import debug from 'debug'
 import ICO from 'icojs/index.js' // ensure we get the nodejs version, not the browser one
@@ -116,13 +123,11 @@ export const getImage = async (link: string, cancelToken: CancelToken) => {
     let image: ImageBuf
 
     if (ICO.isICO(buf)) {
-      mime = 'image/png'
-      const parsedImages = await ICO.parse(buf, mime)
-      const images: ImageBuf[] = parsedImages
-        .map(({ width, height, buffer }) => {
-          return { width, height, mime, buf: Buffer.from(buffer) }
-        })
-        .sort((a, b) => b.width - a.width) // sort by descending size
+      const parsedImages = await ICO.parse(buf, icoMimeType)
+      const images = parsedImages //
+        .map(imageBufFromIco)
+        .sort(imageComparerDescendingSize)
+      // log('ico images %o', images)
       image = images[0]
     } else {
       const { width, height, type } = imageSize(buf, link)
@@ -136,3 +141,12 @@ export const getImage = async (link: string, cancelToken: CancelToken) => {
     throw error
   }
 }
+
+const icoMimeType = 'image/png'
+
+const imageBufFromIco = ({ width, height, buffer }: ICO.ParsedImage) => ({
+  width,
+  height,
+  mime: icoMimeType,
+  buf: Buffer.from(buffer),
+})
