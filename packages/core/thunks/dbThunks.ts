@@ -3,20 +3,21 @@ import {
   appEntities,
   Bank,
   Bill,
-  Budget,
-  Category,
   Db,
   Image,
   indexEntities,
+  Transaction,
 } from '@ag/db/entities'
-import { ImageBuf, imageBufToUri } from '@ag/util'
 import crypto from 'crypto'
+import debug from 'debug'
 import { defineMessages } from 'react-intl'
 import sanitize from 'sanitize-filename'
 import { actions } from '../actions'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
 import { settingsThunks } from './settingsThunks'
+
+const log = debug('core:dbThunks')
 
 const dbInit = (): CoreThunk =>
   async function _dbInit(dispatch, getState, { sys: { openDb } }) {
@@ -37,20 +38,20 @@ const dbInit = (): CoreThunk =>
 const dbLoadEntities = (): CoreThunk =>
   async function _dbLoadEntities(dispatch, getState) {
     const {
-      accountsRepository, //
-      banksRepository,
-      billsRepository,
+      accountRepository, //
+      bankRepository,
+      billRepository,
       imageRepository,
       // budgetsRepository,
       // categoriesRepository,
     } = selectors.appDb(getState())
 
-    const banks = await banksRepository.all()
-    const accounts = await accountsRepository.all()
-    const bills = await billsRepository.all()
+    const banks = await bankRepository.all()
+    const accounts = await accountRepository.all()
+    const bills = await billRepository.all()
     const images = await imageRepository.all()
-    // const budgets = await budgetsRepository.all()
-    // const categories = await categoriesRepository.all()
+    // const budgets = await budgetRepository.all()
+    // const categories = await categoryRepository.all()
 
     dispatch(
       actions.dbEntities([
@@ -169,6 +170,15 @@ const dbLoadImage = ({ imageId }: { imageId: string }): CoreThunk =>
     dispatch(actions.imageLoaded({ image }))
   }
 
+const dbLoadTransactions = ({ accountId }: { accountId: string }): CoreThunk =>
+  async function _dbloadTransactions(dispatch, getState) {
+    const state = getState()
+    const { transactionRepository } = selectors.appDb(state)
+    const transactions = await transactionRepository.getForAccount(accountId)
+    log('dbLoadTransactions %o', transactions)
+    dispatch(actions.dbEntities([{ table: Transaction, entities: transactions, deletes: [] }]))
+  }
+
 export const dbThunks = {
   dbInit,
   dbReloadAll,
@@ -176,6 +186,7 @@ export const dbThunks = {
   dbOpen,
   dbDelete,
   dbLoadImage,
+  dbLoadTransactions,
 }
 
 const messages = defineMessages({

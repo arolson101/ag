@@ -1,5 +1,12 @@
 import { useSelector } from '@ag/core/context'
-import { AccountDialog, BankDialog, BillDialog, LoginDialog, PictureDialog } from '@ag/core/dialogs'
+import {
+  AccountDialog,
+  BankDialog,
+  BillDialog,
+  LoginDialog,
+  PictureDialog,
+  TransactionDialog,
+} from '@ag/core/dialogs'
 import { selectors } from '@ag/core/reducers'
 import debug from 'debug'
 import React from 'react'
@@ -18,6 +25,7 @@ export const ElectronDialogs = Object.assign(
         {dialog.pictureDialog && <PictureDialog {...dialog.pictureDialog} />}
         {dialog.bankDialog && <BankDialog {...dialog.bankDialog} />}
         {dialog.accountDialog && <AccountDialog {...dialog.accountDialog} />}
+        {dialog.transactionDialog && <TransactionDialog {...dialog.transactionDialog} />}
         {dialog.billDialog && <BillDialog {...dialog.billDialog} />}
       </>
     )

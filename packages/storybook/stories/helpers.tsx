@@ -37,11 +37,13 @@ export const data = {
     bankId: 'a372cda0d53a2f9b0f4c46d0cd3136748',
     accountId: 'a30cdcfe7d083e8e4470e63f61c782928',
     billId: 'a020dd8555b14acc1c1101b2f7d2b8c62',
+    transactionId: '',
   },
   full: {
     bankId: 'a74780f9d696f3646f3177b83093c0667',
     accountId: 'a13cb3bf09d932e0b00d4eedee1b22e85',
     billId: 'a020dd8555b14acc1c1101b2f7d2b8c62',
+    transactionId: '',
   },
 }
 

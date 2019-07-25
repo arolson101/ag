@@ -2,11 +2,12 @@ import { Transaction } from '@ag/db'
 import { formatCurrency } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
 import { TableColumn, useAction, useIntl, useSelector, useUi } from '../context'
 import { selectors } from '../reducers'
+import { thunks } from '../thunks'
 
 const log = debug('core:AccountPage')
 
@@ -20,9 +21,10 @@ const route = docuri.route<Props, string>(path)
 export const AccountPage = Object.assign(
   React.memo<Props>(function _AccountPage({ accountId }) {
     const intl = useIntl()
-    const openBankCreateDlg = useAction(actions.openDlg.bankCreate)
+    const transactionCreate = useAction(actions.openDlg.transactionCreate)
     const getBank = useSelector(selectors.getBank)
     const getTransactions = useSelector(selectors.getTransactions)
+    const dbLoadTransactions = useAction(thunks.dbLoadTransactions)
     const { Page, Table, Text } = useUi()
 
     const account = useSelector(selectors.getAccount)(accountId)
@@ -65,6 +67,10 @@ export const AccountPage = Object.assign(
       [intl]
     )
 
+    useEffect(() => {
+      dbLoadTransactions({ accountId })
+    }, [dbLoadTransactions, accountId])
+
     if (!account) {
       return null
     }
@@ -81,12 +87,12 @@ export const AccountPage = Object.assign(
 
     return (
       <Page
-        image={bank.iconId}
+        image={account.iconId || bank.iconId}
         title={title}
         subtitle={subtitle}
         button={{
           title: intl.formatMessage(messages.transactionAdd),
-          onClick: openBankCreateDlg,
+          onClick: () => transactionCreate({ accountId }),
         }}
       >
         <Table

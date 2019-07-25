@@ -1,16 +1,20 @@
 import { Transaction } from '@ag/db'
 import { pick, useSubmitRef } from '@ag/util'
 import accounting from 'accounting'
+import debug from 'debug'
 import React, { useCallback, useImperativeHandle, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { useFields } from '../components'
-import { Errors, useAction, useIntl, useSelector, useUi } from '../context'
+import { Errors, useAction, useIntl, useSelector } from '../context'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
+
+const log = debug('core:TransactionForm')
 
 interface Props {
   accountId: string
   transactionId?: string
+  onClosed: () => any
 }
 
 type FormValues = ReturnType<typeof Transaction.defaultValues>
@@ -20,20 +24,15 @@ export interface TransactionForm {
 }
 
 export const TransactionForm = Object.assign(
-  React.forwardRef<TransactionForm, Props>((props, ref) => {
-    const { accountId, transactionId } = props
+  React.forwardRef<TransactionForm, Props>(function _TransactionForm(props, ref) {
+    const { accountId, transactionId, onClosed } = props
     const intl = useIntl()
     const saveTransaction = useAction(thunks.saveTransaction)
     const submitFormRef = useSubmitRef()
-    const getTransaction = useSelector(selectors.getTransaction)
-    const defaultCurrency = useSelector(selectors.currency)
     const account = useSelector(selectors.getAccount)(accountId)
+    const transaction = useSelector(selectors.getTransaction)(transactionId)
+    const defaultCurrency = useSelector(selectors.currency)
     const { Form, CurrencyField, DateField, TextField } = useFields<FormValues>()
-
-    const transaction = getTransaction(transactionId)
-    if (!transaction) {
-      return null
-    }
 
     const initialValues = useMemo<FormValues>(
       () =>
@@ -67,6 +66,7 @@ export const TransactionForm = Object.assign(
             amount: accounting.unformat(amount.toString()),
           },
         })
+        onClosed()
       },
       [accountId, transactionId, saveTransaction]
     )
@@ -84,13 +84,13 @@ export const TransactionForm = Object.assign(
         submit={submit}
         submitRef={submitFormRef}
       >
-        <DateField field='time' label={intl.formatMessage(messages.date)} />
         <TextField field='name' autoFocus label={intl.formatMessage(messages.name)} />
         <CurrencyField
           field='amount'
           label={intl.formatMessage(messages.amount)}
           currencyCode={account ? account.currencyCode : defaultCurrency}
         />
+        <DateField field='time' label={intl.formatMessage(messages.date)} />
         <TextField field='memo' label={intl.formatMessage(messages.memo)} />
       </Form>
     )
@@ -144,66 +144,18 @@ const messages = defineMessages({
   },
   name: {
     id: 'TransactionForm.name',
-    defaultMessage: 'name',
+    defaultMessage: 'Payee',
   },
   date: {
     id: 'TransactionForm.date',
-    defaultMessage: 'date',
+    defaultMessage: 'Date',
   },
   memo: {
     id: 'TransactionForm.memo',
-    defaultMessage: 'memo',
-  },
-  fid: {
-    id: 'TransactionForm.fid',
-    defaultMessage: 'Fid',
-  },
-  fidPlaceholder: {
-    id: 'TransactionForm.fidPlaceholder',
-    defaultMessage: '1234',
-  },
-  org: {
-    id: 'TransactionForm.org',
-    defaultMessage: 'Org',
-  },
-  orgPlaceholder: {
-    id: 'TransactionForm.orgPlaceholder',
-    defaultMessage: 'MYBANK',
-  },
-  ofx: {
-    id: 'TransactionForm.ofx',
-    defaultMessage: 'OFX Server',
-  },
-  ofxPlaceholder: {
-    id: 'TransactionForm.ofxPlaceholder',
-    defaultMessage: 'https://ofx.mybank.com',
-  },
-  username: {
-    id: 'TransactionForm.username',
-    defaultMessage: 'Username',
-  },
-  usernamePlaceholder: {
-    id: 'TransactionForm.usernamePlaceholder',
-    defaultMessage: 'Username',
-  },
-  password: {
-    id: 'TransactionForm.password',
-    defaultMessage: 'Password',
-  },
-  passwordPlaceholder: {
-    id: 'TransactionForm.passwordPlaceholder',
-    defaultMessage: 'Required',
-  },
-  deleteTransaction: {
-    id: 'TransactionForm.deleteTransaction',
-    defaultMessage: 'Delete Transaction',
-  },
-  deleteTransactionTitle: {
-    id: 'TransactionForm.deleteTransactionTitle',
-    defaultMessage: 'Are you sure?',
+    defaultMessage: 'Memo',
   },
   amount: {
     id: 'TransactionForm.amount',
-    defaultMessage: 'amount',
+    defaultMessage: 'Amount',
   },
 })

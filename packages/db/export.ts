@@ -108,7 +108,8 @@ export const exportDb = async (connection: Connection) => {
 
     log('%s: %d items', tableName, data.length)
 
-    const csv = csvStringify(data)
+    const columns = entityMetadata.columns.map(col => col.propertyName)
+    const csv = csvStringify(data, { columns, header: true })
     await zip.file(`${tableName}.csv`, csv)
   }
 

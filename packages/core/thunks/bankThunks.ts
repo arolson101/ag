@@ -18,7 +18,7 @@ const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
     const intl = selectors.intl(state)
 
     try {
-      const { banksRepository } = selectors.appDb(state)
+      const { bankRepository } = selectors.appDb(state)
 
       const t = Date.now()
 
@@ -28,7 +28,7 @@ const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
       let bank: Bank
       let changes: DbChange[]
       if (bankId) {
-        bank = await banksRepository.getById(bankId)
+        bank = await bankRepository.getById(bankId)
         const q = diff<Bank.Props>(bank, input)
         changes = [Bank.change.edit(t, bankId, q), ...iconChange]
         bank.update(t, q)
@@ -41,7 +41,7 @@ const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
       await dispatch(dbWrite(changes))
       assert.equal(bankId, bank.id)
       // log('get bank %s', bankId)
-      assert.deepStrictEqual(bank, await banksRepository.getById(bankId))
+      assert.deepStrictEqual(bank, await bankRepository.getById(bankId))
       // log('done')
 
       const intlCtx = { name: bank.name }
@@ -85,9 +85,9 @@ const setAccountsOrder = (accountIds: string[]): CoreThunk =>
     const intl = selectors.intl(state)
 
     try {
-      const { accountsRepository } = selectors.appDb(state)
+      const { accountRepository } = selectors.appDb(state)
       const t = Date.now()
-      const accounts = await accountsRepository.getByIds(accountIds)
+      const accounts = await accountRepository.getByIds(accountIds)
       if (accounts.length !== accountIds.length) {
         throw new Error('got back wrong number of accounts')
       }

@@ -23,7 +23,7 @@ const saveBill = ({ input, billId }: SaveBillParams): CoreThunk =>
     const intl = selectors.intl(state)
 
     try {
-      const { billsRepository } = selectors.appDb(state)
+      const { billRepository } = selectors.appDb(state)
 
       const t = Date.now()
 
@@ -33,7 +33,7 @@ const saveBill = ({ input, billId }: SaveBillParams): CoreThunk =>
       let bill: Bill
       let changes: DbChange[]
       if (billId) {
-        bill = await billsRepository.getById(billId)
+        bill = await billRepository.getById(billId)
         const q = diff<Bill.Props>(bill, input)
         changes = [Bill.change.edit(t, billId, q), ...iconChange]
         bill.update(t, q)
@@ -46,7 +46,7 @@ const saveBill = ({ input, billId }: SaveBillParams): CoreThunk =>
       await dispatch(dbWrite(changes))
       assert.equal(billId, bill.id)
       // log('get bill %s', billId)
-      assert.deepStrictEqual(comparable(bill), comparable(await billsRepository.getById(billId)))
+      assert.deepStrictEqual(comparable(bill), comparable(await billRepository.getById(billId)))
       // log('done')
 
       const intlCtx = { name: bill.name }
@@ -90,9 +90,9 @@ const setBillsOrder = (accountIds: string[]): CoreThunk =>
     const intl = selectors.intl(state)
 
     try {
-      const { billsRepository } = selectors.appDb(state)
+      const { billRepository } = selectors.appDb(state)
       const t = Date.now()
-      const bills = await billsRepository.getByIds(accountIds)
+      const bills = await billRepository.getByIds(accountIds)
       if (bills.length !== accountIds.length) {
         throw new Error('got back wrong number of bills')
       }
