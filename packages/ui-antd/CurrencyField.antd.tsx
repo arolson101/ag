@@ -15,7 +15,9 @@ export const CurrencyField = Object.assign(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target
         const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
-        if ((!Number.isNaN(+value) && reg.test(value)) || value === '' || value === '-') {
+        if (value === '.') {
+          form.change(name, '0.')
+        } else if ((!Number.isNaN(+value) && reg.test(value)) || value === '' || value === '-') {
           form.change(name, value)
         }
       },

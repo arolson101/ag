@@ -47,7 +47,7 @@ export const NumberField = Object.assign(
         <Label label={label} error={touched && error} />
         <Input
           disabled={disabled}
-          style={{ flex: 1 }}
+          style={{ flex: 1, textAlign: 'right' }}
           value={field.value.toString()}
           autoCapitalize={'none'}
           autoCorrect={false}

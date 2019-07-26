@@ -6,7 +6,6 @@ import React, { useCallback } from 'react'
 import { Label } from './Label.nativebase'
 
 const log = debug('ui-nativebase:SelectField')
-log.enabled = true
 
 export const SelectField = Object.assign(
   React.memo<SelectFieldProps>(function _SelectField(props) {
@@ -14,19 +13,6 @@ export const SelectField = Object.assign(
 
     const form = useForm()
     const [field, { touched, error }] = useField(name)
-
-    const onPress = useCallback(() => {
-      // const { navPicker, items, searchable, label, field } = this.props
-      // if (searchable) {
-      //   navPicker({
-      //     title: label,
-      //     items,
-      //     searchable,
-      //     onValueChange: this.onValueChange,
-      //     selectedItem: form.values[field] as any,
-      //   })
-      // }
-    }, [])
 
     const onValueChange = useCallback(
       (value: string) => {
@@ -38,27 +24,33 @@ export const SelectField = Object.assign(
       [name, form, props.onValueChange]
     )
 
-    return (
-      <ListItem button onPress={onPress} style={{ paddingTop: 0, paddingBottom: 0 }}>
-        <Label label={label} error={touched && error} />
-        <Body>
-          <Picker
-            mode='dialog'
-            iosHeader={label}
-            textStyle={{ flex: 1 }}
-            // placeholder='placeholder'
-            // placeholderStyle={{ flex: 1 }}
-            selectedValue={field.value}
-            onValueChange={onValueChange}
-          >
-            {items.map(item => (
-              <Picker.Item key={item.value} label={item.label} value={item.value} />
-            ))}
-          </Picker>
-        </Body>
-        {touched && error && <Icon name='close-circle' />}
-      </ListItem>
+    const picker = (
+      <Picker
+        mode='dialog'
+        iosHeader={label}
+        textStyle={{ flex: 1, textAlign: 'right' }}
+        // placeholder='placeholder'
+        // placeholderStyle={{ flex: 1 }}
+        selectedValue={field.value}
+        onValueChange={onValueChange}
+      >
+        {items.map(item => (
+          <Picker.Item key={item.value} label={item.label} value={item.value} />
+        ))}
+      </Picker>
     )
+
+    if (label) {
+      return (
+        <ListItem button style={{ paddingTop: 0, paddingBottom: 0 }}>
+          <Label label={label} error={touched && error} />
+          <Body>{picker}</Body>
+          {touched && error && <Icon name='close-circle' />}
+        </ListItem>
+      )
+    } else {
+      return picker
+    }
   }),
   { displayName: 'SelectField' }
 )

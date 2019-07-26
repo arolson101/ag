@@ -6,6 +6,7 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { NativeSyntheticEvent, TextInputFocusEventData } from 'react-native'
 import { FormContext } from './Form.nativebase'
 import { Label } from './Label.nativebase'
+import { mapIconName } from './mapIconName.nativebase'
 // import { CalculatorInput } from 'react-native-calculator'
 
 export const CurrencyField = Object.assign(
@@ -21,9 +22,24 @@ export const CurrencyField = Object.assign(
       label,
       placeholder,
       // returnKeyType,
+      leftIcon,
+      leftElement,
+      rightElement,
     } = props
 
     const [field, { error, touched }] = useField(name)
+
+    const onChangeText = useCallback(
+      (value: string) => {
+        const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/
+        if (value === '.') {
+          form.change(name, '0.')
+        } else if ((!Number.isNaN(+value) && reg.test(value)) || value === '' || value === '-') {
+          form.change(name, value)
+        }
+      },
+      [form]
+    )
 
     const focus = useCallback(() => {
       const input: any = textInput.current
@@ -34,8 +50,10 @@ export const CurrencyField = Object.assign(
 
     const onBlur = useCallback(
       (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-        const value = accounting.formatMoney(e.nativeEvent.text)
-        form.change(name, value)
+        const value = e.nativeEvent.text
+        if (value.charAt(value.length - 1) === '.' || value === '-') {
+          form.change(name, value.slice(0, -1))
+        }
       },
       [form, field]
     )
@@ -54,6 +72,8 @@ export const CurrencyField = Object.assign(
     const inputProps = { autoFocus }
     return (
       <Item {...itemProps} error={touched && error} placeholder={placeholder}>
+        {leftElement}
+        {leftIcon && <Icon name={mapIconName(leftIcon)} />}
         <Label label={label} error={touched && error} />
         {/* <CalculatorInput
             prefix='$ '
@@ -66,17 +86,19 @@ export const CurrencyField = Object.assign(
           /> */}
         <Input
           selectTextOnFocus
-          style={{ flex: 1 }}
-          onChangeText={text => form.change(name, text)}
+          style={{ flex: 1, textAlign: 'right' }}
+          onChangeText={onChangeText}
           value={field.value.toString()}
           onBlur={onBlur}
+          onFocus={focus}
           // returnKeyType={returnKeyType}
           keyboardType='numeric'
           ref={textInput}
           {...commonTextFieldProps}
           {...inputProps}
         />
-        {touched && error && <Icon name='close-circle' />}
+        {touched && error && <Icon style={{ color: 'red' }} name='close-circle' />}
+        {rightElement}
       </Item>
     )
   }),

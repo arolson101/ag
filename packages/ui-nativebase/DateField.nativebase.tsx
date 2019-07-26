@@ -6,10 +6,11 @@ import React, { useCallback, useState } from 'react'
 import { DatePickerIOS } from 'react-native'
 import Collapsible from 'react-native-collapsible'
 import { Label } from './Label.nativebase'
+import { mapIconName } from './mapIconName.nativebase'
 
 export const DateField = Object.assign(
   React.memo<DateFieldProps>(function _DisplayName(props) {
-    const { field: name, label, collapsed } = props
+    const { field: name, label, collapsed, leftIcon, leftElement, rightElement } = props
     const [picking, setPicking] = useState(false)
     const [field, { error, touched }] = useField(name)
     const colorStyle = {
@@ -39,13 +40,17 @@ export const DateField = Object.assign(
     return (
       <>
         <ListItem button onPress={onPress}>
+          {leftElement}
+          {leftIcon && <Icon name={mapIconName(leftIcon)} />}
+
           <Label label={label} error={error} />
           <Body>
-            <Text style={{ color: platform.textColor, ...colorStyle }}>
+            <Text style={{ color: platform.textColor, textAlign: 'right', ...colorStyle }}>
               {formatDate(new Date(field.value))}
             </Text>
           </Body>
-          {touched && error && <Icon name='close-circle' />}
+          {touched && error && <Icon style={{ color: 'red' }} name='close-circle' />}
+          {rightElement}
         </ListItem>
         <Collapsible collapsed={!picking}>
           <DatePickerIOS mode='date' date={new Date(field.value)} onDateChange={onDateChange} />

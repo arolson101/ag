@@ -3,13 +3,14 @@ import { ImageProps } from '@ag/core/context'
 import { SvgUri } from '@ag/react-native-svg-image'
 import debug from 'debug'
 import React from 'react'
-import { ImageStyle, StyleProp } from 'react-native'
+import { Image as RNImage, ImageStyle, StyleProp } from 'react-native'
 
 const log = debug('ui-nativebase:NativeImage')
 
 export const Image = Object.assign(
   React.memo<ImageProps>(function _Image({ id, size, margin }) {
     const source = useImage(id)
+    log('Image %o', source)
 
     if (!source) {
       return null
@@ -21,7 +22,6 @@ export const Image = Object.assign(
       height: size,
     }
 
-    // log('uri %s', img.uri)
     if (source.src && source.src.startsWith('data:image/svg')) {
       return <SvgUri source={source} style={style} width={size} height={size} />
     } else {

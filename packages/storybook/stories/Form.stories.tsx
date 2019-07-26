@@ -54,7 +54,7 @@ interface Props {
 
 const TestForm: React.FC<Props> = ({ disabled }) => {
   const intl = useIntl()
-  const { Text, PopoverButton } = useUi()
+  const { Page, Text, PopoverButton } = useUi()
   const [selection, setSelection] = useState(0)
 
   const {
@@ -84,99 +84,111 @@ const TestForm: React.FC<Props> = ({ disabled }) => {
   ]
 
   return (
-    <Form initialValues={initialValues} validate={validate} submit={submit}>
-      {() => {
-        return (
-          <>
-            <TextField
-              label='text field'
-              field='text'
-              disabled={disabled}
-              leftElement={
-                <SelectField label='' field='select' items={selectValues} disabled={disabled} />
-              }
-              // leftElement={
-              //   <PopoverButton content={prefixes}>{prefixes[selection].text}</PopoverButton>
-              // }
-              rightElement={<Text>right element</Text>}
-            />
-            <TextField label='password field' field='password' secure disabled={disabled} />
-            <NumberField
-              label='integer field (step 2)'
-              field='int'
-              disabled={disabled}
-              min={1}
-              max={100}
-              step={2}
-              integer
-              leftElement={
-                <SelectField label='' field='intselect' items={selectValues} disabled={disabled} />
-              }
-              rightElement='right element'
-            />
-            <NumberField
-              label='float field (step 1.1)'
-              field='float'
-              disabled={disabled}
-              min={1}
-              max={100}
-              step={1.1}
-            />
-            <SelectField
-              label='select field'
-              field='select'
-              items={selectValues}
-              disabled={disabled}
-            />
-            <DateField
-              label='date field'
-              field='date'
-              disabled={disabled}
-              highlightDates={highlightDates}
-            />
-            <DateField
-              label='date field with extras'
-              field='date'
-              disabled={disabled}
-              highlightDates={highlightDates}
-              leftElement={
-                <SelectField label='' field='intselect' items={selectValues} disabled={disabled} />
-              }
-              rightElement='right element'
-            />
-            <CurrencyField
-              label='currency field- dollars'
-              field='dollars'
-              currencyCode='USD'
-              disabled={disabled}
-            />
-            <CurrencyField
-              label='currency field- pounds'
-              field='dollars'
-              currencyCode='GBP'
-              disabled={disabled}
-            />
-            <CurrencyField
-              label='currency field- euro'
-              field='dollars'
-              currencyCode='EUR'
-              disabled={disabled}
-            />
-            <CheckboxField label='checkbox field' field='check' disabled={disabled} />
-            <UrlField
-              label='url field'
-              field='web'
-              nameField='text'
-              favicoField='icon'
-              favicoWidth={100}
-              favicoHeight={100}
-              disabled={disabled}
-            />
-            <AccountField label='account field' field='acctId' disabled={disabled} />
-          </>
-        )
-      }}
-    </Form>
+    <Page title='form test'>
+      <Form initialValues={initialValues} validate={validate} submit={submit}>
+        {() => {
+          return (
+            <>
+              <TextField
+                label='text field'
+                field='text'
+                disabled={disabled}
+                leftElement={
+                  <SelectField label='' field='select' items={selectValues} disabled={disabled} />
+                }
+                // leftElement={
+                //   <PopoverButton content={prefixes}>{prefixes[selection].text}</PopoverButton>
+                // }
+                rightElement={<Text>right element</Text>}
+              />
+              <TextField label='password field' field='password' secure disabled={disabled} />
+              <NumberField
+                label='integer field (step 2)'
+                field='int'
+                disabled={disabled}
+                min={1}
+                max={100}
+                step={2}
+                integer
+                leftElement={
+                  <SelectField
+                    label=''
+                    field='intselect'
+                    items={selectValues}
+                    disabled={disabled}
+                  />
+                }
+                rightElement={<Text>right element</Text>}
+              />
+              <NumberField
+                label='float field (step 1.1)'
+                field='float'
+                disabled={disabled}
+                min={1}
+                max={100}
+                step={1.1}
+              />
+              <SelectField
+                label='select field'
+                field='select'
+                items={selectValues}
+                disabled={disabled}
+              />
+              <DateField
+                label='date field'
+                field='date'
+                disabled={disabled}
+                highlightDates={highlightDates}
+              />
+              <DateField
+                label='date field with extras'
+                field='date'
+                disabled={disabled}
+                highlightDates={highlightDates}
+                leftElement={
+                  <SelectField
+                    label=''
+                    field='intselect'
+                    items={selectValues}
+                    disabled={disabled}
+                  />
+                }
+                rightElement={<Text>right element</Text>}
+              />
+              <CurrencyField
+                label='currency field- dollars'
+                field='dollars'
+                currencyCode='USD'
+                disabled={disabled}
+              />
+              <CurrencyField
+                label='currency field- pounds'
+                field='dollars'
+                currencyCode='GBP'
+                disabled={disabled}
+              />
+              <CurrencyField
+                label='currency field- euro'
+                field='dollars'
+                currencyCode='EUR'
+                disabled={disabled}
+              />
+              <CheckboxField label='checkbox field' field='check' disabled={disabled} />
+              <UrlField
+                label='url field'
+                field='web'
+                nameField='text'
+                favicoField='icon'
+                favicoWidth={100}
+                favicoHeight={100}
+                disabled={disabled}
+              />
+              <AccountField label='account field' field='acctId' disabled={disabled} />
+            </>
+          )
+        }}
+      </Form>
+    </Page>
   )
 }
 
