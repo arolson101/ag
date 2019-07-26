@@ -2,10 +2,11 @@ import { Transaction } from '@ag/db'
 import { formatCurrency } from '@ag/util'
 import debug from 'debug'
 import docuri from 'docuri'
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { TableColumn, useAction, useIntl, useSelector, useUi } from '../context'
+import { useAccountTransactions } from '../components'
+import { ActionDesc, TableColumn, useAction, useIntl, useSelector, useUi } from '../context'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
@@ -21,19 +22,52 @@ const route = docuri.route<Props, string>(path)
 export const AccountPage = Object.assign(
   React.memo<Props>(function _AccountPage({ accountId }) {
     const intl = useIntl()
-    const transactionCreate = useAction(actions.openDlg.transactionCreate)
+    const openDlgTransactionCreate = useAction(actions.openDlg.transactionCreate)
+    const openDlgTransactionEdit = useAction(actions.openDlg.transactionEdit)
+    const deleteTransaction = useAction(thunks.deleteTransaction)
     const getBank = useSelector(selectors.getBank)
     const getTransactions = useSelector(selectors.getTransactions)
-    const dbLoadTransactions = useAction(thunks.dbLoadTransactions)
+    const defaultCurrency = useSelector(selectors.currency)
     const { Page, Table, Text } = useUi()
 
     const account = useSelector(selectors.getAccount)(accountId)
+
+    useAccountTransactions(accountId)
+
+    const rowAdd = useMemo<ActionDesc>(
+      () => ({
+        icon: 'add',
+        text: intl.formatMessage(messages.transactionCreate),
+        onClick: () => openDlgTransactionCreate({ accountId }),
+      }),
+      [intl, openDlgTransactionCreate, accountId]
+    )
+
+    const rowEdit = useCallback(
+      (transaction: Row): ActionDesc => ({
+        icon: 'edit',
+        text: intl.formatMessage(messages.transactionEdit),
+        onClick: () => openDlgTransactionEdit({ accountId, transactionId: transaction.id }),
+      }),
+      [intl, openDlgTransactionEdit, accountId]
+    )
+
+    const rowDelete = useCallback(
+      (transaction: Row): ActionDesc => ({
+        icon: 'trash',
+        text: intl.formatMessage(messages.transactionDelete),
+        onClick: () => deleteTransaction(transaction.id),
+        danger: true,
+      }),
+      [deleteTransaction]
+    )
 
     type Row = Transaction
     const columns = useMemo<Array<TableColumn<Row>>>(
       () => [
         {
           dataIndex: 'time',
+          width: 100,
           title: intl.formatMessage(messages.colTime),
           format: (text: string) => intl.formatDate(new Date(text)),
         },
@@ -45,31 +79,29 @@ export const AccountPage = Object.assign(
           dataIndex: 'memo',
           title: 'memo',
         },
-        {
-          dataIndex: 'type',
-          title: 'type',
-        },
-        {
-          dataIndex: 'account',
-          title: 'account',
-        },
-        {
-          dataIndex: 'serverid',
-          title: 'serverid',
-        },
+        // {
+        //   dataIndex: 'type',
+        //   title: 'type',
+        // },
+        // {
+        //   dataIndex: 'account',
+        //   title: 'account',
+        // },
+        // {
+        //   dataIndex: 'serverid',
+        //   title: 'serverid',
+        // },
         {
           dataIndex: 'amount',
           align: 'right',
+          width: 100,
           title: intl.formatMessage(messages.colAmount),
-          format: (value: number) => formatCurrency(intl, value, account!.currencyCode),
+          format: (value: number) =>
+            formatCurrency(intl, value, account ? account.currencyCode : defaultCurrency),
         },
       ],
       [intl]
     )
-
-    useEffect(() => {
-      dbLoadTransactions({ accountId })
-    }, [dbLoadTransactions, accountId])
 
     if (!account) {
       return null
@@ -92,13 +124,16 @@ export const AccountPage = Object.assign(
         subtitle={subtitle}
         button={{
           title: intl.formatMessage(messages.transactionAdd),
-          onClick: () => transactionCreate({ accountId }),
+          onClick: () => openDlgTransactionCreate({ accountId }),
         }}
       >
         <Table
           rowKey={'id'}
           columns={columns}
           emptyText={intl.formatMessage(messages.noTransactions)}
+          rowAdd={rowAdd}
+          rowEdit={rowEdit}
+          rowDelete={rowDelete}
           data={transactions}
         />
       </Page>
@@ -140,5 +175,17 @@ const messages = defineMessages({
   colTime: {
     id: 'AccountPage.colTime',
     defaultMessage: 'Date',
+  },
+  transactionCreate: {
+    id: 'AccountPage.transactionCreate',
+    defaultMessage: 'Create Transaction',
+  },
+  transactionEdit: {
+    id: 'AccountPage.transactionEdit',
+    defaultMessage: 'Edit Transaction',
+  },
+  transactionDelete: {
+    id: 'AccountPage.transactionDelete',
+    defaultMessage: 'Delete Transaction',
   },
 })

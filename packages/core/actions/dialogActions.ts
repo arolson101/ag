@@ -14,12 +14,11 @@ export const dialogActions = {
     bankEdit: createStandardAction('dlg/bankEdit')<{ bankId: string }>(),
     accountCreate: createStandardAction('dlg/accountCreate')<{ bankId: string }>(),
     accountEdit: createStandardAction('dlg/accountEdit')<{ accountId: string }>(),
-    accountDelete: createStandardAction('dlg/accountDelete')<{ accountId: string }>(),
+    transactionCreate: createStandardAction('dlg/transactionCreate')<{ accountId: string }>(),
     transactionEdit: createStandardAction('dlg/transactionEdit')<{
       accountId: string
       transactionId: string
     }>(),
-    transactionCreate: createStandardAction('dlg/transactionCreate')<{ accountId: string }>(),
     billCreate: createStandardAction('dlg/billCreate')(),
     billEdit: createStandardAction('dlg/billEdit')<{ billId: string }>(),
   },

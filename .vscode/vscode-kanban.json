@@ -16,6 +16,16 @@
       "assignedTo": {
         "name": "arolson101"
       },
+      "creation_time": "2019-02-25T21:51:55.655Z",
+      "id": "8",
+      "prio": 10,
+      "references": [],
+      "title": "add bills"
+    },
+    {
+      "assignedTo": {
+        "name": "arolson101"
+      },
       "category": "features",
       "creation_time": "2019-02-25T21:51:37.313Z",
       "id": "7",
@@ -121,27 +131,17 @@
       "assignedTo": {
         "name": "arolson101"
       },
-      "creation_time": "2019-02-25T21:51:55.655Z",
-      "id": "8",
-      "prio": 10,
-      "references": [],
-      "title": "add bills"
-    }
-  ],
-  "in-progress": [],
-  "testing": [],
-  "todo": [
-    {
-      "assignedTo": {
-        "name": "arolson101"
-      },
       "category": "features",
       "creation_time": "2019-02-25T21:52:03.901Z",
       "id": "9",
       "prio": 10,
       "references": [],
       "title": "add transactions"
-    },
+    }
+  ],
+  "in-progress": [],
+  "testing": [],
+  "todo": [
     {
       "assignedTo": {
         "name": "arolson101"

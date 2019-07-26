@@ -4,7 +4,7 @@ import accounting from 'accounting'
 import debug from 'debug'
 import React, { useCallback, useImperativeHandle, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
-import { useFields } from '../components'
+import { useAccountTransactions, useFields } from '../components'
 import { Errors, useAction, useIntl, useSelector } from '../context'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
@@ -33,6 +33,8 @@ export const TransactionForm = Object.assign(
     const transaction = useSelector(selectors.getTransaction)(transactionId)
     const defaultCurrency = useSelector(selectors.currency)
     const { Form, CurrencyField, DateField, TextField } = useFields<FormValues>()
+
+    useAccountTransactions(accountId)
 
     const initialValues = useMemo<FormValues>(
       () =>
