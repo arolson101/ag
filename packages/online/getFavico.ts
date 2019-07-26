@@ -89,7 +89,6 @@ export const getFavico = async (
   const rank = (img: ImageBuf) => Math.abs(img.width * img.height - width * height)
 
   // sort by descending size
-  images.sort((a, b) => b.width - a.width)
   images.sort((a, b) => rank(a) - rank(b))
   log('images: %o', images)
   return images[0]

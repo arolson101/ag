@@ -1,5 +1,6 @@
 import { DbChange, Transaction, TransactionInput } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
+import assert from 'assert'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { selectors } from '../reducers'
@@ -18,13 +19,13 @@ const saveTransaction = ({ input, transactionId, accountId }: SaveTransactionPar
     const intl = selectors.intl(state)
 
     try {
-      const { transactionsRepository } = selectors.appDb(state)
+      const { transactionRepository } = selectors.appDb(state)
       const t = Date.now()
       const table = Transaction
       let transaction: Transaction
       let changes: DbChange[]
       if (transactionId) {
-        transaction = await transactionsRepository.getById(transactionId)
+        transaction = await transactionRepository.getById(transactionId)
         const q = diff<Transaction.Props>(transaction, input)
         changes = [{ table, t, edits: [{ id: transactionId, q }] }]
         transaction.update(t, q)
@@ -36,6 +37,7 @@ const saveTransaction = ({ input, transactionId, accountId }: SaveTransactionPar
         transactionId = transaction.id
         changes = [{ table, t, adds: [transaction] }]
       }
+      assert(transaction.accountId === accountId)
       await dispatch(dbWrite(changes))
       showToast(intl.formatMessage(transactionId ? messages.saved : messages.created))
     } catch (error) {

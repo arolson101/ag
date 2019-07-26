@@ -188,7 +188,9 @@ export const Table = React.memo<TableProps>(function _Table(props) {
                 rowClassName='ant-table-row ant-table-row-level-0'
                 noRowsRenderer={noRowsRenderer}
               >
-                <VColumn dataKey='id' width={sortwidth} cellRenderer={drawDragHandle} />
+                {moveRow && (
+                  <VColumn dataKey='id' width={sortwidth} cellRenderer={drawDragHandle} />
+                )}
                 {columns.map((col, idx) => (
                   <VColumn
                     headerRenderer={headerRenderer(col)}

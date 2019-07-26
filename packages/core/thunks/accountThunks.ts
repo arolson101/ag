@@ -32,7 +32,7 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
     const intl = selectors.intl(state)
 
     try {
-      const { accountsRepository } = selectors.appDb(state)
+      const { accountRepository } = selectors.appDb(state)
 
       let account: Account
       let changes: DbChange[]
@@ -42,7 +42,7 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
       input.iconId = iconId
 
       if (accountId) {
-        account = await accountsRepository.getById(accountId)
+        account = await accountRepository.getById(accountId)
         const q = diff<Account.Props>(account, input)
         changes = [Account.change.edit(t, accountId, q), ...iconChange]
         account.update(t, q)
@@ -56,7 +56,7 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
       }
       await dispatch(dbWrite(changes))
       assert.equal(accountId, account.id)
-      assert.deepStrictEqual(account, await accountsRepository.getById(accountId))
+      assert.deepStrictEqual(account, await accountRepository.getById(accountId))
 
       const intlCtx = { name: account.name }
       showToast(intl.formatMessage(accountId ? messages.saved : messages.created, intlCtx))
@@ -103,14 +103,14 @@ const downloadAccountList = (bankId: string): CoreThunk =>
     const state = getState()
     const intl = selectors.intl(state)
     try {
-      const { banksRepository, accountsRepository } = selectors.appDb(state)
-      const bank = await banksRepository.getById(bankId)
+      const { bankRepository, accountRepository } = selectors.appDb(state)
+      const bank = await bankRepository.getById(bankId)
       if (!bank.online) {
         throw new Error(`downloadAccountList: bank is not set online`)
       }
 
       // TODO: make bank query get this for us
-      const existingAccounts = await accountsRepository.getForBank(bank.id)
+      const existingAccounts = await accountRepository.getForBank(bank.id)
       const source = online.CancelToken.source()
 
       const accountProfiles = await online.getAccountList(bank, bank, source.token, intl)
@@ -173,13 +173,13 @@ const downloadTransactions = ({
   async function _downloadTransactions(dispatch, getState, { online }) {
     const state = getState()
     const intl = selectors.intl(state)
-    const { banksRepository, accountsRepository, transactionsRepository } = selectors.appDb(state)
-    const bank = await banksRepository.getById(bankId)
+    const { bankRepository, accountRepository, transactionRepository } = selectors.appDb(state)
+    const bank = await bankRepository.getById(bankId)
     if (!bank.online) {
       throw new Error(`downloadTransactions: bank is not set online`)
     }
 
-    const account = await accountsRepository.getById(accountId)
+    const account = await accountRepository.getById(accountId)
     const source = online.CancelToken.source()
 
     try {
@@ -198,7 +198,7 @@ const downloadTransactions = ({
       } else {
         log('transactions', transactions)
 
-        const existingTransactions = await transactionsRepository.getForAccount(
+        const existingTransactions = await transactionRepository.getForAccount(
           account.id,
           start,
           end

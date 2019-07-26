@@ -97,7 +97,7 @@ export const BillForm = Object.assign(
     //   [locale]
     // )
 
-    const groups = useMemo(() => getGroupNames(bills.filter(bill => !!bill.group)), [...bills])
+    const groups = useMemo(() => getGroupNames(bills.filter(bill => !!bill.group)), [bills])
     // log('groups %o bills %o', groups, bills)
 
     const initialValues = useMemo<FormValues>(() => {

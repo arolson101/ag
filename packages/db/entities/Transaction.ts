@@ -1,7 +1,21 @@
 import { ISpec, standardizeDate } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { DbEntity } from './DbEntity'
-import { TransactionInput } from './TransactionInput'
+
+export interface Split {
+  [categoryId: string]: number
+}
+
+export class TransactionInput {
+  time?: Date
+  account?: string
+  serverid?: string
+  type?: string
+  name?: string
+  memo?: string
+  amount?: number
+  // split: Split
+}
 
 @Entity({ name: 'transactions' })
 export class Transaction extends DbEntity<Transaction.Props> {
@@ -18,7 +32,7 @@ export class Transaction extends DbEntity<Transaction.Props> {
   @Column({ default: 0 }) balance!: number
   // split: Split
 
-  constructor(accountId?: string, id?: string, props?: TransactionInput) {
+  constructor(id?: string, accountId?: string, props?: TransactionInput) {
     super(id, { ...Transaction.defaultValues(), ...props })
     if (accountId) {
       this.accountId = accountId
@@ -40,7 +54,7 @@ export namespace Transaction {
     amount: 0,
   })
 
-  // // TODO: move this to untility
+  // // TODO: move this to utility
   // type Nullable<T> = { [K in keyof T]?: T[K] | undefined | null }
 
   // export const diff = (tx: Transaction, values: Nullable<Props>): Query => {

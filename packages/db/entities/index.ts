@@ -23,7 +23,6 @@ export * from './DbEntity'
 export * from './Image'
 export * from './Setting'
 export * from './Transaction'
-export * from './TransactionInput'
 
 export const indexEntities = [
   Db, //
