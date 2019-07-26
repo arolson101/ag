@@ -12,14 +12,20 @@ export abstract class RecordRepository<T extends DbEntity<any>> extends Abstract
     return res
   }
 
-  async getByIds(ids: string[]) {
+  async getByIds(ids: string[]): Promise<Record<string, T>> {
     const res = await this.createQueryBuilder('e')
       .whereInIds(ids)
       .getMany()
     if (!res) {
       throw new Error('no results')
     }
-    return res
+    return res.reduce(
+      (ret, elt) => {
+        ret[elt.id] = elt
+        return ret
+      },
+      {} as Record<string, T>
+    )
   }
 
   async all() {

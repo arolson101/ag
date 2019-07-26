@@ -7,14 +7,17 @@ import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
 import { dbWrite } from './dbWrite'
 
-interface SaveTransactionParams {
-  input: TransactionInput
-  transactionId?: string
+interface SaveTransactionsParams {
+  transactions: Array<
+    TransactionInput & {
+      id?: string
+    }
+  >
   accountId: string
 }
 
-const saveTransaction = ({ input, transactionId, accountId }: SaveTransactionParams): CoreThunk =>
-  async function _saveTransaction(dispatch, getState, { ui: { alert, showToast } }) {
+const saveTransactions = ({ transactions, accountId }: SaveTransactionsParams): CoreThunk =>
+  async function _saveTransactions(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
     const intl = selectors.intl(state)
 
@@ -22,30 +25,39 @@ const saveTransaction = ({ input, transactionId, accountId }: SaveTransactionPar
       const { transactionRepository } = selectors.appDb(state)
       const t = Date.now()
       const table = Transaction
-      let transaction: Transaction
-      let changes: DbChange[]
-      const amount = input.amount || 0
 
-      if (transactionId) {
-        transaction = await transactionRepository.getById(transactionId)
-        const q = diff<Transaction.Props>(transaction, input)
-        const delta = amount - transaction.amount
-        changes = [
-          { table, t, edits: [{ id: transactionId, q }] },
-          ...Account.change.addTx(t, accountId, delta),
-        ]
-        transaction.update(t, q)
-      } else {
-        transaction = new Transaction(uniqueId(), accountId, input)
-        transactionId = transaction.id
-        changes = [
-          { table, t, adds: [transaction] },
-          ...Account.change.addTx(t, accountId, input.amount),
-        ]
+      const txIds = transactions
+        .map(tx => tx.id) //
+        .filter((txId): txId is string => !!txId)
+
+      const txs = await transactionRepository.getByIds(txIds)
+      if (Object.keys(txIds).length !== txIds.length) {
+        throw new Error('got back wrong number of transactions')
       }
-      assert(transaction.accountId === accountId)
+
+      const accountDelta = transactions.reduce(
+        (value, tx) =>
+          value + (typeof tx.amount !== 'undefined' && tx.id ? tx.amount - txs[tx.id].amount : 0),
+        0
+      )
+
+      const changes = transactions
+        .map(
+          ({ id, ...input }): DbChange => {
+            if (id) {
+              const transaction = txs[id]
+              const q = diff<Transaction.Props>(transaction, input)
+              return { table, t, edits: [{ id, q }] }
+            } else {
+              const transaction = new Transaction(uniqueId(), accountId, input)
+              return { table, t, adds: [transaction] }
+            }
+          }
+        )
+        .concat(Account.change.addTx(t, accountId, accountDelta))
+
       await dispatch(dbWrite(changes))
-      showToast(intl.formatMessage(transactionId ? messages.saved : messages.created))
+      showToast(intl.formatMessage(messages.saved, { count: transactions.length }))
     } catch (error) {
       ErrorDisplay.show(alert, intl, error)
     }
@@ -85,7 +97,7 @@ const deleteTransaction = (transactionId: string): CoreThunk =>
   }
 
 export const transactionThunks = {
-  saveTransaction,
+  saveTransactions,
   deleteTransaction,
 }
 
@@ -112,10 +124,9 @@ const messages = defineMessages({
   },
   saved: {
     id: 'transactionThunks.saved',
-    defaultMessage: `Transaction saved`,
-  },
-  created: {
-    id: 'transactionThunks.created',
-    defaultMessage: `Transaction added`,
+    defaultMessage: `{count} {count, plural,
+      one {transaction}
+      other {transactions}
+    } saved`,
   },
 })

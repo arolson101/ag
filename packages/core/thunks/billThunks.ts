@@ -93,12 +93,11 @@ const setBillsOrder = (accountIds: string[]): CoreThunk =>
       const { billRepository } = selectors.appDb(state)
       const t = Date.now()
       const bills = await billRepository.getByIds(accountIds)
-      if (bills.length !== accountIds.length) {
+      if (Object.keys(bills).length !== accountIds.length) {
         throw new Error('got back wrong number of bills')
       }
       // log('bills (before) %o', bills)
-      bills.sort((a, b) => accountIds.indexOf(a.id) - accountIds.indexOf(b.id))
-      const edits = bills.map(
+      const edits = Object.values(bills).map(
         ({ id }, idx): DbEntityEdit<Bill.Spec> => ({
           id,
           q: { sortOrder: { $set: idx } },

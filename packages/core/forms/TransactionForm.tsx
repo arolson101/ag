@@ -27,7 +27,7 @@ export const TransactionForm = Object.assign(
   React.forwardRef<TransactionForm, Props>(function _TransactionForm(props, ref) {
     const { accountId, transactionId, onClosed } = props
     const intl = useIntl()
-    const saveTransaction = useAction(thunks.saveTransaction)
+    const saveTransactions = useAction(thunks.saveTransactions)
     const submitFormRef = useSubmitRef()
     const account = useSelector(selectors.getAccount)(accountId)
     const transaction = useSelector(selectors.getTransaction)(transactionId)
@@ -60,17 +60,19 @@ export const TransactionForm = Object.assign(
     const submit = useCallback(
       async input => {
         const { amount } = input
-        await saveTransaction({
+        await saveTransactions({
           accountId,
-          transactionId,
-          input: {
-            ...input,
-            amount: accounting.unformat(amount.toString()),
-          },
+          transactions: [
+            {
+              ...input,
+              id: transactionId,
+              amount: accounting.unformat(amount.toString()),
+            },
+          ],
         })
         onClosed()
       },
-      [accountId, transactionId, saveTransaction]
+      [accountId, transactionId, saveTransactions]
     )
 
     useImperativeHandle(ref, () => ({

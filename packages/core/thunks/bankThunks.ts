@@ -88,12 +88,11 @@ const setAccountsOrder = (accountIds: string[]): CoreThunk =>
       const { accountRepository } = selectors.appDb(state)
       const t = Date.now()
       const accounts = await accountRepository.getByIds(accountIds)
-      if (accounts.length !== accountIds.length) {
+      if (Object.keys(accounts).length !== accountIds.length) {
         throw new Error('got back wrong number of accounts')
       }
       // log('accounts (before) %o', accounts)
-      accounts.sort((a, b) => accountIds.indexOf(a.id) - accountIds.indexOf(b.id))
-      const edits = accounts.map(
+      const edits = Object.values(accounts).map(
         ({ id }, idx): DbEntityEdit<Account.Spec> => ({
           id,
           q: { sortOrder: { $set: idx } },
