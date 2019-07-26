@@ -7,7 +7,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import * as Mac from 'react-desktop/macOs'
 import * as Win from 'react-desktop/windows'
 
-const log = debug('ElectronWindow')
+const log = debug('electron:ElectronWindow')
 
 interface Props extends React.Props<any> {
   hist: HistoryType

@@ -6,6 +6,7 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { TextInput } from 'react-native'
 import { FormContext } from './Form.nativebase'
 import { Label } from './Label.nativebase'
+import { mapIconName } from './mapIconName.nativebase'
 
 const log = debug('ui-nativebase:TextField.nativebase')
 
@@ -75,7 +76,7 @@ export const TextField = Object.assign(
         disabled={disabled}
       >
         {leftElement}
-        {leftIcon && <Icon name={leftIcon} />}
+        {leftIcon && <Icon name={mapIconName(leftIcon)} />}
         <Label label={label} error={touched && error} />
         {rows && rows > 0 ? (
           <Textarea

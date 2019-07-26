@@ -4,7 +4,7 @@ import { EntityRepository } from 'typeorm'
 import { Image } from '../entities'
 import { RecordRepository } from './RecordRepository'
 
-const log = debug('core:ImageRepository')
+const log = debug('db:ImageRepository')
 
 @EntityRepository(Image)
 export class ImageRepository extends RecordRepository<Image> {

@@ -1,8 +1,12 @@
 import { SelectFieldProps } from '@ag/core/context'
 import { useField, useForm } from '@ag/util'
+import debug from 'debug'
 import { Body, Icon, ListItem, Picker } from 'native-base'
 import React, { useCallback } from 'react'
 import { Label } from './Label.nativebase'
+
+const log = debug('ui-nativebase:SelectField')
+log.enabled = true
 
 export const SelectField = Object.assign(
   React.memo<SelectFieldProps>(function _SelectField(props) {
@@ -34,10 +38,6 @@ export const SelectField = Object.assign(
       [name, form, props.onValueChange]
     )
 
-    const selectedItem = items.find(item => item.value === (field.value as any))
-    if (!selectedItem) {
-      throw new Error(`selected item ${field.value} not found in item list`)
-    }
     return (
       <ListItem button onPress={onPress} style={{ paddingTop: 0, paddingBottom: 0 }}>
         <Label label={label} error={touched && error} />

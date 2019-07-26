@@ -22,7 +22,7 @@ export { action, storiesOf }
 
 require('sql.js/dist/sql-asm.js')().then((x: SQLJS) => (window.SQL = x))
 
-const log = debug('helpers')
+const log = debug('storybook:helpers')
 
 const datasets = {
   empty,

@@ -8,7 +8,7 @@ import JSZip from 'jszip'
 import { Connection, EntityMetadata } from 'typeorm'
 import { DbEntity } from './entities'
 
-const log = debug('export')
+const log = debug('db:export')
 
 const getExt = (obj: object | any): string => {
   const mime = obj.mime

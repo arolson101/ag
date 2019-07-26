@@ -47,7 +47,7 @@ export const DateField = Object.assign(
           </Body>
           {touched && error && <Icon name='close-circle' />}
         </ListItem>
-        <Collapsible collapsed={picking}>
+        <Collapsible collapsed={!picking}>
           <DatePickerIOS mode='date' date={new Date(field.value)} onDateChange={onDateChange} />
         </Collapsible>
       </>

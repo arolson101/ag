@@ -4,9 +4,9 @@ import { Form, Icon, Input } from 'antd'
 import debug from 'debug'
 import React, { useCallback, useState } from 'react'
 import { formItemLayout } from './Form.antd'
-import { mapIconName } from './ImageSourceIcon'
+import { mapIconName } from './mapIconName.antd'
 
-const log = debug('TextField.antd')
+const log = debug('ui-antd:TextField.antd')
 
 export const TextField = Object.assign(
   React.memo<TextFieldProps>(function _TextField(props) {

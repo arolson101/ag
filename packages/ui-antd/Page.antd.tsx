@@ -6,7 +6,8 @@ import { MemoryHistory } from 'history'
 import 'nprogress/nprogress.css'
 import React from 'react'
 import useReactRouter from 'use-react-router'
-import { ImageSourceIcon, mapIconName } from './ImageSourceIcon'
+import { ImageSourceIcon } from './ImageSourceIcon'
+import { mapIconName } from './mapIconName.antd'
 
 const { Title } = Typography
 

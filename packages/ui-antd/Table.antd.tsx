@@ -35,7 +35,7 @@ import {
 import 'react-virtualized/styles.css'
 import { ContextMenu } from './ContextMenu'
 import { Image } from './Image.antd'
-import { mapIconName } from './ImageSourceIcon'
+import { mapIconName } from './mapIconName.antd'
 import './Table.antd.css'
 
 const DragHandle = SortableHandle(() => (

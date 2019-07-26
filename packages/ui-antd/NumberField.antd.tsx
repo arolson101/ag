@@ -5,7 +5,7 @@ import debug from 'debug'
 import React from 'react'
 import { formItemLayout } from './Form.antd'
 
-const log = debug('NumberField.antd')
+const log = debug('ui-antd:NumberField.antd')
 
 export const NumberField = Object.assign(
   React.memo<NumberFieldProps>(function _NumberField(props) {

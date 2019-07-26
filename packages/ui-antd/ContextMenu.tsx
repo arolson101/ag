@@ -1,7 +1,7 @@
 import { ContextMenuProps } from '@ag/core/context'
 import { Dropdown, Icon, Menu } from 'antd'
 import React from 'react'
-import { mapIconName } from './ImageSourceIcon'
+import { mapIconName } from './mapIconName.antd'
 
 export const ContextMenu: React.FC<ContextMenuProps> = ({ header, actions, children }) => {
   if (actions) {

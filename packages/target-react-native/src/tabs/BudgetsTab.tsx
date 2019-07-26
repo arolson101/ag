@@ -7,7 +7,7 @@ import { icons } from '../icons'
 import { LoggedIn } from './LoggedIn'
 import { VisibleRoot } from './VisibleRoot'
 
-const log = debug('BudgetsTab')
+const log = debug('rn:BudgetsTab')
 
 interface Props {
   componentId: string

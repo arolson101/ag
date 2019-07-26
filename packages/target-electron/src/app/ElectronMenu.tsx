@@ -14,7 +14,7 @@ import './ElectronMenu.css'
 
 const { dialog, Menu, systemPreferences } = remote
 
-const log = debug('menu')
+const log = debug('electron:menu')
 
 const opaque = (color: Color): Color => {
   const { r, g, b, a } = color.rgba

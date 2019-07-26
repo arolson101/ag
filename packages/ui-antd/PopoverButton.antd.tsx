@@ -3,7 +3,7 @@ import { Button, Dropdown, Icon, Menu } from 'antd'
 import { ClickParam } from 'antd/lib/menu'
 import debug from 'debug'
 import React, { useCallback } from 'react'
-import { mapIconName } from './ImageSourceIcon'
+import { mapIconName } from './mapIconName.antd'
 
 const log = debug('ui-antd:PopoverButton')
 
