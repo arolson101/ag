@@ -63,6 +63,6 @@ export const SelectField = Object.assign(
     }
   }),
   {
-    displayName: 'Form',
+    displayName: 'SelectField',
   }
 )

@@ -20,6 +20,6 @@ export const Image = Object.assign(
     )
   }),
   {
-    displayName: 'Form',
+    displayName: 'Image',
   }
 )

@@ -175,7 +175,7 @@ const dbLoadTransactions = ({ accountId }: { accountId: string }): CoreThunk =>
     const state = getState()
     const { transactionRepository } = selectors.appDb(state)
     const transactions = await transactionRepository.getForAccount(accountId)
-    log('dbLoadTransactions %o', transactions)
+    // log('dbLoadTransactions %o', transactions)
     dispatch(actions.dbEntities([{ table: Transaction, entities: transactions, deletes: [] }]))
   }
 

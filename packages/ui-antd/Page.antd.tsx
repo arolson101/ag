@@ -6,7 +6,7 @@ import { MemoryHistory } from 'history'
 import 'nprogress/nprogress.css'
 import React from 'react'
 import useReactRouter from 'use-react-router'
-import { ImageSourceIcon } from './ImageSourceIcon'
+import { Image } from './Image.antd'
 import { mapIconName } from './mapIconName.antd'
 
 const { Title } = Typography
@@ -32,7 +32,7 @@ export const Page = Object.assign(
           onBack={onBack}
           title={
             <Title level={2}>
-              {image && <ImageSourceIcon style={{ margin: 5 }} id={image} />}
+              {image && <Image id={image} size='1.5em' margin={5} />}
               {title}
             </Title>
           }

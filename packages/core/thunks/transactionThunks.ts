@@ -1,4 +1,4 @@
-import { DbChange, Transaction, TransactionInput } from '@ag/db/entities'
+import { Account, DbChange, Transaction, TransactionInput } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import { defineMessages } from 'react-intl'
@@ -10,7 +10,7 @@ import { dbWrite } from './dbWrite'
 interface SaveTransactionParams {
   input: TransactionInput
   transactionId?: string
-  accountId?: string
+  accountId: string
 }
 
 const saveTransaction = ({ input, transactionId, accountId }: SaveTransactionParams): CoreThunk =>
@@ -24,18 +24,24 @@ const saveTransaction = ({ input, transactionId, accountId }: SaveTransactionPar
       const table = Transaction
       let transaction: Transaction
       let changes: DbChange[]
+      const amount = input.amount || 0
+
       if (transactionId) {
         transaction = await transactionRepository.getById(transactionId)
         const q = diff<Transaction.Props>(transaction, input)
-        changes = [{ table, t, edits: [{ id: transactionId, q }] }]
+        const delta = amount - transaction.amount
+        changes = [
+          { table, t, edits: [{ id: transactionId, q }] },
+          ...Account.change.addTx(t, accountId, delta),
+        ]
         transaction.update(t, q)
       } else {
-        if (!accountId) {
-          throw new Error('when creating an transaction, accountId must be specified')
-        }
         transaction = new Transaction(uniqueId(), accountId, input)
         transactionId = transaction.id
-        changes = [{ table, t, adds: [transaction] }]
+        changes = [
+          { table, t, adds: [transaction] },
+          ...Account.change.addTx(t, accountId, input.amount),
+        ]
       }
       assert(transaction.accountId === accountId)
       await dispatch(dbWrite(changes))
@@ -49,8 +55,11 @@ const deleteTransaction = (transactionId: string): CoreThunk =>
   async function _deleteTransaction(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()
     const intl = selectors.intl(state)
+    const { transactionRepository } = selectors.appDb(state)
 
     try {
+      const transaction = await transactionRepository.getById(transactionId)
+
       const confirmed = await alert({
         title: intl.formatMessage(messages.title),
         body: intl.formatMessage(messages.deleteTransactionBody),
@@ -63,7 +72,10 @@ const deleteTransaction = (transactionId: string): CoreThunk =>
       if (confirmed) {
         const t = Date.now()
         const table = Transaction
-        const changes: DbChange[] = [{ table, t, deletes: [transactionId] }]
+        const changes: DbChange[] = [
+          { table, t, deletes: [transactionId] },
+          ...Account.change.addTx(t, transaction.accountId, -transaction.amount),
+        ]
         await dispatch(dbWrite(changes))
         showToast(intl.formatMessage(messages.transactionDeleted), true)
       }

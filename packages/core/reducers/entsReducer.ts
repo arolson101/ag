@@ -1,9 +1,9 @@
-import { Account, Bank, Bill, Budget, Category, DbEntity, Image, Transaction } from '@ag/db';
-import { stringComparer } from '@ag/util';
-import debug from 'debug';
-import { getType } from 'typesafe-actions';
-import { actions, CoreAction } from '../actions';
-import { ImageSrc } from '../context';
+import { Account, Bank, Bill, Budget, Category, DbEntity, Image, Transaction } from '@ag/db'
+import { stringComparer } from '@ag/util'
+import debug from 'debug'
+import { getType } from 'typesafe-actions'
+import { actions, CoreAction } from '../actions'
+import { ImageSrc } from '../context'
 
 const log = debug('core:recordsReducer')
 
@@ -55,9 +55,7 @@ export const entsSelectors = {
     return accounts
   },
   getTransactions: (state: EntsState) => (accountId: string): Transaction[] => {
-    const transactions = Object.values(state.transactions).filter(t => t.accountId === accountId)
-    transactions.sort((a, b) => a.time.getTime() - b.time.getTime())
-    return transactions
+    return Object.values(state.transactions).filter(t => t.accountId === accountId)
   },
   getTransaction: (state: EntsState) => (transactionId?: string): Transaction | undefined => {
     return transactionId ? state.transactions[transactionId] : undefined

@@ -16,6 +16,11 @@ interface Props {
   accountId: string
 }
 
+interface Row extends Required<Transaction.Props> {
+  id: string
+  balance: number
+}
+
 const path = '/accounts/:accountId'
 const route = docuri.route<Props, string>(path)
 
@@ -62,7 +67,6 @@ export const AccountPage = Object.assign(
       [deleteTransaction]
     )
 
-    type Row = Transaction
     const columns = useMemo<Array<TableColumn<Row>>>(
       () => [
         {
@@ -99,6 +103,14 @@ export const AccountPage = Object.assign(
           format: (value: number) =>
             formatCurrency(intl, value, account ? account.currencyCode : defaultCurrency),
         },
+        {
+          dataIndex: 'balance',
+          align: 'right',
+          width: 100,
+          title: intl.formatMessage(messages.colBalance),
+          format: (value: number) =>
+            formatCurrency(intl, value, account ? account.currencyCode : defaultCurrency),
+        },
       ],
       [intl]
     )
@@ -113,9 +125,23 @@ export const AccountPage = Object.assign(
     }
 
     const transactions = getTransactions(account.id)
+      .sort((a, b) => a.time.getTime() - b.time.getTime())
+      .reduce(
+        (txs, tx) => {
+          const prevBalance = txs.length === 0 ? 0 : txs[txs.length - 1].balance
+          txs.push({ ...tx, balance: prevBalance + tx.amount })
+          return txs
+        },
+        [] as Row[]
+      )
+      .reverse()
 
     const title = account.name
     const subtitle = bank.name
+    const tableTitle = intl.formatMessage(messages.tableTitle, {
+      name: account.name,
+      balance: formatCurrency(intl, account.balance, account.currencyCode),
+    })
 
     return (
       <Page
@@ -128,6 +154,7 @@ export const AccountPage = Object.assign(
         }}
       >
         <Table
+          titleText={tableTitle}
           rowKey={'id'}
           columns={columns}
           emptyText={intl.formatMessage(messages.noTransactions)}
@@ -160,6 +187,10 @@ const messages = defineMessages({
     id: 'AccountPage.getTransactionsComplete',
     defaultMessage: 'Downloaded transactions for account {name}',
   },
+  tableTitle: {
+    id: 'AccountPage.tableTitle',
+    defaultMessage: '{name}: {balance}',
+  },
   noTransactions: {
     id: 'AccountPage.noTransactions',
     defaultMessage: 'No transactions',
@@ -171,6 +202,10 @@ const messages = defineMessages({
   colAmount: {
     id: 'AccountPage.colAmount',
     defaultMessage: 'Amount',
+  },
+  colBalance: {
+    id: 'AccountPage.colBalance',
+    defaultMessage: 'Balance',
   },
   colTime: {
     id: 'AccountPage.colTime',

@@ -19,6 +19,7 @@ export class AccountInput {
   iconId?: string
   sortOrder?: number
   currencyCode?: string
+  balance?: number
 }
 
 @Entity({ name: 'accounts' })
@@ -36,6 +37,7 @@ export class Account extends DbEntity<Account.Props> {
   @Column('text') iconId!: ImageId
   @Column() sortOrder!: number
   @Column('text') currencyCode!: CurrencyCode
+  @Column({ default: 0 }) balance!: number
 
   constructor(bankId?: string, id?: string, props?: AccountInput) {
     super(id, { ...Account.defaultValues(), ...props })
@@ -113,6 +115,20 @@ export namespace Account {
       t,
       deletes: [id],
     })
+
+    export const addTx = (t: number, id: string, amount: number | undefined): DbChange[] => {
+      if (!amount) {
+        return []
+      }
+      const q: Spec = { balance: { $plus: amount } }
+      return [
+        {
+          table: Account,
+          t,
+          edits: [{ id, q }],
+        },
+      ]
+    }
   }
 
   export const defaultValues = (): Props => ({
@@ -126,5 +142,6 @@ export namespace Account {
     sortOrder: -1,
     iconId: '',
     currencyCode: defaultCurrencyCode,
+    balance: 0,
   })
 }

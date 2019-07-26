@@ -43,7 +43,7 @@ message.config({
 
 export const ui: UiContext = {
   // special ui
-  showToast: (text, danger) => (danger ? message.error(text) : message.success(text)),
+  showToast: (text, danger) => message.success(text),
   alert: ({ title, body, danger, error, confirmText, cancelText }) => {
     return new Promise(resolve => {
       const modal = cancelText ? Modal.confirm : error ? Modal.error : Modal.info

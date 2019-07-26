@@ -6,7 +6,15 @@ import docuri from 'docuri'
 import React, { useCallback, useMemo } from 'react'
 import { defineMessages } from 'react-intl'
 import { actions } from '../actions'
-import { ActionDesc, TableColumn, useAction, useIntl, useSelector, useUi } from '../context'
+import {
+  ActionDesc,
+  ImageId,
+  TableColumn,
+  useAction,
+  useIntl,
+  useSelector,
+  useUi,
+} from '../context'
 import { selectors } from '../reducers'
 import { thunks } from '../thunks'
 
@@ -97,7 +105,7 @@ const BankTable = Object.assign(
           width: 30,
           align: 'center',
           title: intl.formatMessage(messages.colVisible),
-          render: (text: string, account: Row) => <Text>*</Text>,
+          render: (visible: boolean) => <Text>*</Text>,
         },
         {
           dataIndex: 'number', // TODO
@@ -110,26 +118,26 @@ const BankTable = Object.assign(
           dataIndex: 'iconId',
           title: '',
           width: 30,
-          render: (text: string, account: Row) => (
-            <Image id={account.iconId || bank.iconId} size='1.5em' />
+          render: (iconId: ImageId, account: Row) => (
+            <Image id={iconId || bank.iconId} size='1.5em' />
           ),
         },
         {
           dataIndex: 'name',
           title: intl.formatMessage(messages.colName),
-          render: (text: string, account: Row) => (
+          render: (name: string, account: Row) => (
             <Link onClick={() => navAccount({ accountId: account.id })}>
-              <Text>{account.name}</Text>
+              <Text>{name}</Text>
             </Link>
           ),
         },
         {
-          dataIndex: 'sortOrder', // TODO
+          dataIndex: 'balance',
           width: 100,
-          title: 'amount',
+          title: 'balance',
           align: 'right',
-          render: (text: string, account: Row) => (
-            <Text>{formatCurrency(intl, 123.45, account.currencyCode)}</Text>
+          render: (balance: number, account: Row) => (
+            <Text>{formatCurrency(intl, balance, account.currencyCode)}</Text>
           ),
         },
         // {
