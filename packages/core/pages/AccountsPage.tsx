@@ -128,8 +128,9 @@ const BankTable = Object.assign(
           width: 100,
           title: 'amount',
           align: 'right',
-          render: (text: string, account: Row) =>
-            formatCurrency(intl, 123.45, account.currencyCode),
+          render: (text: string, account: Row) => (
+            <Text>{formatCurrency(intl, 123.45, account.currencyCode)}</Text>
+          ),
         },
         // {
         //   dataIndex: 'sortOrder',

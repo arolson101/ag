@@ -98,11 +98,13 @@ export const NbUi: Omit<UiContext, RNNTypes> = {
   },
 
   Page: Object.assign(
-    React.memo<PageProps>(({ children }) => (
-      <Container>
-        <Content>{children}</Content>
-      </Container>
-    )),
+    React.memo<PageProps>(function _Page({ children }) {
+      return (
+        <Container>
+          <Content>{children}</Content>
+        </Container>
+      )
+    }),
     {
       displayName: 'nativebase.Page',
     }
