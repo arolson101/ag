@@ -5,7 +5,8 @@ import csvStringify from 'csv-stringify/lib/sync'
 import debug from 'debug'
 import { flatten, nest } from 'flatnest'
 import JSZip from 'jszip'
-import { Connection, EntityMetadata } from 'typeorm'
+import { DateTime } from 'luxon'
+import { ColumnType, Connection, EntityMetadata } from 'typeorm'
 import { DbEntity } from './entities'
 
 const log = debug('db:export')
@@ -32,6 +33,28 @@ const getExt = (obj: object | any): string => {
   }
 }
 
+const isDate = (type: ColumnType): boolean => {
+  if (typeof type === 'function' && type.name === 'Date') {
+    return true
+  } else if (typeof type === 'string') {
+    switch (type) {
+      case 'date':
+      case 'datetime':
+      case 'time':
+      case 'datetime2':
+      case 'datetimeoffset':
+      case 'time with time zone':
+      case 'time without time zone':
+      case 'timestamp':
+      case 'timestamp without time zone':
+      case 'timestamp with time zone':
+      case 'timestamp with local time zone':
+        return true
+    }
+  }
+  return false
+}
+
 const fixExport = (
   object: DbEntity<any> & Record<string, any>,
   entityMetadata: EntityMetadata,
@@ -49,6 +72,8 @@ const fixExport = (
       const path = `${entityMetadata.tableName}/${object.id}_${key}${ext}`
       zip.file(path, object[key] as Buffer)
       object[key] = path
+    } else if (isDate(col.type)) {
+      object[key] = DateTime.fromJSDate(object[key]).toISO()
     } else if (key === '_history' && object._history) {
       try {
         const value = JSON.stringify(hydrate(object._history), null, '  ')
@@ -75,9 +100,9 @@ const fixImport = async (
       const path = row[key] as string
       const data: Buffer = await zip.file(path).async('nodebuffer')
       row[key] = data
-    }
-
-    if (key === '_history') {
+    } else if (isDate(col.type)) {
+      row[key] = DateTime.fromISO(row[key]).toJSDate()
+    } else if (key === '_history') {
       try {
         const val = JSON.parse(row[key])
         if (Array.isArray(val)) {
