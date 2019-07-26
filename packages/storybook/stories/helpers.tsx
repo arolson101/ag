@@ -13,9 +13,9 @@ import { applyMiddleware, combineReducers, createStore as reduxCreateStore } fro
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunk from 'redux-thunk'
 import { Connection, ConnectionOptions, createConnection, getConnectionManager } from 'typeorm'
-import empty from './data/empty.zip'
-import full from './data/full.zip'
-import normal from './data/normal.zip'
+import empty from './data/empty.agz'
+import full from './data/full.agz'
+import normal from './data/normal.agz'
 import { storiesOf, ui } from './platform-specific'
 
 export { action, storiesOf }

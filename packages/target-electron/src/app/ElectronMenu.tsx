@@ -141,7 +141,7 @@ const exportToFile = async (connection: Connection, intl: IntlContext, ui: UiCon
 
   const path = dialog.showSaveDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.exportDialogTitle),
-    filters: [{ name: 'Archive', extensions: ['zip'] }],
+    filters: [{ name: 'Archive', extensions: ['agz'] }],
   })
 
   if (path) {
@@ -156,7 +156,7 @@ const importFromFile = async (connection: Connection, intl: IntlContext, ui: UiC
 
   const o = dialog.showOpenDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.importDialogTitle),
-    filters: [{ name: 'Archive', extensions: ['zip'] }],
+    filters: [{ name: 'Archive', extensions: ['agz'] }],
   })
 
   if (o && o.length > 0) {

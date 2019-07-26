@@ -187,6 +187,7 @@ export const AccountsPage = Object.assign(
         title={intl.formatMessage(messages.titleText)}
         componentId={componentId}
         button={{
+          icon: 'add',
           title: intl.formatMessage(messages.bankAdd),
           onClick: openBankCreateDlg,
         }}

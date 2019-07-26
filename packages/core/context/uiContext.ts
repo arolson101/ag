@@ -78,6 +78,7 @@ export interface GridProps<T = any> {
 }
 
 export interface ButtonConfig {
+  icon?: IconName
   title: string
   onClick: () => any
   isDanger?: boolean

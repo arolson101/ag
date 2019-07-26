@@ -6,7 +6,7 @@ import { MemoryHistory } from 'history'
 import 'nprogress/nprogress.css'
 import React from 'react'
 import useReactRouter from 'use-react-router'
-import { ImageSourceIcon } from './ImageSourceIcon'
+import { ImageSourceIcon, mapIconName } from './ImageSourceIcon'
 
 const { Title } = Typography
 
@@ -43,6 +43,7 @@ export const Page = Object.assign(
         {button && (
           <Layout.Footer>
             <Button
+              icon={mapIconName(button.icon)}
               disabled={button.disabled}
               type={button.isDanger ? 'danger' : undefined}
               onClick={button.onClick}
