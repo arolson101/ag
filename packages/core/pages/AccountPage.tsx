@@ -112,7 +112,7 @@ export const AccountPage = Object.assign(
             formatCurrency(intl, value, account ? account.currencyCode : defaultCurrency),
         },
       ],
-      [intl]
+      [intl, account, defaultCurrency]
     )
 
     if (!account) {
