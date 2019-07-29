@@ -1,5 +1,8 @@
+import debug from 'debug'
 import { AbstractRepository } from 'typeorm'
 import { DbEntity } from '../entities'
+
+const log = debug('db:RecordRepository')
 
 export abstract class RecordRepository<T extends DbEntity<any>> extends AbstractRepository<T> {
   async getById(id: string) {
@@ -13,19 +16,23 @@ export abstract class RecordRepository<T extends DbEntity<any>> extends Abstract
   }
 
   async getByIds(ids: string[]): Promise<Record<string, T>> {
-    const res = await this.createQueryBuilder('e')
-      .whereInIds(ids)
-      .getMany()
-    if (!res) {
-      throw new Error('no results')
-    }
-    return res.reduce(
-      (ret, elt) => {
+    const maxQuery = 10
+    const ret: Record<string, T> = {}
+    // log('getByIds')
+    while (ids.length > 0) {
+      const slice = ids.splice(0, maxQuery)
+      const res = await this.createQueryBuilder('e')
+        .whereInIds(slice)
+        .getMany()
+      if (!res) {
+        throw new Error('no results')
+      }
+
+      res.forEach(elt => {
         ret[elt.id] = elt
-        return ret
-      },
-      {} as Record<string, T>
-    )
+      })
+    }
+    return ret
   }
 
   async all() {

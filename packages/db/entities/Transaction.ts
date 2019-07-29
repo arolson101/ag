@@ -1,5 +1,6 @@
 import { ISpec, standardizeDate } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { DbChange } from './DbChange'
 import { DbEntity } from './DbEntity'
 
 export interface Split {
@@ -29,7 +30,6 @@ export class Transaction extends DbEntity<Transaction.Props> {
   @Column() name!: string
   @Column() memo!: string
   @Column() amount!: number
-  @Column({ default: 0 }) balance!: number
   // split: Split
 
   constructor(id?: string, accountId?: string, props?: TransactionInput) {
@@ -54,23 +54,23 @@ export namespace Transaction {
     amount: 0,
   })
 
-  // // TODO: move this to utility
-  // type Nullable<T> = { [K in keyof T]?: T[K] | undefined | null }
+  export namespace change {
+    export const add = (t: number, transactions: Transaction[]): DbChange => ({
+      table: Transaction,
+      t,
+      adds: transactions,
+    })
 
-  // export const diff = (tx: Transaction, values: Nullable<Props>): Query => {
-  //   return Object.keys(values).reduce(
-  //     (q, prop): Query => {
-  //       const val = values[prop]
-  //       if (val !== tx[prop]) {
-  //         return ({
-  //           ...q,
-  //           [prop]: { $set: val }
-  //         })
-  //       } else {
-  //         return q
-  //       }
-  //     },
-  //     {} as Query
-  //   )
-  // }
+    export const edit = (t: number, id: string, q: Spec): DbChange => ({
+      table: Transaction,
+      t,
+      edits: [{ id, q }],
+    })
+
+    export const remove = (t: number, id: string): DbChange => ({
+      table: Transaction,
+      t,
+      deletes: [id],
+    })
+  }
 }

@@ -1,3 +1,4 @@
+import { dbSaveOptions } from '@ag/core/thunks/dbWrite'
 import { dehydrate, hydrate } from '@ag/util'
 import assert from 'assert'
 import csvParse from 'csv-parse/lib/sync'
@@ -10,6 +11,8 @@ import { ColumnType, Connection, EntityMetadata } from 'typeorm'
 import { DbEntity } from './entities'
 
 const log = debug('db:export')
+
+export const exportExt = 'agz'
 
 const getExt = (obj: object | any): string => {
   const mime = obj.mime
@@ -102,7 +105,7 @@ const fixImport = async (
       row[key] = data
     } else if (isDate(col.type)) {
       row[key] = DateTime.fromISO(row[key]).toJSDate()
-    } else if (key === '_history') {
+    } else if (key === '_history' && row[key]) {
       try {
         const val = JSON.parse(row[key])
         if (Array.isArray(val)) {
@@ -143,7 +146,6 @@ export const exportDb = async (connection: Connection) => {
 
 export const importDb = async (connection: Connection, data: Buffer) => {
   // log('importDb')
-
   const zip = new JSZip()
   await zip.loadAsync(data)
 
@@ -165,7 +167,7 @@ export const importDb = async (connection: Connection, data: Buffer) => {
     )
     // log('importDb %s %o', sheetName, ents)
     if (ents.length) {
-      await repo.insert(ents)
+      await repo.save(ents, dbSaveOptions)
     }
   }
 }

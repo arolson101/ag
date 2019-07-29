@@ -24,7 +24,6 @@ const saveTransactions = ({ transactions, accountId }: SaveTransactionsParams): 
     try {
       const { transactionRepository } = selectors.appDb(state)
       const t = Date.now()
-      const table = Transaction
 
       const txIds = transactions
         .map(tx => tx.id) //
@@ -48,10 +47,10 @@ const saveTransactions = ({ transactions, accountId }: SaveTransactionsParams): 
             if (id) {
               const transaction = txs[id]
               const q = diff<Transaction.Props>(transaction, input)
-              return { table, t, edits: [{ id, q }] }
+              return Transaction.change.edit(t, id, q)
             } else {
               const transaction = new Transaction(uniqueId(), accountId, input)
-              return { table, t, adds: [transaction] }
+              return Transaction.change.add(t, [transaction])
             }
           }
         )
@@ -84,9 +83,8 @@ const deleteTransaction = (transactionId: string): CoreThunk =>
 
       if (confirmed) {
         const t = Date.now()
-        const table = Transaction
         const changes: DbChange[] = [
-          { table, t, deletes: [transactionId] },
+          Transaction.change.remove(t, transactionId),
           ...Account.change.addTx(t, transaction.accountId, -transaction.amount),
         ]
         await dispatch(dbWrite(changes))

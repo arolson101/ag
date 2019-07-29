@@ -2,7 +2,7 @@ import { actions } from '@ag/core/actions'
 import { IntlContext, UiContext, useAction, useIntl, useSelector, useUi } from '@ag/core/context'
 import { selectors } from '@ag/core/reducers'
 import { thunks } from '@ag/core/thunks'
-import { exportDb, importDb } from '@ag/db/export'
+import { exportDb, exportExt, importDb } from '@ag/db/export'
 import { Color, RGBA, Titlebar } from 'custom-electron-titlebar'
 import debug from 'debug'
 import { MenuItemConstructorOptions, remote } from 'electron'
@@ -141,7 +141,7 @@ const exportToFile = async (connection: Connection, intl: IntlContext, ui: UiCon
 
   const path = dialog.showSaveDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.exportDialogTitle),
-    filters: [{ name: 'Archive', extensions: ['agz'] }],
+    filters: [{ name: 'Archive', extensions: [exportExt] }],
   })
 
   if (path) {
@@ -156,7 +156,7 @@ const importFromFile = async (connection: Connection, intl: IntlContext, ui: UiC
 
   const o = dialog.showOpenDialog(remote.getCurrentWindow(), {
     title: intl.formatMessage(messages.importDialogTitle),
-    filters: [{ name: 'Archive', extensions: ['agz'] }],
+    filters: [{ name: 'Archive', extensions: [exportExt] }],
   })
 
   if (o && o.length > 0) {

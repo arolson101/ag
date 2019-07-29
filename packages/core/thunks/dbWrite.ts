@@ -1,10 +1,16 @@
 import { DbChange, DbEntity } from '@ag/db/entities'
 import debug from 'debug'
+import { SaveOptions } from 'typeorm'
 import { actions, LoadEntities } from '../actions'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
 
 const log = debug('core:dbWrite')
+
+export const dbSaveOptions: SaveOptions = {
+  chunk: 500,
+  reload: false,
+}
 
 export const dbWrite = (changes: DbChange[]): CoreThunk =>
   async function _dbWrite(dispatch, getState) {
@@ -17,7 +23,7 @@ export const dbWrite = (changes: DbChange[]): CoreThunk =>
         const le: LoadEntities = { table: change.table, deletes: [], entities: [] }
 
         if (change.adds) {
-          await manager.save(change.table, change.adds)
+          await manager.save(change.table, change.adds, dbSaveOptions)
           le.entities.push(...change.adds)
         }
 
@@ -40,7 +46,7 @@ export const dbWrite = (changes: DbChange[]): CoreThunk =>
             // log('before %o %o', record, edits[i].q)
             record.update(change.t, edits[i].q)
           })
-          await manager.save(change.table, items)
+          await manager.save(change.table, items, dbSaveOptions)
           le.entities.push(...items)
         }
 

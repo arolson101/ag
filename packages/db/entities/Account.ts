@@ -79,21 +79,21 @@ export namespace Account {
     },
   })
 
-  export const generateColor = (type?: Type): string => {
+  export const generateColor = (type?: Type, seed?: number): string => {
     switch (type) {
       case Type.CHECKING:
-        return randomColor({ hue: 'red', luminosity: 'bright' }) as string
+        return randomColor({ hue: 'red', luminosity: 'bright', seed }) as string
       case Type.SAVINGS:
-        return randomColor({ hue: 'green', luminosity: 'bright' }) as string
+        return randomColor({ hue: 'green', luminosity: 'bright', seed }) as string
       case Type.MONEYMRKT:
-        return randomColor({ hue: 'purple', luminosity: 'bright' }) as string
+        return randomColor({ hue: 'purple', luminosity: 'bright', seed }) as string
       case Type.CREDITLINE:
-        return randomColor({ hue: 'blue', luminosity: 'bright' }) as string
+        return randomColor({ hue: 'blue', luminosity: 'bright', seed }) as string
       case Type.CREDITCARD:
-        return randomColor({ hue: 'orange', luminosity: 'bright' }) as string
+        return randomColor({ hue: 'orange', luminosity: 'bright', seed }) as string
 
       default:
-        return randomColor({ luminosity: 'bright' }) as string
+        return randomColor({ luminosity: 'bright', seed }) as string
     }
   }
 

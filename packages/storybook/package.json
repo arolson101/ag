@@ -13,6 +13,7 @@
     "electron": "concurrently --raw --kill-others \"yarn:electron:server\" \"yarn:electron:main\"",
     "electron:main": "wait-on http://localhost:6006/ && cross-env DEBUG=* electron . --url http://localhost:6006/",
     "electron:server": "start-storybook --ci --quiet -p 6006",
+    "generateExport": "ts-node --transpile-only ./scripts/generateExport.ts",
     "preios": "cd ./ios && pod install",
     "ios": "cross-env-shell react-native run-ios --no-packager",
     "start": "cross-env-shell node --max-old-space-size=8192 ../../node_modules/react-native/local-cli/cli.js start --config $INIT_CWD/rn-cli.config.js",
@@ -23,6 +24,7 @@
   },
   "dependencies": {
     "@ag/core": "^0.0.0",
+    "@ag/db": "^0.0.0",
     "@ag/online": "^0.0.0",
     "@ag/ui-antd": "^0.0.0",
     "@ag/ui-nativebase": "^0.0.0",
@@ -44,6 +46,7 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-window-state": "^5.0.3",
     "emotion-theming": "^10.0.10",
+    "faker": "^4.1.0",
     "native-base": "^2.12.1",
     "node-libs-react-native": "^1.0.3",
     "prop-types": "^15.7.2",
@@ -55,12 +58,14 @@
     "react-native-sqlite-storage": "^3.3.10",
     "react-native-stream": "^0.1.9",
     "sql.js": "^1.0.0",
-    "typeorm": "^0.2.17"
+    "typeorm": "^0.2.17",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.4",
     "@types/electron-devtools-installer": "^2.2.0",
     "@types/electron-window-state": "^2.0.33",
+    "@types/faker": "^4.1.5",
     "@types/react": "^16.8.19",
     "@types/react-intl": "^2.3.17",
     "@types/react-native": "^0.57.60",
