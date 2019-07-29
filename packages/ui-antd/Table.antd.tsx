@@ -91,7 +91,7 @@ export const Table = React.memo<TableProps>(function _Table(props) {
       <Antd.Menu>
         <Antd.Menu.ItemGroup title={titleText} />
         {actionMenuItem(rowAdd)}
-        <Antd.Menu.Divider />
+        {tableEdit || tableDelete ? <Antd.Menu.Divider /> : null}
         {actionMenuItem(tableEdit)}
         {actionMenuItem(tableDelete)}
       </Antd.Menu>

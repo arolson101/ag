@@ -39,15 +39,6 @@ export const AccountPage = Object.assign(
 
     useAccountTransactions(accountId)
 
-    const rowAdd = useMemo<ActionDesc>(
-      () => ({
-        icon: 'add',
-        text: intl.formatMessage(messages.transactionCreate),
-        onClick: () => openDlgTransactionCreate({ accountId }),
-      }),
-      [intl, openDlgTransactionCreate, accountId]
-    )
-
     const rowEdit = useCallback(
       (transaction: Row): ActionDesc => ({
         icon: 'edit',
@@ -158,7 +149,6 @@ export const AccountPage = Object.assign(
           rowKey={'id'}
           columns={columns}
           emptyText={intl.formatMessage(messages.noTransactions)}
-          rowAdd={rowAdd}
           rowEdit={rowEdit}
           rowDelete={rowDelete}
           data={transactions}
