@@ -189,7 +189,7 @@ const messages = defineMessages({
   },
   tableTitle: {
     id: 'AccountPage.tableTitle',
-    defaultMessage: '{name}: {balance}',
+    defaultMessage: 'Balance {balance}',
   },
   noTransactions: {
     id: 'AccountPage.noTransactions',

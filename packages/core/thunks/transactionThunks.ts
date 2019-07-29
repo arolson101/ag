@@ -37,7 +37,8 @@ const saveTransactions = ({ transactions, accountId }: SaveTransactionsParams): 
 
       const accountDelta = transactions.reduce(
         (value, tx) =>
-          value + (typeof tx.amount !== 'undefined' && tx.id ? tx.amount - txs[tx.id].amount : 0),
+          value +
+          (typeof tx.amount !== 'undefined' ? tx.amount - (tx.id ? txs[tx.id].amount : 0) : 0),
         0
       )
 
