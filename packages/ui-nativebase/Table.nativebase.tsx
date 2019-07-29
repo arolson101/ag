@@ -107,15 +107,15 @@ export const Table = Object.assign(
                   assert(dataIndex in item)
                   const itemData = (item as any)[dataIndex]
                   const formatted = format ? format(itemData) : itemData
-                  return (
-                    <React.Fragment key={dataIndex}>
-                      {render ? (
-                        render(formatted, item)
-                      ) : (
-                        <Text style={{ textAlign: align }}>{formatted}</Text>
-                      )}
-                    </React.Fragment>
-                  )
+                  const rendered = render ? render(formatted, item) : formatted
+                  const child =
+                    typeof rendered === 'string' ? (
+                      <Text style={{ textAlign: align }}>{rendered}</Text>
+                    ) : (
+                      rendered
+                    )
+
+                  return <React.Fragment key={colIndex}>{child}</React.Fragment>
                 })}
               </View>
             }
