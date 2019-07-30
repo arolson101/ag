@@ -76,11 +76,15 @@ export const getFavico = async (
 
   await Promise.all(
     links.map(async link => {
-      const dl = await getImage(link, cancelToken)
-      if (!dl) {
-        log('failed getting: %s', link)
-      } else {
-        images.push(dl)
+      try {
+        const dl = await getImage(link, cancelToken)
+        if (!dl) {
+          log('failed getting: %s', link)
+        } else {
+          images.push(dl)
+        }
+      } catch (err) {
+        log('failed getting: %s: %s', link, err.message)
       }
     })
   )
