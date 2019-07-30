@@ -1,5 +1,5 @@
 import { ISpec, standardizeDate } from '@ag/util'
-import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
 import { DbChange } from './DbChange'
 import { DbEntity } from './DbEntity'
 
@@ -19,6 +19,8 @@ export class TransactionInput {
 }
 
 @Entity({ name: 'transactions' })
+@Index(['accountId', '_deleted'])
+@Index(['time'])
 export class Transaction extends DbEntity<Transaction.Props> {
   @PrimaryColumn() id!: string
   @Column() accountId!: string

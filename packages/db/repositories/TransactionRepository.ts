@@ -19,7 +19,9 @@ export class TransactionRepository extends RecordRepository<Transaction> {
       q = q.andWhere('tx.time BETWEEN :start AND :end', { start, end })
     }
 
-    const res = await q.orderBy({ time: 'ASC' }).getMany()
+    console.time('tx query ' + accountId)
+    const res = await q.getMany()
+    console.timeEnd('tx query ' + accountId)
     return res
   }
 }
