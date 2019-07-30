@@ -127,6 +127,10 @@ async function main() {
         { name: 'House Savings', txs },
         { name: 'College Savings', txs },
         { name: 'Kids Savings', txs },
+        { name: 'Shared Savings', txs },
+        { name: 'Mortgage', txs },
+        { name: 'Home Equity Line of Credit', txs },
+        { name: 'Checking 2', txs },
       ],
     },
     citi: {
@@ -140,6 +144,10 @@ async function main() {
     discover: {
       fi: getBank('Discover Card'),
       accounts: [{ name: 'Discover', currencyCode: 'EUR', cardImage: cardImages.discover, txs }],
+    },
+    etrade: {
+      fi: getBank('E*TRADE Financial'),
+      accounts: [{ name: 'E*Trade Checking', txs }],
     },
   }
 
@@ -207,6 +215,7 @@ async function main() {
         routing: faker.finance.account(10),
         iconId: cardImageId,
         currencyCode: accountInfo.currencyCode || Account.defaultCurrencyCode,
+        sortOrder: bankInfo.accounts.indexOf(accountInfo),
       })
 
       changes.push(Account.change.add(t, account))
