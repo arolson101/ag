@@ -122,6 +122,16 @@ const dbOpen = ({ dbId, password }: { dbId: string; password: string }): CoreThu
     }
   }
 
+const dbClose = (): CoreThunk =>
+  async function _dbClose(dispatch, getState) {
+    if (selectors.isLoggedIn(getState())) {
+      const { connection } = selectors.appDb(getState())
+      await connection.close()
+      dispatch(actions.dbLogout())
+      dispatch(actions.openDlg.login())
+    }
+  }
+
 const dbDelete = ({ dbId }: { dbId: string }): CoreThunk =>
   async function _dbDelete(dispatch, getState, { sys: { deleteDb }, ui: { alert, showToast } }) {
     const intl = selectors.intl(getState())
@@ -184,6 +194,7 @@ export const dbThunks = {
   dbReloadAll,
   dbCreate,
   dbOpen,
+  dbClose,
   dbDelete,
   dbLoadImage,
   dbLoadTransactions,

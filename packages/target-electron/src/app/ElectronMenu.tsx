@@ -32,6 +32,7 @@ export const ElectronMenu: React.FC = () => {
   const themeColor = useSelector(selectors.themeColor)
   const setThemeColor = useAction(actions.setThemeColor)
   const setPlatform = useAction(actions.setPlatform)
+  const dbClose = useAction(thunks.dbClose)
   const titleBar = useRef<Titlebar>()
   const dbReloadAll = useAction(thunks.dbReloadAll)
 
@@ -81,6 +82,12 @@ export const ElectronMenu: React.FC = () => {
             enabled: isLoggedIn,
             label: intl.formatMessage(messages.export),
             click: exportClicked,
+          },
+          { type: 'separator' },
+          {
+            enabled: isLoggedIn,
+            label: intl.formatMessage(messages.logout),
+            click: dbClose,
           },
           { type: 'separator' },
           platform === 'mac' ? { role: 'close' } : { role: 'quit' },
@@ -187,6 +194,10 @@ const messages = defineMessages({
   help: {
     id: 'ElectronMenu.help',
     defaultMessage: '&Help',
+  },
+  logout: {
+    id: 'ElectronMenu.logout',
+    defaultMessage: 'Logout',
   },
   export: {
     id: 'ElectronMenu.export',
