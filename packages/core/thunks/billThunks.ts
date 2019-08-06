@@ -1,4 +1,4 @@
-import { Bill, BillInput, DbChange, DbEntityEdit, Image } from '@ag/db/entities'
+import { Bill, DbChange, DbEntityEdit, Image } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import { defineMessages } from 'react-intl'
@@ -8,7 +8,7 @@ import { CoreThunk } from './CoreThunk'
 import { dbWrite } from './dbWrite'
 
 interface SaveBillParams {
-  input: BillInput
+  input: Bill.Props
   billId?: string
 }
 

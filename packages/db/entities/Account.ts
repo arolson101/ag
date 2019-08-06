@@ -1,26 +1,12 @@
 import { ImageId } from '@ag/core/context'
-import { ImageUri, ISpec } from '@ag/util'
+import { ISpec } from '@ag/util'
 import { CurrencyCode } from 'currency-code-map'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { AccountType } from './AccountType'
 import { DbChange } from './DbChange'
-import { DbEntity } from './DbEntity'
-
-export class AccountInput {
-  name?: string
-  color?: string
-  type?: AccountType
-  number?: string
-  visible?: boolean
-  routing?: string
-  key?: string
-  iconId?: string
-  sortOrder?: number
-  currencyCode?: string
-  balance?: number
-}
+import { DbEntity, DbEntityKeys } from './DbEntity'
 
 @Entity({ name: 'accounts' })
 export class Account extends DbEntity<Account.Props> {
@@ -39,8 +25,8 @@ export class Account extends DbEntity<Account.Props> {
   @Column('text') currencyCode!: CurrencyCode
   @Column({ default: 0 }) balance!: number
 
-  constructor(bankId?: string, id?: string, props?: AccountInput) {
-    super(id, { ...Account.defaultValues(), ...props })
+  constructor(bankId?: string, id?: string, props?: Account.Props) {
+    super(id, props)
     if (bankId) {
       this.bankId = bankId
     }
@@ -48,7 +34,7 @@ export class Account extends DbEntity<Account.Props> {
 }
 
 export namespace Account {
-  export interface Props extends Pick<Required<AccountInput>, keyof AccountInput> {}
+  export interface Props extends Partial<Omit<Account, DbEntityKeys | 'bankId'>> {}
   export const Type = AccountType
   export type Type = AccountType
   export type Spec = ISpec<Props>

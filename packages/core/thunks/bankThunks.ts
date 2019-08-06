@@ -1,4 +1,4 @@
-import { Account, Bank, BankInput, DbChange, DbEntityEdit, Image } from '@ag/db/entities'
+import { Account, Bank, DbChange, DbEntityEdit, Image } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
 import { defineMessages } from 'react-intl'
@@ -8,7 +8,7 @@ import { CoreThunk } from './CoreThunk'
 import { dbWrite } from './dbWrite'
 
 interface SaveBankParams {
-  input: BankInput
+  input: Bank.Props
   bankId?: string
 }
 

@@ -1,6 +1,5 @@
-import { Account, DbChange, Transaction, TransactionInput } from '@ag/db/entities'
+import { Account, DbChange, Transaction } from '@ag/db/entities'
 import { diff, uniqueId } from '@ag/util'
-import assert from 'assert'
 import { defineMessages } from 'react-intl'
 import { ErrorDisplay } from '../components'
 import { selectors } from '../reducers'
@@ -9,7 +8,7 @@ import { dbWrite } from './dbWrite'
 
 interface SaveTransactionsParams {
   transactions: Array<
-    TransactionInput & {
+    Transaction.Props & {
       id?: string
     }
   >

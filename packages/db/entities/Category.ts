@@ -1,7 +1,6 @@
 import { ISpec } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { CategoryInput } from './CategoryInput'
-import { DbEntity } from './DbEntity'
+import { DbEntity, DbEntityKeys } from './DbEntity'
 
 @Entity({ name: 'categories' })
 export class Category extends DbEntity<Category.Props> {
@@ -11,7 +10,7 @@ export class Category extends DbEntity<Category.Props> {
 }
 
 export namespace Category {
-  export interface Props extends Pick<CategoryInput, keyof CategoryInput> {}
+  export interface Props extends Partial<Omit<Category, DbEntityKeys>> {}
 
   export type Query = ISpec<Props>
 }

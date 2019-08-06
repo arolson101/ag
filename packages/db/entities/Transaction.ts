@@ -1,21 +1,10 @@
 import { ISpec, standardizeDate } from '@ag/util'
 import { Column, Entity, Index, PrimaryColumn } from 'typeorm'
 import { DbChange } from './DbChange'
-import { DbEntity } from './DbEntity'
+import { DbEntity, DbEntityKeys } from './DbEntity'
 
 export interface Split {
   [categoryId: string]: number
-}
-
-export class TransactionInput {
-  time?: Date
-  account?: string
-  serverid?: string
-  type?: string
-  name?: string
-  memo?: string
-  amount?: number
-  // split: Split
 }
 
 @Entity({ name: 'transactions' })
@@ -34,8 +23,8 @@ export class Transaction extends DbEntity<Transaction.Props> {
   @Column() amount!: number
   // split: Split
 
-  constructor(id?: string, accountId?: string, props?: TransactionInput) {
-    super(id, { ...Transaction.defaultValues(), ...props })
+  constructor(id?: string, accountId?: string, props?: Transaction.Props) {
+    super(id, props)
     if (accountId) {
       this.accountId = accountId
     }
@@ -43,7 +32,7 @@ export class Transaction extends DbEntity<Transaction.Props> {
 }
 
 export namespace Transaction {
-  export interface Props extends Pick<TransactionInput, keyof TransactionInput> {}
+  export interface Props extends Partial<Omit<Transaction, DbEntityKeys | 'accountId'>> {}
   export type Spec = ISpec<Props>
 
   export const defaultValues = () => ({

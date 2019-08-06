@@ -1,7 +1,6 @@
 import { ISpec } from '@ag/util'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { BudgetInput } from './BudgetInput'
-import { DbEntity } from './DbEntity'
+import { DbEntity, DbEntityKeys } from './DbEntity'
 
 @Entity({ name: 'budgets' })
 export class Budget extends DbEntity<Budget.Props> {
@@ -11,6 +10,6 @@ export class Budget extends DbEntity<Budget.Props> {
 }
 
 export namespace Budget {
-  export interface Props extends Pick<BudgetInput, keyof BudgetInput> {}
+  export interface Props extends Partial<Omit<Budget, DbEntityKeys>> {}
   export type Spec = ISpec<Props>
 }

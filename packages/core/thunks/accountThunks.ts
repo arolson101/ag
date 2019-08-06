@@ -1,13 +1,4 @@
-import {
-  Account,
-  AccountInput,
-  AccountType,
-  Bank,
-  DbChange,
-  Image,
-  Transaction,
-  TransactionInput,
-} from '@ag/db/entities'
+import { Account, AccountType, Bank, DbChange, Image, Transaction } from '@ag/db/entities'
 import { ofx4js, toAccountType } from '@ag/online'
 import { diff, uniqueId } from '@ag/util'
 import assert from 'assert'
@@ -21,7 +12,7 @@ import { dbWrite } from './dbWrite'
 const log = debug('db:accountThunks')
 
 interface SaveAccountParams {
-  input: AccountInput
+  input: Account.Props
   accountId?: string
   bankId?: string
 }
@@ -120,7 +111,7 @@ const downloadAccountList = (bankId: string): CoreThunk =>
         log('accountProfiles', accountProfiles)
         const t = Date.now()
         const accounts = accountProfiles
-          .map(accountProfile => toAccountInput(bank, accountProfiles, accountProfile))
+          .map(accountProfile => toAccountProps(bank, accountProfiles, accountProfile))
           .filter((input): input is Account => !!input)
 
         const adds = accounts
@@ -204,13 +195,13 @@ const downloadTransactions = ({
           end
         )
 
-        const inDateRange = (tx: TransactionInput): boolean => {
+        const inDateRange = (tx: Transaction.Props): boolean => {
           return tx.time !== undefined && tx.time >= start && tx.time <= end
         }
 
         const t = Date.now()
 
-        const txInputs = transactions.map(toTransactionInput).filter(inDateRange)
+        const txInputs = transactions.map(toTransactionProps).filter(inDateRange)
 
         const adds = txInputs
           .filter(tx => !existingTransactions.find(etx => transactionsEqual(etx, tx)))
@@ -252,11 +243,11 @@ const downloadTransactions = ({
 
 const defined = <T>(object: T | undefined): object is T => !!object
 
-const toAccountInput = (
+const toAccountProps = (
   bank: Bank,
   accountProfiles: ofx4js.AccountProfile[],
   accountProfile: ofx4js.AccountProfile
-): AccountInput | undefined => {
+): Account.Props | undefined => {
   const name =
     accountProfile.getDescription() ||
     (accountProfiles.length === 1
@@ -291,13 +282,13 @@ const toAccountInput = (
   return undefined
 }
 
-const accountsEqual = (a: AccountInput, b: AccountInput): boolean => {
+const accountsEqual = (a: Account.Props, b: Account.Props): boolean => {
   return a.type === b.type && a.number === b.number
 }
 
 const timeForTransaction = (tx: ofx4js.Transaction): Date => tx.getDatePosted()
 
-const toTransactionInput = (tx: ofx4js.Transaction): TransactionInput => ({
+const toTransactionProps = (tx: ofx4js.Transaction): Transaction.Props => ({
   serverid: tx.getId(),
   time: timeForTransaction(tx),
   type: ofx4js.TransactionType[tx.getTransactionType()],
@@ -307,7 +298,7 @@ const toTransactionInput = (tx: ofx4js.Transaction): TransactionInput => ({
   // split: {}
 })
 
-const transactionsEqual = (a: TransactionInput, b: TransactionInput): boolean => {
+const transactionsEqual = (a: Transaction.Props, b: Transaction.Props): boolean => {
   return a.serverid === b.serverid
 }
 

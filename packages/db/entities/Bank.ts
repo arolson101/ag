@@ -2,9 +2,8 @@ import { ImageId } from '@ag/core/context'
 import { ImageUri, ISpec } from '@ag/util'
 import debug from 'debug'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
-import { BankInput } from './BankInput'
 import { DbChange } from './DbChange'
-import { DbEntity } from './DbEntity'
+import { DbEntity, DbEntityKeys } from './DbEntity'
 
 const log = debug('db:Bank')
 
@@ -26,15 +25,10 @@ export class Bank extends DbEntity<Bank.Props> {
 
   @Column() username!: string
   @Column() password!: string
-
-  constructor(id?: string, props?: BankInput) {
-    super(id, { ...Bank.defaultValues, ...props })
-    // log('Bank constructor %o', this)
-  }
 }
 
 export namespace Bank {
-  export interface Props extends Pick<BankInput, keyof BankInput> {}
+  export interface Props extends Partial<Omit<Bank, DbEntityKeys>> {}
   export type Spec = ISpec<Props>
 
   export const iconSize = 128

@@ -3,6 +3,7 @@ import { Bank } from './Bank'
 import { Bill } from './Bill'
 import { Budget } from './Budget'
 import { Category } from './Category'
+import { ChangeRecord } from './ChangeRecord'
 import { Image } from './Image'
 import { Setting } from './Setting'
 import { Transaction } from './Transaction'
@@ -18,5 +19,9 @@ export const appTable = {
   setting: Setting,
 }
 
-export const appEntities = Object.values(appTable)
 export type AppTable = keyof typeof appTable
+
+export const appEntities = [
+  ...Object.values(appTable), //
+  ChangeRecord,
+]

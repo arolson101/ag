@@ -14,6 +14,8 @@ interface Update<T> {
 
 export type HistoryType<T> = CompressedJson<Array<Update<T>>>
 
+export type DbEntityKeys = keyof DbEntity<{}>
+
 @Entity()
 @Index(['_deleted', 'id'])
 export abstract class DbEntity<Props extends {}> {
