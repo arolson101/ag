@@ -1,9 +1,9 @@
-import { DbEntity, DbTable } from '@ag/db'
+import { AppTable, DbEntity } from '@ag/db'
 import { Connection } from 'typeorm'
 import { createAsyncAction, createStandardAction } from 'typesafe-actions'
 
 export interface LoadEntities {
-  table: DbTable
+  table: AppTable
   deletes: string[]
   entities: Array<DbEntity<any>>
 }

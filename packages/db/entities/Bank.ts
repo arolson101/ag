@@ -41,19 +41,19 @@ export namespace Bank {
 
   export namespace change {
     export const add = (t: number, bank: Bank): DbChange => ({
-      table: Bank,
+      table: 'bank',
       t,
       adds: [bank],
     })
 
     export const edit = (t: number, id: string, q: Spec): DbChange => ({
-      table: Bank,
+      table: 'bank',
       t,
       edits: [{ id, q }],
     })
 
     export const remove = (t: number, id: string): DbChange => ({
-      table: Bank,
+      table: 'bank',
       t,
       deletes: [id],
     })

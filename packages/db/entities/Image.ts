@@ -50,7 +50,7 @@ export namespace Image {
           buf,
         })
         const dbChange: DbChange = {
-          table: Image,
+          table: 'image',
           t,
           adds: [image],
         }

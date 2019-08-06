@@ -102,7 +102,7 @@ const setAccountsOrder = (accountIds: string[]): CoreThunk =>
       const change: DbChange = {
         t,
         edits,
-        table: Account,
+        table: 'account',
       }
       await dispatch(dbWrite([change]))
     } catch (error) {

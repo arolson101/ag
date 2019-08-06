@@ -99,19 +99,19 @@ export namespace Account {
 
   export namespace change {
     export const add = (t: number, ...accounts: Account[]): DbChange => ({
-      table: Account,
+      table: 'account',
       t,
       adds: accounts,
     })
 
     export const edit = (t: number, id: string, q: Spec): DbChange => ({
-      table: Account,
+      table: 'account',
       t,
       edits: [{ id, q }],
     })
 
     export const remove = (t: number, id: string): DbChange => ({
-      table: Account,
+      table: 'account',
       t,
       deletes: [id],
     })
@@ -123,7 +123,7 @@ export namespace Account {
       const q: Spec = { balance: { $plus: amount } }
       return [
         {
-          table: Account,
+          table: 'account',
           t,
           edits: [{ id, q }],
         },

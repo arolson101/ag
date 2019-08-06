@@ -55,13 +55,13 @@ const dbLoadEntities = (): CoreThunk =>
 
     dispatch(
       actions.dbEntities([
-        { table: Bank, entities: banks, deletes: [] },
-        { table: Account, entities: accounts, deletes: [] },
-        // { table: Transaction, entities: transactions, deletes: [] },
-        { table: Bill, entities: bills, deletes: [] },
-        // { table: Budget, entities: budgets, deletes: [] },
-        // { table: Category, entities: categories, deletes: [] },
-        { table: Image, entities: images, deletes: [] },
+        { table: 'bank', entities: banks, deletes: [] },
+        { table: 'account', entities: accounts, deletes: [] },
+        // { table: 'transaction', entities: transactions, deletes: [] },
+        { table: 'bill', entities: bills, deletes: [] },
+        // { table: 'budget', entities: budgets, deletes: [] },
+        // { table: 'category', entities: categories, deletes: [] },
+        { table: 'image', entities: images, deletes: [] },
       ])
     )
   }
@@ -186,7 +186,7 @@ const dbLoadTransactions = ({ accountId }: { accountId: string }): CoreThunk =>
     const { transactionRepository } = selectors.appDb(state)
     const transactions = await transactionRepository.getForAccount(accountId)
     // log('dbLoadTransactions %o', transactions)
-    dispatch(actions.dbEntities([{ table: Transaction, entities: transactions, deletes: [] }]))
+    dispatch(actions.dbEntities([{ table: 'transaction', entities: transactions, deletes: [] }]))
   }
 
 export const dbThunks = {

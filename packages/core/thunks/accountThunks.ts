@@ -141,7 +141,7 @@ const downloadAccountList = (bankId: string): CoreThunk =>
 
         if (adds.length || edits.length) {
           const change: DbChange = {
-            table: Account,
+            table: 'account',
             t,
             adds,
             edits,
@@ -230,7 +230,7 @@ const downloadTransactions = ({
 
         if (adds.length || edits.length) {
           const change: DbChange = {
-            table: Transaction,
+            table: 'transaction',
             t,
             adds,
             edits,

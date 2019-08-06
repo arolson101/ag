@@ -99,25 +99,25 @@ export const ents = (state: EntsState = initialState, action: CoreAction): EntsS
     case getType(actions.dbEntities): {
       return action.payload.reduce((nextState, change) => {
         switch (change.table) {
-          case Bank:
+          case 'bank':
             return { ...nextState, banks: applyChange(change, nextState.banks) }
 
-          case Account:
+          case 'account':
             return { ...nextState, accounts: applyChange(change, nextState.accounts) }
 
-          case Bill:
+          case 'bill':
             return { ...nextState, bills: applyChange(change, nextState.bills) }
 
-          case Budget:
+          case 'budget':
             return { ...nextState, budgets: applyChange(change, nextState.budgets) }
 
-          case Category:
+          case 'category':
             return { ...nextState, categories: applyChange(change, nextState.categories) }
 
-          case Transaction:
+          case 'transaction':
             return { ...nextState, transactions: applyChange(change, nextState.transactions) }
 
-          case Image:
+          case 'image':
             return { ...nextState, images: applyChange(change, nextState.images) }
 
           default:
