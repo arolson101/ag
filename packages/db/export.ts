@@ -103,6 +103,8 @@ const fixExport = (
       const path = `${entityMetadata.tableName}/${object.id}_${key}${ext}`
       zip.file(path, object[key] as Buffer)
       object[key] = path
+    } else if (col.type === 'simple-json') {
+      object[key] = object[key] && JSON.stringify(object[key])
     } else if (key === '_history' && object._history) {
       try {
         const value = JSON.stringify(hydrate(object._history), null, '  ')
@@ -129,6 +131,8 @@ const fixImport = async (
       const path = row[key] as string
       const data: Buffer = await zip.file(path).async('nodebuffer')
       row[key] = data
+    } else if (col.type === 'simple-json') {
+      row[key] = row[key] && JSON.parse(row[key])
     } else if (isDate(col.type)) {
       row[key] = DateTime.fromISO(row[key]).toJSDate()
     } else if (key === '_history' && row[key]) {

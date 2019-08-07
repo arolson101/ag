@@ -62,7 +62,7 @@ async function main() {
   faker.seed(seed)
 
   const changes: DbChange[] = []
-  const txs = 10 // 1000
+  const txs = 1000
 
   window.SQL = await require('sql.js/dist/sql-asm.js')()
 
@@ -71,38 +71,38 @@ async function main() {
       fi: getBank('American Express', 'https://www.americanexpress.com/'),
       accounts: [{ name: 'American Express', cardImage: cardImages.amex, txs: 1 }],
     },
-    // chase: {
-    //   fi: getBank('Chase', 'https://chase.com'),
-    //   accounts: [
-    //     { name: 'Chase Sapphire', cardImage: cardImages.chaseSapphire, txs },
-    //     { name: 'Chase Freedom', cardImage: cardImages.chaseFreedom, txs },
-    //     { name: 'Checking', txs },
-    //     { name: 'Vacation Savings', txs },
-    //     { name: 'House Savings', txs },
-    //     { name: 'College Savings', txs },
-    //     { name: 'Kids Savings', txs },
-    //     { name: 'Shared Savings', txs },
-    //     { name: 'Mortgage', txs },
-    //     { name: 'Home Equity Line of Credit', txs },
-    //     { name: 'Checking 2', txs },
-    //   ],
-    // },
-    // citi: {
-    //   fi: getBank('Citi Cards', 'https://online.citi.com/'),
-    //   accounts: [
-    //     { name: 'Citi Savings', txs: 0 },
-    //     { name: 'Citi Checking', txs },
-    //     { name: 'Citi Credit', cardImage: cardImages.citi, txs },
-    //   ],
-    // },
-    // discover: {
-    //   fi: getBank('Discover Card'),
-    //   accounts: [{ name: 'Discover', currencyCode: 'EUR', cardImage: cardImages.discover, txs }],
-    // },
-    // etrade: {
-    //   fi: getBank('E*TRADE Financial'),
-    //   accounts: [{ name: 'E*Trade Checking', txs }],
-    // },
+    chase: {
+      fi: getBank('Chase', 'https://chase.com'),
+      accounts: [
+        { name: 'Chase Sapphire', cardImage: cardImages.chaseSapphire, txs },
+        { name: 'Chase Freedom', cardImage: cardImages.chaseFreedom, txs },
+        { name: 'Checking', txs },
+        { name: 'Vacation Savings', txs },
+        { name: 'House Savings', txs },
+        { name: 'College Savings', txs },
+        { name: 'Kids Savings', txs },
+        { name: 'Shared Savings', txs },
+        { name: 'Mortgage', txs },
+        { name: 'Home Equity Line of Credit', txs },
+        { name: 'Checking 2', txs },
+      ],
+    },
+    citi: {
+      fi: getBank('Citi Cards', 'https://online.citi.com/'),
+      accounts: [
+        { name: 'Citi Savings', txs: 0 },
+        { name: 'Citi Checking', txs },
+        { name: 'Citi Credit', cardImage: cardImages.citi, txs },
+      ],
+    },
+    discover: {
+      fi: getBank('Discover Card'),
+      accounts: [{ name: 'Discover', currencyCode: 'EUR', cardImage: cardImages.discover, txs }],
+    },
+    etrade: {
+      fi: getBank('E*TRADE Financial'),
+      accounts: [{ name: 'E*Trade Checking', txs }],
+    },
   }
 
   const s = createStore({ online, ui: {} as any, sys: { ...sys, openDb } })
@@ -220,62 +220,62 @@ async function main() {
       recur: 'monthly',
       start: makeDate({ year: 2012, month: 7, day: 12 }),
     },
-    // {
-    //   payee: 'Hulu',
-    //   description: '',
-    //   amount: -9.99,
-    //   url: 'http://hulu.com',
-    //   recur: 'monthly',
-    //   start: makeDate({ year: 2015, month: 2, day: 3 }),
-    // },
-    // {
-    //   payee: 'Amazon',
-    //   description: 'Amazon Prime',
-    //   amount: -120.0,
-    //   url: 'http://amazon.com',
-    //   recur: 'yearly',
-    //   start: makeDate({ year: 2017, month: 11, day: 1 }),
-    // },
-    // {
-    //   payee: 'Cal Water',
-    //   description: 'Water',
-    //   amount: -28.55,
-    //   url: 'https://www.calwater.com/',
-    //   recur: 'bimonthly',
-    //   start: makeDate({ year: 2015, month: 3, day: 15 }),
-    // },
-    // {
-    //   payee: 'National Fuel',
-    //   description: 'Utilities',
-    //   amount: -55.0,
-    //   url: 'https://natfuel.com/',
-    //   recur: 'monthly',
-    //   start: makeDate({ year: 2017, month: 11, day: 1 }),
-    // },
-    // {
-    //   payee: 'AT&T',
-    //   description: '',
-    //   amount: -89.99,
-    //   url: 'https://att.com/',
-    //   recur: 'monthly',
-    //   start: makeDate({ year: 2017, month: 3, day: 1 }),
-    // },
-    // {
-    //   payee: 'IBM',
-    //   description: '',
-    //   amount: 1000.0,
-    //   url: 'https://ibm.com/',
-    //   recur: 'biweekly',
-    //   start: makeDate({ year: 2013, month: 4, day: 1 }),
-    // },
-    // {
-    //   payee: 'Bank of America',
-    //   description: 'Mortgage',
-    //   amount: -1500.0,
-    //   url: 'https://www.bankofamerica.com',
-    //   recur: 'monthly',
-    //   start: makeDate({ year: 2014, month: 4, day: 1 }),
-    // },
+    {
+      payee: 'Hulu',
+      description: '',
+      amount: -9.99,
+      url: 'http://hulu.com',
+      recur: 'monthly',
+      start: makeDate({ year: 2015, month: 2, day: 3 }),
+    },
+    {
+      payee: 'Amazon',
+      description: 'Amazon Prime',
+      amount: -120.0,
+      url: 'http://amazon.com',
+      recur: 'yearly',
+      start: makeDate({ year: 2017, month: 11, day: 1 }),
+    },
+    {
+      payee: 'Cal Water',
+      description: 'Water',
+      amount: -28.55,
+      url: 'https://www.calwater.com/',
+      recur: 'bimonthly',
+      start: makeDate({ year: 2015, month: 3, day: 15 }),
+    },
+    {
+      payee: 'National Fuel',
+      description: 'Utilities',
+      amount: -55.0,
+      url: 'https://natfuel.com/',
+      recur: 'monthly',
+      start: makeDate({ year: 2017, month: 11, day: 1 }),
+    },
+    {
+      payee: 'AT&T',
+      description: '',
+      amount: -89.99,
+      url: 'https://att.com/',
+      recur: 'monthly',
+      start: makeDate({ year: 2017, month: 3, day: 1 }),
+    },
+    {
+      payee: 'IBM',
+      description: '',
+      amount: 1000.0,
+      url: 'https://ibm.com/',
+      recur: 'biweekly',
+      start: makeDate({ year: 2013, month: 4, day: 1 }),
+    },
+    {
+      payee: 'Bank of America',
+      description: 'Mortgage',
+      amount: -1500.0,
+      url: 'https://www.bankofamerica.com',
+      recur: 'monthly',
+      start: makeDate({ year: 2014, month: 4, day: 1 }),
+    },
   ]
 
   for (const billInfo of billInfos) {
