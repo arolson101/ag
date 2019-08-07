@@ -8,7 +8,6 @@ export interface Split {
 }
 
 @Entity({ name: 'transactions' })
-@Index(['accountId', '_deleted'])
 @Index(['time'])
 export class Transaction extends DbEntity<Transaction.Props> {
   @PrimaryColumn() id!: string

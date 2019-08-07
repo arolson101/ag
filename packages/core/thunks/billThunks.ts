@@ -36,18 +36,12 @@ const saveBill = ({ input, billId }: SaveBillParams): CoreThunk =>
         bill = await billRepository.getById(billId)
         const q = diff<Bill.Props>(bill, input)
         changes = [Bill.change.edit(t, billId, q), ...iconChange]
-        bill.update(t, q)
       } else {
         bill = new Bill(uniqueId(), input)
         billId = bill.id
         changes = [Bill.change.add(t, bill), ...iconChange]
       }
-      // log('dbwrite %o', changes)
       await dispatch(dbWrite(changes))
-      assert.equal(billId, bill.id)
-      // log('get bill %s', billId)
-      assert.deepStrictEqual(comparable(bill), comparable(await billRepository.getById(billId)))
-      // log('done')
 
       const intlCtx = { name: bill.name }
       showToast(intl.formatMessage(billId ? messages.saved : messages.created, intlCtx))

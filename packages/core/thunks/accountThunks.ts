@@ -36,7 +36,6 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
         account = await accountRepository.getById(accountId)
         const q = diff<Account.Props>(account, input)
         changes = [Account.change.edit(t, accountId, q), ...iconChange]
-        account.update(t, q)
       } else {
         if (!bankId) {
           throw new Error('when creating an account, bankId must be specified')
@@ -46,8 +45,6 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
         changes = [Account.change.add(t, account), ...iconChange]
       }
       await dispatch(dbWrite(changes))
-      assert.equal(accountId, account.id)
-      assert.deepStrictEqual(account, await accountRepository.getById(accountId))
 
       const intlCtx = { name: account.name }
       showToast(intl.formatMessage(accountId ? messages.saved : messages.created, intlCtx))

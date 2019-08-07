@@ -11,9 +11,8 @@ export const equals = <K extends keyof Transaction>(alias: string, obj: Pick<Tra
 export class TransactionRepository extends RecordRepository<Transaction> {
   async getForAccount(accountId: string, start?: Date, end?: Date) {
     const alias = 'tx'
-    let q = this.createQueryBuilder(alias)
-      .where(...equals(alias, { _deleted: 0 }))
-      .andWhere(...equals(alias, { accountId }))
+    let q = this.createQueryBuilder(alias) //
+      .where(...equals(alias, { accountId }))
 
     if (start && end) {
       q = q.andWhere('tx.time BETWEEN :start AND :end', { start, end })

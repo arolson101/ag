@@ -1,6 +1,9 @@
-import { appTable, DbChange, DbEntity, makeRecords } from '@ag/db/entities'
+import { appTable, AppTable, ChangeRecord, DbChange, DbEntity } from '@ag/db/entities'
+import { iupdate } from '@ag/util'
+import assert = require('assert')
 import debug from 'debug'
-import { SaveOptions } from 'typeorm'
+import * as R from 'ramda'
+import { Brackets, SaveOptions } from 'typeorm'
 import { actions, LoadEntities } from '../actions'
 import { selectors } from '../reducers'
 import { CoreThunk } from './CoreThunk'
@@ -19,44 +22,73 @@ export const dbWrite = (changes: DbChange[]): CoreThunk =>
     const loadEntities: LoadEntities[] = []
 
     await connection.transaction(async manager => {
-      for (const change of changes) {
-        const entity = appTable[change.table]
-        const le: LoadEntities = { table: change.table, deletes: [], entities: [] }
+      const records = ChangeRecord.fromDbChange(changes)
+      const crr = manager.getRepository(ChangeRecord)
 
-        if (change.adds) {
-          await manager.save(entity, change.adds, dbSaveOptions)
-          le.entities.push(...change.adds)
+      await crr.save(records)
+
+      const recordsByTable = R.groupBy((a: ChangeRecord) => a.table, records)
+      for (const table of Object.keys(recordsByTable) as AppTable[]) {
+        const le: LoadEntities = { table, deletes: [], entities: [] }
+        const entity = appTable[table]
+        for (const { id, t } of recordsByTable[table]) {
+          const prev = await crr
+            .createQueryBuilder('e')
+            .where('e.table = :table', { table })
+            .andWhere('e.id = :id', { id })
+            .andWhere('e.t < :t', { t })
+            .orderBy('e.t', 'DESC')
+            .take(1)
+            .getOne()
+
+          const base = prev ? prev.value : undefined
+          let ent: object | undefined
+          let deleted = false
+
+          const next = await crr
+            .createQueryBuilder('e')
+            .where('e.table = :table', { table })
+            .andWhere('e.id = :id', { id })
+            .andWhere('e.t >= :t', { t })
+            .orderBy('e.t', 'DESC')
+            .getMany()
+
+          for (const n of next) {
+            switch (n.type) {
+              case 'add':
+                deleted = false
+                assert(n.value)
+                ent = n.value
+                break
+
+              case 'delete':
+                deleted = true
+                break
+
+              case 'edit':
+                assert(ent)
+                deleted = false
+                ent = n.edit && ent ? iupdate(ent, n.edit) : ent
+                n.value = ent
+                break
+            }
+
+            crr.save(next)
+
+            if (deleted) {
+              await manager.delete(entity, { id })
+              le.deletes.push(id)
+            } else {
+              if (ent) {
+                const saved = await manager.save(entity, { id, ...ent })
+                le.entities.push(saved)
+              }
+            }
+          }
+
+          loadEntities.push(le)
         }
-
-        if (change.deletes) {
-          await manager
-            .createQueryBuilder()
-            .update(entity)
-            .set({ _deleted: change.t })
-            .whereInIds(change.deletes)
-            .execute()
-          le.deletes.push(...change.deletes)
-        }
-
-        if (change.edits) {
-          const edits = change.edits
-          const ids = change.edits.map(edit => edit.id)
-          const items = await manager.findByIds<DbEntity<any>>(entity, ids)
-          items.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id))
-          items.forEach((record, i) => {
-            // log('before %o %o', record, edits[i].q)
-            record.update(change.t, edits[i].q)
-          })
-          await manager.save(entity, items, dbSaveOptions)
-          le.entities.push(...items)
-        }
-
-        loadEntities.push(le)
       }
-
-      // const records = makeRecords(changes)
-      // const text = JSON.stringify(changes)
-      // await this._changes.add({ text })
     })
 
     dispatch(actions.dbEntities(loadEntities))

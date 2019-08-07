@@ -3,6 +3,7 @@ globalThis.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest
 globalThis.window = {} as any
 globalThis.document = {} as any
 
+import { ImageId } from '@ag/core/context'
 import { FI, filist, formatAddress } from '@ag/core/data'
 import { selectors } from '@ag/core/reducers'
 import { thunks } from '@ag/core/thunks'
@@ -108,6 +109,11 @@ async function main() {
   await s.dispatch(thunks.init())
   await s.dispatch(thunks.dbCreate({ name: 'app', password: '1234' }))
 
+  const err = selectors.appError(s.getState())
+  if (err) {
+    throw err
+  }
+
   let t = 10000
 
   for (const bankInfo of Object.values(bankInfos)) {
@@ -140,7 +146,7 @@ async function main() {
 
     for (const accountInfo of bankInfo.accounts) {
       console.log('  account ' + accountInfo.name)
-      let cardImageId = ''
+      let cardImageId: ImageId = ''
       if (accountInfo.cardImage) {
         const uri = await getImage(accountInfo.cardImage)
         const [imageId, imgChanges] = Image.change.create(t, uri)

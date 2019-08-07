@@ -32,8 +32,6 @@ export abstract class RecordRepository<T extends DbEntity<any>> extends Abstract
   }
 
   async all() {
-    return this.createQueryBuilder('e')
-      .where({ _deleted: 0 })
-      .getMany()
+    return this.createQueryBuilder('e').getMany()
   }
 }

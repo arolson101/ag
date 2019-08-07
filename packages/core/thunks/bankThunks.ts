@@ -31,18 +31,12 @@ const saveBank = ({ input, bankId }: SaveBankParams): CoreThunk =>
         bank = await bankRepository.getById(bankId)
         const q = diff<Bank.Props>(bank, input)
         changes = [Bank.change.edit(t, bankId, q), ...iconChange]
-        bank.update(t, q)
       } else {
         bank = new Bank(uniqueId(), input)
         bankId = bank.id
         changes = [Bank.change.add(t, bank), ...iconChange]
       }
-      // log('dbwrite %o', changes)
       await dispatch(dbWrite(changes))
-      assert.equal(bankId, bank.id)
-      // log('get bank %s', bankId)
-      assert.deepStrictEqual(bank, await bankRepository.getById(bankId))
-      // log('done')
 
       const intlCtx = { name: bank.name }
       showToast(intl.formatMessage(bankId ? messages.saved : messages.created, intlCtx))

@@ -25,7 +25,7 @@ export const openDb = async (
     extra: {
       key,
     },
-    // logging: true,
+    logging: true,
   })
   log('opened')
   return db
