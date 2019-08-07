@@ -9,6 +9,7 @@
       "request": "launch",
       "name": "generateExport",
       "runtimeArgs": ["-r", "ts-node/register"],
+      "cwd": "${workspaceFolder}",
       "args": ["./scripts/generateExport.ts"],
       "env": {
         "TS_NODE_TRANSPILE_ONLY": "true"

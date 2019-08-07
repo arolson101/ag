@@ -1,4 +1,5 @@
 import { appTable, AppTable, ChangeRecord, DbChange, DbEntity } from '@ag/db/entities'
+import { simplifyEntity, unsimplifyEntity } from '@ag/db/export'
 import { iupdate } from '@ag/util'
 import assert = require('assert')
 import debug from 'debug'
@@ -11,7 +12,7 @@ import { CoreThunk } from './CoreThunk'
 const log = debug('core:dbWrite')
 
 export const dbSaveOptions: SaveOptions = {
-  chunk: 500,
+  chunk: 300,
   reload: false,
 }
 
@@ -22,15 +23,20 @@ export const dbWrite = (changes: DbChange[]): CoreThunk =>
     const loadEntities: LoadEntities[] = []
 
     await connection.transaction(async manager => {
-      const records = ChangeRecord.fromDbChange(changes)
       const crr = manager.getRepository(ChangeRecord)
 
-      await crr.save(records)
+      const records = ChangeRecord.fromDbChange(connection, changes)
+      await crr.save(records, dbSaveOptions)
 
       const recordsByTable = R.groupBy((a: ChangeRecord) => a.table, records)
       for (const table of Object.keys(recordsByTable) as AppTable[]) {
-        const le: LoadEntities = { table, deletes: [], entities: [] }
         const entity = appTable[table]
+        const entityMetadata = connection.entityMetadatas.find(emd => emd.target === entity)
+        if (!entityMetadata) {
+          throw new Error('no entityMetadata for table ' + table)
+        }
+
+        const le: LoadEntities = { table, deletes: [], entities: [] }
         for (const { id, t } of recordsByTable[table]) {
           const prev = await crr
             .createQueryBuilder('e')
@@ -41,8 +47,8 @@ export const dbWrite = (changes: DbChange[]): CoreThunk =>
             .take(1)
             .getOne()
 
-          const base = prev ? prev.value : undefined
-          let ent: object | undefined
+          const base = prev && prev.value ? simplifyEntity(prev.value, entityMetadata) : undefined
+          let ent: object | undefined = base
           let deleted = false
 
           const next = await crr
@@ -73,21 +79,22 @@ export const dbWrite = (changes: DbChange[]): CoreThunk =>
                 break
             }
 
-            crr.save(next)
+            crr.save(next, dbSaveOptions)
 
             if (deleted) {
               await manager.delete(entity, { id })
               le.deletes.push(id)
             } else {
               if (ent) {
-                const saved = await manager.save(entity, { id, ...ent })
+                const values = unsimplifyEntity(ent, entityMetadata)
+                const saved = await manager.save(entity, { id, ...values })
                 le.entities.push(saved)
               }
             }
           }
-
-          loadEntities.push(le)
         }
+
+        loadEntities.push(le)
       }
     })
 

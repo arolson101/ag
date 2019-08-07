@@ -21,17 +21,10 @@ export class Transaction extends DbEntity<Transaction.Props> {
   @Column() memo!: string
   @Column() amount!: number
   // split: Split
-
-  constructor(id?: string, accountId?: string, props?: Transaction.Props) {
-    super(id, props)
-    if (accountId) {
-      this.accountId = accountId
-    }
-  }
 }
 
 export namespace Transaction {
-  export interface Props extends Partial<Omit<Transaction, DbEntityKeys | 'accountId'>> {}
+  export interface Props extends Omit<Transaction, DbEntityKeys> {}
   export type Spec = ISpec<Props>
 
   export const defaultValues = () => ({

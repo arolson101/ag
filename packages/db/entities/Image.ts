@@ -19,7 +19,7 @@ export class Image extends DbEntity<Image.Props> {
   @Column() mime!: string
   @Column() width!: number
   @Column() height!: number
-  @Column({ type: 'blob', select: false, readonly: true }) buf?: Buffer
+  @Column({ type: 'blob', select: false, readonly: true, nullable: true }) buf?: Buffer
   blob?: Blob
   src?: ImageUri
 }
@@ -35,7 +35,10 @@ export namespace Image {
   }
 
   export namespace change {
-    export const create = (t: number, imageId?: ImageId): [ImageId | undefined, DbChange[]] => {
+    export const create = (t: number, imageId?: ImageId): [ImageId, DbChange[]] => {
+      if (!imageId) {
+        imageId = ''
+      }
       if (imageId && isDataUri(imageId)) {
         const uri = imageId as ImageUri
         const {

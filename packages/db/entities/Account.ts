@@ -24,23 +24,16 @@ export class Account extends DbEntity<Account.Props> {
   @Column() sortOrder!: number
   @Column('text') currencyCode!: CurrencyCode
   @Column({ default: 0 }) balance!: number
-
-  constructor(bankId?: string, id?: string, props?: Account.Props) {
-    super(id, props)
-    if (bankId) {
-      this.bankId = bankId
-    }
-  }
 }
 
 export namespace Account {
-  export interface Props extends Partial<Omit<Account, DbEntityKeys | 'bankId'>> {}
+  export interface Props extends Omit<Account, DbEntityKeys> {}
   export const Type = AccountType
   export type Type = AccountType
   export type Spec = ISpec<Props>
 
   export const iconSize = 128
-  export const defaultCurrencyCode = 'USD'
+  export const defaultCurrencyCode: CurrencyCode = 'USD'
 
   export const messages = defineMessages({
     CHECKING: {
@@ -117,7 +110,7 @@ export namespace Account {
     }
   }
 
-  export const defaultValues = (): Props => ({
+  export const defaultValues = () => ({
     name: '',
     type: Type.CHECKING,
     color: generateColor(Type.CHECKING),
@@ -126,7 +119,7 @@ export namespace Account {
     routing: '',
     key: '',
     sortOrder: -1,
-    iconId: '',
+    iconId: '' as ImageId,
     currencyCode: defaultCurrencyCode,
     balance: 0,
   })

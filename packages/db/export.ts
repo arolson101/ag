@@ -58,25 +58,51 @@ const isDate = (type: ColumnType): boolean => {
   return false
 }
 
-const fixExport = (
-  object: DbEntity<any> & Record<string, any>,
-  entityMetadata: EntityMetadata,
-  zip: JSZip
-): object => {
+export const simplifyEntity = (object: Record<string, any>, entityMetadata: EntityMetadata) => {
   for (const col of entityMetadata.columns) {
     const key = col.propertyPath as keyof typeof object
     if (col.transformer) {
       const transforms = Array.isArray(col.transformer) ? col.transformer : [col.transformer]
       const value = transforms.reduce((val, tx) => tx.to(val), object[key])
       object[key] = value
-    } else if (col.type === 'blob') {
+    } else if (isDate(col.type)) {
+      object[key] = DateTime.fromJSDate(object[key]).toISO()
+    }
+  }
+
+  return object
+}
+
+export const unsimplifyEntity = (object: Record<string, any>, entityMetadata: EntityMetadata) => {
+  for (const col of entityMetadata.columns) {
+    const key = col.propertyPath as keyof typeof object
+    if (col.transformer) {
+      const transforms = Array.isArray(col.transformer) ? col.transformer : [col.transformer]
+      const value = transforms.reverse().reduce((val, tx) => tx.from(val), object[key])
+      object[key] = value
+    } else if (isDate(col.type)) {
+      object[key] = DateTime.fromISO(object[key]).toJSDate()
+    }
+  }
+
+  return object
+}
+
+const fixExport = (
+  object: DbEntity<any> & Record<string, any>,
+  entityMetadata: EntityMetadata,
+  zip: JSZip
+): object => {
+  simplifyEntity(object, entityMetadata)
+
+  for (const col of entityMetadata.columns) {
+    const key = col.propertyPath as keyof typeof object
+    if (col.type === 'blob') {
       assert(object[key] instanceof Buffer)
       const ext = getExt(object)
       const path = `${entityMetadata.tableName}/${object.id}_${key}${ext}`
       zip.file(path, object[key] as Buffer)
       object[key] = path
-    } else if (isDate(col.type)) {
-      object[key] = DateTime.fromJSDate(object[key]).toISO()
     } else if (key === '_history' && object._history) {
       try {
         const value = JSON.stringify(hydrate(object._history), null, '  ')
@@ -126,13 +152,12 @@ export const exportDb = async (connection: Connection) => {
       .filter(col => !col.isSelect)
       .map(col => `ent.${col.propertyName}`)
     const repo = connection.manager.getRepository<DbEntity<any>>(tableName)
-    const data = (await repo
+    const raw = await repo
       .createQueryBuilder('ent')
       .select()
       .addSelect(hiddenColumns)
-      .getMany())
-      .map(ent => fixExport(ent, entityMetadata, zip))
-      .map(flatten)
+      .getMany()
+    const data = raw.map(ent => fixExport(ent, entityMetadata, zip)).map(flatten)
 
     log('%s: %d items', tableName, data.length)
 

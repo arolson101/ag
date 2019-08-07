@@ -40,7 +40,7 @@ const saveAccount = ({ input, accountId, bankId }: SaveAccountParams): CoreThunk
         if (!bankId) {
           throw new Error('when creating an account, bankId must be specified')
         }
-        account = new Account(bankId, uniqueId(), input)
+        account = new Account(uniqueId(), input)
         accountId = account.id
         changes = [Account.change.add(t, account), ...iconChange]
       }
@@ -113,7 +113,7 @@ const downloadAccountList = (bankId: string): CoreThunk =>
 
         const adds = accounts
           .filter(account => !existingAccounts.find(acct => accountsEqual(account, acct)))
-          .map(input => new Account(bankId, uniqueId(), input))
+          .map(input => new Account(uniqueId(), input))
 
         const edits = accounts
           .map(account => {
@@ -198,11 +198,11 @@ const downloadTransactions = ({
 
         const t = Date.now()
 
-        const txInputs = transactions.map(toTransactionProps).filter(inDateRange)
+        const txInputs = transactions.map(toTransactionProps(accountId)).filter(inDateRange)
 
         const adds = txInputs
           .filter(tx => !existingTransactions.find(etx => transactionsEqual(etx, tx)))
-          .map(tx => new Transaction(accountId, uniqueId(), tx))
+          .map(tx => new Transaction(uniqueId(), tx))
 
         const edits = txInputs
           .map(tx => {
@@ -256,6 +256,8 @@ const toAccountProps = (
     const bankAccount = bankSpecifics.getBankAccount()
     // bankAccount.getBranchId()
     return {
+      ...Account.defaultValues(),
+      bankId: bank.id,
       name,
       routing: bankAccount.getBankId(),
       type: toAccountType(bankAccount.getAccountType()),
@@ -265,6 +267,8 @@ const toAccountProps = (
     const creditCardSpecifics = accountProfile.getCreditCardSpecifics()
     const creditCardAccount = creditCardSpecifics.getCreditCardAccount()
     return {
+      ...Account.defaultValues(),
+      bankId: bank.id,
       name,
       type: AccountType.CREDITCARD,
       number: creditCardAccount.getAccountNumber(),
@@ -285,7 +289,9 @@ const accountsEqual = (a: Account.Props, b: Account.Props): boolean => {
 
 const timeForTransaction = (tx: ofx4js.Transaction): Date => tx.getDatePosted()
 
-const toTransactionProps = (tx: ofx4js.Transaction): Transaction.Props => ({
+const toTransactionProps = (accountId: string) => (tx: ofx4js.Transaction): Transaction.Props => ({
+  ...Transaction.defaultValues(),
+  accountId,
   serverid: tx.getId(),
   time: timeForTransaction(tx),
   type: ofx4js.TransactionType[tx.getTransactionType()],
