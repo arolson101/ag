@@ -86,12 +86,14 @@ const setAccountsOrder = (accountIds: string[]): CoreThunk =>
         throw new Error('got back wrong number of accounts')
       }
       // log('accounts (before) %o', accounts)
-      const edits = Object.values(accounts).map(
-        ({ id }, idx): DbEntityEdit<Account.Spec> => ({
-          id,
-          q: { sortOrder: { $set: idx } },
-        })
-      )
+      const edits = Object.values(accounts)
+        .filter(({ id, sortOrder }) => sortOrder !== accountIds.indexOf(id))
+        .map(
+          ({ id }, idx): DbEntityEdit<Account.Spec> => ({
+            id,
+            q: { sortOrder: { $set: accountIds.indexOf(id) } },
+          })
+        )
       // log('accounts: %o, edits: %o', accounts, edits)
       const change: DbChange = {
         t,

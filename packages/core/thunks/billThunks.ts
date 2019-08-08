@@ -73,7 +73,7 @@ const deleteBill = (bill: { id: string; name: string }): CoreThunk =>
     }
   }
 
-const setBillsOrder = (accountIds: string[]): CoreThunk =>
+const setBillsOrder = (billIds: string[]): CoreThunk =>
   async function _setBillsOrder(dispatch, getState, { ui: { alert } }) {
     const state = getState()
     const intl = selectors.intl(state)
@@ -81,17 +81,19 @@ const setBillsOrder = (accountIds: string[]): CoreThunk =>
     try {
       const { billRepository } = selectors.appDb(state)
       const t = Date.now()
-      const bills = await billRepository.getByIds(accountIds)
-      if (Object.keys(bills).length !== accountIds.length) {
+      const bills = await billRepository.getByIds(billIds)
+      if (Object.keys(bills).length !== billIds.length) {
         throw new Error('got back wrong number of bills')
       }
       // log('bills (before) %o', bills)
-      const edits = Object.values(bills).map(
-        ({ id }, idx): DbEntityEdit<Bill.Spec> => ({
-          id,
-          q: { sortOrder: { $set: idx } },
-        })
-      )
+      const edits = Object.values(bills)
+        .filter(({ id, sortOrder }) => sortOrder !== billIds.indexOf(id))
+        .map(
+          ({ id }, idx): DbEntityEdit<Bill.Spec> => ({
+            id,
+            q: { sortOrder: { $set: billIds.indexOf(id) } },
+          })
+        )
       // log('bills: %o, edits: %o', bills, edits)
       const change: DbChange = {
         t,
