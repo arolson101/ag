@@ -1,6 +1,7 @@
 import { ImageId } from '@ag/core/context'
 import { ISpec } from '@ag/util'
 import { CurrencyCode } from 'currency-code-map'
+import * as R from 'ramda'
 import randomColor from 'randomcolor'
 import { defineMessages } from 'react-intl'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
@@ -76,6 +77,22 @@ export namespace Account {
     }
   }
 
+  export const defaultValues = () => ({
+    name: '',
+    type: Type.CHECKING,
+    color: generateColor(Type.CHECKING),
+    number: '',
+    visible: true,
+    routing: '',
+    key: '',
+    sortOrder: -1,
+    iconId: '' as ImageId,
+    currencyCode: defaultCurrencyCode as CurrencyCode,
+    balance: 0,
+  })
+
+  export const keys = R.keys(defaultValues())
+
   export namespace change {
     export const add = (t: number, ...accounts: Account[]): DbChange => ({
       table: 'account',
@@ -109,18 +126,4 @@ export namespace Account {
       ]
     }
   }
-
-  export const defaultValues = () => ({
-    name: '',
-    type: Type.CHECKING,
-    color: generateColor(Type.CHECKING),
-    number: '',
-    visible: true,
-    routing: '',
-    key: '',
-    sortOrder: -1,
-    iconId: '' as ImageId,
-    currencyCode: defaultCurrencyCode,
-    balance: 0,
-  })
 }

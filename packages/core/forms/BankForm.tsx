@@ -39,9 +39,8 @@ export const BankForm = Object.assign(
     const initialValues = useMemo<FormValues>(
       () => ({
         fi: defaultFi.toString(),
-        ...(bank
-          ? pick(bank, Object.keys(Bank.defaultValues) as Array<keyof Bank.Props>)
-          : Bank.defaultValues),
+        ...Bank.defaultValues,
+        ...(bank ? pick(Bank.keys, bank) : {}),
       }),
       [bank]
     )

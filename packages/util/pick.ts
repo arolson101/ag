@@ -1,2 +1,2 @@
-import pick from 'lodash.pick'
-export { pick }
+import * as R from 'ramda'
+export const pick = R.pick

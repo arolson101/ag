@@ -7,6 +7,7 @@
       "options": [100]
     },
     "prettier": true,
+    "linebreak-style": [true, "CRLF"],
     "object-literal-sort-keys": false,
     "interface-name": false,
     "no-object-literal-type-assertion": false,

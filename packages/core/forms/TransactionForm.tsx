@@ -37,12 +37,10 @@ export const TransactionForm = Object.assign(
     useAccountTransactions(accountId)
 
     const initialValues = useMemo<FormValues>(
-      () =>
-        transaction
-          ? pick(transaction, Object.keys(Transaction.defaultValues()) as Array<
-              keyof Transaction.Props
-            >)
-          : Transaction.defaultValues(),
+      () => ({
+        ...Transaction.defaultValues(),
+        ...(transaction ? pick(Transaction.keys, transaction) : {}),
+      }),
       [transaction]
     )
 

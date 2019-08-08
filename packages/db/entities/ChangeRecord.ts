@@ -1,7 +1,6 @@
 import { ISpec } from '@ag/util'
-import { Column, Connection, Entity, PrimaryColumn } from 'typeorm'
-import { simplifyEntity } from '../export'
-import { AppTable, appTable } from './appEntities'
+import { Column, Entity, PrimaryColumn } from 'typeorm'
+import { AppTable } from './appEntities'
 import { DbChange } from './DbChange'
 
 type ChangeType = 'add' | 'edit' | 'delete'
@@ -21,25 +20,11 @@ export class ChangeRecord<T extends {} = {}> {
     }
   }
 
-  static fromDbChange = (connection: Connection, change: DbChange[]): ChangeRecord[] => {
+  static fromDbChange = (change: DbChange[]): ChangeRecord[] => {
     const records: ChangeRecord[] = change.flatMap(({ table, t, adds, edits, deletes }) => {
-      const entityMetadata = connection.entityMetadatas.find(emd => emd.target === appTable[table])
-      if (!entityMetadata) {
-        throw new Error('no entityMetadata for table ' + table)
-      }
-
       return [
         ...(adds
-          ? adds.map(
-              add =>
-                new ChangeRecord({
-                  table,
-                  id: add.id,
-                  t,
-                  type: 'add',
-                  value: simplifyEntity(add, entityMetadata),
-                })
-            )
+          ? adds.map(add => new ChangeRecord({ table, id: add.id, t, type: 'add', value: add }))
           : []),
         ...(edits
           ? edits.map(

@@ -48,7 +48,7 @@ interface RRuleValues {
   bymonth: string
 }
 
-interface FormValues extends RRuleValues, Required<Bill.Props> {
+interface FormValues extends RRuleValues, Omit<Bill.Props, 'rruleString'> {
   billType: BillType
 }
 
@@ -114,17 +114,21 @@ export const BillForm = Object.assign(
 
       let ivalues: FormValues
       if (edit) {
-        assert(edit.rrule)
+        const rrule = RRule.fromString(edit.rruleString)
+        assert(rrule)
+        if (!rrule) {
+          throw new Error('rrule is not set')
+        }
 
         ivalues = {
           ...initialRRuleValues,
           ...edit,
           billType: edit.amount < 0 ? 'expense' : 'income',
           // amount: intl.formatNumber(edit.amount, { style: 'currency', currency: 'USD' }),
-          start: edit.rrule.options.dtstart,
+          start: rrule.options.dtstart,
         }
 
-        const opts = edit.rrule.origOptions
+        const opts = rrule.origOptions
         if (opts.freq === RRule.MONTHLY) {
           ivalues.frequency = 'months'
         } else if (opts.freq === RRule.WEEKLY) {
@@ -190,9 +194,9 @@ export const BillForm = Object.assign(
       async (values: FormValues) => {
         try {
           log('onSubmit %o', values)
-          const input = {
-            ...pick(values, Object.keys(Bill.defaultValues) as Array<keyof Bill.Props>),
-            rrule: toRRule(values),
+          const input: Bill.Props = {
+            ...pick(Bill.keys, values),
+            rruleString: toRRule(values).toString(),
             amount: values.billType === 'expense' ? -values.amount : +values.amount,
           }
           await saveBill({ input, billId })

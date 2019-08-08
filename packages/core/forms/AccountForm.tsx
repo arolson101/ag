@@ -17,7 +17,7 @@ interface Props {
   onClosed: () => any
 }
 
-type FormValues = ReturnType<typeof Account.defaultValues>
+type FormValues = Omit<Account.Props, 'bankId' | 'accountId'>
 
 export interface AccountForm {
   save: () => any
@@ -43,9 +43,8 @@ export const AccountForm = Object.assign(
 
     const initialValues = useMemo<FormValues>(
       () => ({
-        ...(account
-          ? pick(account, Object.keys(Account.defaultValues()) as Array<keyof Account.Props>)
-          : Account.defaultValues()),
+        ...Account.defaultValues(),
+        ...(account ? pick(Account.keys, account) : {}),
       }),
       [account]
     )

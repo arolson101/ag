@@ -37,6 +37,8 @@ export namespace Transaction {
     amount: 0,
   })
 
+  export const keys = Object.keys(defaultValues()) as Array<keyof Props>
+
   export namespace change {
     export const add = (t: number, transactions: Transaction[]): DbChange => ({
       table: 'transaction',

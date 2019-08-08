@@ -1,0 +1,16 @@
+{
+  "name": "ag-sync",
+  "version": "0.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "dependencies": {
+    "googleapis": "^41.0.1",
+    "tsl-apple-cloudkit": "^0.2.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

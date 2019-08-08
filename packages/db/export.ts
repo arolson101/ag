@@ -58,46 +58,16 @@ const isDate = (type: ColumnType): boolean => {
   return false
 }
 
-export const simplifyEntity = (object: Record<string, any>, entityMetadata: EntityMetadata) => {
-  for (const col of entityMetadata.columns) {
-    const key = col.propertyPath as keyof typeof object
-    if (col.transformer) {
-      const transforms = Array.isArray(col.transformer) ? col.transformer : [col.transformer]
-      const value = transforms.reduce((val, tx) => tx.to(val), object[key])
-      object[key] = value
-    } else if (isDate(col.type)) {
-      object[key] = DateTime.fromJSDate(object[key]).toISO()
-    }
-  }
-
-  return object
-}
-
-export const unsimplifyEntity = (object: Record<string, any>, entityMetadata: EntityMetadata) => {
-  for (const col of entityMetadata.columns) {
-    const key = col.propertyPath as keyof typeof object
-    if (col.transformer) {
-      const transforms = Array.isArray(col.transformer) ? col.transformer : [col.transformer]
-      const value = transforms.reverse().reduce((val, tx) => tx.from(val), object[key])
-      object[key] = value
-    } else if (isDate(col.type)) {
-      object[key] = DateTime.fromISO(object[key]).toJSDate()
-    }
-  }
-
-  return object
-}
-
 const fixExport = (
   object: DbEntity<any> & Record<string, any>,
   entityMetadata: EntityMetadata,
   zip: JSZip
 ): object => {
-  simplifyEntity(object, entityMetadata)
-
   for (const col of entityMetadata.columns) {
     const key = col.propertyPath as keyof typeof object
-    if (col.type === 'blob') {
+    if (isDate(col.type)) {
+      object[key] = DateTime.fromJSDate(object[key]).toISO()
+    } else if (col.type === 'blob') {
       assert(object[key] instanceof Buffer)
       const ext = getExt(object)
       const path = `${entityMetadata.tableName}/${object.id}_${key}${ext}`
@@ -178,25 +148,27 @@ export const importDb = async (connection: Connection, data: Buffer) => {
   const zip = new JSZip()
   await zip.loadAsync(data)
 
-  // log('importDb %o', wb)
-  for (const entityMetadata of connection.entityMetadatas) {
-    const { tableName } = entityMetadata
-    const csv = await zip.file(`${tableName}.csv`).async('text')
+  await connection.transaction(async manager => {
+    // log('importDb %o', wb)
+    for (const entityMetadata of connection.entityMetadatas) {
+      const { tableName } = entityMetadata
+      const csv = await zip.file(`${tableName}.csv`).async('text')
 
-    const obj = csvParse(csv, {
-      columns: true,
-      skip_empty_lines: true,
-      skip_lines_with_error: true,
-      skip_lines_with_empty_values: true,
-    }) as object[]
+      const obj = csvParse(csv, {
+        columns: true,
+        skip_empty_lines: true,
+        skip_lines_with_error: true,
+        skip_lines_with_empty_values: true,
+      }) as object[]
 
-    const repo = connection.manager.getRepository<object>(tableName)
-    const ents = await Promise.all(
-      obj.map(async o => repo.create(await fixImport(zip, entityMetadata, nest(o))))
-    )
-    // log('importDb %s %o', sheetName, ents)
-    if (ents.length) {
-      await repo.save(ents, dbSaveOptions)
+      const repo = manager.getRepository<object>(tableName)
+      const ents = await Promise.all(
+        obj.map(async o => repo.create(await fixImport(zip, entityMetadata, nest(o))))
+      )
+      // log('importDb %s %o', sheetName, ents)
+      if (ents.length) {
+        await repo.save(ents, dbSaveOptions)
+      }
     }
-  }
+  })
 }

@@ -1,5 +1,4 @@
 import { appTable, AppTable, ChangeRecord, DbChange, DbEntity } from '@ag/db/entities'
-import { simplifyEntity, unsimplifyEntity } from '@ag/db/export'
 import { iupdate } from '@ag/util'
 import assert = require('assert')
 import debug from 'debug'
@@ -40,13 +39,8 @@ export const dbWrite = (dbChanges: DbChange[]): CoreThunk =>
             le.entities.push(...saved)
           }
         } else {
-          const records = ChangeRecord.fromDbChange(connection, tableChanges)
+          const records = ChangeRecord.fromDbChange(tableChanges)
           await crr.save(records, dbSaveOptions)
-
-          const entityMetadata = connection.entityMetadatas.find(emd => emd.target === entity)
-          if (!entityMetadata) {
-            throw new Error('no entityMetadata for table ' + table)
-          }
 
           for (const { id, t } of records) {
             const prev = await crr
@@ -58,7 +52,7 @@ export const dbWrite = (dbChanges: DbChange[]): CoreThunk =>
               .take(1)
               .getOne()
 
-            const base = prev && prev.value ? simplifyEntity(prev.value, entityMetadata) : undefined
+            const base = prev ? prev.value : undefined
             let ent: object | undefined = base
             let deleted = false
 
@@ -97,8 +91,7 @@ export const dbWrite = (dbChanges: DbChange[]): CoreThunk =>
                 le.deletes.push(id)
               } else {
                 if (ent) {
-                  const values = unsimplifyEntity(ent, entityMetadata)
-                  const saved = await manager.save(entity, { id, ...values })
+                  const saved = await manager.save(entity, { id, ...ent })
                   le.entities.push(saved)
                 }
               }

@@ -48,7 +48,7 @@ const saveTransactions = ({ transactions, accountId }: SaveTransactionsParams): 
               const q = diff<Transaction.Props>(transaction, input)
               return Transaction.change.edit(t, id, q)
             } else {
-              const transaction = new Transaction(uniqueId(), accountId, input)
+              const transaction = new Transaction(uniqueId(), input)
               return Transaction.change.add(t, [transaction])
             }
           }

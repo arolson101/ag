@@ -1,6 +1,7 @@
 import { ImageId } from '@ag/core/context'
 import { ImageUri, ISpec } from '@ag/util'
 import debug from 'debug'
+import * as R from 'ramda'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { DbChange } from './DbChange'
 import { DbEntity, DbEntityKeys } from './DbEntity'
@@ -33,6 +34,25 @@ export namespace Bank {
 
   export const iconSize = 128
 
+  export const defaultValues: Required<Props> = {
+    name: '',
+    web: '',
+    address: '',
+    notes: '',
+    iconId: '',
+
+    online: true,
+
+    fid: '',
+    org: '',
+    ofx: '',
+
+    username: '',
+    password: '',
+  }
+
+  export const keys = R.keys(defaultValues)
+
   export namespace change {
     export const add = (t: number, bank: Bank): DbChange => ({
       table: 'bank',
@@ -51,22 +71,5 @@ export namespace Bank {
       t,
       deletes: [id],
     })
-  }
-
-  export const defaultValues: Required<Props> = {
-    name: '',
-    web: '',
-    address: '',
-    notes: '',
-    iconId: '',
-
-    online: true,
-
-    fid: '',
-    org: '',
-    ofx: '',
-
-    username: '',
-    password: '',
   }
 }

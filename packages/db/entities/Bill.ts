@@ -1,7 +1,7 @@
 import { ImageId } from '@ag/core/context'
 import { ISpec } from '@ag/util'
 import debug from 'debug'
-import { RRule } from 'rrule'
+import * as R from 'ramda'
 import { Column, Entity, PrimaryColumn } from 'typeorm'
 import { DbChange } from './DbChange'
 import { DbEntity, DbEntityKeys } from './DbEntity'
@@ -21,41 +21,28 @@ export class Bill extends DbEntity<Bill.Props> {
   @Column() category!: string
   @Column() showAdvanced!: boolean
   @Column({ nullable: true }) sortOrder!: number
-  @Column({
-    type: 'text',
-    nullable: true,
-    transformer: {
-      from: (value: string) => {
-        // log('from %s', value)
-        return RRule.fromString(value)
-      },
-      to: (value: RRule) => {
-        // log('to: %o', value)
-        return value.toString()
-      },
-    },
-  })
-  rrule!: RRule
+  @Column() rruleString!: string
 }
 
 export namespace Bill {
-  export interface Props extends Partial<Omit<Bill, DbEntityKeys>> {}
+  export interface Props extends Omit<Bill, DbEntityKeys> {}
   export type Spec = ISpec<Props>
   export const iconSize = 32
 
-  export const defaultValues: Required<Props> = {
+  export const defaultValues = {
     name: '',
     group: '',
     web: '',
-    iconId: '',
+    iconId: '' as ImageId,
     notes: '',
     amount: 0,
     account: '',
     category: '',
-    rrule: new RRule(),
     showAdvanced: false,
     sortOrder: -1,
   }
+
+  export const keys = R.keys(defaultValues)
 
   export namespace change {
     export const add = (t: number, bill: Bill): DbChange => ({

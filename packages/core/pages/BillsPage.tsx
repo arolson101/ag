@@ -22,7 +22,7 @@ const route = docuri.route<void, string>(path)
 
 const BillGroup = Object.assign(
   React.memo<{ group: string; bills: Bill[] }>(function _BillGroup({ group, bills }) {
-    type Row = Bill
+    type Row = Bill & { rrule: RRule }
     const intl = useIntl()
     const { Image, Table, Text } = useUi()
     const openBillEditDlg = useAction(actions.openDlg.billEdit)
@@ -30,6 +30,11 @@ const BillGroup = Object.assign(
     const setBillsOrder = useAction(thunks.setBillsOrder)
     const getAccount = useSelector(selectors.getAccount)
     const currency = useSelector(selectors.currency)
+
+    const data = useMemo<Row[]>(
+      () => bills.map(bill => ({ ...bill, rrule: RRule.fromString(bill.rruleString) })),
+      [bills]
+    )
 
     const moveRow = useCallback(
       (srcIndex: number, dstIndex: number) => {
@@ -121,7 +126,7 @@ const BillGroup = Object.assign(
         rowEdit={rowEdit}
         rowDelete={rowDelete}
         emptyText={intl.formatMessage(messages.emptyText)}
-        data={bills}
+        data={data}
         columns={columns}
         moveRow={moveRow}
         dragId={`group-${group}`}

@@ -12,11 +12,6 @@ interface SaveBillParams {
   billId?: string
 }
 
-const comparable = (bill: Bill) => ({
-  ...bill,
-  rrule: bill.rrule.toString(),
-})
-
 const saveBill = ({ input, billId }: SaveBillParams): CoreThunk =>
   async function _saveBill(dispatch, getState, { ui: { alert, showToast } }) {
     const state = getState()

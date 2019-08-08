@@ -290,7 +290,7 @@ async function main() {
       notes: billInfo.description,
       sortOrder: billInfos.indexOf(billInfo),
       web: billInfo.url,
-      rrule: makeRrule(billInfo),
+      rruleString: makeRrule(billInfo),
       iconId: billImageId,
     })
 
@@ -311,20 +311,20 @@ async function main() {
 
 main().catch(err => console.error(err))
 
-const makeRrule = (billInfo: BillInfo): RRule => {
+const makeRrule = (billInfo: BillInfo): string => {
   const dtstart = billInfo.start
   switch (billInfo.recur) {
     case 'yearly':
-      return new RRule({ dtstart, freq: RRule.YEARLY })
+      return new RRule({ dtstart, freq: RRule.YEARLY }).toString()
 
     case 'bimonthly':
-      return new RRule({ dtstart, freq: RRule.MONTHLY, interval: 2 })
+      return new RRule({ dtstart, freq: RRule.MONTHLY, interval: 2 }).toString()
 
     case 'monthly':
-      return new RRule({ dtstart, freq: RRule.MONTHLY })
+      return new RRule({ dtstart, freq: RRule.MONTHLY }).toString()
 
     case 'biweekly':
-      return new RRule({ dtstart, freq: RRule.WEEKLY, interval: 2 })
+      return new RRule({ dtstart, freq: RRule.WEEKLY, interval: 2 }).toString()
   }
 }
 
