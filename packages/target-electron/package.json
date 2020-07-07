@@ -29,7 +29,7 @@
     "custom-electron-titlebar": "^3.1.0",
     "debug": "^4.1.1",
     "docuri": "^4.2.2",
-    "electron": "^5.0.2",
+    "electron": "^9.1.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-is-dev": "^1.1.0",
     "electron-window-state": "^5.0.3",
